@@ -4,7 +4,14 @@ Brad, 2026-09-22: *"Whenever we code anything, there should be a hook (or whatev
 machinery knowledge if its applicable for that code task. Whenever we analyze anything, same concept."* Plan only. It
 will be built at lower effort, so every work item is written to be executed without re-deriving it.
 
-**Status: PLAN, nothing built.** This file is the index: the goals, the evidence summary, the design, the working rules,
+**Status (2026-09-25, from the record; section 5 has one status per item and section 5a the commits):** of 46 items,
+29 are built, 10 are built with a reading owed, 6 are waiting, 1 is closed by ruling and 0 are not started. Built on
+2026-09-23 in both repos, plus W3.4 (the `--estate` sweep) on 2026-09-25 after W3.3's bar held, 10 of 16 against 5.
+Owed: readings for W1.2 and W2.4 since 2026-09-24; W2.2, W4.1, W4.3, W5.6, W5.7, W6.3 and W6.11 on 2026-09-30; W6.2
+after 2026-10-07. Waiting: W4.2's refusals on Brad's D3 decision after the 2026-09-28 report; W4.5's BRAIN_REFUSE_FROM
+on the 2026-10-02 replay (D17); W5.4 on a route that clears its bar (shipped OFF); W5.5 on 7 days of W1.4's log, read
+2026-10-08; W6.6 on the D2 option B decision (branch experiment/rules-split-option-b); W6.12 on its leftover doc sweep.
+Closed: W6.8 (D16, 2026-09-25). This file is the index: the goals, the evidence summary, the design, the working rules,
 the order, the metrics, the guardrails and Brad's decisions. The work items live in seven phase files, each small enough
 to read in one pass:
 
@@ -365,54 +372,111 @@ window to minutes, and never leave step 2 uncommitted overnight.
 
 ## 5. Work item index
 
-| Id | Title | Repo | Needs | Brad |
-|---|---|---|---|---|
-| W0.1 | Store: resolver accepts estate knowledge | TC | - | D1 |
-| W0.2 | A checkout with no copy of the rule says BLIND | TC | - | - |
-| W1.0 | `redirected_env` and `RECALL_INDEX_DB` | brain | - | - |
-| W1.1 | Sandboxed harness-event probe | brain | W1.0, W1.9 | D18 |
-| W1.2 | InstructionsLoaded log | brain | W1.1 | - |
-| W1.3 | Brief-gate log | brain | W1.0, W1.9 | - |
-| W1.4 | Intent-hook log | brain | W1.0 | - |
-| W1.5 | Coverage row per call | brain | W1.0, W1.9 | - |
-| W1.6 | Search attribution, log before print, COMPLETE line | brain | W1.0 | - |
-| W1.7 | `tool_use_id` and pattern hash on fire rows | brain | - | - |
-| W1.8 | `recall_transcripts.py` (subagents and workflows) | brain | - | - |
-| W1.9 | Review-traffic exclusion file | brain | W1.8 | - |
-| W2.1 | One project-root function | brain | W1.0 | - |
-| W2.2 | One harness strip; skip scheduled envelopes | brain | W1.0 | - |
-| W2.3 | Rules truth, option A | both | W1.2 | D2 |
-| W2.4 | State lock, atomic appends, saves counter | brain | W1.0 | - |
-| W3.1 | Rules chunked per bullet | brain | W2.1 | - |
-| W3.2 | Generated machinery index, plus header seeds | both | W2.1, W3.1, W5.3 step 1 | - |
-| W3.3 | `search.py --estate` | brain | W3.1, W3.2, W1.6 | - |
-| W3.4 | Command sweep to `--estate` | both | W3.3 bar, W5.2 | - |
-| W4.1 | Machinery recognition rows (hand plus generated) | brain | W3.2, W1.7 | D9 |
-| W4.2 | Search before the first in-scope write | brain | W4.1, W2.1, W2.2, W3.3, W1.6, W1.5, W5.1 step 1, W5.3 | D3, D3b |
-| W4.3 | Store sections citing this file (shadow) | brain | W4.2 | - |
-| W4.4 | spawn_task and Workflow brief gates | brain | W1.1, W1.3 | D5 |
-| W4.5 | The brain is covered | both | W0.1, W3.3, W4.1 | D17 |
-| W4.6 | Fantasy | Fantasy | W0.1 | D8, D15 |
-| W5.1 | Analysis preflight, pointed at from ~/.claude/CLAUDE.md | both | - | D6 |
-| W5.2 | Analysis store-step in verdict agents and tasks | both | - | - |
-| W5.3 | Analysis records must say what they consulted | both | - | - |
-| W5.4 | Prompt analysis route (bar first) | brain | W2.2, W1.9 | D19 |
-| W5.5 | Intent analysis card | brain | W1.4 plus 7 days, W4.2 | - |
-| W5.6 | SubagentStop telemetry | brain | W1.1 | D4b |
-| W5.7 | Stop gates see prompt offers; analysis rung refuses once without a search (D4, 2026-09-25) | brain | W2.2, W4.2, W5.4 | D4 |
-| W6.1 | Subagent failures recorded | brain | W1.1, W1.7, W1.8, W4.2 | - |
-| W6.2 | Did a reminder change the next edit (control arm) | brain | W4.1, W4.2, W6.1 | D12b |
-| W6.3 | The nightly signal means what it says | brain | - | - |
-| W6.4 | Brad's unapplied rulings; approvals page | both | - | D13 |
-| W6.5 | Bridge currency; frozen refusal cases | brain | - | - |
-| W6.6 | Always-loaded budget ratchet | both | D2 | - |
-| W6.7 | Log archive, never delete | brain | W2.4 | - |
-| W6.8 | Memory semantic leg stays gated: CLOSED 2026-09-25 (D16 ruled no) | - | W2.1 | D16 |
-| W6.9 | The push tier stops reading green when blind | TC | - | - |
-| W6.10 | Harness facts carry a re-check date | brain | - | - |
-| W6.11 | Store: escape forms (warn-only first) | TC | W0.1 | D1b |
-| W6.12 | Docs say what the code does (sweep) | both | as described | - |
-| W6.13 | Hook health by origin | brain | W1.8 | - |
+| Id | Title | Repo | Needs | Brad | Status (2026-09-25) |
+|---|---|---|---|---|---|
+| W0.1 | Store: resolver accepts estate knowledge | TC | - | D1 | built |
+| W0.2 | A checkout with no copy of the rule says BLIND | TC | - | - | built |
+| W1.0 | `redirected_env` and `RECALL_INDEX_DB` | brain | - | - | built |
+| W1.1 | Sandboxed harness-event probe | brain | W1.0, W1.9 | D18 | built |
+| W1.2 | InstructionsLoaded log | brain | W1.1 | - | built, reading owed since 2026-09-24 (the one-day count of bytes loaded per session by load_reason) |
+| W1.3 | Brief-gate log | brain | W1.0, W1.9 | - | built |
+| W1.4 | Intent-hook log | brain | W1.0 | - | built |
+| W1.5 | Coverage row per call | brain | W1.0, W1.9 | - | built |
+| W1.6 | Search attribution, log before print, COMPLETE line | brain | W1.0 | - | built |
+| W1.7 | `tool_use_id` and pattern hash on fire rows | brain | - | - | built |
+| W1.8 | `recall_transcripts.py` (subagents and workflows) | brain | - | - | built |
+| W1.9 | Review-traffic exclusion file | brain | W1.8 | - | built |
+| W2.1 | One project-root function | brain | W1.0 | - | built |
+| W2.2 | One harness strip; skip scheduled envelopes | brain | W1.0 | - | built, reading owed 2026-09-30 (7-day bar: scheduled-envelope offers 0 of N) |
+| W2.3 | Rules truth, option A | both | W1.2 | D2 | built (option A); option B is D2, on branch experiment/rules-split-option-b |
+| W2.4 | State lock, atomic appends, saves counter | brain | W1.0 | - | built, reading owed since 2026-09-24 (save-fail N of M saves, orphan .tmp files that day) |
+| W3.1 | Rules chunked per bullet | brain | W2.1 | - | built |
+| W3.2 | Generated machinery index, plus header seeds | both | W2.1, W3.1, W5.3 step 1 | - | built; bar read 2026-09-25: hit@3 9 of 12, bar 9, HELD |
+| W3.3 | `search.py --estate` | brain | W3.1, W3.2, W1.6 | - | built; bar read 2026-09-25: 10 of 16, bar 5, HELD |
+| W3.4 | Command sweep to `--estate` | both | W3.3 bar, W5.2 | - | built 2026-09-25 |
+| W4.1 | Machinery recognition rows (hand plus generated) | brain | W3.2, W1.7 | D9 | built (remind), reading owed 2026-09-30 (7 days of fires, at most 2% of eligible calls per row) |
+| W4.2 | Search before the first in-scope write | brain | W4.1, W2.1, W2.2, W3.3, W1.6, W1.5, W5.1 step 1, W5.3 | D3, D3b | built (remind since 2026-09-25), waiting on Brad's D3 refusal decision after the 2026-09-28 report |
+| W4.3 | Store sections citing this file (shadow) | brain | W4.2 | - | built (shadow), reading owed 2026-09-30 (the GOVERNS bar, 28 of 40) |
+| W4.4 | spawn_task and Workflow brief gates | brain | W1.1, W1.3 | D5 | built |
+| W4.5 | The brain is covered | both | W0.1, W3.3, W4.1 | D17 | built (warn-only), waiting on the 2026-10-02 replay that sets BRAIN_REFUSE_FROM (D17) |
+| W4.6 | Fantasy | Fantasy | W0.1 | D8, D15 | built (Fantasy ed1d849); D15's hand fix of C:\Codex\CLAUDE.md is Brad's |
+| W5.1 | Analysis preflight, pointed at from ~/.claude/CLAUDE.md | both | - | D6 | built |
+| W5.2 | Analysis store-step in verdict agents and tasks | both | - | - | built |
+| W5.3 | Analysis records must say what they consulted | both | - | - | built |
+| W5.4 | Prompt analysis route (bar first) | brain | W2.2, W1.9 | D19 | waiting on a route that clears its bar: built and shipped OFF, recall 24 of 37 against 28 |
+| W5.5 | Intent analysis card | brain | W1.4 plus 7 days, W4.2 | - | waiting on 7 days of W1.4's log (from 2026-09-23); reading scheduled 2026-10-08 |
+| W5.6 | SubagentStop telemetry | brain | W1.1 | D4b | built, reading owed 2026-09-30 (D4b: switch on only if would-refuse is at most 10%) |
+| W5.7 | Stop gates see prompt offers; analysis rung refuses once without a search (D4, 2026-09-25) | brain | W2.2, W4.2, W5.4 | D4 | built (D4 shape (b) on since 2026-09-25), reading owed 2026-09-30 (trigger tune) |
+| W6.1 | Subagent failures recorded | brain | W1.1, W1.7, W1.8, W4.2 | - | built |
+| W6.2 | Did a reminder change the next edit (control arm) | brain | W4.1, W4.2, W6.1 | D12b | built, reading owed after 2026-10-07 (14-day window, bar M9); scheduled 2026-10-08 |
+| W6.3 | The nightly signal means what it says | brain | - | - | built, reading owed 2026-09-30 (red nights out of 7) |
+| W6.4 | Brad's unapplied rulings; approvals page | both | - | D13 | built |
+| W6.5 | Bridge currency; frozen refusal cases | brain | - | - | built |
+| W6.6 | Always-loaded budget ratchet | both | D2 | - | waiting on the D2 option B decision (branch experiment/rules-split-option-b) |
+| W6.7 | Log archive, never delete | brain | W2.4 | - | built |
+| W6.8 | Memory semantic leg stays gated: CLOSED 2026-09-25 (D16 ruled no) | - | W2.1 | D16 | closed by ruling (D16, 2026-09-25) |
+| W6.9 | The push tier stops reading green when blind | TC | - | - | built |
+| W6.10 | Harness facts carry a re-check date | brain | - | - | built |
+| W6.11 | Store: escape forms (warn-only first) | TC | W0.1 | D1b | built (warn-only), reading owed 2026-09-30 (one warn week's count, then D1b) |
+| W6.12 | Docs say what the code does (sweep) | both | as described | - | waiting on the leftover sweep: automatic-recall.md 2a line 316 and section 7, recall_core.budget_state |
+| W6.13 | Hook health by origin | brain | W1.8 | - | built |
+
+## 5a. Status evidence, from the record (2026-09-25)
+
+Built from `git log` of BOTH repos since 2026-09-21: a commit counts for an item only when its own `Plan:` line
+names this plan and that item id, and each status was then read against the item's phase file ("Done when", its bar,
+its mode). A commit that only mentions an item in passing counts for nothing. Two commits name items without
+building them and are marked so: TC `0b0df03c3` records Brad's 2026-09-25 rulings, and brain `fd477c8` schedules the
+2026-10-08 readings. Counts in section 5: 29 built, 10 built with a reading owed, 6 waiting, 1 closed by ruling,
+0 not started, of 46. A "reading owed" is a dated bar in the item's phase file that nobody has taken yet; it is not a
+failure and not a pass. Hashes are as landed on each repo's origin/main. Per item, the commits whose Plan: line names
+it (repo, hash, date, subject):
+- **W0.1** (3): TC `1fbb617c4` 2026-09-23 "The Store: check accepts the estate's own rules, design docs and libraries as citations"; TC `5a7f53d44` 2026-09-23 "A replay of landed commits through the Store: check, committed before the check changes"; TC `7d9c1eb89` 2026-09-23 "store_citation: a .md named inside a quoted or parenthesised section title is not a citation"
+- **W0.2** (1): TC `0f5e341ff` 2026-09-23 "A checkout with no copy of the Store: rule says BLIND instead of saying nothing"
+- **W1.0** (1): brain `9de37ea` 2026-09-23 "recall: one helper redirects every live path in a fixture, and review traffic is excluded through one file"
+- **W1.1** (3): brain `020f360` 2026-09-23 "settings-hook-entry: one safe path for P1 edits, and the desktop half of the harness probe"; brain `6072e02` 2026-09-23 "probes: the W1.1 harness-event probe, headless half, and its dated result: BLIND on authentication"; brain `8133842` 2026-09-23 "recall: the InstructionsLoaded log is registered, and the harness probe's Desktop half is recorded"
+- **W1.2** (3): brain `8133842` 2026-09-23 "recall: the InstructionsLoaded log is registered, and the harness probe's Desktop half is recorded"; brain `cb24d1f` 2026-09-23 "recall-instructions-log-hook: it beats the session state, so HOOK HEALTH can see it ran"; brain `f10460a` 2026-09-23 "recall: an InstructionsLoaded log, one row per instruction file the harness loaded (W1.2, not registered)"
+- **W1.3** (2): brain `1453229` 2026-09-23 "store-usage-report gains a briefs section: calls, denied, resent within 10 minutes, searched-only"; brain `336e40c` 2026-09-23 "recall-brief-gate-hook writes one row for every Agent call it sees, skips included"
+- **W1.4** (2): brain `dee098b` 2026-09-23 "recall-intent-hook: its answering-sidecar fixture gets a hang guard, not the production timeout as a bar"; brain `f9e7650` 2026-09-23 "recall-intent-hook logs every judgement it makes, and its header stops claiming filter_new"
+- **W1.5** (2): brain `41a76a4` 2026-09-23 "recall-stats prints how many estate code edits got any tool-tier pointer, by directory and origin"; brain `523473b` 2026-09-23 "recall reflex: machinery rows fire when an edit ADDS a site, every call gets a coverage row, fire rows carry tool_use_id"
+- **W1.6** (3): brain `00ab78f` 2026-09-23 "recall-stats and recall-brain set ev: search-call rows aside, and count them"; brain `82dc84d` 2026-09-23 "recall-forget: review traffic, search-call rows and routed offers never decide a candidate; one tally a night"; brain `8d534b1` 2026-09-23 "search.py logs its row before it prints and ends with a COMPLETE line; recall-log-open writes a search-call row per run"
+- **W1.7** (1): brain `523473b` 2026-09-23 "recall reflex: machinery rows fire when an edit ADDS a site, every call gets a coverage row, fire rows carry tool_use_id"
+- **W1.8** (1): brain `2385152` 2026-09-23 "recall: one transcript iterator that includes subagents and workflow agents"
+- **W1.9** (4): brain `34f3e99` 2026-09-23 "recall: the D18 desktop probe's two workflow agents join the exclusion file"; brain `82dc84d` 2026-09-23 "recall-forget: review traffic, search-call rows and routed offers never decide a candidate; one tally a night"; brain `9de37ea` 2026-09-23 "recall: one helper redirects every live path in a fixture, and review traffic is excluded through one file"; brain `af8ca84` 2026-09-23 "recall reports: review and probe traffic is dropped through one file, and every report says how much"
+- **W2.1** (2): brain `33d1c76` 2026-09-23 "recall_index: canonical_root, checkout_root and a project_key that matches the harness"; brain `eead7e1` 2026-09-23 "recall: one project-root resolver, so a worktree or a subdirectory reads its memory and rules"
+- **W2.2** (2): brain `247f2d7` 2026-09-23 "scheduled-task-knowledge-lint: which scheduled-task prompts carry no search command, as a check-skills WARNING"; brain `4a751f7` 2026-09-23 "recall: one harness strip in recall_core, and a scheduled task's envelope is skipped, not answered"
+- **W2.3** (6): TC `05d301129` 2026-09-23 "Rules truth, option A: the six rules files say they load in every session, and audit-rule-currency refuses the keys the loader never reads"; TC `6db4b55db` 2026-09-23 "run-gates and the liveness register describe audit-rule-currency as W2.3 rewrote it"; brain `38457f3` 2026-09-23 "Memory: what reaches a spawned agent gains the workflow-agent row, and the correction block leaves the table"; brain `61b427f` 2026-09-23 "claude-code-craft 11.1: the rules scope key is paths, and the 2026-09-06 globs finding was a misread of Bun's Cursor template"; brain `7fd87d8` 2026-09-23 "Memory: two course memories stop saying CLAUDE.md does not reach a spawned agent"; brain `f147aa4` 2026-09-23 "recall: two code comments stop saying the ThriftyCrew rules files are path-scoped"
+- **W2.4** (3): brain `55cf320` 2026-09-23 "recall_append: the append allow-list names the three self-test fixtures two lanes added"; brain `966204d` 2026-09-23 "recall state: a refused replace is retried, every save is counted, and a per-key lock stops two hooks losing each other's writes"; brain `9d2d8b7` 2026-09-23 "recall state: locked_state sweeps after it releases the lock, never under it"
+- **W3.1** (1): brain `3acd9d3` 2026-09-23 "recall_index: a rules file is one chunk per bullet, not one chunk per heading"
+- **W3.2** (5): TC `613b83a70` 2026-09-23 "Header seeds: USE WHEN, REPLACES and ENFORCED BY lines on 17 estate libraries (W3.2)"; TC `c48a27095` 2026-09-23 "lib/ratchet.ps1: machinery header seeds (USE WHEN, REPLACES, ENFORCED BY)"; brain `b89c469` 2026-09-23 "knowledge-search: the machinery index's probe set, written before the generator exists"; brain `c6ba909` 2026-09-23 "recall-sleep: a pathspec commit, falls are can-tighten, a reindex step, one forgetting tally, readers for every step"; brain `eb28ec5` 2026-09-23 "knowledge-search: machinery_index.py, a generated index of an estate's own machinery"
+- **W3.3** (2): brain `1b50158` 2026-09-23 "search.py --estate: one definition, four estate legs after the unchanged SKILLS leg, and the harness that replays its two bars"; brain `1f9dad6` 2026-09-23 "knowledge-search: W3.3's 16 'nothing applicable' commits, pre-registered before any --estate code"
+- **W3.4** (2): the ThriftyCrew commit "W3.4: the store-step, the agents, the CLAUDE.md line and store_citation's refusal carry --estate" and the brain commit "W3.4: the brief gate and knowledge-search SKILL.md carry --estate, and W3.3's bar is scored", both 2026-09-25 (hashes on `git log --grep W3.4`)
+- **W4.1** (3): brain `523473b` 2026-09-23 "recall reflex: machinery rows fire when an edit ADDS a site, every call gets a coverage row, fire rows carry tool_use_id"; brain `c6ba909` 2026-09-23 "recall-sleep: a pathspec commit, falls are can-tighten, a reindex step, one forgetting tally, readers for every step"; brain `ed0ba26` 2026-09-23 "recall: wave B integration - the new self-tests gated, the shown/shadow split opened, readers told a withheld fire from a draft"
+- **W4.2** (4): brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `bc62b6d` 2026-09-23 "recall: W4.2 first-write gate in SHADOW - a search before the first code or analysis-record write, per context"; TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build); brain `db77e20` 2026-09-25 "recall: the W4.2 first-write gate moves from shadow to remind (Brad's D3 ruling)"
+- **W4.3** (2): brain `302c59d` 2026-09-23 "recall: W4.3 path routes in SHADOW - the store sections that cite this exact file, on a Read, an Edit and a Run"; brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"
+- **W4.4** (3): brain `837918e` 2026-09-23 "recall-brief-gate-hook gates the spawn_task chip's prompt, from its own settings entry"; brain `93dacaf` 2026-09-23 "recall: four hooks registered - spawn_task and Workflow brief gates, helper answers measured, failures recorded live"; brain `f6ae75e` 2026-09-23 "recall-workflow-gate-hook: a Workflow script whose agents get no Knowledge consulted section is refused"
+- **W4.5** (9): TC `48dc635c1` 2026-09-23 "store_citation: each decision row records the committing checkout's toplevel and common_root"; TC `9fc787437` 2026-09-23 "store_citation: a commit from a linked worktree of the brain repo is judged as the brain"; TC `acb2c6faf` 2026-09-23 "The Store: rule can judge the brain repo, and its cheap escape forms are recorded, not yet refused"; brain `3ba1b62` 2026-09-23 "recall reflex: two brain rows, a recall log nobody can redirect and a lossy append to one"; brain `5cfecfc` 2026-09-23 "Brain commit-msg hook and its installer: the Store: rule judges the brain repo, warn-only, BLIND until the main checkout has step 0"; brain `bcfae9c` 2026-09-23 "approvals_runner: every build prompt opens with the store-first search and names the memory directory"; brain `c6ba909` 2026-09-23 "recall-sleep: a pathspec commit, falls are can-tighten, a reindex step, one forgetting tally, readers for every step"; brain `ed0ba26` 2026-09-23 "recall: wave B integration - the new self-tests gated, the shown/shadow split opened, readers told a withheld fire from a draft"; TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build)
+- **W4.6** (1): brain `b066d39` 2026-09-23 "store-usage-report splits every rate by repo, reports Fantasy's vendored resolver, and counts escape forms"
+- **W5.1** (3): TC `9019a3939` 2026-09-23 "measurement.md opens with a pointer to the analysis preflight"; brain `1c65399` 2026-09-23 "CLAUDE.md: the ANALYSIS PREFLIGHT block, with check-skills holding its shape; the lanes' new self-tests are gated"; brain `7ece384` 2026-09-23 "experiment-craft: the analysis preflight, a thin index of the ten checks before any analysis verdict"
+- **W5.2** (3): TC `091e6520d` 2026-09-23 "prompt-backup: verify-board-sample and store-usage-weekly carry the ANALYSIS store-step"; TC `aafa5d367` 2026-09-23 "W5.2: one canonical store-step in 10 agents, held byte for byte by audit-agent-tools RULE 3"; brain `661cbca` 2026-09-23 "scheduled-tasks: verify-board-sample and store-usage-weekly carry the ANALYSIS store-step, and are tracked"
+- **W5.3** (2): TC `bbe96e272` 2026-09-23 "Analysis records and triage plans say what they consulted"; brain `9de37ea` 2026-09-23 "recall: one helper redirects every live path in a fixture, and review traffic is excluded through one file"
+- **W5.4** (4): brain `5f0e0b8` 2026-09-23 "recall: the analysis route, a cue table naming a difference, a diagnosis or a decision, shipped OFF"; brain `82dc84d` 2026-09-23 "recall-forget: review traffic, search-call rows and routed offers never decide a candidate; one tally a night"; brain `d230a10` 2026-09-23 "knowledge-search: hand labels for the analysis route, 139 human prompts of 2026-09-15..22"; brain `f6b6da6` 2026-09-23 "recall-stats and recall-brain count routed offers apart from retrieval offers"
+- **W5.5** (1): brain `fd477c8` 2026-09-25 "scheduled tasks: the brain plan's October readings (W5.5, W6.2), one time on 2026-10-08" (schedules the reading, not a build)
+- **W5.6** (5): brain `0355705` 2026-09-23 "recall-consulted-hook: a failing self-test case prints its name instead of crashing the suite"; brain `93dacaf` 2026-09-23 "recall: four hooks registered - spawn_task and Workflow brief gates, helper answers measured, failures recorded live"; brain `bc74a78` 2026-09-23 "recall-consulted-hook measures every helper's final answer on SubagentStop, and never refuses one"; brain `ead0330` 2026-09-23 "store-usage-report prints how many helpers' final messages name what they consulted"; TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build)
+- **W5.7** (6): brain `14c52aa` 2026-09-23 "recall-consulted-hook: the Stop gate sees the prompt's own offers (shadow), and analysis answers are measured"; brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `5f0e0b8` 2026-09-23 "recall: the analysis route, a cue table naming a difference, a diagnosis or a decision, shipped OFF"; TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build); brain `3087110` 2026-09-25 "recall-consulted-mode: D4 on, the Consulted rung arms on prompt offers and shape (b) refuses analysis with no search"; brain `599694a` 2026-09-25 "recall-consulted-hook: D4 shape (b), an analysis reply with no search in the context is refused once (behind its own mode key, off until the flip)"
+- **W6.1** (6): brain `096eccc` 2026-09-23 "recall outcome: failures recorded on PostToolUseFailure, subagent transcripts harvested and joined, a subagent floor"; brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `614b4c7` 2026-09-23 "recall-tool-probes: the fire-rate corpus reads subagent and workflow transcripts, deduped by tool_use_id"; brain `93dacaf` 2026-09-23 "recall: four hooks registered - spawn_task and Workflow brief gates, helper answers measured, failures recorded live"; brain `b8c3d63` 2026-09-23 "recall: two reds the live gate found after wave B - a fixture pinned to a window's off state, and a hook with no heartbeat"; brain `4636a46` 2026-09-25 "recall-tool-probes: the fire-rate corpus is every transcript of the last 4 days, with a 60,000-row speed ceiling"
+- **W6.2** (6): brain `22bbcbb` 2026-09-23 "reflex-control-report: the D12b control arm scored - did a shown machinery reminder change the next edit"; brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `523473b` 2026-09-23 "recall reflex: machinery rows fire when an edit ADDS a site, every call gets a coverage row, fire rows carry tool_use_id"; brain `b8c3d63` 2026-09-23 "recall: two reds the live gate found after wave B - a fixture pinned to a window's off state, and a hook with no heartbeat"; brain `ed0ba26` 2026-09-23 "recall: wave B integration - the new self-tests gated, the shown/shadow split opened, readers told a withheld fire from a draft"; brain `fd477c8` 2026-09-25 "scheduled tasks: the brain plan's October readings (W5.5, W6.2), one time on 2026-10-08" (schedules the reading, not a build)
+- **W6.3** (3): brain `82dc84d` 2026-09-23 "recall-forget: review traffic, search-call rows and routed offers never decide a candidate; one tally a night"; brain `c6ba909` 2026-09-23 "recall-sleep: a pathspec commit, falls are can-tighten, a reindex step, one forgetting tally, readers for every step"; brain `fd1b8a2` 2026-09-23 "recall-inbox: a hermetic self-test, and items Brad answered on the approvals page are not offered again"
+- **W6.4** (5): TC `11396fac2` 2026-09-23 "Brain digest W6.4: every queue row ages from its own source, and graph proposals Brad already answered stop counting as waiting"; TC `4570d8b14` 2026-09-23 "D13: Brad's 69 graph-alias rulings of 2026-09-12 recorded (18 accept, 51 reject)"; brain `62af089` 2026-09-23 "approvals: a job that died before doing any work is retried; the page reads the live store"; brain `a4edc1f` 2026-09-23 "recall-inbox: --graph-json, the cheap count the digest's graph row subtracts from"; brain `fd1b8a2` 2026-09-23 "recall-inbox: a hermetic self-test, and items Brad answered on the approvals page are not offered again"
+- **W6.5** (3): brain `22a18dd` 2026-09-23 "2a case sets: want_current on the 11 moved craft labels, path_current and retired on candidate 1's two dead case files"; brain `f031d00` 2026-09-23 "course/score-signal-cases.py: the committed harness for the two frozen 2a case sets, before any remap"; brain `f5223e6` 2026-09-23 "check-bridge-currency: a read-only report on every path:LINE citation in the bridge files, and the authoring rule that prevents the class"
+- **W6.6** (0): none; it waits on D2 option B
+- **W6.7** (2): brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `b4fa392` 2026-09-23 "recall: logs are archived after 60 days and never deleted, one iter_rows spans archive and live, and the join, recurrence and ladder read through it (W6.7)"
+- **W6.8** (1): TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build)
+- **W6.9** (4): TC `595bb581b` 2026-09-23 "lib/ratchet.ps1: one named-site comparison, where there were two copies of it"; TC `8bf0d72f8` 2026-09-23 "run-gates: a static gate that exits 0 having read zero files is BLIND, not ok"; TC `b4c8705cb` 2026-09-23 "audit-readjson-inline-wrap reads a worktree: it walked nothing from every one and exited 0"; TC `e180b8267` 2026-09-23 "test-prepush-hook: a case drives the hook's static-scanned-zero refusal"
+- **W6.10** (4): brain `458bc8a` 2026-09-23 "harness-facts-check: harness facts carry a re-check date, and a retired phrase stays retired"; brain `4681e38` 2026-09-23 "check-skills: two ratchet marks tightened to what the store now holds"; brain `c5b3aed` 2026-09-23 "harness-facts-check: a case for the one mutant that survived, a heading marker over the line straight under it"; brain `7f55ab4` 2026-09-25 "check-skills: the estate:rules harness-facts mark falls 6 -> 0, by hand"
+- **W6.11** (3): TC `acb2c6faf` 2026-09-23 "The Store: rule can judge the brain repo, and its cheap escape forms are recorded, not yet refused"; brain `1b559f6` 2026-09-23 "store-usage-report lists landed Claude code commits that have no decision row"; brain `8781228` 2026-09-23 "recall reflex: a reminder when git commit skips its hooks with -n or --no-verify"
+- **W6.12** (1): brain `f9e7650` 2026-09-23 "recall-intent-hook logs every judgement it makes, and its header stops claiming filter_new"
+- **W6.13** (1): brain `7c6e31c` 2026-09-23 "recall-stop-hook --health splits the last 14 days by origin and names a STRUCTURAL GAP"
 
 ## 6. Order
 
