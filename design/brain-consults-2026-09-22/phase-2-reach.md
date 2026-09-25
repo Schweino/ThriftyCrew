@@ -179,6 +179,14 @@ Rubric for judging A against B, written now:
 - (iii) from W1.2's log, the share of sessions that edit a file under grocery/ and loaded the grocery depth before their
   first edit: at least 90%, N printed.
 
+**2026-09-25, option B judged and not taken.** Built on branch `experiment/rules-split-option-b` (left in place, pushed,
+for reference) and measured against the three bars above, one row per case in
+`design/brain-consults-2026-09-22/rules-split-b/rows-2026-09-25.jsonl` (blob e0189a48f2df) and `rows-ii-2026-09-25.jsonl`
+(blob 3eadc3cf5053) on that branch: (i) 78,362 B against the 50,000 B bar (arm A 181,413 B); (ii) 0 of 6 leads quoted,
+because a helper's rules come from the root session's checkout and a branch cannot reach one; (iii) 71 of 89 grocery
+editors, 79.8%, against 90%. All three missed, so Brad ruled D2 the same day: keep A, ratchet the size, "Keep A, ratchet the
+size (Recommended)". The ratchet is W6.6.
+
 **Trap.** Renaming `globs:` to `paths:` verbatim is the most damaging mistake available here. It strips ops-and-gates.md
 from the grocery and meal-prep writers, who hold 20 of 27 Write-TcAtomicFile, 15 of 16 Invoke-Native and 3 of 3
 Enter-TcLedgerLock call sites. It also strips measurement.md from analysis work.

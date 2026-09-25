@@ -1,0 +1,35 @@
+﻿{
+    "note":  "High-water mark for the always-loaded budget ratchet, ThriftyCrew side (W6.6, Brad\u0027s D2 ruling 2026-09-25: keep option A, ratchet the size). Bytes as git stores them, of CLAUDE.md plus every unconditional .claude/rules file. This number may only go DOWN; a deliberate growth is recorded with -Accept and its reason in the commit.",
+    "generated":  "2026-09-25T06:05:09",
+    "bytes":  155505,
+    "files":  [
+                  {
+                      "path":  "CLAUDE.md",
+                      "bytes":  18125
+                  },
+                  {
+                      "path":  ".claude/rules/graph.md",
+                      "bytes":  1996
+                  },
+                  {
+                      "path":  ".claude/rules/grocery.md",
+                      "bytes":  19561
+                  },
+                  {
+                      "path":  ".claude/rules/meal-prep.md",
+                      "bytes":  9451
+                  },
+                  {
+                      "path":  ".claude/rules/measurement.md",
+                      "bytes":  10787
+                  },
+                  {
+                      "path":  ".claude/rules/ops-and-gates.md",
+                      "bytes":  90687
+                  },
+                  {
+                      "path":  ".claude/rules/site-and-publish.md",
+                      "bytes":  4898
+                  }
+              ]
+}

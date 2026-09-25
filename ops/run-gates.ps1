@@ -378,6 +378,10 @@ $static = @(
   # 2026-09-23 (W4.1 of design\PLAN-push-derived-conflicts-2026-09-23.md): git merges design\reread-ledger.tsv by union, which would keep an edited row beside its original and undo a deletion, so this is the append-only half.
   @{ f = 'ops\audit-reread-ledger.ps1';        n = 'no push deletes or edits a row of design\reread-ledger.tsv that the merge base with origin/main holds, and every row there has seven fields, a 40-hex blob and a closed action - union merge keeps both sides'' rows, and this keeps the file append-only' }
   @{ f = 'ops\audit-rule-currency.ps1';        n = 'no .claude\rules file carries a scope key the loader ignores, and every paths: entry matches a tracked file; stale dated claims are reported (WS 7e, rewritten by W2.3)' }
+  # W6.6 of design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, Brad's D2 ruling 2026-09-25 ("Keep A, ratchet the
+  # size"): every rules file loads in full, so their bytes are paid by every session. ON EVERY PUSH, because the value is the
+  # edit in THIS push that grows them, and it reads seven files. Hermetic, reads tracked source only.
+  @{ f = 'ops\audit-always-loaded-bytes.ps1';  n = 'the bytes every ThriftyCrew session loads at start (CLAUDE.md plus every unconditional .claude\rules file, as git stores them) have not grown past their mark - a ratchet that fails only on a rise; a fall is "can tighten" and keeps the mark' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.

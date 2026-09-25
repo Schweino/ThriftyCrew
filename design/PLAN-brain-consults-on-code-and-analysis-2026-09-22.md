@@ -388,7 +388,7 @@ window to minutes, and never leave step 2 uncommitted overnight.
 | W1.9 | Review-traffic exclusion file | brain | W1.8 | - | built |
 | W2.1 | One project-root function | brain | W1.0 | - | built |
 | W2.2 | One harness strip; skip scheduled envelopes | brain | W1.0 | - | built, reading owed 2026-09-30 (7-day bar: scheduled-envelope offers 0 of N) |
-| W2.3 | Rules truth, option A | both | W1.2 | D2 | built (option A); option B is D2, on branch experiment/rules-split-option-b |
+| W2.3 | Rules truth, option A | both | W1.2 | D2 | built (option A, kept by Brad's D2 ruling 2026-09-25); option B measured on branch experiment/rules-split-option-b, missed all three bars, not taken |
 | W2.4 | State lock, atomic appends, saves counter | brain | W1.0 | - | built, reading owed since 2026-09-24 (save-fail N of M saves, orphan .tmp files that day) |
 | W3.1 | Rules chunked per bullet | brain | W2.1 | - | built |
 | W3.2 | Generated machinery index, plus header seeds | both | W2.1, W3.1, W5.3 step 1 | - | built; bar read 2026-09-25: hit@3 9 of 12, bar 9, HELD |
@@ -412,12 +412,12 @@ window to minutes, and never leave step 2 uncommitted overnight.
 | W6.3 | The nightly signal means what it says | brain | - | - | built, reading owed 2026-09-30 (red nights out of 7) |
 | W6.4 | Brad's unapplied rulings; approvals page | both | - | D13 | built |
 | W6.5 | Bridge currency; frozen refusal cases | brain | - | - | built |
-| W6.6 | Always-loaded budget ratchet | both | D2 | - | waiting on the D2 option B decision (branch experiment/rules-split-option-b) |
+| W6.6 | Always-loaded budget ratchet | both | D2 | - | built 2026-09-25 ("W6.6: every ThriftyCrew session's always-loaded bytes are held by a ratchet that fails only on a rise"; mark 155,505 B over 7 files), after D2 ruled keep A |
 | W6.7 | Log archive, never delete | brain | W2.4 | - | built |
 | W6.8 | Memory semantic leg stays gated: CLOSED 2026-09-25 (D16 ruled no) | - | W2.1 | D16 | closed by ruling (D16, 2026-09-25) |
 | W6.9 | The push tier stops reading green when blind | TC | - | - | built |
 | W6.10 | Harness facts carry a re-check date | brain | - | - | built |
-| W6.11 | Store: escape forms (warn-only first) | TC | W0.1 | D1b | built (warn-only), reading owed 2026-09-30 (one warn week's count, then D1b) |
+| W6.11 | Store: escape forms (warn-only first) | TC | W0.1 | D1b | built; D1b ruled 2026-09-25 and landed (f38b4c95c "store_citation: the escape forms refuse from 2026-09-30 (D1b ruled)"): warn-only until the escape forms refuse from 2026-09-30 |
 | W6.12 | Docs say what the code does (sweep) | both | as described | - | waiting on the leftover sweep: automatic-recall.md 2a line 316 and section 7, recall_core.budget_state |
 | W6.13 | Hook health by origin | brain | W1.8 | - | built |
 
@@ -427,8 +427,8 @@ Built from `git log` of BOTH repos since 2026-09-21: a commit counts for an item
 names this plan and that item id, and each status was then read against the item's phase file ("Done when", its bar,
 its mode). A commit that only mentions an item in passing counts for nothing. Two commits name items without
 building them and are marked so: TC `0b0df03c3` records Brad's 2026-09-25 rulings, and brain `fd477c8` schedules the
-2026-10-08 readings. Counts in section 5: 29 built, 10 built with a reading owed, 6 waiting, 1 closed by ruling,
-0 not started, of 46. A "reading owed" is a dated bar in the item's phase file that nobody has taken yet; it is not a
+2026-10-08 readings. Counts in section 5: 31 built, 9 built with a reading owed, 5 waiting, 1 closed by ruling,
+0 not started, of 46 (updated 2026-09-25: W6.6 built after D2, and W6.11's reading is taken by D1b's ruling). A "reading owed" is a dated bar in the item's phase file that nobody has taken yet; it is not a
 failure and not a pass. Hashes are as landed on each repo's origin/main. Per item, the commits whose Plan: line names
 it (repo, hash, date, subject):
 - **W0.1** (3): TC `1fbb617c4` 2026-09-23 "The Store: check accepts the estate's own rules, design docs and libraries as citations"; TC `5a7f53d44` 2026-09-23 "A replay of landed commits through the Store: check, committed before the check changes"; TC `7d9c1eb89` 2026-09-23 "store_citation: a .md named inside a quoted or parenthesised section title is not a citation"
@@ -469,7 +469,7 @@ it (repo, hash, date, subject):
 - **W6.3** (3): brain `82dc84d` 2026-09-23 "recall-forget: review traffic, search-call rows and routed offers never decide a candidate; one tally a night"; brain `c6ba909` 2026-09-23 "recall-sleep: a pathspec commit, falls are can-tighten, a reindex step, one forgetting tally, readers for every step"; brain `fd1b8a2` 2026-09-23 "recall-inbox: a hermetic self-test, and items Brad answered on the approvals page are not offered again"
 - **W6.4** (5): TC `11396fac2` 2026-09-23 "Brain digest W6.4: every queue row ages from its own source, and graph proposals Brad already answered stop counting as waiting"; TC `4570d8b14` 2026-09-23 "D13: Brad's 69 graph-alias rulings of 2026-09-12 recorded (18 accept, 51 reject)"; brain `62af089` 2026-09-23 "approvals: a job that died before doing any work is retried; the page reads the live store"; brain `a4edc1f` 2026-09-23 "recall-inbox: --graph-json, the cheap count the digest's graph row subtracts from"; brain `fd1b8a2` 2026-09-23 "recall-inbox: a hermetic self-test, and items Brad answered on the approvals page are not offered again"
 - **W6.5** (3): brain `22a18dd` 2026-09-23 "2a case sets: want_current on the 11 moved craft labels, path_current and retired on candidate 1's two dead case files"; brain `f031d00` 2026-09-23 "course/score-signal-cases.py: the committed harness for the two frozen 2a case sets, before any remap"; brain `f5223e6` 2026-09-23 "check-bridge-currency: a read-only report on every path:LINE citation in the bridge files, and the authoring rule that prevents the class"
-- **W6.6** (0): none; it waits on D2 option B
+- **W6.6** (2, 2026-09-25): the ThriftyCrew commit "W6.6: every ThriftyCrew session's always-loaded bytes are held by a ratchet that fails only on a rise" and the brain commit "W6.6: check-skills reports each project's session-start bytes from the InstructionsLoaded log, and warns on a MEMORY.md near the harness limit" (hashes on `git log --grep W6.6`)
 - **W6.7** (2): brain `50cf4ab` 2026-09-23 "recall: wave C wired in - five suites gated, two nightly steps, the Edit/Write pointer hook, one searched-marker rule, and a live-log leak check that other sessions cannot turn red"; brain `b4fa392` 2026-09-23 "recall: logs are archived after 60 days and never deleted, one iter_rows spans archive and live, and the join, recurrence and ladder read through it (W6.7)"
 - **W6.8** (1): TC `0b0df03c3` 2026-09-25 "Plan: Brad's 2026-09-25 rulings land in the plan (D2 option B, D3, D4, D4b, D14, D16, D17)" (records Brad's ruling, not a build)
 - **W6.9** (4): TC `595bb581b` 2026-09-23 "lib/ratchet.ps1: one named-site comparison, where there were two copies of it"; TC `8bf0d72f8` 2026-09-23 "run-gates: a static gate that exits 0 having read zero files is BLIND, not ok"; TC `b4c8705cb` 2026-09-23 "audit-readjson-inline-wrap reads a worktree: it walked nothing from every one and exited 0"; TC `e180b8267` 2026-09-23 "test-prepush-hook: a case drives the hook's static-scanned-zero refusal"
@@ -580,7 +580,7 @@ disposition.
 |---|---|---|---|
 | D1 | Land W0.1 by 2026-09-24, or move REFUSE_FROM | land it: one file, with a written bar | W0.1 |
 | D1b | Refuse date for the escape forms (W6.11) | after one warn week, with its count (RULED by Brad 2026-09-25: ESCAPES_REFUSE_FROM 2026-09-30, "Sep 30, a week after landing (Recommended)"; warning week 0 of 174 code commits used an escape) | W6.11 |
-| D2 | Rules: unconditional (A, now) or lead plus scoped depth (B, after the probe) | A now; judge B on W2.3's rubric once W1.1 and W1.2 report (option A ruled earlier and on main; option B RULED by Brad 2026-09-25: built on branch experiment/rules-split-option-b and judged on W2.3's three-bar rubric before anything loads differently; W6.6's ratchet is set after Brad's decision on B, "Build B on a branch, judge it on the bar (Recommended)") | W2.3 option B, W6.6 |
+| D2 | Rules: unconditional (A, now) or lead plus scoped depth (B, after the probe) | A now; judge B on W2.3's rubric once W1.1 and W1.2 report (option A ruled earlier and on main; option B RULED by Brad 2026-09-25: built on branch experiment/rules-split-option-b and judged on W2.3's three-bar rubric before anything loads differently; W6.6's ratchet is set after Brad's decision on B, "Build B on a branch, judge it on the bar (Recommended)"; option B built and measured 2026-09-25, missed all three bars (78,362 B vs 50 KB; 0 of 6; 71 of 89); RULED by Brad 2026-09-25: keep A, ratchet the size, "Keep A, ratchet the size (Recommended)") | W2.3 option B, W6.6 |
 | D3 | First-write gate: shadow, then remind (3 days), then deny | yes, if the shadow bars and W3.3's bar hold (RULED by Brad 2026-09-25: remind now; refusals decided by Brad after 3 days of remind data, a one-time job on 2026-09-28 reports, "Remind now, decide refusals after 3 days (Recommended)") | W4.2 deny |
 | D3b | Deny headless runs too | decide on the shadow count; until then headless is log-only | W4.2 |
 | D4 | Consulted gate reads prompt offers (about 15 refusals a week), and which refusal shape for chat analysis: a missing footer, or no search in the context | shadow first; prefer "no search in the context", judged on named items (RULED by Brad 2026-09-25: shape (b) now, trigger tuned on 2026-09-30, "(b) now, tune trigger on Sep 30 (Recommended)") | W5.7 |
