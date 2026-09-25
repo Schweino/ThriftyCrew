@@ -108,6 +108,14 @@ if ($SelfTest) {
   $fslOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $fslFile -SelfTest
   $fslRc = $LASTEXITCODE
   if ($fslRc -ne 0 -or -not ((@($fslOut))[-1] -match '^feed-served-lib SELF-TEST PASS')) { $fails += ('the served-board decision failed its own fixtures (rc=' + $fslRc + ')') }
+  # The matching-soundness post hold (Brad's ruling Q-2026-09-25-2-A): the decision is fixtured in audit-match-soundness.ps1
+  # -SelfTest (PUBLISH-HOLD); this proves the gate CALLS it on the audit's non-zero, non-BLIND exit and can refuse on it.
+  $msRunAt = $pdpSrc.IndexOf('audit-match-' + 'soundness.ps1'') -OutDir')
+  $msJudgeAt = if ($msRunAt -ge 0) { $pdpSrc.IndexOf('Read-SoundnessPublish' + 'Verdict -ReportFile', $msRunAt) } else { -1 }
+  $msNextGate = $pdpSrc.IndexOf('audit-category-' + 'coverage.ps1')
+  $msHoldAt = if ($msJudgeAt -ge 0) { $pdpSrc.IndexOf('exit ' + '2', $msJudgeAt) } else { -1 }
+  if ($msJudgeAt -lt 0 -or $msJudgeAt -gt $msNextGate) { $fails += 'MUST-FIRE: the soundness gate no longer asks Get-SoundnessPublishVerdict which changes touch a published cell' }
+  elseif ($msHoldAt -lt 0 -or $msHoldAt -gt $msNextGate) { $fails += 'MUST-FIRE: the soundness gate judges the report but cannot exit 2 on a published cell''s winner' }
   if ($fails.Count) { Write-Output ('SELFTEST FAIL - ' + ($fails -join ' | ')); exit 1 }
   Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass; the served-board check stands before every Ghost write and its decision passed its own fixtures.'
   exit 0
@@ -238,11 +246,27 @@ if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodi
 # ---- MATCHING-SOUNDNESS gate (HARD): a rule change that MOVED or DROPPED an existing product's commodity
 # vs the reviewed baseline is a matching regression (the 2026-07-13 audit class). Hold until a human reviews
 # and runs `audit-match-soundness.ps1 -Accept`. Steady state (no rule change) => 0 changes => passes. -Force overrides.
+# WHAT HOLDS THE POST (Brad's ruling Q-2026-09-25-2-A, 2026-09-25, option A; queue 2026-09-23-80f302): only a moved,
+# dropped or contested product that WINS a cell of the board being published (any store column). A change on no cell
+# prints REVIEW and still waits for -Accept, but does not hold the page. The rule is Get-SoundnessPublishVerdict in
+# soundness-publish-lib.ps1 and its fixtures are audit-match-soundness.ps1 -SelfTest (PUBLISH-HOLD). FAILS CLOSED: an
+# unreadable or stale report, or a board that cannot be joined, holds. Exit 3 (BLIND) is unchanged. Any exit but 0 and
+# 3 is judged from the report, so a crashed audit (exit 1 with no fresh report) now HOLDS where it used to pass.
+. (Join-Path $root 'soundness-publish-lib.ps1')
 $__sw = [Diagnostics.Stopwatch]::StartNew()
+$msStart = Get-Date
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-match-soundness.ps1') -OutDir $OutDir
+$msRc = $LASTEXITCODE
 $__sw.Stop(); $script:StageTimes['audit-match-soundness'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
-if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: commodity matching changed vs the reviewed baseline (see out\audit\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'; exit 2 }
-elseif ($LASTEXITCODE -eq 3) { Write-Output 'match-soundness: BLIND - it ingested ZERO products, so nothing this build proves any commodity matching is sound; the matching gate above passed on an empty examination, not on a clean result.' }
+if ($msRc -ne 0 -and $msRc -ne 3) {
+  $msV = Read-SoundnessPublishVerdict -ReportFile (Join-Path $OutDir 'audit\soundness-report.json') -CompareFile $CompareFile -NotBefore $msStart
+  foreach ($w in $msV.Winners) { Write-Output ('match-soundness HOLD: ' + $w) }
+  foreach ($rv in $msV.Review) { Write-Output ('match-soundness REVIEW (on no published cell, does not hold the post): ' + $rv) }
+  if ($msV.Hold -and -not $Force) { Write-Output ('HELD: commodity matching changed vs the reviewed baseline and ' + $msV.Reason + ' (audit rc=' + $msRc + '; see out\audit\soundness-report.json). Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'); exit 2 }
+  if ($msV.Hold) { Write-Output ('match-soundness: -Force overrides a HOLD (' + $msV.Reason + '; audit rc=' + $msRc + ').') }
+  else { Write-Output ('match-soundness: NOT held (' + $msV.Reason + '; audit rc=' + $msRc + '). The baseline still waits for a reviewed `audit-match-soundness.ps1 -Accept`.') }
+}
+elseif ($msRc -eq 3) { Write-Output 'match-soundness: BLIND - it ingested ZERO products, so nothing this build proves any commodity matching is sound; the matching gate above passed on an empty examination, not on a clean result.' }
 
 # ---- CATEGORY-COVERAGE gate (HARD): every commodity must be filed into exactly one category, else it renders in
 # NO department/filter (invisible). This is what makes "add a new item" safe: forget to categorize it and the

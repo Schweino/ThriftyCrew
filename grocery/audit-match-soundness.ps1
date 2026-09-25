@@ -66,50 +66,9 @@ function Get-DriftRows {
 }
 
 
-function Get-CellNames {
-  <#
-    The product NAME on EVERY store cell of a comparison - not only the cheapest one - mapped to a
-    readable description of the cell it holds and whether that cell is the crown.
-
-    Was Get-CrownNames until 2026-09-08 (queue 2026-09-08-2e59b3), and the crown-only reader was SILENT
-    on the founding case of that round: 'Fareway Steamables Green Beans', a frozen 12 oz microwave bag,
-    held Fareway's fresh-green-beans cell at 1.92/lb while the CROWN sat at Walmart on 1.6201/lb. A
-    wrong product does not have to be the cheapest in Omaha to be wrong on the board; it only has to
-    hold a cell a reader will price a shop from. Reading cheapest_store made that half of the class
-    invisible, and it is the half that had already been accepted into the baseline.
-
-    A PARAMETER rather than a file read, so the CELL-BY-CONTEST cases in -SelfTest can be driven by a
-    frozen board slice. The whole point of the class is a wrong product that HELD a cell, and the
-    exclude that ships the same day removes that product from today's board - so a check that could
-    only read live data could never fire, which is the defect this estate keeps paying for (see
-    grocery\test-capture-builders.ps1's BLIND branch).
-
-    A CROWN WINS A TIE: one product name can sit on several rows or stores. If any of them is the
-    crown, the entry records the crown, because that is the more expensive finding and the one the
-    2026-09-07 BELVITA case is about.
-  #>
-  param($Comparison)
-  $out = @{}
-  foreach ($r in @($Comparison)) {
-    $cs = [string]$r.cheapest_store
-    foreach ($s in @($r.stores)) {
-      $itm = [string]$s.item
-      if (-not $itm) { continue }
-      $isCrown = ([bool]$cs -and ([string]$s.store -eq $cs))
-      if ($out.ContainsKey($itm) -and $out[$itm].crown -and -not $isCrown) { continue }
-      $out[$itm] = [pscustomobject]@{
-        text  = ([string]$r.id + ' @ ' + [string]$s.store + ' ' + [string]$s.per_unit + '/' + [string]$r.unit)
-        crown = [bool]$isCrown
-      }
-    }
-  }
-  return $out
-}
-function Select-CellByContest {
-  # The intersection, as its own function so both the fixture and the live path drive the SHIPPED rule.
-  param($NewContest, $CellNames)
-  return @(@($NewContest) | Where-Object { $CellNames.ContainsKey([string]$_) })
-}
+# Get-CellNames and Select-CellByContest moved to soundness-publish-lib.ps1 on 2026-09-25 (queue 2026-09-23-80f302), so
+# the publish gate and this audit read "which names hold a cell" through ONE implementation. See that file's header.
+. (Join-Path $root 'soundness-publish-lib.ps1')
 
 function Get-ContestTag {
   <#
@@ -432,7 +391,7 @@ if ($SelfTest) {
   # these cases sat inside a comment behind a typed backslash-n (8847c9fa5) and the suite printed PASS over 60 of 62. Every call
   # to T counts; the verdict below refuses any total but $script:expectedCases. Add a case, move the number.
   $script:ran = 0
-  $script:expectedCases = 62
+  $script:expectedCases = 73
   function T([string]$n, [bool]$ok, [string]$got) {
     $script:ran++
     if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
@@ -718,6 +677,70 @@ if ($SelfTest) {
     T 'MUST FIRE  a NEW contested name holding a CROWN (the frozen BELVITA row) is labelled CONTESTED CROWN; a crownless one stays NEW CONTESTED' ((@($ccC | Where-Object { $_.Label -eq 'CONTESTED CROWN' -and $_.Text -like '*BELVITA*' }).Count -eq 1) -and (@($ccC | Where-Object { $_.Label -eq 'NEW CONTESTED' -and $_.Text -like '*Super Sweet Corn*' }).Count -eq 1)) ((@($ccC | ForEach-Object { $_.Label }) -join ','))
     T 'MUST FIRE  every condition this audit can send derives a type key that alert-registry.json registers (an unregistered one pages as UNREGISTERED)' ($rgMiss.Count -eq 0) ($rgMiss -join ', ')
   } catch { T 'the registry check could load alert-registry-lib.ps1 and alert-registry.json' $false $_.Exception.Message }
+  # ---- PUBLISH-HOLD: which soundness findings hold the reader-facing post (Brad's ruling Q-2026-09-25-2-A, 2026-09-25,
+  # option A; queue 2026-09-23-80f302). The rule is Get-SoundnessPublishVerdict in soundness-publish-lib.ps1.
+  # FROZEN BOARD SLICE transcribed from comparison-2026-09-23 (built 2026-09-25 08:06:39): the limes row whole, and five of
+  # the six facial-tissues columns (Sam's Club's item carries a non-ASCII apostrophe and is left out; Sam's stays the crown).
+  $phBoard = @(
+    [pscustomobject]@{ id = 'facial-tissues'; unit = 'each'; cheapest_store = "Sam's Club"; stores = @(
+      [pscustomobject]@{ store = 'Aldi'; per_unit = 0.0087; item = 'Willow Facial Tissue 144 CT' },
+      [pscustomobject]@{ store = 'Fareway'; per_unit = 0.012; item = 'Puffs Facial Tissue Plus Lotion' },
+      [pscustomobject]@{ store = "Baker's"; per_unit = 0.0124; item = 'Kroger Facial Tissue' },
+      [pscustomobject]@{ store = 'Family Fare'; per_unit = 0.0124; item = 'Cardinal Facial Tissues Flat' },
+      [pscustomobject]@{ store = 'Walmart'; per_unit = 0.0137; item = 'Great Value Ultra Soft Facial Tissues, 4 Flat Cartons, 120 Tissues per Carton, 3-Ply, Compare to Kleenex' }) },
+    [pscustomobject]@{ id = 'limes'; unit = 'each'; cheapest_store = 'Walmart'; stores = @(
+      [pscustomobject]@{ store = 'Walmart'; per_unit = 0.25; item = 'Fresh Lime, Each' },
+      [pscustomobject]@{ store = "Baker's"; per_unit = 0.69; item = 'Fresh Large Limes - Each' },
+      [pscustomobject]@{ store = 'Family Fare'; per_unit = 0.89; item = 'Fresh Limes' },
+      [pscustomobject]@{ store = 'Fareway'; per_unit = 0.99; item = 'Lime' },
+      [pscustomobject]@{ store = 'Hy-Vee'; per_unit = 0.99; item = 'Limes' }) })
+  $phCells = Get-CellNames $phBoard
+  # TODAY'S REPORT (soundness-report.json 2026-09-25 11:10), every line; the Pledge name is transcribed without its (R) and (TM) marks.
+  $phToday = [ordered]@{ generated = '2026-09-25 11:10'; drift_vs_engine = 0; drift_products = $null
+    moved = @([pscustomobject]@{ name = 'Puffs Plus Lotion 2-Ply Facial Tissues 12 Cube Boxes, 72 tissues/box'; from = 'lotion'; to = 'facial-tissues' })
+    dropped = @([pscustomobject]@{ name = 'True Lime Crystallized Lime Packets, 100 ct.'; from = 'limes' })
+    new_contested = $null
+    new_contested_names = @('Lay''s Honey Barbecue Potato Chips', 'Pledge Multisurface Cleaner, Everyday Clean, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3')
+    cell_by_contest = @() }
+  $phV = Get-SoundnessPublishVerdict -Report $phToday -CellNames $phCells
+  T 'MUST NOT FIRE  today''s report (Puffs Plus Lotion 12-cube moved lotion->facial-tissues, True Lime dropped, Lay''s and Pledge contested) touches no published cell, so the post is NOT held and all four print as REVIEW' `
+    ((-not $phV.Hold) -and ($phV.Review.Count -eq 4) -and ($phV.Winners.Count -eq 0)) ('hold=' + $phV.Hold + ' review=' + $phV.Review.Count + ' winners=' + $phV.Winners.Count)
+  $phMv = [ordered]@{ moved = @([pscustomobject]@{ name = 'Puffs Facial Tissue Plus Lotion'; from = 'lotion'; to = 'facial-tissues' }); dropped = $null; new_contested_names = $null; cell_by_contest = $null }
+  $phV = Get-SoundnessPublishVerdict -Report $phMv -CellNames $phCells
+  T 'MUST FIRE  a MOVED product that WINS a published cell (Fareway facial-tissues 0.012/each, the real 2026-09-23 winner) HOLDS the post and names the cell' `
+    (($phV.Hold) -and ($phV.Winners.Count -eq 1) -and ([string]$phV.Winners[0] -like '*facial-tissues @ Fareway 0.012/each*')) ('hold=' + $phV.Hold + ' ' + ($phV.Winners -join ' | '))
+  $phDr = [ordered]@{ moved = $null; dropped = @([pscustomobject]@{ name = 'Fresh Lime, Each'; from = 'limes' }); new_contested_names = $null; cell_by_contest = $null }
+  $phV = Get-SoundnessPublishVerdict -Report $phDr -CellNames $phCells
+  T 'MUST FIRE  a DROPPED product that is a published CROWN (Walmart limes 0.25/each) HOLDS the post' (($phV.Hold) -and ($phV.Winners.Count -eq 1)) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  $phNc = [ordered]@{ moved = $null; dropped = $null; new_contested_names = @('Limes'); cell_by_contest = $null }
+  $phV = Get-SoundnessPublishVerdict -Report $phNc -CellNames $phCells
+  T 'MUST FIRE  a newly CONTESTED product that wins a plain (non-crown) cell (Hy-Vee limes) HOLDS the post' (($phV.Hold) -and ($phV.Winners.Count -eq 1)) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  $phV = Get-SoundnessPublishVerdict -Report $null -CellNames $phCells -ReadError 'no report'
+  T 'MUST FIRE  an unreadable soundness report HOLDS the post (fails closed)' ($phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  $phV = Get-SoundnessPublishVerdict -Report $phToday -CellNames @{} -ReadError 'no board'
+  T 'MUST FIRE  changes that cannot be joined to a board naming at least one cell HOLD the post (off-board is proven, never assumed)' ($phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  $phNn = [ordered]@{ moved = @([pscustomobject]@{ name = ''; from = 'lotion'; to = 'facial-tissues' }); dropped = $null; new_contested_names = $null; cell_by_contest = $null }
+  $phV = Get-SoundnessPublishVerdict -Report $phNn -CellNames $phCells
+  T 'MUST FIRE  a change row with no product name cannot be joined, so it HOLDS' ($phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  $phV = Get-SoundnessPublishVerdict -Report ([ordered]@{ moved = @(); dropped = @(); new_contested_names = @(); cell_by_contest = @() }) -CellNames $null
+  T 'MUST NOT FIRE  a steady-state report (no changes) passes without needing the board' (-not $phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  # The IO half, driven through real files in a per-run scratch directory.
+  $phDir = Join-Path ([IO.Path]::GetTempPath()) ('ams-ph-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $phDir -ErrorAction Stop | Out-Null
+  try {
+    $phRep = Join-Path $phDir 'soundness-report.json'; $phCmp = Join-Path $phDir 'comparison-2026-09-23.json'
+    [IO.File]::WriteAllText($phRep, ($phToday | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText($phCmp, ([ordered]@{ week_of = '2026-09-23'; comparison = $phBoard } | ConvertTo-Json -Depth 6), (New-Object Text.UTF8Encoding($false)))
+    $phStart = (Get-Date).AddSeconds(-30)
+    $phV = Read-SoundnessPublishVerdict -ReportFile $phRep -CompareFile $phCmp -NotBefore $phStart
+    T 'CLEAN TWIN  the file path reads a fresh report and a real board file and lets today''s off-board changes through as 4 REVIEW lines' `
+      ((-not $phV.Hold) -and ($phV.Review.Count -eq 4)) ('hold=' + $phV.Hold + ' review=' + $phV.Review.Count + ' ' + $phV.Reason)
+    (Get-Item -LiteralPath $phRep).LastWriteTime = (Get-Date).AddHours(-3)
+    $phV = Read-SoundnessPublishVerdict -ReportFile $phRep -CompareFile $phCmp -NotBefore (Get-Date)
+    T 'MUST FIRE  a report older than this audit run (the audit died before writing its own) HOLDS the post' (($phV.Hold) -and ([string]$phV.Reason -like '*before this audit run*')) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+    $phV = Read-SoundnessPublishVerdict -ReportFile (Join-Path $phDir 'absent.json') -CompareFile $phCmp -NotBefore $phStart
+    T 'MUST FIRE  a missing report HOLDS the post' ($phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
+  } finally { Remove-Item -LiteralPath $phDir -Recurse -Force -ErrorAction SilentlyContinue }
   $ranCount = $script:ran
   if ($ranCount -ne $script:expectedCases) {
     Write-Output ("  X     CASE COUNT  the suite ran {0} case(s) and lists {1}: a case was skipped, hidden in a comment, or added without moving expectedCases" -f $ranCount, $script:expectedCases)
