@@ -47,6 +47,10 @@ $OWNED = @(
   # 2026-09-12: the six tree-wide ratchets a PUSH no longer runs. They are deferred in ops\run-gates.ps1 by a
   # `daily = $true` mark, so without THIS registration they run nowhere at all - not in a push, not on a clock.
   [pscustomobject]@{ Name = 'TC Daily Ratchets 0315'; File = 'tc-daily-ratchets-0315.xml' }
+  # 2026-09-25, Brad's ruling on Q4-tasks-dead-after-reboot: lock after an automatic sign-in, page what a reboot cost,
+  # and beat the off-box heartbeat. Its XML carries a LogonTrigger, so it is the first owned definition with a
+  # __CURRENT_USER__ placeholder (substituted below).
+  [pscustomobject]@{ Name = 'TC Boot Watch';         File = 'tc-boot-watch.xml' }
 )
 
 function Test-TaskWatched {
@@ -189,6 +193,19 @@ if ($SelfTest) {
   T 'CLEAN TWIN the registration path checks every target exists before registering' `
     ($src.Contains($nTargets)) 'the target check is defined but never called'
 
+  # MUST FIRE: a definition with a LogonTrigger carries the __CURRENT_USER__ placeholder, and the registration path must
+  # replace it, or the task registers a trigger for a user named '__CURRENT_USER__' who never signs in.
+  $iUsr = $src.IndexOf("Replace('__CURRENT_USER" + "__'")
+  T 'MUST FIRE  the registration path replaces the __CURRENT_USER__ placeholder a LogonTrigger carries' `
+    ($iUsr -ge 0) ("user@{0}" -f $iUsr)
+  $bwXml = Join-Path $XMLDIR 'tc-boot-watch.xml'
+  $bwTxt = if (Test-Path -LiteralPath $bwXml) { [IO.File]::ReadAllText($bwXml) } else { '' }
+  T 'CLEAN TWIN TC Boot Watch fires at logon for this user and every 15 minutes' `
+    (($bwTxt -match '<LogonTrigger>\s*<UserId>__CURRENT_USER__</UserId>') -and ($bwTxt -match '<Interval>PT15M</Interval>')) 'triggers'
+  $bwPaths = Get-TaskTargetPaths -Arguments (Get-DefinitionArguments -XmlPath $bwXml)
+  T 'CLEAN TWIN TC Boot Watch runs boot-watch.ps1 under the exit-code-passing headless launcher' `
+    (($bwPaths -contains 'C:\Codex\ThriftyCrew\ops\boot-watch.ps1') -and ($bwTxt -match 'pythonw\.exe') -and ($bwTxt -match 'headless-exit\.pyw')) ($bwPaths -join ' | ')
+
   Write-Output ''
   if ($bad -gt 0) {
     Write-Output ("install-ops-tasks selftest: {0} FAILED of {1}" -f $bad, $ran)
@@ -261,6 +278,9 @@ Invoke-Guard -Name 'INSTALL-OPS-TASKS' -Body {
     $xml = [IO.File]::ReadAllText($x)
     $sid = ([Security.Principal.WindowsIdentity]::GetCurrent()).User.Value
     $xml = $xml.Replace('__CURRENT_USER_SID__', $sid)
+    # A LogonTrigger names its user as DOMAIN\user, the form Export-ScheduledTask writes (tc-approvals-page.xml carries the
+    # same placeholder). The two placeholders do not overlap: '__CURRENT_USER_SID__' has one underscore after USER.
+    $xml = $xml.Replace('__CURRENT_USER__', ([Security.Principal.WindowsIdentity]::GetCurrent()).Name)
     # STRIP THE XML DECLARATION. `Register-ScheduledTask -Xml` takes a .NET string, which is
     # UTF-16 in memory, and refuses one whose declaration claims anything else: "The task XML
     # is malformed. (1,40)::ERROR: unable to switch the encoding". The committed bytes are

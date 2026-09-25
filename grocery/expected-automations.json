@@ -61,6 +61,15 @@
                               "exit_note":  "ops/reap-runaway-processes.ps1 exits 0 clean, 1 when it has findings (its header), 3 when it could not read the process table. 1 is it working; 3 is a blind reaper and is never excused by a fresh log (2026-09-22 post-landing review F2, plan-2026-09-22-10)."
                           },
                           {
+                              "name":  "TC Boot Watch",
+                              "max_age_hours":  2,
+                              "why":  "at logon and every 15 min (ops/boot-watch.ps1 -Lock -Alert -Beat). Brad's ruling 2026-09-25 on Q4-tasks-dead-after-reboot (grocery/triage-plans/plan-2026-09-18.json): every TC task is 'run only when logged on', so the 2026-09-14 Windows Update restart cost 09-15 and 09-16 and nothing paged. Once Brad sets up Autologon this locks the desktop after the automatic sign-in, pages the daily jobs a reboot lost at the first sign-in after it, and beats the smp-feed Worker's off-box heartbeat, whose cron pages when the beats stop. Aged like any 15-minute task: its logon trigger alone could not be, because it fires only after a boot. proves = the run log, appended on every run.",
+                              "proves":  "ops/out/logs/boot-watch-*.log",
+                              "ok_exits":  [0, 1],
+                              "fail_exits":  [3],
+                              "exit_note":  "ops/boot-watch.ps1 exits 0 nothing to report, 1 a finding it has already paged (a boot that lost a day, a watcher not checking, a refused beat), 3 when LastBootUpTime could not be read. 1 is it working; 3 is a blind boot watch and is never excused by a fresh log."
+                          },
+                          {
                               "name":  "TC Recall Sleep 0435",
                               "max_age_hours":  30,
                               "why":  "the knowledge store\u0027s nightly offline pass: harvest, join reflex outcomes from the transcripts, re-derive floors and weights, refresh drafts and failure classes, run the forgetting and clustering queues, finish with the gate. It ran as a Claude scheduled AGENT until 2026-09-09, against Brad\u0027s 2026-08-22 rule that Windows tasks are the only routines that fire - one more failure mode between the schedule and the work. The pass now stamps on every path, red or green, because a stamp written only on success reads as \u0027never ran\u0027 on exactly the mornings somebody needs to know it did.",
