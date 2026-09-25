@@ -4024,6 +4024,7 @@ Copy-Item (Join-Path $root 'audit-match-soundness.ps1') (Join-Path $fxMs 'audit-
 Copy-Item (Join-Path $root 'verdict-lib.ps1') (Join-Path $fxMs 'verdict-lib.ps1')
 Copy-Item (Join-Path $root 'alert-lib.ps1') (Join-Path $fxMs 'alert-lib.ps1')      # dot-sourced for Send-Alert, same as verdict-lib
   Copy-Item (Join-Path $root 'match-worklist-lib.ps1') (Join-Path $fxMs 'match-worklist-lib.ps1')   # dot-sourced for Get-ReviewedContested (2026-09-23, plan-10 2dae07)
+  Copy-Item (Join-Path $root 'soundness-publish-lib.ps1') (Join-Path $fxMs 'soundness-publish-lib.ps1')   # dot-sourced at load since 742445437 (plan-2026-09-25-2, 2026-09-23-80f302)
 Set-Content (Join-Path $fxMs 'commodities.json') '[{"id":"lemons","include":["lemon"],"exclude":[]},{"id":"limes","include":["lime"],"exclude":[]}]' -Encoding UTF8
 # The fixture's exclude list is a LIBRARY now (backlog I82), not an array literal inside a stub engine.
 # compare-deals.ps1 stays here because it is still part of the cache fingerprint below; it just no
@@ -4125,7 +4126,7 @@ if (Use-Unit 'u077-m-verdict-identity-which-item-did') {
 $fxVi = NewFxDir 'verdict-identity'
 New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\audit') | Out-Null
 New-Item -ItemType Directory -Force (Join-Path $fxVi 'out\regular') | Out-Null
-foreach ($lf in @('audit-match-soundness.ps1', 'verdict-lib.ps1', 'alert-lib.ps1', 'match-worklist-lib.ps1')) { Copy-Item (Join-Path $root $lf) (Join-Path $fxVi $lf) }
+foreach ($lf in @('audit-match-soundness.ps1', 'verdict-lib.ps1', 'alert-lib.ps1', 'match-worklist-lib.ps1', 'soundness-publish-lib.ps1')) { Copy-Item (Join-Path $root $lf) (Join-Path $fxVi $lf) }
 Set-Content (Join-Path $fxVi 'commodities.json') '[{"id":"garlic","include":["garlic"],"exclude":[]},{"id":"pinto-beans","include":["pinto bean"],"exclude":[]}]' -Encoding UTF8
 Set-Content (Join-Path $fxVi 'out\regular\hyvee-regular-2026-01-01.json') '{"deals":[{"item":"Marketside Tandoori Style Garlic Naan Bites, 7.05 oz, 15 Count"},{"item":"Garlic"},{"item":"Member''s Mark Pinto Beans 12 lbs."}]}' -Encoding UTF8
 Set-Content (Join-Path $fxVi 'out\audit\match-baseline.json') '{"generated":"2026-01-01 00:00","names":{"Garlic":"garlic"},"contested":[]}' -Encoding UTF8
