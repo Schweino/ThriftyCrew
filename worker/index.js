@@ -24,6 +24,9 @@
 //   ingredients and the planner are paid content). It was a public static file until then.
 
 import { verifyMemberToken, bearer } from "./member-token.js";
+// - POST /box-heartbeat and the scheduled() cron handler: the OFF-BOX boot page (worker/box-heartbeat.js). Both are
+//   inert until the BOX_KV binding and the cron trigger exist (design/ready-for-brad/Q4-autologon-and-box-heartbeat.md).
+import { handleBoxHeartbeat, runBoxWatch } from "./box-heartbeat.js";
 
 // The feed is a static asset written by the daily pipeline and deployed with the repo.
 // No upstream fetch, no release pointer, no fallback branch that can silently become the norm.
@@ -310,6 +313,12 @@ export default {
       return serveCompatibleFeed(request, env);
     }
 
+    // server-to-server only (no CORS path): the box's TC Boot Watch task beats here every 15 minutes.
+    if (url.pathname === "/box-heartbeat") {
+      const authOk = request.method === "POST" ? await notifyAuthOk(env, request) : false;
+      return handleBoxHeartbeat(request, env, authOk, Date.now());
+    }
+
     // server-to-server only (no CORS path): the Actions backup posts here on failure.
     if (url.pathname === "/ops-alert") {
       if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
@@ -482,6 +491,11 @@ export default {
 
     // everything else: static assets (smp-feed.json, etc.)
     return env.ASSETS.fetch(request);
+  },
+
+  // The off-box watcher. Runs only when a cron trigger is configured, and does nothing without the BOX_KV binding.
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runBoxWatch(env, Date.now(), (subject, body) => sendOpsEmail(env, { subject, body })));
   },
 };
 

@@ -31,8 +31,11 @@ def main():
         print("member-token self-test: BLIND - no node.exe under C:\\Codex\\node-v*, nothing ran")
         return 3
     bad = 0
-    for suite, verdict in (("member-token.selftest.mjs", "member-token self-test: pass"),
-                           ("index.selftest.mjs", "worker-routes self-test: pass")):
+    suites = (("member-token.selftest.mjs", "member-token self-test: pass"),
+              ("index.selftest.mjs", "worker-routes self-test: pass"),
+              # 2026-09-25: the off-box boot page (Q4-tasks-dead-after-reboot, grocery/triage-plans/plan-2026-09-18.json).
+              ("box-heartbeat.selftest.mjs", "box-heartbeat self-test: pass"))
+    for suite, verdict in suites:
         r = subprocess.run([node, os.path.join(HERE, suite)], capture_output=True, text=True, cwd=HERE)
         lines = [l for l in (r.stdout or "").splitlines() if l.strip()]
         last = lines[-1] if lines else ""
@@ -42,7 +45,7 @@ def main():
             bad += 1
             print("  " + (r.stderr or "").strip()[-2000:])
             print("  %s did not pass (node exit %d)" % (suite, r.returncode))
-    print("member-token self-test: %s (suites=2 failed=%d)" % ("pass" if not bad else "FAIL", bad))
+    print("member-token self-test: %s (suites=%d failed=%d)" % ("pass" if not bad else "FAIL", len(suites), bad))
     return 1 if bad else 0
 
 

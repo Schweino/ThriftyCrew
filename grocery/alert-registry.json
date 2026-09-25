@@ -553,6 +553,36 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "box-rebooted-daily-jobs-missed",
+   "match": "exact",
+   "key": "ops the box rebooted and daily jobs were missed",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "ops/boot-watch.ps1",
+   "note": "Born 2026-09-25 with TC Boot Watch (Brad's ruling on Q4-tasks-dead-after-reboot, grocery/triage-plans/plan-2026-09-18.json, queue 2026-09-18-8491bf). Sent once per boot, at the first sign-in after it, only when a DAILY TC job lost at least one whole day: the 09-14 22:29 Windows Update restart cost 09-15 and 09-16 and nothing paged. A 15-minute job missing an hour, or one daily run that StartWhenAvailable makes up at sign-in, is logged and never sent.",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
+   "id": "box-heartbeat-watcher-not-checking",
+   "match": "exact",
+   "key": "ops the off box heartbeat watcher is not checking",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "ops/boot-watch.ps1",
+   "note": "The off-box watcher (smp-feed Worker cron, worker/box-heartbeat.js) has not checked for over 120 minutes, or has never checked while beats have landed for 120: if the box goes down now, nothing pages. The centre of a centralised heartbeat is the one thing nothing else watches, so the box watches it. Fix is in the Cloudflare dashboard (the smp-feed cron trigger), design/ready-for-brad/Q4-autologon-and-box-heartbeat.md.",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
+   "id": "box-heartbeat-refused",
+   "match": "exact",
+   "key": "ops the off box heartbeat refused this box",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "ops/boot-watch.ps1",
+   "note": "The Worker answered 401 to the box's heartbeat: the X-Notify-Auth hash (SHA-256 of the Ghost Admin key) no longer matches the Worker's GHOST_ADMIN_KEY secret, so no beat lands and the off-box watcher will page the box as silent while it is up. Usually a key rotated on one side only.",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "manifest-refused-stale-feed",
    "match": "exact",
    "key": "recipe per serving manifest refused stale price feed",
