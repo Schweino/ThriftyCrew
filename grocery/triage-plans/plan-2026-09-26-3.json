@@ -1,0 +1,1158 @@
+{
+  "generated": "2026-09-26T14:00:00",
+  "round": 1,
+  "board_week": "2026-09-23",
+  "queue_ids_seen": [
+    "2026-09-26-8deaa4",
+    "2026-09-26-ed86c6",
+    "2026-09-26-f655c7",
+    "2026-09-26-samsunit",
+    "2026-09-26-fab315",
+    "2026-09-26-9dc3f6",
+    "2026-09-26-f73dc7",
+    "2026-09-22-6e6a3b",
+    "2026-09-26-ab11be",
+    "2026-09-26-518fff",
+    "2026-09-25-22b1e8",
+    "2026-09-26-8163f7",
+    "2026-09-25-a8448d",
+    "2026-09-26-eb9ca4"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "memory:triage-rebuild-reads-late-captures (crowns diffed against 0b1ef1c4b public/board.json before the rebuild was committed)",
+    "memory:push-data-sweeps-your-edit (every commit by pathspec, git show --stat checked)",
+    "memory:link-derivation-order (derive-links after the board is final, one -Store at a time)",
+    "searched \"guard blind test-auditors\", nothing applicable",
+    "searched \"fixture expected route after ruled rule change\", nothing applicable"
+  ],
+  "integration": "Assembled 2026-09-26 by the integration step from the parallel lanes' item files: 10 branches merged --no-ff into local main (HEAD 3feb147bf before this plan), one board chain rebuilt comparison-2026-09-23 over all of them; guards exit 0. Crown diff vs 0b1ef1c4b: 12 changed, all explained (8deaa4 3, 177835 2, samsunit 7).",
+  "ship_sequence": [
+    "2026-09-26-8deaa4",
+    "2026-09-26-f655c7-routes",
+    "2026-09-26-ed86c6",
+    "2026-09-26-f655c7",
+    "2026-09-26-samsunit",
+    "2026-09-26-fab315",
+    "2026-09-26-9dc3f6",
+    "2026-09-26-f73dc7",
+    "2026-09-22-6e6a3b",
+    "2026-09-26-ab11be",
+    "2026-09-26-518fff",
+    "2026-09-25-22b1e8",
+    "2026-09-26-8163f7",
+    "2026-09-25-a8448d",
+    "2026-09-26-eb9ca4"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-26-8deaa4",
+      "lane": "money",
+      "subject": "Wrong-product cells on the live board: 3 Family Fare sale cells, the 7 candidates and 2 regex rows from plan-2026-09-26-2 item 177835, and the class behind them",
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "comparison-2026-09-23.json (built 2026-09-26 08:06, main checkout) read cell by cell: broccoli | Family Fare | sale | 2.0833/lb | 'Michelina's Beef & Broccoli 9.6 Oz' (the crown; public/board.json at 10:45 shows it as Family Fare $2.08/lb 'when you buy 4' with a Broccoli Crowns link); jarred-gravy | Family Fare | 0.1302/oz | 'Michelina's Salisbury Steak With Mashed Potatoes & Gravy 9.6 Oz'; raspberries | Family Fare | 0.2851/oz | 'Pillsbury Poppin' Flavor Raspberry Fruit Rolls 5 Ea'. All three as the queue item says.",
+      "evidence": [
+        "RULINGS, one row per cell (id | store | type | per_unit | item | ruling | fact):",
+        "broccoli | Family Fare | sale | 2.0833/lb | Michelina's Beef & Broccoli 9.6 Oz | WRONG | a frozen entree (brand is a frozen-meal line; 4 for $5 at 9.6 oz). CROWN.",
+        "jarred-gravy | Family Fare | sale | 0.1302/oz | Michelina's Salisbury Steak With Mashed Potatoes & Gravy 9.6 Oz | WRONG | a frozen dinner. Its own fence \\b(?:and|&|n)\\s+gravy\\b could never match ' & Gravy' because \\b before '&' needs a word character on one side.",
+        "raspberries | Family Fare | sale | 0.2851/oz | Pillsbury Poppin' Flavor Raspberry Fruit Rolls 5 Ea | WRONG | refrigerated sweet dough rolls.",
+        "raspberries | Fareway | everyday | 0.165/oz | AE Dairy Raspberry Yolite | WRONG (found in the sweep, not in any queue item) | AE Dairy's Yolite is a yogurt cup, 6 oz at $0.99; raspberries excludes 'yog' but the name never says yogurt. CROWN.",
+        "177835 candidate: sun-dried-tomatoes | Family Fare | sale | 0.4694/oz | Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz | WRONG | a cracker; the commodity's 'cracker' fence cannot see 'Wheat Thins ... Snacks'.",
+        "177835 candidate: sun-dried-tomatoes | Baker's | sale | 0.4989/oz | California Sun Dry Sun-Dried Tomatoes Bruschetta Jar | WRONG | a bruschetta topping; its next two fallbacks were also wrong: 'California Sun Dry Garlic with Sun Dried Tomatoes' (garlic is the first listed ingredient; Food Lion shelves it under prepared garlic) and 'California Sun Dry Sun-Dried Tomato Spread'.",
+        "177835 candidate: sirloin-steak | Family Fare | everyday | 5.49/lb | Fresh Usda Choice Whole Sirloin Tip | WRONG | a whole subprimal (the joint steaks are cut from), not a steak. CROWN, priced 25 recipe lines per 177835.",
+        "177835 candidate: sirloin-steak | Sam's Club | everyday | 6.47/lb | Sirloin Tip, Case  priced per pound | WRONG | a case of whole subprimals.",
+        "found in the sweep: sirloin-steak | Baker's | everyday | 9.99/lb | Kevin's Natural Foods Ranchero Sirloin Steak | WRONG | a heat-and-eat entree, 16 oz.",
+        "177835 candidates: mayonnaise | Aldi | 0.0963 | Burman S Light Mayonnaise 30 FL OZ, and | Walmart | 0.099 | Great Value Light Mayonnaise, 30 fl oz; plus the same shape at Baker's (Kroger Light Mayo, 0.133) and Family Fare (Our Family Mayo, Light 30 Fl Oz, 0.133) | WRONG | light mayonnaise is a reduced-oil dressing, not standard-of-identity mayonnaise (21 CFR 169.140 requires at least 65% vegetable oil). Each falls back to the same brand's real mayo at the SAME per-unit price, so no price moves.",
+        "177835 candidate: chuck-roast | Sam's Club | everyday | 6.97/lb | Whole Beef Chuck Roll, Case, priced per pound | RIGHT FOOD, PACK IS A RULING | a chuck roll is the chuck-roast muscle sold whole by the case. Left in place; Q-2026-09-26-subprimal-case below.",
+        "found in the sweep: ribeye-steak | Sam's Club | 13.84/lb | Member's Mark USDA Choice Angus Whole Beef Cowboy Ribeye, Cryovac | WRONG | whole subprimal. ribeye-steak | Family Fare | 18.49/lb | Fresh Ribeye, Whole | WRONG | whole ribeye roll.",
+        "found in the sweep: peaches | Sam's Club | 1.9967/lb | Member's Mark Organic Diced Peach Bowls, 4 oz., 24 pk. | WRONG | fruit cups on fresh peaches.",
+        "REGEX ROW (2026-09-22-5a9676): sun-dried-tomatoes | Aldi | everyday | 0.4738/oz | Tuscan Garden Sundried Tomatoes 8 OZ | RIGHT | sun-dried tomatoes whether oil-packed or dry: the commodity admits both (Sam's 'Terra Verde ... in Oil' and Walmart 'Bella Sun Luci ... in Olive Oil' hold cells beside it); no rule change.",
+        "REGEX ROW (2026-09-22-5a9676): japanese-curry-roux | Baker's | sale | 1.1531/oz | S&B Golden Curry Medium Hot Sauce Mix | RIGHT | the S&B Golden Curry roux block, which Kroger lists as 'Sauce Mix'; include golden\\s+curry is correct. No rule change.",
+        "177835 sirloin tip STEAK rows (Aldi 'Fresh Black Angus Sirloin Tip Steak' 7.99 sale, Fareway 'USDA Choice Sirloin Tip Steak' 7.99, Walmart 'Beef Choice Angus Thin Sliced Sirloin Tip Steak' 8.8182): real steaks, but cut from the round, not the loin: Q-2026-09-26-sirloin-tip below. Unchanged."
+      ],
+      "root_cause": "The category-exclude library (grocery/category-excludes.json, read by the bake, the audit-food-category guard and the vet sheet) had no class for a frozen or heat-and-eat ENTREE, no token for the named snack, dairy and bakery products that won these cells, no rule that a roast or whole subprimal is not a steak, and it scopes by display category: jarred-gravy and sun-dried-tomatoes sit in 'Canned & Soup' beside real soups and chili, so no category block could carry an entree or snack class to them (the class-scope-by-display-taxonomy shape). Each commodity's own fences named product WORDS ('cracker', 'yog', 'frozen') that these names never contain, and jarred-gravy's '&' fence was a dead regex. A wrong prepared product is usually cheaper per unit than the raw food, so it takes the crown; and because the guard reads the same library, it read OK over every one.",
+      "root_fix": {
+        "what": "category-excludes.json: NEW frozen_entree_carrier (entree, Michelina's, Stouffer's, Lean Cuisine, Healthy Choice, Marie Callender's, Hungry-Man, Banquet, Smart Ones, Kevin's Natural, 'with mashed potatoes', boxed mac and cheese) on Fruit, Vegetables, Meat, and by id on jarred-gravy and sun-dried-tomatoes (with snack_carrier); NEW whole_cut_carrier (roast, whole, case) by id on sirloin-steak, ribeye-steak, shaved-beef-steak, pork-chops only; NEW cup_bowl_carrier (gel cups, fruit/diced/salad bowls) on produce; bakery_carrier + Pillsbury, fruit rolls; dairy_carrier + Yolite; snack_carrier + Wheat Thins, Triscuit; frozen_dessert_brand + sorbet, gelato. Per commodity in commodities.json: jarred-gravy '&' fence repaired to (?:\\band|&|\\bn)\\s+gravy\\b; mayonnaise excludes light/lite/reduced fat/low fat/fat free/half the fat; sun-dried-tomatoes excludes bruschetta, 'garlic with sun', spread, turkey; chickpeas excludes salad bowl. Baked with apply-category-excludes.ps1; audit-match-soundness moved/dropped reviewed line by line over five passes and the baseline re-accepted."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "names": "69 of 37,456 corpus names change route (66 drop, 3 move: onion mac and cheese -> mac-and-cheese; two Dole 'Fruit Bowls Diced Peaches in Strawberry Gel' -> fruit-cups), every line read and right. Includes the ed86c6 shapes (13 names) measured in the same passes.",
+        "board": "comparison-2026-09-23: 16 of 2,808 store cells change, 1 EMPTIES, 3 of 574 crowns change. Fallback = cheapest other priced candidate at that store in candidates-2026-09-23.json, BEFORE bands, verdicts and known-wrong, so the landing rebuild is the measurement of record.",
+        "cells": [
+          "broccoli | Family Fare | Michelina's 2.0833 -> Broccoli Crowns 2.99 everyday",
+          "jarred-gravy | Family Fare | Michelina's 0.1302 -> Heinz Home Style Turkey Gravy, 12 Oz Jar 0.2658",
+          "mayonnaise | Aldi | light 0.0963 -> Burman S Real Mayonnaise 0.0963 (same price)",
+          "mayonnaise | Walmart | light 0.099 -> Great Value Mayonnaise 0.099 (same)",
+          "mayonnaise | Baker's | light 0.133 -> Kroger Real Mayo 0.133 (same)",
+          "mayonnaise | Family Fare | light 0.133 -> Our Family Mayo, Real 0.133 (same)",
+          "peaches | Sam's Club | Diced Peach Bowls 1.9967 -> White Peaches, 4 lbs. 2.4675",
+          "raspberries | Fareway | Yolite 0.165 -> CELL EMPTIES (no other priced Fareway candidate)",
+          "raspberries | Family Fare | Pillsbury 0.2851 -> Fresh Red Raspberry 0.715",
+          "ribeye-steak | Sam's Club | whole cowboy ribeye cryovac 13.84 -> Bone In Cowboy Ribeye Steak 13.97",
+          "ribeye-steak | Family Fare | Fresh Ribeye, Whole 18.49 -> Fresh Beef Ribeye Steak, Value Pack 22.99",
+          "sirloin-steak | Family Fare | Whole Sirloin Tip 5.49 -> Fresh Petite Beef Sirloin Sizzle Steak 6.49",
+          "sirloin-steak | Sam's Club | Sirloin Tip, Case 6.47 -> Member's Mark Boneless Top Sirloin Steaks 9.97",
+          "sirloin-steak | Baker's | Kevin's 9.99 -> National Beef Choice Top Sirloin Steak 13.99",
+          "sun-dried-tomatoes | Family Fare | Wheat Thins 0.4694 -> California Sun Dry Sun Dried Tomatoes Julienne Ct 0.7488",
+          "sun-dried-tomatoes | Baker's | bruschetta 0.4989 -> California Sun Dry Sun-Dried Julienne Cut Tomatoes in Oil with Herbs 0.6244"
+        ],
+        "crowns": [
+          "broccoli: Family Fare 2.0833 -> Aldi 2.09/lb (Broccoli Crowns Per LB)",
+          "raspberries: Fareway 0.165 -> Sam's Club 0.3608/oz (Raspberries 12 oz.)",
+          "sirloin-steak: Family Fare 5.49 -> Family Fare 6.49/lb (Fresh Petite Beef Sirloin Sizzle Steak); the 25 recipe lines 177835 counted price about $1.00/lb higher"
+        ],
+        "guard_on_live_board": "audit-food-category over comparison-2026-09-23 with the new library: exit 2, exactly 10 class-scoped cells (broccoli, jarred-gravy, 2 raspberries, 2 ribeye, 3 sirloin, Family Fare sun-dried), nothing else; that run preceded cup_bowl_carrier, which adds the Sam's peaches cell (11 class-scoped). The other 5 of the 16 are per-commodity fences (4 mayonnaise, 1 bruschetta).",
+        "affected_now": 69,
+        "measured_by": "37,456 corpus names of match-baseline.json routed before and after (first-eligible-wins); board: comparison-2026-09-23 16 of 2,808 cells, 3 of 574 crowns. Integration rebuild observed the same 3 crowns (broccoli, raspberries, sirloin-steak)",
+        "cell_effects": [
+          {
+            "commodity": "broccoli",
+            "store": "Family Fare",
+            "before": 2.0833,
+            "after": 2.99,
+            "note": "Michelina's Beef & Broccoli -> Broccoli Crowns; crown moves to Aldi 2.09"
+          },
+          {
+            "commodity": "jarred-gravy",
+            "store": "Family Fare",
+            "before": 0.1302,
+            "after": 0.2658,
+            "note": "Michelina's Salisbury Steak -> Heinz Home Style Turkey Gravy"
+          },
+          {
+            "commodity": "mayonnaise",
+            "store": "Aldi",
+            "before": 0.0963,
+            "after": 0.0963,
+            "note": "Burman S Light -> Burman S Real"
+          },
+          {
+            "commodity": "mayonnaise",
+            "store": "Walmart",
+            "before": 0.099,
+            "after": 0.099,
+            "note": "Great Value Light -> Great Value Mayonnaise"
+          },
+          {
+            "commodity": "mayonnaise",
+            "store": "Baker's",
+            "before": 0.133,
+            "after": 0.133,
+            "note": "Kroger Light Mayo -> Kroger Olive Oil Mayo (plan predicted Kroger Real Mayo)"
+          },
+          {
+            "commodity": "mayonnaise",
+            "store": "Family Fare",
+            "before": 0.133,
+            "after": 0.133,
+            "note": "Our Family Mayo Light -> Our Family Mayo Real"
+          },
+          {
+            "commodity": "peaches",
+            "store": "Sam's Club",
+            "before": 1.9967,
+            "after": 2.4675,
+            "note": "Diced Peach Bowls -> White Peaches 4 lbs"
+          },
+          {
+            "commodity": "raspberries",
+            "store": "Family Fare",
+            "before": 0.2851,
+            "after": 0.715,
+            "note": "Pillsbury fruit rolls -> Fresh Red Raspberry"
+          },
+          {
+            "commodity": "raspberries",
+            "store": "Fareway",
+            "before": 0.165,
+            "after": "empty",
+            "note": "AE Dairy Yolite -> cell empties; crown moves to Sam's Raspberries 12 oz 0.3608"
+          },
+          {
+            "commodity": "ribeye-steak",
+            "store": "Family Fare",
+            "before": 18.49,
+            "after": 22.99,
+            "note": "Fresh Ribeye, Whole -> Value Pack ribeye steak"
+          },
+          {
+            "commodity": "ribeye-steak",
+            "store": "Sam's Club",
+            "before": 13.84,
+            "after": 13.97,
+            "note": "whole cowboy ribeye cryovac -> bone-in cowboy ribeye steak"
+          },
+          {
+            "commodity": "sirloin-steak",
+            "store": "Baker's",
+            "before": 9.99,
+            "after": 13.99,
+            "note": "Kevin's Ranchero -> National Beef Choice Top Sirloin"
+          },
+          {
+            "commodity": "sirloin-steak",
+            "store": "Family Fare",
+            "before": 5.49,
+            "after": 6.49,
+            "note": "Whole Sirloin Tip -> Petite Sirloin Sizzle Steak (crown stays Family Fare)"
+          },
+          {
+            "commodity": "sirloin-steak",
+            "store": "Sam's Club",
+            "before": 6.47,
+            "after": 9.97,
+            "note": "Sirloin Tip, Case -> Boneless Top Sirloin Steaks"
+          },
+          {
+            "commodity": "sun-dried-tomatoes",
+            "store": "Baker's",
+            "before": 0.4989,
+            "after": 0.6244,
+            "note": "bruschetta jar -> julienne in oil with herbs"
+          },
+          {
+            "commodity": "sun-dried-tomatoes",
+            "store": "Family Fare",
+            "before": 0.4694,
+            "after": 0.7488,
+            "note": "Wheat Thins -> California Sun Dry julienne"
+          }
+        ],
+        "cell_effects_source": "observed in the integration rebuild, comparison-2026-09-23 08:06 vs 13:08 (scratchpad crown-diff.tsv)"
+      },
+      "proof": {
+        "must_fire_case": "test-auditors unit u143c-d5e-must-fire-for-prepared-product-and-roast-on-steak: the eight founding cells frozen verbatim off comparison-2026-09-23 (two Michelina's, Kevin's, Yolite, Pillsbury, Wheat Thins, Whole Sirloin Tip, Sam's Diced Peach Bowls) each make audit-food-category exit 2 under its own class. test-match-lib routing fixtures W1-W9 and X1-X5: 19 founding names verbatim, each of which routed to the raw commodity under the previous rules (the soundness DROPPED list is that proof), now route to <none>.",
+        "clean_twin": "u143c CLEAN TWIN: Aldi broccoli crowns, Fareway broccoli florets, Heinz and Chef-mate gravy, Baker's raspberry clamshell, Sam's Terra Verde sun-dried tomatoes, Hy-Vee loin sirloin steak, Aldi chuck roast and Sam's whole chuck roll case: exit 0. Routing CLEAN TWINs: frozen broccoli florets -> frozen-broccoli, fresh broccoli -> broccoli, Heinz gravy jar -> jarred-gravy, raspberry clamshell -> raspberries, oil-packed sun-dried -> sun-dried-tomatoes, loin sirloin -> sirloin-steak, ribeye steak -> ribeye-steak, chuck roast -> chuck-roast (roast token does not reach a roast commodity), Hy-Vee Mayonnaise -> mayonnaise, cut cantaloupe bowl -> cantaloupe.",
+        "runs": "test-match-lib.ps1 exit 0, MATCH-LIB PASSED, routing fixtures 79 of 79. test-auditors.ps1 -SkipUnitsFile (units u143, u143b, u143c only) exit 0, SELECTIVE 7 of 7 passed, NOT a full run.",
+        "guard_or_fixture": "test-auditors unit u143c-d5e-must-fire-for-prepared-product-and-roast-on-steak: the eight founding cells frozen verbatim off comparison-2026-09-23 (two Michelina's, Kevin's, Yolite, Pillsbury, Wheat Thins, Whole Sirloin Tip, Sam's Diced Peach Bowls) each make audit-food-category exit 2 under its own class. test-match-lib routing fixtures W1-W9 and X1-X5: 19 founding names verbatim, each of which r"
+      },
+      "full_suite": "deferred-to-land",
+      "leaves_open": "2 rulings on 2 live shapes (Q-2026-09-26-sirloin-tip: 3 sirloin-tip-steak cells; Q-2026-09-26-subprimal-case: 1 chuck-roast crown). Not residuals: Fareway's emptied raspberries cell is the true state, and the 16 fallbacks are pre-band estimates that the landing rebuild proves.",
+      "leaves_open_occurrences": "2 rulings, each on 1 live cell today (sirloin tip steak rows at Aldi, Fareway, Walmart; Sam's chuck roll case on chuck-roast)",
+      "leaves_open_followup": "Q-2026-09-26-sirloin-tip",
+      "open_questions_for_brad": [
+        {
+          "id": "Q-2026-09-26-sirloin-tip",
+          "question": "May a sirloin tip STEAK stand for sirloin steak? Sirloin tip is cut from the ROUND; sirloin steak from the loin.",
+          "options": {
+            "A (keep, today's state)": "Aldi 7.99 sale, Fareway 7.99 and Walmart 8.82 sirloin-tip-steak cells stay. The crown does not move either way (Family Fare's 6.49 sizzle steak, a loin cut, holds it after this item).",
+            "B (exclude sirloin tip from sirloin-steak)": "those three cells fall back to loin sirloin (Aldi petite sirloin 8.99, Fareway and Walmart to their cheapest top sirloin, or empty); recipe lines are unaffected because the crown is unchanged. A separate sirloin-tip commodity could carry them."
+          }
+        },
+        {
+          "id": "Q-2026-09-26-subprimal-case",
+          "question": "May a whole-subprimal CASE (sold only as a multi-piece case, priced per lb) price a retail roast? Live: chuck-roast | Sam's Club | 'Whole Beef Chuck Roll, Case, priced per pound' 6.97/lb, the crown.",
+          "options": {
+            "A (keep)": "Sam's holds the chuck-roast crown at 6.97/lb; a shopper must buy the whole case.",
+            "B (exclude case/whole on roast commodities)": "crown moves to Aldi 'Choice Black Angus Chuck Roast Per LB' 6.99/lb (+0.02/lb); Sam's cell falls to its next retail roast or empties."
+          }
+        }
+      ],
+      "needs_brad_email": "not sent: two rulings, orchestrator to batch into one email with the run's other questions (send-alert.ps1 -Force from the main checkout).",
+      "close_disposition": "fixed",
+      "resolution_note": "Fixed 16 wrong-product cells on the 2026-09-23 board and the class behind them: frozen/heat-and-eat entrees, fruit rolls, yogurt, crackers, sorbet, fruit cups and salad bowls on raw ingredients (frozen_entree_carrier, cup_bowl_carrier and widened bakery/dairy/snack/frozen-dessert classes, scoped by id where the display bucket hides the food), and a roast or whole subprimal on a steak (whole_cut_carrier); per-commodity fences for light mayonnaise, the sun-dried-tomato bruschetta/garlic-jar/spread chain and the dead jarred-gravy '&' fence. 69 corpus names re-route, 16 of 2,808 cells change, 1 empties (Fareway raspberries), 3 crowns change (broccoli -> Aldi 2.09, raspberries -> Sam's 0.3608, sirloin -> Family Fare sizzle steak 6.49). Both regex rows ruled right. Guard fixture u143c and 21 routing fixtures shipped. Two rulings open for Brad.",
+      "live_check": {
+        "commodity": "broccoli",
+        "store": "Family Fare",
+        "expect": "not 'Michelina's Beef & Broccoli 9.6 Oz'; the broccoli crown is Aldi at $2.09/lb (Broccoli Crowns Per LB) unless a fresh capture beats it. Second check: sirloin-steak crown is not 'Fresh Usda Choice Whole Sirloin Tip' (expect Family Fare $6.49/lb sizzle steak)."
+      },
+      "republished": false,
+      "overlaps": "triage/0926-177835 also changes grocery/commodities.json and grocery/out/audit/match-baseline.json; the landing must merge commodities.json, re-run apply-category-excludes.ps1, and re-accept the baseline once over both.",
+      "tree": "worktree C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-wrongprod, branch triage/0926-wrongprod off triage/0926-routes",
+      "branch": "triage/0926-wrongprod",
+      "commits": [
+        "2ccec48e2 (rules, classes, guard fixture u143c, 30 routing fixtures, baseline)",
+        "3178c4a7d (sun-dried fallback fences, 2 routing fixtures, baseline)"
+      ],
+      "actual_tool_calls": 70,
+      "knowledge_consulted": "searched 'prepared product raw commodity exclude' (data-quality-craft/applies-here.md first-match-wins section, background only); memory:class-scope-by-display-taxonomy and memory:guard-fixture-rule applied; routes commit 93c786a48 used as the exemplar (bake, routing fixtures, soundness accept).",
+      "classification": "wrong-product",
+      "rollback": "git revert -m 1 <the merge commit of 8aaeaafc6 (triage/0926-wrongprod)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "8aaeaafc6 (triage/0926-wrongprod)",
+      "leaves_open_owner_note": "open_questions_for_brad: Q-2026-09-26-sirloin-tip, Q-2026-09-26-subprimal-case"
+    },
+    {
+      "queue_id": "2026-09-26-f655c7-routes",
+      "follow_on_of": "2026-09-26-f655c7",
+      "lane": "money",
+      "publish_batch": "0926-parallel (rule change; the board chain re-runs after the merge, no republish from this lane)",
+      "subject": "Carried re-routes: a flavour pair routes a prepared product to a raw-ingredient commodity (flavour_pair_carrier), plus the Inglehoffer horseradish ruling",
+      "status": "done",
+      "tree": "C:/Codex/ThriftyCrew/.claude/worktrees/tri0926-routes (worktree, branch triage/0926-routes on triage/0926-2dae07)",
+      "branch": "triage/0926-routes",
+      "commits": [
+        "93c786a48 on triage/0926-routes (unlanded; cite blobs grocery/commodities.json 5ffcba3cc831, grocery/category-excludes.json 986d7c4263a7, grocery/test-match-lib.ps1 e9c2c4c4051d, grocery/out/audit/match-baseline.json ca1434de4df4)"
+      ],
+      "premise_verified": "true: re-derived the 117 carried re-routes from main's rules with a scratch explain harness (same first-eligible-wins logic as Get-Eligible); 7 are wrong routes, 110 right. The brief's 'at least 8' counted one more than the list holds; the 8th and 9th wrong routes found are outside the carried list (Honey Stinger ad line at honey, a baseline route; Jalapeno and Habanero Feta re-landing on feta), both fixed here.",
+      "evidence": [
+        "carried list (scratchpad/items/carried-reroutes-2026-09-26.txt): 117 lines = 37 moved, 43 dropped, 37 admissions",
+        "WRONG 1 'Quaker Apple Cinnamon Rice Crisps' apples -> ground-cinnamon: 'Rice Crisps' is a snack; ground-cinnamon's include '\\bcinnamon\\b' took it once apples fenced 'rice\\s+(?:cakes?|crisps?)'",
+        "WRONG 2 'Fresh Cravings Jalapeno Cilantro Hummus,10oz. Plastic Tub' jalapenos -> cilantro: eligible 'cilantro > hummus', cilantro sits earlier in the file",
+        "WRONG 3 'Florida's Natural Peach Mango 59 oz' peaches -> mangoes: a juice carton; peaches fenced \"florida'?s\\s+natural\", mangoes did not",
+        "WRONG 4 'RXBAR Protein Energy Bites, Strawberry Peanut Butter, 14 ct.' strawberries -> peanut-butter: strawberries fenced '\\bbites\\b', peanut-butter did not",
+        "WRONG 5 'BEAR Fruit Rolls Variety Pack Strawberry Raspberry ... No Added Sugar' strawberries -> sugar (then raspberries): sugar fenced 'no\\s+sugar' and 'sugar\\s+added' but not 'No Added Sugar'",
+        "WRONG 6 'McCormick Kosher Strawberry Finishing Sugar, 3.67 oz Bottle' strawberries -> sugar: a decorating sugar",
+        "WRONG 7 'Tostitos Queso Variety Salsa ... 15 oz Jar, 4 Pack' salsa -> queso: a four-jar salsa variety pack at one price (search result for walmart.com/ip/127279894 names four salsas; that listing's contents not read first-hand)",
+        "RIGHT 110: either-or ad lines stating one price for both products (salsa or queso x3, drumsticks or thighs x2, Lay's or Tostitos, 7up, Pepsi or Mountain Dew), lotion facial tissues x10 ('Facial Tissues' in every name), chicken drumsticks x7, Dole mandarin oranges x2, Idahoan mashed potato pouches x2 (instant-mashed-potatoes include names 'pouch'), Caramelized Onion Hummus, Goya Adobo Bitter Orange ('All Purpose Seasoning'), O'Food Sweet Potato Glass Noodle, GV Mac and Cheese Feta and Tomato, Butter Country Buttermilk Syrup (maple-syrup is labelled 'Syrup (pancake / maple)'), 29 laundry detergents, kalamata olives x3, onion soup mix x3, lo mein, 15 bean soup, and 43 drops each fenced by a deliberate type word (fully cooked, can, sticks, beef, freeze dried, cooked, pop-up/pre-cut sheets, salad, protein shake, candies, flakes, crystallized)",
+        "per-line rulings with the deciding fact: scratchpad/items/2026-09-26-routes-rulings.jsonl (117 carried-list lines + 133 post-landing report lines, 250 rows)"
+      ],
+      "root_cause": "A prepared product is named by its flavour, and a flavour is usually a PAIR of ingredient words. A raw-ingredient commodity includes its bare word, so first-match-wins handed the product to whichever ingredient sat earliest in commodities.json, and each per-product fence (apples fences rice crisps, peaches fences florida's natural, jalapenos fences hummus, strawberries fences fruit rolls) only moved it to the NEXT ingredient word in its name. The carried pass made the moves visible for the first time; they had been sitting in the baseline under old routes.",
+      "root_fix": {
+        "what": "category-excludes.json gains the flavour_pair_carrier class: two flavour words side by side joined by a space, and, & or + (never 'or': an either-or ad line is two products at one price), with honey and tangerine deliberately not flavour words (Honey Mangos, Honey Tangerines are produce) and a lookahead for orange habanero/bell/peppers (a colour). Scoped to all 116 Fruit and Vegetables commodities (first apply block) and by apply_ids to 37 single-ingredient spices, the three plain sugars and feta; baked by apply-category-excludes.ps1 and written back as minimal insertions (157 commodities, appended excludes only). audit-food-category (the blocking guard) reads the same library, so a flavour-pair product on a scoped cell now hard-fails the publish. Commodity fences beside it: sugar (no added sugar; finishing/sanding/decorating sugar; cinnamon sugar), peanut-butter (energy/protein bites), mangoes (no sugar), queso (variety salsa), honey and frozen-waffles (Honey Stinger)."
+      },
+      "files": [
+        "grocery/category-excludes.json",
+        "grocery/commodities.json",
+        "grocery/test-match-lib.ps1",
+        "grocery/out/audit/match-baseline.json"
+      ],
+      "blast_radius": {
+        "measured_as": "routing",
+        "corpus": "37,368 names of main's grocery/out/audit/match-baseline.json (rules_hash 5a5d0fc274df, blob 4e94c8c8e94a), routed before and after with first-eligible-wins; a name matching no added pattern cannot move, so the 1,044-name prefilter is exact",
+        "moved": "60 of 37,368 change route; every one a flavoured, mixed or prepared product leaving a raw commodity (scratchpad/routes/diff-v7.txt)",
+        "board": "comparison-2026-09-23.json (built 2026-09-26 08:06): 0 of 2,808 store cells hold a moved name, so 0 of 574 crowns change. Re-landings: Jalapeno Cilantro Hummus at Walmart $0.392/oz vs the Walmart hummus cell $0.287; Hunt's basil-garlic tomato paste at Fareway $0.215 vs $0.1408; Jalapeno Lime pistachios $1.085 vs $0.4492; Good Good jelly and Looney Pruney prunes withheld ship-only; Hy-Vee lime-cilantro tomatoes and Eggo cinnamon brown sugar waffles not in today's candidates. No cell changes by that arithmetic.",
+        "guard": "audit-food-category over a copy of comparison-2026-09-23 with the new class: exit 0, 'ok ... (2458 priced cells scanned)'",
+        "affected_now": 60,
+        "measured_by": "37,368 names of main's match-baseline.json routed before and after; 0 of 2,808 board cells hold a moved name",
+        "cell_effects": [],
+        "cell_effects_source": "observed in the integration rebuild, comparison-2026-09-23 08:06 vs 13:08 (scratchpad crown-diff.tsv)"
+      },
+      "post_landing_report": "audit-match-soundness report mode on these rules over a temp copy of main's out (scratchpad/routes/out, baseline blob 4e94c8c8e94a): exit 2 RULE CHANGE UNREVIEWED as expected, MOVED=38 DROPPED=95 new-contested=0, 100 of them [carried]; all 133 lines ruled RIGHT in the rulings file (0 wrong). drift-vs-engine=33 is candidates-2026-09-23 built under the old rules and clears when the chain re-runs.",
+      "accept": "audit-match-soundness -Accept on these rules over the temp out copy: exit 0, 'baseline ACCEPTED (37456 product names, 619 contested) at rules_hash 51bc57794487', 138 CARRIED RE-ROUTE lines recorded, 21848 seen today / 15608 carried. Committed with the rules; ops/verify-commodities-gate.ps1: 'ok - the baseline this commit carries was accepted against exactly these rules'. MERGE NOTE: the baseline was accepted from main's out as copied about 11:00; any other lane that accepts a baseline before this lands conflicts on grocery/out/audit/match-baseline.json, and the right resolution is to re-run -Accept on the merged rules, never to pick a side.",
+      "proof": {
+        "must_fire_case": "test-match-lib.ps1 routing fixtures F1-F6 (founding names verbatim): 'Quaker Apple Cinnamon Rice Crisps' -> <none> (was ground-cinnamon); Jalapeno Cilantro Hummus -> hummus (was cilantro); Florida's Natural Peach Mango 59 oz -> <none> (was mangoes); BEAR Fruit Rolls ... No Added Sugar -> <none> (was sugar); McCormick Strawberry Finishing Sugar -> <none> (was sugar); RXBAR Strawberry Peanut Butter bites -> <none> (was peanut-butter). Under main's rules all six route to the wrong commodity (scratchpad/routes/explain-before.txt), so the cases reach the change.",
+        "clean_twin": "'McCormick Culinary Kosher Ground Cinnamon, 18.0 oz Bottle' -> ground-cinnamon; 'Cilantro Each' -> cilantro; 'Honey Mangos' -> mangoes (Baker's LIVE mangoes cell at $1.00); 'Fresh Orange Habanero Peppers, 4 oz' -> habanero-peppers; 'Zulka Pure Cane Sugar, 4 lb' -> sugar; 'Jif Extra Crunchy Peanut Butter 16 Oz' -> peanut-butter",
+        "run": "test-match-lib.ps1 on the final rules: exit 0, 'MATCH-LIB PASSED', 'MATCH-LIB-COMPLETE names=45576 divergences=0', routing fixtures 47 of 47 (list count raised 35 -> 47 in the same change). audit-food-category over a copy of comparison-2026-09-23: exit 0, 2458 priced cells scanned. test-auditors.ps1 not run (full_suite deferred-to-land).",
+        "guard_or_fixture": "test-match-lib.ps1 routing fixtures F1-F6 (founding names verbatim): 'Quaker Apple Cinnamon Rice Crisps' -> <none> (was ground-cinnamon); Jalapeno Cilantro Hummus -> hummus (was cilantro); Florida's Natural Peach Mango 59 oz -> <none> (was mangoes); BEAR Fruit Rolls ... No Added Sugar -> <none> (was sugar); McCormick Strawberry Finishing Sugar -> <none> (was sugar); RXBAR Strawberry Peanut Butter "
+      },
+      "horseradish": {
+        "cell": "horseradish @ Aldi, crown $0.2989/oz: 'Inglehoffer Horseradish Cream Style 9.5 OZ' $2.84 (comparison-2026-09-23); contested 'horseradish > horseradish-sauce'",
+        "panel": "COULD NOT READ ON ALDI'S PAGE: https://www.aldi.us/store/aldi/products/2683032-inglehoffer-horseradish-cream-style-9-5-oz serves name 'Inglehoffer Mustards, Cream Hrsradish', 9.5 oz, $2.84 and no ingredients; beavertonfoods.com and shop.lowesfoods.com pages carry none either; no built-in browser tool was available to this spawn. A third-party transcription (nutritionfactsingredients.com viewtopic t=368, a forum post, NET WT 9.5 oz) reads: 'GRATED HORSERADISH ROOTS, WATER, SOYBEAN OIL, WHITE DISTILLED VINEGAR, HIGH FRUCTOSE CORN SYRUP, EGGS, SUGAR, SALT, MODIFIED CORN STARCH, ...' - horseradish first, but an oil-and-egg emulsion, unlike the Silver Spring coarse-cut rows in the same cell.",
+        "decision": "NOT decided: parked needs-brad (Q-horseradish-cream-style). It is the brief's own example of a judgement about what we sell, and the rules already disagree with themselves: horseradish-sauce ('Horseradish Sauce (creamy)') includes 'cream\\s+style\\s+horseradish' and 'horseradish\\s+cream', but horseradish sits earlier in the file and wins. No -Decide verdict written, match-verdicts.json untouched."
+      },
+      "open_questions_for_brad": [
+        {
+          "id": "Q-horseradish-cream-style",
+          "question": "Is a cream-style horseradish (Inglehoffer Cream Style: grated horseradish first, then water, soybean oil, vinegar, corn syrup, eggs) 'Prepared Horseradish', or 'Horseradish Sauce (creamy)'?",
+          "options": {
+            "A": "Prepared horseradish (confirm the current route). Aldi keeps the horseradish crown at $0.2989/oz and Walmart's Inglehoffer 9.5 oz stays at $0.3032; horseradish-sauce's two cream-style includes stay dead text for these names. Lane: resolve-match-worklist -Decide '<contested key>' -Verdict confirm.",
+            "B": "Horseradish sauce (release: exclude cream style / creamy from horseradish). The horseradish crown moves to Baker's Silver Spring Coarse Cut at $0.3738/oz (+25%); Aldi's and Walmart's horseradish cells empty (every in-store candidate at both is an Inglehoffer or Beaver creamy jar, the rest ship-only); Aldi gains a horseradish-sauce cell at $0.2989 and that crown stays Walmart Great Value at $0.16."
+          },
+          "recommendation": "B reads the rule authors' intent (the sauce commodity names cream style twice) and keeps a mayo-style emulsion off the plain-horseradish crown, at the cost of two empty cells.",
+          "alert": "not sent from this spawn (the queue is shared; the orchestrator batches rulings). Send one send-alert.ps1 -Force from main if not batched."
+        }
+      ],
+      "leaves_open": "nothing: the single-word flavour class it names was closed in this run by 2026-09-26-ed86c6 (flavour_word_carrier, sweetener_claim_carrier), merged as 8aaeaafc6",
+      "leaves_open_occurrences": 0,
+      "close_disposition": "follow-on fix of f655c7; close with f655c7 after triage-land reports the run landed. Horseradish stays needs-brad.",
+      "resolution_note": "The first carried re-route pass listed 117 absent names; 7 were wrong (Quaker Apple Cinnamon Rice Crisps->ground-cinnamon, Jalapeno Cilantro Hummus->cilantro, Florida's Natural Peach Mango->mangoes, RXBAR PB bites->peanut-butter, BEAR fruit rolls and McCormick finishing sugar->sugar, Tostitos salsa variety pack->queso), 110 right. Fixed the class: flavour_pair_carrier in category-excludes.json, baked into 116 produce, 37 spice, 3 sugar commodities and feta, plus six commodity fences. 60 of 37,368 corpus names move, 0 of 2,808 board cells change. Post-landing soundness report on these rules: 133 lines, all right; baseline accepted against these rules and committed with them. Horseradish cream style parked needs-brad (Aldi panel unreadable; options A/B with consequences).",
+      "live_check": "no republish from this lane; after the chain re-runs: horseradish @ Aldi still 'Inglehoffer Horseradish Cream Style 9.5 OZ' at $0.2989/oz (unchanged until Brad rules), and mangoes @ Baker's still 'Honey Mangos' at $1.00",
+      "republished": false,
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 128,
+      "classification": "wrong-product",
+      "status_note": "was done-with-needs-brad in the lane report: the fix shipped; the horseradish question is in open_questions_for_brad",
+      "rollback": "git revert -m 1 <the merge commit of 8aaeaafc6 (triage/0926-wrongprod, contains routes)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "8aaeaafc6 (triage/0926-wrongprod, contains routes)",
+      "leaves_open_was": "1 residual: the flavour-pair class does not cover a flavour named by ONE word beside a type word ('Stonemill Cinnamon Sugar', fenced here by hand on sugar; 'Simply Nature Organic Mango NO Sugar', fenced on mangoes); found 2 such names over 37,368 today, both off the board, both fenced.",
+      "leaves_open_owner_note": "queue:2026-09-26-ed86c6 (weekly lane, minted from main with send-alert -Force -Lane weekly; queued as REVIEW, not emailed, by ruling 1)"
+    },
+    {
+      "queue_id": "2026-09-26-ed86c6",
+      "lane": "money",
+      "subject": "Single-word flavour beside a type word on a raw commodity (after flavour_pair_carrier), pulled forward from weekly",
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "Both founding shapes confirmed fenced on the routes branch: 'Stonemill Cinnamon Sugar 3.5 OZ' and 'Simply Nature Organic Mango NO Sugar 5 OZ' route to no commodity under 93c786a48's rules. The claim that nothing detects the NEXT shape held: sweeping main's match-baseline.json (37,456 names) found unfenced live instances of the same class.",
+      "evidence": [
+        "Sweep over the corpus, same class, unfenced before this item (name | routed to):",
+        "flavour word before a type word: 'Health Garden Organic Coconut Sugar, 3 lbs.' | sugar (coconut sugar is not granulated sugar)",
+        "sugar claim on fresh produce: 'Del Monte No Sugar Added Red Grapefruit 6.5 Oz' and two 52 oz siblings | grapefruit (jarred fruit); 'Fareway Diced No Sugar Added Pears' | pears; 'Dole Tropical Fruit, Pineapple & Papaya, No Sugar Added' | pineapple; 3 Metamucil and 2 Top Care 'Fiber Powder, Sugar Free, Orange' | oranges",
+        "flavour pair written with a slash (flavour_pair_carrier's separator was [&+], space or 'and'): 'Raspberry/Blueberry Cup Fresh Divide' | raspberries (this was the Family Fare raspberries cell's next fallback in 8deaa4); 'Fresh Cut In Store Pineapple/Strawberry/Kiwi Bowl' | strawberries",
+        "0 of these are on the 2026-09-23 board as a winning cell; the slash case would have become one when 8deaa4 removed the Pillsbury row."
+      ],
+      "root_cause": "flavour_pair_carrier sees a PAIR of ingredient words; a product can instead be named by ONE flavour word before the commodity's own type word ('Coconut Sugar', 'Lemon Pepper', 'Garlic Salt'), by a processing claim no fresh food carries ('No Sugar Added', 'Unsweetened', 'Sugar Free'), or by a pair joined with a slash. None of those shapes were in the library, so each needed a hand fence after it was seen.",
+      "root_fix": {
+        "what": "category-excludes.json: NEW flavour_word_carrier (one of 22 flavour words immediately before sugar|salt|pepper) on the 38 flavour-pair ids (spices, the three sugars, feta); NEW sweetener_claim_carrier (no (added) sugar, unsweetened, sugar free, zero sugar) on Fruit and Vegetables with prunes, raisins and dried/dates/juice/applesauce/cups ids exempt; flavour_pair_carrier's separator widened to [&+/]. Chosen over a new review detector because the shapes are nameable and the class library already reaches bake, guard and vet sheet at once; honey, chipotle, habanero and jalapeno are deliberately NOT flavour words here (Honey Mangos, chipotle pepper powder are real)."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "names": "13 corpus names drop (coconut sugar; 3 grapefruit jars; pears cups; Dole tropical cups; 5 fiber powders; 2 slash-pair products), every line read and right; 0 prunes lost (exempt holds). Measured inside 8deaa4's passes 2 and 3.",
+        "board": "0 winning cells on comparison-2026-09-23 today; prevents the Family Fare raspberries fallback from becoming a raspberry/blueberry cup.",
+        "affected_now": 13,
+        "measured_by": "8deaa4's routing passes 2 and 3 over the same 37,456-name corpus; 0 winning cells on comparison-2026-09-23",
+        "cell_effects": [],
+        "cell_effects_source": "observed in the integration rebuild, comparison-2026-09-23 08:06 vs 13:08 (scratchpad crown-diff.tsv)"
+      },
+      "proof": {
+        "must_fire_case": "test-match-lib routing fixtures X1 'Health Garden Organic Coconut Sugar, 3 lbs.', X2 'Del Monte No Sugar Added Red Grapefruit 6.5 Oz', X3 'Raspberry/Blueberry Cup Fresh Divide', each routed to its raw commodity under the previous rules and now to <none>.",
+        "clean_twin": "'Mc Cormick Pure Ground Black Pepper 1.5 Oz' -> black-pepper; 'Great Value Unsweetened Pitted Prunes, 16 oz' -> prunes (the exempt); 'Fresh Red Grapefruit, 5 lb Bag' -> grapefruit. The routes branch's F3 twin 'Honey Mangos' -> mangoes still passes.",
+        "runs": "test-match-lib.ps1 exit 0, MATCH-LIB PASSED, routing fixtures 79 of 79.",
+        "guard_or_fixture": "test-match-lib routing fixtures X1 'Health Garden Organic Coconut Sugar, 3 lbs.', X2 'Del Monte No Sugar Added Red Grapefruit 6.5 Oz', X3 'Raspberry/Blueberry Cup Fresh Divide', each routed to its raw commodity under the previous rules and now to <none>."
+      },
+      "full_suite": "deferred-to-land",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "close_disposition": "fixed",
+      "resolution_note": "Detector question answered with rules rather than a new review audit: flavour_word_carrier (a single flavour word before sugar, salt or pepper) on the flavour-pair ids, sweetener_claim_carrier (a no-sugar claim) on fresh produce with dried fruit exempt, and a slash accepted as a flavour-pair separator. 13 unfenced corpus names of the class dropped, 0 on today's board; the two founding shapes stay fenced.",
+      "live_check": null,
+      "republished": false,
+      "branch": "triage/0926-wrongprod",
+      "commits": [
+        "2ccec48e2 (shared with 8deaa4)"
+      ],
+      "actual_tool_calls": 12,
+      "classification": "wrong-product",
+      "rollback": "git revert -m 1 <the merge commit of 8aaeaafc6 (triage/0926-wrongprod)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "8aaeaafc6 (triage/0926-wrongprod)"
+    },
+    {
+      "queue_id": "2026-09-26-f655c7",
+      "branch": "triage/0926-2dae07",
+      "commits": [
+        "1b08e3d9e (unlanded; cite blob grocery/audit-match-soundness.ps1 3fcbb75f524dd22df3d1c63677f0f5c34414351e)"
+      ],
+      "subject": "Grocery matching soundness: RULE CHANGE UNREVIEWED",
+      "classification": "code-change",
+      "evidence": [
+        "queue body: 'MOVED=1 DROPPED=0 ... 1 of these names were absent when the baseline was last accepted and were carried forward with the route they had when last seen ... MOVED lotion->facial-tissues: Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'",
+        "main match-baseline.json (2026-09-26 00:31, rules_hash 5a5d0fc274df = current): Kleenex route 'lotion', last_seen 2026-09-19 - accepted under the current rules while absent, never re-routed",
+        "prior close 2026-09-23-f77857, same type and cause: 'DROPPED carrots: Fresh Cut In Store Carrot & Cucumber Ranch / DROPPED cucumbers: Fresh Cut In Store Cucumber Ranch Bowl' (carried forward); and the 2026-09-21 Goya adobo in the self-test",
+        "measured 2026-09-26 (scratch harness, Get-Eligible copied from the script, over main's baseline): 117 of 15,272 carried names route differently under today's rules (37 moved, 43 dropped, 37 admissions), 154 s"
+      ],
+      "premise_verified": "yes: the instance is real and right (Kleenex Lotion Facial Tissues are facial tissues, facial-tissues is the correct owner, the product is absent today so no cell); the class is live: 116 more carried names hold stale routes that would fire the same way on return.",
+      "prior_closes": [
+        "2026-09-23-f77857"
+      ],
+      "root_cause": "Merge-BaselineCarryForward kept an absent name's route from when it was last seen and the report's diff skipped names absent today, so a rule change was reviewed and accepted for every name a store listed that day and for none that were away; each came back later as RULE CHANGE UNREVIEWED, detached from the change that moved it",
+      "root_fix": {
+        "what": "When the baseline's carried names were last routed under other rules (new field carried_rules_hash; every older baseline has none), the report routes them again through the same Merge-BaselineCarryForward (-Route, Get-Eligible is a pure function of the name) and lists each change as MOVED/DROPPED [carried], so the review of a rule change sees every name it moves; -Accept records the new routes (last_seen untouched), prints them as CARRIED RE-ROUTE, and stamps carried_rules_hash, so later runs under the same rules skip the ~2 minute pass."
+      },
+      "prevention": {
+        "source": "grocery/audit-match-soundness.ps1",
+        "what": "the emitting check and baseline writer (report diff + Merge-BaselineCarryForward)",
+        "exact_change": "Test-CarriedRerouteDue(current hash, baseline.carried_rules_hash) gates a Merge-BaselineCarryForward -Route pass in both report mode (ConvertTo-CarriedFindings -> MOVED/DROPPED carried=true) and -Accept (records routes, writes carried_rules_hash)"
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "main soundness-report.json 2026-09-26 08:18: about 80 carried lines (37 MOVED, 43 DROPPED) listed on landing, none on a published cell",
+        "affected_now": 80,
+        "note": "ON LANDING the first report run in the main checkout finds the baseline with no carried_rules_hash and lists about 80 carried lines (37 MOVED, 43 DROPPED) under RULE CHANGE UNREVIEWED, adds about 2.5 minutes to that run and to each run until an -Accept stamps the hash (fan-out lane timeout 900 s), and exits 2; every one is absent today, so on no published cell: publish REVIEWs, never holds (Brad Q-2026-09-25-2-A). test-auditors' soundness sandbox has no identity-lib, so the pass is not due there."
+      },
+      "proof": {
+        "must_fire_case": "audit-match-soundness -SelfTest: 'MUST FIRE an accept re-routes every carried name under the rules it accepts: all 4 founding names (Goya 09-21, both ranch trays 09-23, Kleenex 09-26)', 'MUST FIRE the report routes carried names again when the baseline records no carried_rules_hash', 'MUST FIRE the carried re-routes reach the report as the founding rows'; live sandbox: report printed MOVED lotion -> facial-tissues 'Kleenex ...' [carried, absent today]",
+        "clean_twin": "'CLEAN TWIN a carried name whose route did not change is not listed, keeps its last_seen', 'CLEAN TWIN under the hash its carried names were already routed at ... it is NOT due', 'CLEAN TWIN with no -Route the carried names keep their old routes', 'CLEAN TWIN a carried name moving from <unmatched> into a commodity ... neither list reports it'; live sandbox second report after the accept: MOVED=0 DROPPED=0",
+        "fixture_occurrences": [
+          "2026-09-21 Goya Adobo Bitter Orange 8 Oz (oranges -> adobo-seasoning)",
+          "2026-09-23-f77857 Fresh Cut In Store Carrot & Cucumber Ranch, Fresh Cut In Store Cucumber Ranch Bowl (-> <unmatched>)",
+          "2026-09-26-f655c7 Kleenex Lotion Facial Tissues 12 boxes (lotion -> facial-tissues)"
+        ],
+        "ran": "audit-match-soundness.ps1 -SelfTest exit 0, 84 of 84; scratch sandbox report(rc 2, MOVED [carried]) -> -Accept(rc 0, carried_rules_hash written, kleenex=facial-tissues, last_seen kept 2026-09-19) -> report(rc 0, MOVED=0)",
+        "guard_or_fixture": "audit-match-soundness -SelfTest: 'MUST FIRE an accept re-routes every carried name under the rules it accepts: all 4 founding names (Goya 09-21, both ranch trays 09-23, Kleenex 09-26)', 'MUST FIRE the report routes carried names again when the baseline records no carried_rules_hash', 'MUST FIRE the carried re-routes reach the report as the founding rows'; live sandbox: report printed MOVED lotion "
+      },
+      "rollback": "revert the commit; a baseline carrying carried_rules_hash reads fine under the old code",
+      "freshness": "main soundness-report.json 2026-09-26 08:18; match-baseline.json 2026-09-26 00:31",
+      "leaves_open": "nothing: the one-time review ran in the integration step. audit-match-soundness on the merged rules against 0b1ef1c4b's baseline listed MOVED=61 DROPPED=161 (136 [carried]); all 222 lines read: 133 ruled RIGHT in routes-rulings.jsonl, 26 named in the 8deaa4/177835/routes/ed86c6 items, 63 attributed to a named rule class, 0 unexplained, 0 matching a WRONG ruling (the 8 wrong carried routes this item named now route to <none> under routes' flavour_pair_carrier). -Accept stamped the baseline (37,456 names, 613 contested, rules_hash 9b14f3724d95), committed in 8aaeaafc6.",
+      "leaves_open_occurrences": 0,
+      "status": "done",
+      "deviation": "the instance is not accepted here (an -Accept is a chain step that writes the tracked baseline in the main checkout and re-derives links); it rides the post-landing accept with the rest of the carried lines",
+      "close_disposition": "confirmed",
+      "resolution_note": "The Kleenex move is right (facial tissues). Fixed at the source: a rule change's review now covers names absent that day, because the report routes carried names again under unaccepted rules and lists them MOVED/DROPPED [carried], and -Accept records them with carried_rules_hash. RETURN of 2026-09-23-f77857; fixtured on Goya 09-21, the ranch trays 09-23 and Kleenex 09-26.",
+      "actual_tool_calls": 16,
+      "full_suite": "deferred-to-land",
+      "merged_as": "8aaeaafc6 (triage/0926-wrongprod)",
+      "leaves_open_was": "the one-time review of the ~80 carried lines the first post-landing report lists, then -Accept and commit the baseline. At least 8 of the 37 moves are WRONG routes of products absent today and need excludes before that accept (a matching change, mis-laned to the money lane): 'Quaker Apple Cinnamon Rice Crisps' apples->ground-cinnamon; 'Fresh Cravings Jalapeno Cilantro Hummus' jalapenos->cilantro; 'Florida's Natural Peach Mango 59 oz' peaches->mangoes; 'RXBAR Protein Energy Bites, Strawberry Peanut Butter' strawberries->peanut-butter; 'BEAR Fruit Rolls Variety Pack Strawberry Raspberry ... No Added Sugar' strawberries->sugar; 'Lay's Potato or Kettle Cooked Potato Chips ... or Tostitos Cantina Tortilla Chips' tortilla-chips->potato-chips; 'Fresh chicken drumsticks or thighs' and 'Smart Chicken drumsticks or thighs value pack' chicken-thighs->chicken-drumsticks (either-or ad lines); the four 'salsa or queso' ad lines salsa->queso. The full 117-row list was written to the run's scratch items/carried-reroutes-2026-09-26.txt.",
+      "leaves_open_owner_note": "watch:grocery/audit-match-soundness.ps1 - the first report after landing pages RULE CHANGE UNREVIEWED with every carried line; its reviewer hands the wrong routes above to the money lane before -Accept"
+    },
+    {
+      "queue_id": "2026-09-26-samsunit",
+      "title": "Sam's rows with a blank unit price were refused even when Sam's own arithmetic had already proved the product's size",
+      "lane": "money",
+      "publish_batch": "after-merge board chain (compare-deals re-reads out\\sams; the next build-sams-deals run writes the carried rows)",
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "Brief said 200 of 276 Sam's rows rejected. Measured: sams-rejects-2026-09-26.json holds 276 REJECTS, 200 of them 'no unitPrice' (all with up blank), out of 1011 capture rows (735 priced raw, 557 after de-dupe). So 200 of 276 rejects, not of 276 rows. The hummus row is real: 'Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.' $5.58, blank up on 09-24/25/26. It had NOT been absent from the board: comparison-2026-09-23.json (rebuilt 09-26 08:06) holds it in the hummus cell at $5.58 as_of 2026-09-22, i.e. the re-reads never refreshed it and the cell was ageing toward the 14-day Sam's window cliff.",
+      "evidence": {
+        "reject_count_per_day": "out\\sams\\sams-rejects-*.json, 'no unitPrice' (all blank up) / total rejects: 09-01 3/3, 09-02 7/11, 09-03 1/4, 09-04 1/1, 09-06 10/11, 09-07 18/20, 09-08 10/12, 09-09 4/5, 09-10 4/7, 09-11 6/6, 09-19 602/756, 09-20 11/12, 09-21 279/515, 09-22 14/23, 09-23 206/365, 09-24 127/202, 09-25 273/438, 09-26 200/276. No files 09-12..09-18.",
+        "is_it_new": "No. The count jumped on 09-19 because the sweep widened (published rows 190 on 09-11 -> 2802 on 09-19), not because the rate moved. As a share of capture rows: 09-24 127 of 887 (14.3%), 09-25 273 of 1645 (16.6%), 09-26 200 of 1011 (19.8%); earlier small sweeps ran about 5-15%. A standing loss since at least 09-01, no step change.",
+        "row_shapes": "09-26, 181 distinct id+name with blank up (202 rows): 93 had an earlier proof (same id + exact name built with a name-stated size that reproduced Sam's printed unit price), 20 one measure no count, 16 one count no measure, 11 measure-first + count, 1 count-first + measure, 38 no size in the name (books, electronics, flowers), 2 several measures. 09-25: 214 distinct, 123 proven (57%). 09-24: 109 distinct, 71 proven (65%). Not a capture field that moved: pull-sams-instore.js captures pi.unitPrice and Sam's itself returns \"\" (its own header documents it). No other field on the row carries a unit price (capture columns q|n|lp|up|id|was|ful).",
+        "rejection_families_check": "out\\logs\\rejection-families.json (generated 2026-09-26T05:38) reads question_verdicts status llm_rejected/known_wrong: MATCH rejections. It cannot see ingest rejects by construction, and it did not flag this. The ingest-reject watcher is audit-ingest-shape.ps1, which fires only on a reason key absent from the prior 14 days, so a known key ('no unitPrice') is never reported however large."
+      },
+      "root_cause": "build-sams-deals derives a Sam's size from linePrice/unitPrice and returned 'no unitPrice' for every blank unit price. Sam's leaves unitPrice blank on some reads of items it prices with a unit price on other days, so 51-65% of the blank rows were products whose size this builder had already proved from Sam's own arithmetic, and each re-read was thrown away: the board kept the last proved read (hummus as_of 09-22) until the 14-day window dropped it, and a moved price never reached it (Hillshire Farm Turkey Polska Kielbasa 14 oz: board $7.57 as_of 09-19, Sam's shelf $9.57 on 09-26).",
+      "root_fix": {
+        "files": [
+          "grocery/build-sams-deals.ps1"
+        ],
+        "what": "Get-SamsProofIndex / Get-SamsCarriedRow. A BLANK unit price (an unreadable non-blank one is still refused, case 8j) looks up the newest proof for the same sams_item_id + exact name in the builder's own out dir (-OutDir, else out\\sams), dated before the capture and inside the quarter (capture-policy-lib Get-PolicyQuarterDays, dot-sourced in function scope). Only a package-shape proof whose qty_basis starts 'package; qty name' carries (never a derived lp/up size); proofs that disagree on the size carry nothing; the proof is re-run through Build-Row under today's rules and must return the same size. The row is today's linePrice over the proved size, marked imputed: qty_basis 'package; qty carried: <basis> on <date> at <lp>; Sam's printed no unit price today', size_proven_on, sams_unit_price_proven, and sams_unit_price blank (so compare-deals' native unit price and audit-basis-reconcile never read the proof day's arithmetic as today's). A row with no proof keeps the plain 'no unitPrice'.",
+        "held_out_error_estimate": "Hide-and-score (data-quality-craft imputation rule): over 10 build days 2026-09-12..26, every row that DID print a unit price with a name-proved size and an earlier proof: 4,643 cases, 4,601 identical size, 26 refused as disagreeing proofs, 16 different size strings, 15 of those the same quantity in another spelling (e.g. 112 oz vs 64 ct 1.75 oz, 128 fl oz vs gal) and 1 a magnitude difference (Krusteaz Gluten Free Cornbread 15 oz., 3 pk.: carry 45 oz = the name's 3 x 15, that day's arithmetic 15 oz = one piece). Harness: scratchpad holdout.py over main's out\\sams\\sams-deals-*.json; one row per case in holdout-cases.jsonl."
+      },
+      "before_after": {
+        "sams_rows_priced_2026-09-26": "before 735 raw / 557 after de-dupe, 276 rejected (200 'no unitPrice'); after 832 raw / 641 after de-dupe, 179 rejected (101 'no unitPrice' with no proof, 2 'proof no longer passes today's rules' for Hormel Black Label Bacon 10.5 oz., 72 ct. under the per-piece guard). 97 raw rows (84 after de-dupe) carried.",
+        "sams_rows_priced_2026-09-25": "+140 raw rows carried (1354 priced raw, 904 after de-dupe; 291 rejected, was 438).",
+        "sams_rows_priced_2026-09-24": "+76 raw rows carried (762 priced raw, 520 after de-dupe; 125 rejected, was 202).",
+        "board_cells": "Of 133 distinct items carried across 09-24..26, 13 sit in a Sam's cell on comparison-2026-09-23.json: 12 refresh their as_of at an unchanged price (hummus as_of 09-22 -> 09-26, Green Bell Peppers 6 ct., Clorox Performance Bleach ...), 1 changes price (smoked-turkey-sausage: Hillshire Farm Turkey Polska Kielbasa 14 oz $7.57 -> $9.57). The other 120 carried items are not on today's board; whether any of them opens or wins a cell needs compare-deals, which I did not run (another agent holds the chain in main): could not verify the new-cell count.",
+        "replay_harness": "worktree build-sams-deals.ps1 run with -OutDir <scratch>\\replay\\out (copies of main's out\\sams\\sams-deals-2026-*.json) -NoCursor -LedgerRoot <scratch> on copies of out\\captures\\sams-capture-2026-09-24/25/26.csv"
+      },
+      "proof": {
+        "self_test": "powershell -File grocery\\build-sams-deals.ps1 -SelfTest (worktree): exit 0, last line SELF-TEST PASS",
+        "must_fire_case": "8l MUST FIRE: the real hummus row (id 4YK5OUWTL5P0, $5.58, blank up) with its real 2026-09-22 proof ($5.58 at $0.35/ea, 16 ct 2.5 oz) carries -> $5.58 / 16 ct 2.5 oz, sams_unit_price '', size_proven_on 2026-09-22. 14a MUST FIRE: a child build reads the proof from its own -OutDir and ignores a later-dated and an out-of-quarter conflicting file.",
+        "clean_twin": "8l CLEAN TWIN: a moved linePrice ($6.40) prices at today's price over the proved size (0.4/each), not the proof day's. MUST NOT FIRE: 8j/8k unchanged (unreadable currency token and a proof-less blank still 'no unitPrice'); 8l other id / name one character off, disagreeing proofs, unreadable non-blank up with a proof, a proof today's rules refuse (count-first NAME AMBIGUOUS); 14b a derived lp/up proof carries nothing.",
+        "guard_or_fixture": "8l MUST FIRE: the real hummus row (id 4YK5OUWTL5P0, $5.58, blank up) with its real 2026-09-22 proof ($5.58 at $0.35/ea, 16 ct 2.5 oz) carries -> $5.58 / 16 ct 2.5 oz, sams_unit_price '', size_proven_on 2026-09-22. 14a MUST FIRE: a child build reads the proof from its own -OutDir and ignores a later-dated and an out-of-quarter conflicting file."
+      },
+      "watcher": {
+        "status": "deviated",
+        "deviation": "The brief asked to fix rejection-families if it did not flag this jump, with today's 200/276 as a must-fire. Not built: (1) rejection-families reads MATCH rejections from question_verdicts, not ingest rejects, so it is the wrong watcher by construction; (2) there was no jump to fire on: 'no unitPrice' ran 14-20% of capture rows daily and 56-72% of rejects (09-23 206/365, 09-24 127/202, 09-25 273/438, 09-26 200/276), so a spike fixture built on 09-26 would encode a non-event and page on a normal day. The real gap (a KNOWN reason that rises is watched by nothing; audit-ingest-shape sees only new keys) has 0 occurrences and no founding day, so it is enqueued weekly rather than built without a real must-fire."
+      },
+      "related_item": "2026-09-25-0cefa4 (weight-first pack total vs pieces reading rule) is NOT the same class: it is a ruling about how to READ a name, this was a missing unit price. Not pulled forward. Note for it: a measure-first multipack WITH a proof (the hummus is one) now carries the reading Sam's own unit price chose on the proof day, which is its option C per row; without a proof such rows are still refused 'no unitPrice'.",
+      "leaves_open": "2 residuals: (a) blank-unit-price rows with no earlier proof but a name-stated size are still refused (09-26: 36 distinct, 20 one measure + 16 one count; 09-25: 32; 09-24: 19), a ruling on admitting a name-only size; (b) a known reject reason that rises is watched by nothing (0 spikes 09-01..26).",
+      "leaves_open_occurrences": "(a) daily, 19-36 distinct products per capture on 09-24/25/26; (b) 0 share spikes over 19 Sam's rejects files 2026-09-01..26.",
+      "leaves_open_followup": "Q-2026-09-26-sams-name-only-size",
+      "open_questions_for_brad": [
+        {
+          "id": "Q-2026-09-26-sams-name-only-size",
+          "question": "When Sam's prints no unit price and the item has never been proved by one, may the board price it from the name's size alone (\"Campbell's Cream of Mushroom Condensed Soup 50 oz.\" $4.98 -> 50 oz), as Hy-Vee and Family Fare rows are, or stay refused as today?",
+          "options": [
+            "A: admit a name with exactly one measure or one count and no per-lb/approx marker, marked qty_basis 'package; qty name only'",
+            "B: keep refusing until Sam's prints a unit price (current behaviour; about 20-36 products a day)"
+          ],
+          "measured": "09-26: 20 one-measure + 16 one-count distinct names; Walmart's builder refuses the same shape (walmart-row-lib 'no unitPrice'), so A is a new estate rule, not a Sam's patch."
+        }
+      ],
+      "close_disposition": "fixed (root) on branch triage/0926-samsup; live after merge and the next build-sams-deals + board chain",
+      "resolution_note": "Sam's leaves unitPrice blank on some reads of items it prices by unit on other days; build-sams-deals refused them all. It now carries the size Sam's own arithmetic proved on an earlier read of the same item id and exact name (name-stated size, package shape, inside the quarter, re-verified under today's rules), prices it at today's linePrice and marks the row carried. 09-26 replay: 557 -> 641 priced after de-dupe, rejects 276 -> 179; 13 board cells refresh, 1 price moves. Held-out: 4,601 of 4,643 identical, 1 magnitude difference. Name-only sizes left as a ruling; known-reason spike watcher enqueued weekly (2026-09-26-6b8ce9).",
+      "live_check": "After merge, the next build-sams-deals and the board chain: smoked-turkey-sausage, Sam's Club cell (if it still holds Hillshire Farm Turkey Polska Kielbasa Smoked Sausage, 14 oz.) ad $9.57 as_of 2026-09-26 or later (was $7.57 as_of 2026-09-19); hummus, Sam's Club, Member's Mark Classic Hummus Singles 2.5 oz., 16 ct. $5.58 with as_of 2026-09-26 or later (was 2026-09-22).",
+      "republished": false,
+      "guards_exit": "not run (worktree, no board; chain belongs to e0d5cf in main)",
+      "full_suite": "deferred-to-land",
+      "tree": "C:/Codex/ThriftyCrew/.claude/worktrees/tri0926-samsup (worktree, not main)",
+      "branch": "triage/0926-samsup",
+      "commits": [
+        "944b04430 grocery: a Sam's row with a blank unit price carries the size Sam's own arithmetic proved (triage finding samsunit) (unlanded hash; blob of grocery/build-sams-deals.ps1 = 88f9ba6fcc0ac69bfb8f916dd80ed74ac768f8dc)"
+      ],
+      "knowledge_consulted": "searched 'sams unitPrice blank', 'build-sams-deals reject', 'name stated size basis', 'carry proven size blank unit price'. Used: data-quality-craft/applies-here.md (imputation: mark a filled size as imputed, carry a held-out error estimate); memory:C--Codex/sams-ingest (unitPrice rounding, package shape).",
+      "actual_tool_calls": 66,
+      "subject": "Sam's rows with a blank unit price were refused even when Sam's own arithmetic had already proved the product's size",
+      "classification": "parse-basis-bug",
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "build-sams-deals replay over sams-capture 2026-09-24/25/26; integration rebuild of 09-26: 97 carried raw rows, 13 then-board Sam's cells, 7 crown changes observed (smoked-turkey-sausage, canned-tuna, oatmeal, salsa, cheddar::r, colby-jack::r, fresh-mozzarella::r)",
+        "affected_now": 97
+      },
+      "rollback": "git revert -m 1 <the merge commit of 944eceef0 (triage/0926-samsup)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "944eceef0 (triage/0926-samsup)",
+      "leaves_open_owner_note": "(a) open_questions_for_brad Q-2026-09-26-sams-name-only-size; (b) queue 2026-09-26-6b8ce9 (weekly, minted via send-alert -Lane weekly from the main checkout)."
+    },
+    {
+      "queue_id": "2026-09-26-fab315",
+      "lane": "money",
+      "publish_batch": "post-merge-links-0926",
+      "title": "See-item links open a sibling product (Dr Pepper -> Jarritos, Orange gelatin -> Strawberry, StarKist -> Dolores)",
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "Ran the finder (audit-tile-integrity.ps1 at e2896b534) over copies of main's comparison-2026-09-23.json (built 2026-09-26 08:06), product-urls.json (08:12) and name-drift.json (08:12): SIBLING 28, the exact list in the item. Checked each entry's provenance: 19 sale cells, 9 everyday; 14 entries stamped 'DERIVED from the price row' for an earlier winner.",
+      "evidence": [
+        "soda|Family Fare: sale cell 'Dr Pepper Soda 42.2 Fl Oz' (0.0237/fl oz, Weekly Ad) linked to 'Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt', verified '2026-09-07 DERIVED from the price row'",
+        "gelatin|Aldi: everyday 'Baker S Corner Orange Gelatin 3 OZ' $0.98 linked to Strawberry at $0.98 (price equal, so no price check could see it)",
+        "canned-tuna|Family Fare: sale 'Star Kist Tuna, Chunk Light 5 Oz' linked to 'Dolores Chunk Light Yellowfin Tuna In Vegetable Oil 5 Oz'",
+        "firm-tofu|Walmart: flagged, but the link URL walmart.com/ip/10898985 is the priced row's own item_id; Walmart retitled it from 'House Tofu - Firm, 16.0 oz' (2026-08-31 capture) to 'Azumaya Firm Tofu, 16 oz' (2026-09-19 capture), same $2.22. Same product: the one false flag.",
+        "raisins|Aldi: 'Southern Grove California Raisins' 20 oz $3.99 vs link 'Southern Grove Seedless Raisins' 20 oz $3.99; probably one product, but the board row carries no URL to prove it, so it is dropped (coverage, not a lie)"
+      ],
+      "root_cause": "derive-links-from-prices.ps1 (the link resolver, run -Apply daily by check-ad-cycles) writes a link only when the cell's price row carries an identity, and every other branch (no matching row = flyer sale, row with no URL, unproven price, unwritable) did `continue`, keeping whatever entry was already there. So when a cell's WINNER changed to a row with no identity, the link derived for the previous winner stayed and kept opening that product. Nothing re-judged a stored link's NAME against the cell: prune-bad-links grades price on everyday cells only and relies on name-drift, whose token/brand tests pass a same-brand sibling. The resolver never picked a sibling; it failed to let go of one.",
+      "root_fix": {
+        "files": [
+          "grocery/link-sibling-lib.ps1",
+          "grocery/derive-links-from-prices.ps1",
+          "grocery/audit-tile-integrity.ps1"
+        ],
+        "change": "The sibling (contradiction) rule moved unchanged from audit-tile-integrity into grocery/link-sibling-lib.ps1, dot-sourced by both. derive-links-from-prices: every non-writing branch calls Remove-OutgrownLink, which drops the stored link when Get-TiSiblingReason says it names a different product than the cell, unless the priced row carries the very URL the link stores (URL outranks names). A same-URL entry whose name reads as a sibling is re-written from the priced row (name refresh), so the audit and the link agree. New output line 'links DROPPED, cell now names a different product: N' and the APPLIED line carries the drop count. Store list converted to stores.json (I192).",
+        "what": "The sibling (contradiction) rule moved unchanged from audit-tile-integrity into grocery/link-sibling-lib.ps1, dot-sourced by both. derive-links-from-prices: every non-writing branch calls Remove-OutgrownLink, which drops the stored link when Get-TiSiblingReason says it names a different product than the cell, unless the priced row carries the very URL the link stores (URL outranks names). A same-URL entry whose name reads as a sibling is re-written from the priced row (name refresh), so the audit and the link agree. New output line 'links DROPPED, cell now names a different product: N' and the APPLIED line carries the drop count. Store list converted to stores.json (I192)."
+      },
+      "proof": {
+        "must_fire_case": "derive-links-from-prices.ps1 -SelfTest: soda|Family Fare sale 'Dr Pepper Soda 42.2 Fl Oz' with its real Jarritos entry is dropped; gelatin|Aldi Orange with its real Strawberry entry is dropped; both counted ('cell now names a different product: 2')",
+        "clean_twin": "firm-tofu|Walmart same URL walmart.com/ip/10898985 kept and renamed to the row's 'Azumaya Firm Tofu, 16 oz'; avocados|Family Fare link that only omits a word keeps url and verified stamp; -Store 'Aldi' leaves the Family Fare link alone; a dry run names the 2 drops and leaves the file byte-identical",
+        "selftests": "derive-links-from-prices -SelfTest: PASS (28 case(s), 0 failure(s)), exit 0. audit-tile-integrity -SelfTest: TILE-INTEGRITY SELF-TEST PASS, exit 0. audit-store-registry: STORE-REGISTRY-COMPLETE scanned=326 findings=0, exit 0.",
+        "real_data": "New resolver -Apply over main's grocery\\out (read only) into a scratch copy of product-urls.json: 27 dropped, 1 renamed (firm-tofu), 0 other entries changed (diff removed=27 changed=1 added=0). audit-tile-integrity over the result: SIBLING 0, ACCURACY 0 of 2589 linked tiles, exit 0, COVERAGE warn only (219 NO-LINK, non-blocking).",
+        "store_page_check": "could not verify: walmart.com/ip/10898985 returned a CAPTCHA (wall, not bypassed). No replacement links were typed: a re-point happens only from a pipeline row carrying identity (the resolver, or the Family Fare board-match resolver's daily no-link grind).",
+        "guard_or_fixture": "derive-links-from-prices.ps1 -SelfTest: soda|Family Fare sale 'Dr Pepper Soda 42.2 Fl Oz' with its real Jarritos entry is dropped; gelatin|Aldi Orange with its real Strawberry entry is dropped; both counted ('cell now names a different product: 2')"
+      },
+      "links_fixed": "27 of 28 flagged links removed from the link layer when main runs the resolver (26 clear siblings + raisins|Aldi dropped as unproven); 1 of 28 (firm-tofu|Walmart) was the same product and is kept with its name refreshed. 0 re-pointed by hand.",
+      "post_merge_in_main": [
+        "After e0d5cf's board chain and this merge, in the MAIN checkout, per store (never global, memory link-derivation-order): powershell -NoProfile -File grocery\\derive-links-from-prices.ps1 -Store 'Aldi' -Apply; then -Store 'Family Fare', -Store 'Fareway', -Store 'Hy-Vee', -Store 'Walmart' (each -Apply). Expect 'links DROPPED, cell now names a different product' to total about 27 and firm-tofu|Walmart renamed; diff product-urls.json and stop if anything else moved beyond ordinary re-derivations.",
+        "Then the rest of the chain: audit-name-drift.ps1, prune-bad-links.ps1, generate-board-overrides.ps1, build-deals-page.ps1, guards.ps1 (must exit 0), audit-tile-integrity.ps1 (expect SIBLING 0), publish-deals-page.ps1, export-feed.ps1 against the current comparison.",
+        "Commit grocery/product-urls.json by explicit path with the chain's outputs (it is the link layer the resolver rewrote)."
+      ],
+      "live_check": {
+        "commodity": "soda",
+        "store": "Family Fare",
+        "expect": "the Dr Pepper Soda 42.2 Fl Oz tile carries NO See-item link to Jarritos (check board.json soda|Family Fare link absent or pointing at a Dr Pepper product page, never shopfamilyfare.com/.../jarritos_soda_natural_flavor_grapefruit_1_58_qt/p/2417986)"
+      },
+      "leaves_open": "nothing: the 3 Family Fare sale cells were fixed by 2026-09-26-8deaa4 in this run (integration rebuild: broccoli -> Broccoli Crowns 2.99, jarred-gravy -> Heinz 0.2658, raspberries -> Fresh Red Raspberry 0.715)",
+      "leaves_open_occurrences": 0,
+      "open_questions_for_brad": [],
+      "close_disposition": "fixed-at-root: resolver drops outgrown sibling links; data repair lands when main runs derive-links-from-prices per store after the merge",
+      "resolution_note": "The link resolver (derive-links-from-prices) kept a link derived for a cell's previous winner whenever the new winner's row carried no identity, so 28 tiles opened another product. It now re-judges every stored link it cannot re-derive against the cell's own name with the one sibling rule (moved to grocery/link-sibling-lib.ps1, shared with audit-tile-integrity) and drops a sibling, keeping any link whose URL is the priced row's own. On main's data: 27 dropped, firm-tofu kept and renamed (same Walmart item), SIBLING 0 after. Live once main runs derive-links -Store for Aldi, Family Fare, Fareway, Hy-Vee, Walmart and the chain republishes.",
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-fab315",
+      "base": "triage/0926-817976 (e2896b534, carries the finder)",
+      "commits": [
+        "6a318a5c0 Triage fab315: the link resolver drops a link its cell has outgrown, by the one sibling rule (worktree hash; cite blobs after rebase)"
+      ],
+      "tree": "C:/Codex/ThriftyCrew/.claude/worktrees/tri0926-fab315 (worktree, not main; data read from main read-only)",
+      "republished": false,
+      "actual_tool_calls": 55,
+      "knowledge_consulted": "searched 'see item link sibling product', 'stale link after winner changes'; used memory:link-derivation-order (derive after the final board, -Store scoped), memory:grocery-links-consistency (link must be the product the price is for; FF board-match resolver fills no-link cells), .claude/rules/grocery.md (stores.json on touch)",
+      "subject": "See-item links open a sibling product (Dr Pepper -> Jarritos, Orange gelatin -> Strawberry, StarKist -> Dolores)",
+      "classification": "wrong-product",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "where each See-item link ends up after the resolver, per store over comparison-2026-09-23: derive-links-from-prices over comparison-2026-09-23 per store: about 27 outgrown links dropped (integration run: 23 outgrown dropped across Aldi, Family Fare, Fareway, Hy-Vee; SIBLING 0 after Sam's derived too); no price moves (links only)",
+        "affected_now": 27,
+        "cell_effects": [],
+        "cell_effects_source": "observed in the integration rebuild, comparison-2026-09-23 08:06 vs 13:08 (scratchpad crown-diff.tsv)"
+      },
+      "rollback": "git revert -m 1 <the merge commit of 70d89b951 (triage/0926-fab315)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "70d89b951 (triage/0926-fab315)",
+      "leaves_open_was": "3 Family Fare sale CELLS (not links) publish a non-commodity product: broccoli = Michelina's Beef & Broccoli, jarred-gravy = Michelina's Salisbury Steak dinner, raspberries = Pillsbury Poppin' fruit rolls",
+      "leaves_open_owner_note": "queue:2026-09-26-8deaa4 (weekly lane, enqueued via send-alert -Force -Lane weekly from the main checkout, measurement in the body)",
+      "deviation": "integration: derive-links also ran for Sam's Club (-Store \"Sam's Club\" -Apply, 9 links written from priced rows) because samsunit's carried rows changed the Sam's grapes cell to Red Seedless while its link still named Moon Drop (tile-integrity SIBLING 1 -> 0). Sam's /ip/<id> shape is proven (sams-url-shape-2026-09-22.json)."
+    },
+    {
+      "queue_id": "2026-09-26-9dc3f6",
+      "subject": "Triage residual: tile-link sibling rule is report-only until it passes its own bar (75 of 2,600 flagged; 817976)",
+      "classification": "detector-precision",
+      "evidence": [
+        "main checkout grocery/out/tile-integrity.json 2026-09-26 08:13 (comparison-2026-09-23, 2,616 linked tiles): the old rule flags 68. Labelled one by one BEFORE the new rule ran: 30 are real siblings (44%), 38 are one product named two ways.",
+        "the refined rule over the same pairs: 28 flagged, 27 real (96%); frozen set 36 of 39 known siblings fire (all 9 founding siblings), 1 of 44 same-product pairs fires (raisins|Aldi, California vs Seedless). These pairs tuned the rule.",
+        "HELD OUT: comparison-2026-09-05 with product-urls.json at 3a0be7b89, 55 flagged pairs used for nothing else: 48 real (87%). Bar written before that run: 95% held out. FAILED. Wrong on: ad copy (Gain Flings coupon text, 'Cheez-It snack crackers' vs 'Original'), an ad range whose brand word leads the wrong alternative (Bud by Dole romaine or cauliflower; Red, Green or Black grapes), and a descriptor or generic swap (Shaved vs Thin sirloin, 'Italian Pork Sausage' vs Purnells, 'Bakery Fresh' vs 'Sliced' French bread).",
+        "live run of the edited audit over main's board in a temp dir: exit 0, 'SIBLING   28', 'ACCURACY OK - all 2301 price-graded links (of 2616 linked tiles)', sibling_rows identical to the scratch run."
+      ],
+      "root_cause": "The sibling test treated any omitted word as a different product, but store names shorten a product by OMITTING words (brand, 'Package', 'Original', a typo) while a sibling REPLACES them; a rule that cannot tell omission from replacement flags half of what it sees, and a name test with no held-out measurement cannot be trusted to hold a cell.",
+      "root_fix": {
+        "what": "the sibling test fires on a contradiction (a board word missing from the link AND a link word missing from the board) or on a formulation modifier the link drops, with typo, transposition, compound, stem, container-word, commodity-word and ad-range tolerance; it stays reported, not blocking, because it misses its held-out bar",
+        "files": [
+          "grocery/audit-tile-integrity.ps1"
+        ],
+        "exact_change": "Get-TiSiblingMissing replaced by Get-TiSiblingReason (Get-TiContentWords ordered + extended filler, Test-TiOneEdit, Test-TiWordIn, Get-TiContradiction, modifier list); the SIBLING line and sibling_rows detail carry the reason; self-test rewritten: 7 must-fire/clean-twin and 11 must-not-fire cases from real pairs"
+      },
+      "blast_radius": {
+        "measured_as": "report-only detector",
+        "measured_by": "the audit's exit code and ACCURACY set are unchanged (SIBLING never enters $ACC); only the SIBLING count and sibling_rows move, 68 -> 28 on today's board",
+        "affected_now": 0,
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-tile-integrity.ps1 -SelfTest",
+        "must_fire_case": "gelatin|Aldi 'Baker S Corner Orange Gelatin 3 OZ' linked to 'Baker's Corner Strawberry Gelatin 3 oz' (live 2026-09-26, same price) fires: lacks orange; adds strawberry",
+        "clean_twin": "MUST NOT FIRE asparagus|Aldi 'Freshire Farms Asparagus' linked to 'Asparagus, Package' (the pair the old rule failed its own bar on) is the same product; CLEAN TWIN potato-chips|Aldi Hot Chili Lime vs Loaded Bacon Cheddar still fires",
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-tile-integrity.ps1 -SelfTest (exit 0, TILE-INTEGRITY SELF-TEST PASS)"
+        ]
+      },
+      "rollback": "git revert the commit on triage/0926-817976; the audit returns to the any-missing-word rule, still report-only",
+      "freshness": "tile-integrity.json 2026-09-26 08:13 over comparison-2026-09-23; held-out comparison-2026-09-05 + product-urls.json 3a0be7b89",
+      "status": "done",
+      "premise_verified": "yes: the old rule failed its bar (44% precision on today's 68). The refined rule passes the queue's written bar in-sample (9 of 9 founding siblings fire, 0 of the 7 same-product rows, 1 of 38 short-name forms) but fails the stricter held-out bar (87% < 95%), so it is not promoted.",
+      "deviation": "The ask was 'if it passes, promote it'. It does not pass held out, so it stays report-only. Promotion would in any case drop or hold 28 published links today, a board change that belongs to the money lane, so it would be mis-laned here even at 95%.",
+      "shipped_commit": "the commit titled 'Triage 9dc3f6: the tile SIBLING test fires on a replaced word, not an omitted one' on triage/0926-817976 (unlanded; cite by blob after landing)",
+      "leaves_open": "(1) SIBLING stays report-only: held out 7 of 55 flags were the same product (ad copy, ad-range lead word, descriptor swaps), and it misses one-sided variants (Chai Black Tea vs Black Tea, Parmesan And Romano vs Parmesan). Owner: watch:grocery/audit-tile-integrity.ps1 (it names every flag daily on its SIBLING line). (2) 27 real sibling links live on the board today plus 3 seen by hand: 2026-09-26-fab315 (money lane; the fix changes product-urls.json).",
+      "leaves_open_occurrences": 30,
+      "leaves_open_followup": "2026-09-26-fab315",
+      "close_disposition": "confirmed",
+      "resolution_note": "The sibling test now fires only when the link replaces a word of the board name, not when it merely omits one: on today's board it flags 28 instead of 68 and 27 of the 28 are real (the old rule was 30 of 68). Held out on the 2026-09-05 board it was right 48 of 55 (87%), under the 95% bar set before that run, so it stays reported rather than blocking. The 30 sibling links it and a hand read found on the live board went to the money lane as 2026-09-26-fab315.",
+      "branch": "triage/0926-817976",
+      "commits": [
+        "e2896b534 (branch-local id; rebases on landing)"
+      ],
+      "actual_tool_calls": 22,
+      "full_suite": "deferred-to-land",
+      "merged_as": "70d89b951 (triage/0926-fab315, contains 817976)"
+    },
+    {
+      "queue_id": "2026-09-26-f73dc7",
+      "lane": "money",
+      "branch": "triage/0926-f73dc7",
+      "base": "main at 0b1ef1c4b, with triage/0926-4b973e (479bff955) merged in as 478c777d6, because item 2 changes flag-verify-lib.ps1 and verify-price-flags.ps1, which 479bff955 also changed",
+      "worktree": "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-f73dc7",
+      "commits": [
+        "702e9b7fa",
+        "337b3a0d3",
+        "99e2c9280"
+      ],
+      "commit_map": {
+        "item3_category_push_gate": "702e9b7fa",
+        "item1_offboard_scope": "337b3a0d3",
+        "item2_flag_rejudge": "99e2c9280"
+      },
+      "status": "done",
+      "premise_verified": "true: (1) audit-asof-evidence.ps1 at 0b1ef1c4b returned $null from Get-AsOfViolationCells when any violation was on no cell, and Get-TcChildQuarantineScope returned $null for any scope naming 0 cells and 0 stores, so an off-board row held the board. (2) check-ad-cycles.ps1 runs verify-price-flags.ps1 in the post-publish review-flag unit (after sanity-check writes guards-<week>.json), while guards launches audit-flag-verification.ps1, which only read out\\flag-verification.json: one chain late by construction. (3) audit-category-coverage.ps1 ran only in the daily chain lane and in publish-deals-page, and ops/run-gates.ps1 had no entry for it.",
+      "evidence": [
+        "e0d5cf item: ad-cycle-log 38181-38221, asof violation 'Webster City Bacon Ends' (Fareway) on no board cell held the 2026-09-26 board; guards read flag-verification.json at 08:13, the 17c0da re-judge ran at 08:26; 4880ebc98 added 3 commodities with no category, caught only by publish-deals-page.",
+        "grocery/ad-cycle-log.txt 2026-09-01..2026-09-26: 81 HARD FAIL lines; asof-evidence 1 (the founding row); guards 5 (multipack) and 10 (store-charges) row failures 0.",
+        "Main out\\flag-verification.json at 08:26: 29 open entries, all pending. Live re-judge with the new code moved 2 to match (hummus / Sam's Club, ground-fennel / Family Fare), cells=0."
+      ],
+      "root_cause": "Three separate gaps in where a check looks. (1) The quarantine protocol had no way for a child to say 'every finding is proven off the board', so a row no cell carries could only be board scoped. (2) The flag verifier needs sanity-check's flags, which exist only after publish, so the ledger guards reads is always judged one chain earlier, by the verifier code of that time. (3) Category coverage is a property of two tracked source files but was checked only at data time (chain and publish), never at push time.",
+      "root_fix": {
+        "item1": {
+          "decision": "A violation the audit PROVES is on no board cell (looked up on the board it judged; no live cell and no quarantine-held cell carries it) holds nothing: it is named QUARANTINE-OFFBOARD and guards WARNs it by name every run, so a broken capture behind it is still read, and the audit still exits 2 with its FAIL line. Fail closed where evidence is missing: no board, an unreadable board, or a violated row with no name affirms no scope and the board holds. A cell a quarantine withheld is still the row's cell, so the second guards run keeps holding it.",
+          "files": [
+            "grocery/cell-quarantine-lib.ps1",
+            "grocery/guards.ps1",
+            "grocery/audit-asof-evidence.ps1",
+            "grocery/test-asof-evidence-scope.ps1",
+            "grocery/test-cell-quarantine.ps1"
+          ],
+          "exact_change": "Get-TcChildQuarantineScope reads QUARANTINE-OFFBOARD <store>|<what>, count-checked by offboard=<K> (lines with no K, or a K that disagrees, hold); new Get-TcKidScopeOutcome is guards' hold/warn decision; guards adds a WARN and no fail for an off-board-only scope; Get-AsOfViolationCells returns { keys; offboard }, reads the board's quarantine block, and returns $null only when it cannot look."
+        },
+        "item2": {
+          "decision": "Reordering the chain cannot work (the flags do not exist before publish), so guards' delegated audit re-judges: every OPEN ledger entry is put to the store's captures on disk with the current code before any cell is named, nothing written.",
+          "files": [
+            "grocery/flag-verify-lib.ps1",
+            "grocery/verify-price-flags.ps1",
+            "grocery/audit-flag-verification.ps1",
+            "grocery/guards.ps1",
+            "grocery/test-flag-verification-rejudge.ps1"
+          ],
+          "exact_change": "Read-TcStoreAnswerRows, New-TcRereadContext, Resolve-TcFlagEntry and Invoke-TcFlagRejudge move into flag-verify-lib (one copy for the lane and the audit; verify-price-flags -NoWrite output byte-identical before and after over live data). audit-flag-verification re-judges, falls back to the stored verdicts on a throw (fail closed), keeps -NoRejudge for a replay; guards launches it first (44s measured, was about 1s)."
+        },
+        "item3": {
+          "decision": "The checking point is the push, where the source changes.",
+          "files": [
+            "grocery/audit-category-coverage.ps1",
+            "ops/run-gates.ps1"
+          ],
+          "exact_change": "audit-category-coverage gains -Source (no report, no alert, runs on a bare checkout), -SourceDir (fixture root; -Root would collide with the script's own $root, case-insensitively, and the first fixture run proved it silently ignored), -SelfTest, and examined=/categories=/findings= on its marker; run-gates lists it as a static gate with -Source."
+        },
+        "what": "{'decision': \"A violation the audit PROVES is on no board cell (looked up on the board it judged; no live cell and no quarantine-held cell carries it) holds nothing: it is named QUARANTINE-OFFBOARD and guards WARNs it by name every run, so a broken capture behind it is still read, and the audit still exits 2 with its FAIL line. Fail closed where evidence is missing: no board, an unreadable board, or a violated row with no name affirms no scope and the board holds. A cell a quarantine withheld is still the row's cell, so the second guards run keeps holding it.\", 'files': ['grocery/cell-quarantine-lib.ps1', 'grocery/guards.ps1', 'grocery/audit-asof-evidence.ps1', 'grocery/test-asof-evidence-scope.ps1', 'grocery/test-cell-quarantine.ps1'], 'exact_change': \"Get-TcChildQuarantineScope reads QUARANTINE-OFFBOARD <store>|<what>, count-checked by offboard=<K> (lines with no K, or a K that disagrees, hold); new Get-TcKidScopeOutcome is guards' hold/warn decision; guards adds a WARN and no fail for an off-board-only scope; Get-AsOfViolationCells returns { keys; offboard }, reads the board's quarantine block, and returns $null only when it cannot look.\"} {'decision': \"Reordering the chain cannot work (the flags do not exist before publish), so guards' delegated audit re-judges: every OPEN ledger entry is put to the store's captures on disk with the current code before any cell is named, nothing written.\", 'files': ['grocery/flag-verify-lib.ps1', 'grocery/verify-price-flags.ps1', 'grocery/audit-flag-verification.ps1', 'grocery/guards.ps1', 'grocery/test-flag-verification-rejudge.ps1'], 'exact_change': 'Read-TcStoreAnswerRows, New-TcRereadContext, Resolve-TcFlagEntry and Invoke-TcFlagRejudge move into flag-verify-lib (one copy for the lane and the audit; verify-price-flags -NoWrite output byte-identical before and after over live data). audit-flag-verification re-judges, falls back to the stored verdicts on a throw (fail closed), keeps -NoRejudge for a replay; guards launches it first (44s measured, was about 1s).'} {'decision': 'The checking point is the push, where the source changes.', 'files': ['grocery/audit-category-coverage.ps1', 'ops/run-gates.ps1'], 'exact_change': \"audit-category-coverage gains -Source (no report, no alert, runs on a bare checkout), -SourceDir (fixture root; -Root would collide with the script's own $root, case-insensitively, and the first fixture run proved it silently ignored), -SelfTest, and examined=/categories=/findings= on its marker; run-gates lists it as a static gate with -Source.\"}"
+      },
+      "proof": {
+        "must_fire_case": "item1: test-asof-evidence-scope MUST FIRE with no board the violation affirms no scope (holds); test-cell-quarantine MUST FIRE off-board lines with no or a wrong offboard= count hold. item2: test-flag-verification-rejudge MUST FIRE a stored pending the current code condemns is named this run; MUST FIRE no capture keeps a stored wrong-price named; MUST FIRE a re-judge that cannot run names the stored one. item3: audit-category-coverage -SelfTest MUST FIRE the frozen 4880ebc98 push (lo-mein-noodles, sweet-potato-glass-noodles, blackened-seasoning in no category) exits 2 naming all three.",
+        "clean_twin": "item1: MUST NOT FIRE the bacon-ends shape (off-board) holds nothing and keeps its FAIL line; CLEAN TWIN an ordinary cell scope still holds with no warning; a mixed scope keeps the cell. item2: MUST NOT FIRE the frozen 2026-09-26 pepper (stored wrong-price, re-judged a match) names nothing; CLEAN TWIN -NoRejudge over the same inputs names it, so the re-judge is what released it. item3: MUST NOT FIRE every id filed once exits 0; CLEAN TWIN multi-category and orphan refs still fire under -Source.",
+        "ran": "audit-category-coverage -SelfTest exit 0 (4 of 4); -Source over the tree exit 0 examined=596 findings=0. test-asof-evidence-scope -SelfTest exit 0 (5 of 5). test-cell-quarantine -SelfTest exit 0 (59 of 59, 7 new). audit-asof-evidence -SelfTest SELF-TEST PASS. test-flag-verification-rejudge -SelfTest exit 0 (5 of 5). test-flag-verification -SelfTest exit 0 (48 of 48). verify-price-flags -NoWrite over main data, before vs after the refactor: both exit 0, output identical. audit-flag-verification live over main data exit 0, cells=0, 29 re-judged, 2 moved to match. audit-guard-contract exit 0 (dead=0), audit-script-census exit 0, audit-fixture-vocabulary exit 0 (files=869 mislabelled=0), test-hold-scope exit 0 (8 of 8), audit-mustfire-census exit 0, audit-source-control-bytes exit 0. Not run: audit-asof-evidence live (it writes its report under the root it reads; main is read-only for this lane; the live count is already 0 since 7f05f77e9); guards.ps1 end to end (the worktree has no board); run-gates and the full test-auditors (deferred to land).",
+        "guard_or_fixture": "item1: test-asof-evidence-scope MUST FIRE with no board the violation affirms no scope (holds); test-cell-quarantine MUST FIRE off-board lines with no or a wrong offboard= count hold. item2: test-flag-verification-rejudge MUST FIRE a stored pending the current code condemns is named this run; MUST FIRE no capture keeps a stored wrong-price named; MUST FIRE a re-judge that cannot run names the stor"
+      },
+      "full_suite": "deferred-to-land",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no commodities.json rule changed; guards disposition changes only for an off-board-only asof scope (1 occurrence 2026-09-01..26) and for flag cells whose stored verdict the current verifier overturns (0 open disagreements live today)",
+        "affected_now": 0,
+        "cell_effects": []
+      },
+      "republished": false,
+      "leaves_open": "2: (a) guards 5 and 10 (Add-RowFail) still hold the board for a capture row no board cell carries, the same class as item 1 for capture-row guards; (b) an entry the verifier already CLOSED as match is not re-judged by guards (a match settles by design), so a false match from older code passes until the claim is flagged again",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/guards.ps1",
+      "close_disposition": "hit",
+      "resolution_note": "All three e0d5cf leftovers fixed on triage/0926-f73dc7 (base main 0b1ef1c4b + 4b973e merged). (1) An as_of violation the audit proves is on no board cell now holds nothing: it is named OFF-BOARD and guards WARNs it; no board or no name still holds. (2) Guards' flag audit re-judges every open ledger entry with the current verifier over the captures on disk before naming a cell, through one shared resolver, so a verdict judged a chain earlier can neither hold nor pass; a re-judge that cannot run falls back to the stored verdicts. (3) Category coverage is a run-gates static gate (-Source), fixtured on the 4880ebc98 push. Each ships a must-fire and a clean twin; full suite deferred to land.",
+      "actual_tool_calls": 66,
+      "live_check": null,
+      "classification": "infra",
+      "rollback": "git revert -m 1 <the merge commit of 757e1cacb (triage/0926-f73dc7)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "757e1cacb (triage/0926-f73dc7)",
+      "leaves_open_owner_note": "(a) watch:grocery/guards.ps1 (a guard 5/10 board hold pages GUARDS FAILED on its first occurrence); (b) watch:grocery/verify-price-flags.ps1 (a re-flagged claim opens a fresh pending entry and a wrong-price pages one alert per cell)"
+    },
+    {
+      "branch": "main",
+      "commits": [
+        "7f05f77e9"
+      ],
+      "queue_id": "2026-09-22-6e6a3b",
+      "subject": "Triage residual: 9 delegated guard audits still hold the whole board instead of scoping to a cell",
+      "classification": "infra",
+      "lane": "money",
+      "prior_plan": "grocery/triage-plans/plan-2026-09-25-6.json",
+      "status": "done",
+      "premise_verified": "true with a correction: 1cff0edf2 (2026-09-26 04:53) had already taught five more, so the live tree read 13 delegates, 2 board-scoped against a mark of 2 (test-hold-scope -SelfTest exit 0), not 7. The two left were board-mojibake and coverage-regression.",
+      "evidence": [
+        "test-hold-scope -SelfTest before this change: 'the live tree: 13 delegates, 2 board-scoped against a mark of 2, findings 0' (exit 0)",
+        "after: 'the live tree: 13 delegates, 1 board-scoped against a mark of 1, findings 0' (exit 0); audit-guard-contract 'hold scope: 13 delegated audit(s), 1 board-scoped against a mark of 1' exit 0",
+        "grep 'HARD FAIL: no store lost coverage' over grocery/ad-cycle-log.txt (2026-09-01 to 2026-09-26): 0 days"
+      ],
+      "root_cause": "carried forward: guards.ps1 treats a delegated audit's exit 2 as BOARD scope unless the child affirms a complete cell list, and the delegated audits predate the 2026-09-21 quarantine protocol, so each reported its findings in prose only and one bad cell held the whole board.",
+      "root_fix": {
+        "what": "board-mojibake names every mangled cell in the QUARANTINE-CELL protocol (selection hold) and affirms scope only when every finding has an id and a store; coverage-regression stays board-scoped by design with the reason in its header; the ratchet mark falls 2 -> 1.",
+        "files": [
+          "grocery/audit-board-mojibake.ps1",
+          "grocery/test-board-mojibake-scope.ps1",
+          "grocery/audit-coverage-regression.ps1",
+          "grocery/hold-scope-lib.ps1"
+        ],
+        "exact_change": "audit-board-mojibake: on count > base print 'QUARANTINE-CELL <id>|<store>|selection' per distinct cell plus 'QUARANTINE-SCOPE complete cells=N stores=0' before its marker, none if any finding lacks id or store; HOLD SCOPE header cell. audit-coverage-regression HOLD SCOPE reason: the lost cells are absent from the board so no cell exists to hold, and QUARANTINE-STORE withholds a store's everyday cells, which widens the loss; holding keeps the last board that still has them. TcHoldBoardMark 2 -> 1."
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-board-mojibake-scope.ps1 (new), grocery/test-hold-scope.ps1 live ratchet at mark 1",
+        "must_fire_case": "MUST FIRE  a mangled name past the mark (1 against 0) exits 2 and is named for guards as jarred-gravy / Hy-Vee [selection], scope complete (the 2026-09-02 Campbell's apostrophe decoded as cp1252, read through Get-TcChildQuarantineScope)",
+        "clean_twin": "CLEAN TWIN  a mangled name with no store still exits 2 and prints RATCHET BROKEN, with no scope affirmed (the board holds); BAR one mangled name exactly AT the mark (1 of 1) exits 1 with no QUARANTINE line; MUST NOT FIRE a correctly encoded name exits 0",
+        "ran": "test-board-mojibake-scope -SelfTest 4 of 4 exit 0; audit-board-mojibake -SelfTest SELF-TEST PASS; test-hold-scope -SelfTest 8 of 8 exit 0 (live 1 against 1); audit-guard-contract exit 0 (67 of 67, hold=0); audit-script-census exit 0; guards.ps1 live exit 0 disposition=pass",
+        "full_suite": "deferred-to-land"
+      },
+      "full_suite": "deferred-to-land",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "guards.ps1 delegate table via test-hold-scope live pass (13 delegates) and the exit-2 path of audit-board-mojibake",
+        "affected_now": 0,
+        "note": "Only a broken mojibake ratchet changes: it now names its cells and guards quarantines them under the breaker instead of holding. A clean run prints nothing new."
+      },
+      "rollback": "git revert 7f05f77e9: board-mojibake stops printing the protocol and the mark returns to 2 in the same revert.",
+      "freshness": "measured 2026-09-26 in the main checkout on comparison-2026-09-23 built 08:06",
+      "shipped_commit": "7f05f77e9",
+      "deviation": "Eight of nine scoped; coverage-regression deliberately left board-scoped because no quarantine unit fits it (a lost cell is not on the board to hold, and a store drop widens the loss). Scoping it would need a new quarantine action that re-inserts a lost cell at its last published value, a protocol change nobody has measured.",
+      "leaves_open": "1: coverage-regression holds the board by design (0 hard-fail days since 2026-09-01)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-coverage-regression.ps1",
+      "close_disposition": "hit",
+      "resolution_note": "All nine delegated audits resolved: eight now name their cells or stores (board-mojibake taught today with its own fixture; seven in 6f1dd11cd and 1cff0edf2) and coverage-regression stays board-scoped on purpose because its lost cells are not on the board to hold; its header says why. Hold-scope mark 9 -> 1, test-hold-scope live 1 against 1.",
+      "actual_tool_calls": 14,
+      "merged_as": "7f05f77e9 (on main before the merges)"
+    },
+    {
+      "queue_id": "2026-09-26-ab11be",
+      "branch": "triage/0926-4b973e",
+      "commits": [
+        "479bff955"
+      ],
+      "subject": "Triage residual: ad-flyer sale cells have no product-level re-read (residual of 2026-09-21-4b973e)",
+      "classification": "code-change",
+      "lane": "weekly",
+      "evidence": [
+        "grocery/out/ads-2026-09-23.json (Hy-Vee 740, Aldi 110, Family Fare 1382 rows) is never in the verifier's answer set (verify-price-flags reads regular\\<prefix>-regular-* and <prefix>\\<prefix>-deals-* only), and a Hy-Vee line reads like {\"item\":\"Post cereal, 10 to 14.75 oz., $3.99\",\"ad_from\":\"2026-08-31\",\"ad_to\":\"2026-09-27\",\"store\":\"Hy-Vee\"}: no product, no product id, no size field",
+        "comparison-2026-09-23: 401 sale cells, 155 read from an ad (no as_of); of those, 90 have no same-name row in the store's answer set (Hy-Vee 53, Family Fare 30, Fareway 4, Aldi 3); 56 carry a price in the item text (Hy-Vee 53 of 53, Fareway 3 of 37), the other 34 name a product a lead can still read",
+        "the ledger era (since 2026-09-21): closed sale verdicts 4 of 4 match (Fareway allspice x3 and Family Fare yellow pepper, both product-named); 0 flyer-line flags opened; today's replay 'unverifiable by construction: 0 of 29 pending'"
+      ],
+      "premise_verified": "yes, re-measured 2026-09-26: the 15 of 21 (2026-08-23..2026-09-21 replay) predates the worklist leads; the class that remains is the flyer LINE that names no product (56 cells live), and product-named flyer sales do reach verdicts",
+      "root_cause": "a flyer that publishes a LINE (a product family, a size range and a price in one string) gives the verifier nothing a product read can be the same product as, and the only other read of that line is the flyer re-reading its own text through the same parser, so the verifier kept waiting ('no read of this product later than ...') and led worklists with questions no capture could answer",
+      "root_fix": {
+        "what": "grocery/flag-verify-lib.ps1 Test-TcFlyerLineNamesNoProduct (a sale read from an ad whose item text carries a price) makes Find-TcStoreReread return road=none with the reason and look nothing up, not even a later row under the identical text; Update-TcFlagLedger records road on the entry and keeps it pending; Get-TcFlagVerifyOwed owes it no re-read; verify-price-flags prints and stores the count per store and as summary.pending_no_product_road. The decision asked for: a next-flyer re-read is NOT a verdict, because it cannot confirm a mis-parse of itself (the laundry-pods class would pass)."
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "flag-verification.json 2026-09-26 over comparison-2026-09-23: 56 flyer-line sale cells (Hy-Vee 53, Fareway 3) now carry road=none",
+        "affected_now": 56,
+        "note": "verification ledger, report and worklist leads only. No price, match, band or board file is touched, so nothing on the board moves."
+      },
+      "proof": {
+        "must_fire_case": "test-flag-verification 2b: the live Hy-Vee cell 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49' (Weekly Ad from 2026-09-21) gets road none, and a LATER row under the identical text is not taken as an answer; the ledger keeps it pending with road none; Get-TcFlagVerifyOwed does not owe it to Hy-Vee",
+        "clean_twin": "test-flag-verification 2b: a Family Fare flyer sale that names a product ('Our Family Apples Michigan Gala', $3.99, 48 oz) keeps road product and matches its in-window product read; a pending Hy-Vee product claim beside the flyer line is still owed and leads the worklist",
+        "self_test": "grocery/test-flag-verification.ps1 -SelfTest exit 0 (48 of 48); grocery/test-capture-policy.ps1 exit 0; verify-price-flags -NoWrite over the main data exit 0",
+        "guard_or_fixture": "test-flag-verification 2b: the live Hy-Vee cell 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49' (Weekly Ad from 2026-09-21) gets road none, and a LATER row under the identical text is not taken as an answer; the ledger keeps it pending with road none; Get-TcFlagVerifyOwed does not owe it to Hy-Vee"
+      },
+      "rollback": "revert 479bff955; entries lose road on the next run and the flyer lines lead worklists again",
+      "freshness": "comparison-2026-09-23 and flag-verification.json of 2026-09-26",
+      "leaves_open": "56 flyer-line sale cells on the 2026-09-23 board (Hy-Vee 53, Fareway 3) have no product road at all: verifying them needs the flyer line linked to the store's product ids (Hy-Vee Aisles Online reads sale prices in-window), which is new line-to-product matching with a false-wrong-price quarantine risk, or a ruling that such lines stay published unverified",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "Q-ab11be-flyer-line-road",
+      "open_questions_for_brad": [
+        {
+          "id": "Q-ab11be-flyer-line-road",
+          "question": "56 sale cells (Hy-Vee 53, Fareway 3 on the 2026-09-23 board) are flyer LINES like 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49': they name a product family, not a product, so no store read can ever verify one when it is flagged. Options: A) accept it, they stay published and unverifiable, and the verifier says so every run (shipped); B) build a line-to-product linker in the Hy-Vee ad ingest so the in-window Aisles Online read can verify them (matching work, money lane, risk of a false wrong-price withholding a real sale); C) stop publishing a flyer line whose product cannot be named (fewer sale cells). 0 of these have been flagged since the verifier went live on 2026-09-21."
+        }
+      ],
+      "status": "done",
+      "deviation": "The item asked for a verdict from the next flyer. Measured and decided against: the flyer re-read is the same text through the same parser, so it would confirm a mis-parse; what shipped instead makes the class explicit and stops it spending worklist leads.",
+      "close_disposition": "confirmed",
+      "resolution_note": "Decided and built: a flyer line that names no product (a sale read from an ad whose item text carries a price, 56 of 155 ad-read sale cells: Hy-Vee 53, Fareway 3) is unverifiable by construction, because a next-flyer re-read is its own text through the same parser and would confirm a mis-parse. The verifier now marks it road=none, keeps it pending, owes it no re-read and counts it every run. Product-named flyer sales keep the product road and reach verdicts (4 of 4 sale verdicts since 09-21 matched). Whether to build a line-to-product road is Q-ab11be-flyer-line-road.",
+      "actual_tool_calls": 12,
+      "full_suite": "deferred-to-land",
+      "merged_as": "757e1cacb (triage/0926-f73dc7, contains 4b973e)"
+    },
+    {
+      "queue_id": "2026-09-26-518fff",
+      "parent_queue_id": "2026-09-23-80f302",
+      "lane": "money",
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "capture-run.ps1 honoured out\\post-deferred.json only when date == today (line 2083) and published only when THIS run pushed (Get-DeferredPostDecision -ObjectLanded shipServed+botCommitted+pushed). Logs: capture-run-daily-2026-09-24.log:199 'tail[1]: the sync ended blocked - NOT pushing' then POST HELD :378; capture-run-daily-2026-09-25.log:178 'NOT pushing', :182 POST HELD. grocery\\out\\post-deferred.json is still the 2026-09-25 record (sig 1AF7E40A..., written 08:16:44) while published-board.sig reads 32AD002A...: the held post was never republished and today's run ignores the record because it is not dated today.",
+      "evidence": [
+        "grocery/out/logs/capture-run-daily-2026-09-24.log:199,378 (push did not land, POST HELD)",
+        "grocery/out/logs/capture-run-daily-2026-09-25.log:178,182 (push did not land, POST HELD)",
+        "grocery/out/post-deferred.json date 2026-09-25 sig 1AF7E40A0F9ECCC4FE0786E78940504F vs grocery/out/published-board.sig 32AD002A9099A9F3902115AC50C3F361 on 2026-09-26",
+        "grocery/capture-run.ps1 (pre-change) line 2083: $postDeferred = ([string]$postDeferredDoc.date -eq $today)"
+      ],
+      "root_cause": "The deferred-post record was keyed to the calendar day and to this run's own push. A commit that landed on a LATER push (another session's or the next bot's) had nothing to publish its post, and the record silently expired at midnight. It also never recorded WHICH board the post would name, so no later run could prove the landed board was the deferred one.",
+      "root_fix": {
+        "files": [
+          "grocery/check-ad-cycles.ps1",
+          "grocery/capture-run.ps1",
+          "grocery/test-capture-builders.ps1"
+        ],
+        "change": "check-ad-cycles writes board_sha256 (SHA-256 of public\\board.json as written) and compare_file into post-deferred.json. capture-run gains pure Get-HeldPostDecision (inside EDGE-DECISION) and a block after the same-run post decision: a deferral from an earlier day publishes (publish-deals-page -CompareFile <recorded>) only when its board_sha256 equals the SHA-256 of origin/main:public/board.json, of the checkout's public\\board.json AND of feed.thriftycrew.com/board.json (cache-busted); it is cleared when published-board.sig already equals its sig; otherwise it is HELD and kept, never expired by the clock. Fail closed: any unreadable side is a hold, a legacy record without board_sha256 is a hold, and publish-deals-page's own served gate still runs before any Ghost write. public\\board.json is restored byte for byte after the page build. No new alert type (a post behind its board is paged by audit-live-page-parity).",
+        "what": "check-ad-cycles writes board_sha256 (SHA-256 of public\\board.json as written) and compare_file into post-deferred.json. capture-run gains pure Get-HeldPostDecision (inside EDGE-DECISION) and a block after the same-run post decision: a deferral from an earlier day publishes (publish-deals-page -CompareFile <recorded>) only when its board_sha256 equals the SHA-256 of origin/main:public/board.json, of the checkout's public\\board.json AND of feed.thriftycrew.com/board.json (cache-busted); it is cleared when published-board.sig already equals its sig; otherwise it is HELD and kept, never expired by the clock. Fail closed: any unreadable side is a hold, a legacy record without board_sha256 is a hold, and publish-deals-page's own served gate still runs before any Ghost write. public\\board.json is restored byte for byte after the page build. No new alert type (a post behind its board is paged by audit-live-page-parity)."
+      },
+      "proof": {
+        "must_fire_case": "test-capture-builders.ps1 'E  MUST FIRE (held post): 2026-09-24 held, landed on a LATER push, next run: board on origin/main, in the checkout and at the edge -> publish' - ok",
+        "clean_twin": "test-capture-builders.ps1 'E  CLEAN TWIN (held post): held and STILL UNLANDED (origin/main carries the older board) -> hold, never publish' - ok",
+        "other_cases": "edge stale -> hold; edge unreadable -> hold; origin unreadable -> hold; newer board in checkout -> hold; legacy record (the live 2026-09-25 file, no board_sha256) -> hold; already-published sig -> clear; today's deferral -> none; nothing pending -> none; wiring order (after Get-DeferredPostDecision, before the live-page parity call); check-ad-cycles writes board_sha256",
+        "self_test": "powershell -File grocery\\test-capture-builders.ps1: rc=0, 'CAPTURE-BUILDERS-COMPLETE cases=57 failed=0' (44 before, 13 added). grocery\\audit-live-page-parity.ps1 -SelfTest: rc=0, 'live-page-parity SELF-TEST PASS: 21 of 21'. ops\\audit-bare-replace.ps1: rc=0 PASSED (baseline unchanged). Parser: capture-run.ps1 and check-ad-cycles.ps1 0 errors. grocery\test-native-stderr-eap.ps1: rc=0, NATIVE-STDERR-EAP-TEST-COMPLETE cases=23 failed=0. ops\u0007udit-typed-param-shadow.ps1: rc=0, PASSED sites=0 baseline=0.",
+        "not_verified": "The live carried-publish path (a real publish-deals-page run against Ghost) was not exercised: publishing to Ghost was out of scope for this run. It first runs on the next capture-run after a held day.",
+        "guard_or_fixture": "test-capture-builders.ps1 'E  MUST FIRE (held post): 2026-09-24 held, landed on a LATER push, next run: board on origin/main, in the checkout and at the edge -> publish' - ok"
+      },
+      "leaves_open": "nothing: the legacy 2026-09-25 record (no board_sha256) was deleted in the integration run (3feb147bf), superseded by the rebuilt board; no legacy record remains",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-live-page-parity.ps1",
+      "leaves_open_note": "The legacy record is self-limiting: the next run whose board changes writes a new deferral carrying board_sha256. While the live post is behind its served board, audit-live-page-parity (shipped 4fee8112f, called every capture-run) pages it. Note: occurrences of the legacy record is 1, not 0, so the gate's watch: owner may refuse; if so the orchestrator should enqueue it weekly instead.",
+      "close_disposition": "fixed-root-cause",
+      "resolution_note": "A held board post now republishes itself on a later run once the exact board it names (board_sha256, recorded by check-ad-cycles) is on origin/main, in the checkout and served byte for byte by feed.thriftycrew.com, whoever's push landed it; the deferral no longer expires at midnight and fails closed on any could-not-look. Must-fire (09-24 held then landed later -> publish) and clean twin (held, unlanded -> hold) fixtured in test-capture-builders.ps1 (57/57).",
+      "live_check": "none: no board republished by this item; first live exercise is the next capture-run after a held day (look for 'HELD POST PUBLISHED' or 'HELD POST STILL HELD' in capture-run-daily-<date>.log)",
+      "republished": false,
+      "actual_tool_calls": 36,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-518fff",
+      "worktree": "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-518fff",
+      "commits": [
+        "5bc3969ac (branch-local, unlanded; cite blobs after rebase)"
+      ],
+      "knowledge_consulted": "searched 'held post republish after later push': nothing directly applicable; used lib/git-blob-lib.ps1 (reused helpers), .claude/rules/ops-and-gates.md og-51 (pointed-to object first), memory checkpoint-before-durable (from the brief).",
+      "classification": "infra",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grocery/out/post-deferred.json: the one held record (2026-09-25, no board_sha256); capture-run's held-post block",
+        "affected_now": 1
+      },
+      "rollback": "git revert -m 1 <the merge commit of 1a878f659 (triage/0926-518fff)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "1a878f659 (triage/0926-518fff)",
+      "leaves_open_was": "The live 2026-09-25 record carries no board_sha256, so it can never auto-publish; it holds and prints daily until a new deferral overwrites it or its sig is published (1 record)."
+    },
+    {
+      "queue_id": "2026-09-25-22b1e8",
+      "subject": "Triage residual: first publish of /omaha-price-tracker/ through its road is unobserved (c7d152)",
+      "lane": "money",
+      "branch": "triage/0926-80f302",
+      "commits": [
+        "4fee8112f (worktree id; rebased on landing), shared with 2026-09-23-80f302"
+      ],
+      "status": "done",
+      "premise_verified": "true, and worse than stated: live 2026-09-26 the tracker quotes 'week of Sep 2, 2026' (article:modified_time 2026-09-05T19:40:18Z) while main's built grocery/out/trend/index.html (2026-09-22 08:17) quotes 'week of Sep 22, 2026', 20 days apart; trend-pages.stamp 2026-09-22, so the road has not been called and a failure there would print only inside publish-deals-page's output, which capture-run filters from its log.",
+      "root_cause": "Same class as 2026-09-23-80f302: nothing reads a live page after its publish road, so a companion page that never went live (or whose publisher failed) is silent. The question 'did the first publish land' had no observer.",
+      "root_fix": {
+        "what": "The tracker arm of grocery/audit-live-page-parity.ps1: the live /omaha-price-tracker/ 'week of' label against the built out/trend/index.html's, run by capture-run every run; a different week pages 'Grocery page does not match its shipped data'. The first publish through the road is now observed automatically (parity after it, a page if it fails), so no dated manual read is needed.",
+        "files": [
+          "grocery/audit-live-page-parity.ps1",
+          "grocery/capture-run.ps1",
+          "grocery/alert-registry.json"
+        ]
+      },
+      "proof": {
+        "must_fire_case": "frozen live 'week of Sep 2, 2026' vs built 'week of Sep 22, 2026' -> diverged, 20 days apart; LIVE run against main's built page: tracker arm DIVERGED.",
+        "clean_twin": "live tracker quoting the built week -> parity; missing built page, no label or two labels -> blind (exit 3), never parity.",
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-live-page-parity.ps1 -SelfTest  (rc=0, 21 of 21)"
+        ],
+        "guard_or_fixture": "frozen live 'week of Sep 2, 2026' vs built 'week of Sep 22, 2026' -> diverged, 20 days apart; LIVE run against main's built page: tracker arm DIVERGED."
+      },
+      "leaves_open": "nothing (the tracker is stale NOW: a republish, not a residual; the next capture-run pages it until the orchestrator runs grocery\\publish-trend-index.ps1 after landing)",
+      "close_disposition": "confirmed",
+      "resolution_note": "Pulled forward into 2026-09-23-80f302's class fix: the tracker arm of grocery/audit-live-page-parity.ps1 compares the live /omaha-price-tracker/ week with the built out/trend/index.html on every capture-run and pages a mismatch, so the first publish through the road is observed without a dated manual read. Measured 2026-09-26: live Sep 2 vs built Sep 22 (20 days); republish with publish-trend-index.ps1 after landing.",
+      "live_check": "after the orchestrator runs grocery\\publish-trend-index.ps1: audit-live-page-parity.ps1 prints 'live-page-parity tracker: PARITY - both quote the week of Sep 22, 2026'",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 3,
+      "classification": "infra",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "the /omaha-price-tracker/ publish road: one page",
+        "affected_now": 1
+      },
+      "rollback": "git revert -m 1 <the merge commit of 1a878f659 (triage/0926-518fff, with 80f302)> on main, then re-run the board chain",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item",
+      "merged_as": "1a878f659 (triage/0926-518fff, with 80f302)"
+    },
+    {
+      "branch": "triage/0926-8163f7",
+      "commits": [
+        "48b414ba3 (unlanded; grocery/test-auditors.ps1 blob 3bf0713f2c755187ffd6b722ddede8f162330083)"
+      ],
+      "queue_id": "2026-09-26-8163f7",
+      "subject": "test-auditors still scores a census orphan as a blind guard rather than HYGIENE",
+      "classification": "infra",
+      "lane": "ops",
+      "status": "done",
+      "premise_verified": "yes: grocery/test-auditors.ps1 unit u079 at c6783fa8e line 4290 scored any non-clean live census (rc 2 with a finding, rc 3, empty census) with one Bad(), so an unrecorded script, which is the census WORKING, exited test-auditors 2 and paged 'a GUARD has gone blind' (founding run grocery/out/test-auditors-fail-2026-09-26.txt: 1 failed, 790 passed, the only FAIL the live census case)",
+      "evidence": [
+        "grocery/test-auditors.ps1@c6783fa8e:4290 'else { Bad (''script-census fires on the live tree, or reported an EMPTY census ...'' - two opposite findings in one Bad()",
+        "grocery/test-auditors.ps1:139 'function Hygiene' already exists and Get-AuditorsVerdict maps hygiene-only to rc 1 'The board is NOT unproven' (memory one-tally-two-verdicts, 2026-09-04): the tier existed, the census live case was never moved onto it",
+        "ops/prepush-test-auditors.ps1 refuses on FAIL lines (Get-FailLines), not HYGIENE lines; ops/run-gates.ps1:210 declares audit-script-census in $static as 'no script is unreachable and unrecorded', and run-gates has no advisory tier"
+      ],
+      "root_cause": "test-auditors answers two questions (can each watcher see its founding bug; is the estate tidy) and each case site picks its own tier by hand; a live-tree case whose detector found a real hygiene finding and a case whose detector went blind shared one Bad() because nothing forced a case over live data to separate 'the detector fired on the tree' from 'the detector cannot see'",
+      "root_fix": {
+        "what": "a pure tier function for the census live case, fail-closed: ok needs exit 0 + the clean line + uncalled > 0; hygiene needs exit 2 + the census's own 'script-census FAIL: N finding(s)' line + uncalled > 0; every other exit or shape (3, 124, crash, empty census) is blind and stays Bad",
+        "files": [
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "function Get-ScriptCensusLiveTier([int]$Rc,[string]$Text) outside the u079 wrapper; the live case routes ok->Ok, hygiene->Hygiene, blind->Bad; eight frozen tier cases inside u079"
+      },
+      "gate_question": "The pre-push gate should keep BLOCKING. run-gates declares audit-script-census as a static source invariant ('no script is unreachable and unrecorded') and has no advisory tier; stopping the push that adds an orphan is the cheapest point to catch it. The four refusals of the bot's push were not a tier defect but a POPULATION defect (an untracked gitignored sidecar/.venv script counted only in the main checkout), fixed at source in c6783fa8e. Re-measured 2026-09-26: 1 gitignored .ps1 remains outside the vendored prune (.claude/skills/lesson/ghost-config.ps1), and 30+ executable files name it, so it is not an orphan and main and worktrees read the same census. test-auditors, the daily watcher-health run, now scores the same finding as HYGIENE (rc 1), which prepush-test-auditors does not refuse.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "u079 selective run: live census rc 0 (108 uncalled) still Ok; only the tier of a future live finding changes; no pricing or matching code touched",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a census that crashes after printing 'script-census FAIL' would read hygiene; it prints that line only on its own finding path (audit-script-census.ps1:385), after the count line",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 unit u079, 8 new frozen tier cases",
+        "must_fire_case": "the founding day's census text (109 uncalled, 'WIDE RATCHET ROSE: 74 ... mark of 73', 'script-census FAIL: 1 finding(s).') at exit 2 is 'hygiene', and a strict-tier ORPHAN at exit 2 is 'hygiene'; five blind shapes stay 'blind': 0 uncalled clean at exit 0, empty census at exit 2, exit 3, exit 124 after the count line, exit 2 with no finding line",
+        "clean_twin": "a clean census (exit 0, 'no unrecorded orphan', 109 uncalled) is 'ok'; the live census in the worktree still scores Ok (108 uncalled)",
+        "ran": "powershell -File grocery/test-auditors.ps1 -SkipUnitsFile <all but u079>: exit 0, 'ran 20 case(s) in 1 of 146 unit(s) (0 failed, 20 passed)'"
+      },
+      "rollback": "git revert of the one commit restores the single Bad() verdict",
+      "freshness": "measured 2026-09-26 in worktree triage/0926-8163f7 off c6783fa8e; main checkout census rc 0 at 71/71",
+      "leaves_open": "any OTHER live-data case in test-auditors that still scores a hygiene finding with Bad(); not audited here (one case moved, the prompt-backup case moved 2026-09-04)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_owner": "watch:grocery/test-auditors.ps1 (a mis-tiered case pages through check-ad-cycles on its first occurrence as 'a GUARD has gone blind', which triage reads as this class)",
+      "close_disposition": "confirmed",
+      "resolution_note": "Shipped on triage/0926-8163f7 (48b414ba3, unlanded; test-auditors.ps1 blob 3bf0713f2c75): the census live case now gives two verdicts through Get-ScriptCensusLiveTier, hygiene for a real finding and Bad only for a census that cannot see, fail closed on every undefined exit. 8 frozen cases (founding day MUST FIRE, clean twin, 5 blind shapes). Pre-push keeps blocking by declaration; the refusals were a population defect fixed in c6783fa8e. u079 selective run exit 0, 20/20.",
+      "actual_tool_calls": 21,
+      "full_suite": "deferred-to-land",
+      "merged_as": "a1e99b707 (triage/0926-8163f7)",
+      "leaves_open_followup": "watch:grocery/test-auditors.ps1"
+    },
+    {
+      "queue_id": "2026-09-25-a8448d",
+      "branch": "triage/0926-2dae07",
+      "commits": [
+        "1b08e3d9e (unlanded; cite blob grocery/audit-match-soundness.ps1 3fcbb75f524dd22df3d1c63677f0f5c34414351e, grocery/publish-deals-page.ps1 d5451a871936daa0019afb9ca54990591898e45a)"
+      ],
+      "subject": "Triage residual: a soundness -Accept blesses every contested arrival, bypassing the matching lane",
+      "classification": "code-change",
+      "evidence": [
+        "grocery/audit-match-soundness.ps1 (HEAD c6783fa8e) Merge-BaselineCarryForward: '$outContest = @{}; foreach ($kv in $TodayContest.GetEnumerator()) { $outContest[[string]$kv.Key] = $true }' - every name contested today enters the reviewed list at any -Accept",
+        "queue body: 'the laundry-detergent accept ... blessed all 6 undecided contested arrivals on that day's worklist, among them \"Lay's Honey Barbecue Potato Chips\" routed to HONEY ... and \"Inglehoffer Horseradish Cream Style 9.5 OZ\" (a crown at Aldi, undecided)'",
+        "memory contested-flag-baselined-away: 2026-08-06 a Cerebelly baby-food jar crowning apples was swept into the baseline by an unrelated tortilla accept"
+      ],
+      "premise_verified": "yes, 2026-09-26: the HEAD code writes $TodayContest wholesale into baseline.contested (read at the function), and Get-ReviewedContested unions baseline.contested with ledger confirms, so a whole-state accept was a second road to 'reviewed' that bypassed -Decide.",
+      "root_cause": "the soundness baseline had two roads to 'reviewed' for a contested name, the per-name lane ledger and the whole-state -Accept, and the accept road carried no per-name reading, so any accept for any reason blessed every undecided arrival of its day",
+      "root_fix": {
+        "what": "Merge-BaselineCarryForward admits a name contested today into baseline.contested only when the previous baseline already held it (an establishing accept with no previous baseline still blesses all); every other arrival comes back in .unblessed, is printed by -Accept as UNDECIDED CONTESTED with its chain, and stays with the matching lane, whose confirms Get-ReviewedContested reads. The alert body, the report pointer and publish-deals-page's HELD line now name resolve-match-worklist.ps1 -Decide as the road for a contested product."
+      },
+      "prevention": {
+        "source": "grocery/audit-match-soundness.ps1",
+        "what": "the baseline writer (Merge-BaselineCarryForward, called by -Accept)",
+        "exact_change": "today's contested names pass through a prevContest membership test; non-members go to .unblessed instead of baseline.contested"
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "match-baseline.json 2026-09-26 00:31 (638 contested): the 6 arrivals the 2026-09-25 accept blessed; new_contested=0 on main's 08:18 report",
+        "affected_now": 6,
+        "note": "grocery/audit-match-soundness.ps1 -Accept output and the contested list it writes; an undecided contested crown now keeps its CELL-BY-CONTEST (exit 1) and, by Brad's Q-2026-09-25-2-A ruling, holds the post until it is decided per name, where an -Accept used to clear it. Main's newest report (08:18) has new_contested=0, so nothing holds on landing."
+      },
+      "proof": {
+        "must_fire_case": "audit-match-soundness -SelfTest: 'MUST FIRE an -Accept does NOT bless the undecided contested arrivals of its day (Lay's to honey and the Inglehoffer crown, 2026-09-25; the Cerebelly jar, 2026-08-06)' and 'MUST FIRE a new-contested alert body names the per-name road'; live sandbox: accept printed NOT BLESSED / UNDECIDED CONTESTED 'Lay's Honey Barbecue Potato Chips' and wrote contested=[]",
+        "clean_twin": "'CLEAN TWIN a contested name the previous baseline already reviewed stays reviewed through the same accept' and 'CLEAN TWIN with NO previous baseline the accept is ESTABLISHING one, so all 4 contested names enter'; the existing 'an -Accept with NO absent names writes ... contested identical' twin still passes",
+        "fixture_occurrences": [
+          "2026-09-25 laundry-detergent accept (Lay's, Inglehoffer)",
+          "2026-08-06 tortilla accept (Cerebelly jar)"
+        ],
+        "ran": "audit-match-soundness.ps1 -SelfTest exit 0 (84 of 84, 'match-soundness SELF-TEST PASS'); scratch live-path sandbox report->accept->report exit 0; test-auditors selective unit u076 18/18 exit 0 (SELECTIVE, not a pass of the suite); audit-alert-registry exit 0",
+        "guard_or_fixture": "audit-match-soundness -SelfTest: 'MUST FIRE an -Accept does NOT bless the undecided contested arrivals of its day (Lay's to honey and the Inglehoffer crown, 2026-09-25; the Cerebelly jar, 2026-08-06)' and 'MUST FIRE a new-contested alert body names the per-name road'; live sandbox: accept printed NOT BLESSED / UNDECIDED CONTESTED 'Lay's Honey Barbecue Potato Chips' and wrote contested=[]"
+      },
+      "rollback": "revert the commit; baselines written meanwhile stay valid (the added carried_rules_hash key is ignored by the old code)",
+      "freshness": "main soundness-report.json 2026-09-26 08:18 and match-baseline.json 2026-09-26 00:31 (638 contested)",
+      "leaves_open": "(1) the 6 arrivals the 2026-09-25 accept already blessed stay in baseline.contested (not un-blessed: removing them from the tracked baseline would re-open them and the Aldi horseradish crown would hold the post); Lay's is decided release in match-verdicts.json. (2) 'Inglehoffer Horseradish Cream Style 9.5 OZ' (horseradish > horseradish-sauce, Aldi crown) is undecided: whether it is prepared horseradish or a cream sauce is a MATCHING judgement that needs the jar's panel - mis-laned to the money lane.",
+      "leaves_open_occurrences": 1,
+      "status": "done",
+      "deviation": "none on the fix; the six 09-25 blessings are not reversed (see leaves_open)",
+      "close_disposition": "confirmed",
+      "resolution_note": "An -Accept no longer blesses an undecided contested arrival: only a name the previous baseline already reviewed stays in its contested list, every other arrival is printed UNDECIDED CONTESTED and waits for resolve-match-worklist -Decide. Fixtured on the 2026-09-25 Lay's/Inglehoffer accept and the 2026-08-06 Cerebelly accept.",
+      "actual_tool_calls": 18,
+      "full_suite": "deferred-to-land",
+      "merged_as": "8aaeaafc6 (triage/0926-wrongprod)",
+      "leaves_open_followup": "Q-horseradish-cream-style",
+      "leaves_open_owner_note": "money lane (Inglehoffer horseradish decision, from plan-2026-09-25-6 b2850b leaves_open (2)); nothing new minted"
+    },
+    {
+      "queue_id": "2026-09-26-eb9ca4",
+      "subject": "Triage finding: chain rehearsal ages data by the board's file name, not its build time (blind=stale-data on 21-hour-old data)",
+      "lane": "money",
+      "branch": "claude/board-clock (a sibling session's, unlanded; tip bafcc8cc6, worktree .claude/worktrees/recursing-edison-169e3b). Not rebuilt here: a rival copy of an in-flight fix is the waste CLAUDE.md names.",
+      "commits": [],
+      "fix_commits_on_sibling_branch": [
+        "48c893532 Board clock W2-W4: a board's data age is its newest READ, never its ad-set name",
+        "bafcc8cc6 (branch tip, PLAN-board-clock build record)"
+      ],
+      "status": "superseded",
+      "premise_verified": "TRUE, and both of the finding's questions are answered. (1) ops/rehearse-chain.ps1 at main c6783fa8e ages data with Get-RhNewestBoardDate, the date in the newest comparison-*.json FILE NAME, at 4 sites (lines ~541, ~755, ~941-944, ~1092), against $script:RhMaxDataAgeDays = 2. On disk 2026-09-26: comparison-2026-09-23.json carries built_at 2026-09-26T08:06:07. (2) The name is not stuck: compare-deals.ps1 line 2449 sets $today = $ads.today and names the board and week_of from the newest out/ads-<D>.json, which is written only on a day a weekly ad is pulled. So the name is the AD SET and does not advance between ad days by design; the defect is the rehearsal (and other consumers) reading it as 'now'. Recorded by the sibling in memory the-board-has-three-dates.",
+      "root_cause": "one variable (week_of, the board's file-name date) answered two questions, 'which ad set' and 'how old is the data', and it lags the real date by the days since the last weekly ad pull (3 days on 2026-09-26), so the F2 two-day bar refused every chain push from day 3 of any stretch with no ad due.",
+      "root_fix": {
+        "what": "held on the sibling branch claude/board-clock, design/PLAN-board-clock-2026-09-26.md (approved by Brad 2026-09-26, D1-D3): Get-RhNewestBoardDate becomes Get-RhBoardDataDate, which uses the name only to PICK the newest board and reads the data age from the newest price READ on it (as_of, lib/board-clock.ps1). Never built_at, which a rebuild over old captures would launder fresh (dates-written-not-measured). All four data-age sites read it; a board with no dated price is blind, never fresh by its name.",
+        "files": [
+          "ops/rehearse-chain.ps1",
+          "lib/board-clock.ps1 (new)",
+          "grocery/audit-board-freshness.ps1",
+          "design/PLAN-board-clock-2026-09-26.md"
+        ],
+        "why_not_built_here": "git log --all -- ops/rehearse-chain.ps1 showed 48c893532 on claude/board-clock (4 commits behind main, 7 ahead) with a live worktree. My first design (read built_at) is the one that plan rejects with a measured reason, so building it would have shipped a worse rival."
+      },
+      "proof": {
+        "must_fire_case": "on the sibling branch, run by me in a detached throwaway worktree at bafcc8cc6: 'MUST FIRE a board NAMED 09-21 whose prices were READ 09-24 is rehearsed on 09-24, and its data date is the read (the founding false blind)' ok; 'MUST FIRE a board NAMED today whose prices were read 09-21 is stale on 09-24, and the cause names the read, not the name' ok; 'MUST FIRE a board named today that carries no dated price is BLIND' ok.",
+        "clean_twin": "same run: 'MUST NOT FIRE at the bar prices read exactly 2 days before (the F2 bar) are rehearsed' ok; the pre-existing 'MUST FIRE data older than the bar ... blind=stale-data (09-21 board on 09-24)' still ok.",
+        "commands_run": [
+          "powershell -NoProfile -File ops/rehearse-chain.ps1 -SelfTest at bafcc8cc6: exit 0, 'rehearse-chain self-test PASS: 70 of 70 cases'",
+          "powershell -NoProfile -File lib/board-clock.ps1 -SelfTest at bafcc8cc6: exit 0, 'board-clock SELF-TEST PASS (10 cases)'"
+        ],
+        "guard_or_fixture": "on the sibling branch, run by me in a detached throwaway worktree at bafcc8cc6: 'MUST FIRE a board NAMED 09-21 whose prices were READ 09-24 is rehearsed on 09-24, and its data date is the read (the founding false blind)' ok; 'MUST FIRE a board NAMED today whose prices were read 09-21 is stale on 09-24, and the cause names the read, not the name' ok; 'MUST FIRE a board named today that carries no d"
+      },
+      "leaves_open": "the fix is not on main: claude/board-clock (and claude/board-clock-detector, tip 5255b89e3) are unlanded; until they land, every chain push on a day 3+ days past the last ad pull is refused blind=stale-data (occurred 2026-09-26, 1 time, round 2 of the 2026-09-25 triage, bypassed by Brad with -NoRehearsal).",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "orchestrator: land claude/board-clock through ops/push-main.ps1 (a chain change) or confirm its owning session is landing it; this queue item closes only after that lands. No new queue item minted: its own id carries it.",
+      "close_disposition": "superseded",
+      "resolution_note": "The rehearsal aged data by the board's file name, which is the AD SET (compare-deals names it from the newest ads-<D>.json), not the build or read date, so it lags whenever no weekly ad is due and the 2-day bar refused every chain push from day 3. The fix already exists on the sibling branch claude/board-clock under Brad's approved PLAN-board-clock-2026-09-26: data age is the newest price READ on the newest board, never its name and never built_at. Verified by running that branch's self-tests: rehearse-chain 70 of 70 and board-clock 10 of 10, exit 0, with the founding false blind as a must-fire. Superseded by that branch; closes when it lands.",
+      "actual_tool_calls": 14,
+      "full_suite": "deferred-to-land (no code on this branch; the sibling branch's landing runs it)",
+      "classification": "superseded",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08: comparison-2026-09-23 rebuilt over all merged branches (bakers 09-09, fareway 09-20 pinned; sams 09-26 rebuilt); lane measurement as recorded in the item"
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-26-sirloin-tip",
+      "question": "May a sirloin tip STEAK stand for sirloin steak? Sirloin tip is cut from the ROUND; sirloin steak from the loin.",
+      "options": {
+        "A (keep, today's state)": "Aldi 7.99 sale, Fareway 7.99 and Walmart 8.82 sirloin-tip-steak cells stay. The crown does not move either way (Family Fare's 6.49 sizzle steak, a loin cut, holds it after this item).",
+        "B (exclude sirloin tip from sirloin-steak)": "those three cells fall back to loin sirloin (Aldi petite sirloin 8.99, Fareway and Walmart to their cheapest top sirloin, or empty); recipe lines are unaffected because the crown is unchanged. A separate sirloin-tip commodity could carry them."
+      },
+      "from_item": "2026-09-26-8deaa4"
+    },
+    {
+      "id": "Q-2026-09-26-subprimal-case",
+      "question": "May a whole-subprimal CASE (sold only as a multi-piece case, priced per lb) price a retail roast? Live: chuck-roast | Sam's Club | 'Whole Beef Chuck Roll, Case, priced per pound' 6.97/lb, the crown.",
+      "options": {
+        "A (keep)": "Sam's holds the chuck-roast crown at 6.97/lb; a shopper must buy the whole case.",
+        "B (exclude case/whole on roast commodities)": "crown moves to Aldi 'Choice Black Angus Chuck Roast Per LB' 6.99/lb (+0.02/lb); Sam's cell falls to its next retail roast or empties."
+      },
+      "from_item": "2026-09-26-8deaa4"
+    },
+    {
+      "id": "Q-horseradish-cream-style",
+      "question": "Is a cream-style horseradish (Inglehoffer Cream Style: grated horseradish first, then water, soybean oil, vinegar, corn syrup, eggs) 'Prepared Horseradish', or 'Horseradish Sauce (creamy)'?",
+      "options": {
+        "A": "Prepared horseradish (confirm the current route). Aldi keeps the horseradish crown at $0.2989/oz and Walmart's Inglehoffer 9.5 oz stays at $0.3032; horseradish-sauce's two cream-style includes stay dead text for these names. Lane: resolve-match-worklist -Decide '<contested key>' -Verdict confirm.",
+        "B": "Horseradish sauce (release: exclude cream style / creamy from horseradish). The horseradish crown moves to Baker's Silver Spring Coarse Cut at $0.3738/oz (+25%); Aldi's and Walmart's horseradish cells empty (every in-store candidate at both is an Inglehoffer or Beaver creamy jar, the rest ship-only); Aldi gains a horseradish-sauce cell at $0.2989 and that crown stays Walmart Great Value at $0.16."
+      },
+      "recommendation": "B reads the rule authors' intent (the sauce commodity names cream style twice) and keeps a mayo-style emulsion off the plain-horseradish crown, at the cost of two empty cells.",
+      "alert": "not sent from this spawn (the queue is shared; the orchestrator batches rulings). Send one send-alert.ps1 -Force from main if not batched.",
+      "from_item": "2026-09-26-f655c7-routes"
+    },
+    {
+      "id": "Q-2026-09-26-sams-name-only-size",
+      "question": "When Sam's prints no unit price and the item has never been proved by one, may the board price it from the name's size alone (\"Campbell's Cream of Mushroom Condensed Soup 50 oz.\" $4.98 -> 50 oz), as Hy-Vee and Family Fare rows are, or stay refused as today?",
+      "options": [
+        "A: admit a name with exactly one measure or one count and no per-lb/approx marker, marked qty_basis 'package; qty name only'",
+        "B: keep refusing until Sam's prints a unit price (current behaviour; about 20-36 products a day)"
+      ],
+      "measured": "09-26: 20 one-measure + 16 one-count distinct names; Walmart's builder refuses the same shape (walmart-row-lib 'no unitPrice'), so A is a new estate rule, not a Sam's patch.",
+      "from_item": "2026-09-26-samsunit"
+    },
+    {
+      "id": "Q-ab11be-flyer-line-road",
+      "question": "56 sale cells (Hy-Vee 53, Fareway 3 on the 2026-09-23 board) are flyer LINES like 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49': they name a product family, not a product, so no store read can ever verify one when it is flagged. Options: A) accept it, they stay published and unverifiable, and the verifier says so every run (shipped); B) build a line-to-product linker in the Hy-Vee ad ingest so the in-window Aisles Online read can verify them (matching work, money lane, risk of a false wrong-price withholding a real sale); C) stop publishing a flyer line whose product cannot be named (fewer sale cells). 0 of these have been flagged since the verifier went live on 2026-09-21.",
+      "from_item": "2026-09-26-ab11be"
+    }
+  ]
+}

@@ -127,8 +127,8 @@
         "the out\\ baseline",
         "any other KNOWN entry"
       ],
-      "leaves_open": "test-auditors still scores a census orphan as a blind guard rather than HYGIENE (the one-tally-two-verdicts shape): 1 occurrence, today",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "test-auditors scoring a live census orphan as a blind guard is CLOSED by queue 2026-09-26-8163f7 (branch triage/0926-8163f7, Get-ScriptCensusLiveTier: a live finding is HYGIENE, rc 1; only a census that cannot see is Bad). Left open: another live-data case in test-auditors could still mis-tier a hygiene finding; and a future gitignored uncalled .ps1 outside .venv/venv/node_modules would re-open the main-vs-worktree population gap (0 today: the one gitignored .ps1 left, .claude/skills/lesson/ghost-config.ps1, is named by 30+ executable files).",
+      "leaves_open_occurrences": 0,
       "leaves_open_followup": "2026-09-26-8163f7",
       "premise_verified": "true: re-ran the census live (rc 2, 74 over 73) and read which of the 791 cases failed; the prior close's cause (a regex timeout) is not today's",
       "deviation": "the dispatch framed it as possibly a blind guard; it is a hygiene finding, and its real damage was refusing the bot's push. The fix goes to the census's population rather than only to KNOWN.",
@@ -137,7 +137,12 @@
       "publish_batch": "none",
       "status": "done",
       "shipped_commit": "the commit carrying this plan, subject 'Triage plan-2026-09-26: script census prunes vendored dirs and names a wide rise (1f95a4)'",
-      "actual_tool_calls": 40
+      "actual_tool_calls": 40,
+      "branch": "triage/0926-8163f7",
+      "commits": [
+        "48b414ba3 (unlanded; grocery/test-auditors.ps1 blob 3bf0713f2c755187ffd6b722ddede8f162330083)"
+      ],
+      "leaves_open_owner": "watch:grocery/test-auditors.ps1 and watch:grocery/audit-script-census.ps1 (each pages on its first occurrence)"
     },
     {
       "queue_id": "2026-09-26-e0d5cf",
@@ -149,16 +154,14 @@
         "grocery/ad-cycle-log.txt:38217-38221 [08:14:12] 'HARD FAIL: no published price claims a date newer than the capture it came from (as_of evidence) (see audit-asof-evidence.ps1)'; 'HARD FAIL: no published cell carries a price its own store contradicted on a later read of the same product (see audit-flag-verification.ps1)'; 'GUARDS-COMPLETE hard=2 warn=19 disposition=hold'",
         "both delegates are cell-scoped by now: audit-flag-verification quarantines its cell by design (plan-2026-09-21-8), and asof-evidence was taught to name its cells in 30a2e4907 (queue note of 2026-09-22-6e6a3b, landed). Yet the disposition was HOLD, not QUARANTINE-REQUIRED"
       ],
-      "root_cause": "carried from 2026-09-23-0c8e6e (plan-2026-09-25-4): one cell can still hold the whole board when the disposition cannot scope a failure; today two delegates that should scope to cells produced a board HOLD, so either one did not print its QUARANTINE-SCOPE complete line, or a held value was condemned, or the breaker tripped. Not yet measured which.",
+      "root_cause": "audit-asof-evidence took its evidence from the SELECTED Fareway capture (fareway-shop-<date>.json, one winner per commodity), which select-fareway-shop re-derives on every pass, instead of the raw capture (.jsonl candidates). A re-selection after the regular build dropped a truly measured row from the selected file, the audit called its date laundered, and because that row is on no board cell the violation could not be scoped, so the whole board held.",
       "root_fix": {
-        "what": "to be measured by triage-developer: find which of the three roads produced HOLD and fix it at the scope decision so these two failures quarantine their cells",
+        "what": "audit-asof-evidence reads the raw capture's candidates (out/fareway/fareway-shop-*.jsonl) as sightings, every sighting newest-wins, and the selected-file walk filters on its own extension so a .jsonl is never counted as a selected file.",
         "files": [
-          "grocery/guards.ps1",
-          "grocery/cell-quarantine-lib.ps1",
           "grocery/audit-asof-evidence.ps1",
-          "grocery/audit-flag-verification.ps1"
+          "grocery/categories.json"
         ],
-        "exact_change": "decided after reading guards' per-delegate scope lines for 2026-09-26 08:14"
+        "exact_change": "Get-LastSeen gains -rawGlob; Fareway SOURCES entry gains raw='out\\fareway\\fareway-shop-*.jsonl'; both sighting writes become newest-wins; three frozen self-test cases from today's row. categories.json: lo-mein-noodles, sweet-potato-glass-noodles (grains), blackened-seasoning (baking)."
       },
       "prior_closes": [
         "2026-08-31-0465b5",
@@ -181,17 +184,21 @@
       },
       "blast_radius": {
         "measured_as": "routing",
-        "measured_by": "not yet measured (planned item)",
-        "affected_now": 0,
-        "names": [],
-        "risk": "unmeasured",
+        "measured_by": "guards.ps1 over the built board before and after (hard 2 -> 0); no rule in commodities.json changed",
+        "affected_now": 1,
+        "names": [
+          "Webster City Bacon Ends (Fareway, off-board row)"
+        ],
+        "risk": "low: evidence widened only to the raw capture of the same store and day",
         "cell_effects": []
       },
       "freshness": "measured against the 08:14 guards run on comparison-2026-09-23 built 08:06:07; a later chain run replaces it",
       "proof": {
-        "guard_or_fixture": "grocery/test-cell-quarantine.ps1",
-        "must_fire_case": "today's two findings, frozen: guards must exit 2 QUARANTINE-REQUIRED (then 4 QUARANTINED), not a board HOLD",
-        "clean_twin": "an unscoped delegate's HARD FAIL still holds the board",
+        "guard_or_fixture": "grocery/audit-asof-evidence.ps1 -SelfTest (frozen 2026-09-26 bacon-ends fixture)",
+        "must_fire_case": "MUST FIRE  the same row dated 09-27, past every raw and selected sighting, still fires with evidence 09-26",
+        "clean_twin": "MUST NOT FIRE a row dated to a RAW capture sighting (jsonl candidate) is backed, though the selected file dropped it (bacon ends 09-26); CLEAN TWIN a .jsonl is never read as a selected .json file. Before the newest-wins edit both new cases FAILED (evidence 09-25), after it both pass.",
+        "ran": "audit-asof-evidence -SelfTest SELF-TEST PASS; live audit-asof-evidence exit 0 (Fareway 895 of 895 checked, 0 unbacked, 0 violations; was 1 violation); test-asof-evidence-scope 3 of 3; audit-flag-verification live exit 0 (cells=0); guards.ps1 over comparison-2026-09-23 exit 0, GUARDS-COMPLETE hard=0 warn=19 disposition=pass; audit-basis-reconcile exit 0 (54 checked, 0 findings); audit-category-coverage exit 0 (596 in exactly one of 16); export-feed exit 0 (week 2026-09-23); publish-deals-page exit 2 HELD on the feed-served gate (post names board.json?v=654273d703, edge serves v=a14a8c805c) - correct until landing.",
+        "full_suite": "deferred-to-land",
         "fixture_occurrences": [
           "2026-08-31-0465b5",
           "2026-09-03-83b57e",
@@ -206,37 +213,94 @@
         ]
       },
       "rollback": "revert the scope change; the board holds as before",
-      "leaves_open": "unknown until measured",
-      "leaves_open_occurrences": 0,
-      "resolution_note": "PROVISIONAL (triage-developer rewrites at close): guards held the 2026-09-26 board on two HARD FAILs from cell-scoped delegates (asof-evidence, flag-verification); fixed at the scope decision so they quarantine their cells.",
+      "leaves_open": "3: an asof violation on a row no board cell carries still holds the board (no zero-cell complete scope in the protocol); guards reads flag-verification.json before the verifier re-judges it (a verifier fix reaches guards one chain late, overlaps 4b973e); category coverage is not a push gate (a commodity with no category passes push and holds publish)",
+      "leaves_open_occurrences": 3,
+      "resolution_note": "Guards held the 2026-09-26 board because audit-asof-evidence called a measured Fareway date laundered (it read only the re-selected capture, not the raw one) and that row is on no board cell, so it could not scope. The audit now reads the raw capture (frozen fixture from the row); guards exit 0, board and feed rebuilt and committed (0b1ef1c4b), Ghost post publishes after landing. flag-verification's cell had already been re-judged a match by the 17c0da fix. Three residuals queued weekly as 2026-09-26-f73dc7.",
       "publish_batch": 1,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "partly false: the plan said both delegates were cell-scoped and one of three roads produced HOLD. Measured in ad-cycle-log 38181-38221: audit-flag-verification DID scope (named yellow-bell-pepper / Family Fare); audit-asof-evidence printed no QUARANTINE-SCOPE line because its one violation ('Webster City Bacon Ends', Fareway) is on no board cell, so Get-AsOfViolationCells returned null and the board held. The breaker did not trip and no held value was condemned.",
+      "deviation": "The fault was not at the scope decision. The asof violation was FALSE: the row IS a candidate in fareway-shop-2026-09-26.jsonl ($11.99, loc 531573); the 06:58 build dated it to that capture and the 08:0x re-selection gave the bacon slot to a sale row, so the selected .json the audit read no longer held it. Fixed the audit's evidence (raw capture candidates count, newest-wins), not guards. The flag-verification cell needed no change: the 17c0da fix (2026-09-25 20:01) made the verifier re-judge it a match at 08:26, after guards had already read the old verdict at 08:13; out/flag-verification.json now holds it as match and the audit exits 0 live. Also fixed a publish blocker found on the way: 3 commodities added in 4880ebc98 had no category, and publish-deals-page's category gate held the republish.",
+      "shipped_commit": "7f05f77e9",
+      "branch": "main",
+      "commits": [
+        "7f05f77e9",
+        "0b1ef1c4b"
+      ],
+      "full_suite": "deferred-to-land",
+      "republished": true,
+      "live_check": {
+        "commodity": "yellow-bell-pepper",
+        "store": "Family Fare",
+        "expect": "$1.00 each, sale, when you buy 10 (withheld on 2026-09-25); board.json v=654273d703. The Ghost post publishes only after landing: re-run grocery/publish-deals-page.ps1 once the edge serves that board."
+      },
+      "leaves_open_followup": "2026-09-26-f73dc7",
+      "close_disposition": "hit",
+      "actual_tool_calls": 50
     },
     {
       "queue_id": "2026-09-26-2a80fa",
       "subject": "Grocery bot checkout sync blocked at the push - 2026-09-26",
-      "classification": "no-code-change",
+      "classification": "code",
       "lane": "ops",
       "est_tool_calls": 3,
       "evidence": [
         "queue body 07:02: 'uncommitted work the bot does not own sits on path(s) upstream changed ... grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M)'",
         "10:00: git status of those three paths is clean, and capture-run-daily-2026-09-26.log:214-217 'sync[tail 1..4]: current 8df33b9be..8df33b9be behind=0 ... HEAD already contains origin; nothing was written': the foreign blockers had cleared by 09:11; what refused the later pushes was the census gate (2026-09-26-1f95a4)"
       ],
-      "root_cause": "carried from 2026-09-24-f72978 (plan-2026-09-24): the designed refusal of the bot checkout sync (blocked/foreign never writes a foreign file) when a session leaves untracked work in the shared main checkout on a path upstream later adds; the class is the shared checkout itself",
+      "root_cause": "the bot and interactive sessions share the main checkout, and the sync's only answer to a session file on a moved path is to wait (blocked/partial), so any session's leftover stops the bot",
       "root_fix_none_because": "the refusal is the design (PLAN-bot-checkout-self-heal-2026-09-23 outcome table), and the class owner is design/PLAN-bot-dedicated-checkout-2026-09-25.md, which moves the bot to its own checkout",
       "prevention_none_because": "the source fix is the dedicated bot checkout already planned in design/PLAN-bot-dedicated-checkout-2026-09-25.md; this instance cleared by itself and the held commits land once 1f95a4's census fix is on main",
-      "leaves_open": "nothing",
-      "leaves_open_occurrences": 0,
-      "resolution_note": "Designed refusal: three untracked files of another session sat on paths upstream added. They were committed by their owner and the 09:11 sync found HEAD already containing origin; the bot's pushes after that were refused by the script census gate, fixed under 2026-09-26-1f95a4. Class owner: design/PLAN-bot-dedicated-checkout-2026-09-25.md.",
-      "close_disposition": "by-design",
+      "leaves_open": "the switch itself: ops/production-writers.json intruder_policy stays wait until the census reads 7 clean days (Brad D4); Stage 2 W2.1 (barrier refuses) and W2.3 (land through push-main under Global\\tc-capture-run); staged MM/AM and ' D' intruder shapes stay FOREIGN by design",
+      "leaves_open_occurrences": 2,
+      "resolution_note": "CLASS FIX SHIPPED DARK. W2.2 of design/PLAN-bot-dedicated-checkout-2026-09-25.md is built: under intruder_policy set-aside, another session's unregistered file on a path upstream changed is set aside (bytes verified in the dated quarantine tree) and the sync proceeds, so it can no longer block the bot. Design D is ruled (the main checkout stays the bot's; sessions leave), so the bot does not move to a new checkout. SWITCH-OVER: NOT switched. Brad's ruling D4 turns it on only after ops/report-production-intruders.ps1 reads 0 unregistered producer paths for 7 clean days; today's read-only census: 96 entries, 12 UNREGISTERED (7 session-shaped). To switch: set \"intruder_policy\": \"set-aside\" in ops/production-writers.json (the next 07:00 run reads it; nothing else changes). ROLLBACK: set it back to \"wait\" (today's rule exactly), or revert this commit; the kill switch .git\\tc-checkout-sync.disabled still stops the sync entirely. Residual owner: 2026-09-26-86a27b (weekly lane).",
+      "close_disposition": "confirmed",
       "status": "done",
-      "premise_verified": "true: the three paths are clean now and the tail sync reads behind=0",
-      "deviation": null,
-      "shipped_commit": null,
-      "actual_tool_calls": 3
+      "premise_verified": "true: the 07:02 body names three foreign paths blocking the push sync; the plan's W2.2 is ruled (D4 b) and unbuilt on main; live classifier calls all three UNREGISTERED",
+      "deviation": "Implemented W2.2 only, at the ruled switch position wait. Not built today: W2.1 and W2.3 (Stage 2 is sequenced after a week of barrier warnings and W0.3's 7 clean days) and W1.2 (not code). The brief's \"bot syncs from its own checkout\" is design B; Brad ruled design D on 2026-09-25, so the bot keeps the main checkout and intruders are set aside instead.",
+      "shipped_commit": "f1fa0ec79",
+      "actual_tool_calls": 40,
+      "branch": "triage/0926-2a80fa",
+      "commits": [
+        "f1fa0ec79 (branch; rebased on landing)"
+      ],
+      "root_fix": {
+        "what": "set an unregistered intruder aside and proceed (W2.2), gated by the ruled 7-clean-day switch, while sessions move to worktrees (W1.1 barrier live in warn mode)"
+      },
+      "prior_closes": [
+        "2026-09-24-f72978"
+      ],
+      "prevention": {
+        "source": [
+          "lib/checkout-sync.ps1",
+          "lib/production-writers.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "what": "W2.2 of design/PLAN-bot-dedicated-checkout-2026-09-25.md (D4 ruled (b)): the bot sync sets an UNREGISTERED intruder on a moved path aside, verified by bytes, and proceeds, instead of waiting on another session's file",
+        "exact_change": "Invoke-TcCheckoutSync -IntruderPolicy wait|set-aside -IsRegisteredPath: Get-TcCsPlanFor reclassifies an unowned, unvouched FOREIGN entry of shape ??(upstream adds), ' M', 'M ', 'A ' to intruder; Move-TcCsIntruder copies (moves if untracked) it to <tree>\\intruder\\, checks SHA-256, restores H0; Restore-TcCsPreSync puts it back and re-stages; Complete-TcCsSync pages naming each. Get-TcSyncIntruderArgs reads ops/production-writers.json intruder_policy (unreadable = wait). capture-run passes both to the start and tail syncs, failing toward wait. Switch stays wait until 7 clean census days (ruled)."
+      },
+      "proof": {
+        "must_fire_case": "lib/test-checkout-sync.ps1 group 'W2.2 MUST FIRE - the 2026-09-26 07:00 shape': two untracked files where upstream adds them plus one ' M' upstream changed (stand-ins for grocery/test-asof-evidence-scope.ps1, grocery/triage-plans/plan-2026-09-25-15.json, ops/report-ratchet-trends.ps1) under set-aside: synced, pages, 3 intruders named, copies byte-identical, HEAD = origin, tree clean; plus the staged 'M ' shape (09-24 16:38) and the put-back after a throw",
+        "clean_twin": "same file: default wait and set-aside without a classifier block exactly as today (byte-identical Snap); a registered writer's file and a throwing classifier are never moved; an MM path stays FOREIGN",
+        "ran": "lib\\test-checkout-sync.ps1 exit 0, 199 of 199 (16 new); mutants no-shape and no-restage each red in named cases; lib\\production-writers.ps1 -SelfTest exit 0, 17 of 17; grocery\\test-capture-run-sync.ps1 exit 0, 51 of 51; live read-only probe exit 0: the three founding paths classify registered=False, grocery/out/board.json registered=True, census 96 entries / 12 UNREGISTERED / policy wait",
+        "fixture_occurrences": [
+          "2026-09-24-f72978",
+          "2026-09-24-f293ee",
+          "2026-09-26-a988a8",
+          "2026-09-26-2a80fa"
+        ],
+        "guard_or_fixture": "lib/test-checkout-sync.ps1 (group 'W2.2 MUST FIRE - the 2026-09-26 07:00 shape')"
+      },
+      "leaves_open_owner": "grocery\\send-alert.ps1 -Lane weekly: 2026-09-26-86a27b",
+      "full_suite": "deferred-to-land",
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "lib/checkout-sync.ps1 callers (capture-run and the 07:00/08:00 bots) with ops/production-writers.json intruder_policy still 'wait': live behaviour changes only when Brad's 7-clean-day switch flips; 199 of 199 fixture cases",
+        "affected_now": 0,
+        "cell_effects": []
+      },
+      "rollback": "git revert -m 1 063627ded (merge of triage/0926-2a80fa)",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08 over comparison-2026-09-23 (all branches merged); lane measurement as recorded in the item",
+      "leaves_open_followup": "2026-09-26-86a27b"
     },
     {
       "queue_id": "2026-09-26-e3566b",
@@ -264,12 +328,45 @@
       "evidence": [
         "queue body 07:00:16: 'partial (foreign) ... uncommitted work the bot does not own sits on path(s) first changed upstream by 73efe379e ...: grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M)': the same three paths as 2a80fa, the start sync of the same 07:00 run"
       ],
-      "root_cause": "the same condition as 2026-09-26-2a80fa (the start sync of the run whose push sync 2a80fa reports); carried from 2026-09-24-f293ee (plan-2026-09-25): a session's uncommitted work in the shared checkout",
-      "resolution_note": "Superseded by 2026-09-26-2a80fa: the start sync of the same 07:00 run, blocked by the same three foreign paths, which have since cleared.",
+      "root_cause": "the bot and interactive sessions share the main checkout, and the sync's only answer to a session file on a moved path is to wait (blocked/partial), so any session's leftover stops the bot",
+      "resolution_note": "Superseded by 2026-09-26-2a80fa: the start sync of the same 07:00 run, blocked by the same three foreign paths. The class fix (W2.2 intruder set-aside, both syncs) shipped on triage/0926-2a80fa at the ruled switch position wait; switch-over and rollback are in 2a80fa's note; residual 2026-09-26-86a27b.",
       "close_disposition": "superseded",
       "status": "superseded",
-      "premise_verified": "true: same three paths named in both bodies",
-      "actual_tool_calls": 1
+      "premise_verified": "true: the 07:00:16 start-sync body names the same three paths as 2a80fa",
+      "actual_tool_calls": 1,
+      "branch": "triage/0926-2a80fa",
+      "commits": [
+        "f1fa0ec79 (branch; rebased on landing)"
+      ],
+      "root_fix": "the same W2.2 change as 2026-09-26-2a80fa, which covers the start sync and the tail sync alike",
+      "prior_closes": [
+        "2026-09-24-f293ee"
+      ],
+      "prevention": {
+        "source": [
+          "lib/checkout-sync.ps1",
+          "lib/production-writers.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "what": "W2.2 of design/PLAN-bot-dedicated-checkout-2026-09-25.md (D4 ruled (b)): the bot sync sets an UNREGISTERED intruder on a moved path aside, verified by bytes, and proceeds, instead of waiting on another session's file",
+        "exact_change": "Invoke-TcCheckoutSync -IntruderPolicy wait|set-aside -IsRegisteredPath: Get-TcCsPlanFor reclassifies an unowned, unvouched FOREIGN entry of shape ??(upstream adds), ' M', 'M ', 'A ' to intruder; Move-TcCsIntruder copies (moves if untracked) it to <tree>\\intruder\\, checks SHA-256, restores H0; Restore-TcCsPreSync puts it back and re-stages; Complete-TcCsSync pages naming each. Get-TcSyncIntruderArgs reads ops/production-writers.json intruder_policy (unreadable = wait). capture-run passes both to the start and tail syncs, failing toward wait. Switch stays wait until 7 clean census days (ruled)."
+      },
+      "proof": {
+        "must_fire_case": "lib/test-checkout-sync.ps1 group 'W2.2 MUST FIRE - the 2026-09-26 07:00 shape': two untracked files where upstream adds them plus one ' M' upstream changed (stand-ins for grocery/test-asof-evidence-scope.ps1, grocery/triage-plans/plan-2026-09-25-15.json, ops/report-ratchet-trends.ps1) under set-aside: synced, pages, 3 intruders named, copies byte-identical, HEAD = origin, tree clean; plus the staged 'M ' shape (09-24 16:38) and the put-back after a throw",
+        "clean_twin": "same file: default wait and set-aside without a classifier block exactly as today (byte-identical Snap); a registered writer's file and a throwing classifier are never moved; an MM path stays FOREIGN",
+        "ran": "lib\\test-checkout-sync.ps1 exit 0, 199 of 199 (16 new); mutants no-shape and no-restage each red in named cases; lib\\production-writers.ps1 -SelfTest exit 0, 17 of 17; grocery\\test-capture-run-sync.ps1 exit 0, 51 of 51; live read-only probe exit 0: the three founding paths classify registered=False, grocery/out/board.json registered=True, census 96 entries / 12 UNREGISTERED / policy wait",
+        "fixture_occurrences": [
+          "2026-09-24-f293ee",
+          "2026-09-24-f72978",
+          "2026-09-26-2a80fa",
+          "2026-09-26-a988a8"
+        ]
+      },
+      "leaves_open": "the switch itself: ops/production-writers.json intruder_policy stays wait until the census reads 7 clean days (Brad D4); Stage 2 W2.1 (barrier refuses) and W2.3 (land through push-main under Global\\tc-capture-run); staged MM/AM and ' D' intruder shapes stay FOREIGN by design",
+      "leaves_open_occurrences": 2,
+      "leaves_open_owner": "grocery\\send-alert.ps1 -Lane weekly: 2026-09-26-86a27b",
+      "shipped_commit": "f1fa0ec79",
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-26-32500f",
@@ -281,14 +378,17 @@
         "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md:47-51 'gate (exit 1): BROKEN' with why: 'recall_append.py FAIL exit 1 APPEND-SELFTEST-COMPLETE'; 'C--Codex-ThriftyCrew: memory NO_COST rose to 152 against a mark of 151'; 'MEMORY.md links 1 file(s) git does not track (write-tool-decodes-backslash-u-escapes.md)'",
         ":45-46 forgetting and memory clusters exit 1 'waiting on a judgement' (Q-recall-judgement-queues, already Brad's)"
       ],
-      "root_cause": "carried from 2026-09-23-a83841 (plan-2026-09-25-4): sessions write to the knowledge store without passing its gate (an untracked memory linked from MEMORY.md, an edit that broke a memory's cost line, and a failing recall_append self-test), and the store's gate only reads it the next night. The a83841 prevention worked as designed: the report now names each broken step's reason.",
+      "root_cause": "The knowledge store's only defence against a bad write was the NEXT night's gate: a memory written through a shell command skipped the Write|Edit lint entirely, and nothing at write time checked that MEMORY.md points only at committed files or that a new memory's [[links]] resolve, so every such write surfaced 04:35 the following night as a RED pass (14 of 30 nights; the untracked-index-link reason on 6 of the last 7 RED nights). Separately, a flaky self-test (a single read of a freshly renamed file on Windows) could turn the gate RED with no defect at all.",
       "root_fix": {
-        "what": "commit or unlink the untracked memory, fix the memory that raised NO_COST, and repair recall_append.py's self-test, in the ~/.claude store",
+        "what": "move the three store-shape checks the gate kept discovering to the moment of the write, and make the flaky self-test deterministic",
         "files": [
+          "~/.claude/skills/recall-memory-lint-hook.py",
+          "~/.claude/settings.json",
           "~/.claude/skills/recall_append.py",
-          "~/.claude/projects/C--Codex-ThriftyCrew/memory/MEMORY.md"
+          "~/.claude/skills/recall_floors.py",
+          "~/.claude/projects/C--Codex-ThriftyCrew/memory/write-tool-decodes-backslash-u-escapes.md"
         ],
-        "exact_change": "owed by a session that may write the knowledge store; this lane's store is read-only (agent brief) and the files are outside this repository"
+        "exact_change": "recall-memory-lint-hook.py: (a) a MEMORY.md Write/Edit that ADDS a link to a file git does not track or that is not on disk is DENIED with the pathspec commit command; (b) a NEW memory with a [[link]] naming no memory in its store is DENIED (same matching as check-skills.dangling_links); (c) registered on PostToolUse Bash|PowerShell: a shell command naming a memory path BLOCKS with the reason when that memory is untracked and structurally defective or dangling, or when it is MEMORY.md with an untracked link. All fail open when git cannot answer. recall_append.spawn_lock_holder retries the ready-file read until the word arrives, the child dies or the 60 s hang guard ends, and reports which; the case still demands holder == held. recall_floors.derive: when the at-or-under-target side of a tie jump is below RATE_BAND and the other side is inside it, take the in-band side."
       },
       "prior_closes": [
         "2026-09-11-18da92",
@@ -298,15 +398,15 @@
       ],
       "prevention": {
         "source": [
-          "~/.claude/skills/recall-sleep.py",
-          "ops/scheduled-tasks/tc-recall-sleep-0435.xml"
+          "~/.claude/skills/recall-memory-lint-hook.py",
+          "~/.claude/settings.json"
         ],
-        "what": "carried from a83841: the emitter separates a ruling owed from a broken step and names the broken step's reason; the missing half is refusing a memory write that breaks the gate at write time, in the store's own hook",
-        "exact_change": "not made here: outside this lane's write scope"
+        "what": "the store's write-time hook, the upstream producer of every memory write, now refuses or names the defects the nightly gate used to discover: an untracked or missing file linked from MEMORY.md, a new memory with a dangling [[link]], and a new memory written by a shell command with a structural defect (the path the Write|Edit lint never saw)",
+        "exact_change": "decide_index (MEMORY.md Write/Edit deny on added untracked/missing link), DANGLING_LINK on the NEW-memory Write path, decide_shell on PostToolUse Bash|PowerShell (block with reason); new PostToolUse matcher Bash|PowerShell in settings.json running the same hook"
       },
       "proof": {
-        "must_fire_case": "the 2026-09-26 report's three BROKEN reasons, frozen, must keep the gate BROKEN",
-        "clean_twin": "a night with only the judgement queues reads 'waiting on a judgement', never BROKEN",
+        "must_fire_case": "recall-memory-lint-hook.py --selftest (34 of 34, exit 0): an Edit adding MEMORY.md's link to write-tool-decodes-backslash-u-escapes.md while it is untracked is DENIED; a PowerShell WriteAllText of that memory with no cost band is BLOCKED naming NO_COST; a new memory linking [[dates-written-not-measured]] is DENIED; a shell append to MEMORY.md leaving an untracked link is BLOCKED. recall_floors.py --selftest (22 of 22): the 09-26 path tie shape lands in band. recall_append --selftest killed-holder case: 8 of 8 concurrent runs exit 0 after the retry (1 of 6 failed before). Live: the hook fed a real PostToolUse payload naming the untracked memory returned decision=block with NO_COST.",
+        "clean_twin": "the same MEMORY.md Edit once the memory is tracked is silent; a link already in the index before the write is not refused; git that cannot answer refuses nothing; a well-formed shell-written memory is silent; an already-tracked memory is grandfathered; the same new memory whose linked memory exists is silent; a tie whose loud side is past the band keeps the quiet side; the 2026-09-18 tie cases are unchanged",
         "fixture_occurrences": [
           "2026-09-11-18da92",
           "2026-09-18-35e0f5",
@@ -314,26 +414,49 @@
           "2026-09-23-a83841",
           "2026-09-26-32500f"
         ],
-        "guard_or_fixture": "~/.claude/skills/recall-sleep.py gate step (its own report's why lines)"
+        "guard_or_fixture": "~/.claude/skills/recall-memory-lint-hook.py selftest (frozen founding shapes from the 2026-09-26 04:35 report), ~/.claude/skills/recall_floors.py selftest, ~/.claude/skills/recall_append.py selftest"
       },
       "blast_radius": {
         "measured_as": "routing",
-        "measured_by": "not applicable: no board or matching code",
+        "measured_by": "not applicable: knowledge store hooks and derivers only; no board, price or matching code",
         "affected_now": 0,
         "names": [],
-        "risk": "none in this repository",
+        "risk": "a session adding a MEMORY.md line for an uncommitted memory is now refused until it commits that memory (the refusal carries the command); a new memory citing a memo in the OTHER store by [[name]] is refused (the gate already counted it dangling)",
         "cell_effects": []
       },
-      "rollback": "not applicable",
-      "freshness": "the 04:35 pass of 2026-09-26",
-      "leaves_open": "the three BROKEN reasons stay until a store-writing session repairs them; the pass pages again nightly through its own emitter",
+      "rollback": "git -C C:/Users/Owner/.claude revert aa3dc18 73727bc 03a430b",
+      "freshness": "recall-sleep re-run 2026-09-26 11:07 (--cwd C:/Codex/ThriftyCrew, no --commit/--push)",
+      "leaves_open": "the-board-has-three-dates.md, written 2026-09-26 09:41 by another live session, is untracked, linked from MEMORY.md, and carries [[dates-written-not-measured]] (a memo in the C--Codex store); it was written before the new hook and was not committed or edited here because it is that session's in-flight work. The two judgement queues (1 forget candidate, 2 clusters) are Brad's (Q-recall-judgement-queues), classed 'waiting on a judgement', not BROKEN.",
       "leaves_open_occurrences": 1,
-      "resolution_note": "Not closed: the knowledge store gate is BROKEN on three reasons in ~/.claude (recall_append self-test, a NO_COST rise 151 -> 152, an untracked memory linked from MEMORY.md), outside this lane's write scope; left open for a store-writing session.",
-      "status": "blocked",
-      "premise_verified": "true: read the report's why lines",
-      "deviation": "blocked, not fixed: every repair is in the ~/.claude knowledge store, which this lane may not write",
+      "resolution_note": "Fixed in the local ~/.claude store (03a430b, 73727bc, aa3dc18): recall_append self-test flake (single read of a freshly renamed file; now retried, reproduced 1 in 6 before, 0 in 8 after), NO_COST back to 151 (cost band on the shell-written memory), and that memory committed so MEMORY.md's link resolves. Class prevention at the write: the memory lint hook now denies a MEMORY.md link to an untracked or missing file and a new memory's dangling [[link]], and lints shell-written memories on PostToolUse Bash|PowerShell. The daytime re-run also exposed and fixed a TOO QUIET path floor (tie-jump flaw in recall_floors.derive). Re-run 11:07: exit 1 only on one foreign in-flight memory (the-board-has-three-dates.md) plus Brad's judgement queues.",
+      "status": "done",
+      "premise_verified": "true: recall-sleep-latest.md 04:42 gate why lines read; recall_append --selftest reproduced FAIL 1 of 6 under six concurrent runs (killed-holder case, holder=''); memory_lint --json read NO_COST 152 (the +1 was write-tool-decodes-backslash-u-escapes.md, no cost band, written through PowerShell); git status showed it untracked while MEMORY.md linked it",
+      "deviation": "the item was blocked on write scope; this dispatch authorised writing ~/.claude, so all three were fixed there. Two further reasons surfaced on the daytime re-runs and were fixed in the same run: the path recognition floor derived TOO QUIET (a tie-jump flaw in recall_floors.derive) and a dangling [[link]] in a new memory (added to the write-time refusal). The index-lock failure on the first re-run was daytime contention and cleared with recall-reindex.py (exit 0, PASS).",
       "shipped_commit": null,
-      "actual_tool_calls": 2
+      "actual_tool_calls": 58,
+      "branch": "main of the local-only ~/.claude store repo (no remote push; ThriftyCrew untouched, no worktree needed)",
+      "commits": [
+        {
+          "repo": "C:/Users/Owner/.claude",
+          "sha": "03a430b",
+          "what": "recall_append self-test read retry; cost band on write-tool-decodes-backslash-u-escapes.md and that memory committed; memory lint hook refuses an untracked MEMORY.md link and lints shell-written memories (PostToolUse Bash|PowerShell registered in settings.json)"
+        },
+        {
+          "repo": "C:/Users/Owner/.claude",
+          "sha": "73727bc",
+          "what": "memory lint hook: a NEW memory's [[link]] to no memory in its store is refused at write time"
+        },
+        {
+          "repo": "C:/Users/Owner/.claude",
+          "sha": "aa3dc18",
+          "what": "recall_floors.derive: a tie whose quiet side is under RATE_BAND takes its in-band loud side"
+        }
+      ],
+      "nightly_pass_after_fix": "exit 1; gate BROKEN on 2 why lines, both one foreign in-flight file: 'dangling memory [[links]] rose to 4 against a mark of 3' (the-board-has-three-dates.md -> [[dates-written-not-measured]]) and 'MEMORY.md links 1 file(s) git does not track (the-board-has-three-dates.md)'. forgetting and memory clusters: waiting on a judgement. All three 04:35 reasons gone; floors path 40 of 300 (13.3%) ok.",
+      "close_disposition": "confirmed",
+      "full_suite": "not applicable: no ThriftyCrew file changed; ~/.claude self-tests run (recall-memory-lint-hook 34/34, recall_floors 22/22, recall_append 8/8 concurrent) and the recall-sleep pass re-run twice",
+      "leaves_open_followup": "2026-09-26-a7dbb1",
+      "leaves_open_owner_note": "watch:~/.claude/skills/check-skills.py (the 04:35 recall-sleep gate pages RED on its first night uncommitted, as it did for this item); judgement queues: open_questions_for_brad Q-recall-judgement-queues (already Brad's)"
     },
     {
       "queue_id": "2026-09-20-cb8f30",
@@ -344,59 +467,135 @@
       "evidence": [
         "queue notes: closed by-design; the class shipped in plan-2026-09-22-10 publish 1, landed 1ec218d5f (git merge-base --is-ancestor 1ec218d5f origin/main: yes); residual 312 id-less Hy-Vee rows owned by 2026-09-22-3366e4"
       ],
-      "root_cause": "carried from plan-2026-09-22-5: askability was not a notion the ask order had; both halves were already in the code",
-      "resolution_note": "Re-measured 2026-09-26: the root fix is on origin/main (1ec218d5f) and the id-less Hy-Vee residual is owned by 2026-09-22-3366e4. Nothing left to resume.",
+      "root_cause": "one level up: nothing had pinned that a later re-measure's status beats an earlier deviated status for the same queue id, so the RESUME rule's correct behaviour on this shape was unprotected; the RESUME line itself was a read taken before the closing plan item existed, not a detector defect",
+      "resolution_note": "RESUME finished 2026-09-26: root fix 1ec218d5f is an ancestor of origin/main; the id-less Hy-Vee residual was closed by-design as 2026-09-22-3366e4 (queue status resolved, checked 2026-09-26); triage-due in the main checkout prints no RESUME for this id once plan-2026-09-26 records it done. Added a frozen fixture for that newest-plan-wins shape (b99d22f3d on triage/0926-cb8f30).",
       "close_disposition": "superseded",
       "status": "done",
-      "premise_verified": "true: commit is an ancestor of origin/main",
-      "actual_tool_calls": 1,
+      "premise_verified": "false as dispatched: triage-due.ps1 run from the main checkout at c6783fa8e on 2026-09-26 prints NO RESUME line for 2026-09-20-cb8f30 (exit 0; only 3 RESUMED-BY notes, none for it). Get-TriageUnfinished takes the NEWEST plan's item, and plan-2026-09-26.json (committed in c6783fa8e, working copy identical) records it done. The RESUME the orchestrator saw was read before that plan item was on disk.",
+      "actual_tool_calls": 16,
       "prior_closes": [
         "2026-09-11-1139c4"
       ],
       "prevention_none_because": "no code change: its class (send-alert's default subject merging unrelated alerts into one type) was fixed at the emitter in 1ec218d5f, on origin/main; the old shared type is why 2026-09-11-1139c4 reads as a prior close",
       "proof": {
+        "guard_or_fixture": "grocery/triage-due.ps1 -SelfTest",
+        "must_fire_case": "MUST-NOT-FIRE an item deviated in an older plan and done in a newer one is not RESUME work (2026-09-20-cb8f30: plan-2026-09-22-5 deviated, plan-2026-09-26 done)",
+        "clean_twin": "CLEAN TWIN with only the older deviated plan on disk, 2026-09-20-cb8f30 is RESUME work from plan-2026-09-22-5",
+        "commands": [
+          "powershell -NoProfile -File grocery\\triage-due.ps1 -SelfTest -> exit 0, SELF-TEST PASS (53 triage-due cases)",
+          "powershell -NoProfile -File grocery\\triage-due.ps1 (main checkout) -> exit 0, no RESUME line for 2026-09-20-cb8f30"
+        ],
         "fixture_occurrences": [
           "2026-09-11-1139c4",
           "2026-09-20-cb8f30"
+        ]
+      },
+      "branch": "triage/0926-cb8f30",
+      "commits": [
+        "b99d22f3d"
+      ],
+      "shipped_commit": "b99d22f3d",
+      "deviation": "No detector change: the detector was right. Shipped only a frozen fixture pinning the shape it got right (same id, older plan deviated, newer plan done), which had none.",
+      "root_fix": {
+        "what": "frozen MUST-NOT-FIRE and CLEAN TWIN in triage-due.ps1 -SelfTest for the cb8f30 shape",
+        "files": [
+          "grocery/triage-due.ps1"
         ],
-        "must_fire_case": "audit-alert-registry refuses a Send-Alert call with no -Subject (shipped in 1ec218d5f)",
-        "clean_twin": "a call with a registered subject passes"
-      }
+        "exact_change": "added $uCbOld (plan-2026-09-22-5, deviated, leaves_open 312) and $uCbNew (plan-2026-09-26, done) records; Get-TriageUnfinished over both returns 0 records; over the older alone returns 1 RESUME record naming plan-2026-09-22-5"
+      },
+      "leaves_open": "nothing: the 312 id-less Hy-Vee rows of plan-2026-09-22-5 were ruled by-design in residual 2026-09-22-3366e4 (resolved, by-design: they expire under the quarter rule from 2026-10-13, which pull-regular-hyvee -SelfTest's expiry cases pin)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "2026-09-22-3366e4",
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-21-4b973e",
-      "subject": "Grocery: price-flag verification residuals (plan-2026-09-21-8)",
-      "classification": "no-code-change",
-      "lane": "ops",
+      "subject": "Grocery: price-flag verification residuals (plan-2026-09-21-8): R1..R4 and Sam's Club 0 of 1",
+      "classification": "code-change",
+      "lane": "weekly",
       "est_tool_calls": 2,
       "evidence": [
-        "queue notes 2026-09-26 05:14: R1 median 1 day (76 of 91), R2 in 8d2ad5, landed 30a2e4907 (ancestor of origin/main: yes); 'Product-level re-reads of ad-flyer sales remain open under this queue id', but the id was closed"
+        "queue notes 2026-09-26 05:14 (landed 30a2e4907): 'R1 measured: median 1 day to a verdict (76 of 91)', 'R2's count class ships in 8d2ad5', R3 closed by 9459a1 (resolved 2026-09-26T05:14:07); 'Product-level re-reads of ad-flyer sales remain open under this queue id'",
+        "grocery/out/flag-verification.json (2026-09-26, board comparison-2026-09-23): hummus|Sam's Club pending, reason 'no read of this product later than 2026-09-22 has landed yet'; Sam's Club 0 verdicts in the ledger's closed list",
+        "grocery/out/sams/sams-rejects-2026-09-26.json: {\"name\":\"Member's Mark Classic Hummus Singles 2.5 oz., 16 ct.\",\"lp\":\"$5.58\",\"up\":\"\",\"reason\":\"no unitPrice\"}; the same product is in captures/sams-capture-2026-09-24..26 and the worklist led 'hummus' every day",
+        "comparison-2026-09-23: 155 ad-read sale cells (no as_of); 56 carry a price in the item text (Hy-Vee 53 of 53, e.g. 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49'; Fareway 3 of 37, e.g. 'Fareway Potato Chips (2/$5)')"
       ],
-      "root_cause": "carried from plan-2026-09-25-6: the verifier re-reads only what a later capture of the SAME product can answer, so ad-flyer sale cells stay outside it",
-      "resolution_note": "Re-measured 2026-09-26: landed 30a2e4907; the ad-flyer sale residual that the close left with no open owner is now 2026-09-26-ab11be (weekly lane, 15 of 21 replayed sale claims).",
-      "close_disposition": "superseded",
-      "leaves_open": "ad-flyer sale cells have no product-level re-read: 15 of 21 replayed sale claims",
-      "leaves_open_occurrences": 15,
+      "root_cause": "the verifier only accepts rows a builder PRICED and keys a re-read on the product's own name, so two kinds of real store read never reach it: a read the builder refused only for a missing printed unit price (Sam's 'no unitPrice'), and any read of a flyer line that names a product family rather than a product",
+      "resolution_note": "Every residual is closed: R1 measured (median 1 day to a verdict, 76 of 91), R2 shipped in 8d2ad5, R3 in 9459a1 (all landed 30a2e4907). Sam's Club had 0 verdicts because its daily re-read of the flagged hummus ($5.58) landed only in sams-rejects as 'no unitPrice'; the verifier now takes that one reject reason as a read, and a read-only replay closes it as a match (Sam's 1 of 1). R4 is decided and built in 2026-09-26-ab11be.",
+      "close_disposition": "confirmed",
+      "leaves_open": "none of 4b973e's own residuals: R1 measured (median 1 day, 76 of 91), R2 in 8d2ad5, R3 in 9459a1, Sam's Club now 1 of 1 (read-only replay), R4 decided and mechanised in 2026-09-26-ab11be, whose own residual carries the flyer-line product road",
+      "leaves_open_occurrences": 0,
       "leaves_open_followup": "2026-09-26-ab11be",
       "status": "done",
-      "premise_verified": "true",
-      "actual_tool_calls": 2
+      "premise_verified": "yes: R1, R2, R3 re-read on the queue (each closed by a landed commit, 30a2e4907); R4 and Sam's Club 0 of 1 re-measured live on 2026-09-26 against the main checkout's ledger, captures and rejects",
+      "actual_tool_calls": 22,
+      "branch": "triage/0926-4b973e",
+      "commits": [
+        "479bff955"
+      ],
+      "root_fix": {
+        "what": "grocery/flag-verify-lib.ps1: ConvertTo-TcRejectedReadRows takes a reject whose reason is exactly 'no unitPrice' as the store's read (list price, the name's size, read day = the file's date) and verify-price-flags reads <prefix>\\<prefix>-rejects-*.json beside the built files; Test-TcFlyerLineNamesNoProduct marks a flyer line road=none so it is reported as unverifiable by construction, owed no re-read, and kept pending (the ab11be half, see that item)"
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "flag-verification.json 2026-09-26: Sam's Club 1 of 1 claim answered from a no-unitPrice reject (read-only replay); flyer lines no longer lead a worklist",
+        "affected_now": 1,
+        "note": "the verification ledger and the capture worklist leads only: a Sam's flag can now close as match or open as a disagreement from a no-unitPrice read; a flyer line no longer leads a worklist. No price, match or board file is touched."
+      },
+      "proof": {
+        "must_fire_case": "test-flag-verification 2c: the real hummus|Sam's Club claim ($5.58, read 2026-09-22) against the real 2026-09-26 'no unitPrice' reject is answered and reproduces 0.1395/oz (match)",
+        "clean_twin": "test-flag-verification 2c: a NAME CONFLICT reject of the same product (the builder doubted the read) is not taken as a read",
+        "self_test": "grocery/test-flag-verification.ps1 -SelfTest exit 0, 'flag-verification self-test pass: 48 of 48'; grocery/test-capture-policy.ps1 exit 0 'CAPTURE-POLICY PASSED'; verify-price-flags.ps1 -OutDir <main out> -NoWrite exit 0, Sam's Club '1 of 1 match'",
+        "guard_or_fixture": "grocery/test-flag-verification.ps1 -SelfTest (case 2c)"
+      },
+      "rollback": "revert 479bff955 on the branch; the ledger re-derives on the next run",
+      "freshness": "measured 2026-09-26 against flag-verification.json generated 2026-09-26 and sams-rejects-2026-09-26.json",
+      "deviation": "Sam's Club 0 of 1 was diagnosed, not just re-measured: the re-read existed daily and the builder's reject hid it. Side finding, not fixed here: sams-rejects-2026-09-26 holds 200 of 276 rejects as 'no unitPrice'; that is Sam's pricing coverage (build-sams-deals / the sweep), watched by the daily rejection-families report.",
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-22-2dae07",
-      "subject": "Grocery matching soundness: NEW CONTESTED",
-      "classification": "no-code-change",
+      "subject": "Grocery matching soundness: NEW CONTESTED (RESUME)",
+      "classification": "code-change",
       "lane": "ops",
       "est_tool_calls": 1,
       "evidence": [
-        "queue notes: landed on origin/main 0c06fcf1d (ancestor: yes) with plan-2026-09-22-9 publish 3; contested arrivals residual owned by 2026-09-23-5aa22a"
+        "plan-2026-09-22-2 item (closed deviated): 'The surface fix is per NAME, not a whole-state -Accept ... the lane never ran -Accept'; leaves_open 'contested arrivals are docket-only until the 77 September names are labelled', followup 2026-09-23-5aa22a",
+        "queue 2026-09-23-5aa22a resolved 2026-09-25: 'it confirms 2 wrongly ... so contested stays docket-only. The resolver's self-test now refuses contested in the deciding kinds while that bar has a wrong decision'",
+        "queue 2026-09-25-a8448d: the whole-state -Accept still wrote every contested name reviewed, bypassing the per-name road this item built"
       ],
-      "root_cause": "carried from plan-2026-09-22-2: an arrival review whose only consumer is a person",
-      "resolution_note": "Re-measured 2026-09-26: root fix on origin/main (0c06fcf1d); the contested-arrival residual is 2026-09-23-5aa22a. Nothing left to resume.",
-      "close_disposition": "superseded",
+      "root_cause": "2dae07 made the lane ledger a road to 'reviewed' for a contested name but left the whole-state -Accept writing every contested name reviewed, so the per-name decision it built could be skipped by any accept",
+      "resolution_note": "Finished: the per-name contested road 2dae07 built is now the only road for an arrival, because -Accept no longer blesses an undecided contested name (shipped with a8448d). The docket-only leftover was closed by 5aa22a (the classifier bar failed 2 of 11, the resolver refuses the kind).",
+      "close_disposition": "confirmed",
       "status": "done",
-      "premise_verified": "true",
-      "actual_tool_calls": 1
+      "premise_verified": "yes, 2026-09-26: the docket-only leftover was finished by 5aa22a (labelled, bar failed, resolver refuses the kind); the part still open was the second road to 'reviewed' (-Accept), read in Merge-BaselineCarryForward at HEAD c6783fa8e.",
+      "actual_tool_calls": 4,
+      "branch": "triage/0926-2dae07",
+      "commits": [
+        "1b08e3d9e (unlanded; cite blob grocery/audit-match-soundness.ps1 3fcbb75f524dd22df3d1c63677f0f5c34414351e)"
+      ],
+      "root_fix": {
+        "what": "shipped with 2026-09-25-a8448d in the same commit: -Accept keeps a contested name reviewed only when the previous baseline already held it; arrivals are printed UNDECIDED CONTESTED and left to resolve-match-worklist -Decide, so the lane is now the only road for an arrival"
+      },
+      "proof": {
+        "must_fire_case": "audit-match-soundness -SelfTest 'MUST FIRE an -Accept does NOT bless the undecided contested arrivals of its day' (Lay's, Inglehoffer, Cerebelly)",
+        "clean_twin": "'CLEAN TWIN a contested name the previous baseline already reviewed stays reviewed through the same accept'",
+        "ran": "audit-match-soundness.ps1 -SelfTest exit 0, 84 of 84",
+        "guard_or_fixture": "grocery/audit-match-soundness.ps1 -SelfTest ('MUST FIRE an -Accept does NOT bless the undecided contested arrivals of its day')"
+      },
+      "leaves_open": "the contested kind stays docket-only: the classifier confirmed 2 of 11 decided September names wrongly (fried apples to apples, a coconut jasmine rice pouch to white rice), so every arrival waits for a hand -Decide. Improving the classifier is a matching change.",
+      "leaves_open_occurrences": 2,
+      "deviation": "none beyond the prior deviation; the finishing fix is the a8448d change",
+      "full_suite": "deferred-to-land",
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "match-baseline.json contested list: the 2026-09-25 accept blessed 6 arrivals; the integration accept on merged rules (37,456 names, 613 contested) left arrivals UNDECIDED instead of blessing them",
+        "affected_now": 6
+      },
+      "rollback": "git revert -m 1 8aaeaafc6 (merge of triage/0926-wrongprod, which carries 1b08e3d9e)",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08 over comparison-2026-09-23 (all branches merged); lane measurement as recorded in the item",
+      "leaves_open_followup": "2026-09-26-a7dbb1",
+      "leaves_open_owner_note": "watch:grocery/resolve-match-worklist.ps1 (its self-test refuses 'contested' in the deciding kinds while the bar holds a wrong decision); a classifier improvement belongs to the money lane"
     },
     {
       "queue_id": "2026-09-22-6e6a3b",
@@ -416,19 +615,52 @@
     },
     {
       "queue_id": "2026-09-22-817976",
-      "subject": "Triage residual: 16 non-Sam's tile links the chain cannot re-price",
-      "classification": "no-code-change",
+      "subject": "Triage residual: 16 non-Sam's tile links the chain cannot re-price (residual of 2026-09-20-bec597)",
+      "classification": "wrong-product",
       "lane": "ops",
       "est_tool_calls": 1,
       "evidence": [
-        "queue notes 2026-09-26 05:14: 9 of 16 were sibling-product links, dropped; audit-tile-integrity names every sibling-shaped link; the 7 true drifts stay under the per-store drift ratchet; landed 30a2e4907 (ancestor: yes)"
+        "main checkout grocery/out/tile-integrity.json 2026-09-26 08:13 over comparison-2026-09-23: PRICE-DRIFT 8 = Aldi 4 (asparagus, peanut-butter, strawberries, toaster-pastries), Walmart 1 (sweet-corn), Family Fare 1 (flour), Sam's Club 2 (eggs, ranch-dressing). Non-Sam's 16 -> 6.",
+        "grocery/out/tile-integrity-baseline.json drift_by_store still reads Aldi 13, Walmart 2, Family Fare 1, Sam's Club 67 (last written cc468f93d, 2026-09-22): the -Tighten -AcceptDrop owed since plan-2026-09-25-15 has not run.",
+        "92a9aa575 on main ('Triage 817976: the tile audit names SIBLING links, and the 9 known siblings are dropped') landed the work plan-2026-09-25-15 did; the queue already reads resolved, but plan-2026-09-25-6 still carries the item needs-more-time, which is why triage-due lists it RESUME."
       ],
-      "root_cause": "carried from plan-2026-09-25-6: derive-links re-points a link only when a row re-prices to the cell, and Aldi's pack basis is refused unless proven",
-      "resolution_note": "Re-measured 2026-09-26: landed 30a2e4907; the 7 true drifts are owned by the tile-integrity drift ratchet, which pages on a rise.",
-      "close_disposition": "superseded",
+      "root_cause": "The accuracy grade compares a link's price with the tile, never its name, so a link to a different variant of the same brand passed as accurate and surfaced only as a price that drifted; 9 of the 16 were such siblings. The other 7 are right-product links whose snapshot derive-links cannot refresh because the priced row fails its re-price check.",
+      "resolution_note": "Finished. Of the 16 drifting non-Sam's links, 9 opened a sibling product and were dropped on main (92a9aa575); 6 are the right product at a moved price and the drift ratchet watches them; Sam's fell 67 to 2. The baseline still needs -Tighten -AcceptDrop in the main checkout to record the falls.",
+      "close_disposition": "confirmed",
       "status": "done",
-      "premise_verified": "true",
-      "actual_tool_calls": 1
+      "premise_verified": "partly: the 16 no longer stand. 9 were siblings and were dropped by 92a9aa575; 6 non-Sam's drift rows remain (Aldi 4, Walmart 1, Family Fare 1), each read by name as the same product at a moved price. The Sam's eggs drift row is itself a sibling (Member's Mark 2 dozen vs 'Large Eggs 15 dozen'), now named in 2026-09-26-fab315.",
+      "actual_tool_calls": 6,
+      "root_fix": {
+        "what": "the 9 siblings were dropped and audit-tile-integrity names sibling links (92a9aa575); the name test was made precise enough to be worth reading in 2026-09-26-9dc3f6 (branch triage/0926-817976)",
+        "files": [
+          "grocery/audit-tile-integrity.ps1"
+        ],
+        "exact_change": "see 2026-09-26-9dc3f6; nothing further for this item"
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-tile-integrity.ps1 -SelfTest",
+        "must_fire_case": "black-pepper|Aldi 'Stonemill Ground Black Pepper' linked to 'Stonemill Black Peppercorn Grinder 1.76 OZ' is a SIBLING (lacks ground; adds grinder)",
+        "clean_twin": "CLEAN TWIN: peanut-butter|Aldi 'Peanut Delight Creamy Peanut Butter 40 OZ' linked to the same product stays silent on SIBLING and reads as PRICE-DRIFT only",
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-tile-integrity.ps1 -SelfTest (exit 0, TILE-INTEGRITY SELF-TEST PASS)"
+        ]
+      },
+      "deviation": "No code for this item: its work landed in 92a9aa575 under plan-2026-09-25-15. This closes the stale needs-more-time copy in plan-2026-09-25-6. The 6 remaining drift rows were not re-derived: they are right products, the board's price is the one shown, and derive-links refuses their rows for the reason recorded in plan-2026-09-25-6 (pack basis unproven).",
+      "shipped_commit": "92a9aa575 (on main)",
+      "leaves_open": "8 right-product links carry a stale price snapshot after every store's derive-links pass (Aldi 4, Family Fare 1, Sam's Club 2, Walmart 1). Done in the integration run: -Tighten -AcceptDrop recorded the PRICE-DRIFT marks (Aldi 13->4, Walmart 2->1, Sam's Club 67->2) and the sibling links are gone (fab315 merged, SIBLING 0).",
+      "leaves_open_occurrences": 8,
+      "leaves_open_followup": "2026-09-26-a7dbb1",
+      "branch": "triage/0926-817976",
+      "commits": [],
+      "full_suite": "deferred-to-land",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "where each See-item link ends up: 9 sibling links dropped (92a9aa575); integration rebuild tile-integrity SIBLING 0 after derive-links for all six linkable stores",
+        "affected_now": 9,
+        "cell_effects": []
+      },
+      "rollback": "git revert 92a9aa575 restores the 9 dropped links (not advised: they named sibling products)",
+      "freshness": "integration rebuild in the main checkout 2026-09-26 13:08 over comparison-2026-09-23 (all branches merged); lane measurement as recorded in the item"
     },
     {
       "queue_id": "2026-09-22-20fecf",
@@ -439,12 +671,29 @@
       "evidence": [
         "queue notes: plan-2026-09-22-10 shipped the ingest-shape check (grocery/audit-ingest-shape.ps1, grocery/unit-aliases.json); residual owned by 2026-09-22-293660"
       ],
-      "root_cause": "carried from plan-2026-09-22-10: a builder meets a store rendering it has never seen and its only outputs are a rejects line and a smaller board",
-      "resolution_note": "PROVISIONAL: the ingest-shape check shipped in plan-2026-09-22-10 and runs in capture-run; residual owned by 2026-09-22-293660.",
+      "root_cause": "carried from plan-2026-09-22-10: a builder meeting a store rendering it has never seen had only a rejects line and a smaller board as outputs. Fixed there for the three builders that refuse per row by unit spelling (Sam's, Walmart, Aldi).",
+      "resolution_note": "Re-checked 2026-09-26: the ingest-shape check has run in every capture-run since it landed (09-23..09-26, 3 stores scanned, 0 blind) and its one live finding was sent and triaged (2026-09-23-ff21e2). The only thing left undone was an owner: residual (a) had ridden on 2026-09-22-293660, closed 09-25. It now has its own: watch:grocery/audit-null-rate.ps1, which already checks all four of those stores every morning and pages when a field goes blank. 0 occurrences so far. No code change.",
       "publish_batch": "none",
-      "status": "planned",
-      "premise_verified": "partly: the fix is named as landed in the queue notes; triage-developer confirms audit-ingest-shape ran in today's capture-run log and closes",
-      "deviation": null
+      "status": "done",
+      "premise_verified": "TRUE, checked in the main checkout's logs. The root fix from plan-2026-09-22-10 is live and runs every morning: grocery/out/logs/capture-run-daily-2026-09-23..26 each print 'ingest-shape: did a store print a unit spelling no builder has seen?' and INGEST-SHAPE-COMPLETE stores=3 scanned=3 blind=0 (09-23 new=7 unproved=1; 09-24 new=0 twice; 09-25 new=1; 09-26 new=0). Its one live finding (Sam's unit 'l' x2, Member's Mark frying oil '35 lbs.' printed per litre, 2026-09-23) was sent and triaged as 2026-09-23-ff21e2 (by-design). Shape records are written daily (out/ingest-shape aldi/walmart, out/sams/ingest-shape sams). grocery/unit-aliases.json holds no alias for either store: no new spelling has proved since landing, so nothing has been admitted by it yet.",
+      "deviation": null,
+      "branch": "none (triage/0926-20fecf created at c6783fa8e, no commit needed, removed)",
+      "commits": [],
+      "root_fix_none_because": "already shipped and live (grocery/audit-ingest-shape.ps1 in capture-run, grocery/ingest-shape-lib.ps1, grocery/unit-aliases.json; landed via plan-2026-09-22-10). What the deviation left undone was an OWNER, not code: leaves_open (a), the Family Fare, Hy-Vee, Baker's and Fareway builders writing no per-row rejects, was parked 'riding on 2026-09-22-293660', and 293660 was closed by-design on 2026-09-25, so (a) had no owner from then. Measured today: those four stores' pullers take structured API or JSONL size fields and refuse no row by unit spelling (no unit table in pull-regular-hyvee, pull-regular-familyfare, pull-regular-bakers-api, build-fareway-regular or select-fareway-shop), so a rendering change there shows as a field going blank, which grocery/audit-null-rate.ps1 already measures in capture-run for all four (hand run 2026-09-26: PASSED, 23 store/source pairs, Baker's 7362 rows, Family Fare 5524, Fareway 895 plus fareway-deals 217, Hy-Vee 1546; exit 0, NULL-RATE-COMPLETE pairs=23 findings=0) and pages 'Grocery: A CAPTURED FIELD WENT BLANK' at exit 2. Building a per-row rejects file into four pullers for a class with 0 occurrences would duplicate that check.",
+      "proof": {
+        "must_fire_case": "carried: audit-ingest-shape.ps1 -SelfTest founding day (Sam's 2026-09-21 'fluid ounce (us)' UNPROVED 50 of 52 with both rows named, 'gl' PROVED 2 of 2). Live must-fire observed: 2026-09-23 capture-run 'UNPROVED Sam's Club unit \"l\" x2' sent as 2026-09-23-ff21e2.",
+        "clean_twin": "carried: Sam's 2026-09-20 against its prior files raises nothing. Live clean days observed: 2026-09-24 and 2026-09-26 new=0 unproved=0 blind=0.",
+        "commands_run": [
+          "log reads of capture-run-daily-2026-09-23..26 (INGEST-SHAPE-COMPLETE each day)",
+          "powershell -File grocery/audit-null-rate.ps1 (main checkout, read-only): exit 0, PASSED, 23 pairs"
+        ]
+      },
+      "leaves_open": "(a) Family Fare, Hy-Vee, Baker's and Fareway write no per-row rejects, so a same-morning rendering change there is met by audit-null-rate (a field going blank), not by the ingest-shape check: 0 occurrences 2026-09-20..2026-09-26. (b) a misread into a known unit: closed by-design as 2026-09-22-293660 on 2026-09-25.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-null-rate.ps1",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 22,
+      "full_suite": "not-run: no code changed"
     },
     {
       "queue_id": "2026-09-22-5a9676",
@@ -456,11 +705,12 @@
         "queue notes: plan-2026-09-22-11 landed 479a8591b (ancestor of origin/main: yes); sourcing owned by 2026-09-23-dd290b, union rows by 2026-09-23-9999c0"
       ],
       "root_cause": "carried from plan-2026-09-22-11: ingredient rows bid the nearest commodity when the real food had none",
-      "resolution_note": "PROVISIONAL: landed 479a8591b, 11 recipes held; sourcing owned by 2026-09-23-dd290b, union rows by 2026-09-23-9999c0.",
+      "resolution_note": "Carried to round 2: implemented and recorded in plan-2026-09-26-2.json under the same queue id (status shipped); this round-1 entry holds no separate work.",
       "publish_batch": "none",
-      "status": "planned",
+      "status": "superseded",
       "premise_verified": "partly: landed; triage-developer confirms the 11 held slugs are still held on today's board and closes",
-      "deviation": null
+      "deviation": null,
+      "superseded_by": "plan-2026-09-26-2.json item 2026-09-22-5a9676 (shipped, merged as d68827cbc)"
     },
     {
       "queue_id": "2026-09-23-80f302",
@@ -471,12 +721,48 @@
       "evidence": [
         "queue notes: root fix per Q-2026-09-25-2-A shipped (grocery/soundness-publish-lib.ps1); residual owned by 2026-09-25-a84dcf"
       ],
-      "root_cause": "carried from plan-2026-09-25-2: the soundness gate held the whole post on any moved name",
-      "resolution_note": "PROVISIONAL: the post holds only on a moved, dropped or contested winner of a published cell (Q-2026-09-25-2-A); residual owned by 2026-09-25-a84dcf.",
+      "root_cause": "No check compares what a LIVE page says with the data it was built from after the run that published it. The deferred post counts only for its own date and only for the run's own push, so a held commit that lands on a later push leaves the post naming a board the feed no longer serves; a companion page (tracker) publisher failure prints only inside publish-deals-page's filtered output. Both were silent for days.",
+      "resolution_note": "Root fix for the class: grocery/audit-live-page-parity.ps1 reads the LIVE board post and /omaha-price-tracker/ on every capture-run, after the post decision, and pages 'Grocery page does not match its shipped data' when the post names a board the feed no longer serves or the tracker quotes a week other than its built page, so shipped data and a published page can no longer diverge silently. Founding cases were live on 2026-09-26 (post v=780837d352 over served a14a8c805c since 09-24; tracker Sep 2 vs Sep 22) and both fire. Hand repair of a late-landed held post is owned by 2026-09-26-518fff. Pulled forward and closes 2026-09-25-22b1e8.",
       "publish_batch": "none",
-      "status": "planned",
-      "premise_verified": "partly: landed per the queue; today's publish was held by guards (e0d5cf), not by soundness, so triage-developer confirms on the next publish",
-      "deviation": null
+      "status": "deviated",
+      "premise_verified": "false as planned: the plan carried this as a 7-call re-check ('today's publish was held by guards, not soundness'). Re-measured live 2026-09-26 10:40: the class REPRODUCES. /omaha-grocery-prices/ names board.json?v=780837d352 (Ghost article:modified_time 2026-09-23T05:20Z) while feed.thriftycrew.com serves a14a8c805c (= public/board.json at 64fb5fb6a and e90682129, the 2026-09-24 daily). capture-run-daily-2026-09-24.log:374-378: the run committed locally, the tail sync blocked the push, 'POST HELD' (pages nothing); the commit landed on a later push and nothing republished. /omaha-price-tracker/ quotes 'week of Sep 2, 2026' (modified 2026-09-05) against a built out/trend/index.html of 'week of Sep 22, 2026'.",
+      "deviation": "Built the class fix instead of a re-check close: the soundness-hold root fix (742445437) and a84dcf's by-design close stand, but every check judged a publish from INSIDE the run that made it, so a page left behind by any other road (late-landed commit, expired deferral, a companion publisher's filtered failure) was silent. New grocery/audit-live-page-parity.ps1 reads the LIVE pages from outside and capture-run runs it every run after the post decision. Pulled 2026-09-25-22b1e8 forward: its tracker arm is the same class.",
+      "branch": "triage/0926-80f302",
+      "commits": [
+        "4fee8112f (worktree id; rebased on landing)"
+      ],
+      "root_fix": {
+        "what": "grocery/audit-live-page-parity.ps1: board-post arm (live post board.json?v= vs SHA-1 of the served board, reusing Test-TcBoardServed) and tracker arm (live vs built 'week of' label), up to 3 reads a minute apart, exit 0/2/3 with LIVE-PAGE-PARITY-COMPLETE. capture-run runs it every run after Get-DeferredPostDecision and pages 'Grocery page does not match its shipped data' (page, condition 1), not twice when the run already paged the same failed publish; a blind read queues and mails on the 2nd sighting (hold_observations 2) without failing the run.",
+        "files": [
+          "grocery/audit-live-page-parity.ps1",
+          "grocery/capture-run.ps1",
+          "grocery/alert-registry.json"
+        ]
+      },
+      "proof": {
+        "must_fire_case": "frozen live post naming v=780837d352 against served stand-in bytes -> diverged naming both versions; frozen tracker 'week of Sep 2, 2026' vs built 'week of Sep 22, 2026' -> diverged, 20 days apart; persistent divergence over 3 reads -> diverged; blind halves (unreadable feed, no version, no/two week labels, missing built page, throwing fetch) -> blind, never parity. LIVE: audit-live-page-parity.ps1 rc=2, both arms DIVERGED on the real pages.",
+        "clean_twin": "live post naming the served board -> parity; live tracker quoting the built week -> parity; a Ghost cache lag clearing on read 2 -> parity after one wait; both arms parity -> exit 0; capture-run calls the audit after the deferred-post decision and pages under the registered subject.",
+        "commands": [
+          "powershell -NoProfile -File grocery\\audit-live-page-parity.ps1 -SelfTest  (rc=0, 21 of 21)",
+          "powershell -NoProfile -File grocery\\audit-live-page-parity.ps1 -Attempts 1 -DelaySec 0 -BuiltTrackerFile C:\\Codex\\ThriftyCrew\\grocery\\out\\trend\\index.html  (rc=2, 2 diverged)",
+          "powershell -NoProfile -File grocery\\audit-alert-registry.ps1  (rc=0, ALERT-REGISTRY-COMPLETE findings=0)",
+          "powershell -NoProfile -File grocery\\capture-watchdog.ps1 -SelfTest  (rc=0, 70 cases)",
+          "powershell -NoProfile -File grocery\\feed-served-lib.ps1 -SelfTest  (rc=0, 18 cases)",
+          "powershell -NoProfile -File lib\\gate-input-key.ps1 -VerifyDeclared grocery\\audit-live-page-parity.ps1  (VERIFIED)",
+          "powershell -NoProfile -File grocery\\audit-script-census.ps1  (rc=0)"
+        ]
+      },
+      "leaves_open": "1: a held post whose commit lands on a later push is detected and paged but still republished by hand (1 occurrence on record, 2026-09-24..26). Also LIVE NOW (not a residual, a republish): both pages diverge until the orchestrator republishes after landing.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_occurrences_window": "2026-09-01..2026-09-26, cases with a record of the live post's version (none was kept before this audit)",
+      "leaves_open_followup": "2026-09-26-518fff",
+      "close_disposition": "confirmed",
+      "live_check": "After landing: (1) orchestrator republishes the board post from the served board (publish-deals-page after e0d5cf's board lands, or from the board at origin/main) and the tracker with grocery\\publish-trend-index.ps1; (2) powershell -File grocery\\audit-live-page-parity.ps1 in the MAIN checkout prints 'live-page-parity board-post: PARITY' and 'live-page-parity tracker: PARITY' and exits 0. Until then the next capture-run pages 'Grocery page does not match its shipped data', which is correct.",
+      "republished": false,
+      "overlap": "e0d5cf (running the board chain in main): its publish-deals-page, if its board lands and is served, repairs the board-post arm. Sibling branch claude/trusting-swirles-b7637a (d34322f9a) also edits grocery/capture-run.ps1 (push stderr), a different region. Commit hook warned plan-citation (capture-run named by PLAN-bot-checkout-self-heal and PLAN-bot-dedicated-checkout; warn only until 2026-09-30): this change adds a read-only audit after the post decision and does not touch the sync or checkout.",
+      "full_suite": "deferred-to-land",
+      "worktree": "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-80f302 (git rev-parse --show-toplevel differs from C:\\Codex\\ThriftyCrew: a worktree; the live read used main's gitignored out\\trend\\index.html read-only)",
+      "actual_tool_calls": 47
     }
   ],
   "open_questions_for_brad": []

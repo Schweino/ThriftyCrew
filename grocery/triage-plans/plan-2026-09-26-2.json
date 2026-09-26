@@ -1,0 +1,344 @@
+{
+  "generated": "2026-09-26T11:50:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23",
+  "board_note": "comparison-2026-09-23.json built 2026-09-26 08:06:07, HELD by GUARDS FAILED (2026-09-26-e0d5cf); another agent is rebuilding the board in the main checkout while this plan was written, so every count names the generation it was read from.",
+  "queue_ids_seen": [
+    "2026-09-26-177835",
+    "2026-09-22-5a9676",
+    "2026-09-25-f9c8ce",
+    "2026-09-26-9b0825"
+  ],
+  "routing_artifact": "plan-2026-09-26-2.routing.json",
+  "knowledge_consulted": {
+    "searched": [
+      "\"recipe ingredient identity\"",
+      "\"priced as different food\"",
+      "\"substitute union rows\"",
+      "\"commodity admits different product\"",
+      "(dispatch) \"guard blind test-auditors\", \"pipeline push blocked\", \"guards failed board not published\""
+    ],
+    "used": [
+      "memory C--Codex/ruling-recipe-live-only-if-every-ingredient-priced.md (read whole): Brad 2026-09-22 'That recipe should not be live if an ingredient is not carried in Omaha with a price'; How to apply: 'first try to get the missing ingredient priced through the pipeline (a new commodity via the registrar and a store capture)'; 'A yield from a parent food ... is the SAME food'. Decides the zucchini and pepperoncini splits (their foods ARE carried), the Egg Yolk yield row, and that dangmyeon stays held.",
+      "memory C--Codex-ThriftyCrew/form-rule-t1-t2-t3.md (read whole): T2 'if the unit is a WEIGHT or VOLUME, format is irrelevant' is ruled for BOARD cells only, which is why the pasta-shape / crushed-pineapple question is still Brad's for recipe lines and is framed as extending T2.",
+      "memory hook board-match-collisions and data-quality-craft/applies-here.md 'First-match-wins and freshness ranking let the wrong row take a board cell' (search excerpt): an include can be a no-op on a name an earlier commodity owns. Applied as claimed_by_earlier for the two new includes (1 pepperoncini name owned by pickles, 3 owned by nothing before and after).",
+      ".claude/rules/meal-prep.md 'Recost aftercare' and 'propagate REFUSES': sync-recipesdb-cost before propagate, and propagate-recipes needs -SlugsFile.",
+      ".claude/rules/ops-and-gates.md og-11 (ratchet: a plain run never writes its mark, -Tighten records a fall), og-04 (Invoke-NativeScript for the wrapper's child run), og-18 (two guards over one rule: check (d) REPLACES check (c) rather than running beside it).",
+      ".claude/rules/measurement.md and the PS case-insensitive variable trap from this agent's brief: before/after matchers held in differently named variables, five positive controls asserted before any count was trusted.",
+      "memory hook triage-rebuild-reads-late-captures (index line): a triage rebuild must diff crowns against HEAD's board.json before it publishes; written into ship_sequence step 5."
+    ]
+  },
+  "ship_sequence": [
+    "0. PREREQUISITE owned by plan-2026-09-26 step 2 (e0d5cf): today's board is HELD, so public/board.json at origin/main carries neither lo-mein-noodles nor blackened-seasoning. Steps 1-4 do not need it; step 6 does.",
+    "1. ONE triage-developer spawn, in its own worktree, items 177835 (money) and 5a9676 (ops) together. 177835 A-D first: rebid the three held rows (Lo Mein, Blackened, dangmyeon) with rebid-ingredient (dry run, read the skipped-block list, -Apply); Egg Yolk relation derived 12 x 17; Fresh Red Chili identity_same_as; THEN the recost chain (cost-recipes -> compute-v2-perserving -> regenerate-ingredient-map -> reanchor-machine-fields -Slugs <10 held slugs> -> sync-recipesdb-cost). Foreign-dirty rule in 177835 do_not_touch.",
+    "2. same spawn, 5a9676: the twenty identity_same_as records, check (d) with -RecipeBoardFile/-AliasMapFile, the check-ad-cycles fan-out arguments, product-keyed cell mark, self-test cases.",
+    "3. same spawn, 177835 E-F: the two splits through new-commodity.ps1 / add-commodity-rule.ps1 with the registrar (commodities.json + out/audit/match-baseline.json + test-commodity-rules fixtures + categories.json placement), drop pepperoncini from recipe-floor-id-map.json, rebid Pepperoncini -> pepperoncini WITHOUT re-running the recost; then -RoutesOnly, the wrapper and its run-gates $static entry.",
+    "4. same spawn, gates, exit codes first: audit-ingredient-identity -SelfTest; audit-ingredient-routes.ps1 exit 0; test-commodity-rules; the data pass with -BoardFile/-RecipeBoardFile/-AliasMapFile -Tighten (main mark 91 -> 8, cell mark recorded, both counts in the commit with the board they were read from); run-gates exit 0; test-auditors. Land ONCE with grocery/triage-land.ps1 (ops/push-main.ps1); never git push origin HEAD:main. publish_batch 1.",
+    "5. orchestrator: a board built from the landed rules (a triage rebuild in a SCRATCH CLONE, compare-deals with identity emission and link repair, or the 2026-09-27 08:00 chain). Before publishing, diff crowns against HEAD's public/board.json and confirm: zucchini has no yellow squash row, yellow-squash and pepperoncini exist with the estimated cells, banana-peppers keeps its 4 winners, and no other crown moved because of these rules. Publish only through the gated chain (guards.ps1).",
+    "6. GATED, publish_batch 2, only after a PUBLISHED public/board.json carries the cells (check origin/main first; if absent, stop and leave the recipes held): sync-recipesdb-cost; hold-recipe.ps1 -Release -Apply for beef-chow-mein-noodles, beijing-zha-jiang-mian-pork-noodles, five-spice-turkey-noodle-bowls, ground-turkey-lo-mein, spicy-pork-noodles, turkey-zha-jiang-mian, blackened-chicken-with-mango-salsa; propagate-recipes.ps1 -SlugsFile <those 7>. After a published board carries pepperoncini and the chain has recost: propagate-recipes.ps1 -SlugsFile <mississippi-pot-roast-bowls, slow-cooker-italian-beef-bowl, slow-cooker-mississippi-pork-bowls>. Then re-run the identity data pass and -Tighten both marks (the zucchini and pepperoncini keys fall).",
+    "7. live verification: meal-prep/pipeline/monitor-live-recipe-prices.ps1 exit 0; fetch the 7 un-held and 3 pepperoncini posts with a fresh cache-busting query and read the FILLED per-serving price, not the fallback; open one zucchini recipe (cheesy-zucchini-beef-rice-skillet) and confirm its zucchini line fills from a zucchini cell.",
+    "8. orchestrator: close 2026-09-26-177835 (also closes 2026-09-26-9b0825) and 2026-09-22-5a9676 with triage-close.ps1 from the resolution notes; park 2026-09-25-f9c8ce as needs-brad; mint ONE grocery weekly item for the 7 board wrong-product candidates in discovered_during_review."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-26-177835",
+      "subject": "Recipe ingredient priced as a different food",
+      "classification": "wrong-product",
+      "lane": "money",
+      "est_tool_calls": 115,
+      "verdict_for_the_day": "True findings, but the RISE is a key re-shape: 4880ebc98 registered lo-mein-noodles, sweet-potato-glass-noodles and blackened-seasoning without re-pointing the three vocabulary rows (10 lines, 10 held recipes, none live). Planned WITH the same-class rows f9c8ce named, where the ingredient's own food is carried in Omaha but its commodity is a two-food union: Zucchini (18 lines, 18 not-held recipes, Walmart cell is yellow squash) and Pepperoncini (3 lines, 3 not-held recipes, every cell is banana pepper rings). Egg Yolk and Fresh Red Chili are vocabulary annotations with no price move.",
+      "evidence": [
+        "audit-ingredient-identity.ps1 -BoardFile grocery/out/comparison-2026-09-23.json re-run 11:05: exit 2, '354 vocabulary row(s), 587 costed recipe(s), board comparison-2026-09-23.json: 91 finding(s) [PROXY=5 UNION-ROW=80 UNROUTED=6]', RISE 3 against the 2026-09-25 mark of 91. The alert's three lines reproduce exactly.",
+        "Key diff against ops/out/ingredient-identity-baseline.json: NEW proxy|Lo Mein Noodles|egg-noodles|lo-mein-noodles, proxy|Korean glass noodles (dangmyeon)|rice-noodles|sweet-potato-glass-noodles, proxy|Blackened Seasoning|cajun-seasoning|blackened-seasoning; FELL the three unrouted| keys of the same (item, bid) pairs. Count unchanged at 91.",
+        "Cause: 4880ebc98 (plan-2026-09-25-15 step 3) inserted lo-mein-noodles (index 59), sweet-potato-glass-noodles (60), blackened-seasoning (61). The three names routed '' before and to the new ids after; bids stayed egg-noodles / rice-noodles / cajun-seasoning.",
+        "Held lines (all in meal-prep/db/held-recipes.json since 479a8591b): Lo Mein 6 (beef-chow-mein-noodles 1400 g, beijing-zha-jiang-mian-pork-noodles 998 g, five-spice-turkey-noodle-bowls 1293 g, ground-turkey-lo-mein 681 g, spicy-pork-noodles 1801 g, turkey-zha-jiang-mian 1034 g, basis board:egg-noodles:walmart 'Great Value Extra Wide Egg Noodles, 16 oz' $1.78 / 16 oz); dangmyeon 3 (basis board:rice-noodles:walmart 'Thai Kitchen ... Stir Fry Rice Noodles, 14.0 oz Box' $4.76); blackened 1 (blackened-chicken-with-mango-salsa 74 g, 'Slap Ya Mama Cajun Seasoning ... 16 oz' $4.94).",
+        "Real foods on comparison-2026-09-23: lo-mein-noodles | Family Fare | 'Wel Pac Egg Noodles, Lo Mein 10 Oz' | $2.59 / 10 oz | $0.259/oz (only cell); blackened-seasoning | Baker's | 'Cajun's Choice Blackened Seasoning & Rub' | $8.79 / 6.5 oz | $1.3523/oz (only cell); sweet-potato-glass-noodles: no cell. public/board.json carries neither new id (today's board HELD, 2026-09-26-e0d5cf); grocery/out/smp-feed.json (08:10) carries both.",
+        "SAME CLASS, NOT YET PAGED AS NEW (standing union keys): zucchini | Walmart | 'Fresh Yellow Squash, Each' | $0.76 / 0.5 lb | $1.52/lb prices 'Zucchini' on 18 costed lines in 18 not-held recipes; the commodity label is 'Zucchini / Yellow Squash' (include zucchini | yellow\\s+squash). Real zucchini is carried: Aldi 'Zucchini Squash 1 LB' $1.19/lb, Baker's 'Zucchini' $1.79, Family Fare/Fareway/Hy-Vee 'Zucchini Squash' $1.99; Walmart 'Fresh Zucchini, Each' $0.76/0.5 lb is in candidates as WITHHELD-UNPROVEN-STORE (2026-09-12).",
+        "SAME CLASS: banana-peppers (label 'Banana Peppers / Pepperoncini') prices 'Pepperoncini' (mississippi-pot-roast-bowls, slow-cooker-italian-beef-bowl, slow-cooker-mississippi-pork-bowls) with banana pepper rings at all 4 stores (Walmart 'Mezzetta Mild Banana Pepper Rings, 32 fl oz Jar' $0.1475/oz). Real pepperoncini is carried: Walmart 'Great Value Whole Pepperoncini, 12 fl oz' $0.171/oz, Baker's 'Mezzetta Medium-Heat Golden Greek Peperoncini' 32 oz $0.2278/oz, Hy-Vee Mezzetta Golden Greek Peperoncini (no unit price in candidates). recipe-floor-id-map.json also aliases pepperoncini -> banana-peppers.",
+        "Egg Yolk (french-chicken-fricassee) bids eggs per dozen with buy_pkg_g 204 = 12 yolks x 17 g, but carries no relation, so it is asked about 'yolk' and every egg cell fails; it is a YIELD row (Brad 2026-09-22: a yield from a parent food is the same food). Fresh Red Chili (chicken-and-potato-curry) bids jalapenos on Brad's 2026-08-31 ruling recorded in its own note, kept by plan-2026-09-22-11; Family Fare's jalapenos cell is literally 'Red/Mexican Red Jalapeno Peppers'."
+      ],
+      "surface_fix": {
+        "what": "re-point the three held rows at their own commodities; split the two two-food unions so zucchini and pepperoncini each have a commodity of their own and re-point Pepperoncini; annotate Egg Yolk as a yield and Fresh Red Chili with its ruling; un-hold the 7 lo mein and blackened recipes once a published board carries their cells",
+        "files": [
+          "meal-prep/db/ingredients.json",
+          "meal-prep/recipes/<affected specs, via rebid-ingredient only>",
+          "grocery/commodities.json",
+          "grocery/out/audit/match-baseline.json",
+          "grocery/test-commodity-rules.ps1",
+          "grocery/categories.json (placement of the two new ids, as new-commodity.ps1 requires)",
+          "grocery/recipe-floor-id-map.json",
+          "meal-prep/db/costed.json and the recost chain outputs",
+          "meal-prep/db/held-recipes.json (gated step only)"
+        ],
+        "exact_change": "A. meal-prep/pipeline/rebid-ingredient.ps1 (dry run, read the skipped-block list, then -Apply): Lo Mein Noodles egg-noodles -> lo-mein-noodles (buy_pkg_g 283, buy_pkg_label '10oz pack'); Blackened Seasoning cajun-seasoning -> blackened-seasoning (pantry_pkg_g 184, '6.5oz container', drop the 2026-08-28 REUSE note that dd290b superseded); Korean glass noodles (dangmyeon) rice-noodles -> sweet-potato-glass-noodles (package fields unchanged; lines become NO PRICE BASIS, the 3 recipes stay held). All three targets are unit oz, gpu 28.3495 unchanged. Tandoori Masala is NOT rebid: Brad ruled on 2026-08-28 that it stays on garam-masala and its recipe is held under the 09-22 ruling; its PROXY key stays in the mark. B. Egg Yolk: relation 'derived', parent_units_per_purchase 12, yield_g_per_parent_unit 17 (12 x 17 = 204 = buy_pkg_g; Test-DerivedBasis returns null; cost-recipes' derived branch only refuses, so no price moves). C. Fresh Red Chili: identity_same_as [{ product '\\bjalape', reason 'Brad 2026-08-31 (this row's note): a recipe's fresh red chili is the jalapeno purchase class; kept by plan-2026-09-22-11' }]. D. RUN THE RECOST CHAIN NOW, before step E: engine/cost-recipes.ps1 -> pipeline/compute-v2-perserving.ps1 -> pipeline/regenerate-ingredient-map.ps1 -> pipeline/reanchor-machine-fields.ps1 -Slugs <the 10 held slugs> -> pipeline/sync-recipesdb-cost.ps1. E. grocery/commodities.json through grocery/new-commodity.ps1 / add-commodity-rule.ps1 with the commodity-registrar, 4880ebc98 is the exemplar (commodities.json + out/audit/match-baseline.json + test-commodity-rules.ps1): insert yellow-squash immediately BEFORE zucchini (label 'Yellow Squash', unit lb, include ['yellow\\s+squash','yellow\\s+zucchini'], exclude = zucchini's current exclude + ['\\bseeds?\\b','\\bplants?\\b','dehydrated']); narrow zucchini (label 'Zucchini', include ['zucchini'], exclude += ['\\byellow\\b','\\bseeds?\\b','\\bplants?\\b','dehydrated']); insert pepperoncini immediately BEFORE banana-peppers (label 'Pepperoncini', unit oz, include ['pepp?eroncini'], exclude = banana-peppers' exclude + ['\\bplants?\\b','\\bseeds?\\b']); narrow banana-peppers (label 'Banana Peppers', include ['banana\\s+pepper'], exclude += ['pepp?eroncini','\\bplants?\\b','\\bseeds?\\b']). Remove 'pepperoncini': 'banana-peppers' from grocery/recipe-floor-id-map.json map (export-feed line 559 would skip it while the weekly id is priced, and silently re-clone banana rings under the pepperoncini name the day it is not). F. rebid-ingredient.ps1: Pepperoncini banana-peppers -> pepperoncini (unit oz, gpu 28.3495, pantry 355 g '12floz jar' unchanged; add identity_same_as [{ product '\\bpep+eroncini\\b', reason 'peperoncini is the Italian spelling' }] so Baker's 'Peperoncini' passes) and DO NOT re-run the recost after it: committed costed.json keeps a priced basis until the next board build, whose chain (check-ad-cycles line 1232, after compare-deals) recosts it from the new cell. Zucchini keeps bid zucchini: nothing to rebid. G. GATED, after a published public/board.json carries lo-mein-noodles|Family Fare and blackened-seasoning|Baker's: sync-recipesdb-cost, hold-recipe.ps1 -Release -Apply for the 6 lo mein slugs and blackened-chicken-with-mango-salsa, propagate-recipes.ps1 -SlugsFile <those 7>. After a published board carries pepperoncini: propagate-recipes.ps1 -SlugsFile <the 3 pepperoncini slugs> (their spec bid changed). The dangmyeon and tandoori holds stay."
+      },
+      "root_cause": "A commodity registration and the recipe vocabulary that names the same food are two records written by two tools on two days, and nothing compares them when either lands. run-gates runs audit-ingredient-identity only as -SelfTest; its data pass runs once a day inside check-ad-cycles; apply-coverage-batch.ps1, new-commodity.ps1 and add-commodity-rule.ps1 never read db/ingredients.json. So 4880ebc98 could land three commodities that claim three vocabulary names, the rebid was deferred to another queue id (9b0825), and the next chain paged the gap as three NEW findings. Measured over the 61 commodities.json commits of the last 30 days: 10 vocabulary rows changed route in 6 commits, 4 of them newly off their bid (4880ebc98 x3, 828d5226b 'Cooked White Rice' rice -> unrouted). The split in this item is exactly such a change (Pepperoncini moves banana-peppers -> pepperoncini), which is why its rebid must ride the same push.",
+      "root_fix": {
+        "what": "audit-ingredient-identity.ps1 -RoutesOnly (Get-IdentityRouteChanges in ingredient-identity-lib.ps1): check (a) only, per (item, bid) pair against the mark's proxy|/unrouted| keys; on-bid -> off-bid, unrouted -> proxy and proxy -> another id REFUSE (exit 2 with the rebid command), proxy -> unrouted SPEAKS, exit 3 on unreadable input or no mark, never writes the mark. Wrapper meal-prep/pipeline/audit-ingredient-routes.ps1 (Invoke-NativeScript, declared gate-inputs) entered in run-gates $static."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "two corpora, each read whole: (1) all 354 db/ingredients.json names routed under commodities.json at HEAD and at both sides of each of the 61 commodities.json commits since 2026-08-27; (2) 59,506 distinct product names from 556 capture files (grocery/out/regular, sams, bakers, fareway, candidates-2026-09-23) routed first-match-wins under HEAD rules and under the split, with positive controls. Identity findings recomputed in memory before and after. Artifact: plan-2026-09-26-2.routing.json",
+        "affected_now": 5,
+        "names": [
+          "Lo Mein Noodles",
+          "Korean glass noodles (dangmyeon)",
+          "Blackened Seasoning",
+          "Pepperoncini",
+          "Zucchini (bid unchanged; its cell narrows)"
+        ],
+        "risk": "Product routing: 33 of 59,506 names change route, all intended: 26 pepperoncini listings banana-peppers -> pepperoncini, 3 yellow-squash listings zucchini -> yellow-squash, 3 zucchini -> none (2 garden-seed listings, 1 dehydrated mylar bag; all Walmart ship-only or unpriced) and 1 banana-peppers -> none (a live banana pepper plant). Zero second-order re-landings. Board: the 'Zucchini / Yellow Squash' row becomes 'Zucchini' and loses its Walmart cell until the ruling-owed Walmart recapture proves 'Fresh Zucchini, Each'; Family Fare's zucchini cell becomes 'Zucchini Squash' at the same $1.99/lb; a new 'Yellow Squash' row (2 cells) and 'Pepperoncini' row (2 cells) appear; banana-peppers keeps all 4 winners. audit-coverage-regression needs >10% AND >15 cells of one store, so the single Walmart cell cannot trip it; cell-drops will name zucchini|Walmart as a warning, which is the intended effect. Recipes: 18 zucchini lines move off the Walmart $1.52/lb yellow squash to the nomem cheapest (Aldi $1.19/lb) at the next chain recost, about 22% cheaper per line; on the card (min whole-package across stores) the 4 lines where Walmart's half-pound squash won move to Aldi. 3 pepperoncini lines move $0.1475 -> $0.171/oz (+16%) once propagated. Held rebids move nothing live; estimate for the lo mein lines at un-hold: 2.33x (beef-chow-mein-noodles 5.49 -> 12.79 a batch), blackened 0.81 -> 3.53. Egg Yolk and Fresh Red Chili: no price moves. Vocabulary rows sharing old bids (Egg Noodles, Rice Noodles, Cajun Seasoning, and every other eggs/jalapenos row) keep them: rebid-ingredient selects spec blocks by canon identity; read its skipped-block list.",
+        "claimed_by_earlier": [
+          {
+            "name": "(2 pack) Mt. Olive Delicatessen Style Pepperoncini Pickles, 32 fl oz Jar",
+            "owner": "pickles (earlier index)",
+            "release": "none proposed: a Walmart ship-only 2-pack, stays with pickles as today"
+          },
+          {
+            "name": "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz / Mt Olive Mt Olive Italian Seasoned Pepperoncini 12 Fl Oz",
+            "owner": "none today and after (seasoned: global exclude)",
+            "release": "none proposed"
+          },
+          {
+            "name": "DeLallo Hot Whole Kosher Pepperoncini Chili Peppers",
+            "owner": "none today and after (\\bchili\\b is in the copied banana-peppers exclude)",
+            "release": "none proposed"
+          }
+        ],
+        "cell_effects": [
+          {
+            "commodity": "zucchini",
+            "store": "Walmart",
+            "before": "$1.52/lb Fresh Yellow Squash, Each",
+            "after": "no cell until the ruling-owed recapture ($0.76/0.5 lb Fresh Zucchini, Each is withheld)"
+          },
+          {
+            "commodity": "zucchini",
+            "store": "Family Fare",
+            "before": "$1.99/lb Yellow Zucchini/Yellow Squash",
+            "after": "$1.99/lb Zucchini Squash"
+          },
+          {
+            "commodity": "yellow-squash (new)",
+            "store": "Walmart",
+            "before": "none",
+            "after": "$1.52/lb Fresh Yellow Squash, Each"
+          },
+          {
+            "commodity": "yellow-squash (new)",
+            "store": "Family Fare",
+            "before": "none",
+            "after": "$1.99/lb Yellow Zucchini/Yellow Squash"
+          },
+          {
+            "commodity": "pepperoncini (new)",
+            "store": "Walmart",
+            "before": "none",
+            "after": "$0.171/oz Great Value Whole Pepperoncini, 12 fl oz"
+          },
+          {
+            "commodity": "pepperoncini (new)",
+            "store": "Baker's",
+            "before": "none",
+            "after": "$0.2278/oz Mezzetta Medium-Heat Golden Greek Peperoncini"
+          }
+        ]
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "(2 pack) Mt. Olive Delicatessen Style Pepperoncini Pickles, 32 fl oz Jar",
+          "owner": "pickles (earlier index)",
+          "release": "none proposed: a Walmart ship-only 2-pack, stays with pickles as today"
+        },
+        {
+          "name": "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz / Mt Olive Mt Olive Italian Seasoned Pepperoncini 12 Fl Oz",
+          "owner": "none today and after (seasoned: global exclude)",
+          "release": "none proposed"
+        },
+        {
+          "name": "DeLallo Hot Whole Kosher Pepperoncini Chili Peppers",
+          "owner": "none today and after (\\bchili\\b is in the copied banana-peppers exclude)",
+          "release": "none proposed"
+        }
+      ],
+      "freshness": "measured against comparison-2026-09-23 built 2026-09-26 08:06:07 (the generation the dispatch named; HELD, not published), candidates-2026-09-23 08:05:55 and HEAD c6783fa8e (commodities.json blob 0b8a7fc5, ingredients.json blob 01ee6191, mark blob c6cd030d, all clean and unmoved between 10:10 and 11:30). Another agent is rebuilding the board in the main checkout now: the cell_effects are estimates from candidates and the developer confirms them in a scratch-clone rebuild. If commodities.json or ingredients.json has moved when you start, re-run the scratch routing before trusting any count.",
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (-RoutesOnly cases) and grocery/test-commodity-rules.ps1",
+        "must_fire_case": "MUST FIRE -RoutesOnly: Lo Mein Noodles marked unrouted on egg-noodles now routes to lo-mein-noodles (the 4880ebc98 re-shape) and is REFUSED, naming both; MUST FIRE Pepperoncini bid banana-peppers under the split rules is REFUSED",
+        "clean_twin": "CLEAN TWIN Egg Noodles still routes to egg-noodles beside the lo-mein-noodles include; MUST NOT FIRE Pepperoncini rebid onto pepperoncini is silent",
+        "ran": "audit-ingredient-identity -SelfTest exit 0, 37 of 37 (12 new, frozen must-fires + must-not-fires + 3 child runs); mutation probe 3 of 3 killed, lib restored md5-identical. audit-ingredient-routes.ps1 on the branch: exit 0 (354 rows, 598 commodities, 0 refused); on main's HEAD state exit 2 naming the alert's 3 rows; on the split commit without the Pepperoncini rebid exit 2. test-commodity-rules exit 0, 172 of 172 (13 new). match-soundness MOVED=11 DROPPED=0 reviewed line by line and -Accept (lotion -> facial-tissues present under HEAD rules too, correct product). audit-cross-module-reach 0, audit-script-census 0, audit-guard-contract 0, audit-fixture-vocabulary 0, audit-mustfire-census 0. Identity data pass exit 0, no RISE. costed.json moves on exactly 10 of 587 recipes, all held. Worktree C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-177835 (not main); run-gates not run (landing runs it).",
+        "integration": "after the merge with 5a9676 the self-test runs 52 of 52 (exit 0); audit-ingredient-routes on the merged tree exit 0 once Light Mayonnaise carried identity_reviewed (2e6ca1d05); compare-deals -SelfTest R15 updated to the ruled dehydrated-zucchini route (2e6ca1d05)"
+      },
+      "rollback": "revert the commodities.json, match-baseline, test-commodity-rules, recipe-floor-id-map, ingredients.json, spec and baseline hunks and re-run the recost chain; re-hold any released slug with hold-recipe.ps1 -Apply; drop the $static entry and the wrapper. The next board build restores the zucchini/banana-peppers unions.",
+      "do_not_touch": [
+        "Tandoori Masala's bid (Brad 2026-08-28) and the dangmyeon and tandoori holds",
+        "the baseline except through -Tighten after a measured fall",
+        "the daily data pass's RISE semantics (only the push check is pair-based)",
+        "foreign-dirty files in the MAIN checkout: meal-prep/ingredient-map.json, meal-prep/recipes-db.json, meal-prep/db/costed.stamp.json, meal-prep/pipeline/v2-perserving*.json, meal-prep/db/golden-frozen-actual.json, meal-prep/dinner-data.js, meal-prep/cheapnow-data.js, meal-prep/free-rotation.json. They are today's held 08:00 chain output awaiting e0d5cf. Run the recost in YOUR worktree, commit the regenerated files there with a pathspec commit, and never read, copy, stash or revert the main checkout's copies; if e0d5cf has not landed when you push, land anyway and name those paths in your report so the orchestrator expects checkout-sync to leave them partial until their owner re-derives them."
+      ],
+      "leaves_open": "(a) the -RoutesOnly check cannot see a union cell admitting another member while the row's name still routes to its bid (28 two-name labels); (b) dangmyeon has no Omaha cell, its 3 recipes stay held NO PRICE BASIS; (c) the 7 live-board wrong-product candidates in discovered_during_review (Wheat Thins on sun-dried tomato at Family Fare, sirloin tip roast crowning sirloin-steak, and 5 more), not touched here; (d) batch 2 un-holds of the 6 lo mein recipes and blackened-chicken-with-mango-salsa wait for a published board carrying their cells, and the 3 pepperoncini recipes wait for a published board plus recost; (e) identity mark not tightened (91 -> 82/64 available); (f) rebid-ingredient's cache invalidation keys on the OLD ID, so it also dropped 'wide homestyle egg noodles' -> egg-noodles (an Egg Noodles resolution): one cache miss, no price effect; (g) recipe-board-everyday.json holds a 'pepperoncini' floor row priced by banana pepper rings, de-duped out of the feed while commodities.json holds pepperoncini.",
+      "leaves_open_occurrences": "(a) 61 per the plan's measurement (rows bidding a two-name label, 30-day window); (b) 1 (3 held recipes); (c) 7 candidates on today's board; (d) 10 held recipes; (e) 0 findings risen; (f) 1 today (the Lo Mein rebid); (g) 0 live (de-duped since the floor row was added)",
+      "leaves_open_followup": "2026-09-26-a7dbb1",
+      "resolution_note": "Key re-shape, not a new mispricing: 4880ebc98 registered lo-mein-noodles, sweet-potato-glass-noodles and blackened-seasoning while the three rows still bid egg-noodles, rice-noodles and cajun-seasoning (10 lines, 10 held recipes). Rebid all three (dangmyeon by a mirror of the rebid tool's sweep, since no Omaha store carries glass noodles yet; its 3 recipes stay held), recost in the worktree (exactly those 10 recipes moved). Split the two-food unions: yellow squash out of zucchini and pepperoncini out of banana peppers, so Zucchini (18 recipes) and Pepperoncini (3) price from their own food; retired the pepperoncini alias; rebid Pepperoncini. Egg Yolk declared a yield row, Fresh Red Chili recorded under Brad's 08-31 ruling. Root fix: audit-ingredient-identity -RoutesOnly runs at push through audit-ingredient-routes.ps1, so a commodity or vocabulary change that moves a row off its bid cannot land without its rebid; it reproduces this alert on main's state. The 7 lo mein and blackened un-holds wait for a published board carrying their cells (gated, not done here). Also closes 2026-09-26-9b0825.",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "(1) dangmyeon: rebid-ingredient.ps1 refuses a target with no smp-feed row (sweet-potato-glass-noodles has no Omaha cell), so the identical identity-scoped spec edit was applied by a scratch mirror of its sweep (3 specs; FK-BID resolves via the commodities.json roster); the 3 recipes stay held with the line NO PRICE BASIS, as planned. (2) new-commodity.ps1 inserts AFTER the clone source (plan said before); the pair is adjacent and mutually exclusive, routing verified identical to the artifact. (3) The rebid tool labelled Pepperoncini board 'recipe' (a hand-held banana-ring 'pepperoncini' floor row exists on recipe-board-everyday.json); corrected to 'weekly'. (4) The identity mark was NOT tightened here (CAN tighten 91 -> 82 on the published board, 91 -> 64 on the rebuilt one) because 5a9676 restructures the same mark in parallel. (5) The batch 2 un-holds (G) were not run: they are gated on a PUBLISHED board carrying lo-mein-noodles|Family Fare and blackened-seasoning|Baker's, and public/board.json at HEAD carries neither.",
+      "shipped_commit": null,
+      "premise_check": "Freshness held at start: commodities.json 0b8a7fc5e, ingredients.json 01ee61911, mark c6cd030d8 unmoved since c6783fa8e. audit-ingredient-identity -RoutesOnly over main's HEAD state reproduces exactly the 3 rows (Lo Mein, dangmyeon, Blackened: unrouted -> proxy). Routing of the split over the 487 capture names any touched rule can claim (563 files): 33 moves, all 33 in the artifact's frozen list, 0 unexpected, 0 missing. Rebuilt-board crown diff (control board under pre-split rules vs split rules, same inputs): exactly the plan's cell_effects and nothing else.",
+      "crown_diff": "Against HEAD public/board.json (= comparison-2026-09-23 08:06): NEW yellow-squash (Walmart 1.52 'Fresh Yellow Squash, Each', Family Fare 1.99 'Yellow Zucchini/Yellow Squash'); NEW pepperoncini (Walmart 0.171 'Great Value Whole Pepperoncini, 12 fl oz', Baker's 0.2278 'Mezzetta Medium-Heat Golden Greek Peperoncini'); zucchini Walmart 1.52 yellow squash -> no cell, zucchini Family Fare -> 1.99 'Zucchini Squash', zucchini crown stays Aldi 1.19; banana-peppers keeps its 4 winners. No other crown or cell moved. Late captures since 08:06 moved 0 crowns.",
+      "live_check": "After the post-landing board chain publishes: pepperoncini | Walmart | $0.171/oz 'Great Value Whole Pepperoncini, 12 fl oz'; zucchini | Walmart | no cell; yellow-squash | Walmart | $1.52/lb 'Fresh Yellow Squash, Each'.",
+      "post_merge_in_main": "1. Merge triage/0926-177835 with triage/0926-5a9676: one conflict in meal-prep/pipeline/audit-ingredient-identity.ps1, resolve by keeping BOTH params ([switch]$RoutesOnly and [string]$CellBaselineFile, comma-separated) and BOTH self-test blocks, case count 52 (25 base + 12 mine + 15 theirs); every other file auto-merges. Re-run audit-ingredient-identity -SelfTest and audit-ingredient-routes.ps1 after the merge. 2. Land once with grocery/triage-land.ps1 -CheckFeed (push-main; never git push origin HEAD:main). 3. Board chain in a scratch clone or the 2026-09-27 08:00 chain: compare-deals -MinStores 1 -IdentityNamespace staple (newest bakers/fareway pinned), audit-name-drift, prune-bad-links, generate-board-overrides, build-deals-page, guards (exit 0), publish, export-feed; the chain's recost (cost-recipes -> compute-v2-perserving -> regenerate-ingredient-map -> reanchor-machine-fields -> sync-recipesdb-cost) reprices the 18 zucchini and 3 pepperoncini lines. Diff crowns against HEAD's board.json before publishing (expected: exactly the crown_diff above). 4. Gated batch 2, only once origin/main public/board.json carries lo-mein-noodles|Family Fare and blackened-seasoning|Baker's: sync-recipesdb-cost -Apply; hold-recipe.ps1 -Release -Apply for beef-chow-mein-noodles, beijing-zha-jiang-mian-pork-noodles, five-spice-turkey-noodle-bowls, ground-turkey-lo-mein, spicy-pork-noodles, turkey-zha-jiang-mian, blackened-chicken-with-mango-salsa; propagate-recipes.ps1 -SlugsFile <those 7>; then propagate-recipes.ps1 -SlugsFile <mississippi-pot-roast-bowls, slow-cooker-italian-beef-bowl, slow-cooker-mississippi-pork-bowls> once pepperoncini is published and recost. 5. Identity data pass -Tighten after both land. Foreign-dirty paths regenerated and committed on this branch (main's copies untouched): meal-prep/ingredient-map.json, meal-prep/db/costed.stamp.json, meal-prep/pipeline/v2-perserving.json, meal-prep/pipeline/v2-perserving.prev.json (plus tracked meal-prep/db/costed.json). meal-prep/recipes-db.json was NOT changed (sync wrote 0 fields: all 10 movers are held).",
+      "actual_tool_calls": 100,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-177835",
+      "commits": [
+        "19aa534c8 A-D rebids, Egg Yolk, Fresh Red Chili, recost",
+        "eee32b052 E splits, alias retired, soundness accepted, fixtures",
+        "05bb18e97 F Pepperoncini rebid + -RoutesOnly root fix"
+      ],
+      "leaves_open_owner_note": "(a)(d)(f) carried by 2026-09-26-a7dbb1; (b) dangmyeon held NO PRICE BASIS (2026-09-23-dd290b resolved it as sourcing); (c) the live wrong-product candidates were fixed by 2026-09-26-8deaa4 in this run (broccoli, sirloin tip roast, Wheat Thins and bruschetta on sun-dried, light mayo, chuck roll case left to Q-2026-09-26-subprimal-case); (e) identity mark tightened 91 -> 8 in the integration run; (g) watch:meal-prep/pipeline/audit-ingredient-identity.ps1",
+      "integration_deviation": "Two cross-branch repairs in 2e6ca1d05: compare-deals -SelfTest R15 expected Dehydrated Zucchini -> zucchini (this item's ruled move is -> none, frozen in plan-2026-09-26-2.routing.json rows[9]); guards held the rebuilt board on it until fixed. And Light Mayonnaise (bid mayonnaise) was refused by this item's new push gate once 8deaa4 excluded light jars; it now carries identity_reviewed."
+    },
+    {
+      "queue_id": "2026-09-26-9b0825",
+      "subject": "Triage residual: un-hold the lo mein and blackened recipes once the 09-26 board prices their new commodities (dd290b step 5)",
+      "classification": "superseded",
+      "lane": "money",
+      "evidence": [
+        "Same unresolved condition as 2026-09-26-177835: its three NEW PROXY keys are exactly the rows this step 5 re-points, and its precondition is still unmet on the published board (public/board.json carries neither lo-mein-noodles nor blackened-seasoning; today's board HELD by e0d5cf)."
+      ],
+      "root_cause": "the dd290b registration landed the commodity half (4880ebc98) and deferred the vocabulary half to this residual, so the gap paged as 177835 the next morning",
+      "resolution_note": "Same unresolved condition as 2026-09-26-177835: the Lo Mein and Blackened rebids shipped there on branch triage/0926-177835 (commit 19aa534c8, recost moved exactly the 10 held recipes). The un-holds of the 6 lo mein recipes and blackened-chicken-with-mango-salsa were NOT performed: they are gated on a published public/board.json carrying lo-mein-noodles|Family Fare and blackened-seasoning|Baker's, which HEAD does not; 177835's post_merge_in_main step 4 carries them. Not work performed under this id.",
+      "publish_batch": 2,
+      "status": "superseded",
+      "superseded_by": "2026-09-26-177835",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-177835",
+      "commits": [],
+      "actual_tool_calls": 0
+    },
+    {
+      "queue_id": "2026-09-22-5a9676",
+      "subject": "Triage residual: recipe ingredient identity, 149 standing findings (substitutes live against the ruling, union rows) - RESUME",
+      "classification": "wrong-product",
+      "lane": "ops",
+      "est_tool_calls": 80,
+      "verdict_for_the_day": "RESUME of the item plan-2026-09-22-11 closed deviated. The standing list (149 -> 91 today) is the output of a check that asks about ONE store per line on ONE of the three pricing surfaces, so it both misses what the reader sees and over-reports spellings. This item is the detection root fix for the whole family; the price fixes ride in 2026-09-26-177835 and the ruling half in 2026-09-25-f9c8ce.",
+      "evidence": [
+        "Check (c) today tests only the costed basis store (Walmart first): 80 UNION-ROW lines over 14 (item, bid, product) pairs, 77 recipes, 72 not held (scratch re-derivation of the audit over the same inputs; per-pair rows in the routing artifact).",
+        "It silently skips 946 of 7,616 board-basis costed lines (744 board:<id>:recipeboard-* and 202 board:<id>:nomem:* whose store key never matches the comparison index) and never reads the 234 feed:<id> lines, which price through grocery/recipe-floor-id-map.json aliases (31 entries, e.g. rotini-pasta -> pasta, pineapple-chunks -> canned-pineapple, marinara-sauce -> pasta-sauce, pepperoncini -> banana-peppers).",
+        "What the reader sees: the recipe card and compute-v2 cheapest_ps take the minimum whole-package cost across EVERY store cell (package-cost-lib Get-PkgCheapestAcross). Simulated over all 587 specs against grocery/out/smp-feed.json pricing_inputs: 3,788 priced lines, of which 119 lines in 114 recipes (110 not held) are won by a store whose product does not name the ingredient, a different set from check (c)'s: e.g. Pasta Shells won at Aldi by 'Reggano Spaghetti' (8) and at Family Fare by 'Our Family Spaghetti 16 Oz' (5); Beef Flank/Sirloin Steak won at Family Fare by 'Fresh Usda Choice Whole Sirloin Tip' (25); Zucchini won at Walmart only 4 times, not 18.",
+        "Every store cell of every (item, priced id) pair used by a costed line: 102 board cells over 38 pairs plus 15 alias cells fail the head-word test today. Most are one food with two names ('Aldi Garbanzo Beans 15.5 OZ' for Chickpeas, 'Whole Boneless Pork Butt Roast Per LB' for Pork Shoulder, 'Happy Farms Neufchatel Cheese 8 OZ' for 1/3 Fat Cream Cheese, 'That's Smart! canola oil' for Vegetable Oil, 151 lines); some are real wrong foods the standing list never showed ('Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz' $3.99 in sun-dried-tomatoes at Family Fare).",
+        "The key is per costed line today (union|slug|item|id) and carries no product, so a standing key hides the NEXT wrong product at the same cell."
+      ],
+      "surface_fix": {
+        "what": "record the one-food-two-names pairs as reviewed same-food spellings so the widened check starts on real findings",
+        "files": [
+          "meal-prep/db/ingredients.json"
+        ],
+        "exact_change": "identity_same_as entries (product regex, reason), each read off the product names in evidence: Chickpeas '\\bgarbanzo\\b'; Pork Shoulder '\\bpork\\s+butt\\b|\\bbutt\\s+roast\\b'; Mexican Cheese Blend '\\bfiesta\\s+blend\\b'; 1/3 Fat Cream Cheese '\\bneufch.tel\\b' (21 CFR 133.162); Red Pepper Flakes add '\\bred\\s+pepper,?\\s+crushed\\b'; Smoked Turkey Sausage '\\bturkey\\b.*\\bkielbasa\\b'; Gingersnap Cookies '\\bginger\\s*snaps?\\b'; Corn Chips '\\bfritos?\\b'; Diced Tomatoes & Green Chilies '\\bgreen\\s+chiles?\\b'; Dried Arbol Chiles '\\bchil[ei]\\s+de\\s+.rbol\\b'; Dried Guajillo Chiles '\\bguajillo\\b'; Japanese Curry Roux add '\\bcurry\\s+sauce\\s+mix\\b'; Masa Harina '\\bcorn\\s+masa\\s+flour\\b|\\bmaseca\\b'; No-Boil Lasagna Noodles '\\b(?:oven[\\s-]+ready|no[\\s-]+boil)\\b.*\\blasagna\\b'; Bratwurst '\\bbrats?\\b'; 80/20 Ground Beef '\\b80%?\\s*/\\s*20%?\\b'; Beef Base '\\bbeef\\s+bouillon\\b'; Fries '\\bfrench\\s+fried\\s+potatoes\\b'; Vegetable Oil '\\bcanola\\s+oil\\b'; Sun-Dried Tomatoes (Oil-Packed) add '\\bsun\\s*-?\\s*dried\\s+tomatoes\\s+in\\s+(?:olive\\s+)?oil\\b'. Every reason a sentence (an entry with no reason silences nothing). No price moves: identity_same_as is read only by the identity check."
+      },
+      "root_cause": "The recipe price is bound to a commodity ID, and all three pricing surfaces (engine/cost-recipes Walmart-first, compute-v2 cheapest_ps and the card's costAt, both minimum across every store cell) price by that id with no notion of which food the line names. The only thing that asks whether the product is the ingredient is audit-ingredient-identity check (c), and it reads one store per line on one surface, skips the recipe-board and nomem lines, never reads the alias-priced lines, and keys findings without the product. So a union cell can price a line with another food at any store the card picks, and the list both misses it and fills with spellings nobody reviewed.",
+      "root_fix": {
+        "what": "check (d): every store cell a costed line can be priced from, on both boards and through the alias map, keyed with the store and product, on its own ratchet; check (c) retired",
+        "files": [
+          "meal-prep/lib/ingredient-identity-lib.ps1",
+          "meal-prep/pipeline/audit-ingredient-identity.ps1",
+          "grocery/check-ad-cycles.ps1 (fan-out arguments only)",
+          "meal-prep/db/ingredients.json (twenty identity_same_as records)",
+          "ops/out/ingredient-identity-cell-baseline.json (new, 86 keys)"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changes in this item, so no product name re-routes (routing of all 354 vocabulary names unchanged); the detector's own outcome measured over every (item, priced id) pair in costed.json (311 pairs after 177835's rebids, 3 with no cell on either board) against comparison-2026-09-23, recipe-board.json and recipe-floor-id-map.json, with the same_as records applied in memory. Artifact: plan-2026-09-26-2.routing.json identity_measurement",
+        "affected_now": 61,
+        "names": [
+          "day-one cell keys after both items: Fettuccine 7, Pasta Shells 7, Ziti Pasta 5, Spaghetti 5, Orzo Pasta 5, Marinara Sauce 5, Rotini Pasta 5, Green Chile Sauce 4, Sun-Dried Tomatoes (Oil-Packed) 3, Pineapple Chunks 3, Beef Flank/Sirloin Steak 2, Mayonnaise 2, and 1 each for No-Boil Lasagna Noodles, Cheese Tortellini, Japanese Curry Roux, Traditional Pasta Sauce, Enchilada Sauce, Cajun Seasoning, Beef Chuck Roast, Chili Crisp"
+        ],
+        "risk": "Detection only: no price, board cell or recipe moves. On push day the cell mark records about 66 keys (the 61 above plus the 4 banana-pepper cells still pricing Pepperoncini and Walmart's yellow squash on Zucchini until the next build recosts), falling to about 61 at the next -Tighten. Of the 61: 51 are owned by the form/style ruling (2026-09-25-f9c8ce), 7 are board wrong-product candidates for a grocery queue item (Wheat Thins and a bruschetta jar on sun-dried-tomatoes, two sirloin tip rows on sirloin-steak, two light mayo rows on mayonnaise, a chuck roll case on chuck-roast), 3 need a regex look (Aldi 'Tuscan Garden Sundried Tomatoes 8 OZ' may not be oil-packed, Hy-Vee lasagna, one curry roux). Positive control for the widened scan: 'cell|Zucchini|zucchini|walmart|freshyellowsquasheach' present before the split and absent after.",
+        "cell_effects": []
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "(none)",
+          "owner": "n/a",
+          "release": "this item widens no include and changes no matching rule; the word include in its root_fix means the detector reads more cells, not that a commodity admits more names"
+        }
+      ],
+      "freshness": "measured against comparison-2026-09-23 built 2026-09-26 08:06:07 (HELD), recipe-board.json 08:09:16, grocery/out/smp-feed.json 08:10 and HEAD c6783fa8e; the board is being rebuilt in the main checkout by another agent, so the day-one count is recorded against whatever board the developer's data pass reads, and the developer states that board.",
+      "proof": {
+        "must_fire_case": "frozen in audit-ingredient-identity.ps1 -SelfTest: Zucchini costed board:zucchini:nomem:Aldi with Walmart 'Fresh Yellow Squash, Each' names exactly cell|Zucchini|zucchini|walmart|freshyellowsquasheach; Rotini Pasta feed:rotini-pasta through alias {rotini-pasta: pasta} fires on Aldi 'Reggano Spaghetti'; a standing chickpeas cell key does not hide a new 'Kroger Black Beans 15 oz' product in the same cell (child run, exit 2).",
+        "clean_twin": "the zucchini cell with Walmart 'Fresh Zucchini, Each' is silent over 2 cells; Chickpeas with identity_same_as '\\bgarbanzo\\b' is silent on 'Aldi Garbanzo Beans 15.5 OZ' while 'Kroger Black Beans 15 oz' in the same cell still fires; Egg Yolk derived from eggs is silent on 'Great Value Large White Eggs, 60 Count'; without -RecipeBoardFile the recipe-board pair is BLIND, the child exits 3 and -Tighten leaves the cell mark byte-identical.",
+        "commands_run": [
+          "powershell -File meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest -> exit 0, 'audit-ingredient-identity SELF-TEST PASS (40 cases)'",
+          "mutation probe (lib reads only the first store of each cell) -> exit 1, 5 of 40 cases red including the zucchini must-fire; original restored by hash",
+          "data pass -BoardFile C:/Codex/ThriftyCrew/grocery/out/comparison-2026-09-23.json -RecipeBoardFile .../recipe-board.json -AliasMapFile grocery/recipe-floor-id-map.json -Tighten -> exit 2 (the 3 pre-existing main PROXY rises owned by 177835), cell mark RECORDED at 86",
+          "same data pass over 177835's rows + costed (scratch marks) -> check (d) 65 keys, 0 not in the 86",
+          "ops/audit-cross-module-reach.ps1, audit-list-array-wrap, audit-and-comma-case, audit-typed-param-shadow -> exit 0 each; PS parser 0 errors on the three scripts"
+        ],
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (check (d) cases; 52 of 52 after the merge)"
+      },
+      "rollback": "revert the lib, audit script and check-ad-cycles argument hunks, delete ops/out/ingredient-identity-cell-baseline.json and restore the main mark from git; the same_as records are inert without the check and may stay.",
+      "do_not_touch": [
+        "the ruling-owned pairs (no same_as for a pasta shape, a sauce style, crushed pineapple, tortelloni, creole, salsa verde or chili oil until Brad rules)",
+        "the 7 board wrong-product candidates (a grocery queue item owns them; no same_as that would silence them)",
+        "any pricing surface: this item changes detection only"
+      ],
+      "leaves_open": "60 cell keys stand after both items and a rebuild: 51 wait on the form/style ruling (pasta shapes, sauce styles, crushed pineapple, tortellini, cajun/creole, green chile/salsa verde, chili oil: Q-2026-09-26-form-style); 7 are board wrong-product candidates (Wheat Thins and a bruschetta jar on sun-dried-tomatoes, two sirloin tip rows on sirloin-steak, two light mayo rows on mayonnaise, a chuck roll case on chuck-roast) for the grocery weekly item the orchestrator mints in step 8; 2 need a regex look (Aldi 'Tuscan Garden Sundried Tomatoes 8 OZ' oil-packed or not, one Japanese curry roux row). The class itself stays reachable: every pricing surface still prices by commodity id, so a union cell can still price a line with another food; this item makes that visible within a day, it does not prevent it.",
+      "leaves_open_occurrences": 60,
+      "leaves_open_followup": "Q-2026-09-26-form-style",
+      "resolution_note": "RESUMED and shipped on triage/0926-5a9676. The identity check asked about one store per line on one pricing surface: it skipped 946 recipe-board and nomem lines, never read the 234 alias-priced lines, and keyed without the product. Check (d) now reads every store cell a line can be priced from, on both boards and through the alias map (311 pairs, 7,850 lines, 1,426 cells, 0 blind), keyed with store and product, on its own ratchet: day-one cell mark 86 keys on comparison-2026-09-23, 65 once 177835's A-D rows merge, about 60 after the next board build. Twenty one-food-two-names spellings are recorded as reviewed identity_same_as pairs. Check (c)'s union| family is retired; the main mark falls 91 -> about 8 at the landing -Tighten as a family moving to its own mark, not findings fixed. Price fixes ship under 2026-09-26-177835; the ruling half is 2026-09-25-f9c8ce / Q-2026-09-26-form-style.",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "Yes. costed.json at HEAD carries 6,670 board:<id>:<store>, 744 board:<id>:recipeboard-*, 202 board:<id>:nomem:* and 234 feed:<id> lines, and the old check (c) read only the first family's one store. Over comparison-2026-09-23.json (built 2026-09-26 08:06:07), recipe-board.json (08:09:16) and recipe-floor-id-map.json, check (d) reads 311 (item, priced id) pairs from 7,850 costed lines, 1,426 store cells, 0 BLIND, 86 finding keys; the positive control cell|Zucchini|zucchini|walmart|freshyellowsquasheach is present.",
+      "deviation": "Three narrowings, none weakening. (1) The main mark stays at 91: today's main pass RISES by 3 PROXY keys (Lo Mein Noodles, Korean glass noodles, Blackened Seasoning) that 177835's rebids remove, and a rising run never tightens, so 91 -> about 8 is the landing's -Tighten after 177835 (step 4). (2) The cell mark was recorded at 86 keys, not about 61-66, because 177835's rows were not in this branch; 26 of the 86 are 177835-owned (Egg Yolk 6, Fresh Red Chili 6, Blackened Seasoning 6, dangmyeon 3, Pepperoncini 4, Zucchini 1). Measured against 177835's committed A-D rows and costed.json (19aa534c8, with its in-progress commodities.json): 65 keys, every one inside the 86, so the merge is a fall and the landing -Tighten records 86 -> 65. (3) A pair on neither board with every input passed is printed and counted BLIND but does not fail the run (its line prices from no board this check can read); a pair made blind by a MISSING input exits 3 and never writes the cell mark. Found and fixed during the data pass: feed:cannellini-beans+drained read as BLIND until the +pack suffix was stripped (self-test case added). No-Boil Lasagna reads 0 keys, not 1: the plan's oven-ready regex covers today's Hy-Vee row.",
+      "shipped_commit": "88437664f (branch triage/0926-5a9676, unlanded)",
+      "branch": "triage/0926-5a9676",
+      "commits": [
+        "88437664f (branch-local id; cite blobs after the landing rebase)"
+      ],
+      "full_suite": "deferred-to-land",
+      "day_one_mark": "cell mark 86 keys on this branch (board comparison-2026-09-23.json built 2026-09-26 08:06:07); 65 once 177835 A-D is merged (measured); about 60 after the next board build drops the Walmart yellow-squash row and the 4 banana-pepper cells pricing Pepperoncini. Main mark 91 until the landing -Tighten (about 8 after 177835's Pepperoncini rebid).",
+      "leaves_open_owners": [
+        "51: open_questions_for_brad Q-2026-09-26-form-style (plan-2026-09-26-2)",
+        "7: grocery weekly queue item minted by the orchestrator in ship_sequence step 8",
+        "2: they have happened, so no watch: fold them into the same step-8 grocery weekly item as the 7 (the orchestrator mints it; I did not send-alert because the plan routes one item for the whole residual)"
+      ],
+      "landing_note": "After merging triage/0926-177835 run the data pass with -BoardFile/-RecipeBoardFile/-AliasMapFile -Tighten: expect main 91 -> about 8 and cell 86 -> 65 (both falls, spoken). If it prints a cell RISE, that is a new wrong product in a cell, never a merge artefact: the merged set was measured as a subset.",
+      "actual_tool_calls": 33
+    },
+    {
+      "queue_id": "2026-09-25-f9c8ce",
+      "subject": "Triage residual: recipe ingredient identity union rows, 80 lines over 14 pairs (substitutes and a pasta-shape ruling)",
+      "classification": "needs-brad",
+      "evidence": [
+        "Measured 2026-09-26 on comparison-2026-09-23: the 80 costed union lines and 14 pairs reproduce exactly. Of them, the defect half (Zucchini 18, Pepperoncini 3, Korean glass noodles 3, Blackened 1, Egg Yolk 1, Fresh Red Chili 1 = 27 lines) is planned in 2026-09-26-177835. What remains is one question about FORM and STYLE: not-held recipes carrying at least one such line: pasta shape 42 lines / 42 recipes (Pasta Shells 13, Spaghetti 10, Ziti 8, Orzo 4, Fettuccine 2 priced by 'Great Value Penne, 32 oz', Rotini 5 through the rotini-pasta -> pasta alias, priced by 'Reggano Spaghetti' at Aldi); pineapple chunks by crushed 4; cheese tortellini by tortelloni 3; marinara by pasta sauce 21 (alias marinara-sauce -> pasta-sauce, plus Rao's Marinara for Traditional Pasta Sauce); enchilada sauce by 'Las Palmas Medium Red Chile Sauce, 28 oz' 9; chili crisp by 'Lao Gan Ma Fried Chili Oil, 7.41 oz' 2; cajun by 'Tony Chachere's Creole Seasoning' at Fareway 13; green chile sauce by salsa verde 1. 88 distinct not-held recipes of 570."
+      ],
+      "root_cause": "Board commodities are defined for the shopper's cheapest-of-a-class question ('Pasta (dry)', 'Canned Pineapple', 'Cajun / Creole Seasoning'), and whether a different form or style of the same food is the same food for a RECIPE line has never been ruled: the 2026-09-06 form rule (T2: weight or volume unit, format irrelevant) covers board cells, and the 2026-09-22 no-substitute ruling covers different foods.",
+      "resolution_note": "Needs Brad: Q-2026-09-26-form-style (supersedes Q-2026-09-25-pasta-shape). The defect half of this residual (zucchini, pepperoncini, glass noodles, blackened, egg yolk, red chili) shipped under 2026-09-26-177835 and the detection fix under 2026-09-22-5a9676. On an answer: A records identity_same_as per pair (no price moves); B registers member commodities the way zucchini and pepperoncini were split and holds any recipe whose form is carried nowhere in Omaha.",
+      "publish_batch": "none",
+      "status": "needs-brad"
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-26-form-style",
+      "supersedes": "Q-2026-09-25-pasta-shape",
+      "question": "Under your 2026-09-22 ruling (no ingredient priced as a different food), is a different FORM or STYLE of the same food the same food for a recipe line? Measured 2026-09-26: 88 of 570 not-held recipes carry at least one such line. FORM: pasta shape (42 recipes: shells, spaghetti, ziti, orzo, fettuccine and rotini priced by penne or spaghetti), pineapple chunks priced by crushed (4), cheese tortellini by tortelloni (3). STYLE: marinara priced by plain pasta sauce (21), enchilada sauce by Las Palmas Red Chile Sauce (9), cajun seasoning by Tony Chachere's Creole at Fareway (13), chili crisp by Lao Gan Ma Fried Chili Oil (2), green chile sauce by salsa verde (1).",
+      "options": [
+        "A (recommended for FORM): extend your 2026-09-06 form rule T2 to recipes: when the unit is weight or volume, a different shape or cut is the same food. Each pair gets a reviewed same-food record; no price moves, nothing is held. Consequence: a shells recipe keeps pricing from the cheapest dry pasta, which may be spaghetti.",
+        "B (recommended for STYLE): a different style is a different food. Each style gets its own commodity the way zucchini and pepperoncini were split today, and a recipe whose style is carried nowhere in Omaha is held. Consequence: up to 46 recipes reprice from their own style's cells, and any whose style has no Omaha capture comes down until one lands.",
+        "C: B for everything, forms included. Consequence: up to 88 recipes move or hold, and pasta alone needs five or six new commodities with captures before 42 recipes can stay live."
+      ],
+      "owns": "2026-09-25-f9c8ce (and the 51 ruling-owned cell keys left open by 2026-09-22-5a9676)"
+    }
+  ],
+  "discovered_during_review": [
+    "BOARD WRONG-PRODUCT CANDIDATES (not in this dispatch; need one grocery weekly item; not proven beyond the names): sun-dried-tomatoes | Family Fare | 'Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz' | $3.99 / 8.5 oz | $0.4694/oz, a cracker, second-cheapest on the row; sun-dried-tomatoes | Baker's | 'California Sun Dry Sun-Dried Tomatoes Bruschetta Jar' | $4.49 / 9 oz; sirloin-steak | Family Fare CROWN | 'Fresh Usda Choice Whole Sirloin Tip' | $5.49/lb and Sam's Club 'Sirloin Tip, Case priced per pound' $6.47/lb (sirloin tip is cut from the round, and it wins the card for 'Beef Flank/Sirloin Steak' in 25 lines / 28 not-held recipes); mayonnaise | Baker's 'Kroger Light Mayo' and Family Fare 'Our Family Mayo, Light 30 Fl Oz' ($0.133/oz) on the Mayonnaise row; chuck-roast | Sam's Club 'Whole Beef Chuck Roll, Case, priced per pound'."
+  ]
+}
