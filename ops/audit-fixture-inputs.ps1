@@ -82,6 +82,38 @@ function Get-UnpinnedReads {
         $tk.Kind -ne [System.Management.Automation.Language.TokenKind]::HereStringExpandable) { continue }
     for ($ln = $tk.Extent.StartLineNumber + 1; $ln -lt $tk.Extent.EndLineNumber; $ln++) { [void]$inHere.Add($ln - 1) }
   }
+  # A TEMP-ROOTED VARIABLE IS NOT THE REPO (2026-09-26, queue 2026-09-26-ef3d50). The read pattern below keys on the
+  # variable's NAME, so grocery\test-known-wrong-scope.ps1, whose `$root = Join-Path $tmp $name` is a per-run fixture
+  # tree under GetTempPath(), read as three live-rulings dependencies (known-wrong.json, comparison-2026-09-25.json,
+  # recipe-board.json) and turned TC Daily Ratchets 0315 red for a self-test that reads nothing live. A variable is
+  # exempt only when EVERY assignment of it in the block is temp-derived: its right-hand side names GetTempPath(),
+  # $env:TEMP, $env:TMP or New-TemporaryFile, or is a Join-Path over another temp-rooted variable. One assignment from
+  # anything else (Split-Path $PSScriptRoot, a git rev-parse, a parameter default) and every read through it counts.
+  $tempVars = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  $assigns = @{}
+  for ($i = 0; $i -lt $lines.Count; $i++) {
+    if ($inHere.Contains($i) -or $lines[$i].TrimStart().StartsWith('#')) { continue }
+    $am0 = [regex]::Match($lines[$i], '^\s*(?:\[[^\]]+\]\s*)*\$(\w+)\s*=(?!=)\s*(.+)$')
+    if (-not $am0.Success) { continue }
+    $vn0 = $am0.Groups[1].Value
+    if (-not $assigns.ContainsKey($vn0)) { $assigns[$vn0] = New-Object System.Collections.ArrayList }
+    [void]$assigns[$vn0].Add($am0.Groups[2].Value)
+  }
+  $grew = $true
+  while ($grew) {
+    $grew = $false
+    foreach ($vn0 in @($assigns.Keys)) {
+      if ($tempVars.Contains($vn0)) { continue }
+      $allTemp = $true
+      foreach ($rhs in $assigns[$vn0]) {
+        if ($rhs -match '(?i)GetTempPath\(\)|\$env:TE?MP\b|New-TemporaryFile') { continue }
+        $jm = [regex]::Match($rhs, '^\s*\(?\s*Join-Path\s+\$(\w+)\b')
+        if ($jm.Success -and $tempVars.Contains($jm.Groups[1].Value)) { continue }
+        $allTemp = $false; break
+      }
+      if ($allTemp) { [void]$tempVars.Add($vn0); $grew = $true }
+    }
+  }
   for ($i = 0; $i -lt $lines.Count; $i++) {
     if ($inHere.Contains($i)) { continue }
     $l = $lines[$i]
@@ -114,8 +146,9 @@ function Get-UnpinnedReads {
       }
       if ($uses -gt 0 -and $uses -eq $probes) { continue }
     }
-    foreach ($m in [regex]::Matches($l, "Join-Path\s+\`$(?:root|repo|PSScriptRoot|OutDir|OutDirectory)\s+'([^']*\.json)'")) {
-      $rel = $m.Groups[1].Value
+    foreach ($m in [regex]::Matches($l, "Join-Path\s+\`$(root|repo|PSScriptRoot|OutDir|OutDirectory)\s+'([^']*\.json)'")) {
+      if ($tempVars.Contains($m.Groups[1].Value)) { continue }
+      $rel = $m.Groups[2].Value
       if ($rel -match '(?i)regression-inputs') { continue }
       $leaf = ($rel -split '[\\/]')[-1]
       if ($ConfigOk -contains $leaf) { continue }
@@ -222,6 +255,21 @@ if ($SelfTest) {
   $srcR = "if (`$SelfTest) {`n  `$kw = Join-Path `$root 'known-wrong.json'`n  `$b = Read-JsonFile `$kw`n}`n"
   FiT 'MUST FIRE: a live path assigned to a variable and then read is still a finding' `
       ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcR)).Count -eq 1)
+
+  # THE TEMP-ROOTED VARIABLE (2026-09-26, queue 2026-09-26-ef3d50). Frozen from grocery\test-known-wrong-scope.ps1:
+  # $root is a per-run fixture tree under GetTempPath(), so the three .json leaves it names are fixtures it wrote.
+  $srcT = "if (`$SelfTest) {`n  `$tmp = Join-Path ([IO.Path]::GetTempPath()) ('kws-' + 'x')`n  function New-KwTree([string]`$name) {`n    `$root = Join-Path `$tmp `$name`n    [IO.File]::WriteAllText((Join-Path `$root 'known-wrong.json'), '{}')`n    [IO.File]::WriteAllText((Join-Path `$root 'out\comparison-2026-09-25.json'), '{}')`n  }`n  function Invoke-Kw([string]`$root) { & x -ListFile (Join-Path `$root 'known-wrong.json') }`n}`n"
+  FiT 'CLEAN TWIN: a $root whose only assignment is a Join-Path over a GetTempPath() variable is a fixture tree, not the repo' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcT)).Count -eq 0)
+  $srcT2 = "if (`$SelfTest) {`n  `$tmp = Join-Path ([IO.Path]::GetTempPath()) 'x'`n  `$root = Join-Path `$tmp 'a'`n  `$root = Split-Path `$PSScriptRoot -Parent`n  `$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
+  FiT 'MUST FIRE: a $root assigned once from a temp dir and once from the repo is still the repo' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcT2)).Count -eq 1)
+  $srcT3 = "if (`$SelfTest) {`n  `$tmp = `$PSScriptRoot`n  `$root = Join-Path `$tmp 'a'`n  `$b = Read-JsonFile (Join-Path `$root 'known-wrong.json')`n}`n"
+  FiT 'MUST FIRE: a variable merely NAMED tmp that holds the repo does not exempt the reads through it' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcT3)).Count -eq 1)
+  $srcT4 = "if (`$SelfTest) {`n  `$root = Join-Path `$env:TEMP 'fx'`n  `$b = Read-JsonFile (Join-Path `$repo 'known-wrong.json')`n}`n"
+  FiT 'MUST FIRE: a temp-rooted $root does not exempt a read through a DIFFERENT variable ($repo)' `
+      ((Get-UnpinnedReads -Text (Get-SelfTestBlock -Text $srcT4)).Count -eq 1)
 
   # THE WALK, FROM A WORKTREE ROOT (2026-09-11, lib\tree-walk.ps1). Matched on the FULL path, every file under
   # .claude\worktrees\<name> was excluded: no -SelfTest block was found anywhere and the audit exited 3.

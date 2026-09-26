@@ -346,11 +346,24 @@ function Get-TriageUnfinished {
   # with owned_by set, printed as RESUMED-BY, and never counted as RESUME work. An owner that is CLOSED, absent or
   # not a queue id leaves the item RESUME: the owner finished and the class did not.
   $liveOwners = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
+  # AN OWNER THAT FINISHED THE LEFTOVER FINISHES THE ITEM (2026-09-26, triage mid-run, resume-detector). A deviated
+  # item hands its leftover to a follow-on queue item; when that owner has CLOSED with disposition `confirmed` AND its
+  # own newest plan item is `done`, the leftover was fixed and the deviated item is finished. Founding: plan-2026-09-26
+  # closed 2026-09-23-80f302 deviated (followup 2026-09-26-518fff) and 2026-09-26-e0d5cf deviated (followup
+  # 2026-09-26-f73dc7); both owners closed confirmed with plan-2026-09-26-3.json items done, and triage-due still listed
+  # both as RESUME. Every queue id the followup names must be finished this way, and a followup that also names a
+  # watch: owner is not settled by it. An owner closed with its plan item needs-more-time, deviated or absent, or closed
+  # with any other disposition, leaves the item RESUME exactly as before (the fccb69 case): the owner closed and the
+  # class did not finish. needs-more-time never finishes by this rule.
+  $closedConfirmed = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
   foreach ($i in @($Items)) {
     if (-not $i) { continue }
     $st0 = ''
     try { $st0 = ([string]$i.status).Trim().ToLowerInvariant() } catch { $st0 = '' }
     if ($st0 -eq 'open' -or $st0 -eq 'needs-brad') { [void]$liveOwners.Add(([string]$i.id).Trim()) }
+    $dp0 = ''
+    try { if ($i.PSObject.Properties['disposition']) { $dp0 = ([string]$i.disposition).Trim().ToLowerInvariant() } } catch { $dp0 = '' }
+    if ($st0 -eq 'resolved' -and $dp0 -eq 'confirmed') { [void]$closedConfirmed.Add(([string]$i.id).Trim()) }
   }
   foreach ($i in @($Items)) {
     if (-not $i) { continue }
@@ -390,6 +403,19 @@ function Get-TriageUnfinished {
     $owners = New-Object System.Collections.Generic.List[string]
     $fu = ''
     try { if ($route.item -and $route.item.PSObject.Properties['leaves_open_followup']) { $fu = [string]$route.item.leaves_open_followup } } catch { $fu = '' }
+    if ($ps -eq 'deviated' -and $fu -and $fu -notmatch '(?i)watch:') {
+      $fuIds = @([regex]::Matches($fu, '\d{4}-\d{2}-\d{2}-[0-9a-f]{6}') | ForEach-Object { $_.Value } | Where-Object { $_ -ne $id } | Sort-Object -Unique)
+      $allDone = ($fuIds.Count -gt 0)
+      foreach ($oid in $fuIds) {
+        if (-not $closedConfirmed.Contains($oid)) { $allDone = $false; break }
+        $oRoute = $null
+        try { $oRoute = Get-TriageReturnRoute @($oid) $plans } catch { $oRoute = $null }
+        $oSt = ''
+        try { if ($oRoute -and $oRoute.found) { $oSt = ([string]$oRoute.status).Trim().ToLowerInvariant() } } catch { $oSt = '' }
+        if ($oSt -ne 'done') { $allDone = $false; break }
+      }
+      if ($allDone) { continue }
+    }
     foreach ($m in [regex]::Matches($fu, '\d{4}-\d{2}-\d{2}-[0-9a-f]{6}')) {
       if ($m.Value -ne $id -and $liveOwners.Contains($m.Value) -and -not $owners.Contains($m.Value)) { [void]$owners.Add($m.Value) }
     }

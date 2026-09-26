@@ -43,7 +43,9 @@
                               "name":  "TC Recipe Harvest Crawl",
                               "max_age_hours":  30,
                               "why":  "18:00 daily recipe candidate crawl (meal-prep/pipeline/harvest-crawl.ps1). Registered 2026-08-24 and likewise never added here. proves = the dated crawl log, which is appended on every run including one that finds no new candidates; candidate-pool.json would have been the wrong proof because a legitimately empty crawl never touches it, and a proof that only exists on a good day pages on the ordinary ones.",
-                              "proves":  "meal-prep/runs/_harvest-log/crawl-*.log"
+                              "proves":  "meal-prep/runs/_harvest-log/crawl-*.log",
+                              "planned_end":  "2026-09-25T00:00:00-05:00",
+                              "planned_end_why":  "Brad 2026-09-17 (4d5d96b43): the daily crawl stops; a five-evening retry of the four 429 publishers, 09-20..09-24, then the EndBoundary in ops/scheduled-tasks/tc-recipe-harvest-crawl.xml. All five ran rc=0 (grocery/out/logs/harvest-crawl-2026-09-2[0-4].log). The heartbeat reads an expired window at exactly this instant as ended as planned; any other end still pages (queue 2026-09-26-b2f93f)."
                           },
                           {
                               "name":  "TC Sidecar Watchdog",
