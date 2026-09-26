@@ -1814,7 +1814,16 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         # this board would record, is handed to the caller in out\post-deferred.json, and capture-run publishes it only
         # after the edge serves the committed board.json and smp-feed.json byte for byte (Get-DeferredPostDecision).
         try {
-          $pdDoc = [ordered]@{ date = $asofS; sig = $sigAfter; sig_file = $sigFile; written = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); flips = @($flips); guards_rc = $guardsRc }
+          # board_sha256 + compare_file (2026-09-26, queue 2026-09-26-518fff): WHICH board this post would name, so a later
+          # run can republish a held post once that exact board is on origin/main and at the edge, whoever landed it
+          # (capture-run Get-HeldPostDecision). Uppercase hex, the same form lib\git-blob-lib.ps1's Get-Sha256Hex prints.
+          $pdBoardSha = ''
+          try {
+            $pdBoardF = Join-Path (Split-Path $root -Parent) 'public\board.json'
+            if (Test-Path -LiteralPath $pdBoardF) { $pdH = [System.Security.Cryptography.SHA256]::Create(); try { $pdBoardSha = ([BitConverter]::ToString($pdH.ComputeHash([IO.File]::ReadAllBytes($pdBoardF))) -replace '-', '') } finally { $pdH.Dispose() } }
+          } catch { $pdBoardSha = '' }
+          $pdCmp = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+          $pdDoc = [ordered]@{ date = $asofS; sig = $sigAfter; sig_file = $sigFile; written = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); flips = @($flips); guards_rc = $guardsRc; board_sha256 = $pdBoardSha; compare_file = $(if ($pdCmp) { $pdCmp.FullName } else { '' }) }
           [IO.File]::WriteAllText((Join-Path $OutDir 'post-deferred.json'), ($pdDoc | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
           Log 'POST DEFERRED to the caller: it publishes after the served data it points at is live (out\post-deferred.json)'
           $summary += 'DEFERRED  the board post publishes after capture-run confirms board.json and smp-feed.json are live'
