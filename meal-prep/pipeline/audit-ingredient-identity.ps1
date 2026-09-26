@@ -272,7 +272,7 @@ if ($SelfTest) {
   $zk = KeysOf $zres
   Check 'MUST FIRE  a nomem:Aldi zucchini line names the Walmart yellow squash cell: cell|Zucchini|zucchini|walmart|freshyellowsquasheach' (($zk.Count -eq 1) -and ($zk -contains 'cell|Zucchini|zucchini|walmart|freshyellowsquasheach')) ($zk -join ',')
   $zres = CellRun @(Rw 'Zucchini' 'zucchini') @(Ln 'Zucchini' 'board:zucchini:nomem:Aldi') (Ix @(Bd 'zucchini' @('Aldi', 'Zucchini Squash 1 LB', 'Walmart', 'Fresh Zucchini, Each')))
-  Check 'CLEAN TWIN  the same zucchini cell with Walmart "Fresh Zucchini, Each" has no finding and reads 2 cells' ((@($zres.findings).Count -eq 0) -and ($zres.cells -eq 2)) ((KeysOf $zres) -join ',')
+  Check 'MUST NOT FIRE  the same zucchini cell with Walmart "Fresh Zucchini, Each" has no finding and reads 2 cells' ((@($zres.findings).Count -eq 0) -and ($zres.cells -eq 2)) ((KeysOf $zres) -join ',')
   # 2. Rotini Pasta priced feed:rotini-pasta through the alias map to pasta, whose Aldi cell is spaghetti.
   $pix = Ix @(Bd 'pasta' @('Aldi', 'Reggano Spaghetti'))
   $rres = CellRun @(Rw 'Rotini Pasta' 'rotini-pasta') @(Ln 'Rotini Pasta' 'feed:rotini-pasta') $pix $emptyIx @{ 'rotini-pasta' = 'pasta' }

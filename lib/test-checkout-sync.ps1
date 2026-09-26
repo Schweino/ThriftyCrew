@@ -1018,7 +1018,7 @@ try {
       $vf = Join-Path $E.bot 'tools\verifier.txt'; $vmd = Md5 $vf
       $cls = if ($arm -eq 'registered') { { param($p) $p -eq 'tools/verifier.txt' } } else { { param($p) throw 'registry unreadable' } }
       $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = $cls }
-      T ('CLEAN TWIN (' + $arm + '): not synced, the file untouched, nothing set aside') (($s.outcome -ne 'synced') -and ($s.class -eq 'foreign') -and ((Md5 $vf) -eq $vmd) -and (@($s.intruders | Where-Object { $_ }).Count -eq 0)) ($s.outcome + '/' + $s.class + ' ' + (ReadOr $vf))
+      T ('MUST NOT FIRE (' + $arm + '): not synced, the file untouched, nothing set aside') (($s.outcome -ne 'synced') -and ($s.class -eq 'foreign') -and ((Md5 $vf) -eq $vmd) -and (@($s.intruders | Where-Object { $_ }).Count -eq 0)) ($s.outcome + '/' + $s.class + ' ' + (ReadOr $vf))
     }
   }
 
