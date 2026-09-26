@@ -73,11 +73,19 @@ try {
     '"source_ad": "everyday club price (fixture)", "as_of": "2026-09-23", "sams_item_id": "FIXTUREWIDGET1", "marked_down": true, "base_price": 5.00, ' +
     '"ad_from": "2026-08-26", "ad_to": "2026-09-25", "ad_basis": "TTL - fixture" } ] }')
 
-  function Invoke-Board([string]$tag, [string]$judge) {
+  # $samsUnion: @{ 'sams-deals-<date>.json' = '<json>' } placed in the board's own out\sams, and -SamsFile NOT passed, so
+  # the engine unions them the way the live chain does. Empty = the single pinned $sams file, as before.
+  function Invoke-Board([string]$tag, [string]$judge, [hashtable]$samsUnion = @{}) {
     $od = Join-Path $g ('board-' + $tag)
     New-Item -ItemType Directory -Force $od | Out-Null
+    $samsArgs = @('-SamsFile', $sams)
+    if ($samsUnion.Count) {
+      New-Item -ItemType Directory -Force (Join-Path $od 'sams') | Out-Null
+      foreach ($k in $samsUnion.Keys) { Put (Join-Path $od ('sams\' + $k)) $samsUnion[$k] }
+      $samsArgs = @()
+    }
     $argv = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $g 'compare-deals.ps1'), '-MinStores', '1', '-OutDir', $od,
-      '-AdsFile', $ads, '-SamsFile', $sams, '-RegularDir', (Join-Path $fx 'regular'), '-ExtraDir', $fx,
+      '-AdsFile', $ads) + $samsArgs + @('-RegularDir', (Join-Path $fx 'regular'), '-ExtraDir', $fx,
       '-CommoditiesFile', $com, '-BandsFile', $bands, '-OutName', 'clock', '-NoProvenanceContract')
     if ($judge) { $argv += @('-JudgeDate', $judge) }
     # No stderr redirection: this file runs under EAP=Stop (ops-and-gates og-04). Everything asserted on is read back
@@ -108,6 +116,19 @@ try {
   Case 'MUST FIRE  ...and with Aldi''s sale gone the crown moves to that reverted Sam''s price' ([string]$ended.row.cheapest_store -eq "Sam's Club") (Show $ended)
   Case 'MUST FIRE  the health record counts the dropped sale and the rollback split, and names the judge date' ($ended.doc -and [int]$ended.doc.health.expired_sale_rows_dropped -ge 1 -and [int]$ended.doc.health.rollbacks_with_revert -eq 1 -and [string]$ended.doc.health.judged_on -eq '2026-09-26') ('health=' + ($ended.doc.health | ConvertTo-Json -Compress))
 
+  # ---- THE SPLIT MUST NOT DEFEAT THE UNION'S "NEWEST SIGHTING WINS" (found by the zero-lag A/B, 2026-09-26) ----
+  # Sam's captures load newest first and the identical-row dedupe keeps only the newest sighting of a product at an
+  # unchanged price, so an older capture never looks "deeper" for holding it. Retyping the newest sighting to sale broke
+  # that key: the older identical row survived, its capture rejoined as deeper, and its OTHER, cheaper product won
+  # (oatmeal, olive-oil, sliced-cheese on the real board). Frozen shape: 09-19 holds P at $3.00 and Q at $2.50; 09-23
+  # holds only P, marked down to $3.00 from $5.00. The pre-split engine priced P; so must this one.
+  $mkRow = { param([string]$item, [string]$price, [bool]$md, [string]$to) '{ "store": "Sam''s Club", "item": "' + $item + '", "ad_price": "' + $price + '", "size": "10 oz", "regular": null, "source_ad": "everyday club price (fixture)", "as_of": "2026-09-19", "sams_item_id": "' + ($item -replace '\W', '') + '"' + $(if ($md) { ', "marked_down": true, "base_price": 5.00, "ad_from": "2026-09-01", "ad_to": "' + $to + '", "ad_basis": "TTL - fixture"' } else { '' }) + ' }' }
+  $u19 = '{ "store": "Sam''s Club", "price_type": "everyday", "deals": [ ' + (& $mkRow 'Fixture Widget 10 oz' '$3.00' $false '') + ', ' + (& $mkRow 'Fixture Widget Value 10 oz' '$2.50' $false '') + ' ] }'
+  $u23 = '{ "store": "Sam''s Club", "price_type": "everyday", "deals": [ ' + (& $mkRow 'Fixture Widget 10 oz' '$3.00' $true '2026-09-30') + ' ] }'
+  $un = Invoke-Board 'union' '2026-09-24' @{ 'sams-deals-2026-09-19.json' = $u19; 'sams-deals-2026-09-23.json' = $u23 }
+  $sUn = Cell $un "Sam's Club"
+  Case 'MUST FIRE  a markdown split in the newest Sam''s capture does not let an older capture rejoin as deeper: Sam''s prices P at 0.30/oz, not the older Q at 0.25' ($un.rc -eq 0 -and $sUn -and [math]::Abs([double]$sUn.per_unit - 0.3) -lt 0.0001 -and [string]$sUn.item -notmatch 'Value') (Show $un)
+
   # ---- no -JudgeDate: a live build judges at the real date ----
   $dflt = Invoke-Board 'default' ''
   $realToday = (Get-Date).ToString('yyyy-MM-dd')
@@ -117,7 +138,7 @@ try {
 } finally {
   Remove-Item -LiteralPath $base -Recurse -Force -ErrorAction SilentlyContinue
 }
-$want = 8
+$want = 9
 if ($script:bcRan -ne $want) { Write-Output ('  FAIL  the suite ran ' + $script:bcRan + ' case(s), not the ' + $want + ' it lists'); $script:bcFail++ }
 if ($script:bcFail) {
   Write-Output ('test-board-clock SELF-TEST FAIL (' + $script:bcFail + ' of ' + $want + ')')

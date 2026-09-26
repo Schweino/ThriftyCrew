@@ -20,7 +20,17 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          shell before a slow store posts. A router-driven Fareway sweep pushes '/fareway-meat-grocery/s?k=<term>' (basename is /store),
          waits ~1.5 s, THEN resetStore(), then settles - an immediate reset still leaks the previous term's rows:
          memory fareway-router-sweep-needs-apollo-reset.
-      4. Spawn the four store agents together. Give each ONLY its own store's section of PER-STORE METHOD below,
+      3a. CREATE THE TABS YOURSELF, BEFORE SPAWNING (2026-09-26). All agents share ONE Chrome MCP tab group. When
+         any agent closes the group's LAST tab the group is destroyed and recreated, and every other agent's tab
+         drops out of it and becomes unreachable mid-sweep (its in-memory results are lost); and a call made
+         without a tabId lands on the group's first tab, whoever owns it. Measured 2026-09-26: Aldi lost three
+         tabs and captured nothing, Sam's lost a finished 45-term sweep and re-swept (90 searches). So: call
+         tabs_context_mcp(createIfEmpty) and keep that first tab as a KEEPER nobody uses or closes; create one
+         tab per store with tabs_create_mcp; pass each agent ITS tabId. Agents must pass that tabId on EVERY
+         call, never call tabs_create_mcp, tabs_close_mcp or tabs_context_mcp(createIfEmpty), and never
+         navigate without a tabId. You close all five tabs after the last agent reports.
+      4. Spawn the four store agents together (overriding the tab lines below: each agent works ONLY in the tabId you
+         gave it and creates or closes no tab). Give each ONLY its own store's section of PER-STORE METHOD below,
          the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
          its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
          assert its store and In-Store/pickup mode before trusting a price; post the emitter's output UNALTERED to
@@ -28,6 +38,26 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
          promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
          task on 2026-09-13, and the stores went unread for six days.
+         MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5).
+         This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
+         refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
+         and the builders REFUSE a capture with no store line, the wrong store or a non-In-Store mode, so a
+         slip by the cheaper model is refused, not published. The pasted script text is most of each agent's
+         cost, and that is billed at the agent's model.
+         FAREWAY STAYS ON OPUS until its contamination and settled-count checks are enforced in code (the
+         extractor scoping to the active query, or select-fareway-shop refusing): today they live only in the
+         brief, and a contaminated capture looks like a good deep one. Then move it to Sonnet too.
+         TRIAL BAR, written 2026-09-26 before any Sonnet run. Over the first 5 Sonnet days, per store:
+           - zero builder refusals for store/mode/straddle (any one sends that store back to Opus);
+           - terms with rows / terms requested >= 90%, stated with both numbers in the report;
+           - capture rows per term, 5-day mean within 20% of the Opus baseline below.
+         Opus baseline, captures 2026-09-21..25 (rows / terms with rows): Walmart 48-50 (1462/30, 1544/32,
+         1335/27, 1719/35, 1750/35); Aldi 57-69 (522/9, 1082/19, 1099/17, 1453/21, 1291/21); Sam's 20-28
+         (2034/95, 278/10, 1459/71, 887/45, 1645/69). Terms REQUESTED were not recorded on those days, so
+         coverage has no Opus baseline; the 90% bar is absolute. Rows per term moves with WHICH terms are asked,
+         so a miss on that line alone is a reason to look, not to revert. Record each trial day as one row per
+         store in grocery\out\logs\browser-refresh-model-trial.jsonl
+         ({date, store, model, requested, with_rows, rows, unusable, builder_refused}).
       5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
          build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
          they write out\regular and advance the shared cursor, so they do not run side by side.

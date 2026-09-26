@@ -2397,7 +2397,10 @@ function Add-Norm {
         # THE PROVENANCE CONTRACT'S INPUTS (2026-09-19): the capture row as read ($ProvRow - separate from $SrcRow,
         # which some call sites withhold on purpose), whether it is a CAPTURE (judged) or an AD-flyer row (judged by
         # its own window), and what the capture FILE says about the store it was read at.
-        $ProvRow = $null, $ProvKind = 'ad', $FileSource = '')
+        $ProvRow = $null, $ProvKind = 'ad', $FileSource = '',
+        # THE TYPE THIS ROW HAD BEFORE A ROLLBACK SPLIT (2026-09-26, PLAN-board-clock W1b). Only the identical-row
+        # dedupe after matching reads it - see the note there. '' = the row's own price_type.
+        $DedupeType = '')
   # THE FORMAT LAYER, AND THE ONE DROP HERE THAT SAID NOTHING (2026-09-07, backlog E5). A row whose
   # name did not parse vanishes before any business rule runs, so a capture whose name field moved
   # would yield fewer rows and produce no signal at all - "silent by construction". It is still
@@ -2460,7 +2463,7 @@ function Add-Norm {
   # split_from: the WHOLE flyer line this row was cut out of, when Split-TwoProductAdLine cut it (queue
   # 2026-09-10-582032). Carried so audit-match-soundness and the identity table can show provenance, and so
   # Get-UnitPrice can tell a part whose size is its own from a two-size line nobody has split.
-  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
+  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; dedupe_type=[string]$DedupeType; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
 }
 $ads = Read-JsonFile $AdsFile
 # TWO DATES, EACH NAMED FOR WHAT IT IS (2026-09-26, design\PLAN-board-clock-2026-09-26.md).
@@ -2657,7 +2660,7 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
         # ONLY: that unit price describes what the store charges today, and pairing it with the was-price below would
         # manufacture a disagreement out of a discount.
         $rowBasis = if ($rowPt -ne $pt) { 'ttl' } else { '' }
-        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $rowPt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -AdBasis $rowBasis -ProductId $partProdId -SrcRow $d -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
+        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $rowPt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -AdBasis $rowBasis -ProductId $partProdId -SrcRow $d -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource -DedupeType $pt
         if ($null -ne $revertTo) {
           Add-Norm -Store $d.store -Name $pn -PriceText ('$' + $revertTo.ToString('0.00', [Globalization.CultureInfo]::InvariantCulture)) -SizeText $pSize -Regular $null -SourceAd $d.source_ad -PriceType 'everyday' -SrcDate $sd -ProductId $partProdId -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
           $script:RollbackRevert++
@@ -2982,7 +2985,17 @@ if ($Explain) {
 
 # dedup identical rows (Family Fare's circular API repeats items across pages)
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]
-foreach ($d in $deals) { $k = ($d.store + '|' + $d.name + '|' + $d.price_text + '|' + $d.size_text + '|' + $d.price_type); if (-not $seen.ContainsKey($k)) { $seen[$k]=$true; $ded.Add($d) } }
+# THIS DEDUPE IS ALSO THE UNION'S "NEWEST SIGHTING WINS" (measured 2026-09-26, PLAN-board-clock W1b). Sam's captures
+# load newest first, so when a product shows the SAME price in several captures only the newest sighting survives here,
+# and its older capture never counts as deeper in Select-FreshestCaptureRows. The rollback split retypes the newest
+# sighting's cut price to sale; keyed on that type, an older identical everyday sighting stopped matching, survived,
+# made its old capture "deeper", and handed 3 Sam's cells to an older, cheaper product (oatmeal, olive-oil,
+# sliced-cheese) in the zero-lag A/B. So a split row dedupes on the type it had BEFORE the split (dedupe_type).
+foreach ($d in $deals) {
+  $dt = if ($d.PSObject.Properties['dedupe_type'] -and [string]$d.dedupe_type) { [string]$d.dedupe_type } else { [string]$d.price_type }
+  $k = ($d.store + '|' + $d.name + '|' + $d.price_text + '|' + $d.size_text + '|' + $dt)
+  if (-not $seen.ContainsKey($k)) { $seen[$k]=$true; $ded.Add($d) }
+}
 $deals = $ded
 
 # Flat list of every matched deal (priced or not). Grouping by id afterward avoids per-id hashtable indexing.

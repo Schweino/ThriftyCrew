@@ -32,6 +32,15 @@ restating it, so there is one copy of every rule and nothing here can drift from
   guard to scope is a per-guard change with its own fixture, never a default.** The rules and every consumer of the
   exit code are in `grocery/cell-quarantine-lib.ps1` and `grocery/triage-plans/plan-2026-09-21-4.json`; the fixtures are
   `grocery/test-cell-quarantine.ps1`. `design/PLAN-per-cell-quarantine-2026-09-21.md` is the spec.
+- **THE BOARD HAS THREE DATES, AND "NOW" IS NEVER THE FIRST** (2026-09-26, Brad's D1-D3). `week_of`, and the D in
+  `comparison-<D>.json` and every sibling, is the AD SET: the newest `ads-<D>.json`, written only on a day a weekly ad
+  is pulled, so it lags the real date (3 days on 09-26, and every reader that used it as "now" failed at once: ended
+  sales priced and crowned, the rehearsal refusing every push, a stopped feed reading fresh). `judged_on` is the real
+  date the engine judged validity at (`compare-deals -JudgeDate`, default today; a pinned run SAYS its date); per-cell
+  `as_of` is when the price was read. An age is measured from `as_of` to the real date, or to `judged_on`; `week_of`
+  and the file-name date only NAME and ORDER things. Read them through `lib/board-clock.ps1`; never `built_at` for data
+  age (a build date launders old captures). `ops/audit-board-clock.ps1` ratchets new uses.
+  `design/PLAN-board-clock-2026-09-26.md`, [[the-board-has-three-dates]].
 - **`known-wrong.json` is the MAIN-board corrector, and `comparison-*.json` is rebuilt daily.** A fresh
   ruling reads as red until the next build. That is on purpose, not a bug to chase.
   [[known-wrong-is-the-main-board-corrector]]
