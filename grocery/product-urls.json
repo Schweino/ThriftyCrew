@@ -2270,12 +2270,6 @@
                                                     "verified":  "2026-07-29 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  0.265
                                                 },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24314636-fareway-ripe-olives-pitted-large-6-oz",
-                                                       "price":  2,
-                                                       "size":  "6 oz",
-                                                       "name":  "Fareway Large Pitted Ripe Olives"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2970354/that-s-smart-large-pitted-ripe-olives",
                                                       "price":  1.97,
@@ -2303,6 +2297,13 @@
                                                        "price":  "$1.97",
                                                        "size":  "6 oz",
                                                        "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
+                                                   },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24314636-fareway-ripe-olives-pitted-large-6-oz",
+                                                       "name":  "Fareway Large Pitted Ripe Olives",
+                                                       "price":  "$2.29",
+                                                       "size":  "6 oz",
+                                                       "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
                                                    }
                                    },
                   "black-pepper":  {
@@ -2360,12 +2361,6 @@
                                                                 "size":  "8.1 oz",
                                                                 "verified":  "2026-08-15 DERIVED from the price row (same record the board priced)"
                                                             },
-                                            "Fareway":  {
-                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458588-badia-spices-black-pepper-whole-16-oz",
-                                                            "price":  7.99,
-                                                            "size":  "16 oz",
-                                                            "name":  "Badia Spices Whole Black Pepper"
-                                                        },
                                             "Walmart":  {
                                                             "url":  "https://www.walmart.com/ip/44981959",
                                                             "name":  "McCormick Non-GMO Kosher Whole Black Pepper, 3.5 oz Bottle",
@@ -2379,7 +2374,14 @@
                                                                     "price":  "$10.18",
                                                                     "size":  "19.5 oz",
                                                                     "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                                }
+                                                                },
+                                            "Fareway":  {
+                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1458588-badia-spices-black-pepper-whole-16-oz",
+                                                            "name":  "Badia Spices Whole Black Pepper",
+                                                            "price":  "$9.99",
+                                                            "size":  "16 oz",
+                                                            "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                        }
                                         },
                   "bleach":  {
                                  "commodity":  "bleach",

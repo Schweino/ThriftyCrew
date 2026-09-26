@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  38950,
+    "evidence_rows":  39097,
     "derived_commodities":  562,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  8019
+                                "newly_refused_rows":  8048
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  5040
+                                "newly_refused_rows":  5056
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  3457
+                                "newly_refused_rows":  3467
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  2523
+                                "newly_refused_rows":  2531
                             }
                 },
     "typed_fields_ignored":  [
@@ -718,6 +718,14 @@
                               "derived":  "0.01025-0.25625"
                           },
                           {
+                              "id":  "beef-broth",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Butterfield Farms Roast Beef in Beef Broth 12 oz., 4 pk.",
+                              "per_unit":  0.3567,
+                              "typed":  "none",
+                              "derived":  "0.01025-0.25625"
+                          },
+                          {
                               "id":  "ramen",
                               "store":  "Sam\u0027s Club",
                               "name":  "Samyang Buldak Carbonara Spicy Chicken Ramen Bowl, 3.7 oz., 6 pk.",
@@ -746,6 +754,14 @@
                               "store":  "Sam\u0027s Club",
                               "name":  "Marathon Multifold 1-Ply White Paper Towels 16 pks., 250 towels/pk",
                               "per_unit":  0.008,
+                              "typed":  "none",
+                              "derived":  "0.21583-5.39575"
+                          },
+                          {
+                              "id":  "paper-towels",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Marathon Multifold 1-Ply White Paper Towels 16 pks., 250 towels/pk",
+                              "per_unit":  0.0082,
                               "typed":  "none",
                               "derived":  "0.21583-5.39575"
                           },
@@ -886,6 +902,22 @@
                               "derived":  "0.0195-0.4875"
                           },
                           {
+                              "id":  "chicken-thighs",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Member\u0027s Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
+                              "per_unit":  124.01,
+                              "typed":  "none",
+                              "derived":  "0.37567-9.39175"
+                          },
+                          {
+                              "id":  "chicken-breast",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Boneless Skinless Chicken Breast, Case, priced per pound",
+                              "per_unit":  132.54,
+                              "typed":  "none",
+                              "derived":  "0.558-13.95"
+                          },
+                          {
                               "id":  "batteries",
                               "store":  "Sam\u0027s Club",
                               "name":  "Kidde 4\" Compact Battery Powered Smoke Detector, AA Batteries Included",
@@ -974,10 +1006,26 @@
                               "derived":  "0.02948-0.737"
                           },
                           {
+                              "id":  "white-wine",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Decoy Sauvignon Blanc Wine, 750 ml",
+                              "per_unit":  0.8075,
+                              "typed":  "none",
+                              "derived":  "0.03142-0.7855"
+                          },
+                          {
                               "id":  "shampoo",
                               "store":  "Sam\u0027s Club",
                               "name":  "NatureWell Living For Good Shampoo \u0026 Conditioner, 24 fl. oz., 2 pk.",
                               "per_unit":  0.5829,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "NatureWell Living For Good Shampoo \u0026 Conditioner, 24 fl. oz., 2 pk.",
+                              "per_unit":  0.6246,
                               "typed":  "none",
                               "derived":  "0.01882-0.4705"
                           },
@@ -1010,6 +1058,14 @@
                               "store":  "Sam\u0027s Club",
                               "name":  "Nexxus Fullology Shampoo and Conditioner Pack, 24 fl. oz., 2 pk.",
                               "per_unit":  0.6867,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Nexxus Fullology Shampoo and Conditioner Pack, 24 fl. oz., 2 pk.",
+                              "per_unit":  0.8117,
                               "typed":  "none",
                               "derived":  "0.01882-0.4705"
                           },
@@ -1062,10 +1118,26 @@
                               "derived":  "0.314-7.85"
                           },
                           {
+                              "id":  "bread",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "King Arthur Bread Flour, 10 lbs.",
+                              "per_unit":  8.98,
+                              "typed":  "none",
+                              "derived":  "0.314-7.85"
+                          },
+                          {
                               "id":  "grapefruit",
                               "store":  "Sam\u0027s Club",
                               "name":  "NatureWell Bergamot \u0026 Grapefruit Moisturizing Cream, 16 oz., 2 pk.",
                               "per_unit":  8.99,
+                              "typed":  "none",
+                              "derived":  "0.3-7.5"
+                          },
+                          {
+                              "id":  "grapefruit",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "NatureWell Bergamot \u0026 Grapefruit Moisturizing Cream, 16 oz., 2 pk.",
+                              "per_unit":  9.99,
                               "typed":  "none",
                               "derived":  "0.3-7.5"
                           },
@@ -1104,6 +1176,14 @@
                           {
                               "id":  "hand-soap",
                               "store":  "Sam\u0027s Club",
+                              "name":  "Safeguard Skin Zen Hand Wash, Variety Pack, 16 oz., 3 pk.",
+                              "per_unit":  0.3117,
+                              "typed":  "none",
+                              "derived":  "0.01216-0.304"
+                          },
+                          {
+                              "id":  "hand-soap",
+                              "store":  "Sam\u0027s Club",
                               "name":  "Marathon Gentle Foam Hand Soap Refill, Fragrance-Free (1,000 ml)",
                               "per_unit":  0.53,
                               "typed":  "none",
@@ -1116,6 +1196,14 @@
                               "per_unit":  0.31,
                               "typed":  "none",
                               "derived":  "0.01216-0.304"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Nate\u0027s Honey New Zealand Manuka Honey, 13.2 oz.",
+                              "per_unit":  1.5136,
+                              "typed":  "none",
+                              "derived":  "0.05411-1.35275"
                           },
                           {
                               "id":  "maple-syrup",
@@ -1138,6 +1226,14 @@
                               "store":  "Sam\u0027s Club",
                               "name":  "Everyday Dose Medium Roast Coffee+",
                               "per_unit":  2.2399,
+                              "typed":  "none",
+                              "derived":  "0.07214-1.8035"
+                          },
+                          {
+                              "id":  "coffee",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Everyday Dose Medium Roast Coffee+",
+                              "per_unit":  2.8003999999999998,
                               "typed":  "none",
                               "derived":  "0.07214-1.8035"
                           },
@@ -1166,6 +1262,14 @@
                               "derived":  "0.00589-0.14725"
                           },
                           {
+                              "id":  "peaches",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "NatureWell Peach Blossom Moisturizing Cream, 16 oz., 2 pk.",
+                              "per_unit":  9.99,
+                              "typed":  "none",
+                              "derived":  "0.36887-9.22175"
+                          },
+                          {
                               "id":  "microwave-popcorn",
                               "store":  "Sam\u0027s Club",
                               "name":  "Hawaiian Hurricane Microwave Popcorn 6 oz., 4 pk.",
@@ -1178,6 +1282,14 @@
                               "store":  "Sam\u0027s Club",
                               "name":  "Crest 3D White Deep Stain Remover Whitening Toothpaste, 2.1 oz., 4 pk.",
                               "per_unit":  2.1393,
+                              "typed":  "none",
+                              "derived":  "0.0223-0.5575"
+                          },
+                          {
+                              "id":  "stain-remover",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Crest 3D White Deep Stain Remover Whitening Toothpaste, 2.1 oz., 4 pk.",
+                              "per_unit":  2.3774,
                               "typed":  "none",
                               "derived":  "0.0223-0.5575"
                           },
@@ -1232,6 +1344,14 @@
                           {
                               "id":  "bananas",
                               "store":  "Sam\u0027s Club",
+                              "name":  "Premier Protein 30g High Protein Shake, Bananas \u0026 Cream 11 fl. oz., 15 pk.",
+                              "per_unit":  402.7897,
+                              "typed":  "none",
+                              "derived":  "0.099-2.475"
+                          },
+                          {
+                              "id":  "bananas",
+                              "store":  "Sam\u0027s Club",
                               "name":  "Dole Freshly Fetched Molded Chew, Banana, 2 lb. Bag",
                               "per_unit":  9.99,
                               "typed":  "none",
@@ -1280,8 +1400,32 @@
                           {
                               "id":  "shampoo",
                               "store":  "Sam\u0027s Club",
+                              "name":  "Nexxus Therappe Moisture Shampoo, 43 fl. oz.",
+                              "per_unit":  0.546,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Nexxus Color Assure Shampoo and Conditioner Combo Pack, 32 fl. oz., 2 pk.",
+                              "per_unit":  0.5466,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Sam\u0027s Club",
                               "name":  "NatureWell Maldives Shampoo \u0026 Conditioner, 16 fl. oz., 2 pk.",
                               "per_unit":  0.5619,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "NatureWell Maldives Shampoo \u0026 Conditioner, 16 fl. oz., 2 pk.",
+                              "per_unit":  0.6244,
                               "typed":  "none",
                               "derived":  "0.01882-0.4705"
                           },
@@ -1362,6 +1506,14 @@
                               "store":  "Sam\u0027s Club",
                               "name":  "Bloom Pop Prebiotic Soda Variety Pack, 12 fl. oz., 15 pk.",
                               "per_unit":  0.0888,
+                              "typed":  "none",
+                              "derived":  "0.00296-0.074"
+                          },
+                          {
+                              "id":  "soda",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Bloom Pop Prebiotic Soda Variety Pack, 12 fl. oz., 15 pk.",
+                              "per_unit":  0.111,
                               "typed":  "none",
                               "derived":  "0.00296-0.074"
                           },
@@ -1454,6 +1606,14 @@
                               "derived":  "0.747-18.675"
                           },
                           {
+                              "id":  "butter",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "NatureWell Tinted Lip Butter, 0.50 oz., 4 pk.",
+                              "per_unit":  159.52,
+                              "typed":  "none",
+                              "derived":  "0.747-18.675"
+                          },
+                          {
                               "id":  "milk",
                               "store":  "Sam\u0027s Club",
                               "name":  "Horizon Organic Whole Milk, 8 fl. oz, 18 pk.",
@@ -1521,9 +1681,17 @@
                               "id":  "baby-food",
                               "store":  "Sam\u0027s Club",
                               "name":  "HappyBABY Organics Yogis Melts Variety Pack, 1 oz., 4ct.",
-                              "per_unit":  2.595,
+                              "per_unit":  3.22,
                               "typed":  "none",
                               "derived":  "0.04687-1.17175"
+                          },
+                          {
+                              "id":  "apples",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "RIND Apple Chips, 9 oz.",
+                              "per_unit":  13.2978,
+                              "typed":  "none",
+                              "derived":  "0.241-6.025"
                           },
                           {
                               "id":  "apples",
@@ -1532,30 +1700,6 @@
                               "per_unit":  9.7422,
                               "typed":  "none",
                               "derived":  "0.241-6.025"
-                          },
-                          {
-                              "id":  "baby-food",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "HappyBABY Organics Yogis Melts Variety Pack, 1 oz., 4ct.",
-                              "per_unit":  3.22,
-                              "typed":  "none",
-                              "derived":  "0.04687-1.17175"
-                          },
-                          {
-                              "id":  "grapefruit",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "NatureWell Bergamot \u0026 Grapefruit Moisturizing Cream, 16 oz., 2 pk.",
-                              "per_unit":  9.99,
-                              "typed":  "none",
-                              "derived":  "0.3-7.5"
-                          },
-                          {
-                              "id":  "peaches",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "NatureWell Peach Blossom Moisturizing Cream, 16 oz., 2 pk.",
-                              "per_unit":  9.99,
-                              "typed":  "none",
-                              "derived":  "0.36887-9.22175"
                           },
                           {
                               "id":  "bread",
@@ -1630,22 +1774,6 @@
                               "derived":  "0.0195-0.4875"
                           },
                           {
-                              "id":  "shampoo",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "NatureWell Living For Good Shampoo \u0026 Conditioner, 24 fl. oz., 2 pk.",
-                              "per_unit":  0.6246,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Nate\u0027s Honey New Zealand Manuka Honey, 13.2 oz.",
-                              "per_unit":  1.5136,
-                              "typed":  "none",
-                              "derived":  "0.05411-1.35275"
-                          },
-                          {
                               "id":  "coffee",
                               "store":  "Sam\u0027s Club",
                               "name":  "Everyday Dose Medium Roast Coffee+",
@@ -1678,28 +1806,12 @@
                               "derived":  "0.605-15.125"
                           },
                           {
-                              "id":  "bananas",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Premier Protein 30g High Protein Shake, Bananas \u0026 Cream 11 fl. oz., 15 pk.",
-                              "per_unit":  402.7897,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
-                          },
-                          {
                               "id":  "bottled-water",
                               "store":  "Sam\u0027s Club",
                               "name":  "Essentia Bottled Water, Ionized Alkaline Water 1.5 L., 12 pk.",
                               "per_unit":  1.415,
                               "typed":  "none",
                               "derived":  "0.03274-0.8185"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Nexxus Therappe Moisture Shampoo, 43 fl. oz.",
-                              "per_unit":  0.546,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
                           },
                           {
                               "id":  "shampoo",
@@ -1798,14 +1910,6 @@
                               "derived":  "0.03274-0.8185"
                           },
                           {
-                              "id":  "bread",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "King Arthur Bread Flour, 10 lbs.",
-                              "per_unit":  8.98,
-                              "typed":  "none",
-                              "derived":  "0.314-7.85"
-                          },
-                          {
                               "id":  "soda",
                               "store":  "Sam\u0027s Club",
                               "name":  "Olipop Variety Pack, A New Kind of Soda, 12 fl. oz., 15 pk.",
@@ -1828,14 +1932,6 @@
                               "per_unit":  1.0525,
                               "typed":  "none",
                               "derived":  "0.01079-0.26975"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "NatureWell Maldives Shampoo \u0026 Conditioner, 16 fl. oz., 2 pk.",
-                              "per_unit":  0.6244,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
                           },
                           {
                               "id":  "bread",
@@ -8892,14 +8988,6 @@
                               "per_unit":  1.69,
                               "typed":  "none",
                               "derived":  "0.04482-1.1205"
-                          },
-                          {
-                              "id":  "bar-soap",
-                              "store":  "Fareway",
-                              "name":  "Irish Spring Men\u0027s Bar Soap, Original Clean",
-                              "per_unit":  5.97,
-                              "typed":  "none",
-                              "derived":  "0.19976-4.994"
                           },
                           {
                               "id":  "bar-soap",
@@ -21378,14 +21466,6 @@
                               "store":  "Walmart",
                               "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 16 fl oz",
                               "per_unit":  0.4262,
-                              "typed":  "none",
-                              "derived":  "0.01092-0.273"
-                          },
-                          {
-                              "id":  "apple-cider-vinegar",
-                              "store":  "Walmart",
-                              "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse, Raw and Unfiltered, 32 fl oz",
-                              "per_unit":  0.4681,
                               "typed":  "none",
                               "derived":  "0.01092-0.273"
                           },

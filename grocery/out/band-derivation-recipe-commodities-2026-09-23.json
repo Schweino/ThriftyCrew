@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4811,
+    "evidence_rows":  4815,
     "derived_commodities":  105,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1448
+                                "newly_refused_rows":  1446
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  971
+                                "newly_refused_rows":  969
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  694
+                                "newly_refused_rows":  691
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  538
+                                "newly_refused_rows":  537
                             }
                 },
     "typed_fields_ignored":  [
@@ -2315,7 +2315,7 @@
                               "name":  "Olibites Pitted Green Olives With Lemon Thyme, 1 oz, Allergen-Free, Liquid-Free Pack",
                               "per_unit":  1.77,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "olives",
@@ -2323,7 +2323,7 @@
                               "name":  "Olibites Pitted Green Olives with Chili Pepper - Liquid Free, Allergen Free, 1 oz",
                               "per_unit":  1.77,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "butter",
@@ -3216,18 +3216,10 @@
                           {
                               "id":  "olives",
                               "store":  "Walmart",
-                              "name":  "GOYA Large Pitted Ripe Black Olives  6 oz",
-                              "per_unit":  1.6667,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "olives",
-                              "store":  "Walmart",
                               "name":  "Pearls (3 Pack Cans), 2.25 oz Sliced Black Olives. No Artificial Colors. Major Allergens Not Contained.",
                               "per_unit":  2.3674,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "honey",
@@ -4075,7 +4067,7 @@
                               "name":  "Pearls Sliced Black Ripe Olives, 6.5 oz. Can. No Artificial Colors. Major Allergens Not Contained.",
                               "per_unit":  2,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "potato",
@@ -4291,7 +4283,7 @@
                               "name":  "Upper Cut Dry Salami, Tuscan-Style Fontina \u0026 Green Olive Skewer, 6 Count, 2.7oz, Plastic Tray (Refrigerated)",
                               "per_unit":  2.2111,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "hickory-smoked-bacon",
@@ -4910,14 +4902,6 @@
                               "derived":  "0.02091-0.52275"
                           },
                           {
-                              "id":  "olives",
-                              "store":  "Walmart",
-                              "name":  "Olibites Pitted Green Olives With Lemon Thyme, 1 oz, Allergen-Free, Liquid-Free Pack",
-                              "per_unit":  1.72,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
                               "id":  "canned-sweet-corn",
                               "store":  "Walmart",
                               "name":  "Great Value Golden Sweet Whole Kernel Corn, 106 oz",
@@ -5360,18 +5344,10 @@
                           {
                               "id":  "olives",
                               "store":  "Walmart",
-                              "name":  "Pearls Medium Pitted Black Ripe Olives 6 oz Can. No Artificial Colors. Major Allergens Not Contained.",
-                              "per_unit":  1.665,
-                              "typed":  "none",
-                              "derived":  "0.0665-1.6625"
-                          },
-                          {
-                              "id":  "olives",
-                              "store":  "Walmart",
                               "name":  "Pearls Sliced Black Ripe Olives, 6.5 oz. Can. No Artificial Colors. Major Allergens Not Contained.",
                               "per_unit":  1.8231,
                               "typed":  "none",
-                              "derived":  "0.0665-1.6625"
+                              "derived":  "0.07017-1.75425"
                           },
                           {
                               "id":  "butter",

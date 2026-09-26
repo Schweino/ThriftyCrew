@@ -78976,9 +78976,9 @@
         "cost_first_run":  53.87,
         "lines_priced":  8,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Pepperoncini [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -79058,7 +79058,7 @@
                           "grams":  145,
                           "util_cost":  0.87,
                           "basis":  "board:pepperoncini:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -108244,9 +108244,9 @@
         "cost_first_run":  42.56,
         "lines_priced":  11,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Pepperoncini [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -108272,7 +108272,7 @@
                           "grams":  300,
                           "util_cost":  1.81,
                           "basis":  "board:pepperoncini:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
@@ -110494,9 +110494,9 @@
         "cost_first_run":  53.93,
         "lines_priced":  8,
         "lines_unpriced":  0,
-        "lines_uncarried":  1,
+        "lines_uncarried":  0,
         "uncarried":  [
-                          "Pepperoncini [UNKNOWN]"
+
                       ],
         "lines":  [
                       {
@@ -110558,7 +110558,7 @@
                           "grams":  150,
                           "util_cost":  0.9,
                           "basis":  "board:pepperoncini:walmart",
-                          "carriage":  "UNKNOWN",
+                          "carriage":  "CARRIED",
                           "bulk":  true,
                           "buy_n":  null,
                           "buy_cost":  null,
