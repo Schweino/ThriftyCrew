@@ -5,14 +5,91 @@
   "board_week": "comparison-2026-09-23 (the board flag-verification.json and semantic-findings.json were both built over on 2026-09-25)",
   "head_at_dispatch": "cbbe61b42",
   "routing_artifact": "",
-  "queue_ids_seen": ["2026-09-21-4b973e", "2026-09-23-9459a1", "2026-09-23-3ba362"],
+  "queue_ids_seen": [
+    "2026-09-21-4b973e",
+    "2026-09-23-9459a1",
+    "2026-09-23-3ba362",
+    "2026-09-21-149497",
+    "2026-09-22-0c812e",
+    "2026-09-22-8d2ad5",
+    "2026-09-23-57b66b",
+    "2026-09-23-5aa22a",
+    "2026-09-23-b2850b",
+    "2026-09-23-f77857",
+    "2026-09-25-a84dcf",
+    "2026-09-22-3366e4",
+    "2026-09-22-781758",
+    "2026-09-23-d493dd",
+    "2026-09-25-c2a750",
+    "2026-09-22-293660",
+    "2026-09-22-93f022",
+    "2026-09-23-ff21e2",
+    "2026-09-25-17c0da",
+    "2026-09-18-a0c785",
+    "2026-09-19-dc1b5b",
+    "2026-09-22-6e6a3b",
+    "2026-09-22-817976",
+    "2026-09-23-749d31",
+    "2026-09-23-9999c0",
+    "2026-09-23-dd290b",
+    "2026-09-25-602457",
+    "2026-09-18-8491bf",
+    "2026-09-23-373ac2",
+    "2026-09-23-c7d152",
+    "2026-09-25-ef83cf",
+    "2026-09-23-cf85c8",
+    "2026-09-24-5bce76",
+    "2026-09-24-b606fd",
+    "2026-09-25-110a8f",
+    "2026-09-25-d76f72"
+  ],
   "scope_note": "Weekly lane run early (Brad lifted the budget on 2026-09-25 and asked for every open alert to be resolved), batch 1 of 9, the prevention batch. Only the three ids above are this batch's; the rest of the open queue belongs to the other eight batches.",
   "knowledge_consulted": [
     "searched: 'alert triage root cause recurrence' (dispatch), 'multibuy price flag out of band' (knowledge-search --estate; nothing applicable beyond the rules below)",
     "reliability-craft/MAP.md s5: do not declare resolved on the alert going quiet, because a silenced symptom and a fixed cause look identical from the alert's side (why 9459a1 is not closed by quieting MULTIBUY in the pager)",
     "reliability-craft/rca-and-chaos.md s2: corrective actions are Preventive, Detective, Responsive",
     ".claude/rules/grocery.md: No hard-coded bands (Brad, 2026-09-04) - why the Dove hand wash band refusal is routed to the money lane and not widened here",
-    "memory worktrees-lack-the-boards-the-engines-price-on: seeded with ops/seed-worktree.ps1 -Target . (exit 0, seeds=38)"
+    "memory worktrees-lack-the-boards-the-engines-price-on: seeded with ops/seed-worktree.ps1 -Target . (exit 0, seeds=38)",
+    "searched: 'alert triage root cause recurrence' (orchestrator, knowledge-search --estate) and 'alert pages once first seen worklist' (this lane)",
+    "reliability-craft/MAP.md section 4, 'An alert is not a check that fired': alert only where a human has to act. A row re-paged daily with nothing new to act on is a log line, not a page.",
+    "reliability-craft/MAP.md section 5: do not declare resolved on the alert going quiet. Each close below carries a re-measurement against today's board, not the silence.",
+    "grocery rules: 'No hard-coded bands (Brad, 2026-09-04)'; so no band number was touched, and the band-derivation half of every item is bounced to the money lane.",
+    "measurement rules: 'A rate is printed with its DENOMINATOR, always'; every count below names its board and its total.",
+    "grocery/match-worklist-lib.ps1 Get-MatchPageRows (plan-2026-09-22-9): the page-once-on-first-day pattern, reused for the band kind.",
+    "searched 'alert triage root cause recurrence' (knowledge-search --estate, by the orchestrator): reliability-craft/MAP.md s5 'do not declare resolved on the alert going quiet'; reliability-craft/rca-and-chaos.md s2 Preventive, Detective, Responsive",
+    "searched 'classifier labelled bar before deciding' (knowledge-search --estate): memory form-rule-t1-t2-t3 'T1 IDENTITY - if a sibling commodity is a better home, or the commodity's LABEL qualifies the food, the row is wrong-product' - used to label Bakers Corner Fried Apples (apples = fresh, lb) and Ben's Coconut Jasmine rice pouch (rice = White Rice, lb) as neither commodity",
+    ".claude/rules/measurement.md: 'A matcher that ABSTAINS is scored on what it skipped' and 'Write the ACCEPTANCE BAR before the run' - the contested bar prints decided-of-N and uses plan-10's written bar (0 wrong decisions)",
+    ".claude/rules/ops-and-gates.md og-39 'A typed parameter keeps its type' and names are case-insensitive: the first run of the new cases threw because $k overwrote $K; renamed $kid",
+    "searched \"alert triage root cause recurrence\", \"relink stale product link size\", \"hyvee drifted link relink queue\": the last two nothing applicable",
+    "reliability-craft/MAP.md (section 5: do not declare resolved on the alert going quiet)",
+    "reliability-craft/rca-and-chaos.md (section 2: Preventive, Detective, Responsive)",
+    ".claude/rules/grocery.md (UNCHECKED IS NEVER NOT-CARRIED; an everyday price is re-read about once every 90 days)",
+    ".claude/rules/ops-and-gates.md (Three fixture labels, three jobs; a self-test block must LEAVE on every path)",
+    "searched \"alert triage root cause recurrence\", \"count first multipack each measure\", \"sams count first measure per piece\": nothing applicable beyond the rules below",
+    "reliability-craft/MAP.md s5: do not declare resolved on the alert going quiet",
+    ".claude/rules/grocery.md: an Aldi multipack card is one unit or the pack total, resolved by arithmetic proof or not at all; do not add a plausibility bar",
+    ".claude/rules/ops-and-gates.md: three fixture labels, three jobs; a suite whose cases are a literal list asserts how many ran",
+    "searched \"alert triage root cause recurrence\" (dispatch) and \"delegated audit quarantine cell scope\": no store section beyond the rules files applied",
+    ".claude/rules/grocery.md: 'A delegated audit scopes itself by printing QUARANTINE-CELL <id>|<store>|<value|selection> lines and QUARANTINE-SCOPE complete cells=N stores=M before its marker; without the complete line it holds. Teaching a guard to scope is a per-guard change with its own fixture, never a default.' Used for 6e6a3b.",
+    "grocery/cell-quarantine-lib.ps1: a value hold at a different number blanks the cell's item; a hold at the condemned number is withheld. Chose kind=value for both taught guards because of it.",
+    ".claude/rules/grocery.md (Aldi multipack): 'The basis is now resolved by arithmetic proof or not at all ... Do not add a plausibility bar here.' Used for 817976's Aldi refusals.",
+    "memory worktrees-lack-the-boards-the-engines-price-on: seeded with ops/seed-worktree.ps1 -Target . before every measurement",
+    "searched 'alert triage root cause recurrence' (dispatch) and 'build card missing gitignored worktree' (knowledge-search --estate): claude-code-craft/applies-here.md 'A worktree is not the main tree' (a worktree gets TRACKED files only, so db/built made in one never reaches another)",
+    "reliability-craft/MAP.md s5 'do not declare resolved on the alert going quiet' (each item re-measured before its outcome)",
+    ".claude/rules/meal-prep.md: every price fetched from an Omaha store by the pipeline; a price in a recipe post renders from the feed at view time, the fallback on the FILL's basis",
+    "meal-prep/lib/ingredient-identity-lib.ps1 header: 'identity_reviewed' silences every product for a row, which is why the new record is scoped to one spelling",
+    "searched \"alert triage root cause recurrence\" (dispatch): reliability-craft/MAP.md s5 'do not declare resolved on the alert going quiet'",
+    "searched \"scheduled task wake sleep power request\": nothing applicable",
+    "searched \"same day rebuild merge receipts\": nothing applicable; reused grocery/pull-regular-bakers-api.ps1 Merge-BakersSameDayReceipts' shape",
+    ".claude/rules/ops-and-gates.md og-13 (what a threshold does when the producer STOPS) and og-26 (lock around the read-modify-write)",
+    ".claude/rules/site-and-publish.md (Ghost integration token limits; changing what the site shows is Brad's ruling)",
+    "lib/append-line.ps1 (library with no param() block and an in-file self-test, reused for lib/keep-awake.ps1)",
+    "searched \"alert triage root cause recurrence\" (dispatch) and \"repair runs before audit order\": nothing applicable beyond the dispatch excerpts",
+    "reliability-craft/MAP.md section 5: do not declare resolved on the alert going quiet (each item re-measured before its outcome)",
+    ".claude/rules/ops-and-gates.md og-11 (a plain ratchet run never writes its mark; -Tighten records it): write-only-reports tightened only through -Tighten",
+    ".claude/rules/ops-and-gates.md og-35 (a self-test the census cannot find can lose its must-fires): lib/selftest-lib.ps1 Get-SelfTestBlock shapes, extended by an opt-in declaration",
+    ".claude/rules/ops-and-gates.md og-25 (a replace of a file something else reads uses Write-TcAtomicFile): 5bce76's instances already follow it",
+    ".claude/rules/ops-and-gates.md og-03 (a self-test that greps its own source cannot fail): every new fixture needle is concatenated"
   ],
   "last_week_target_measured": "plan-2026-09-20.json targeted 'automation silent death issue s' with days_fired 9 (rank 1, 14 days ending 2026-09-20) and shipped its prevention on 2026-09-20. Over the days since (2026-09-21..2026-09-25, 5 of the 14 available) the census shows it on 0 days, against 9 of 14 before. The census does show a sibling type 'automation silent death task failed' on 2026-09-23 and 2026-09-24 (1 alert each); that is a different type key and was not re-read here.",
   "prevention_target": {
@@ -29,7 +106,39 @@
     "prevention:grocery store s dropped from a commodity they carry - measured, bounced (its fix is grocery/commodities.json)",
     "2026-09-21-4b973e - R1 measured, R3 routed to 9459a1, R2 and R4 left open",
     "2026-09-23-9459a1 - measured, bounced (the fix is compare-deals.ps1 or price-bands.json)",
-    "2026-09-23-3ba362 - instance re-measured, bounced (the standing two need grocery/commodities.json)"
+    "2026-09-23-3ba362 - instance re-measured, bounced (the standing two need grocery/commodities.json)",
+    "re-measure each id against flagged-2026-09-23 / comparison-2026-09-23 in the main checkout",
+    "2026-09-23-57b66b and 2026-09-22-0c812e together: audit-band-refusals pages a row outside the backlog once and hands it to the matching worklist; -Tighten the backlog",
+    "2026-09-22-8d2ad5: re-read the 4 cheap rows on today's board",
+    "2026-09-21-149497: re-read the 20 uncovered commodities and both sub-classes on today's board",
+    "re-measure: audit-match-soundness.ps1 in the seeded worktree (exit 0, 'MOVED=0 DROPPED=0 new-contested=0 drift-vs-engine=0', 19:40)",
+    "2026-09-23-5aa22a: label the classifier-decided September contested names, add the contested bar and the deciding-kinds gate to grocery/test-match-worklist.ps1; resolve-match-worklist.ps1 -SelfTest exit 0 (29 of 29)",
+    "2026-09-23-b2850b: decide today's 5 decidable contested arrivals through resolve-match-worklist.ps1 -Decide (grocery/match-verdicts.json); mint the -Accept residual with send-alert -Lane weekly (2026-09-25-a8448d)",
+    "2026-09-23-f77857 and 2026-09-25-a84dcf: measurement only, no code",
+    "commit on the worktree branch with a pathspec; the orchestrator lands through triage-land.ps1 (full_suite: deferred-to-land)",
+    "2026-09-25-c2a750",
+    "2026-09-22-3366e4",
+    "2026-09-22-781758",
+    "2026-09-23-d493dd",
+    "code: grocery/build-sams-deals.ps1 (93f022); grocery/cell-quarantine-lib.ps1 + grocery/flag-verify-lib.ps1 + grocery/test-flag-verification.ps1 (17c0da), one commit",
+    "no-code: 2026-09-22-293660 (by-design), 2026-09-23-ff21e2 (by-design)",
+    "the orchestrator lands with triage-land.ps1 and closes all four after the landing",
+    "1. 6e6a3b: grocery/audit-known-wrong.ps1, grocery/audit-pack-basis.ps1, grocery/hold-scope-lib.ps1 and the two new fixtures (commit 6f1dd11cd on this worktree branch). Land through triage-land.ps1 (push-main); prepush-test-auditors runs the full suite there.",
+    "2. a0c785, dc1b5b: bounced to the money lane, nothing to land.",
+    "3. 817976: needs-more-time, nothing to land.",
+    "2026-09-23-749d31",
+    "2026-09-23-9999c0",
+    "2026-09-23-dd290b",
+    "2026-09-25-602457",
+    "1. 8491bf: lib/keep-awake.ps1 + capture-run.ps1 (chain change: land through ops\\push-main.ps1, never git push origin HEAD:main)",
+    "2. 373ac2: ops/audit-ghost-page-census.ps1 + prepare-article-price-edits.ps1 + the 32 re-exported article copies",
+    "3. c7d152: no code; residual minted as 2026-09-25-22b1e8",
+    "4. ef83cf: capture-policy-lib.ps1 + build-walmart-deals.ps1 + test-capture-policy.ps1",
+    "1. d76f72: grocery/triage-return-lib.ps1 Get-TriageUnfinished + grocery/triage-due.ps1 cases; triage-due -SelfTest.",
+    "2. 110a8f: ops/audit-write-only-reports.ps1 (fixture writes, read helpers) + -Tighten of ops/out/write-only-reports-baseline.json; lib/selftest-lib.ps1 whole-file-suite declaration + grocery/test-match-lib.ps1 declaration; grocery/audit-search-terms.ps1 LIVE-TWIN label; the three audits live and -SelfTest.",
+    "3. cf85c8: grocery/capture-run.ps1 moves its prompt-sync block ahead of check-ad-cycles; grocery/test-capture-run-sync.ps1 holds the order. Chain change: land through ops/push-main.ps1 only (triage-land.ps1), never a plain push.",
+    "4. 5bce76 and b606fd: no code; owners recorded.",
+    "5. full_suite deferred-to-land; nothing pushed from this worktree."
   ],
   "items": [
     {
@@ -43,13 +152,17 @@
       ],
       "surface_fix": {
         "what": "work the 25 gaps in 2026-09-23-d493dd through explain-coverage-gap.ps1 and apply-coverage-batch.ps1",
-        "files": ["grocery/commodities.json"],
+        "files": [
+          "grocery/commodities.json"
+        ],
         "exact_change": "per gap: widen the include (RULE-INVISIBLE) or add a release exclude on the claiming commodity (CLAIMED-BY), one gated batch"
       },
       "root_cause": "matching is first-match-wins over hand-written include lists, so every new product name a store starts listing either matches no include (RULE-INVISIBLE) or is taken by an earlier, broader commodity (CLAIMED-BY); the audit sees it the next morning, and the only repair road is a hand edit of the rule file, which runs behind the capture by days",
       "root_fix": {
         "what": "the money lane works the CLAIMED-BY majority as releases on the claiming commodities (17 of 24 named are claims, so the broad includes that claim are the lever, not 17 widenings), in one apply-coverage-batch run",
-        "files": ["grocery/commodities.json"],
+        "files": [
+          "grocery/commodities.json"
+        ],
         "exact_change": "for each claiming commodity named in d493dd's CLAIMED-BY lines: an exclude releasing the claimed name's distinguishing token; RULE-INVISIBLE: widen the six includes"
       },
       "prevention": {
@@ -120,10 +233,16 @@
       "root_cause": "compare-deals labels every out-of-band multibuy 'likely a bad multibuy size/regular parse' without checking whether the arithmetic reproduces from the row's own regular price and size, so a real sale the band refuses and a true parse error page identically, as a NEW price flag, and the reader cannot tell a band gap from a capture error",
       "root_fix": {
         "what": "in compare-deals' multibuy pricing, split OUT-OF-BAND into 'arithmetic reproduces, band refuses' and 'does not reproduce'; route the first to band review (price-bands.json derivation), not to the price-flag page",
-        "files": ["grocery/compare-deals.ps1", "grocery/price-bands.json"],
+        "files": [
+          "grocery/compare-deals.ps1",
+          "grocery/price-bands.json"
+        ],
         "exact_change": "money lane: a multibuy_unpriced reason that names which half, and the batch alert pages only the half that does not reproduce"
       },
-      "prior_closes": ["2026-09-18-61f76c", "2026-09-19-fccb69"],
+      "prior_closes": [
+        "2026-09-18-61f76c",
+        "2026-09-19-fccb69"
+      ],
       "prevention": {
         "source": "grocery/compare-deals.ps1",
         "what": "the multibuy_unpriced reason is written there, and it is the producer of every MULTIBUY price flag",
@@ -133,8 +252,23 @@
         "measured_as": "routing",
         "measured_by": "grocery/out/flagged-2026-09-23.json multibuy_unpriced, all 72 rows read and grouped by reason",
         "affected_now": 10,
-        "names": ["10 of 72 multibuy_unpriced rows are OUT-OF-BAND: hand-soap x2, shampoo x2, bar-soap x3 and three more at Family Fare; 61 have no unit basis and 1 no regular price, and a reason split does not touch those"],
-        "cell_effects": [ { "commodity": "hand-soap", "store": "Family Fare", "before": 0.0998, "after": 0.0998 }, { "commodity": "shampoo", "store": "Family Fare", "before": 0.0993, "after": 0.0993 } ],
+        "names": [
+          "10 of 72 multibuy_unpriced rows are OUT-OF-BAND: hand-soap x2, shampoo x2, bar-soap x3 and three more at Family Fare; 61 have no unit basis and 1 no regular price, and a reason split does not touch those"
+        ],
+        "cell_effects": [
+          {
+            "commodity": "hand-soap",
+            "store": "Family Fare",
+            "before": 0.0998,
+            "after": 0.0998
+          },
+          {
+            "commodity": "shampoo",
+            "store": "Family Fare",
+            "before": 0.0993,
+            "after": 0.0993
+          }
+        ],
         "cell_effects_note": "comparison-2026-09-23: Family Fare already carries hand-soap at $0.0998/oz (Top Care 50 Fl Oz) and shampoo at $0.0993/oz (Alberto VO5 15 Fl Oz); the flagged Dove sales at $0.3993 and $0.5993 are 4x and 6x those, so admitting them moves neither cell. The four paged lines could not change a price a reader sees.",
         "risk": "a band widened to admit a premium-brand sale also admits a wrong-basis row of the same price; the reproduce test is what separates them"
       },
@@ -142,7 +276,11 @@
         "must_fire_case": "a multibuy row whose regular x discount / size does not reproduce its out-of-band unit price still pages",
         "clean_twin": "Dove Hand Wash 12 Fl Oz, BOGO 40% off, $5.99: $0.3993/oz reproduces and goes to band review, not the price-flag page",
         "guard_or_fixture": "grocery/test-auditors.ps1 (the REVIEW-DECISION and SANITY-PAGER regions of check-ad-cycles.ps1 run against frozen state)",
-        "fixture_occurrences": ["2026-09-18-61f76c", "2026-09-19-fccb69", "2026-09-23-9459a1"]
+        "fixture_occurrences": [
+          "2026-09-18-61f76c",
+          "2026-09-19-fccb69",
+          "2026-09-23-9459a1"
+        ]
       },
       "rollback": "revert the money lane's commit",
       "freshness": "flagged-2026-09-23.json written 2026-09-25 08:06; the four rows are still in it",
@@ -169,10 +307,16 @@
       "root_cause": "commodity includes are enumerated brand and word forms, so a name that says the same thing in another word order ('Liquid Laundry') or another name for the product ('Pepper Sauce') cannot match; the semantic sweep is the detector that sees it, and the only repair is a rule edit",
       "root_fix": {
         "what": "widen laundry-detergent to 'liquid laundry' and hot-sauce to a cayenne or Louisiana 'pepper sauce' form (not a bare 'pepper sauce', which also names sweet chili and stir-fry sauces)",
-        "files": ["grocery/commodities.json"],
+        "files": [
+          "grocery/commodities.json"
+        ],
         "exact_change": "money lane: laundry-detergent.include += '\\bliquid\\s+laundry\\b'; hot-sauce.include += a pepper-sauce form bounded to cayenne / red devil / louisiana"
       },
-      "prior_closes": ["2026-09-18-37ac63", "2026-09-19-4f01f6", "2026-09-21-7d64a6"],
+      "prior_closes": [
+        "2026-09-18-37ac63",
+        "2026-09-19-4f01f6",
+        "2026-09-21-7d64a6"
+      ],
       "prevention": {
         "source": "sidecar/sweep.py",
         "what": "the emitting check: a finding leaves the sweep as a bare alert line, with no diagnosis and no candidate, so every return of this type costs a lane the same derivation (explain-coverage-gap, then read the include) before the rule edit; three prior closes each repaired only the names they were handed",
@@ -182,7 +326,10 @@
         "measured_as": "routing",
         "measured_by": "NOT a before/after routing run (this lane does not change the rule): the sweep's own verdict over its 44,088-name corpus (8,842 rule-invisible) in semantic-findings.json generated 2026-09-25 08:22, plus a read of both commodities' include lists",
         "affected_now": 2,
-        "names": ["Arm & Hammer Liquid Laundry Clean Burst", "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz"],
+        "names": [
+          "Arm & Hammer Liquid Laundry Clean Burst",
+          "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz"
+        ],
         "claimed_by_earlier": "none today: the sweep records 'no rule matches it' for both names, so no earlier commodity admits either; the money lane re-checks after the widening",
         "cell_effects": [],
         "cell_effects_note": "empty because this lane moves no cell: it ships no rule. laundry-detergent @ Family Fare and hot-sauce @ Family Fare each gain a candidate row under the money lane's widening; the finding carries no price, so no before/after is written",
@@ -192,7 +339,12 @@
         "must_fire_case": "'Arm & Hammer Liquid Laundry Clean Burst' routes to laundry-detergent and 'Trappey's Pepper Sauce, Cayenne' to hot-sauce",
         "clean_twin": "a sweet chili 'pepper sauce' still routes nowhere near hot-sauce, and 'Laundry Detergent' names still route to laundry-detergent",
         "guard_or_fixture": "grocery/apply-coverage-batch.ps1 (applies and gates one batch)",
-        "fixture_occurrences": ["2026-09-18-37ac63", "2026-09-19-4f01f6", "2026-09-21-7d64a6", "2026-09-23-3ba362"]
+        "fixture_occurrences": [
+          "2026-09-18-37ac63",
+          "2026-09-19-4f01f6",
+          "2026-09-21-7d64a6",
+          "2026-09-23-3ba362"
+        ]
       },
       "rollback": "revert the rule commit",
       "freshness": "semantic-findings.json generated 2026-09-25 08:22 over comparison-2026-09-23",
@@ -206,6 +358,1506 @@
       "deviation": "none",
       "shipped_commit": null,
       "actual_tool_calls": 8
+    },
+    {
+      "queue_id": "2026-09-23-57b66b",
+      "subject": "Grocery: a price band refused rows it cannot explain (re-paged 2026-09-23, 09-24 twice, 09-25)",
+      "classification": "code",
+      "evidence": [
+        "audit-band-refusals.ps1 -OutDir <main grocery\\out> on 2026-09-25: exit 2, 'band-refusals: 1423 band-refused row(s) in flagged-2026-09-23.json: 242 explained as a basis error, 1181 unexplained, of which 38 NEW (not in the backlog of 1116)'",
+        "the 2026-09-23 page named 'apple-juice | Baker's | 0.1998 against reference 0.0387 | Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz' and three Baker's conditioners; all four are among today's 38, so the same rows re-paged on every run",
+        "0 of the 38 keys were ever in the founding backlog (1,165 keys at 74cc780df), so they are genuinely new captures, not tightened keys coming back",
+        "match-worklist-lib.ps1 Read-MatchFindings read kind band from band-refusals-backlog.json ONLY, so none of the 38 was on the matching worklist and no -Decide could silence them"
+      ],
+      "root_cause": "The band audit's ratchet has two states, backlog and NEW, and nothing between them: the backlog grows only by a reviewed -Accept, and the worklist that is meant to decide band rows read only the backlog. So every row captured after 2026-09-22 that the derived band refuses re-pages on every run forever, while sitting on no docket. The other four matching detectors were moved to page-once-then-worklist in plan-2026-09-22-9; the band kind was left on the old whole-set page.",
+      "root_fix": {
+        "what": "a band-refused row outside the backlog pages once, on its first day, and then waits on the matching worklist until -Decide settles it, the pattern the other matching detectors use since plan-2026-09-22-9. Nothing is weakened: every unexplained row is still counted, printed and listed.",
+        "files": [
+          "grocery/audit-band-refusals.ps1",
+          "grocery/match-worklist-lib.ps1",
+          "grocery/test-match-worklist.ps1"
+        ],
+        "exact_change": "audit-band-refusals.ps1: Get-TcBandOpenRows keeps first_seen per key (id|store|name) in grocery/out/band-refusals-open.json, drops a key with a match-verdicts.json verdict on band|key, prints UNEXPLAINED (and exits 2) only for rows first seen today and OPEN for older ones; new -OpenFile and -VerdictFile parameters. match-worklist-lib.ps1 Read-MatchFindings: reads band-refusals-open.json as kind band beside the backlog."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no band, rule, commodity or board input is touched. Live run against the main board with a scratch -OpenFile: run 1 exit 2 with 38 first seen today (the same 38 the old code paged); a simulated next day exit 0 with 38 OPEN lines and findings=0 open=38. The main checkout's grocery/out was not written (git status empty for the open file).",
+        "affected_now": 38
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-band-refusals.ps1 -SelfTest (11 -> 15 cases, count asserted) and grocery/test-match-worklist.ps1 (26 -> 28 cases)",
+        "must_fire_case": "the Evolution Fresh apple juice row of the 2026-09-23 page, frozen: with no open record it is first seen 2026-09-23 and pages; and in test-match-worklist the same row in band-refusals-open.json joins the worklist as kind band with 'first seen 2026-09-23' in its evidence",
+        "clean_twin": "the next day the same row still carries first_seen 2026-09-23 and its name for the OPEN line and the worklist (positive assertion); and the backlog's own band row (Member's Mark bay leaves) is still read beside the open file, band not blind",
+        "must_not_fire": "the same row on 2026-09-24 does not page again; a key decided in match-verdicts.json (band|id|store|name) leaves the open set while its undecided sibling still pages",
+        "ran": "audit-band-refusals -SelfTest exit 0, 'band-refusals self-test pass: 15 of 15 case(s) (15 expected)'; test-match-worklist exit 0, 'test-match-worklist self-test pass: 28 of 28 case(s)'",
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the commit's hunks in audit-band-refusals.ps1, match-worklist-lib.ps1 and test-match-worklist.ps1 and delete grocery/out/band-refusals-open.json. The audit then pages every row outside the backlog on every run, as at cbbe61b42. No board effect either way.",
+      "freshness": "measured 2026-09-25 10:00-10:30 against flagged-2026-09-23.json built 2026-09-25 08:06 in the main checkout, and the queue item's recurrences through 2026-09-25T08:27:54. A board rebuilt after this run can change the 38, never the mechanism.",
+      "leaves_open": "the 38 rows themselves are undecided: each is a wrong product (an exclude through apply-coverage-batch -FromWorklist, which edits grocery/commodities.json, THE LINE) or a real premium price the derived band censors (the band derivation, money lane). By reading: most are real premium Baker's products (Tabasco 1.095/fl oz, Kristin Ess conditioner, Halo Top), a few are wrong products (Bettergoods Hot Honey as apple-cider-vinegar, Member's Mark Calzones as pasta-sauce, Clorox 2 as bleach), and the two Walmart paper towels at 0.0248 and 0.0377 against 1.2208 look like a per-sheet basis the audit's conversion list cannot name. The first run after landing pages them once more (no open file exists yet), then they wait on the worklist.",
+      "leaves_open_occurrences": 38,
+      "leaves_open_followup": "2026-09-22-0c812e",
+      "premise_verified": "yes: the page's rows re-occur on today's flagged file and none is in the backlog; the worklist lib reads the backlog alone (match-worklist-lib.ps1 Read-MatchFindings, band block).",
+      "deviation": "",
+      "status": "done",
+      "shipped_commit": "da9e39cd6",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real, and the class fixed at its source: a band-refused row outside the backlog now pages once on its first day and waits on the matching worklist, where -Decide settles it for good. Before: the same 38 rows paged on 2026-09-23, 09-24 (twice) and 09-25. After (live, main board, scratch open file): day 1 exit 2 with 38, day 2 exit 0 with 38 OPEN. The 38 decisions ride 2026-09-22-0c812e to the money lane.",
+      "actual_tool_calls": 30,
+      "folded_from": "plan-2026-09-25-7.json"
+    },
+    {
+      "queue_id": "2026-09-22-0c812e",
+      "subject": "Triage residual: 1,165 band-refused rows no basis error explains (derived-band rollout worklist)",
+      "classification": "no-code-change",
+      "evidence": [
+        "backlog at origin/main: 1,116 keys (1,165 founding at 74cc780df, then dc4be7174 turned 41 band-backlog shapes into commodity rules)",
+        "flagged-2026-09-23 (built 2026-09-25 08:06): 1,181 unexplained band-refused rows; 25 backlog keys no longer occur; -Tighten took the backlog to 1,091 keys (exit 0, 'backlog TIGHTENED at 1091 key(s) (was 1116)')",
+        "each remaining key is decided one at a time by resolve-match-worklist -Decide; a wrong product becomes an exclude through apply-coverage-batch -FromWorklist, which rewrites grocery/commodities.json"
+      ],
+      "root_cause": "The derived bands exposed wrong products the typed band floors had been hiding (gap F1 of design/RCA-holistic-2026-09-22.md). The identity rules still admit them; the band only keeps them off the board.",
+      "root_fix_none_because": "the fix is 1,091 identity decisions whose outcome is an edit of grocery/commodities.json (apply-coverage-batch -FromWorklist) or of the band derivation, both on this lane's line. Bounced to the money lane with the measurement. The paging half of this class shipped under 2026-09-23-57b66b (da9e39cd6), so the backlog no longer produces daily pages.",
+      "leaves_open": "1,091 backlog keys plus 38 open keys outside it, all undecided on the matching worklist (kind band).",
+      "leaves_open_occurrences": 1129,
+      "premise_verified": "yes, re-measured on flagged-2026-09-23 as above",
+      "deviation": "the backlog was tightened here (25 keys no longer occur), which the item body names as the step after the excludes; it is safe now because a returning key pages once and joins the worklist instead of paging daily.",
+      "status": "bounced",
+      "shipped_commit": "da9e39cd6",
+      "resolution_note": "Bounced to the money lane: deciding the 1,091 backlog keys and the 38 open keys needs commodity excludes (grocery/commodities.json) or a band-derivation change. Measured 2026-09-25 on flagged-2026-09-23: 1,423 band-refused rows, 242 explained, 1,181 unexplained; backlog 1,116 -> 1,091 by -Tighten.",
+      "actual_tool_calls": 6,
+      "folded_from": "plan-2026-09-25-7.json"
+    },
+    {
+      "queue_id": "2026-09-22-8d2ad5",
+      "subject": "Triage residual: rows the derived bands newly admit that were not read (4 cheap, 1,211 dear)",
+      "classification": "no-code-change",
+      "evidence": [
+        "comparison-2026-09-23 (built 2026-09-25 08:14), text search of the board: 'Softsoap Liquid Hand Soap Pump, Fresh Breeze' 0 hits; 'Suave Skin Solutions' 0 hits",
+        "'Dr Pepper Soda' 1 hit, and it is a different row: Family Fare 'Dr Pepper Soda 42.2 Fl Oz' at 0.0237/fl oz, size 42.2 fl oz; the Fareway 0.0039/fl oz row holds no cell",
+        "'Fresh Roma Tomato, Each' at Walmart now reads 0.9692/lb with size 0.227 lb (basis 'size 0.227 lb'), against 0.2804/lb on 2026-09-22: the basis error no longer reproduces"
+      ],
+      "root_cause": "The derived band's floor is set from the store rows themselves, so a basis error that is cheap but inside the derived floor is admitted with nothing reading it; the typed floors used to refuse some of these. The dear side is harmless by construction (a dear row wins a cell only where the store has no cheaper row, and the 6 that did were read on 2026-09-22).",
+      "root_fix_none_because": "the instance no longer reproduces (0 of the 4 cheap rows holds a board cell today), and the class, a cheap basis error admitted inside a derived floor with no watcher, is fixed in the band derivation or a value guard (grocery/guards.ps1), both on this lane's line. Bounced to the money lane with the measurement.",
+      "leaves_open": "the class: a cheap basis error admitted inside the derived floor that wins a cell has no dedicated detector. 0 occurrences on today's board among the 4 named rows; the 1,211 dear rows were not re-read and hold no cell by construction.",
+      "leaves_open_occurrences": 0,
+      "premise_verified": "yes, re-measured on comparison-2026-09-23 as above",
+      "deviation": "",
+      "status": "bounced",
+      "shipped_commit": null,
+      "resolution_note": "Bounced to the money lane. Re-measured 2026-09-25 on comparison-2026-09-23: 0 of the 4 cheap rows holds a board cell (Softsoap and Suave absent, Dr Pepper's cell is a different Family Fare 42.2 oz row at 0.0237/fl oz, the Walmart Roma tomato now carries size 0.227 lb and reads 0.9692/lb). The watcher for the class belongs to the band derivation or guards.ps1.",
+      "actual_tool_calls": 5,
+      "folded_from": "plan-2026-09-25-7.json"
+    },
+    {
+      "queue_id": "2026-09-21-149497",
+      "subject": "Grocery: 20 of 577 search-termed commodities have no board cell after the store-fetch fix; a band-refused CARRIED sumac and an un-askable cheaper Hy-Vee wild rice",
+      "classification": "no-code-change",
+      "evidence": [
+        "comparison-2026-09-23 (built 2026-09-25 08:14): 572 commodity rows. ground-sumac now priced: Baker's 'Morton & Bassett All Natural Sumac' 6.395/oz (the band-refused carried sumac is admitted under the derived band)",
+        "wild-rice priced: Hy-Vee 'Hy-Vee Select Wild Rice' 0.6869/oz; cardamom priced: Walmart 'McCormick Gourmet Organic Ground Cardamom, 1.75 oz Bottle' 5.3543/oz",
+        "of the 20 named commodities, 2 (ground-sumac, cardamom) hold a cell and 18 have no board row, each withheld or not carried, none holding a wrong cell",
+        "plan-2026-09-22-2 marked this item superseded by 2026-09-21-6b17b1 (derived bands) and 2026-09-20-cb8f30 (Hy-Vee ask order); both are resolved in the queue (2026-09-22T21:46:08 and 19:39:58), and this id was never closed"
+      ],
+      "root_cause": "Both sub-classes were fixed upstream by the items that superseded it: typed band floors refusing real shelf prices (6b17b1, every commodity on its derived band) and the Hy-Vee ask order skipping id-less rows (cb8f30). The id stayed open because the superseded close was recorded in a plan and never run through triage-close.",
+      "root_fix_none_because": "no code change is owed here: both sub-classes shipped under 2026-09-21-6b17b1 and 2026-09-20-cb8f30 and re-measure fixed on today's board. The 18 uncovered commodities are coverage (not carried, Walmart ship-only, no candidate), not a defect.",
+      "leaves_open": "18 of the 20 commodities still have no board row. 0 live recipes depended on any of them when the item was minted, and any live recipe line that cannot price stays NO PRICE BASIS and pages from the costing engine.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:meal-prep/engine/cost-recipes.ps1",
+      "premise_verified": "yes, re-measured on comparison-2026-09-23 as above",
+      "deviation": "",
+      "status": "done",
+      "shipped_commit": null,
+      "close_disposition": "superseded",
+      "resolution_note": "Superseded by 2026-09-21-6b17b1 and 2026-09-20-cb8f30, both resolved, and re-measured on comparison-2026-09-23: ground-sumac priced at Baker's 6.395/oz, wild-rice at Hy-Vee 0.6869/oz, cardamom at Walmart 5.3543/oz. Of the 20 uncovered, 2 now price and 18 have no row (was 20 of 577 on 2026-09-21); those are coverage, owned by the costing engine's NO PRICE BASIS page.",
+      "actual_tool_calls": 7,
+      "folded_from": "plan-2026-09-25-7.json"
+    },
+    {
+      "queue_id": "2026-09-23-5aa22a",
+      "subject": "Triage residual: contested arrivals are docket-only until the September names are labelled (2dae07)",
+      "classification": "infra",
+      "lane": "ops",
+      "est_tool_calls": 25,
+      "evidence": [
+        "grocery/ad-cycle-log.txt, every 'new-contested (order-dependence to review):' line 2026-09-01..2026-09-25: 139 distinct names (77 when plan-10 counted on 09-22)",
+        "the soundness sweep on 2026-09-25 (grocery/out/audit/match-sweep-cache.json) recomputes a chain for 41 of the 139; 98 are not in today's feeds, so their chain cannot be recomputed",
+        "Get-MatchClassification -Kind contested over the 41: confirm 7, release 4, ad-line 12, undecided 17, multi-commodity chain 1",
+        "labelled: 'Bakers Corner Fried Apples IN Cinnamon 22 OZ' chain apples > ground-cinnamon -> classifier confirm, label none (apples is fresh, per lb); 'Ben's Original Rice, Coconut Jasmine 8.5 Oz' chain rice > coconut -> classifier confirm, label none (rice is 'White Rice', per lb; this is a flavoured ready-rice pouch)",
+        "contested bar printed by test-match-worklist.ps1: 'decided 11 of 11, wrong 2 of 11'; the 4 labelled releases (Lemon Frosting, Hunt's Tomato Paste with Basil Garlic, Quaker Banana Nut Instant Oatmeal, Lay's Honey Barbecue Potato Chips) are 4 of 4 right",
+        "grocery/resolve-match-worklist.ps1:61 '$DecidingKinds = @('coverage', 'semantic')' - contested stays docket-only"
+      ],
+      "surface_fix": {
+        "what": "label the September contested names the classifier decides and measure the bar",
+        "files": [
+          "grocery/test-match-worklist.ps1"
+        ],
+        "exact_change": "11 frozen labels (winner, other, name, label) and the bar line 'contested bar: decided N of 11, wrong N of N'"
+      },
+      "root_cause": "the contested classifier reads only the head noun of the name, so it confirms a product whose head names the winner even when the FORM differs from the commodity's label (fried apples in a jar against fresh apples; a flavoured rice pouch against dry white rice). With no labelled bar nothing stopped 'contested' from being added to the deciding kinds, where each such confirm would be written to match-verdicts.json and become REVIEWED for the soundness audit for good.",
+      "root_fix": {
+        "what": "a kind may DECIDE only when its labelled bar holds, and that rule now reads the resolver's own deciding-kinds list rather than a copy: adding 'contested' while the frozen September labels carry a wrong confirm turns the resolver's self-test red",
+        "files": [
+          "grocery/test-match-worklist.ps1"
+        ],
+        "exact_change": "Test-ContestedMayDecide(kinds, wrongCount) plus three cases: MUST FIRE (coverage, semantic, contested refused at wrong 2 of 11), CLEAN TWIN (the shipped list read from resolve-match-worklist.ps1 passes), CLEAN TWIN (the release reading is right 4 of 4)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no rule, no verdict and no route changes: the edit is fixtures in test-match-worklist.ps1, which resolve-match-worklist.ps1 -SelfTest relays; the live resolver's deciding kinds are unchanged (coverage, semantic)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none to the board. A future fix to the head-noun rule that stops confirming fried apples will turn the must-fire's premise false; that is the moment to re-measure the bar and consider adding contested.",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-worklist.ps1 via grocery/resolve-match-worklist.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE contested added to the deciding kinds is refused while its labelled bar has a wrong decision (Bakers Corner Fried Apples IN Cinnamon confirmed to fresh apples): wrong 2 of 11",
+        "clean_twin": "CLEAN TWIN the resolver as shipped passes the same gate (deciding kinds read from its source: coverage,semantic); CLEAN TWIN the contested release reading is right on every labelled release: 4 of 4",
+        "commands": [
+          "powershell -NoProfile -File grocery\\resolve-match-worklist.ps1 -SelfTest  (exit 0, 'test-match-worklist self-test pass: 29 of 29 case(s)')"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the test-match-worklist.ps1 hunk; nothing else changed",
+      "do_not_touch": [
+        "$DecidingKinds in resolve-match-worklist.ps1",
+        "grocery/commodities.json"
+      ],
+      "freshness": "names from grocery/ad-cycle-log.txt as of 2026-09-25 19:40; chains from the 19:40 soundness sweep over the seeded feeds; commodity labels from commodities.json at cbbe61b42",
+      "leaves_open": "(1) contested stays docket-only: the head-noun classifier confirms against the commodity's FORM on 2 of 11 decided labels, so every contested arrival still waits for a hand -Decide. (2) 98 of the 139 September names are not in today's feeds and were not labelled, because their chain cannot be recomputed; the bar covers 11 of 139.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "wrong auto-confirms written for the contested kind, 2026-09-01..2026-09-25: 0, because contested has never been a deciding kind",
+      "leaves_open_followup": "watch:grocery/test-match-worklist.ps1",
+      "resolution_note": "Labelled the 11 September contested names the classifier decides: it confirms 2 wrongly (fried apples to fresh apples, a coconut jasmine rice pouch to white rice), so contested stays docket-only. The resolver's self-test now refuses 'contested' in the deciding kinds while that bar has a wrong decision. Releases were right 4 of 4.",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: resolve-match-worklist.ps1:61 still decides only coverage and semantic; the September contested names were re-read from ad-cycle-log (139 now, 77 at plan time); the classifier's reading was taken by running Get-MatchClassification, not inferred",
+      "deviation": "narrowed: the item asked for all 77 names labelled. 98 of the 139 cannot have their chain recomputed from today's feeds, and 29 of the 41 that can are undecided, ad-line or multi, which are never wrong under the bar; so the labelled bar is the 11 the classifier DECIDES, with the denominator printed. The bar fails, so 'contested' was not added.",
+      "shipped_commit": "the worktree commit subject-lined 'Weekly lane plan-2026-09-25-8: contested bar measured (2 of 11 wrong), five arrivals decided' (landed by triage-land)",
+      "actual_tool_calls": 22,
+      "folded_from": "plan-2026-09-25-8.json"
+    },
+    {
+      "queue_id": "2026-09-23-b2850b",
+      "subject": "Grocery matching soundness: NEW CONTESTED (09-23, 09-24, 09-25)",
+      "classification": "wrong-product",
+      "lane": "ops",
+      "est_tool_calls": 15,
+      "prior_closes": [
+        "2026-09-22-2dae07"
+      ],
+      "evidence": [
+        "queue recurrences 2026-09-24 'CROWN-BY-CONTEST Inglehoffer Horseradish Cream Style 9.5 OZ | cell horseradish @ Aldi 0.2989/oz' and 2026-09-25 'NEW-CONTESTED Lay's Honey Barbecue Potato Chips | chain: honey (oz) > potato-chips (oz) | engine: size 7.75 oz = 0.5148/oz'",
+        "main checkout grocery/out/match-worklist.json 2026-09-25 08:23: contested 6, every one 'undecided'; Lay's suggestion 'release' pattern '\\bpotato\\w*\\s+chip', 'the head noun 'chips' names potato-chips, and honey's own words do not'",
+        "re-measured 19:40 in the seeded worktree: 'match-soundness: MOVED=0  DROPPED=0  new-contested=0  drift-vs-engine=0', exit 0",
+        "grocery/out/audit/match-baseline.json generated 2026-09-25 17:16 (commit 81a961a00): '\"Lay\\u0027s Honey Barbecue Potato Chips\":  \"honey\"' and the name in its contested list - the accept marked it reviewed",
+        "audit-match-soundness.ps1:358 '$outContest = @{}; foreach ($kv in $TodayContest.GetEnumerator()) { $outContest[[string]$kv.Key] = $true }' - every -Accept blesses every name contested that day",
+        "comparison-2026-09-23 honey @ Baker's 0.2496/oz; Lay's 0.5148/oz is on no cell (and bakers-regular-2026-09-25, its source, postdates the board)"
+      ],
+      "surface_fix": {
+        "what": "decide the day's contested arrivals one key at a time through the lane",
+        "files": [
+          "grocery/match-verdicts.json"
+        ],
+        "exact_change": "resolve-match-worklist.ps1 -Decide: confirm Kroger Orange Rind Muenster Block Cheese (block-cheese); confirm Pledge Multisurface Cleaner (all-purpose-cleaner); release Lay's Honey Barbecue Potato Chips from honey, pattern \\bpotato\\w*\\s+chip; ad-line Deutsche Kuche Lentil Chickpea or Harvest Potato; ad-line the Di Lusso ham/turkey/chicken/cheese line. Inglehoffer Horseradish Cream Style is left undecided on purpose (prepared horseradish vs creamy sauce is not in the name)."
+      },
+      "root_cause": "two rules admit a product and array order picks the winner, so each capture brings new contested names; the lane built for them (2dae07) pages each once and waits for a hand -Decide, but a whole-state audit-match-soundness -Accept made for an UNRELATED rule change marks every contested name reviewed, so the one wrong route of the day (Lay's to honey) was blessed silently at 17:16 by the laundry-detergent accept instead of being decided.",
+      "root_fix_none_because": "the source fix changes what -Accept writes into the baseline's reviewed contested set (audit-match-soundness.ps1 Merge-BaselineCarryForward), which also moves what the publish gate and ops/verify-commodities-gate.ps1 read after every rule accept; that is more than this item's budget can prove with fixtures today. It is minted as 2026-09-25-a8448d with the measurement and the repair shape. The Lay's route fix itself is a commodities.json exclude, on the line this lane does not cross, and goes through the weekly batch's apply-coverage-batch -FromWorklist, which reads the release verdict recorded here.",
+      "prevention": {
+        "source": [
+          "grocery/audit-match-soundness.ps1"
+        ],
+        "what": "the emitter's -Accept is where a contested name becomes REVIEWED without a per-name reading; that is the upstream producer of both the silence (a blessed wrong route never pages) and the return (arrivals nobody decided come back as new-contested on the next day a non-accepted run sees them)",
+        "exact_change": "not shipped here (see root_fix_none_because): -Accept writes contested = the previously reviewed set (baseline contested plus lane confirms, Get-ReviewedContested) plus today's names only where the lane holds a confirm. Owned by 2026-09-25-a8448d."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no rule changes: five entries appended to grocery/match-verdicts.json. A confirm makes a name reviewed for the soundness audit; a release and an ad-line wait for the weekly batch and the ingest split. Keys checked byte for byte against the main checkout's worklist rows (5 of 5 match).",
+        "affected_now": 5,
+        "names": [
+          "Kroger Orange Rind Muenster Block Cheese",
+          "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+          "Lay's Honey Barbecue Potato Chips",
+          "Deutsche Küche Lentil Chickpea or Harvest Potato",
+          "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King's Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,"
+        ],
+        "risk": "a wrong confirm would silence a wrong route; the two confirms are plainly the winner's food (a Muenster block, a multisurface cleaner). None of the five is on a cell of comparison-2026-09-23.",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-worklist.ps1 via resolve-match-worklist.ps1 -SelfTest (the -Decide road and Get-ReviewedContested are its existing cases)",
+        "must_fire_case": "MUST FIRE an arrival the lane does not know still pages; a known one does not; a CONTESTED CROWN line is never filtered (existing), and the new contested bar's labelled release 'Lay's Honey Barbecue Potato Chips' (honey > potato-chips) reads release",
+        "clean_twin": "CLEAN TWIN a confirmed contested name is REVIEWED for audit-match-soundness (and the baseline's own list still is) (existing); CLEAN TWIN the contested release reading is right on every labelled release: 4 of 4",
+        "commands": [
+          "powershell -NoProfile -File grocery\\resolve-match-worklist.ps1 -SelfTest  (exit 0, 29 of 29)",
+          "powershell -NoProfile -File grocery\\audit-match-soundness.ps1  (exit 0, MOVED=0 DROPPED=0 new-contested=0)"
+        ],
+        "fixture_occurrences": [
+          "2026-09-22-2dae07: the 2026-09-22 arrivals, decided by hand 2026-09-23 (the Simple Truth corn confirms in match-verdicts.json)",
+          "2026-09-23-b2850b: the 09-23/24/25 arrivals; Lay's Honey Barbecue Potato Chips is a frozen label in test-match-worklist.ps1's contested bar"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "remove the five 2026-09-25 entries by 'weekly lane plan-2026-09-25-8' from grocery/match-verdicts.json",
+      "do_not_touch": [
+        "grocery/commodities.json (the honey exclude goes through apply-coverage-batch -FromWorklist)",
+        "grocery/out/audit/match-baseline.json"
+      ],
+      "freshness": "worklist rows read from the main checkout's grocery/out/match-worklist.json (generated 2026-09-25 08:23); soundness re-run 19:40 against match-baseline.json generated 17:16",
+      "leaves_open": "(1) the class: any audit-match-soundness -Accept blesses every contested name of that day, so a wrong route can be marked reviewed without a per-name reading (happened 2026-09-25 for Lay's to honey). (2) Inglehoffer Horseradish Cream Style 9.5 OZ, the Aldi horseradish crown, left undecided: whether it is prepared horseradish or a creamy sauce needs the jar's ingredient panel.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_occurrences_window": "accepts that blessed a wrong contested route, measured on the one accept of 2026-09-25 (81a961a00); earlier accepts not audited",
+      "leaves_open_followup": "2026-09-25-a8448d",
+      "resolution_note": "The day's contested arrivals are decided through the lane: two confirms, the Lay's honey barbecue chips released from honey (pattern waits for the weekly batch), two multi-product ad lines. Re-measured clean (MOVED=0 DROPPED=0 new-contested=0), but only because the 17:16 laundry accept blessed every contested name, Lay's included; that class is minted as 2026-09-25-a8448d.",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "status": "done",
+      "premise_verified": "true: the 09-25 body's two names were re-read on the live worklist (undecided) and in the baseline (blessed at 17:16); the 09-23 names are no longer contested after the 09-24 and 09-25 accepts",
+      "deviation": "none on the instance; the class fix is not shipped and is owned by 2026-09-25-a8448d",
+      "shipped_commit": "the worktree commit subject-lined 'Weekly lane plan-2026-09-25-8: contested bar measured (2 of 11 wrong), five arrivals decided' (landed by triage-land)",
+      "actual_tool_calls": 16,
+      "folded_from": "plan-2026-09-25-8.json"
+    },
+    {
+      "queue_id": "2026-09-23-f77857",
+      "subject": "Grocery matching soundness: RULE CHANGE UNREVIEWED (09-23, 09-24, 09-25)",
+      "classification": "no-code-change",
+      "evidence": [
+        "queue body 2026-09-25: 'MOVED=1 DROPPED=5 against the reviewed baseline. Cause: 6 of these names were absent when the baseline was last accepted and were carried forward'",
+        "baseline accepts since: 2283c64cd (2026-09-24 'the soundness baseline accept'), fc2b4c6fd and 81a961a00 (2026-09-25, match-baseline.json generated 17:16)",
+        "re-measured 2026-09-25 19:40 in the seeded worktree: exit 0, 'match-soundness: MOVED=0  DROPPED=0  new-contested=0  drift-vs-engine=0'",
+        "plan-2026-09-25-2 item 2026-09-23-80f302 reviewed all six moved/dropped names line by line (carrot and cucumber ranch bowls, bottled green tea, True Lime packets, Wisp disposables, Puffs Plus Lotion) and judged every one a correct removal",
+        "Brad's ruling Q-2026-09-25-2-A (742445437): the post now holds only on a published cell's winner, so this condition no longer holds the page for off-board names"
+      ],
+      "root_cause": "the soundness baseline carries forward a name absent at an accept with the route it had when last seen, so a rule change made while it was away is first seen, unreviewed, on the day the product comes back; and the baseline advances only by an -Accept nobody's lane owned until the 09-24 triage accept.",
+      "root_fix_none_because": "the instance is gone (MOVED=0 DROPPED=0 after the 09-24 and 09-25 accepts) and the page-holding half of the class was fixed by Brad's ruling (742445437). What remains is a review page on the day a carried name returns, which the audit already emits with its cause named ('were carried forward'); moving that review to the rule-change day would mean routing all 37,368 baseline names on every run and is not worth building for 3 correct drops.",
+      "prevention_none_because": "no code change: the emitter names this cause exactly and every firing in the window was a correct rule removal reviewed in plan-2026-09-25-2",
+      "prior_closes": [],
+      "leaves_open": "a carried-forward name that returns after a rule change pages RULE CHANGE UNREVIEWED on its return day, not on the rule's day",
+      "leaves_open_occurrences": 3,
+      "leaves_open_occurrences_window": "fire days 2026-09-23..2026-09-25 (this queue item's count 3)",
+      "leaves_open_followup": "watch:grocery/audit-match-soundness.ps1",
+      "resolution_note": "Cleared by the 09-24 and 09-25 baseline accepts: re-measured MOVED=0 DROPPED=0 (was MOVED=1 DROPPED=5). All six names were correct removals reviewed in plan-2026-09-25-2, and since Brad's ruling a change on no published cell no longer holds the post.",
+      "close_disposition": "confirmed",
+      "status": "done",
+      "premise_verified": "true: re-ran the audit rather than trusting the accept commit messages; before 1 moved + 5 dropped (09-25 08:21), after 0 + 0 (19:40)",
+      "deviation": "none",
+      "shipped_commit": null,
+      "actual_tool_calls": 8,
+      "folded_from": "plan-2026-09-25-8.json"
+    },
+    {
+      "queue_id": "2026-09-25-a84dcf",
+      "subject": "Triage residual: soundness post gate cannot see a dropped previous-board winner; baseline still unaccepted (2026-09-23-80f302)",
+      "classification": "no-code-change",
+      "evidence": [
+        "measured over grocery/ad-cycle-log.txt, every 'match-soundness: DROPPED|MOVED' line in September, each name joined (Get-CellNames, soundness-publish-lib.ps1) against the newest comparison board built BEFORE that day: 49 rows, 43 distinct names, 6 run days (09-06 10, 09-19 24, 09-20 3, 09-23 2, 09-24 4, 09-25 6)",
+        "previous-board winners among them: 1 of 49 - '2026-09-20 DROPPED Barissimo Caramel Coffee Syrup 12.7 FL OZ [coffee @ Aldi 0.2748/oz] prev=comparison-2026-09-17.json', a coffee syrup removed from coffee, a correct drop",
+        "residual 2 re-measured 19:40: exit 0, 'MOVED=0  DROPPED=0  new-contested=0' against match-baseline.json generated 17:16 (81a961a00); Pledge is now a lane confirm in match-verdicts.json",
+        "soundness-publish-lib.ps1 header: 'the join reads the board being PUBLISHED' (Brad's ruling Q-2026-09-25-2-A: hold only when a changed product WINS a published cell)"
+      ],
+      "root_cause": "the post gate judges the board being published, by Brad's ruling, and a dropped product is on no cell of that board by construction.",
+      "root_fix_none_because": "by design and by measurement: in September the blind spot fired once in 49 moved/dropped rows, and that one (a coffee syrup off the coffee cell) was a correct drop, so a hold there would have been a false hold 1 of 1. Every DROPPED line still pages through the soundness audit and waits for a reviewed -Accept, which is where a wrong drop of a right winner is caught; the post shows the cell's new winner, which the guards and bands judge like any other.",
+      "prevention_none_because": "no code change: the ruling defines what holds the post, and the drop itself already pages",
+      "prior_closes": [],
+      "leaves_open": "a WRONG drop of a right previous-board winner publishes its cell's next winner until the review of the DROPPED line catches it",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "wrong drops of a previous-board winner, 2026-09-01..2026-09-25 (1 previous-board winner dropped, and it was a correct drop)",
+      "leaves_open_followup": "watch:grocery/audit-match-soundness.ps1",
+      "resolution_note": "Measured the blind spot: 1 of 49 September moved/dropped rows was a previous-board winner, and it was a correct drop (a coffee syrup off Aldi's coffee cell), so holding there would have been a false hold. Closed by design under Brad's option A. The baseline is accepted (17:16) and re-measures MOVED=0 DROPPED=0.",
+      "close_disposition": "by-design",
+      "status": "done",
+      "premise_verified": "true for both halves: the blind spot is real (the join reads only the published board) and was counted over the September log; the unaccepted baseline was re-run, not assumed",
+      "deviation": "none",
+      "shipped_commit": null,
+      "actual_tool_calls": 10,
+      "folded_from": "plan-2026-09-25-8.json"
+    },
+    {
+      "queue_id": "2026-09-22-3366e4",
+      "subject": "Triage residual: 312 Hy-Vee rows without a catalogue id expire from 2026-10-13",
+      "classification": "no-code-change",
+      "evidence": [
+        "hyvee-regular-2026-09-25.json: 311 of 1,546 deals carry no product_id (296 as_of July, 15 August), all not_reverified; 09-20 313, 09-21 312, 09-24 311: the count only falls",
+        "the same file's product_ids_recovered = 0 on 09-20..09-25: the lane's own history recovery (pull-regular-hyvee.ps1 lines 1675-1711) already ran and found no id for any of them inside the 90-day window",
+        "0 of the 311 serve a Hy-Vee cell on comparison-2026-09-23 or recipe-board.json: the 4 name matches (cheese-tortellini, ground-cloves, sloppy-joe-sauce, tomatillos) are each served by a SIBLING row of another size that carries an id (1334638, 55979, 444508, 37464)"
+      ],
+      "root_cause": "a row that lost its product id before 2026-08-22 can never be re-asked, and the quarter rule expires it; that is the capture policy doing its job for a candidate no board cell uses",
+      "root_fix_none_because": "the harmful half already has an owner: resolve-hyvee-links.ps1 runs daily in check-ad-cycles.ps1 (line 1952) and searches size-first for every not_reverified Hy-Vee row that serves a live board cell, so an id-less row the day it starts serving a cell is re-linked; one that serves none expiring at the quarter loses no cell",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 9,
+      "status": "done",
+      "premise_verified": "partly: the rows are real (311 today) and do expire from 2026-10-13, but 'the cells they hold then drop' is false today: they hold 0 cells",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against hyvee-regular-2026-09-25.json (08:00) and comparison-2026-09-23.json",
+      "close_disposition": "by-design",
+      "resolution_note": "Re-measured: 311 id-less Hy-Vee rows (was 312), 0 of them serving a board cell; each name match is an id-carrying sibling. They expire at the quarter by design, and the daily resolve-hyvee-links pass already re-links any unverified row the day it starts serving a cell.",
+      "folded_from": "plan-2026-09-25-9.json"
+    },
+    {
+      "queue_id": "2026-09-22-781758",
+      "subject": "Triage residual: a starved Family Fare term defeats victim-first promotion",
+      "classification": "no-code-change",
+      "evidence": [
+        "out/ff-carry-report.json generated 2026-09-25 08:30: confirmed_victims 0",
+        "'promotion failed' in the triage queue: 0 items; in grocery/alert-log.txt: 0 lines, since the page shipped on 2026-09-22",
+        "audit-ff-carry.ps1 line 432 computes Get-FfPromotionFailed over the report's victims every run, called from check-ad-cycles.ps1 lines 891/899, and pages under registry entry ff-carry-promotion-failed"
+      ],
+      "root_cause": "a victim Freshop returns to no search cannot be repaired by promotion; the class fix is a second search term in commodity-search.json, which is money-lane and needs the commodity named by a first occurrence",
+      "root_fix_none_because": "the residual has happened 0 times since the fix (the one founding case, pie-pumpkins, predates it), and the only repair is a rule-file edit chosen from the failed-promotion page when it fires",
+      "leaves_open": "a starved Family Fare term that no search returns still cannot be promoted; 0 occurrences since 2026-09-22",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-ff-carry.ps1",
+      "lane": "weekly",
+      "est_tool_calls": 6,
+      "actual_tool_calls": 3,
+      "status": "done",
+      "premise_verified": "yes: the failed-promotion page exists and runs daily; it has not fired",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against ff-carry-report.json 08:30 and the live triage queue",
+      "close_disposition": "by-design",
+      "resolution_note": "0 failed promotions since the page shipped 09-22 and 0 confirmed victims today. Owned by audit-ff-carry.ps1's failed-promotion page, which names the commodity that needs a second search term (money lane) on its first occurrence.",
+      "folded_from": "plan-2026-09-25-9.json"
+    },
+    {
+      "queue_id": "2026-09-23-d493dd",
+      "subject": "Grocery: 25 store(s) dropped from a commodity they carry (x4)",
+      "classification": "rule-gap",
+      "evidence": [
+        "out/coverage-gaps.json generated 2026-09-25 08:19 against candidates-2026-09-23.json: gap_count 435, actionable 18 (was 25 on 09-23, 17 and 18 on 09-24): the condition is live",
+        "the 18: 11 CLAIMED-BY (fresh-ginger, toasted-sesame-seeds, sun-dried-tomatoes, canned-butter-beans @ Fareway; chili-beans, canned-mixed-vegetables, mandarin-oranges, gochujang, butternut-squash @ Hy-Vee; fresh-basil, jumbo-pasta-shells @ Baker's), 6 RULE-INVISIBLE (canned-peaches, canned-pears, apple-juice @ Fareway; apple-juice @ Hy-Vee; oven-cleaner, kalamata-olives @ Sam's Club), 1 PRICED (yellow-bell-pepper @ Family Fare)",
+        "the check-ad-cycles.ps1 changes after it fired (a7923fab1, 977ba3a0c, bda9e5e0d) touch cell quarantine, the research worklist and recipe takedown, not audit-coverage-gaps or matching",
+        "yellow-bell-pepper @ Family Fare: priced per-each by the engine, absent from comparison-2026-09-23 (Baker's only), not in known-wrong.json and not quarantined: the drop is inside compare-deals.ps1"
+      ],
+      "root_cause": "17 of 18 are matching rules (an include that misses the name, or first-match-wins giving it to another commodity), repaired only in commodities.json / category-excludes.json; the 18th is dropped downstream of matching inside compare-deals.ps1",
+      "root_fix_none_because": "bounced: every repair is on THE LINE this lane does not cross (commodities.json, category-excludes.json, compare-deals.ps1); the money lane applies releases and widenings through apply-coverage-batch -FromWorklist",
+      "prior_closes": [
+        "2026-09-19-2a0748",
+        "2026-09-21-b96f21"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-coverage-gaps.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "what": "already shipped by plan-2026-09-22-2 for b96f21: the emitter pages only on names NEW to out/match-worklist.json and hands the rest to the worklist; measured holding: 18 actionable gaps stood on 2026-09-25 08:19 and the type did not page that day (last_seen 2026-09-24T17:08)",
+        "exact_change": "no new change in this lane; the instance fix is the money lane's apply-coverage-batch -FromWorklist over the 17 rule gaps and a compare-deals.ps1 trace of yellow-bell-pepper @ Family Fare"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "out/coverage-gaps.json 2026-09-25 08:19, actionable rows",
+        "affected_now": 18,
+        "names": [
+          "yellow-bell-pepper",
+          "fresh-ginger",
+          "canned-peaches",
+          "apple-juice",
+          "oven-cleaner",
+          "chili-beans",
+          "canned-mixed-vegetables",
+          "mandarin-oranges",
+          "canned-pears",
+          "gochujang",
+          "toasted-sesame-seeds",
+          "sun-dried-tomatoes",
+          "fresh-basil",
+          "jumbo-pasta-shells",
+          "butternut-squash",
+          "canned-butter-beans",
+          "kalamata-olives"
+        ],
+        "risk": "none from this lane: nothing changed here; the money lane owns the rule edits and their cell effects",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-coverage-gaps.ps1 (the emitter; the money lane's rule change owes its own cases)",
+        "must_fire_case": "not built in this lane (bounced): the money lane's fixture is owed from every occurrence below",
+        "clean_twin": "not built in this lane (bounced)",
+        "fixture_occurrences": [
+          "2026-09-19-2a0748",
+          "2026-09-21-b96f21",
+          "2026-09-23-d493dd"
+        ]
+      },
+      "rollback": "nothing to roll back: no change in this lane",
+      "leaves_open": "18 actionable coverage gaps on 2026-09-25 (11 CLAIMED-BY, 6 RULE-INVISIBLE, 1 PRICED), for the money lane",
+      "leaves_open_occurrences": 18,
+      "leaves_open_followup": "2026-09-23-d493dd",
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 6,
+      "status": "bounced",
+      "premise_verified": "yes, re-measured: still live at 18 actionable",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against out/coverage-gaps.json 08:19 (candidates-2026-09-23)",
+      "resolution_note": "Bounced to the money lane: still live (18 actionable today). 17 need a commodities.json release or widening, and yellow-bell-pepper @ Family Fare is priced by the engine and dropped inside compare-deals.ps1.",
+      "folded_from": "plan-2026-09-25-9.json"
+    },
+    {
+      "queue_id": "2026-09-25-c2a750",
+      "subject": "Triage residual: Hy-Vee size-conflict bindings parked (12 pids)",
+      "classification": "code-defect",
+      "evidence": [
+        "hyvee-regular-2026-09-25.json capture_terms: the 12 pids (2950925, 11342, 47144, 444508, 19478, 2918306, 2925188, 1334638, 37464, 37443, 332699, 269490) each 'rejected' with 'source product size conflicts with the worklist variant'",
+        "every one of the 12 is bound by a product-urls.json Hy-Vee link (e.g. beef-stew -> /p/11342/ 'Dinty Moore Beef Stew' 38 oz; ground-cinnamon -> /p/2950925/ 2.5 oz), not by commodities.json or commodity-search.json, so it is not money-lane by the queue body's own test",
+        "comparison-2026-09-23: 9 of the 12 commodities have NO Hy-Vee cell (ground-cinnamon, beef-stew, corned-beef-hash, minced-garlic, dried-dill, ground-ginger, poblano-peppers, fresh-basil, fresh-mint); 3 are carried (sloppy-joe-sauce 09-22, cheese-tortellini 09-07, tomatillos 08-24)",
+        "resolve-hyvee-links.ps1 lines 101-136 (before this change) built its targets only from Hy-Vee cells ON the board, so the 9 were unreachable by the one tool that re-points a drifted link"
+      ],
+      "root_cause": "the drifted-link repair (resolve-hyvee-links) discovers work only from board cells, and a link whose product id Hy-Vee now answers at another size produces no fresh row, so its cell leaves the board and the repair never sees it again; the pull's refusal was recorded (the ask ledger) but read by nothing that repairs",
+      "root_fix": {
+        "what": "resolve-hyvee-links takes a size-conflict relink queue from the ask ledger, reaching links whose cell is off the board",
+        "files": [
+          "grocery/resolve-hyvee-links.ps1"
+        ],
+        "exact_change": "Get-HyVeeSizeConflictRelinkTargets (pure): every product-urls.json Hy-Vee link whose /p/<id>/ is in out/hyvee-ask-ledger.json with last_outcome = the size-conflict reason, and whose link size still equals the ledger's worklist size (or the ledger size is empty for a link-only product), joins the targets with relink=true, the link's own name and size and, when one exists, the regular row of that name and size; it honours -Ids and never duplicates a board target. The existing four gates (size first, brand, negation, price or strong name) decide the match unchanged, so a link is only re-pointed to a product AT THE LINK'S SIZE. Test-HyVeeRelinkNoProgress: a best match that is the parked pid again is listed 'size conflict stands' and nothing is written. A missing or unreadable ledger adds no target."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the 12 parked pids against product-urls.json and comparison-2026-09-23",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none until the first ask ledger exists (written by the 2026-09-26 08:00 pull); then at most 12 links re-pointed, each only to a product whose search size equals the link size, and a re-pointed link's price is read by the pull like any other",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/resolve-hyvee-links.ps1 -SelfTest (new; the queue builder and the no-progress guard are pure)",
+        "must_fire_case": "FROZEN founding shape: ledger 11342 size-conflict at 38 oz, link beef-stew -> /p/11342/ 38 oz, no board cell: it becomes a relink target at 38 oz carrying the 38 oz row's $6.49; a link-only conflict (2950925, ledger size empty) is queued at the link's 2.5 oz; a search whose best match is 11342 again is no progress.",
+        "clean_twin": "-Ids ground-cinnamon still scopes the queue to exactly ground-cinnamon (positive). MUST NOT FIRE twins: a success pid (444508), a link whose size moved off the conflicted size (47144), a commodity already targeted from the board, a missing ledger, another product id at our size, and a board target with no parked pid.",
+        "commands": [
+          "powershell -NoProfile -File grocery\\resolve-hyvee-links.ps1 -SelfTest"
+        ],
+        "run": "exit 0, 12 ok lines, 0 FAIL, last line 'resolve-hyvee-links self-test pass (12 cases)'; the suite asserts its own count of 12. ops/audit-fixture-vocabulary.ps1 exit 0, FIXTURE-VOCABULARY-COMPLETE files=858 mislabelled=0. The live search path was not run: it calls Hy-Vee's API and writes product-urls.json, which the daily chain does."
+      },
+      "rollback": "revert the resolve-hyvee-links.ps1 hunks; the resolver returns to board-cell targets only and the 12 stay parked, as before",
+      "freshness": "measured 2026-09-25 against hyvee-regular-2026-09-25.json, product-urls.json at HEAD and comparison-2026-09-23; out/hyvee-ask-ledger.json does not exist yet in the main checkout",
+      "leaves_open": "unverified live: the first relink runs after the 2026-09-26 08:00 pull writes the first ask ledger; any of the 12 Hy-Vee no longer sells at the link size stays parked and is printed as 'no size match' or 'size conflict stands', and those need a per-commodity choice of size. 12 pids parked today",
+      "leaves_open_occurrences": 12,
+      "leaves_open_followup": "2026-09-25-1b7001",
+      "lane": "weekly",
+      "est_tool_calls": 25,
+      "actual_tool_calls": 20,
+      "status": "done",
+      "premise_verified": "yes: the 12 pids refused on every run 09-23..09-25; the bindings are product-urls.json links (not a matching rule), and Hy-Vee's reported size is persisted nowhere until the ask ledger's first run records 'theirs'",
+      "deviation": "Did not re-bind the 12 by hand: Hy-Vee's current size for each pid is recorded nowhere today (the ledger that records it has not run), and choosing a size or product by hand would be an agent-made binding. Fixed the class instead so the daily resolver re-points them by its own size-first search.",
+      "shipped_commit": "worktree-agent-a8fa841d53e6be50e commit 'Triage plan-2026-09-25-9: ...' (lands via triage-land.ps1)",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real: 12 Hy-Vee links point at product ids Hy-Vee now answers at another size, 9 of them cells missing from the board. The drifted-link resolver could only see board cells; it now also takes every size-conflict pid from the ask ledger and re-points the link by its size-first search. Live from the first chain run after 2026-09-26 08:00; what it cannot re-point is 2026-09-25-1b7001.",
+      "folded_from": "plan-2026-09-25-9.json"
+    },
+    {
+      "queue_id": "2026-09-22-293660",
+      "subject": "Triage residual: a store rendering misread into a known unit never reaches the ingest-shape check (residual of 2026-09-22-20fecf)",
+      "classification": "no-code-change",
+      "evidence": [
+        "re-measured 2026-09-25: the one known occurrence is Aldi 'Lunch Buddies Pineapple Tidbits ... 4 pack' carded 16 oz (2026-09-19), fixed at build-aldi-regular by arithmetic proof; canned-pineapple's band floor refused it before that",
+        "Rule 4's 'Puraqua Water 40pk 676 FL OZ' rendering is absent from aldi-regular-2026-09-22..25; today's row is 'Puraqua Water, 40 Pack' | $4.99 | size '40 pk 16.9 fl oz' (40 x 16.9 = 676, correct)",
+        "the two builders whose store prints a unit price already test the name's size against it: walmart-row-lib.ps1 ('WHICH QUANTITY TO BELIEVE - the name's, or lp/up?') and build-sams-deals.ps1 (NAME CONFLICT / SAZON rule). Aldi cards carry no unit price (0 of the 30 affected rows, design/MEASURE-aldi-pack-basis-2026-09-19.md); Family Fare, Hy-Vee, Baker's and Fareway builders were not checked here",
+        "census 2026-09-12..25: the downstream detector 'grocery a price band refused rows it cannot explain' fired 09-23, 09-24, 09-25 (queue 2026-09-23-57b66b, open, weekly lane)"
+      ],
+      "root_cause": "an ingest check can only prove a size from the store's own arithmetic, and a misread into a unit the builder already knows produces no new spelling and, where the store prints no unit price, no second number to disagree with",
+      "root_fix_none_because": "the only oracle that would expose it at ingest is the store's own per-unit rate, which Walmart and Sam's already use at build and Aldi's cards do not carry; a plausibility bar is the one other road and grocery.md forbids it ('Do not add a plausibility bar here'), so the band refusal and audit-unit-basis-outlier stay the net",
+      "leaves_open": "a misread into a known unit at a store whose rows print no unit price (Aldi measured; Family Fare, Hy-Vee, Baker's, Fareway not checked) is seen only when a band refuses it or the unit-basis outlier audit flags it: 1 known occurrence (Aldi, 2026-09-19), 0 since",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-23-57b66b",
+      "freshness": "Aldi regular builds 2026-09-22..25 and alert-census.jsonl read 2026-09-25 ~20:00",
+      "resolution_note": "By design: an ingest check cannot see a misread into a known unit without the store's own unit price. Walmart and Sam's already check the name against it at build; Aldi prints none, and a plausibility bar is ruled out. The one occurrence (Aldi 09-19) was fixed at its builder and none since; the band-refusal alert (57b66b) is the net.",
+      "close_disposition": "by-design",
+      "lane": "ops",
+      "est_tool_calls": 8,
+      "actual_tool_calls": 7,
+      "status": "done",
+      "premise_verified": "true: the residual's premise holds (a known-unit misread produces no new spelling); its one named occurrence is fixed and its Rule 4 example no longer appears in any Aldi build 09-22..25",
+      "deviation": null,
+      "shipped_commit": null,
+      "folded_from": "plan-2026-09-25-10.json"
+    },
+    {
+      "queue_id": "2026-09-22-93f022",
+      "subject": "Triage residual: Sam's count-first names refused as ambiguous (7 real rows) and a measure-first pack total held only by a ruling",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "sams-rejects-2026-09-25 | 'LYSOL All Purpose Cleaner Trigger. 4 pk., 32 oz. Each' | $11.98 | 9.4 c/oz | NAME CONFLICT count-first (x3): 11.98/128 = 0.0936, Sam's reproduces 4 x 32 oz",
+        "sams-rejects-2026-09-25 | 'Member's Mark Commercial Disinfectant, Lemon Scent, 4 pk., 1 gal. each' | $30.32 | 5.9 c/fl oz | NAME CONFLICT (x3): 30.32/512 = 0.0592",
+        "sams-rejects-2026-09-23..25 | 'Bloom Pear Scare Limited Edition Sparkling Energy Drink, 15pk, 12 fl oz cans' | $19.98 | 11.1 c/fl oz | NAME CONFLICT daily: 19.98/180 = 0.111",
+        "of the residual's 7: Friskies x2 ('60 ct., 5.5 oz. Cans'), Temptations ('32 ct. 0.4 oz. Pouches') and Bloom carry a per-piece word; Fresh Step 2 pk 70 oz, Fancy Feast 48 ct 3 oz and Blue Buffalo 32 ct 5.5 oz do not, and none of those three nor Nathan's '32 oz., 16 ct.' appears in any Sam's capture 2026-09-22..25"
+      ],
+      "surface_fix": {
+        "what": "a count-first measure immediately followed by a per-piece word is read as one piece, not the pack total",
+        "files": [
+          "grocery/build-sams-deals.ps1"
+        ],
+        "exact_change": "Get-SamsCountFirstMeasure's regex gains a second negative lookahead (?!\\.?\\s+(?:each|ea|cans?|bottles?|pouch(?:es)?|jugs?)\\b) beside the existing '/pk' one"
+      },
+      "root_cause": "the count-first rule reads every 'N ct, X oz' as a pack of N totalling X and refuses the row when Sam's unit price reproduces only N x X, but it recognised the name's own per-piece statement only in the slash form ('8 fl. oz./pk.'), not as a trailing word ('32 oz. Each', '12 fl oz cans')",
+      "root_fix": {
+        "what": "read the name's per-piece word as the name disambiguating itself, class-wide, in the one function every Sam's row passes through",
+        "files": [
+          "grocery/build-sams-deals.ps1"
+        ],
+        "exact_change": "same lookahead as surface_fix: the fix is at the builder's single parser, so it covers every row of that shape, not the three products"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "old vs new Get-SamsCountFirstMeasure regex over the 4,044 distinct item/name strings in grocery/out/sams/sams-deals-2026-09-*.json and sams-rejects-2026-09-*.json (scratch replay)",
+        "affected_now": 11,
+        "names": [
+          "Purina Friskies Wet Cat Food Gravy Pleasers Variety Pack ..., 60 ct., 5.5 oz. Cans",
+          "Purina Friskies Pate Wet Cat Food Variety Pack ..., 60 ct., 5.5 oz. Cans",
+          "Member's Mark Variety Pack Hand Soap with Refillable Glass Dispensers, 3 Pack, 16 oz. each",
+          "LYSOL All Purpose Cleaner Trigger. 4 pk., 32 oz. Each",
+          "Temptations Lickable Puree Adult Variety ... Cat Treats, 32 ct. 0.4 oz. Pouches",
+          "Bloom Pear Scare Limited Edition Sparkling Energy Drink, 15pk, 12 fl oz cans",
+          "Member's Mark Commercial Disinfectant, Lemon Scent, 4 pk., 1 gal. each",
+          "LYSOL Disinfecting Spray, Crisp Linen, Early Morning Breeze, & Mango Hibiscus, 3 pk. 19 oz. each",
+          "Kingsford Match Light Instant Charcoal Briquettes 2 Pack, 16 Lbs. Each",
+          "Tidy Cat Super Jug Twin Pack ..., 42 lbs. (2 Pack, 21 lb. Jugs)",
+          "Red's Sausage Egg and Cheese Breakfast Burrito, Frozen, 10 ct., 5 oz. Each"
+        ],
+        "risk": "every moved name carries an explicit per-piece word right after the measure; a moved row is then checked against Sam's unit price like any measure-first name, so a row Sam's contradicts is still refused. No commodity routing rule changed.",
+        "cell_effects": []
+      },
+      "freshness": "Sam's captures through sams-rejects-2026-09-25 (written 19:37); the next Sam's build is the first to emit the restored rows, so cells move only on the next board",
+      "proof": {
+        "guard_or_fixture": "grocery/build-sams-deals.ps1 -SelfTest",
+        "must_fire_case": "frozen from sams-rejects-2026-09-25: 'LYSOL All Purpose Cleaner Trigger. 4 pk., 32 oz. Each' $11.98 at 9.4 c/oz builds size 128 oz, and 'Bloom Pear Scare ..., 15pk, 12 fl oz cans' $19.98 at 11.1 c/fl oz builds 180 fl oz (both were NAME CONFLICT refusals)",
+        "clean_twin": "'Febreze Air Mist ..., Spring Mixed Scent, 4ct., 32.4 oz.' at 7.7 c/oz, with no per-piece word, is still refused NAME CONFLICT count-first; the existing Pledge per-each cases stay NAME AMBIGUOUS and the Febreze 30.8 c/oz sibling still builds 32.4 oz",
+        "commands": [
+          "powershell -NoProfile -File grocery\\build-sams-deals.ps1 -SelfTest (exit 0, SELF-TEST PASS)"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the regex line and the three self-test cases in grocery/build-sams-deals.ps1; no data migration",
+      "leaves_open": "Fresh Step 2 pk 70 oz, Fancy Feast 48 ct 3 oz and Blue Buffalo 32 ct 5.5 oz stay refused as ambiguous when next captured (the name cannot say, and Sam's product-page oracle is not read); Nathan's '32 oz., 16 ct.' (measure-first meaning the pack total) stays held by its known-wrong ruling. 0 occurrences 2026-09-22..25: none of the four was captured",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-known-wrong.ps1",
+      "resolution_note": "Fixed at the Sam's builder: a count-first measure the name itself calls per piece ('32 oz. Each', '12 fl oz cans', '5.5 oz. Cans') is read as one piece and checked against Sam's unit price. Restores 7 rows refused on 09-25 plus Friskies x2, Temptations and Bloom from the residual's list. The three unmarked pet rows stay refused by design and Nathan's stays under its ruling; none was captured 09-22..25.",
+      "close_disposition": "confirmed",
+      "lane": "money",
+      "est_tool_calls": 25,
+      "actual_tool_calls": 14,
+      "status": "done",
+      "premise_verified": "partly: the 7 named real rows were not captured 09-22..25 (0 rows), but the same parser refused 7 real rows on 09-25 for a per-piece word it did not read, and 4 of the residual's 7 carry that word",
+      "deviation": "fixed the per-piece-word shape the re-measurement found instead of the unmarked count-first names, which stay ambiguous by design",
+      "shipped_commit": "30c5546e2",
+      "folded_from": "plan-2026-09-25-10.json"
+    },
+    {
+      "queue_id": "2026-09-23-ff21e2",
+      "subject": "Grocery: ingest shape - new unit spelling unproved - 2026-09-23",
+      "classification": "no-code-change",
+      "evidence": [
+        "sams-rejects-2026-09-23 | 'Member's Mark Clear Frying Oil 35 lbs.' | $39.98 | $2.32/l | unknown unit \"l\" (x2, one product): 39.98/2.32 = 17.23 l, about 35 lb of oil at 0.92 g/ml, so Sam's priced a weight-named jug per litre",
+        "sams-rejects-2026-09-24 and -25: 0 rows priced per 'l', 0 Frying Oil rows; census 'grocery ingest shape new unit spelling unproved' fired on 1 day (09-23) over 2026-09-12..25",
+        "the NEW-REASON lines were printed, never sent: they are the count-first and per-piece refusal wordings plan-2026-09-22-5 introduced, and the '4 pk., 32 oz. Each' / 'cans' conflicts among them are fixed by 93f022 in this plan"
+      ],
+      "root_cause": "Sam's printed a metric per-litre unit price on one weight-named product, and the builder's unit table has no litre family, so no arithmetic can prove the spelling and the ingest check refuses the rows, as designed",
+      "root_fix_none_because": "refusing an unprovable unit is the designed outcome of audit-ingest-shape; a litre price unit would reach the board only as a cross-family derived size (a 35 lb name against a volume price), which the density rules would have to vouch for, for one product seen on one day and not since",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "freshness": "Sam's rejects 2026-09-23..25 and alert-census.jsonl read 2026-09-25; capture-run's 09-24 changes (b6be9c8c3, 2092dd3a9) do not touch the unit table",
+      "resolution_note": "By design: the ingest check refused two rows of one Member's Mark frying oil priced per litre, a unit with no family in the builder's table, so no wrong price could land; it has not recurred on 09-24 or 09-25. The new refusal wordings were printed only, and the per-piece ones are fixed by 93f022.",
+      "close_disposition": "by-design",
+      "lane": "ops",
+      "est_tool_calls": 5,
+      "actual_tool_calls": 4,
+      "status": "done",
+      "premise_verified": "true: the alert fired once on 09-23; re-measured 0 per-litre rows on 09-24 and 09-25",
+      "deviation": null,
+      "shipped_commit": null,
+      "folded_from": "plan-2026-09-25-10.json"
+    },
+    {
+      "queue_id": "2026-09-25-17c0da",
+      "subject": "Triage residual: yellow-bell-pepper Family Fare withheld on a self-contradicting read (from 2026-09-23-92e552)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "flag-verification.json 2026-09-25 | yellow-bell-pepper|Family Fare | claim 'Yellow Bell Pepper' | '10 for $10.00 with purchase of 10' | 1 ea | $1.0000/each | sale 09-20..09-26 | status wrong-price, verdict_at 2026-09-22, claim has NO deal_qty | store read 09-22: $1.99, 1 ea, product_id:2310571",
+        "comparison-2026-09-22 FF cell carries no deal_qty (built 08:13, before 88c0b05dd stamped it at 14:39); comparison-2026-09-23 WITHHELD the cell ('no previously published value'), and its quarantine record carries only bad_item / bad_per_unit",
+        "flag-verify-lib Update-TcFlagLedger copied deal_qty only when the LIVE cell publishes the claim, so a withheld cell's disagreement could never be re-judged; Get-TcDealCondition('10 for $10.00 with purchase of 10') = qty 10, 'when you buy 10'"
+      ],
+      "root_cause": "not a capture defect and not a price change: the verifier judges a quantity deal by the engine's condition, but read it off the live cell only, and a quarantined cell's record did not carry it, so a verdict taken before the condition existed withheld the cell on every build while the ad kept producing the same claim",
+      "root_fix": {
+        "what": "the quarantine record carries the held candidate's deal condition and the ledger reads it for a held claim",
+        "files": [
+          "grocery/cell-quarantine-lib.ps1",
+          "grocery/flag-verify-lib.ps1"
+        ],
+        "exact_change": "Add-TcHeldDealCondition writes bad_deal_qty / bad_deal_condition onto withheld and last-good entries when the cell carries deal_qty; Get-TcBoardCellIndex exposes them as held_deal_qty / held_deal_condition; Update-TcFlagLedger copies them onto a claim whose claim_key equals the held_key"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the flag ledger of 2026-09-25: 9 open entries, 1 wrong-price (this one), 0 wrong-product; only an open disagreement on a held cell whose candidate carries deal_qty can change verdict",
+        "affected_now": 1,
+        "names": [
+          "Yellow Bell Pepper (Family Fare, 10 for $10.00 with purchase of 10)"
+        ],
+        "risk": "a held cell with no stamped condition keeps its verdict unchanged (clean twin); no routing, band or guard threshold moves",
+        "cell_effects": [
+          {
+            "commodity": "yellow-bell-pepper",
+            "store": "Family Fare",
+            "before": null,
+            "after": 1.0
+          }
+        ]
+      },
+      "freshness": "flag-verification.json and comparison-2026-09-23 as of 2026-09-25 08:27; the sale ends 2026-09-26, so the cell returns on the next build whose quarantine record carries the condition, or the claim changes with the next ad",
+      "proof": {
+        "guard_or_fixture": "grocery/test-flag-verification.ps1 -SelfTest, section 1c",
+        "must_fire_case": "the frozen pepper claim, wrong-price since 2026-09-22 with no deal_qty, on a board where the REAL Invoke-TcCellQuarantine withheld the stamped cell: the withheld record carries bad_deal_qty 10 / 'when you buy 10', and Update-TcFlagLedger closes the entry as match against the store's $1.99 single",
+        "clean_twin": "the same cell with no condition stamped by the engine: the withheld record carries no bad_deal_qty and the entry stays open wrong-price, so the ledger invents no condition",
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-flag-verification.ps1 -SelfTest (exit 0, 41 of 41, was 38)",
+          "powershell -NoProfile -File grocery\\test-cell-quarantine.ps1 -SelfTest (exit 0, 52 of 52)"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the three hunks in cell-quarantine-lib.ps1 and flag-verify-lib.ps1 and section 1c of test-flag-verification.ps1 (and its count back to 38); board quarantine records simply lose two optional fields",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "resolution_note": "A verifier gap, not a capture defect or a price change: the Family Fare '10 for $10 with purchase of 10' pepper was judged wrong-price before the engine stamped its condition, then withheld, and a withheld cell never showed the verifier that condition again. The quarantine record now carries it and the ledger re-judges a held claim with it (a match against the store's $1.99 single).",
+      "close_disposition": "confirmed",
+      "lane": "money",
+      "est_tool_calls": 30,
+      "actual_tool_calls": 22,
+      "status": "done",
+      "premise_verified": "false as posed: neither a capture defect nor a real price change; the store's 09-22 read ($1.99 single) is the unconditional price of a must-buy-10 deal",
+      "deviation": "fixed the verifier's held-cell road instead of the capture; the instance clears on the next build, not by hand",
+      "shipped_commit": "30c5546e2",
+      "folded_from": "plan-2026-09-25-10.json"
+    },
+    {
+      "queue_id": "2026-09-22-6e6a3b",
+      "subject": "Triage residual: 9 delegated guard audits still hold the whole board instead of scoping to a cell",
+      "classification": "infra",
+      "evidence": [
+        "test-hold-scope.ps1 -SelfTest at cbbe61b42 before any edit: 'the live tree: 13 delegates, 9 board-scoped against a mark of 9, findings 0' (exit 0). Board-scoped headers: asof-evidence, board-mojibake, capture-encoding, coverage-regression, household-in-food, known-wrong, pack-basis, price-mode, tile-integrity.",
+        "After this run: 'the live tree: 13 delegates, 7 board-scoped against a mark of 7, findings 0' (exit 0)."
+      ],
+      "root_cause": "guards.ps1 treats a delegated audit's exit 2 as BOARD scope unless the child affirms a complete cell list, and the delegated audits predate the 2026-09-21 quarantine protocol, so each one still reports its findings in prose only and one bad cell holds the whole board.",
+      "root_fix": {
+        "what": "teach each board-scoped delegate to name its cells in the QUARANTINE-CELL protocol, one guard and one fixture at a time, with test-hold-scope's ratchet mark falling with each",
+        "files": [
+          "grocery/audit-known-wrong.ps1",
+          "grocery/audit-pack-basis.ps1",
+          "grocery/hold-scope-lib.ps1",
+          "grocery/test-known-wrong-scope.ps1",
+          "grocery/test-pack-basis-scope.ps1"
+        ],
+        "exact_change": "audit-known-wrong: every BLOCKED comparison-board cell printed as 'QUARANTINE-CELL id|store|value' plus the complete line, only when no blocked cell sits on recipe-board.json; audit-pack-basis: each CONFIRMED-PACK-TOTAL cell named as value, no scope affirmed under -Strict with an undecidable finding; TcHoldBoardMark 9 -> 7."
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "guards.ps1 delegate table via test-hold-scope live pass (13 delegates) and the exit-2 paths of the two audits",
+        "affected_now": 2,
+        "note": "Only the exit-2 path of the two audits: a run that would have held the whole board now names its cells, and guards quarantines them under the existing breaker (more than 2% of priced cells, or 10% of one store's, still holds). A clean run prints nothing new. The BLOCKED-LINK half of known-wrong, a malformed blocklist, a blocked recipe-board cell and pack-basis -Strict still hold the board exactly as before."
+      },
+      "proof": {
+        "must_fire_case": "test-known-wrong-scope.ps1 'MUST FIRE  a BLOCKED comparison-board cell exits 2 and is named for guards as salmon / Walmart [value], scope complete' (the founding shape: a ruled-wrong cat food priced as salmon); test-pack-basis-scope.ps1 'MUST FIRE  a CONFIRMED pack total exits 2 and is named for guards as furniture-polish / Sam's Club [value], scope complete' (Sam's Pledge 3 ct., 29 oz.). Both read through Get-TcChildQuarantineScope, the function guards uses.",
+        "clean_twin": "test-known-wrong-scope 'CLEAN TWIN  a blocked recipe-board cell still exits 2 and affirms no scope, so guards holds the board'; test-pack-basis-scope 'CLEAN TWIN  -Strict over an undecidable finding still exits 2 and affirms no scope, so the board holds'; each suite also has a MUST NOT FIRE clean board.",
+        "ran": "test-known-wrong-scope -SelfTest exit 0 (4 of 4); test-pack-basis-scope -SelfTest exit 0 (4 of 4); test-hold-scope -SelfTest exit 0 (8 of 8, live 7 against 7); live audit-known-wrong exit 0 (0 of 347 on 2973 named cells); live audit-pack-basis exit 0; audit-script-census exit 0",
+        "full_suite": "deferred-to-land",
+        "guard_or_fixture": "grocery/test-known-wrong-scope.ps1 and grocery/test-pack-basis-scope.ps1 (new), grocery/test-hold-scope.ps1 live ratchet at mark 7"
+      },
+      "rollback": "git revert of the fix commit: the two audits stop printing the protocol and hold the board again; the mark returns to 9 in the same revert.",
+      "freshness": "measured 2026-09-25 against the seeded worktree at cbbe61b42 (board comparison-2026-09-23, rebuilt 2026-09-25 08:14)",
+      "status": "needs-more-time",
+      "premise_verified": "true: 9 board-scoped delegates on the live tree before the change (test-hold-scope, exit 0).",
+      "deviation": "Two of nine guards taught inside the batch budget, each with its own fixture; the other seven are left for the next weekly run rather than defaulted, per the per-guard rule.",
+      "resolution_note": "Shipped 2 of 9: audit-known-wrong and audit-pack-basis now scope to cells (mark 9 -> 7). Left for the next run, in rough order of ease: household-in-food (needs guards' row-to-cell map), asof-evidence, price-mode (a store is the natural unit), board-mojibake (a count ratchet, so the finding is an aggregate), tile-integrity (link half is a cell, coverage half a store), capture-encoding (a file is a store), coverage-regression (a store floor). The queue id stays open and carries the seven.",
+      "leaves_open": "7 delegated audits still board-scoped: asof-evidence, board-mojibake, capture-encoding, coverage-regression, household-in-food, price-mode, tile-integrity",
+      "leaves_open_occurrences": 7,
+      "leaves_open_followup": "2026-09-22-6e6a3b",
+      "shipped_commit": "6f1dd11cd",
+      "actual_tool_calls": 30,
+      "folded_from": "plan-2026-09-25-11.json"
+    },
+    {
+      "queue_id": "2026-09-18-a0c785",
+      "subject": "Grocery: beverage class absent on 241 non-drink commodities in five display buckets (residual of 2026-09-18-55b7aa)",
+      "classification": "no-code-change",
+      "evidence": [
+        "Re-measured 2026-09-25 on comparison-2026-09-23 (seeded 2026-09-25 08:14) with categories.json labels and category-excludes.json at blob 7d70ec60c: the five buckets hold 242 commodities without a beverage apply_id (Baking & Spices 76, Canned & Soup 60, Sauces & Condiments 59, Dairy & Eggs 30, Coffee, Oils & Spreads 17) and 1,152 priced cells. 22 cells match a beverage token and all 22 are the right product: baking-soda x6 (soda), coffee x7 and coffee-creamer x6 (coffee), Aldi 'Nature S Nectar' lemon-juice, lime-juice, orange-juice (nectar). True beverage incursions: 0 of 1,152 (0 of 1,284 on 2026-09-17).",
+        "exempt.beverage ('juice|soda|drink|water|tea|coffee|lemonade|punch|cider|kombucha|milk', matched against ids) exempts all six commodity ids behind the 22 hits, so adding beverage to these buckets' apply blocks would fire on 0 of today's 1,152 priced cells."
+      ],
+      "root_cause": "audit-food-category scopes a class by display bucket through category-excludes.json's apply blocks, and the shared Dairy/Canned/Sauces/Baking/Coffee blocks carry no beverage class, so a drink crowning a non-drink commodity sold by the fluid ounce (oils, vinegars, sauces) would be seen by nothing: kind_mismatch_crown only catches a fluid-ounce drink on a weight or each commodity.",
+      "freshness": "measured 2026-09-25 on comparison-2026-09-23 as seeded into this worktree",
+      "status": "bounced",
+      "premise_verified": "true: the five buckets still carry no beverage class (apply blocks read at blob 7d70ec60c); the class has still never occurred there (0 of 1,152).",
+      "deviation": "Bounced: the fix is an edit to grocery/category-excludes.json, which this lane may not touch. The measurement the item said was missing is done and rides with it. Also noticed for the money lane: exempt.beverage is an unanchored substring over ids, so any id containing 'tea', 'milk' or 'water' (steak, watermelon, condensed-milk) is exempt from the beverage class wherever it applies.",
+      "resolution_note": "Bounced to the money lane (owner of category-excludes.json) with its routing measurement: adding beverage to the five buckets' apply blocks would fire on 0 of 1,152 priced cells today, every one of the 22 token hits being exempt by id; the queue id stays open for that lane.",
+      "leaves_open": "the whole class (a drink on a fluid-ounce non-drink commodity in five buckets), 0 occurrences, pending the money lane's category-excludes.json change",
+      "leaves_open_occurrences": 0,
+      "actual_tool_calls": 7,
+      "leaves_open_followup": "2026-09-18-a0c785",
+      "folded_from": "plan-2026-09-25-11.json"
+    },
+    {
+      "queue_id": "2026-09-19-dc1b5b",
+      "subject": "Grocery: board-verification residuals after 2026-09-19 (641ec6) - aging, channel, not-cheapest, Fareway ranges, contested routing, Sam's pack total",
+      "classification": "no-code-change",
+      "evidence": [
+        "grocery/out/verification-history.json (5 runs): the newest run is still board_date 2026-09-17 (recorded 2026-09-19T05:49, 100 drawn), so residuals 1 to 3 cannot be re-measured before the next verification (due about 2026-10-03).",
+        "plan-2026-09-19.json leaves_open, split per residual: (1) price aging 12 of 36; (2) channel 7 of 36; (3) not-cheapest 7 of 36; (4) Fareway size ranges, 1 verified defect plus 3 rows at a range's high end; (5) contested-name routing, 14 contested names, array-order class unfixed; (6) Test-PieceSize reads a Sam's pack TOTAL as the piece weight, 1 occurrence. Test-PieceSize is defined at grocery/compare-deals.ps1:233."
+      ],
+      "root_cause": "one verification's defects were bundled into one item whose residuals live in three different places: capture freshness and channel (1, 2, 3, already given capture-side fixes that need a new verification to judge), and the engine's size, range and routing rules in compare-deals.ps1 (4, 5, 6).",
+      "freshness": "verification-history.json as seeded 2026-09-25 19:38; compare-deals.ps1 at cbbe61b42",
+      "status": "bounced",
+      "premise_verified": "true: no verification has run since the 2026-09-17 board, and Test-PieceSize, the range-end rule and contested routing are all in compare-deals.ps1.",
+      "deviation": "Split, as asked, into six findings; none fits this lane. (1) aging, (2) channel, (3) not-cheapest: owner is the next board verification (about 2026-10-03), whose recorder writes a drift subclass per defect row; re-measure those three counts there. (4) Fareway ranges, (5) contested routing, (6) Sam's pack total in Test-PieceSize: money lane, compare-deals.ps1. (7) the online-multipack rubric stays Brad's (q-2026-09-19-multipack).",
+      "resolution_note": "Bounced to the money lane split into six: 1-3 wait on the next verification to be re-measured, 4-6 are compare-deals.ps1 changes.",
+      "leaves_open": "six residuals: aging 12, channel 7, not-cheapest 7 (of 36 defects in 100 verified, 2026-09-17), Fareway ranges 4 rows, contested routing 14 names, Sam's pack total 1",
+      "leaves_open_occurrences": 45,
+      "actual_tool_calls": 5,
+      "leaves_open_followup": "2026-09-19-dc1b5b",
+      "folded_from": "plan-2026-09-25-11.json"
+    },
+    {
+      "queue_id": "2026-09-22-817976",
+      "subject": "Triage residual: 16 non-Sam's tile links the chain cannot re-price (residual of 2026-09-20-bec597)",
+      "classification": "needs-more-time",
+      "evidence": [
+        "audit-tile-integrity.ps1 on the seeded worktree 2026-09-25 (comparison-2026-09-23): exit 0, 'PRICE-DRIFT 18', 'ACCURACY OK - all 2298 price-graded links (of 2600 linked tiles) open the product the board names, at the price it shows', 'PRICE-DRIFT Sam's Club: 2 finding(s) against a baseline of 67, a 97% fall ... Baseline KEPT', 'PRICE-DRIFT RATCHET OK - no store rose above its mark'. Marks: Aldi 13, Walmart 2, Family Fare 1. 18 - 2 = 16 and no other store printed a fall, so the non-Sam's count is still 16 (inferred from the total, not printed per store).",
+        "The 2026-09-22 derive dry runs in the queue body: Aldi 9 refused at write time for the per-unit not re-pricing inside the 0.32 tolerance (the Aldi pack-basis shape), 3 ad-only cells with no row; Walmart refused at write time; Family Fare nothing refused that maps to its tile."
+      ],
+      "root_cause": "derive-links-from-prices re-points a link only when a row's per-unit re-prices to the cell, and the Aldi rows behind most of these tiles carry a pack basis the builder now refuses to guess (resolved by arithmetic proof or not at all), so the stored snapshot on a right-product link cannot be refreshed.",
+      "freshness": "measured 2026-09-25 on the seeded worktree against grocery/out/tile-integrity-baseline.json (drift_set 2026-09-22 21:58)",
+      "status": "needs-more-time",
+      "premise_verified": "true: 16 non-Sam's drift tiles still stand; Sam's fell 67 -> 2, which the ratchet refused to tighten on its own (over the 60% fall bar) and needs -AcceptDrop in the main checkout.",
+      "deviation": "Not finished: reading each of the 16 tiles' refusal reason individually did not fit after the guard work. Next step: run derive-links-from-prices scoped to Aldi and read the 9 refusals against the MEASURE-aldi-pack-basis cases, then Walmart's 2 and Family Fare's 1; and in the main checkout run audit-tile-integrity.ps1 -AcceptDrop to record Sam's 2.",
+      "resolution_note": "Re-measured, still 16 (Aldi 13, Walmart 2, Family Fare 1); Sam's fell to 2 and waits on -AcceptDrop. Left open for the per-tile read.",
+      "leaves_open": "16 right-product tile links with a stale price snapshot (Aldi 13, Walmart 2, Family Fare 1)",
+      "leaves_open_occurrences": 16,
+      "leaves_open_followup": "2026-09-22-817976",
+      "actual_tool_calls": 4,
+      "folded_from": "plan-2026-09-25-11.json"
+    },
+    {
+      "queue_id": "2026-09-23-749d31",
+      "subject": "Articles: welcome waits for the feed to carry free-chicken-alfredo everyday_ps",
+      "classification": "infra",
+      "evidence": [
+        "served feed feed.thriftycrew.com/smp-feed.json generated 2026-09-25T08:15:36: 570 recipes, everyday_ps on 566; the four without are free-chicken-alfredo, shredded-bbq-chicken-sammies, chicken-marinara-pasta, beef-protein-pasta (the legacy rebuilds of c05390ae1)",
+        "free-chicken-alfredo is LIVE (plan-2026-09-22-6 item discovered:free-chicken-alfredo-live-2026-09-21 status done, 'published by the integrator') but C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\free-chicken-alfredo.body.html does not exist; the card exists only in worktrees agent-ac5f626bdaf27c684 and agent-acc4db640d784b57b",
+        "feed-everyday-ps.ps1 line 96 (before): a slug is filled only when Join-Path $BuiltDir ($s + '.body.html') exists, so a card built elsewhere fails closed for good",
+        "after the fix, run over a copy of that same feed: 'feed-everyday-ps: 4 card(s) built here for recipes with no card ... free-chicken-alfredo,shredded-bbq-chicken-sammies,chicken-marinara-pasta,beef-protein-pasta; 0 could not be built', 'everyday_ps for 570 of 570 recipes', free-chicken-alfredo everyday_ps 2.00 (the live card read ~$2.00 on 2026-09-23)"
+      ],
+      "surface_fix": {
+        "what": "the next daily export writes everyday_ps for free-chicken-alfredo, so prepare-article-price-edits -Land stops refusing welcome",
+        "files": [
+          "meal-prep/pipeline/feed-everyday-ps.ps1"
+        ],
+        "exact_change": "Resolve-TcEverydayCards: a feed slug with no card in BuiltDir and a spec in db\\recipes is built by build-card2 into a per-run scratch directory and handed to the harness"
+      },
+      "root_cause": "db/built is gitignored, so a recipe built and published from a worktree leaves no card in the chain's checkout, and the only writer of the feed's everyday_ps reads cards from that checkout alone: every span on another page naming such a recipe keeps its stamped fallback forever, and nothing pages",
+      "root_fix": {
+        "what": "feed-everyday-ps builds a missing card from its tracked spec with the card's own builder instead of requiring a card this checkout never received",
+        "files": [
+          "meal-prep/pipeline/feed-everyday-ps.ps1"
+        ],
+        "exact_change": "new function Resolve-TcEverydayCards (builder seam $Build); the live path passes build-card2 -SpecFile -CostedFile db\\costed.json -OutDir <scratch>, prints how many it built and which could not be built, removes the scratch in finally"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changed; measured as feed recipes gaining everyday_ps over a copy of the served feed of 2026-09-25T08:15:36",
+        "affected_now": 4,
+        "names": [
+          "free-chicken-alfredo",
+          "shredded-bbq-chicken-sammies",
+          "chicken-marinara-pasta",
+          "beef-protein-pasta"
+        ],
+        "risk": "the 566 recipes with a card keep that card and are never rebuilt (CLEAN TWIN); a build that throws or writes no body leaves the recipe without the key, as before",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/feed-everyday-ps.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE  a recipe with a spec and NO built card here (free-chicken-alfredo, built in a worktree) is built into scratch and filled",
+        "clean_twin": "CLEAN TWIN  a recipe whose card IS built here uses that card and is never rebuilt; MUST NOT FIRE a build that throws, a build with no body and a recipe with no spec get no card",
+        "commands": [
+          "powershell -NoProfile -File meal-prep\\pipeline\\feed-everyday-ps.ps1 -SelfTest (exit 0, PASS 11 cases)",
+          "feed-everyday-ps.ps1 -FeedPath <copy of the served feed> -PublicPath <scratch> (exit 0, 570 of 570)"
+        ]
+      },
+      "rollback": "revert the feed-everyday-ps.ps1 hunk; the next export writes everyday_ps for built cards only, as before",
+      "freshness": "measured against the served feed of 2026-09-25T08:15:36 and the main checkout's db/built on 2026-09-25 evening",
+      "leaves_open": "the welcome article landing (a Ghost write this lane may not make: prepare-article-price-edits -Land -Apply -Slugs welcome after the next export) and published-hashes.json in the main checkout missing the four live rebuilds, so recipe_stats covers 566 of 570",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-25-d835e2",
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "done",
+      "premise_verified": "true, and narrower than written: the body blamed derived files predating origin/main; re-measured, the feed is two days newer and still lacks the key, because the card was never built in the chain's checkout",
+      "deviation": "the item's close path (a Ghost landing of welcome) is not this lane's to run; the class fix ships and the landing is the minted residual",
+      "shipped_commit": "this plan's commit on branch worktree-agent-a6faa5ab800119d8c (unlanded; cite the landed hash after triage-land)",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 26,
+      "close_disposition": "confirmed",
+      "resolution_note": "Confirmed and fixed at the class: feed-everyday-ps now builds, from the tracked spec, any live recipe's card the chain checkout never received (worktree-published). 566 -> 570 of 570 feed recipes carry everyday_ps over the same served feed; free-chicken-alfredo 2.00. Welcome's Ghost landing and the published-hashes gap are 2026-09-25-d835e2.",
+      "folded_from": "plan-2026-09-25-12.json"
+    },
+    {
+      "queue_id": "2026-09-23-9999c0",
+      "subject": "Triage residual: recipe ingredient identity union rows, 138 lines over 30 pairs",
+      "classification": "wrong-product",
+      "evidence": [
+        "audit-ingredient-identity.ps1 -BoardFile comparison-2026-09-23.json, 2026-09-25: exit 0, '149 finding(s) [PROXY=2 UNION-ROW=138 UNROUTED=9]' - 138 union lines, now over 20 pairs",
+        "Red Pepper Flakes <= 'Great Value Crushed Red Pepper, 12 oz' 42; Zucchini <= 'Fresh Yellow Squash, Each' 18; Pasta Shells 13 / Spaghetti 10 / Ziti 8 / Orzo 4 / Fettuccine 2 <= 'Great Value Penne, 32 oz'; BBQ Sauce <= 'Kraft Hint of Honey Slow-Simmered Barbecue Sauce' 11; Enchilada Sauce <= 'Las Palmas Medium Red Chile Sauce' 9",
+        "after: '91 finding(s) [PROXY=2 UNION-ROW=80 UNROUTED=9]', 'ratchet CAN tighten: 149 -> 91'; -Tighten recorded it"
+      ],
+      "surface_fix": {
+        "what": "record the six pairs that are one food under two shelf names",
+        "files": [
+          "meal-prep/db/ingredients.json"
+        ],
+        "exact_change": "identity_same_as on Red Pepper Flakes (crushed red pepper), BBQ Sauce (barbecue sauce), Japanese Curry Roux (japanese curry mix), Pumpkin Puree (pure pumpkin), Bulgur Wheat (bulgur), Sun-Dried Tomatoes (Oil-Packed) (sun dried tomatoes in olive oil)"
+      },
+      "root_cause": "the identity check's only reviewed record is row-wide (identity_reviewed silences every product for the ingredient), so a same-food spelling had two bad choices: stay a standing finding that pages nowhere, or be silenced so broadly that the next wrong product on that cell is invisible",
+      "root_fix": {
+        "what": "a reviewed record scoped to one product spelling, with a required reason",
+        "files": [
+          "meal-prep/lib/ingredient-identity-lib.ps1",
+          "meal-prep/pipeline/audit-ingredient-identity.ps1",
+          "ops/out/ingredient-identity-baseline.json"
+        ],
+        "exact_change": "Test-IdentitySameAs: a row's identity_same_as [{product regex, reason}] skips the UNION-ROW finding only for a product whose name matches; no reason or an unparseable pattern silences nothing; four self-test cases; ratchet mark tightened 149 -> 91"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no commodity rule changed; measured as UNION-ROW findings before/after over 587 costed recipes against comparison-2026-09-23",
+        "affected_now": 58,
+        "names": [
+          "Red Pepper Flakes 42",
+          "BBQ Sauce 11",
+          "Japanese Curry Roux 2",
+          "Pumpkin Puree 1",
+          "Bulgur Wheat 1",
+          "Sun-Dried Tomatoes (Oil-Packed) 1"
+        ],
+        "risk": "a record silences one spelling only: the CLEAN TWIN keeps a paprika row on the same Red Pepper Flakes line a finding; no price, cost or cell moves (the audit reads, it does not price)",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (asserts 25 cases ran)",
+        "must_fire_case": "MUST FIRE  with no record, Red Pepper Flakes priced by 'Great Value Crushed Red Pepper' is a UNION-ROW finding; MUST FIRE a record with no reason silences nothing",
+        "clean_twin": "CLEAN TWIN  the same record does NOT silence a paprika row pricing the same line: still a UNION-ROW",
+        "commands": [
+          "powershell -NoProfile -File meal-prep\\pipeline\\audit-ingredient-identity.ps1 -SelfTest (exit 0, PASS 25 cases)",
+          "audit-ingredient-identity.ps1 -BoardFile grocery\\out\\comparison-2026-09-23.json (exit 0, 91 findings, UNION-ROW 80)"
+        ]
+      },
+      "rollback": "revert the lib function and its call, the six identity_same_as lines and the baseline; the 58 lines return as findings already in the old mark",
+      "freshness": "measured against comparison-2026-09-23 (seeded copy written 2026-09-25 08:14) and db/costed.json at this branch's base; a rebuilt board may move the union rows",
+      "leaves_open": "80 union lines over 14 pairs: 26 real substitutes (Zucchini by yellow squash 18, glass noodles by rice noodles 3, pepperoncini by banana peppers 3, fresh red chili by jalapenos 1, blackened by cajun 1) needing commodities.json (money lane) or a hold; 53 awaiting a ruling (pasta shapes 37 in Q-2026-09-25-pasta-shape, enchilada 9, pineapple chunks 4, chili crisp 3); Egg Yolk 1 needing relation derived",
+      "leaves_open_occurrences": 80,
+      "leaves_open_followup": "2026-09-25-f9c8ce",
+      "lane": "ops",
+      "est_tool_calls": 25,
+      "status": "done",
+      "premise_verified": "true: 138 union lines re-measured 2026-09-25 (the body's 30 pairs are 20 today); the body's same-food reading of Red Pepper Flakes and BBQ Sauce held",
+      "deviation": null,
+      "shipped_commit": "this plan's commit on branch worktree-agent-a6faa5ab800119d8c (unlanded; cite the landed hash after triage-land)",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 16,
+      "close_disposition": "confirmed",
+      "resolution_note": "Confirmed. Shipped a reviewed same-food record scoped to one product spelling (identity_same_as, fixtured) and recorded six pairs: UNION-ROW 138 -> 80, mark 149 -> 91. The 26 substitute lines, the 53 awaiting a ruling and Egg Yolk are 2026-09-25-f9c8ce.",
+      "folded_from": "plan-2026-09-25-12.json"
+    },
+    {
+      "queue_id": "2026-09-23-dd290b",
+      "subject": "Triage residual: sourcing for 11 held recipes (lo mein, glass noodles, blackened, tandoori) plus bacon-ends exclude and red chili",
+      "classification": "no-code-change",
+      "evidence": [
+        "meal-prep/db/held-recipes.json on 2026-09-25: 11 of the 11 named recipes still held",
+        "grocery/commodities.json at this branch: no id matching lo-mein, glass-noodle, sweet-potato-noodle, dangmyeon, bacon-ends or red-chil; comparison-2026-09-23 carries no blackened or tandoori cell; commodities.json changed since 2026-09-23 only for laundry-detergent (81a961a00, fc2b4c6fd)",
+        "the item's own body: 'Owner: the matching-worklist lane (commodities.json)'"
+      ],
+      "root_cause": "four foods the recipes need have no commodity reaching an Omaha board cell (lo mein, sweet potato glass noodles, blackened seasoning, tandoori masala), and the bacon-ends exclude and red chili are matching-rule changes",
+      "root_fix_none_because": "every fix is a commodities.json change (new commodities, a carve-out, an exclude), which is on the line this lane does not cross",
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "bounced",
+      "premise_verified": "true: 11 of 11 still held, no commodity added since 2026-09-23 for any of the named foods",
+      "deviation": "bounced: the measurement shows it touches matching (grocery/commodities.json), so it goes to the money lane; its queue id stays open",
+      "resolution_note": "Bounced to the money lane: every fix is in grocery/commodities.json. Re-measured 2026-09-25: 11 of 11 recipes still held, no lo mein / glass noodle / bacon-ends / red chili commodity, no blackened or tandoori board cell.",
+      "folded_from": "plan-2026-09-25-12.json"
+    },
+    {
+      "queue_id": "2026-09-25-602457",
+      "subject": "Triage residual: per-serving cost feed vs v2-perserving disagree (30 of 570)",
+      "classification": "needs-brad",
+      "evidence": [
+        "grocery/out/smp-feed.json (generated 2026-09-25T08:15:36) per_serving against meal-prep/pipeline/v2-perserving.json cheapest_ps (seeded copy written 19:38): 32 of 570 shared slugs differ by more than a cent, e.g. beef-birria-rice-bowls feed 7.12 v2 7.21, chile-colorado-bowls 5.08 v2 5.21 (the two files are 11 hours apart, so 32 is not a same-run count; the item measured 30 on same-morning files)",
+        "export-feed.ps1 line 603 takes per_serving from grocery/out/recipe-costs.json; compute-v2-perserving.ps1 computes cheapest_ps from feed.cheapest; build-hub-grid.ps1 line 177 bakes v2 cheapest_ps into data-cost and the hub never hydrates it"
+      ],
+      "root_cause": "one fact (a recipe's cheapest per-serving cost) has two producers and each reader surface picks one, so the site can show two prices for one recipe",
+      "root_fix_none_because": "which producer is canonical, and whether the hub hydrates or bakes, is the ruling the item asks for (Q-2026-09-25-per-serving-canonical); a recommendation is written there",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "status": "needs-brad",
+      "premise_verified": "true: the disagreement stands (32 of 570 on files 11 hours apart) and no check watches the pair",
+      "resolution_note": "Needs a ruling: Q-2026-09-25-per-serving-canonical (recommended: the feed is canonical, v2 derives from it, the hub renders from the feed at view time). Measured 32 of 570 differ.",
+      "folded_from": "plan-2026-09-25-12.json"
+    },
+    {
+      "queue_id": "2026-09-18-8491bf",
+      "subject": "daily pipeline did not run on 2026-09-15 or 2026-09-16",
+      "classification": "infra",
+      "evidence": [
+        "RE-MEASURED 2026-09-25: grocery/out/logs/capture-run-daily-<date>.log exists for every day 2026-09-17 to 2026-09-25 (9 of 9) and is still missing for 09-15 and 09-16; 'TC Grocery Daily Capture 0800' LastRunTime 2026-09-25 14:00:02, LastTaskResult 0, WakeToRun True, StartWhenAvailable True",
+        "System log 2026-09-15 and 09-16: Power-Troubleshooter 1 (wake) at 07:59:36, Kernel-Power 107 (resume) at 08:02:03, Kernel-Power 42 (sleep) at 08:02:01; same pair at 06:59:36 / 07:02:02 for the 07:00 task; alert-log.txt holds 0 lines written on either day",
+        "Kernel-Power 42 per day since 2026-09-01: 09-01 1, 09-15 3, 09-16 2, 09-21 1; no sleep on any day since 09-17 but 09-21, so the box being awake is why 9 of 9 days ran, not a fix",
+        ".github/workflows/heartbeat.yml is 'on: { workflow_dispatch: {} }' (dispatch-only), and grocery/health-heartbeat.ps1 runs on the same sleeping box, so no independent watcher could page on a day the box slept"
+      ],
+      "root_cause": "A scheduled run on this box is woken by WakeToRun but nothing holds the machine awake while it runs, so Windows' unattended idle timeout (about 2 minutes after a wake with no user) puts it back to sleep mid-run; every scheduled Kind (ad, daily, the rest) was one idle timeout from being cut off after a wake, and the only absence watcher off the box (heartbeat.yml) is dispatch-only.",
+      "surface_fix": {
+        "what": "none for the two missed days: their boards were never built and the next days' runs rebuilt the board",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_fix": {
+        "what": "hold a system-required power request for the life of every capture-run",
+        "files": [
+          "lib/keep-awake.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "exact_change": "new lib/keep-awake.ps1: Enter-TcKeepAwake calls kernel32 SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED), returns {ok, previous, why} and never throws; Exit-TcKeepAwake clears it. capture-run.ps1 dot-sources it and calls Enter-TcKeepAwake before it asks for Global\\tc-capture-run, printing 'keep-awake: held|NOT held'. Windows drops the request when the process ends, so a dead run never pins the box awake."
+      },
+      "leaves_open": "the absence of a run is still watched only from the box itself: heartbeat.yml is dispatch-only, so a box that is OFF (not asleep) or a wake timer that never fires still produces no page until the box is back; 2 occurrences (09-15, 09-16) in the 14 days before this fix, both the sleep shape this fix closes, 0 of the off shape",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: measured over capture-run's own start. The call sits before the run lock and changes no file, no row and no exit code; a refused request prints 'NOT held' and the run goes on exactly as before. Real test-capture-run-sync.ps1 (drives capture-run in throwaway repos) 49 of 49, exit 0",
+        "affected_now": 0,
+        "names": [],
+        "risk": "the box can no longer idle-sleep while a capture-run is live (up to the task's own 2h limit); it sleeps normally once the run exits",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~19:10 against the System event log, grocery/out/logs of the main checkout and Get-ScheduledTask on this box",
+      "proof": {
+        "guard_or_fixture": "lib/keep-awake.ps1 -SelfTest",
+        "must_fire_case": "Enter-TcKeepAwake then a read-back through SetThreadExecutionState: the flags held include ES_SYSTEM_REQUIRED and ES_CONTINUOUS (founding bug: the 08:00 run re-slept 2.5 min after its wake); and capture-run.ps1 calls Enter-TcKeepAwake before it creates Global\\tc-capture-run",
+        "clean_twin": "Exit-TcKeepAwake leaves ES_CONTINUOUS alone with no system-required bit, and asking twice holds the same flags (idempotent)",
+        "commands": [
+          "powershell -NoProfile -File lib\\keep-awake.ps1 -SelfTest (exit 0, 4 cases)",
+          "powershell -NoProfile -File grocery\\test-capture-run-sync.ps1 (exit 0, 49 of 49)"
+        ]
+      },
+      "rollback": "revert the capture-run.ps1 hunk and delete lib/keep-awake.ps1; nothing on disk depends on it",
+      "do_not_touch": [
+        "the capture-run lock order",
+        "any scheduled task definition"
+      ],
+      "resolution_note": "The two missed days were the box sleeping: the 08:00 WakeToRun timer woke it at 07:59:36 and the unattended idle timeout re-slept it at 08:02:01 on both 09-15 and 09-16, before capture-run logged. 9 of 9 days since have run only because the box stayed awake. capture-run now holds ES_SYSTEM_REQUIRED for its whole run (lib/keep-awake.ps1).",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "lane": "weekly",
+      "est_tool_calls": 20,
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "the premise (no run on 09-15/16, no page) holds: logs absent for both days, alert-log silent both days, the heartbeat that would page runs on the same box",
+      "deviation": "",
+      "shipped_commit": [
+        "171c0443d"
+      ],
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 22,
+      "folded_from": "plan-2026-09-25-13.json"
+    },
+    {
+      "queue_id": "2026-09-23-373ac2",
+      "subject": "a live Ghost page is neither produced by the repo nor declared (32 EDITED-SINCE-EXPORT)",
+      "classification": "infra",
+      "evidence": [
+        "RE-MEASURED 2026-09-25 (key read from the main checkout, GETs only): ops/audit-ghost-page-census.ps1 exit 1, 'live=1069 produced=873 declared=196 findings=32', all 32 EDITED-SINCE-EXPORT, every live updated_at between 2026-09-23T13:16:50Z and 13:19:10Z",
+        "all 32 slugs have content/ghost-adopted/price-edits/<slug>.edit.json (Batch 3 articles); the live HTML carries every prepared replacement on 27 of 32 pages and 20/22, 20/23, 7/8, 24/26, 33/34 on the other 5, so the edit is the Batch 3 land, not a foreign hand edit",
+        "meal-prep/pipeline/prepare-article-price-edits.ps1 -Land -Apply PUT each page and wrote nothing under content/ghost-adopted; the census -Export rewrote exported_on on all 196 declared pages (228 files changed for 32 stale pages)"
+      ],
+      "root_cause": "A writer that PUTs a declared Ghost page does not refresh its exported copy, so the census reads its own pipeline's edit as drift until a human re-exports, and the re-export itself was costly to run because it re-dated every declared page, turning one stale page into a 228-file diff.",
+      "surface_fix": {
+        "what": "re-export and commit the 32 stale copies only",
+        "files": [
+          "content/ghost-adopted/<32 slugs>.json",
+          "content/ghost-adopted/<32 slugs>.html"
+        ],
+        "exact_change": "ops/audit-ghost-page-census.ps1 -Export, then keep only the 64 files of the 32 stale slugs (the other 164 pages changed exported_on only)"
+      },
+      "root_fix": {
+        "what": "a landing re-exports itself, and an export dates only the pages that moved",
+        "files": [
+          "meal-prep/pipeline/prepare-article-price-edits.ps1",
+          "ops/audit-ghost-page-census.ps1"
+        ],
+        "exact_change": "census: Get-TcCensusExportedOn keeps the old exported_on when updated_at, html_sha256 and lexical_sha256 all match the fresh read, used by -Export; prepare-article-price-edits -Land -Apply runs ops\\audit-ghost-page-census.ps1 -Export after its PUTs and refuses (REFUSED line, exit 1) when that export exits non-zero"
+      },
+      "leaves_open": "a Ghost page edited by hand or by any other writer than prepare-article-price-edits still reads EDITED-SINCE-EXPORT until someone runs -Export; 0 such pages today (census findings=0 after the re-export)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:ops/audit-ghost-page-census.ps1",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: measured over the declared-page export set. Re-export with the new rule right after the 32 were refreshed: 'export pages=196 changed_files=0'; the census reads findings=0. No Ghost write anywhere in this change.",
+        "affected_now": 32,
+        "names": [
+          "the 32 Batch 3 articles, e.g. high-protein-shake-recipes, money-rules-to-live-by, cheap-dinner-ideas"
+        ],
+        "risk": "an export that keeps an old date is wrong only if Ghost changed the body without moving updated_at AND without changing either hash, which the hashes rule out",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~19:30 against the live Ghost Admin API (GETs) and content/ghost-adopted at this branch's base",
+      "proof": {
+        "guard_or_fixture": "ops/audit-ghost-page-census.ps1 -SelfTest (asserts 20 cases ran)",
+        "must_fire_case": "an export whose page Ghost edited since (founding: updated_at 2026-07-05 then 2026-09-23T13:17:48Z) takes today's exported_on; the same updated_at over a different lexical hash also moves the date",
+        "clean_twin": "a page with no earlier export is dated today, and an unchanged page keeps 2026-09-19 (MUST NOT FIRE)",
+        "commands": [
+          "powershell -NoProfile -File ops\\audit-ghost-page-census.ps1 -SelfTest (exit 0, 20 of 20)",
+          "powershell -NoProfile -File meal-prep\\pipeline\\prepare-article-price-edits.ps1 -SelfTest (exit 0, 14 cases)",
+          "live: census exit 1 findings=32 before, exit 0 findings=0 after"
+        ]
+      },
+      "rollback": "revert the two script hunks; the 64 re-exported files are the live state and stay",
+      "do_not_touch": [
+        "any live Ghost page",
+        "ops/ghost-page-estate.json declarations"
+      ],
+      "resolution_note": "The 32 findings were the Batch 3 article land of 2026-09-23 (all 32 slugs have a prepared edit and carry its replacements live); the lander never refreshed content/ghost-adopted. Re-exported the 32 (census 32 -> 0), a landing now re-exports itself, and -Export dates only pages that moved (a re-export reads changed_files=0).",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "lane": "weekly",
+      "est_tool_calls": 20,
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "re-ran the census live before acting: still exit 1, the same 32 findings the alert named",
+      "deviation": "",
+      "shipped_commit": [
+        "1d9688964"
+      ],
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 16,
+      "folded_from": "plan-2026-09-25-13.json"
+    },
+    {
+      "queue_id": "2026-09-23-c7d152",
+      "subject": "omaha-price-tracker has no publishing road; site-wide price monitor unsound for prices in words and images",
+      "classification": "superseded",
+      "evidence": [
+        "(1) the road exists: grocery/publish-deals-page.ps1 runs publish-trend-index.ps1 right after publish-trend-pages ('THE TRACKER INDEX RIDES THE SAME ROAD'), landed 2026-09-22 15:57 in 8cee31dd3, and meal-prep/db/sitewide-price-monitor.json exempts omaha-price-tracker with producer grocery/publish-trend-index.ps1; the alert graded 54bff6167, 129 commits behind origin/main",
+        "the live post still reads updated_at 2026-09-05T19:40:18Z (Admin GET 2026-09-25): the road sits inside the weekly trend branch, grocery/out/trend-pages.stamp reads 2026-09-22 (the current board week), so every run since the road landed printed 'builds skipped' and the tracker publisher has never been called; its guards pass on the main checkout's out/trend/index.html (no 'six', Fareway present, 20 links = keep-list 20)",
+        "(2) measured once over the 196 declared pages' exports: 164 outside the price-edits inventory, 55 carry a dollar amount in words (345 phrases), 65 phrases on 15 pages near a grocery word (e.g. 'Eggs, one dozen, about 3 dollars'), 0 <img> tags on any of the 164"
+      ],
+      "root_cause": "Part 1 was fixed upstream (8cee31dd3) before the alert fired on a stale checkout; the page stays stale only until the first new board week, because the road rides the weekly trend branch. Part 2 is the monitor's stated design: a pattern matcher over typed figures cannot see prices written in words, and whether those pages change is a ruling about what the site shows.",
+      "root_fix_none_because": "part 1's class fix already shipped in 8cee31dd3; part 2 changes live copy or the monitor's scope, which is Brad's ruling (Q-c7d152-words), not a defect with one right answer",
+      "leaves_open": "(1) the tracker's first publish through its road is unobserved and a failure only prints (1 page, 0 failed runs because it has never run); (2) 65 grocery-price-in-words phrases on 15 live pages the monitor cannot see",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-25-22b1e8",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no code change",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~19:45: live Admin GET of /omaha-price-tracker/, main checkout's out/trend-pages.stamp and out/trend/index.html, content/ghost-adopted at this branch",
+      "proof": {
+        "guard_or_fixture": "none: no code change",
+        "must_fire_case": "n/a (no code); the residual 2026-09-25-22b1e8 names the check: /omaha-price-tracker/ updated_at newer than 2026-09-05 after the first board week past 2026-09-22 builds",
+        "clean_twin": "n/a (no code)"
+      },
+      "rollback": "none",
+      "resolution_note": "Superseded: the tracker got its publishing road in 8cee31dd3 on 2026-09-22, before this alert graded a checkout 129 commits behind. The live page stays on 09-05 until the next board week triggers the road; its first publish is owned by 2026-09-25-22b1e8. The monitor's words/images gap was measured once (15 pages, 65 phrases in words, 0 images) and is Q-c7d152-words for Brad.",
+      "close_disposition": "superseded",
+      "publish_batch": 1,
+      "lane": "weekly",
+      "est_tool_calls": 15,
+      "status": "superseded",
+      "premise_verified": true,
+      "premise_check": "the premise 'no road' is false on origin/main (8cee31dd3); the premise 'the live copy is stale' is true (2026-09-05)",
+      "deviation": "",
+      "shipped_commit": [],
+      "full_suite": "not-applicable",
+      "actual_tool_calls": 14,
+      "folded_from": "plan-2026-09-25-13.json"
+    },
+    {
+      "queue_id": "2026-09-25-ef83cf",
+      "subject": "walmart ruling-term proof can be erased by a same-day rebuild",
+      "classification": "infra",
+      "evidence": [
+        "RE-MEASURED 2026-09-25: of the 9 tracked walmart-regular files dated 2026-09-12 onward, every one has 1 committed version (git log per file), so 0 occurrences",
+        "build-walmart-deals.ps1 wrote walmart-regular-<Date>.json whole from one capture (ConvertTo-Json | Set-Content), and Get-WalmartRulingOwed (capture-policy-lib.ps1) proves a term only from found_by_term of rows in that file",
+        "reproduced with the real builder in this worktree: built 2026-09-24 from its full capture (35 distinct found_by_term), then from a 40-line cut of it (1 term): before the fix the second file would hold 1 of 35; after it, 1 fresh + 34 proof_terms_carried, covering all 35"
+      ],
+      "root_cause": "A builder that owns a dated file rewrites it whole from one capture while a downstream reader treats that file's contents as a durable receipt, so a same-date rerun silently withdraws evidence the first run earned (the same shape 818b3e fixed for Baker's ad-term receipts).",
+      "surface_fix": {
+        "what": "none: 0 occurrences, no file to repair",
+        "files": [],
+        "exact_change": "none"
+      },
+      "root_fix": {
+        "what": "a same-date rebuild carries the replaced file's proof terms, and the owed reader counts them",
+        "files": [
+          "grocery/capture-policy-lib.ps1",
+          "grocery/build-walmart-deals.ps1"
+        ],
+        "exact_change": "capture-policy-lib: Get-WalmartSameDayProofCarry returns the replaced file's found_by_term plus its own proof_terms_carried, less this build's terms, only when week_of matches and both sources name the same storeId; Get-WalmartRulingOwed adds a file's proof_terms_carried to proven (under the same sanctioned-store stamp check). build-walmart-deals: computes the source once, calls the carry before writing and writes proof_terms_carried (terms only, never rows)."
+      },
+      "leaves_open": "nothing (the other writer, import-walmart-batch.ps1:599-603, edits the loaded document in place and so keeps proof_terms_carried and every other top-level field)",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: rows are untouched (the carry is a top-level list of terms), so no board cell can move; measured by the real two-build run above and by Get-WalmartRulingOwed over a fixture out dir",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a term carried from an earlier same-day build at the same store stays proven; a build at another storeId, another week_of or with no recorded store carries nothing",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~20:00 at this branch's base, on the main checkout's walmart-capture-2026-09-24.csv (copied into the worktree, removed after)",
+      "proof": {
+        "guard_or_fixture": "grocery/test-capture-policy.ps1 case F2",
+        "must_fire_case": "a 2026-09-24 file proving bacon and bread, rebuilt the same date from a capture that found only rice: the carry is [bacon, bread] and Get-WalmartRulingOwed owes only butter",
+        "clean_twin": "a third build that found bread carries [bacon, rice] forward (the carried set chains); MUST NOT FIRE: storeId 3153, week_of 2026-09-25 and a -WaiveMissingStoreLine source each carry nothing",
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-capture-policy.ps1 (exit 0, CAPTURE-POLICY PASSED)",
+          "powershell -NoProfile -File grocery\\build-walmart-deals.ps1 -SelfTest (exit 0)"
+        ]
+      },
+      "rollback": "revert the three hunks; a file already written with proof_terms_carried is read as before by the reverted reader (it ignores the field)",
+      "do_not_touch": [
+        "any Walmart row",
+        "the sanctioned storeId check",
+        "grocery/commodity-search.json"
+      ],
+      "resolution_note": "0 occurrences, but the class was real and reproduced with the real builder: a same-date rebuild from a smaller capture dropped 34 of 35 proof terms. build-walmart-deals now carries the replaced file's proof terms (same week_of and storeId only, terms not rows) and Get-WalmartRulingOwed counts them.",
+      "close_disposition": "confirmed",
+      "publish_batch": 1,
+      "lane": "weekly",
+      "est_tool_calls": 20,
+      "status": "done",
+      "premise_verified": true,
+      "premise_check": "build-walmart-deals' write and Get-WalmartRulingOwed's reader read as the item says at this branch's base",
+      "deviation": "",
+      "shipped_commit": [
+        "e54c4d45a"
+      ],
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 18,
+      "folded_from": "plan-2026-09-25-13.json"
+    },
+    {
+      "queue_id": "2026-09-23-cf85c8",
+      "subject": "Grocery: test-auditors hygiene finding(s) - watchers intact",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/test-auditors-hygiene-2026-09-23.txt:648 'HYGIENE  prompt-backup drift (rc=2) ... 7 issue(s): SCOPE DRIFT post-publish-reviewer.md ... triage-reviewer.md'",
+        "All 5 saved hygiene runs (09-05, 09-06, 09-18, 09-19, 09-23) carry exactly one HYGIENE line and every one is 'prompt-backup drift'; alert-log shows the page on 09-05, 09-06, 09-19, 09-23 08:56 and 09-23 10:25",
+        "grocery/capture-run.ps1 at cbbe61b42: check-ad-cycles (which runs test-auditors, which runs audit-prompt-backup) at line 1270; the 'prompt-sync: audit-prompt-backup -SyncScopes -SyncMirror' repair at line 1331, AFTER it",
+        "Re-measured 2026-09-25 ~19:40 from the main checkout: 'PROMPT-BACKUP-COMPLETE mode=push scanned=36 findings=4 ... review=4' - four SCOPE DRIFT, every project copy last committed in c3c08e7c8 (2026-09-25 05:34, the --estate change), user copies dated 09-23 09:30; this morning's 08:32 run synced before that commit, so the next run's test-auditors will page hygiene again before its own sync repairs it"
+      ],
+      "root_cause": "The daily runner audits the prompts (inside check-ad-cycles' test-auditors) BEFORE it runs the repair lane that reconciles them, so any project-scope prompt committed the day before is reported as hygiene drift and repaired minutes later by the same run: an alert whose own run fixes it.",
+      "root_fix": {
+        "what": "run the prompt-sync repair block before the downstream chain",
+        "files": [
+          "grocery/capture-run.ps1",
+          "grocery/test-capture-run-sync.ps1"
+        ],
+        "exact_change": "Moved the whole 'THE AGENT PROMPTS GET A REPAIR LANE' block (unchanged condition: daily, not WhatIf, not NoDownstream; still non-fatal) to just above 'if ($runDownstream) {', with a note saying why; test-capture-run-sync gains a PROMPT SYNC ORDER group asserting the sync precedes the check-ad-cycles call."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "prior_closes": [
+        "2026-09-19-064845"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1"
+        ],
+        "what": "the daily runner (the producer of both the audit run and its repair) repairs prompt drift before the chain that audits it",
+        "exact_change": "the 'THE AGENT PROMPTS GET A REPAIR LANE' block moved above 'if ($runDownstream) {', held by test-capture-run-sync's PROMPT SYNC ORDER group"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: one block moved inside grocery/capture-run.ps1's daily path; the sync writes only the user-scope prompt copies and refreshes already-existing mirrors under ops/prompt-backup, which the bot's staging list excludes on purpose, so what the tail commits is unchanged",
+        "affected_now": 4,
+        "names": [
+          "post-publish-reviewer.md",
+          "recipe-batch-auditor.md",
+          "recipe-ingredient-mapper.md",
+          "recipe-sourcer.md"
+        ],
+        "risk": "a sync that throws is caught and logged as before; it now runs before prices are built, and it touches no price input",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~19:40 against the main checkout; if a capture-run has run since, re-run audit-prompt-backup from the main checkout first",
+      "proof": {
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (reads the shipped capture-run.ps1 source)",
+        "must_fire_case": "MUST FIRE: a capture-run whose prompt sync sits AFTER check-ad-cycles (the pre-2026-09-25 order) is refused",
+        "clean_twin": "CLEAN TWIN: the shipped capture-run.ps1 runs its prompt sync before check-ad-cycles, and both needles are found; the other 49 cases (start sync, handoff, tail sync) still pass",
+        "fixture_occurrences": [
+          "2026-09-19-064845",
+          "2026-09-23-cf85c8"
+        ],
+        "commands": [
+          "powershell -NoProfile -File grocery\\test-capture-run-sync.ps1 (exit 0, 51 of 51)"
+        ]
+      },
+      "rollback": "move the block back below the downstream call; no data format changes",
+      "do_not_touch": [
+        "the -SyncScopes/-SyncMirror split (adopting never-mirrored files stays a human decision)",
+        "the bot staging list"
+      ],
+      "live_check": "2026-09-26 capture-run-daily log shows 'prompt-sync:' before 'downstream: check-ad-cycles', and no 'test-auditors hygiene' page that morning",
+      "resolution_note": "Real finding, wrong-time repair. All 5 recorded hygiene pages were prompt-backup scope/mirror drift that the same daily run's prompt-sync then repaired, because the sync ran after check-ad-cycles' test-auditors. The repair now runs first; 4 drifts from today's c3c08e7c8 are live and will be synced before tomorrow's audit reads them. test-capture-run-sync 51/51 exit 0. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 15,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 14,
+      "folded_from": "plan-2026-09-25-14.json"
+    },
+    {
+      "queue_id": "2026-09-24-5bce76",
+      "subject": "Triage residual: daily-chain writers still bare WriteAllText",
+      "classification": "infra",
+      "evidence": [
+        "grocery/ad-cycle-log.txt, whole file: 2 lines ever match 'user-mapped section|being used by another process', both [2026-09-23T10:07:05]: hyvee-store-blend and price-capture-reach, each 'Exception calling \"WriteAllText\"'",
+        "grocery/audit-hyvee-store-blend.ps1:84 and grocery/audit-price-capture-reach.ps1:211 already write through Write-TcAtomicFile ('THROUGH Write-TcAtomicFile (2026-09-23)'); export-feed converted 2026-09-24 (a9d1f1691, per the residual's own body)",
+        "0 occurrences after 2026-09-23 10:07 across the 09-24 and 09-25 chain runs (same grep)",
+        "Class size: 556 [IO.File]::WriteAllText sites in 141 files under grocery/ and meal-prep/pipeline/, most inside self-test fixtures; a blanket conversion is not a measured need"
+      ],
+      "root_cause": "A chain lane that replaces a file another process holds or maps with a bare WriteAllText dies with an IOException instead of retrying; every instance that has actually happened (3, all by 2026-09-24) is converted, and the remaining writers have never hit it.",
+      "root_fix_none_because": "the class has 0 occurrences outside the three converted writers; converting 556 sites blind would be a sweep with no measured target, and ops-and-gates og-25 already makes every new replace of a read file use Write-TcAtomicFile (gate ops/audit-bare-replace.ps1 for the tmp-then-move form)",
+      "leaves_open": "unconverted bare WriteAllText writers in chain lanes over files another process may hold; 0 occurrences since the 2026-09-23 conversions",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/fanout-lib.ps1",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no code change in this item: the three writers named were converted by earlier commits; measured over grocery/ad-cycle-log.txt (2 held-file lines ever)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from this item",
+        "cell_effects": []
+      },
+      "rollback": "nothing to roll back: no code changed here",
+      "freshness": "grep of grocery/ad-cycle-log.txt in the main checkout at 2026-09-25 ~20:00",
+      "proof": {
+        "guard_or_fixture": "none shipped: no code change",
+        "must_fire_case": "n/a (no code change); the first occurrence surfaces through Test-FanoutComplete (grocery/fanout-lib.ps1), which check-ad-cycles.ps1:2331 logs as 'BLIND LANE:' and adds to the run summary when a lane exits without its -COMPLETE marker, the 09-23 shape",
+        "clean_twin": "n/a"
+      },
+      "resolution_note": "Re-measured: 2 occurrences ever (both 2026-09-23 10:07), both writers converted that day, export-feed converted 09-24; 0 since. Closed as the instances fixed with the class owned by the fanout completion check: a lane that dies on a held file loses its marker and is named BLIND LANE in the chain summary on its first occurrence. That is a summary line, not a page; if Brad wants a page, it is the fanout check's to send.",
+      "close_disposition": "superseded",
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": "no conversion sweep: the residual asked to convert the remaining writers; measurement shows none of them has ever failed, so the owner is the existing completion check",
+      "shipped_commit": null,
+      "actual_tool_calls": 11,
+      "folded_from": "plan-2026-09-25-14.json"
+    },
+    {
+      "queue_id": "2026-09-24-b606fd",
+      "subject": "Triage residual: a load-only matcher timeout still pages as a blind guard",
+      "classification": "infra",
+      "evidence": [
+        "grocery/test-match-lib.ps1 (c2ff876d6): every blind look is named and re-looked once at the unchanged 250 ms bound; Get-MatchLibVerdict puts 'blind again on one re-look at the same bound: <names>' ON the MATCH-LIB FAILED line, and 'could-not-look RETRIED (load)' lines for the ones that resolved",
+        "grocery/check-ad-cycles.ps1:4027 pages 'Grocery: a GUARD has gone blind (test-auditors failed)' with the failing lines in the body, so a timeout-only red now names each product and says it was re-looked",
+        "test-match-lib -SelfTest 2026-09-25: exit 0, 'test-match-lib SELF-TEST PASSED (7 of 7 case(s))'",
+        "No load-only red since c2ff876d6 landed (2026-09-24 16:44): alert-log shows no 'GUARD has gone blind' after that time"
+      ],
+      "root_cause": "A load spike and a catastrophic pattern produced the same unnamed could-not-look red; c2ff876d6 made the load case self-resolving (re-look at the same bound) and the still-blind case self-describing (names on the verdict line).",
+      "root_fix_none_because": "the root fix shipped in c2ff876d6; what remains is a subject-line preference (a separate alert type for a timeout-only red) with 0 occurrences since, and a red that survives the re-look is by definition not load-only",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no code change in this item: the fix is c2ff876d6's; measured over grocery/alert-log.txt after 2026-09-24 16:44",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from this item",
+        "cell_effects": []
+      },
+      "rollback": "nothing to roll back: no code changed here",
+      "freshness": "alert-log and test-match-lib as of 2026-09-25 ~20:00",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-lib.ps1 -SelfTest (shipped by c2ff876d6)",
+        "must_fire_case": "n/a here (no code change); c2ff876d6's own must-fire: a name blind again on the re-look stays could-not-look and fails, named on the verdict line",
+        "clean_twin": "n/a here; c2ff876d6's twin: a name that resolves on the re-look and agrees with the reference passes as RETRIED (load)"
+      },
+      "resolution_note": "Superseded by c2ff876d6: a load-only timeout is re-looked and passes, so it no longer pages at all; a red that survives the re-look names its products on the verdict line inside the page body. A distinct alert type would split one page into two for a case that has not recurred (0 since 09-24 16:44).",
+      "close_disposition": "superseded",
+      "lane": "weekly",
+      "est_tool_calls": 5,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 3,
+      "folded_from": "plan-2026-09-25-14.json"
+    },
+    {
+      "queue_id": "2026-09-25-110a8f",
+      "subject": "Triage residual: daily ratchets red on write-only-reports, mustfire-census and fixture-inputs",
+      "classification": "infra",
+      "evidence": [
+        "Re-measured in this worktree at cbbe61b42: audit-write-only-reports exit 2 'RATCHET BROKEN - 52 write-only family(ies) now, baseline 34'; audit-mustfire-census exit 1 '! LOST: grocery\\test-match-lib.ps1  26 -> 4'; audit-fixture-inputs exit 1 '! NEW: grocery\\audit-search-terms.ps1|commodities.json'",
+        "write-only-reports' 18 new names split two ways: fixture paths written inside self-test bodies (lib/pipeline-commit.ps1:1081-1185 writes lane/out/old.json, written.json, idx-only.json, back.jsonl, str.json into a temp repo; a, data, new, sess, moved-to, candidates-500 the same shape), and five ratchet baselines plus match-worklist whose readers moved into helpers the read-verb list did not know (ops/audit-arg-binding.ps1:368 'Read-TcRatchetBaseline -Path $blF' since e4ec2c7e7; check-ad-cycles.ps1:2350 'Read-MatchWorklist')",
+        "lib/selftest-lib.ps1:57-58: 'A test-*.ps1 that reads its switch is read by its gated body alone' - c2ff876d6 gave test-match-lib a -SelfTest block, so its 22 corpus must-fires left the census",
+        "grocery/audit-search-terms.ps1:132-137: the self-test reads live commodities.json ON PURPOSE ('The rest reads the TRACKED rule and term files ... so a later edit ... goes red here') but carried no LIVE-TWIN declaration"
+      ],
+      "root_cause": "Two detectors read the tree by rules that lagged the code they read: write-only-reports counted fixture writes as report families and knew write helpers but not read helpers, and the self-test census had no way for a whole-file suite that gained a hermetic -SelfTest to stay whole. The third red was a correct finding: a deliberate live read with no declaration.",
+      "root_fix": {
+        "what": "teach each detector the shape it lagged, never lower a bar",
+        "files": [
+          "ops/audit-write-only-reports.ps1",
+          "ops/out/write-only-reports-baseline.json",
+          "lib/selftest-lib.ps1",
+          "grocery/test-match-lib.ps1",
+          "grocery/audit-search-terms.ps1"
+        ],
+        "exact_change": "(1) write-only-reports: Get-FixtureLineSet (lib/selftest-lib.ps1 Get-SelfTestSpans) marks self-test body lines per .ps1, and a WRITE on such a line is not counted (reads still are, so it can only report fewer); Test-ReadVerb counts any Read-<Noun> command except Read-Host, the mirror of the 2026-09-11 write-helper rule. Live: 52 -> 32, no name outside the committed baseline; baseline recorded 34 -> 32 through the script's own -Tighten (Test-RatchetMove), bytes LF, CR 0. (2) selftest-lib: a test-*.ps1 carrying a comment line '# selftest-lib: whole-file-suite <why>' is read whole although it reads its switch; test-match-lib declares it. Census: 0 lost, test-match-lib 26 -> 30. (3) audit-search-terms: a LIVE-TWIN comment above its commodities.json read; fixture-inputs 0 new."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: three static audits over source text, run live in this worktree before and after (write-only-reports 52 -> 32 families, census lost 1 -> 0, fixture-inputs new 1 -> 0) and each -SelfTest",
+        "affected_now": 3,
+        "names": [
+          "ops/audit-write-only-reports.ps1",
+          "ops/audit-mustfire-census.ps1 (via lib/selftest-lib.ps1)",
+          "ops/audit-fixture-inputs.ps1 (via lib/selftest-lib.ps1)"
+        ],
+        "risk": "the broader read rule can hide a write-only family whose line merely sits beside a Read- command (stated in the source); the declaration is opt-in, so test-guards' gated reading is unchanged",
+        "cell_effects": []
+      },
+      "freshness": "all three audits run in this worktree at 2026-09-25 ~20:10 over HEAD cbbe61b42 plus this change; other batches' concurrent edits may add families, which the ratchet reports by name",
+      "proof": {
+        "guard_or_fixture": "ops/audit-write-only-reports.ps1 -SelfTest; lib/selftest-lib.ps1 -SelfTest; ops/audit-mustfire-census.ps1 -SelfTest; ops/audit-fixture-inputs.ps1 -SelfTest; grocery/audit-search-terms.ps1 -SelfTest; grocery/test-match-lib.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE: the lane/out/written.json write OUTSIDE a self-test body is still a write-only family; MUST FIRE: Read-Host beside a baseline write reads nothing, so it stays write-only; MUST FIRE: a test-*.ps1 that reads its switch AND declares whole-file-suite is read whole (the test-match-lib shape)",
+        "clean_twin": "MUST NOT FIRE: the same write inside a self-test body is no family; MUST NOT FIRE: a baseline read through Read-TcRatchetBaseline is read; CLEAN TWIN: the declaration in a file not named test-*.ps1 changes nothing; the existing test-guards MUST NOT FIRE (reads its switch, no declaration) still passes; a count that ROSE still exits 2",
+        "commands": [
+          "powershell -NoProfile -File ops\\audit-write-only-reports.ps1 -SelfTest (exit 0) and live (exit 0, 32 vs 34), -Tighten (exit 0)",
+          "powershell -NoProfile -File lib\\selftest-lib.ps1 -SelfTest (exit 0)",
+          "powershell -NoProfile -File ops\\audit-mustfire-census.ps1 (exit 0, 0 lost) and -SelfTest (exit 0)",
+          "powershell -NoProfile -File ops\\audit-fixture-inputs.ps1 (exit 0, 0 new) and -SelfTest (exit 0)",
+          "powershell -NoProfile -File grocery\\audit-search-terms.ps1 -SelfTest (exit 0); grocery\\test-match-lib.ps1 -SelfTest (exit 0, 7 of 7)"
+        ]
+      },
+      "rollback": "revert the five files; the baseline returns to 34 with it",
+      "do_not_touch": [
+        "the census and fixture-inputs baselines (no -Update was run)",
+        "test-guards' gated-body reading"
+      ],
+      "live_check": "TC Daily Ratchets 0315 on 2026-09-26 reads 6 of 6 green (ops/run-once-a-day.ps1 now keeps each child's output)",
+      "resolution_note": "Three reds, three causes, none fixed by moving a mark upward. write-only-reports was counting fixture writes and missing read helpers (52 -> 32; the committed mark tightened 34 -> 32 through -Tighten); the census lost test-match-lib's corpus when it gained a hermetic -SelfTest (now an opt-in whole-file-suite declaration, 26 -> 30, 0 lost); fixture-inputs was right about audit-search-terms, whose live read is deliberate and is now declared LIVE-TWIN. All touched -SelfTests exit 0. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 35,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 30,
+      "folded_from": "plan-2026-09-25-14.json"
+    },
+    {
+      "queue_id": "2026-09-25-d76f72",
+      "subject": "Triage finding: plan status deviated is read as unfinished even when the root fix shipped",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-return-lib.ps1:373 at cbbe61b42: 'if ($ps -ne ''deviated'' -and $ps -ne ''needs-more-time'') { continue }' - every deviated item is unfinished, whatever its leaves_open says",
+        "plan-2026-09-25-5.json item 2026-09-24-a9e8a0: status deviated, leaves_open 'nothing', leaves_open_occurrences 0, leaves_open_followup 'none'",
+        "Measured over the live queue (main checkout) and this worktree's 40 plans with Get-TriageUnfinished: HEAD lib 'unfinished=9 resume=1' (the 1 is a9e8a0); new lib 'unfinished=8 resume=0'. The three ids the finding named (a09096, c9f0f3, 0c8e6e) no longer surface under either lib today"
+      ],
+      "root_cause": "The plan status 'deviated' is written for two outcomes ('shipped differently' and 'root fix not landed') and the RESUME reader decided on the status alone, never on the residual fields the plan gate already requires beside it.",
+      "root_fix": {
+        "what": "Get-TriageUnfinished reads leaves_open and leaves_open_occurrences for a deviated item",
+        "files": [
+          "grocery/triage-return-lib.ps1",
+          "grocery/triage-due.ps1"
+        ],
+        "exact_change": "A newest plan item with status deviated whose leaves_open matches ^nothing\\b (case-insensitive) and whose leaves_open_occurrences is absent or 0 is finished and is not returned; needs-more-time is always returned; a deviated item with any other leaves_open (the d24000 watch-owned case) is returned exactly as before."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: Get-TriageUnfinished over the live queue and 40 plan files, HEAD lib vs new lib, one row per unfinished id",
+        "affected_now": 1,
+        "names": [
+          "2026-09-24-a9e8a0"
+        ],
+        "risk": "a developer who writes leaves_open 'nothing' over a real residual now hides it from RESUME; the -Closing gate already refuses a done/deviated item with a non-nothing leaves_open and no followup, so the word is already load-bearing",
+        "cell_effects": []
+      },
+      "freshness": "live queue read from the main checkout at 2026-09-25 ~19:50",
+      "proof": {
+        "guard_or_fixture": "grocery/triage-due.ps1 -SelfTest (dot-sources grocery/triage-return-lib.ps1)",
+        "must_fire_case": "the a9e8a0 founding shape frozen: a deviated item with leaves_open 'nothing' at 0 occurrences is NOT returned (MUST NOT FIRE on RESUME)",
+        "clean_twin": "CLEAN TWIN: deviated 'nothing' with 3 occurrences, needs-more-time 'nothing', and a deviated watch-owned residual all still RESUME; the existing d240fd, a09096 RESUMED-BY and d24000 cases pass unchanged",
+        "commands": [
+          "powershell -NoProfile -File grocery\\triage-due.ps1 -SelfTest (exit 0, 51 triage-due cases)"
+        ]
+      },
+      "rollback": "revert the triage-return-lib.ps1 hunk; no stored data changes",
+      "do_not_touch": [
+        "the queue disposition axis (triage-lib.ps1's header: whether the alert was right)",
+        "the d24000 watch-owned RESUME case"
+      ],
+      "resolution_note": "Confirmed and fixed at the reader, not by splitting the status: the plan gate already requires leaves_open and leaves_open_occurrences on every finished item, so the reader now uses them. Live RESUME count 1 -> 0 (a9e8a0 was the only one today). validate-triage-plan -Closing was not changed: with the reader reading the residual fields, 'deviated + nothing' is no longer ambiguous, so there is no combination left to refuse. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 15,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "the finding proposed also making validate-triage-plan -Closing refuse the ambiguous combination; not done, because once the reader decides on leaves_open the combination carries one meaning",
+      "shipped_commit": null,
+      "actual_tool_calls": 10,
+      "folded_from": "plan-2026-09-25-14.json"
     }
-  ]
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-25-per-serving-canonical",
+      "question": "Two producers publish one per-serving cheapest cost and disagree on 32 of 570 shared recipes (by more than a cent): the feed's per_serving (grocery/out/recipe-costs.json via export-feed.ps1) and meal-prep/pipeline/v2-perserving.json cheapest_ps (compute-v2-perserving.ps1). The dinner tools and recipe cards render the feed; the meal-prep hub bakes v2 into a static data-cost. Recommended (long-term): the feed is canonical, v2's cheapest_ps is derived from it, and the hub renders its cost chips from the feed at view time like the recipe pages (your 2026-09-21 instruction). Alternative: keep both and only make the hub bake from the feed (what f4ab3d20e did for cheap-dinners and dinner-tonight). Which?",
+      "owns": "2026-09-25-602457"
+    },
+    {
+      "id": "Q-2026-09-25-pasta-shape",
+      "question": "Is a pasta SHAPE the same food under your 2026-09-22 no-substitute ruling? 37 costed lines (Pasta Shells 13, Spaghetti 10, Ziti 8, Orzo 4, Fettuccine 2) are priced by 'Great Value Penne, 32 oz' on the one pasta commodity. Yes: record them reviewed. No: each shape needs its own commodity or the recipes hold.",
+      "owns": "2026-09-25-f9c8ce (part B)"
+    },
+    {
+      "id": "Q-c7d152-words",
+      "question": "15 live declared pages outside the Batch 3 article inventory type grocery prices IN WORDS (65 phrases; e.g. meal-prep-for-college-students: 'Dry rice, 2 lb bag, about 2 dollars ... Eggs, one dozen, about 3 dollars'). The site-wide monitor cannot see that shape by design. Give those 15 pages the Batch 3 treatment (live spans from the feed), leave them as dated illustrations, or teach the monitor the words shape as a ratchet?",
+      "measured": "2026-09-25 over content/ghost-adopted/*.html: 196 declared pages, 32 in the price-edits inventory, 164 outside; 55 of 164 carry a dollar amount in words (345 phrases), 65 phrases on 15 pages within 80 characters of a grocery word; 0 <img> tags on the 164 pages"
+    }
+  ],
+  "out_of_scope_observations": [
+    "ops/audit-mustfire-census.ps1 on this worktree at cbbe61b42 plus this run: exit 1, '! LOST: grocery\\test-match-lib.ps1  26 -> 4'. This run did not touch test-match-lib.ps1; the loss is upstream of it and will red the landing unless its owner explains it."
+  ],
+  "folded_note": "Plans -7 to -14 were nine parallel weekly-lane batches run 2026-09-25 at Brad's request; each item keeps folded_from. Folded into this one weekly plan so the lane carries one prevention target."
 }
