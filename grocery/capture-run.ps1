@@ -511,6 +511,14 @@ function Update-CaptureRunLanding {
   return $changed
 }
 
+# ---- HOLD THE BOX AWAKE FOR THE WHOLE RUN (2026-09-25, queue 2026-09-18-8491bf) ------------------------------------
+# On 2026-09-15 and 09-16 the 08:00 WakeToRun timer woke the sleeping box and Windows' unattended idle timeout put it
+# back to sleep 2.5 minutes later, before this run wrote a log line: two whole days with no chain. WakeToRun wakes;
+# only a held power request keeps the box up. Released by Windows when this process ends. Never fails the run.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\keep-awake.ps1')
+$script:KeepAwake = Enter-TcKeepAwake
+Write-Output ('keep-awake: ' + $(if ($script:KeepAwake.ok) { 'held' } else { 'NOT held' }) + ' - ' + $script:KeepAwake.why)
+
 # ---- A RUN HANDED OFF BY ITS PARENT (2026-09-23, plan W4.1 step 6), read BEFORE the lock is asked for ------------------
 $script:RunMutexName = 'Global\tc-capture-run'   # the lock below; named once so the handoff token and the lock cannot disagree
 $script:InheritedLock = Get-CaptureRunInheritedLock -Holder ([string]$env:TC_CAPTURE_RUN_LOCK_HOLDER) -MutexName $script:RunMutexName
