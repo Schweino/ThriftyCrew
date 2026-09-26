@@ -37,7 +37,7 @@ $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 51
+$EXPECTED_CASES = 55
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -618,6 +618,51 @@ try {
     $fin = (Read-JsonFile $E.status).daily
     T 'already-landed: pushed, rc 0, no sync ran and origin did not move' ($r.outcome -eq 'already-landed' -and $r.pushed -and $r.rc -eq 0 -and $null -eq $r.sync -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore) ('outcome=' + $r.outcome + ' sync=' + [string]$r.sync)
     T 'the record pages on a CHANGED reason only, keeps stage complete, and reads pushed=true after the landing' ($c1 -and -not $c2 -and $c3 -and [string]$fin.stage -eq 'complete' -and $fin.pushed -eq $true -and [string]$fin.committed_sha -eq $sha -and [int]$fin.push_retry.tries -eq 3) ('c1=' + $c1 + ' c2=' + $c2 + ' c3=' + $c3 + ' stage=' + [string]$fin.stage + ' pushed=' + [string]$fin.pushed + ' tries=' + [string]$fin.push_retry.tries)
+  }
+
+  Invoke-Group 'PUSH-RETRY LANDED COPY - a commit the sync dropped because its twin landed is already-landed, not not-on-head (2026-09-26-03e565)' {
+    # The 09-26 [ad] shape: the run committed 2a365ec33, the byte-identical ef7edb1a3 reached origin, the sync dropped
+    # the local copy (W0.2), and four hourly retries paged not-on-head for a change that was live.
+    $E = New-Estate 'pushretry-twin'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`ntwin`n"
+    $sha = New-BotCommit $E @('grocery')
+    Push-Up $E 'grocery/ledger.json' "a`nb`nc`ntwin`n" 'up: the same change under another id'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $null = GitOk $E.bot @('reset', '-q', '--hard', 'refs/remotes/origin/main')
+    $tipBefore = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    T 'MUST FIRE: the run''s sha is off HEAD but its byte-identical twin is on origin: already-landed, pushed, rc 0, origin unmoved' ($r.outcome -eq 'already-landed' -and $r.pushed -and $r.rc -eq 0 -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore) ('outcome=' + $r.outcome + ' why=' + $r.why)
+    $E2 = New-Estate 'pushretry-gone'
+    W $E2.bot 'grocery/ledger.json' "a`nb`nc`ngone`n"
+    $sha2 = New-BotCommit $E2 @('grocery')
+    Push-Up $E2 'grocery/ledger.json' "a`nb`nc`nsomething-else`n" 'up: a different change to the same file'
+    $null = GitOk $E2.bot @('fetch', '-q', 'origin')
+    $null = GitOk $E2.bot @('reset', '-q', '--hard', 'refs/remotes/origin/main')
+    $r2 = Invoke-CaptureRunPushRetry -Repo $E2.bot -Root (Join-Path $E2.bot 'grocery') -Kind 'daily' -Sha $sha2
+    T 'CLEAN TWIN: a commit reset away with NO copy upstream still reads not-on-head, not pushed' ($r2.outcome -eq 'not-on-head' -and -not $r2.pushed -and $r2.rc -eq 1) ('outcome=' + $r2.outcome + ' why=' + $r2.why)
+  }
+
+  Invoke-Group 'PUSH-RETRY FOREIGN COMMITS - the retry never pushes a session''s commits stacked on the bot''s (2026-09-26-50914e)' {
+    # The 09-26 shape: the daily run committed 8df33b9be, then the triage integration committed and merged on top of it
+    # in the same checkout; the retry pushed HEAD (the whole branch) and then recorded HEAD as its own commit.
+    $E = New-Estate 'pushretry-foreign'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nbot`n"
+    $sha = New-BotCommit $E @('grocery')
+    $null = GitOk $E.bot @('reset', '-q', '--hard', $sha)
+    W $E.bot 'notes/session.md' "a session's unlanded work`n"
+    $null = GitOk $E.bot @('add', '--', 'notes/session.md')
+    $null = GitOk $E.bot @('commit', '-q', '-m', 'session: integration merge', '--', 'notes/session.md')
+    $tipBefore = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    $owned = [bool]($r.PSObject.Properties['head_owned'] -and $r.head_owned)
+    T 'MUST FIRE: a session commit on top of the bot''s: foreign-commits, nothing synced or pushed, origin unmoved, HEAD not claimed' ($r.outcome -eq 'foreign-commits' -and -not $r.pushed -and $null -eq $r.sync -and -not $owned -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore -and $r.why -match 'session: integration merge') ('outcome=' + $r.outcome + ' owned=' + $owned + ' why=' + $r.why)
+    $null = GitOk $E.bot @('reset', '-q', '--hard', $sha)
+    $r2 = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'daily' -Sha $sha
+    $onRemote = (GitR $E.remote @('show', 'refs/heads/main:grocery/ledger.json')).raw
+    $sessOnRemote = (GitR $E.remote @('cat-file', '-e', 'refs/heads/main:notes/session.md')).rc -eq 0
+    T 'CLEAN TWIN: HEAD holding only the bot''s commit still lands it, claims HEAD, and carries no session file' ($r2.outcome -eq 'landed' -and $r2.pushed -and [bool]$r2.head_owned -and $onRemote -eq "a`nb`nc`nbot`n" -and -not $sessOnRemote) ('outcome=' + $r2.outcome + ' why=' + $r2.why + ' session_on_remote=' + $sessOnRemote)
   }
 
   Invoke-Group 'NO AUTOSTASH MUST NOT FIRE - bar B3 on its mechanism' {
