@@ -72,6 +72,18 @@
     "target_id": "dish-soap-liquid"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-09-25T21:39:01",
+    "id": "lp:05b22ffad3dbfe8ed15a",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"\\\\bchili\\\\b\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches various 'Chili' products by anchoring on the food name. The word boundary helps avoid matching 'chili pepper' if it were a separate commodity, though context usually clarifies.",
+    "status": "proposed",
+    "target_id": "canned-chili"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:0697ab95602022685eca",
@@ -394,6 +406,18 @@
     "rationale": "Matches 'Buffalo Wild Wings Sauce, Spicy Garlic' by anchoring on the specific flavor descriptor 'Spicy Garlic Sauce'.",
     "status": "rejected",
     "target_id": "buffalo-wing-sauce"
+  },
+  {
+    "confidence": 0.8,
+    "created_at": "2026-09-25T21:39:01",
+    "id": "lp:1d38349579a6f3c8a76c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"\\\\b(beet|beets)\\\\b\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Organic Gold Grim Beet' by anchoring on the food name 'Beet'. The word boundary prevents matching 'beetroot' if it were a distinct commodity, though here it's likely the same.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
   },
   {
     "confidence": 0.8,
@@ -1150,6 +1174,18 @@
     "rationale": "Matches 'Hy-Vee Fresh Steam Cut Green Beans' and 'Smart Way Cut Green Beans' for frozen cut green beans.",
     "status": "rejected",
     "target_id": "frozen-cut-green-beans"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-25T21:39:01",
+    "id": "lp:4ef1b5d31687c4a5b8a6",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"ravioli\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Annie's Organic Cheesy Ravioli' by anchoring on the pasta shape 'Ravioli'.",
+    "status": "proposed",
+    "target_id": "canned-pasta-ravioli-spaghettios"
   },
   {
     "confidence": 0.9,
@@ -3265,6 +3301,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-25T21:39:01",
+    "id": "lp:cf6df7b11ca9d8de5901",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"diced\\\\s+potatoes?\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes' by anchoring on the cut style and food name.",
+    "status": "proposed",
+    "target_id": "canned-potatoes"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-09-23T21:43:44",
     "id": "lp:d023e3ac79a1b5b2ae55",
     "kind": "add_alias",
@@ -3346,6 +3394,18 @@
     "rationale": "Matches 'Dunbars Roasted Peppers'. Anchors on 'Roasted Peppers'.",
     "status": "rejected",
     "target_id": "roasted-red-peppers"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-25T21:39:01",
+    "id": "lp:d5670018f3d59ceb6f3a",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun\\\\s+(spice|seasoning|kick)\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Rib Rack Cajun Spice Rub', 'Tony's Cajun Kick Seasoning', and 'Cajun's Choice Cajun Shrimp Seasoning Mix' by anchoring on 'Cajun' followed by a seasoning-related term.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.9,

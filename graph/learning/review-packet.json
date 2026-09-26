@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T05:37:42",
+  "generated_at": "2026-09-25T21:39:27",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -729,6 +729,42 @@
       }
     },
     {
+      "proposal_id": "lp:d5670018f3d59ceb6f3a",
+      "kind": "add_alias",
+      "target": "cajun-creole-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+(spice|seasoning|kick)",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Rib Rack Cajun Spice Rub', 'Tony's Cajun Kick Seasoning', and 'Cajun's Choice Cajun Shrimp Seasoning Mix' by anchoring on 'Cajun' followed by a seasoning-related term.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4ef1b5d31687c4a5b8a6",
+      "kind": "add_alias",
+      "target": "canned-pasta-ravioli-spaghettios",
+      "target_label": null,
+      "payload": "ravioli",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Annie's Organic Cheesy Ravioli' by anchoring on the pasta shape 'Ravioli'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:cf6df7b11ca9d8de5901",
+      "kind": "add_alias",
+      "target": "canned-potatoes",
+      "target_label": null,
+      "payload": "diced\\s+potatoes?",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes' by anchoring on the cut style and food name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:c5a0e98911b2e1a0b373",
       "kind": "add_alias",
       "target": "frozen-broccoli-florets",
@@ -858,6 +894,18 @@
       "rationale": "Apple fritters are a distinct pastry category from donuts (typically ring-shaped or cake-based without the specific fritter shape/ingredients). Mapping them to 'Donuts' would skew price data for both categories."
     },
     {
+      "proposal_id": "lp:05b22ffad3dbfe8ed15a",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "\\bchili\\b",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches various 'Chili' products by anchoring on the food name. The word boundary helps avoid matching 'chili pepper' if it were a separate commodity, though context usually clarifies.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:a5c91ae0c05071d0dcde",
       "kind": "add_alias",
       "target": "frozen-cut-green-beans",
@@ -937,6 +985,18 @@
       "payload": "Kinder's Classic Beef Gravy Mix 0.9 oz",
       "stage1_confidence": 0.8,
       "rationale": "While 'Beef Gravy' is a type of brown gravy, 'Kinder's' is a specific brand often associated with different flavor profiles or formulations than generic 'Brown Gravy Mix'. However, more importantly, if the commodity is strictly 'Brown Gravy"
+    },
+    {
+      "proposal_id": "lp:1d38349579a6f3c8a76c",
+      "kind": "add_alias",
+      "target": "beets-fresh",
+      "target_label": null,
+      "payload": "\\b(beet|beets)\\b",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Organic Gold Grim Beet' by anchoring on the food name 'Beet'. The word boundary prevents matching 'beetroot' if it were a distinct commodity, though here it's likely the same.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
     },
     {
       "proposal_id": "lp:6f55b85052f55a2672d4",
