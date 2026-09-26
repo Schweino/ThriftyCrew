@@ -123,16 +123,21 @@ function Test-IdentitySameAs {
 function ConvertTo-IdentityStoreKey { param([string]$S) return (([string]$S).ToLower() -replace '[^a-z0-9]', '') }
 
 function Get-IdentityBoardIndex {
-  <# id -> (store key -> product name) over a comparison board's rows. #>
+  <# id -> (store key -> product name) over a comparison board's rows (the recipe board has the same shape).
+     `cells` keeps EVERY (store key, product) the row lists, in order, because a store can list two products
+     and the map above keeps only the last: check (d) asks about each one. #>
   param($Board)
   $ix = @{}
   foreach ($r in @($Board.comparison)) {
     $m = @{}
+    $cells = New-Object System.Collections.ArrayList
     foreach ($s in @($r.stores)) {
       $nm = [string]$s.item; if (-not $nm) { $nm = [string]$s.name }
-      $m[(ConvertTo-IdentityStoreKey ([string]$s.store))] = $nm
+      $sk = ConvertTo-IdentityStoreKey ([string]$s.store)
+      $m[$sk] = $nm
+      if ($nm) { [void]$cells.Add([pscustomobject]@{ store = [string]$s.store; key = $sk; product = $nm }) }
     }
-    $ix[[string]$r.id] = [pscustomobject]@{ stores = $m; crown_store = [string]$r.cheapest_store }
+    $ix[[string]$r.id] = [pscustomobject]@{ stores = $m; crown_store = [string]$r.cheapest_store; cells = $cells.ToArray() }
   }
   return $ix
 }
@@ -147,16 +152,15 @@ function Find-IdentityBoardProduct {
 }
 
 function Get-IngredientIdentityFindings {
-  <# Every finding over the vocabulary, the live rules and (optionally) the newest board and costed lines.
+  <# Checks (a) and (b) over the vocabulary and the live rules; the board half is Get-IngredientCellFindings (check d).
      $Resolve is a scriptblock name -> commodity id or $null (the live matcher in production, a frozen one in
      the self-test). $WeeklyIds is the set of ids the weekly rules can route to. Returns objects with a stable
      `key` (what the ratchet counts), `kind`, `item` and `detail`. #>
-  param($Rows, [scriptblock]$Resolve, $WeeklyIds, $BoardIndex = $null, $Costed = $null)
+  param($Rows, [scriptblock]$Resolve, $WeeklyIds)
   $out = New-Object System.Collections.ArrayList
-  $byItem = @{}
   foreach ($r in @($Rows)) {
     if (-not $r.PSObject.Properties['item']) { continue }
-    $item = [string]$r.item; $byItem[$item] = $r
+    $item = [string]$r.item
     $bidP = $r.PSObject.Properties['bid']; if ($null -eq $bidP -or -not $bidP.Value) { continue }
     $bid = [string]$bidP.Value
     $rel = Get-IdentityRelation $r
@@ -177,25 +181,91 @@ function Get-IngredientIdentityFindings {
       default { [void]$out.Add([pscustomobject]@{ key = ('relation|' + $item); kind = 'UNKNOWN-RELATION'; item = $item; detail = ('"' + $item + '" relation "' + $rel + '" is not same or derived') }) }
     }
   }
-  if ($null -ne $BoardIndex -and $null -ne $Costed) {
-    foreach ($rec in @($Costed)) {
-      foreach ($ln in @($rec.lines)) {
-        $basis = [string]$ln.basis
-        if ($basis -notmatch '^board:([^:]+):(.+)$') { continue }
-        $id = $Matches[1]; $sk = ConvertTo-IdentityStoreKey $Matches[2]
-        $prod = Find-IdentityBoardProduct $BoardIndex $id $sk
-        if (-not $prod) { continue }
-        $row = $byItem[[string]$ln.item]
-        $rel = if ($row) { Get-IdentityRelation $row } else { 'same' }
-        if ($row -and $null -ne $row.PSObject.Properties['identity_reviewed'] -and [string]$row.identity_reviewed -ne '') { continue }
-        if (Test-IdentitySameAs -Row $row -ProductName $prod) { continue }
-        if (-not (Test-PricingRowNamesIngredient -Ingredient ([string]$ln.item) -ProductName $prod -Relation $rel -Bid $id)) {
-          [void]$out.Add([pscustomobject]@{ key = ('union|' + [string]$rec.slug + '|' + [string]$ln.item + '|' + $id); kind = 'UNION-ROW'; item = [string]$ln.item; detail = ([string]$rec.slug + ': "' + [string]$ln.item + '" is priced by "' + $prod + '" (' + $basis + '), which does not name ' + (Get-IdentityHeadWord ([string]$ln.item))) })
-        }
-      }
+  # Check (c), the one-store-per-line UNION-ROW test, was RETIRED on 2026-09-26 (queue 2026-09-22-5a9676): it read
+  # only the costed basis store, skipped the recipe-board and nomem lines, never read the alias-priced lines and keyed
+  # without the product. Get-IngredientCellFindings (check d) replaces it; every cell it reads includes the basis cell.
+  return $out.ToArray()
+}
+
+function Resolve-IdentityPricedId {
+  <# The board id a costed line is priced from, or $null for a basis no board prices (label:, ledger:, none).
+     board:<id>:<anything> is that id on a board (the store part, recipeboard-* or nomem:* included, is ignored:
+     check (d) reads every store of the cell). feed:<id> prices through grocery/recipe-floor-id-map.json, so it is
+     resolved through $AliasMap (id -> board id; an id with no entry prices as itself). With no map a feed: line
+     cannot be resolved and comes back with via 'feed-unmapped', which the caller counts BLIND. #>
+  param([string]$Basis, $AliasMap)
+  if ($Basis -match '^board:([^:]+):') { return [pscustomobject]@{ id = $Matches[1]; via = 'board' } }
+  if ($Basis -match '^feed:([^:]+)$') {
+    # A pack-form suffix ('feed:cannellini-beans+drained') is a costing note, not part of the id.
+    $fid = $Matches[1] -replace '\+.*$', ''
+    if ($null -eq $AliasMap) { return [pscustomobject]@{ id = $fid; via = 'feed-unmapped' } }
+    if ($AliasMap.ContainsKey($fid)) { return [pscustomobject]@{ id = [string]$AliasMap[$fid]; via = 'feed-alias' } }
+    return [pscustomobject]@{ id = $fid; via = 'feed' }
+  }
+  return $null
+}
+
+function ConvertTo-IdentityProductKey { param([string]$S) return (([string]$S).ToLower() -replace '[^a-z0-9]', '') }
+
+function Get-IngredientCellFindings {
+  <# CHECK (d), 2026-09-26 (queue 2026-09-22-5a9676, grocery/triage-plans/plan-2026-09-26-2.json). The recipe card and
+     compute-v2's cheapest_ps take the cheapest whole package across EVERY store cell of a line's priced id, so the
+     question is asked of every cell, not of the one store the engine costed. For each distinct (item, priced id) over
+     the costed lines: the cell is the comparison row, else the recipe-board row; for EVERY store product in it,
+     identity_reviewed, identity_same_as and the head-word test apply exactly as check (c) applied them (a derived row
+     is asked about its parent, the priced id). The key carries the product, so a standing key never hides the NEXT
+     wrong product at the same cell: 'cell|<item>|<priced id>|<store key>|<product key>'.
+     BLIND, never ok: a pair whose id is on neither board, a recipe-board line when no recipe board was passed, and a
+     feed: line when no alias map was passed. $RecipeBoardIndex / $AliasMap are $null when not passed.
+     Returns { findings; pairs; lines; cells; reviewed; blind (item, id, why); by_via (hashtable) }. #>
+  param($Rows, $Costed, $BoardIndex, $RecipeBoardIndex = $null, $AliasMap = $null)
+  $byItem = @{}
+  foreach ($r in @($Rows)) { if ($r.PSObject.Properties['item']) { $byItem[[string]$r.item] = $r } }
+  $pairs = [ordered]@{}
+  $nLines = 0
+  foreach ($rec in @($Costed)) {
+    foreach ($ln in @($rec.lines)) {
+      $basis = [string]$ln.basis
+      $p = Resolve-IdentityPricedId -Basis $basis -AliasMap $AliasMap
+      if ($null -eq $p) { continue }
+      $nLines++
+      $item = [string]$ln.item
+      $pk = if ($p.via -eq 'feed-unmapped') { $item + '|feed:' + $p.id } else { $item + '|' + $p.id }
+      if (-not $pairs.Contains($pk)) { $pairs[$pk] = [pscustomobject]@{ item = $item; id = [string]$p.id; via = [string]$p.via; basis = $basis; lines = 0; slugs = New-Object 'System.Collections.Generic.HashSet[string]' } }
+      $pairs[$pk].lines++
+      [void]$pairs[$pk].slugs.Add([string]$rec.slug)
     }
   }
-  return $out.ToArray()
+  $seen = New-Object 'System.Collections.Generic.HashSet[string]'
+  $out = New-Object System.Collections.ArrayList
+  $blind = New-Object System.Collections.ArrayList
+  $byVia = @{}
+  $nCells = 0; $nReviewed = 0
+  foreach ($pr in $pairs.Values) {
+    if (-not $byVia.ContainsKey($pr.via)) { $byVia[$pr.via] = 0 }
+    $byVia[$pr.via]++
+    if ($pr.via -eq 'feed-unmapped') { [void]$blind.Add([pscustomobject]@{ item = $pr.item; id = $pr.id; why = 'feed: line and no -AliasMapFile to resolve it' }); continue }
+    $cell = $null
+    if ($BoardIndex.ContainsKey($pr.id)) { $cell = $BoardIndex[$pr.id] }
+    elseif ($null -ne $RecipeBoardIndex -and $RecipeBoardIndex.ContainsKey($pr.id)) { $cell = $RecipeBoardIndex[$pr.id] }
+    if ($null -eq $cell) {
+      $why = if ($null -eq $RecipeBoardIndex) { 'not on the comparison board and no -RecipeBoardFile' } else { 'on neither board' }
+      [void]$blind.Add([pscustomobject]@{ item = $pr.item; id = $pr.id; why = $why }); continue
+    }
+    $row = $byItem[$pr.item]
+    if ($row -and $null -ne $row.PSObject.Properties['identity_reviewed'] -and [string]$row.identity_reviewed -ne '') { $nReviewed++; continue }
+    $rel = if ($row) { Get-IdentityRelation $row } else { 'same' }
+    foreach ($c in @($cell.cells)) {
+      $nCells++
+      if (Test-IdentitySameAs -Row $row -ProductName $c.product) { continue }
+      if (Test-PricingRowNamesIngredient -Ingredient $pr.item -ProductName $c.product -Relation $rel -Bid $pr.id) { continue }
+      $key = 'cell|' + $pr.item + '|' + $pr.id + '|' + $c.key + '|' + (ConvertTo-IdentityProductKey $c.product)
+      if (-not $seen.Add($key)) { continue }
+      $ask = if ($rel -eq 'derived') { Get-IdentityHeadWord ($pr.id -replace '-', ' ') } else { Get-IdentityHeadWord $pr.item }
+      [void]$out.Add([pscustomobject]@{ key = $key; kind = 'CELL'; item = $pr.item; detail = ('"' + $pr.item + '" (' + $pr.lines + ' line(s), ' + $pr.slugs.Count + ' recipe(s), ' + $pr.basis + ') can be priced at ' + $c.store + ' by "' + $c.product + '" in cell ' + $pr.id + ', which does not name ' + $ask) })
+    }
+  }
+  return [pscustomobject]@{ findings = $out.ToArray(); pairs = $pairs.Count; lines = $nLines; cells = $nCells; reviewed = $nReviewed; blind = $blind.ToArray(); by_via = $byVia }
 }
 
 function Test-ReuseIdentity {

@@ -6,6 +6,7 @@
     },
     {
         "item":  "1/3 Fat Cream Cheese",
+        "identity_same_as":  [ { "product":  "\\bneufch.tel\\b", "reason":  "Neufchatel is the standard of identity for one-third-less-fat cream cheese (21 CFR 133.162).", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "1-3-fat-cream-cheese",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -295,6 +296,7 @@
     },
     {
         "item":  "Bratwurst",
+        "identity_same_as":  [ { "product":  "\\bbrats?\\b", "reason":  "brats is the everyday short name for bratwurst on the package.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "bratwurst",
         "gpu":  453.592,
         "unit":  "lb",
@@ -548,6 +550,7 @@
     },
     {
         "item":  "Chickpeas",
+        "identity_same_as":  [ { "product":  "\\bgarbanzo\\b", "reason":  "garbanzo beans are chickpeas under their Spanish name (Aldi Garbanzo Beans 15.5 OZ, 2026-09-26).", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "chickpeas",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -619,6 +622,7 @@
     },
     {
         "item":  "Corn Chips",
+        "identity_same_as":  [ { "product":  "\\bfritos?\\b", "reason":  "Fritos is the brand name for corn chips and the product is the same food.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "corn-chips",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -742,6 +746,7 @@
     },
     {
         "item":  "Diced Tomatoes \u0026 Green Chilies",
+        "identity_same_as":  [ { "product":  "\\bgreen\\s+chiles?\\b", "reason":  "green chiles is the same pepper as green chilies, spelled the Southwestern way on the can.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "tomatoes-green-chilies",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -788,6 +793,7 @@
     },
     {
         "item":  "Dried Arbol Chiles",
+        "identity_same_as":  [ { "product":  "\\bchil[ei]\\s+de\\s+.rbol\\b", "reason":  "chile de arbol is the Spanish name of the arbol chile.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "dried-arbol-chiles",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -817,6 +823,7 @@
     },
     {
         "item":  "Dried Guajillo Chiles",
+        "identity_same_as":  [ { "product":  "\\bguajillo\\b", "reason":  "guajillo names the chile itself; a guajillo package is this ingredient whatever class word the store uses.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "dried-guajillo-chiles",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -994,6 +1001,7 @@
     },
     {
         "item":  "Fries",
+        "identity_same_as":  [ { "product":  "\\bfrench\\s+fried\\s+potatoes\\b", "reason":  "french fried potatoes is the standard-of-identity label for frozen fries.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "fries",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1079,6 +1087,7 @@
     },
     {
         "item":  "Gingersnap Cookies",
+        "identity_same_as":  [ { "product":  "\\bginger\\s*snaps?\\b", "reason":  "ginger snaps are gingersnap cookies, the store names the cookie without the class word.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "gingersnaps",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1431,7 +1440,7 @@
     },
     {
         "item":  "Japanese Curry Roux",
-        "identity_same_as":  [ { "product":  "\\bjapanese\\s+curry\\s+mix\\b", "reason":  "S&B Golden Curry mix is sold as the roux block (2 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
+        "identity_same_as":  [ { "product":  "\\bjapanese\\s+curry\\s+mix\\b", "reason":  "S&B Golden Curry mix is sold as the roux block (2 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" }, { "product":  "\\bcurry\\s+sauce\\s+mix\\b", "reason":  "a Japanese curry sauce mix is the boxed curry roux block under its label name.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "japanese-curry-roux",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1586,6 +1595,7 @@
     },
     {
         "item":  "Mexican Cheese Blend",
+        "identity_same_as":  [ { "product":  "\\bfiesta\\s+blend\\b", "reason":  "a fiesta blend is the store name for the shredded Mexican-style cheese blend.", "queue_id":  "2026-09-22-5a9676" } ],
         "aliases":  [
                         "Mexican Blend Shredded Cheese"
                     ],
@@ -1893,6 +1903,7 @@
     },
     {
         "item":  "Pork Shoulder",
+        "identity_same_as":  [ { "product":  "\\bpork\\s+butt\\b|\\bbutt\\s+roast\\b", "reason":  "pork butt (Boston butt) is the upper cut of the pork shoulder, the same primal sold under its butcher name.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pork-shoulder",
         "gpu":  453.592,
         "unit":  "lb",
@@ -2004,7 +2015,7 @@
     },
     {
         "item":  "Red Pepper Flakes",
-        "identity_same_as":  [ { "product":  "\\bcrushed\\s+red\\s+pepper\\b", "reason":  "crushed red pepper is red pepper flakes: one food, two shelf names (42 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
+        "identity_same_as":  [ { "product":  "\\bcrushed\\s+red\\s+pepper\\b", "reason":  "crushed red pepper is red pepper flakes: one food, two shelf names (42 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" }, { "product":  "\\bred\\s+pepper,?\\s+crushed\\b", "reason":  "red pepper, crushed is crushed red pepper with the words reversed, which is red pepper flakes.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "red-pepper-flakes",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2225,6 +2236,7 @@
     },
     {
         "item":  "Smoked Turkey Sausage",
+        "identity_same_as":  [ { "product":  "\\bturkey\\b.*\\bkielbasa\\b", "reason":  "turkey kielbasa is a smoked turkey sausage sold under its Polish name.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "smoked-turkey-sausage",
         "gpu":  453.592,
         "unit":  "lb",
@@ -2494,6 +2506,7 @@
     },
     {
         "item":  "Vegetable Oil",
+        "identity_same_as":  [ { "product":  "\\bcanola\\s+oil\\b", "reason":  "canola oil is a vegetable oil and the recipe asks for a neutral vegetable oil.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "vegetable-oil",
         "gpu":  28,
         "unit":  "floz",
@@ -2678,6 +2691,7 @@
     },
     {
         "item":  "80/20 Ground Beef",
+        "identity_same_as":  [ { "product":  "\\b80%?\\s*/\\s*20%?\\b", "reason":  "80%/20% names the same lean-to-fat ratio as 80/20 ground beef.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "ground-beef-8020",
         "gpu":  453.592,
         "unit":  "lb",
@@ -2738,6 +2752,7 @@
     },
     {
         "item":  "Beef Base",
+        "identity_same_as":  [ { "product":  "\\bbeef\\s+bouillon\\b", "reason":  "beef bouillon is the concentrated beef base the recipe dissolves into water.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "beef-base",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2758,7 +2773,7 @@
     },
     {
         "item":  "Sun-Dried Tomatoes (Oil-Packed)",
-        "identity_same_as":  [ { "product":  "\\bsun[\\s-]dried\\s+tomatoes\\s+in\\s+(olive\\s+)?oil\\b", "reason":  "sun dried tomatoes in olive oil are the oil-packed food; the hyphen split the head word (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
+        "identity_same_as":  [ { "product":  "\\bsun[\\s-]dried\\s+tomatoes\\s+in\\s+(olive\\s+)?oil\\b", "reason":  "sun dried tomatoes in olive oil are the oil-packed food; the hyphen split the head word (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" }, { "product":  "\\bsun\\s*-?\\s*dried\\s+tomatoes\\s+in\\s+(?:olive\\s+)?oil\\b", "reason":  "sundried tomatoes in oil is the oil-packed form the recipe names, spelled as one word.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "sun-dried-tomatoes",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2954,6 +2969,7 @@
     },
     {
         "item":  "Masa Harina",
+        "identity_same_as":  [ { "product":  "\\bcorn\\s+masa\\s+flour\\b|\\bmaseca\\b", "reason":  "corn masa flour is masa harina in English, and Maseca is its leading brand.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "masa-harina",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -3015,6 +3031,7 @@
     },
     {
         "item":  "No-Boil Lasagna Noodles",
+        "identity_same_as":  [ { "product":  "\\b(?:oven[\\s-]+ready|no[\\s-]+boil)\\b.*\\blasagna\\b", "reason":  "oven-ready lasagna is the store name for no-boil lasagna noodles.", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "no-boil-lasagna-noodles",
         "gpu":  28.3495,
         "unit":  "oz",
