@@ -365,6 +365,104 @@ function Get-SamsCountFirstMeasure([string]$Name) {
   $v = 0.0; if (-not [double]::TryParse($vt, [ref]$v) -or $v -le 0 -or $n -le 1) { return $null }
   return @{ count = $n; value = $v; unit = ($m.Groups[3].Value -replace '\.', '' -replace '\s+', ' ') }
 }
+# A BLANK UNIT PRICE ON A PRODUCT SAM'S OWN ARITHMETIC ALREADY SIZED (2026-09-26, triage finding samsunit).
+# Sam's prints `"unitPrice":""` on some rows and a unit price on the SAME item id another day. Measured over the
+# captures of 2026-09-24/25/26: 109, 214 and 181 distinct blank-unit-price products, of which 71 (65%), 123 (57%)
+# and 93 (51%) had been built by this file on an earlier day with the SAME item id and the SAME exact name, at a
+# size the NAME states and Sam's printed unit price reproduced (qty_basis 'package; qty name ...'). The flagged row
+# that found it: Member's Mark Classic Hummus Singles 2.5 oz., 16 ct., $5.58, sized 16 ct 2.5 oz on 09-22 against
+# Sam's $0.35/ea, then refused 'no unitPrice' on 09-24, 09-25 and 09-26 at the same $5.58.
+# THE RULE. The size is a property of the product, and it was PROVED - stated by the name and reproduced by Sam's
+# own unit price - so today's linePrice over that proved size is a price justified from the row plus its proof. The
+# proof is RE-RUN through Build-Row under today's rules (its own lp and up), so a proof a later rule would refuse
+# (NAME AMBIGUOUS, the per-piece guard, density) carries nothing. Only a PACKAGE-shape proof whose size the name
+# states carries: a derived lp/up size (name silent) is Sam's arithmetic on that day's pack, and nothing today can
+# say the pack did not change. Proofs that disagree on the size carry nothing. A proof older than the quarter
+# (capture-policy-lib, Get-PolicyQuarterDays) carries nothing, the same age past which an everyday read is withheld.
+# A row with no proof keeps the plain 'no unitPrice' reject: its size would rest on the name alone, which neither
+# Sam's nor Walmart's builder admits today (leaves_open, a ruling).
+# The index is read once per build from the builder's own output directory (-OutDir, else out\sams), so a
+# self-test child reads only its temp directory and a worktree with no captures carries nothing.
+$script:SamsProofDir = ''
+$script:SamsProofDate = ''
+$script:SamsProofIndex = $null
+function Get-SamsProofIndex {
+  if ($null -ne $script:SamsProofIndex) { return $script:SamsProofIndex }
+  $idx = @{}
+  $script:SamsProofIndex = $idx
+  if (-not $script:SamsProofDir -or -not $script:SamsProofDate -or -not (Test-Path -LiteralPath $script:SamsProofDir)) { return $idx }
+  $days = 0
+  try { $days = [int](Get-SamsProofWindowDays) } catch { Write-Warning ('build-sams-deals: proof window unreadable (' + $_.Exception.Message + ') - no blank-unit-price row is carried'); return $idx }
+  if ($days -le 0) { return $idx }
+  $end = [datetime]::ParseExact($script:SamsProofDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+  $from = $end.AddDays(-$days).ToString('yyyy-MM-dd')
+  $files = @(Get-ChildItem -LiteralPath $script:SamsProofDir -Filter 'sams-deals-*.json' -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^sams-deals-(\d{4}-\d{2}-\d{2})$' } | Sort-Object Name)
+  foreach ($f in $files) {
+    $fd = $f.BaseName.Substring(11)
+    if ([string]::CompareOrdinal($fd, $from) -lt 0 -or [string]::CompareOrdinal($fd, $script:SamsProofDate) -ge 0) { continue }
+    $j = $null
+    try { $j = [IO.File]::ReadAllText($f.FullName, [Text.Encoding]::UTF8) | ConvertFrom-Json } catch { Write-Warning ('build-sams-deals: proof file unreadable, skipped: ' + $f.Name); continue }
+    if ($null -eq $j -or -not $j.PSObject.Properties['deals']) { continue }
+    foreach ($d in @($j.deals)) {
+      if ($null -eq $d) { continue }
+      $pid_ = [string]$d.sams_item_id; $pup = ([string]$d.sams_unit_price).Trim(); $pqb = [string]$d.qty_basis
+      if (-not $pid_ -or -not $pup -or -not $pqb.StartsWith('package; qty name', [StringComparison]::Ordinal)) { continue }
+      $k = $pid_ + "`t" + [string]$d.item
+      $e = [pscustomobject]@{ date = $fd; lp = [string]$d.source_checkout_price; up = $pup; size = [string]$d.size }
+      if (-not $e.lp) { $e.lp = [string]$d.ad_price }
+      if (-not $idx.ContainsKey($k)) { $idx[$k] = @{ newest = $e; sizes = @{} } }
+      $idx[$k].sizes[$e.size] = $true
+      if ([string]::CompareOrdinal($fd, [string]$idx[$k].newest.date) -ge 0) { $idx[$k].newest = $e }   # files are read in date order
+    }
+  }
+  return $idx
+}
+# The quarter, read from its one home. Dot-sourced INSIDE this function so none of capture-policy-lib's names reach
+# this script's scope (Build-Row's helpers and the libraries above are not re-checked against it).
+function Get-SamsProofWindowDays {
+  . (Join-Path $root 'capture-policy-lib.ps1')
+  return (Get-PolicyQuarterDays)
+}
+# $null = no proof (the caller keeps its plain reject); @{ err } = a proof exists and does not carry; @{ row } = carried.
+function Get-SamsCarriedRow($raw, [string]$Club = '') {
+  $id = [string]$raw.id
+  if (-not $id) { return $null }
+  $idx = Get-SamsProofIndex
+  $k = $id + "`t" + [string]$raw.n
+  if (-not $idx.ContainsKey($k)) { return $null }
+  $p = $idx[$k]
+  if ($p.sizes.Count -ne 1) { return @{ err = ('no unitPrice (earlier proofs of this item disagree on its size: ' + ((@($p.sizes.Keys) | Sort-Object) -join ' / ') + ' - nothing carried)') } }
+  $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
+  if (-not $lpm.Success) { return @{ err='no linePrice' } }
+  $lp = [double]($lpm.Groups[1].Value -replace ',','')
+  if ($lp -le 0) { return @{ err='zero price' } }
+  $n = $p.newest
+  $synth = [pscustomobject]@{ q = $raw.q; n = $raw.n; lp = $n.lp; up = $n.up; id = $raw.id; was = $raw.was; ful = $raw.ful; taxonomy_path = $raw.taxonomy_path; url = $raw.url; image_url = $raw.image_url }
+  $b = Build-Row $synth $Club
+  if (-not $b.row) { return @{ err = ('no unitPrice (the ' + $n.date + ' proof no longer passes today''s rules: ' + $b.err + ')') } }
+  $row = $b.row
+  if (-not ([string]$row.qty_basis).StartsWith('package; qty name', [StringComparison]::Ordinal) -or ([string]$row.size) -ne ([string]$n.size)) {
+    return @{ err = ('no unitPrice (the ' + $n.date + ' proof now reads ' + [string]$row.size + ' by ' + [string]$row.qty_basis + ', not the proved ' + [string]$n.size + ')') }
+  }
+  $upRead = Get-SamsUnitPriceReading $n.up
+  $u = if ($upRead) { Resolve-Unit $upRead.unit } else { $null }
+  if (-not $u -and $upRead) { $u = Resolve-UnitAlias -Store 'sams' -Spelling $upRead.unit }
+  if (-not $u) { return @{ err = ('no unitPrice (the ' + $n.date + ' proof unit "' + $n.up + '" does not resolve)') } }
+  $ad = ('${0:N2}' -f $lp)
+  $got = Get-UnitPrice ([pscustomobject]@{ price_text=$ad; name=[string]$raw.n; size_text=[string]$row.size; regular=$null }) ([pscustomobject]@{ unit=$u.unit })
+  if ($null -eq $got) { return @{ err = ('no unitPrice (engine returned null for the carried size ' + [string]$row.size + ')') } }
+  $row.ad_price = $ad
+  $row.current_price = $ad
+  $row.source_checkout_price = $ad
+  # BLANK, because Sam's printed none today: this field is read as today's store arithmetic (compare-deals' native
+  # unit price, audit-basis-reconcile), and the proof's number describes the proof day's linePrice, not today's.
+  $row.sams_unit_price = ''
+  $row.qty_basis = ('package; qty carried: ' + ([string]$row.qty_basis).Substring(('package; qty ').Length) + ' on ' + $n.date + ' at ' + $n.lp + '; Sam''s printed no unit price today')
+  $row.engine_check = ('' + [math]::Round($got.unit_price,4) + '/' + $u.unit + ' [' + $got.basis + ']')
+  Add-Member -InputObject $row -NotePropertyName 'sams_unit_price_proven' -NotePropertyValue ([string]$n.up) -Force
+  Add-Member -InputObject $row -NotePropertyName 'size_proven_on' -NotePropertyValue ([string]$n.date) -Force
+  return @{ row = $row }
+}
 function Build-Row($raw, [string]$Club = '') {
   $lpm = [regex]::Match(("" + $raw.lp), '\$\s*([\d,]+(?:\.\d{1,2})?)')
   if (-not $lpm.Success) { return @{ err='no linePrice' } }
@@ -380,7 +478,12 @@ function Build-Row($raw, [string]$Club = '') {
   # form - and it must be carried, because every use of it below is a window inside which a size is
   # believed. See the long note in pricing-math-lib.ps1.
   $upRead = Get-SamsUnitPriceReading ("" + $raw.up)
-  if ($null -eq $upRead) { return @{ err='no unitPrice' } }
+  if ($null -eq $upRead) {
+    # Only a BLANK unit price is carried (see Get-SamsCarriedRow). A non-blank one that does not parse (an unknown
+    # currency token, case 8j) is still refused per row, exactly as before.
+    if (-not ("" + $raw.up).Trim()) { $carry = Get-SamsCarriedRow $raw $Club; if ($null -ne $carry) { return $carry } }
+    return @{ err='no unitPrice' }
+  }
   $lp = [double]($lpm.Groups[1].Value -replace ',','')
   $up = [double]$upRead.value
   if ($lp -le 0 -or $up -le 0) { return @{ err='zero price' } }
@@ -967,6 +1070,49 @@ if (-not ($rC.err -and $rC.err -match 'per-piece')) { Write-Output "ok    MUST N
   if (-not $r8k.row -and ([string]$r8k.err) -eq 'no unitPrice') { Write-Output 'ok    8j CLEAN TWIN  a blank unit price is still the same per-row reject' }
   else { Write-Output ("FAIL  8j blank up changed behaviour: err='" + $r8k.err + "'"); $fail++ }
 
+# 8l. A BLANK UNIT PRICE ON A PRODUCT SAM'S OWN ARITHMETIC ALREADY SIZED IS CARRIED (2026-09-26, triage finding
+# samsunit). The REAL rows: Member's Mark Classic Hummus Singles, built 2026-09-22 at 16 ct 2.5 oz against Sam's
+# $0.35/ea, then captured with a blank unit price on 09-24/25/26 at $5.58 and refused 'no unitPrice' each day.
+# The proof index is set directly here; case 11l drives the file-reading half through a child build.
+$hmName = "Member's Mark Classic Hummus Singles 2.5 oz., 16 ct."
+function _HmIdx($sizes) {
+  $ix = @{}
+  $ix['4YK5OUWTL5P0' + "`t" + $hmName] = @{ newest = [pscustomobject]@{ date = '2026-09-22'; lp = '$5.58'; up = '$0.35/ea'; size = '16 ct 2.5 oz' }; sizes = $sizes }
+  return $ix
+}
+function _HmRaw($id, $n, $lp, $up) { [pscustomobject]@{ q='hummus'; n=$n; lp=$lp; up=$up; id=$id; was=''; ful='DELIVERY@8146,PICKUP@8146,PERISHABLE@' } }
+$script:SamsProofIndex = (_HmIdx @{ '16 ct 2.5 oz' = $true })
+$r8l = Build-Row (_HmRaw '4YK5OUWTL5P0' $hmName '$5.58' '')
+if ($r8l.row -and $r8l.row.ad_price -eq '$5.58' -and $r8l.row.size -eq '16 ct 2.5 oz' -and $r8l.row.sams_unit_price -eq '' -and $r8l.row.size_proven_on -eq '2026-09-22' -and $r8l.row.sams_unit_price_proven -eq '$0.35/ea' -and ([string]$r8l.row.qty_basis).StartsWith('package; qty carried: name', [StringComparison]::Ordinal)) { Write-Output "ok    8l MUST FIRE  the 09-26 hummus with a blank unit price carries its 09-22 proved size -> `$5.58 / 16 ct 2.5 oz ($($r8l.row.engine_check))" }
+else { Write-Output ("FAIL  8l hummus not carried: err='" + $r8l.err + "' size='" + $r8l.row.size + "' basis='" + $r8l.row.qty_basis + "'"); $fail++ }
+# The price is TODAY's linePrice over the proved size, never the proof day's: $6.40 / 16 = $0.40/each.
+$r8l2 = Build-Row (_HmRaw '4YK5OUWTL5P0' $hmName '$6.40' '')
+if ($r8l2.row -and $r8l2.row.ad_price -eq '$6.40' -and $r8l2.row.current_price -eq '$6.40' -and $r8l2.row.source_checkout_price -eq '$6.40' -and ([string]$r8l2.row.engine_check).StartsWith('0.4/each', [StringComparison]::Ordinal)) { Write-Output "ok    8l CLEAN TWIN  a moved linePrice prices at today's `$6.40 over the proved size ($($r8l2.row.engine_check)), not the proof day's `$5.58" }
+else { Write-Output ("FAIL  8l moved price: ad='" + $r8l2.row.ad_price + "' check='" + $r8l2.row.engine_check + "' err='" + $r8l2.err + "'"); $fail++ }
+# Another id, or the same id under a name one character off: no proof, the plain reject.
+$r8l3 = Build-Row (_HmRaw 'OTHERID00000' $hmName '$5.58' '')
+$r8l4 = Build-Row (_HmRaw '4YK5OUWTL5P0' ($hmName.TrimEnd('.')) '$5.58' '')
+if (-not $r8l3.row -and ([string]$r8l3.err) -eq 'no unitPrice' -and -not $r8l4.row -and ([string]$r8l4.err) -eq 'no unitPrice') { Write-Output 'ok    8l MUST NOT FIRE  a blank unit price with no proof for that exact id AND name keeps the plain no unitPrice reject' }
+else { Write-Output ("FAIL  8l carried without a proof: other-id err='" + $r8l3.err + "' other-name err='" + $r8l4.err + "'"); $fail++ }
+# Proofs that disagree on the size carry nothing, and say why.
+$script:SamsProofIndex = (_HmIdx @{ '16 ct 2.5 oz' = $true; '40 oz' = $true })
+$r8l5 = Build-Row (_HmRaw '4YK5OUWTL5P0' $hmName '$5.58' '')
+if (-not $r8l5.row -and ([string]$r8l5.err) -match '^no unitPrice \(earlier proofs of this item disagree on its size') { Write-Output "ok    8l MUST NOT FIRE  proofs that disagree on the size carry nothing -> $($r8l5.err)" }
+else { Write-Output ("FAIL  8l disagreeing proofs carried: size='" + $r8l5.row.size + "' err='" + $r8l5.err + "'"); $fail++ }
+# A non-blank unit price we cannot read is still refused per row, even with a proof (8j keeps its meaning).
+$script:SamsProofIndex = (_HmIdx @{ '16 ct 2.5 oz' = $true })
+$r8l6 = Build-Row (_HmRaw '4YK5OUWTL5P0' $hmName '$5.58' '0.35 USD/ea')
+if (-not $r8l6.row -and ([string]$r8l6.err) -eq 'no unitPrice') { Write-Output 'ok    8l MUST NOT FIRE  an unreadable (non-blank) unit price is refused even when a proof exists' }
+else { Write-Output ("FAIL  8l unreadable up was carried: size='" + $r8l6.row.size + "' err='" + $r8l6.err + "'"); $fail++ }
+# A proof today's rules refuse carries nothing: a count-first name priced per each is NAME AMBIGUOUS (Pledge shape).
+$cfName = 'Fixture Air Mist, 4 ct., 32.4 oz.'
+$script:SamsProofIndex = @{}
+$script:SamsProofIndex['CFPROOF00001' + "`t" + $cfName] = @{ newest = [pscustomobject]@{ date = '2026-09-10'; lp = '$9.98'; up = '$2.50/ea'; size = '4 ct' }; sizes = @{ '4 ct' = $true } }
+$r8l7 = Build-Row (_HmRaw 'CFPROOF00001' $cfName '$9.98' '')
+if (-not $r8l7.row -and ([string]$r8l7.err) -match '^no unitPrice \(the 2026-09-10 proof no longer passes today''s rules: NAME AMBIGUOUS') { Write-Output 'ok    8l MUST NOT FIRE  a proof that today''s rules refuse (count-first NAME AMBIGUOUS) carries nothing' }
+else { Write-Output ("FAIL  8l refused proof carried: size='" + $r8l7.row.size + "' err='" + $r8l7.err + "'"); $fail++ }
+$script:SamsProofIndex = $null
+
   # 8k. THE CROSS-MEASURE HALF OF THE SAZON RULE, AT INGEST (2026-09-21, queue 2026-09-21-e291a1) ---------------
   # The REAL rows of the 2026-09-21 capture, frozen from out\sams\sams-deals-2026-09-21.json as the daily
   # pipeline committed it in df1d6429e. The name states 35 lbs, Sam's prices per fluid ounce, and lp/up derives
@@ -1334,6 +1480,46 @@ if (-not ($rC.err -and $rC.err -match 'per-piece')) { Write-Output "ok    MUST N
     }
     if ($twinBad.Count -eq 0) { Write-Output 'ok    13h CLEAN TWIN  the ordinary cucumber row keeps all 17 pre-change fields byte-identical, with and without a ful column' }
     else { Write-Output ('FAIL  13h fields moved: ' + ($twinBad -join '; ')); $fail++ }
+
+    # 14. THE PROOF INDEX IS READ FROM THE BUILDER'S OWN -OutDir, DATED BEFORE THE CAPTURE AND INSIDE THE QUARTER
+    # (2026-09-26, triage finding samsunit; case 8l drives Build-Row with the index set by hand). The child's out dir
+    # holds three earlier hummus files: a proof on 1998-12-30 (inside the window), a conflicting '40 oz' on 1999-01-02
+    # (AFTER the capture date) and another on 1998-09-01 (older than the 90-day quarter before 1999-01-01). Only the
+    # first may count, so the capture's blank-unit-price hummus carries 16 ct 2.5 oz; if either of the others were
+    # read, the proofs would disagree and nothing would carry. A swab row whose only proof is a DERIVED lp/up size
+    # carries nothing (the name is silent, so nothing can say the pack did not change).
+    $outK = Join-Path $bsdT 'k'
+    New-Item -ItemType Directory -Path $outK -ErrorAction Stop | Out-Null
+    $hmN = "Member's Mark Classic Hummus Singles 2.5 oz., 16 ct."
+    function _ProofFile($path, $size, $qb, $id, $n, $up, $lp) {
+      $d = [ordered]@{ store = "Sam's Club"; deals = @([ordered]@{ store = "Sam's Club"; item = $n; ad_price = $lp; size = $size; source_checkout_price = $lp; sams_unit_price = $up; sams_item_id = $id; qty_basis = $qb }) }
+      [IO.File]::WriteAllText($path, (ConvertTo-Json -InputObject $d -Depth 5), (New-Object Text.UTF8Encoding($false)))
+    }
+    $qbName = 'package; qty name (reproduces Sam''s unit price)'
+    _ProofFile (Join-Path $outK 'sams-deals-1998-12-30.json') '16 ct 2.5 oz' $qbName '4YK5OUWTL5P0' $hmN '$0.35/ea' '$5.58'
+    _ProofFile (Join-Path $outK 'sams-deals-1999-01-02.json') '40 oz' $qbName '4YK5OUWTL5P0' $hmN '$0.14/oz' '$5.58'
+    _ProofFile (Join-Path $outK 'sams-deals-1998-09-01.json') '40 oz' $qbName '4YK5OUWTL5P0' $hmN '$0.14/oz' '$5.58'
+    _ProofFile (Join-Path $outK 'sams-deals-1998-12-31.json') '888 ct' 'package; qty derived lp/up' 'SWABPROOF001' 'Fixture Cotton Swabs' '$0.01/ea' '$9.34'
+    $csvK = Join-Path $bsdT 'sams-capture-k.csv'
+    $K0 = '#tc-store store="' + $blk + '" read="page" rows=2'
+    $K1 = 'q|n|lp|up|id|was|ful'
+    $K2 = 'hummus|' + $hmN + '|$5.58||4YK5OUWTL5P0||DELIVERY@8146,PICKUP@8146,PERISHABLE@'
+    $K3 = 'swabs|Fixture Cotton Swabs|$9.34||SWABPROOF001||PICKUP@8146'
+    [IO.File]::WriteAllText($csvK, (($K0, $K1, $K2, $K3) -join "`n") + "`n", (New-Object Text.UTF8Encoding($false)))
+    $runK = Invoke-NativeScript $PSCommandPath '-In' $csvK '-Date' '1999-01-01' '-OutDir' $outK '-NoCursor' '-LedgerRoot' $bsdLedgerT
+    $kRows = @(); $kRej = @()
+    $fK = Join-Path $outK 'sams-deals-1999-01-01.json'
+    if (Test-Path -LiteralPath $fK) { $kDoc = Get-Content -LiteralPath $fK -Raw -Encoding UTF8 | ConvertFrom-Json; $kRows = @($kDoc.deals) }
+    $fKr = Join-Path $outK 'sams-rejects-1999-01-01.json'
+    if (Test-Path -LiteralPath $fKr) { $kRejDoc = Get-Content -LiteralPath $fKr -Raw -Encoding UTF8 | ConvertFrom-Json; $kRej = @($kRejDoc | ForEach-Object { $_ }) }
+    $kHm = @($kRows | Where-Object { [string]$_.sams_item_id -eq '4YK5OUWTL5P0' })
+    $kSumLine = @($runK.Lines | Where-Object { ([string]$_) -match '^\s+1 of the priced rows had a blank unit price' }).Count
+    if ($runK.ExitCode -eq 0 -and $kHm.Count -eq 1 -and [string]$kHm[0].size -eq '16 ct 2.5 oz' -and [string]$kHm[0].size_proven_on -eq '1998-12-30' -and [string]$kHm[0].ad_price -eq '$5.58' -and $kSumLine -eq 1) {
+      Write-Output 'ok    14a MUST FIRE  a child build carries the blank-unit-price hummus from its own out dir''s 1998-12-30 proof (16 ct 2.5 oz), ignoring a later and an out-of-quarter file'
+    } else { Write-Output ('FAIL  14a carried child build: exit=' + $runK.ExitCode + ' hummus=' + ($kHm | ConvertTo-Json -Compress -Depth 3) + ' sumline=' + $kSumLine + ' | ' + (($runK.Lines | Select-Object -Last 4) -join ' / ')); $fail++ }
+    $kSw = @($kRej | Where-Object { [string]$_.name -eq 'Fixture Cotton Swabs' })
+    if ($kSw.Count -eq 1 -and [string]$kSw[0].reason -eq 'no unitPrice' -and -not @($kRows | Where-Object { [string]$_.sams_item_id -eq 'SWABPROOF001' }).Count) { Write-Output 'ok    14b MUST NOT FIRE  a row whose only proof is a DERIVED lp/up size carries nothing and keeps the plain no unitPrice reject' }
+    else { Write-Output ('FAIL  14b derived proof carried or reject lost: rejects=' + ($kSw | ConvertTo-Json -Compress)); $fail++ }
   } finally { Remove-Item -LiteralPath $bsdT -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
@@ -1380,6 +1566,11 @@ $rejects = New-Object System.Collections.Generic.List[object]
 . (Join-Path $root 'rollback-ttl-lib.ps1')
 $ledgerRoot = if ($LedgerRoot) { $LedgerRoot } else { $root }
 $rollbacks = 0
+# THE PROOFS A BLANK UNIT PRICE MAY CARRY FROM (see Get-SamsCarriedRow): this builder's own earlier outputs, in the
+# directory it writes to, dated before this capture. Read once, on the first blank row.
+$script:SamsProofDir = if ($OutDir) { $OutDir } else { Join-Path $root 'out\sams' }
+$script:SamsProofDate = $Date
+$script:SamsProofIndex = $null
 foreach ($r in $raw) {
   $b = Build-Row $r $storeLocation
   if ($b.row) {
@@ -1418,7 +1609,7 @@ $outFile = Join-Path $outDir ("sams-deals-$Date.json")
   club       = $clubLabel
   club_read  = $(if ($cap.waived) { 'NOT RECORDED' } else { [string]$cap.cs.read })
   captured   = $Date
-  shape      = 'PACKAGE price + pack size (ad_price = price of ONE size). Built by build-sams-deals.ps1; every row verified to reproduce Sam''s own unitPrice through compare-deals'' real Get-UnitPrice.'
+  shape      = 'PACKAGE price + pack size (ad_price = price of ONE size). Built by build-sams-deals.ps1; every row verified to reproduce Sam''s own unitPrice through compare-deals'' real Get-UnitPrice, except a row whose unit price Sam''s left blank, which carries a size its name states and Sam''s own unit price reproduced on an earlier day (qty_basis ''package; qty carried'', size_proven_on).'
   # HOW COMPREHENSIVE was this slice? Sam's is CAPTCHA-walled and pulled in slices; compare-deals unions every
   # slice in its 14-day window, so a slice keeps the file dates fresh while the OLDER slices quietly carry most
   # of the coverage toward the window's cliff (the exact masking that hid the 2026-07-23 Walmart aging risk).
@@ -1448,6 +1639,8 @@ try {
   [void](Write-IngestShape -Store 'sams' -Date $Date -RowsIn $raw.Count -RowsOut $ded.Count -Rejects $rejects.ToArray() -OutRoot $isRoot)
 } catch { Write-Warning ("build-sams-deals: ingest shape not recorded (" + $_.Exception.Message + ")") }
 Write-Output ("build-sams-deals: {0} raw -> {1} priced ({2} after de-dupe), {3} rejected -> {4}" -f $raw.Count, $rows.Count, $ded.Count, $rejects.Count, (Split-Path $outFile -Leaf))
+$carriedN = @($rows | Where-Object { ([string]$_.qty_basis).StartsWith('package; qty carried', [StringComparison]::Ordinal) }).Count
+if ($carriedN -gt 0) { Write-Output ("  {0} of the priced rows had a blank unit price and carried a size Sam's own arithmetic proved earlier (qty_basis 'package; qty carried')" -f $carriedN) }
 if ($rejects.Count) {
   Write-Output "  reject reasons:"
   $rejects | Group-Object { ($_.reason -split ':')[0] -replace '\d+','N' } | Sort-Object Count -Descending | Select-Object -First 8 | ForEach-Object { Write-Output ("   {0,4}x {1}" -f $_.Count, $_.Name) }
