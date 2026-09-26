@@ -16,8 +16,111 @@
   price we later fetch would be a real price attached to the wrong quantity, which is the most dangerous kind
   of wrong: internally consistent and completely false.
 #>
-param([switch]$WhatIf, [int]$StoreId = 0, [string[]]$Ids = @())   # 0 = ask hyvee-store-lib; see that file
+param([switch]$WhatIf, [int]$StoreId = 0, [string[]]$Ids = @(), [switch]$SelfTest)   # 0 = ask hyvee-store-lib; see that file
 $ErrorActionPreference = 'Stop'
+
+# ---- THE SIZE-CONFLICT RELINK QUEUE (2026-09-25, triage 2026-09-25-c2a750) ------------------------------
+# pull-regular-hyvee.ps1 refuses an answer whose size differs from the worklist variant ("source product size
+# conflicts with the worklist variant") and, since 90de7b, parks that product id in out\hyvee-ask-ledger.json
+# until the binding moves. Nothing moved it: the three queues below all start from a Hy-Vee cell ON THE BOARD,
+# and a refused product has no fresh row, so its cell drops off the board and the resolver never sees it again.
+# Measured 2026-09-25: 12 pids refused this way on every run 09-23..09-25; every one is a product-urls.json link,
+# and 9 of their 12 commodities had no Hy-Vee cell on the 09-23 board. So a link whose product id the pull last
+# refused for size is a DRIFTED LINK, whether or not its cell is on the board, and it goes through the same
+# size-first search as every other target: re-pointed only to a product AT THE LINK'S SIZE, never to Hy-Vee's
+# other size. Pure; the caller reads the files.
+$script:HvSizeConflictReason = 'source product size conflicts with the worklist variant'   # pull-regular-hyvee.ps1's reason text
+function Get-HyVeeSizeConflictRelinkTargets {
+  param($Ledger, $Items, $Rows, [hashtable]$Units, [hashtable]$Seen, [string[]]$Ids = @())
+  $out = New-Object System.Collections.ArrayList
+  if ($null -eq $Ledger -or $null -eq $Items) { return ,$out.ToArray() }
+  $parked = @{}
+  foreach ($pr in @($Ledger.PSObject.Properties)) {
+    if ([string]::Equals([string]$pr.Value.last_outcome, $script:HvSizeConflictReason, [StringComparison]::Ordinal)) { $parked[[string]$pr.Name] = $pr.Value }
+  }
+  if ($parked.Count -eq 0) { return ,$out.ToArray() }
+  foreach ($it in @($Items.PSObject.Properties)) {
+    $id = [string]$it.Name
+    $ln = $it.Value.'Hy-Vee'
+    if (-not ($ln -and $ln.url)) { continue }
+    if (([string]$ln.url) -notmatch '/p/(\d+)/') { continue }
+    $p = $Matches[1]
+    if (-not $parked.ContainsKey($p)) { continue }
+    if ($Ids.Count -and ($Ids -notcontains $id)) { continue }
+    if ($Seen.ContainsKey($id)) { continue }
+    $lsize = ([string]$ln.size).Trim()
+    # The ledger records the worklist size that conflicted ('' for a link-only product). A link whose size has
+    # moved since is no longer the parked binding: the pull unparks it and asks again, so leave it alone.
+    $wsize = ([string]$parked[$p].size).Trim()
+    if ($wsize -ne '' -and -not [string]::Equals($wsize, $lsize, [StringComparison]::Ordinal)) { continue }
+    $nm = ([string]$ln.name).Trim()
+    $rowA = @($Rows | Where-Object { ([string]$_.item).Trim() -eq $nm -and ([string]$_.size).Trim() -eq $lsize })
+    $row = if ($rowA.Count) { $rowA[0] } else { [pscustomobject]@{ size = $lsize; ad_price = '' } }
+    $Seen[$id] = $true
+    [void]$out.Add([pscustomobject]@{ id = $id; unit = [string]$Units[$id]; name = $nm; row = $row; relink = $true; parked_pid = [int]$p; theirs = [string]$parked[$p].theirs })
+  }
+  return ,$out.ToArray()
+}
+# A search that still names the parked product id at our size makes no progress: say so, and write nothing.
+function Test-HyVeeRelinkNoProgress($Target, [string]$BestId) {
+  return [bool]($Target.PSObject.Properties['parked_pid'] -and ([string][int]$Target.parked_pid -eq $BestId))
+}
+
+if ($SelfTest) {
+  $fail = 0; $n = 0
+  function _RT([string]$label, [bool]$ok, [string]$got) { $script:n++; if ($ok) { Write-Output ('ok   ' + $label) } else { $script:fail++; Write-Output ('FAIL ' + $label + '  got=' + $got) } }
+  try {
+    $rsn = $script:HvSizeConflictReason
+    $led = [pscustomobject]@{
+      '11342'   = [pscustomobject]@{ last_asked = '2026-09-25'; last_outcome = $rsn; streak = 3; size = '38 oz'; theirs = '20 oz' }
+      '2950925' = [pscustomobject]@{ last_asked = '2026-09-25'; last_outcome = $rsn; streak = 3; size = '' }
+      '47144'   = [pscustomobject]@{ last_asked = '2026-09-25'; last_outcome = $rsn; streak = 3; size = '20 oz' }
+      '444508'  = [pscustomobject]@{ last_asked = '2026-09-25'; last_outcome = 'success'; streak = 0; size = '15 oz' }
+    }
+    $items = [pscustomobject]@{
+      'beef-stew'        = [pscustomobject]@{ 'Hy-Vee' = [pscustomobject]@{ url = 'https://www.hy-vee.com/aisles-online/p/11342/dinty-moore-beef-stew'; name = 'Dinty Moore Beef Stew'; size = '38 oz' } }
+      'ground-cinnamon'  = [pscustomobject]@{ 'Hy-Vee' = [pscustomobject]@{ url = 'https://www.hy-vee.com/aisles-online/p/2950925/thats-smart-ground-cinnamon'; name = "That's Smart Ground Cinnamon"; size = '2.5 oz' } }
+      'corned-beef-hash' = [pscustomobject]@{ 'Hy-Vee' = [pscustomobject]@{ url = 'https://www.hy-vee.com/aisles-online/p/47144/hormel-hash'; name = 'Hormel Mary Kitchen Homestyle Corned Beef Hash'; size = '25 oz' } }
+      'sloppy-joe-sauce' = [pscustomobject]@{ 'Hy-Vee' = [pscustomobject]@{ url = 'https://www.hy-vee.com/aisles-online/p/444508/hy-vee-sloppy-joe-sauce'; name = 'Hy-Vee Sloppy Joe Sauce'; size = '15 oz' } }
+    }
+    $rowsF = @([pscustomobject]@{ item = 'Dinty Moore Beef Stew'; size = '38 oz'; ad_price = '$6.49'; as_of = '2026-08-21'; store_id = '1465' })
+    $unitsF = @{ 'beef-stew' = 'oz'; 'ground-cinnamon' = 'oz'; 'corned-beef-hash' = 'oz'; 'sloppy-joe-sauce' = 'oz' }
+
+    # MUST FIRE: the founding shape, a link whose product id the pull refused for size and whose cell is off the board.
+    $t1 = Get-HyVeeSizeConflictRelinkTargets -Ledger $led -Items $items -Rows $rowsF -Units $unitsF -Seen @{}
+    $t1a = @($t1)
+    $bs = @($t1a | Where-Object { $_.id -eq 'beef-stew' })
+    _RT 'MUST FIRE: size-conflict pid 11342 (beef-stew, no board cell) becomes a relink target at the LINK size 38 oz' (($bs.Count -eq 1) -and ([bool]$bs[0].relink) -and ($bs[0].row.size -eq '38 oz') -and ($bs[0].parked_pid -eq 11342)) ("$($bs.Count)")
+    _RT 'MUST FIRE: the target carries the row the link names, so gate 4 has a price to corroborate ($6.49)' (($bs.Count -eq 1) -and ($bs[0].row.ad_price -eq '$6.49')) ("$($bs[0].row.ad_price)")
+    $gc = @($t1a | Where-Object { $_.id -eq 'ground-cinnamon' })
+    _RT 'MUST FIRE: a link-only size conflict (ledger size empty) is queued at the link size 2.5 oz' (($gc.Count -eq 1) -and ($gc[0].row.size -eq '2.5 oz')) ("$($gc.Count)")
+    # MUST NOT FIRE: a success pid, and a link whose size moved since the conflict (the pull unparks that one itself).
+    _RT 'MUST NOT FIRE: a pid whose last ask succeeded (444508) is not queued' (@($t1a | Where-Object { $_.id -eq 'sloppy-joe-sauce' }).Count -eq 0) ''
+    _RT 'MUST NOT FIRE: a link whose size moved off the conflicted size (47144, 20 oz -> 25 oz) is not queued' (@($t1a | Where-Object { $_.id -eq 'corned-beef-hash' }).Count -eq 0) ''
+    _RT 'exactly 2 targets from the 4-link fixture' ($t1a.Count -eq 2) ("$($t1a.Count)")
+    # MUST NOT FIRE: an id the board queues already hold is not queued twice.
+    $seen = @{ 'beef-stew' = $true }
+    $t2 = Get-HyVeeSizeConflictRelinkTargets -Ledger $led -Items $items -Rows $rowsF -Units $unitsF -Seen $seen
+    $t2a = @($t2)
+    _RT 'MUST NOT FIRE: a commodity already targeted from the board is not added twice' (@($t2a | Where-Object { $_.id -eq 'beef-stew' }).Count -eq 0) ("$($t2a.Count)")
+    # MUST NOT FIRE: no ledger yet (the day before the first ledger run) leaves the queues exactly as they were.
+    $t3 = Get-HyVeeSizeConflictRelinkTargets -Ledger $null -Items $items -Rows $rowsF -Units $unitsF -Seen @{}
+    $t3a = @($t3)
+    _RT 'MUST NOT FIRE: a missing ledger adds no target' ($t3a.Count -eq 0) ("$($t3a.Count)")
+    # CLEAN TWIN: -Ids still scopes the run to the named commodities.
+    $t4 = Get-HyVeeSizeConflictRelinkTargets -Ledger $led -Items $items -Rows $rowsF -Units $unitsF -Seen @{} -Ids @('ground-cinnamon')
+    $t4a = @($t4)
+    _RT 'CLEAN TWIN: -Ids ground-cinnamon targets exactly ground-cinnamon' (($t4a.Count -eq 1) -and ($t4a[0].id -eq 'ground-cinnamon')) ("$($t4a.Count)")
+    # MUST FIRE / CLEAN TWIN of the no-progress guard.
+    _RT 'MUST FIRE: a search whose best match is the parked pid 11342 again is no progress' (Test-HyVeeRelinkNoProgress $bs[0] '11342') ''
+    _RT 'MUST NOT FIRE: a search that finds another product id (11999) at our size is progress' (-not (Test-HyVeeRelinkNoProgress $bs[0] '11999')) ''
+    $plainT = [pscustomobject]@{ id = 'x'; relink = $true }
+    _RT 'MUST NOT FIRE: a board-queue target with no parked pid is never blocked by the guard' (-not (Test-HyVeeRelinkNoProgress $plainT '11342')) ''
+  } catch { $fail++; Write-Output ('FAIL self-test threw: ' + $_.Exception.Message) }
+  if ($n -ne 12) { $fail++; Write-Output ("FAIL expected 12 cases, ran $n") }
+  if ($fail -eq 0) { Write-Output "resolve-hyvee-links self-test pass ($n cases)"; exit 0 }
+  Write-Output "resolve-hyvee-links self-test FAIL ($fail of $n)"; exit 1
+}
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 # 0 means 'take the store the board speaks for'. One home for the identity - see hyvee-store-lib.ps1.
@@ -135,6 +238,16 @@ foreach ($it in $board) {
   [void]$targets.Add([pscustomobject]@{ id=[string]$it.id; unit=[string]$it.unit; name=$nm; row=$row; relink=$had })
 }
 Write-Output ("unverified Hy-Vee rows serving a live board cell: " + $targets.Count + " (" + @($targets | Where-Object { $_.relink }).Count + " have a link pointing at the WRONG SIZE and need re-pointing)")
+# The size-conflict relink queue (header above): links whose product id the pull last refused for size.
+$ledF = Join-Path $root 'out\hyvee-ask-ledger.json'
+$scLedger = $null
+if (Test-Path -LiteralPath $ledF) {
+  try { $scLedger = Read-JsonFile $ledF } catch { Write-Warning ('Hy-Vee ask ledger unreadable (' + $_.Exception.Message + ') - the size-conflict relink queue is skipped this run') }
+}
+$scT = Get-HyVeeSizeConflictRelinkTargets -Ledger $scLedger -Items $doc.items -Rows $rows -Units $units -Seen $seenT -Ids $Ids
+$scTa = @($scT)
+foreach ($x in $scTa) { [void]$targets.Add($x) }
+Write-Output ("size-conflict relink queue: " + $scTa.Count + " link(s) whose product id Hy-Vee last answered at another size" + $(if ($null -eq $scLedger) { ' (no ask ledger yet)' } else { '' }))
 Write-Output ''
 
 $resolved = 0; $unresolved = New-Object System.Collections.Generic.List[string]
@@ -211,6 +324,10 @@ foreach ($t in $targets) {
     # silent gap. If none of them is our size, it is our SIZE that is suspect, not the link.
     $sizes = @($res | Where-Object { $_.description } | Select-Object -First 6 | ForEach-Object { ([string]$_.unitOfMeasure) }) -join ', '
     $unresolved.Add(('  {0,-22} no size match  (ours: {1} / {2})   Hy-Vee has: {3}' -f $t.id, $t.name, $ourSize, $sizes))
+    continue
+  }
+  if (Test-HyVeeRelinkNoProgress $t ([string]$best.id)) {
+    $unresolved.Add(('  {0,-22} size conflict stands: search names the parked product {1} at our size {2}, the product page answers {3}' -f $t.id, [string]$best.id, $ourSize, [string]$t.theirs))
     continue
   }
 

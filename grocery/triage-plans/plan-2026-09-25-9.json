@@ -1,0 +1,169 @@
+{
+  "generated": "2026-09-25T20:30:00",
+  "lane": "weekly",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (seeded into this worktree 2026-09-25)",
+  "queue_ids_seen": ["2026-09-22-3366e4", "2026-09-22-781758", "2026-09-23-d493dd", "2026-09-25-c2a750"],
+  "note": "Weekly lane batch 4 of 9 (2026-09-25). Prevention is batch 1's (plan-2026-09-25-6); this plan names the census target for the gate and carries no prevention item of its own.",
+  "prevention_target": {
+    "type": "the knowledge store s nightly pass went red",
+    "window_days": 14,
+    "days_fired": 12,
+    "rank": 1,
+    "why_not_top": null
+  },
+  "new_source_check": "no row contract exists yet (build step 8); went live since the last lane run (stamp 2026-09-20T07:45): commodities.json rule changes only (laundry-detergent search and rule widening 09-25, 4 releases / 1 widening / 11 known-wrong and 41 band shapes 09-23, chicken-drumsticks split 09-22, derived bands 09-22), no new store and no new capture builder",
+  "knowledge_consulted": [
+    "searched \"alert triage root cause recurrence\", \"relink stale product link size\", \"hyvee drifted link relink queue\": the last two nothing applicable",
+    "reliability-craft/MAP.md (section 5: do not declare resolved on the alert going quiet)",
+    "reliability-craft/rca-and-chaos.md (section 2: Preventive, Detective, Responsive)",
+    ".claude/rules/grocery.md (UNCHECKED IS NEVER NOT-CARRIED; an everyday price is re-read about once every 90 days)",
+    ".claude/rules/ops-and-gates.md (Three fixture labels, three jobs; a self-test block must LEAVE on every path)"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-22-3366e4",
+      "subject": "Triage residual: 312 Hy-Vee rows without a catalogue id expire from 2026-10-13",
+      "classification": "no-code-change",
+      "evidence": [
+        "hyvee-regular-2026-09-25.json: 311 of 1,546 deals carry no product_id (296 as_of July, 15 August), all not_reverified; 09-20 313, 09-21 312, 09-24 311: the count only falls",
+        "the same file's product_ids_recovered = 0 on 09-20..09-25: the lane's own history recovery (pull-regular-hyvee.ps1 lines 1675-1711) already ran and found no id for any of them inside the 90-day window",
+        "0 of the 311 serve a Hy-Vee cell on comparison-2026-09-23 or recipe-board.json: the 4 name matches (cheese-tortellini, ground-cloves, sloppy-joe-sauce, tomatillos) are each served by a SIBLING row of another size that carries an id (1334638, 55979, 444508, 37464)"
+      ],
+      "root_cause": "a row that lost its product id before 2026-08-22 can never be re-asked, and the quarter rule expires it; that is the capture policy doing its job for a candidate no board cell uses",
+      "root_fix_none_because": "the harmful half already has an owner: resolve-hyvee-links.ps1 runs daily in check-ad-cycles.ps1 (line 1952) and searches size-first for every not_reverified Hy-Vee row that serves a live board cell, so an id-less row the day it starts serving a cell is re-linked; one that serves none expiring at the quarter loses no cell",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 9,
+      "status": "done",
+      "premise_verified": "partly: the rows are real (311 today) and do expire from 2026-10-13, but 'the cells they hold then drop' is false today: they hold 0 cells",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against hyvee-regular-2026-09-25.json (08:00) and comparison-2026-09-23.json",
+      "close_disposition": "by-design",
+      "resolution_note": "Re-measured: 311 id-less Hy-Vee rows (was 312), 0 of them serving a board cell; each name match is an id-carrying sibling. They expire at the quarter by design, and the daily resolve-hyvee-links pass already re-links any unverified row the day it starts serving a cell."
+    },
+    {
+      "queue_id": "2026-09-22-781758",
+      "subject": "Triage residual: a starved Family Fare term defeats victim-first promotion",
+      "classification": "no-code-change",
+      "evidence": [
+        "out/ff-carry-report.json generated 2026-09-25 08:30: confirmed_victims 0",
+        "'promotion failed' in the triage queue: 0 items; in grocery/alert-log.txt: 0 lines, since the page shipped on 2026-09-22",
+        "audit-ff-carry.ps1 line 432 computes Get-FfPromotionFailed over the report's victims every run, called from check-ad-cycles.ps1 lines 891/899, and pages under registry entry ff-carry-promotion-failed"
+      ],
+      "root_cause": "a victim Freshop returns to no search cannot be repaired by promotion; the class fix is a second search term in commodity-search.json, which is money-lane and needs the commodity named by a first occurrence",
+      "root_fix_none_because": "the residual has happened 0 times since the fix (the one founding case, pie-pumpkins, predates it), and the only repair is a rule-file edit chosen from the failed-promotion page when it fires",
+      "leaves_open": "a starved Family Fare term that no search returns still cannot be promoted; 0 occurrences since 2026-09-22",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-ff-carry.ps1",
+      "lane": "weekly",
+      "est_tool_calls": 6,
+      "actual_tool_calls": 3,
+      "status": "done",
+      "premise_verified": "yes: the failed-promotion page exists and runs daily; it has not fired",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against ff-carry-report.json 08:30 and the live triage queue",
+      "close_disposition": "by-design",
+      "resolution_note": "0 failed promotions since the page shipped 09-22 and 0 confirmed victims today. Owned by audit-ff-carry.ps1's failed-promotion page, which names the commodity that needs a second search term (money lane) on its first occurrence."
+    },
+    {
+      "queue_id": "2026-09-23-d493dd",
+      "subject": "Grocery: 25 store(s) dropped from a commodity they carry (x4)",
+      "classification": "rule-gap",
+      "evidence": [
+        "out/coverage-gaps.json generated 2026-09-25 08:19 against candidates-2026-09-23.json: gap_count 435, actionable 18 (was 25 on 09-23, 17 and 18 on 09-24): the condition is live",
+        "the 18: 11 CLAIMED-BY (fresh-ginger, toasted-sesame-seeds, sun-dried-tomatoes, canned-butter-beans @ Fareway; chili-beans, canned-mixed-vegetables, mandarin-oranges, gochujang, butternut-squash @ Hy-Vee; fresh-basil, jumbo-pasta-shells @ Baker's), 6 RULE-INVISIBLE (canned-peaches, canned-pears, apple-juice @ Fareway; apple-juice @ Hy-Vee; oven-cleaner, kalamata-olives @ Sam's Club), 1 PRICED (yellow-bell-pepper @ Family Fare)",
+        "the check-ad-cycles.ps1 changes after it fired (a7923fab1, 977ba3a0c, bda9e5e0d) touch cell quarantine, the research worklist and recipe takedown, not audit-coverage-gaps or matching",
+        "yellow-bell-pepper @ Family Fare: priced per-each by the engine, absent from comparison-2026-09-23 (Baker's only), not in known-wrong.json and not quarantined: the drop is inside compare-deals.ps1"
+      ],
+      "root_cause": "17 of 18 are matching rules (an include that misses the name, or first-match-wins giving it to another commodity), repaired only in commodities.json / category-excludes.json; the 18th is dropped downstream of matching inside compare-deals.ps1",
+      "root_fix_none_because": "bounced: every repair is on THE LINE this lane does not cross (commodities.json, category-excludes.json, compare-deals.ps1); the money lane applies releases and widenings through apply-coverage-batch -FromWorklist",
+      "prior_closes": ["2026-09-19-2a0748", "2026-09-21-b96f21"],
+      "prevention": {
+        "source": ["grocery/audit-coverage-gaps.ps1", "grocery/check-ad-cycles.ps1"],
+        "what": "already shipped by plan-2026-09-22-2 for b96f21: the emitter pages only on names NEW to out/match-worklist.json and hands the rest to the worklist; measured holding: 18 actionable gaps stood on 2026-09-25 08:19 and the type did not page that day (last_seen 2026-09-24T17:08)",
+        "exact_change": "no new change in this lane; the instance fix is the money lane's apply-coverage-batch -FromWorklist over the 17 rule gaps and a compare-deals.ps1 trace of yellow-bell-pepper @ Family Fare"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "out/coverage-gaps.json 2026-09-25 08:19, actionable rows",
+        "affected_now": 18,
+        "names": ["yellow-bell-pepper", "fresh-ginger", "canned-peaches", "apple-juice", "oven-cleaner", "chili-beans", "canned-mixed-vegetables", "mandarin-oranges", "canned-pears", "gochujang", "toasted-sesame-seeds", "sun-dried-tomatoes", "fresh-basil", "jumbo-pasta-shells", "butternut-squash", "canned-butter-beans", "kalamata-olives"],
+        "risk": "none from this lane: nothing changed here; the money lane owns the rule edits and their cell effects",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-coverage-gaps.ps1 (the emitter; the money lane's rule change owes its own cases)",
+        "must_fire_case": "not built in this lane (bounced): the money lane's fixture is owed from every occurrence below",
+        "clean_twin": "not built in this lane (bounced)",
+        "fixture_occurrences": ["2026-09-19-2a0748", "2026-09-21-b96f21", "2026-09-23-d493dd"]
+      },
+      "rollback": "nothing to roll back: no change in this lane",
+      "leaves_open": "18 actionable coverage gaps on 2026-09-25 (11 CLAIMED-BY, 6 RULE-INVISIBLE, 1 PRICED), for the money lane",
+      "leaves_open_occurrences": 18,
+      "leaves_open_followup": "2026-09-23-d493dd",
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 6,
+      "status": "bounced",
+      "premise_verified": "yes, re-measured: still live at 18 actionable",
+      "deviation": null,
+      "shipped_commit": null,
+      "freshness": "measured 2026-09-25 against out/coverage-gaps.json 08:19 (candidates-2026-09-23)",
+      "resolution_note": "Bounced to the money lane: still live (18 actionable today). 17 need a commodities.json release or widening, and yellow-bell-pepper @ Family Fare is priced by the engine and dropped inside compare-deals.ps1."
+    },
+    {
+      "queue_id": "2026-09-25-c2a750",
+      "subject": "Triage residual: Hy-Vee size-conflict bindings parked (12 pids)",
+      "classification": "code-defect",
+      "evidence": [
+        "hyvee-regular-2026-09-25.json capture_terms: the 12 pids (2950925, 11342, 47144, 444508, 19478, 2918306, 2925188, 1334638, 37464, 37443, 332699, 269490) each 'rejected' with 'source product size conflicts with the worklist variant'",
+        "every one of the 12 is bound by a product-urls.json Hy-Vee link (e.g. beef-stew -> /p/11342/ 'Dinty Moore Beef Stew' 38 oz; ground-cinnamon -> /p/2950925/ 2.5 oz), not by commodities.json or commodity-search.json, so it is not money-lane by the queue body's own test",
+        "comparison-2026-09-23: 9 of the 12 commodities have NO Hy-Vee cell (ground-cinnamon, beef-stew, corned-beef-hash, minced-garlic, dried-dill, ground-ginger, poblano-peppers, fresh-basil, fresh-mint); 3 are carried (sloppy-joe-sauce 09-22, cheese-tortellini 09-07, tomatillos 08-24)",
+        "resolve-hyvee-links.ps1 lines 101-136 (before this change) built its targets only from Hy-Vee cells ON the board, so the 9 were unreachable by the one tool that re-points a drifted link"
+      ],
+      "root_cause": "the drifted-link repair (resolve-hyvee-links) discovers work only from board cells, and a link whose product id Hy-Vee now answers at another size produces no fresh row, so its cell leaves the board and the repair never sees it again; the pull's refusal was recorded (the ask ledger) but read by nothing that repairs",
+      "root_fix": {
+        "what": "resolve-hyvee-links takes a size-conflict relink queue from the ask ledger, reaching links whose cell is off the board",
+        "files": ["grocery/resolve-hyvee-links.ps1"],
+        "exact_change": "Get-HyVeeSizeConflictRelinkTargets (pure): every product-urls.json Hy-Vee link whose /p/<id>/ is in out/hyvee-ask-ledger.json with last_outcome = the size-conflict reason, and whose link size still equals the ledger's worklist size (or the ledger size is empty for a link-only product), joins the targets with relink=true, the link's own name and size and, when one exists, the regular row of that name and size; it honours -Ids and never duplicates a board target. The existing four gates (size first, brand, negation, price or strong name) decide the match unchanged, so a link is only re-pointed to a product AT THE LINK'S SIZE. Test-HyVeeRelinkNoProgress: a best match that is the parked pid again is listed 'size conflict stands' and nothing is written. A missing or unreadable ledger adds no target."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the 12 parked pids against product-urls.json and comparison-2026-09-23",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none until the first ask ledger exists (written by the 2026-09-26 08:00 pull); then at most 12 links re-pointed, each only to a product whose search size equals the link size, and a re-pointed link's price is read by the pull like any other",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/resolve-hyvee-links.ps1 -SelfTest (new; the queue builder and the no-progress guard are pure)",
+        "must_fire_case": "FROZEN founding shape: ledger 11342 size-conflict at 38 oz, link beef-stew -> /p/11342/ 38 oz, no board cell: it becomes a relink target at 38 oz carrying the 38 oz row's $6.49; a link-only conflict (2950925, ledger size empty) is queued at the link's 2.5 oz; a search whose best match is 11342 again is no progress.",
+        "clean_twin": "-Ids ground-cinnamon still scopes the queue to exactly ground-cinnamon (positive). MUST NOT FIRE twins: a success pid (444508), a link whose size moved off the conflicted size (47144), a commodity already targeted from the board, a missing ledger, another product id at our size, and a board target with no parked pid.",
+        "commands": ["powershell -NoProfile -File grocery\\resolve-hyvee-links.ps1 -SelfTest"],
+        "run": "exit 0, 12 ok lines, 0 FAIL, last line 'resolve-hyvee-links self-test pass (12 cases)'; the suite asserts its own count of 12. ops/audit-fixture-vocabulary.ps1 exit 0, FIXTURE-VOCABULARY-COMPLETE files=858 mislabelled=0. The live search path was not run: it calls Hy-Vee's API and writes product-urls.json, which the daily chain does."
+      },
+      "rollback": "revert the resolve-hyvee-links.ps1 hunks; the resolver returns to board-cell targets only and the 12 stay parked, as before",
+      "freshness": "measured 2026-09-25 against hyvee-regular-2026-09-25.json, product-urls.json at HEAD and comparison-2026-09-23; out/hyvee-ask-ledger.json does not exist yet in the main checkout",
+      "leaves_open": "unverified live: the first relink runs after the 2026-09-26 08:00 pull writes the first ask ledger; any of the 12 Hy-Vee no longer sells at the link size stays parked and is printed as 'no size match' or 'size conflict stands', and those need a per-commodity choice of size. 12 pids parked today",
+      "leaves_open_occurrences": 12,
+      "leaves_open_followup": "2026-09-25-1b7001",
+      "lane": "weekly",
+      "est_tool_calls": 25,
+      "actual_tool_calls": 20,
+      "status": "done",
+      "premise_verified": "yes: the 12 pids refused on every run 09-23..09-25; the bindings are product-urls.json links (not a matching rule), and Hy-Vee's reported size is persisted nowhere until the ask ledger's first run records 'theirs'",
+      "deviation": "Did not re-bind the 12 by hand: Hy-Vee's current size for each pid is recorded nowhere today (the ledger that records it has not run), and choosing a size or product by hand would be an agent-made binding. Fixed the class instead so the daily resolver re-points them by its own size-first search.",
+      "shipped_commit": "worktree-agent-a8fa841d53e6be50e commit 'Triage plan-2026-09-25-9: ...' (lands via triage-land.ps1)",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real: 12 Hy-Vee links point at product ids Hy-Vee now answers at another size, 9 of them cells missing from the board. The drifted-link resolver could only see board cells; it now also takes every size-conflict pid from the ask ledger and re-points the link by its size-first search. Live from the first chain run after 2026-09-26 08:00; what it cannot re-point is 2026-09-25-1b7001."
+    }
+  ],
+  "ship_sequence": ["2026-09-25-c2a750", "2026-09-22-3366e4", "2026-09-22-781758", "2026-09-23-d493dd"],
+  "open_questions_for_brad": []
+}
