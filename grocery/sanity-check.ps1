@@ -62,6 +62,7 @@ $storeLast = @{}    # id -> @{ store -> the LAST per-unit that store carried on 
 $lookDays = 90
 if ($doc.PSObject.Properties['max_publish_age_days'] -and [int]$doc.max_publish_age_days -gt 0) { $lookDays = [int]$doc.max_publish_age_days }
 $lookCut = ''
+# board-clock:allow the look-back is compared only with history week_of values, the same ad-set clock
 try { $lookCut = ([datetime]::ParseExact($week, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)).AddDays(-$lookDays).ToString('yyyy-MM-dd') } catch { $lookCut = '' }
 if (-not $HistoryFile) { $HistoryFile = Join-Path $root 'price-history.json' }
 $histFile = $HistoryFile

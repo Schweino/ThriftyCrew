@@ -43,8 +43,11 @@
     Join-Path, a '+' concatenation or a hashtable holding it is a path or a record, not a date. That is the line
     between a clock use and the ~60 name-only readers (newest-file pick, sibling lookup) the plan left alone.
   SINKS (each is a finding with file:line and the expression):
-    (s1) compare   -eq/-lt/-le/-gt/-ge (either case form) with exactly ONE side carrying, and the other side not a
-                   literal. Ad-set vs ad-set, or vs a literal, is ORDERING and is silent.
+    (s1) compare   -lt/-le/-gt/-ge (either case form) with exactly ONE side carrying, and the other side not a
+                   literal. Ad-set vs ad-set, or vs a literal, is ORDERING and is silent. -eq is NOT a sink (2026-09-26,
+                   measured on its first run): all 8 -eq findings on the tree asked "is this the same ad set?" through a
+                   second name this detector cannot follow (a file-name regex, $Matches, a parameter, a record field),
+                   and an equality cannot express an age or an expiry, which is the defect this hunts.
     (s2) date-math .AddDays/.AddMonths/.AddYears/.AddHours/.Subtract on or with a carrier; New-TimeSpan with a
                    carrier; a '-' with exactly one side carrying. The brief's narrower '-' conditions (a .TotalDays
                    read, a [datetime] operand) are subsumed: a string date cannot be subtracted from anything, so a
@@ -112,7 +115,7 @@ $MARK_FILE = if ($MarkFile) { $MarkFile } else { Join-Path $repo 'ops\audit-boar
 $script:BC_SOURCE_MEMBERS = @(('week' + '_of'), ('to' + 'day'))
 $script:BC_SOURCE_VARS = @('Board' + 'Today')
 $script:BC_SINK_PARAMS = @(('To' + 'day'), ('Board' + 'Date'), ('As' + 'Of'), ('N' + 'ow'), ('Judge' + 'Date'), ('Wall' + 'Clock'), ('Da' + 'te'))
-$script:BC_CMP_OPS = @('Ieq', 'Ceq', 'Ilt', 'Clt', 'Ile', 'Cle', 'Igt', 'Cgt', 'Ige', 'Cge')
+$script:BC_CMP_OPS = @('Ilt', 'Clt', 'Ile', 'Cle', 'Igt', 'Cgt', 'Ige', 'Cge')   # no -eq: see (s1) in the header
 $script:BC_DATE_MATH = @('AddDays', 'AddMonths', 'AddYears', 'AddHours', 'Subtract')
 $script:BC_CARRY_CALLS = @('ToString', 'Substring', 'Trim', 'TrimEnd', 'TrimStart', 'AddDays', 'AddMonths', 'AddYears', 'AddHours', 'ToShortDateString')
 $script:BC_MARKER = 'board-clock' + ':allow'
@@ -375,7 +378,7 @@ function Get-BcScanFiles {
 # ------------------------------------------------------------------------------------------- self-test
 if ($SelfTest) {
   $script:fail = 0; $script:cases = 0
-  $BC_EXPECTED_CASES = 24
+  $BC_EXPECTED_CASES = 25
   function BcT([string]$m, [bool]$c, [string]$got = '') {
     $script:cases++
     if ($c) { Write-Output ('  ok    ' + $m) } else { Write-Output ('  FAIL  ' + $m + '   got: ' + $got); $script:fail++ }
@@ -420,6 +423,9 @@ if ($SelfTest) {
     $r = Get-BcFindings -Text $fxNames
     BcT 'MUST NOT FIRE  a newest-file pick, a sibling lookup, history ordering, a record field and a literal compare' ((@($r.Findings).Count -eq 0) -and $r.Parsed) (BcGot $r)
     BcT 'MUST NOT FIRE  ...and the file WAS parsed and judged: the sibling path is not tainted, the history compare saw two carriers' ((-not (@($r.Tainted) -contains 'wh')) -and $r.Parsed) ('tainted=' + (@($r.Tainted) -join ','))
+    # SAME AD SET, through a second name the detector cannot follow (guards.ps1:702's shape, one of 8 on the first run).
+    $r = Get-BcFindings -Text (@(('$bwk = [string]$board.' + $wk), '$m = [regex]::Match($f.BaseName, ''(\d{4}-\d{2}-\d{2})$'')', 'if ($bwk -eq $m.Groups[1].Value) { $same = $true }') -join $nl)
+    BcT 'MUST NOT FIRE  an EQUALITY with the ad set ("is this the same ad set?") is not a clock use, whatever the other side is' ((@($r.Findings).Count -eq 0) -and $r.Parsed) (BcGot $r)
     $r = Get-BcFindings -Text ('$x = [datetime]::' + 'Today' + $nl + 'if ($x -lt $y) { $z = $x.AddDays(-1) }')
     BcT 'MUST NOT FIRE  [datetime]::Today is the real clock, not the ads file''s field' (@($r.Findings).Count -eq 0) (BcGot $r)
     $r = Get-BcFindings -Text (@(('$wkName = $ads.' + $td), '$ad = Get-Owed -OutDir $o -Date $plan.Today') -join $nl)

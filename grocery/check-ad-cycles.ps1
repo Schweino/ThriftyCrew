@@ -2211,6 +2211,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         @{ n = 'aisle-test';         d = 3; g = @('grocery/out/regular/family-fare-regular-*.json','grocery/taxonomy-map.json','grocery/commodities.json') }
         @{ n = 'matcher-parity';     d = 7; g = @('grocery/match-lib.ps1','grocery/compare-deals.ps1','grocery/audit-household-in-food.ps1','grocery/commodities.json') }
         @{ n = 'precedence-ladders'; d = 7; g = @('grocery/compare-deals.ps1','grocery/known-wrong-lib.ps1','grocery/known-wrong.json','grocery/match-lib.ps1') }
+        @{ n = 'board-clock';        d = 7; g = @('grocery/compare-deals.ps1','grocery/rollback-ttl-lib.ps1','grocery/regular-fileset-lib.ps1','grocery/capture-depth-lib.ps1') }
         @{ n = 'store-registry';     d = 7; g = @('grocery/*.ps1','grocery/stores.json') }
         @{ n = 'commodity-dupes';    d = 7; g = @('grocery/commodities.json','grocery/recipe-commodities.json','grocery/categories.json') }
         @{ n = 'search-terms';       d = 7; g = @('grocery/commodity-search.json','grocery/out/regular/*.json') }
@@ -2238,6 +2239,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         New-FanoutLane -Name 'graph-gates'         -File (Join-Path $root 'audit-graph-gates.ps1')          -TimeoutSec 600 -Marker 'GRAPH-GATES-COMPLETE'
         New-FanoutLane -Name 'matcher-parity'      -File (Join-Path $root 'test-matcher-parity.ps1')        -TimeoutSec 900 -Due $cadDue['matcher-parity'] -Marker 'MATCHER-PARITY-COMPLETE'   # a CENSUS, no -Sample: backlog I133
         New-FanoutLane -Name 'precedence-ladders'  -File (Join-Path $root 'test-precedence-ladders.ps1')    -Arguments @('-Quiet')        -Due $cadDue['precedence-ladders'] -Marker 'PRECEDENCE-LADDERS-COMPLETE'
+        New-FanoutLane -Name 'board-clock'         -File (Join-Path $root 'test-board-clock.ps1')           -Arguments @('-Quiet')        -Due $cadDue['board-clock'] -Marker 'BOARD-CLOCK-COMPLETE'
         New-FanoutLane -Name 'category-coverage'   -File (Join-Path $root 'audit-category-coverage.ps1')    -Arguments (@('-OutDir', $OutDir) + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Marker 'CATEGORY-COVERAGE-COMPLETE'
         New-FanoutLane -Name 'store-registry'      -File (Join-Path $root 'audit-store-registry.ps1')       -Arguments (@() + $(if (-not $NoAlert) { @('-Alert') } else { @() })) -Due $cadDue['store-registry'] -Marker 'STORE-REGISTRY-COMPLETE'
         New-FanoutLane -Name 'commodity-dupes'     -File (Join-Path $root 'audit-commodity-dupes.ps1')      -Due $cadDue['commodity-dupes'] -Marker 'COMMODITY-DUPES-COMPLETE'
@@ -2606,6 +2608,22 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           elseif ($plR.ExitCode -eq 3) { $summary += 'REVIEW    precedence-ladders could not build its fixture tree, so the ruling semantics went unproven this run - a BLIND is not a pass' }
         } catch { Log ('precedence-ladders threw: ' + $_.Exception.Message) }
         Set-CadenceRan 'precedence-ladders'
+      }
+      # ---- BOARD CLOCK (wired 2026-09-26, design\PLAN-board-clock-2026-09-26.md): the REAL engine judges a board at the
+      # real date, retires an ended sale, reverts a Sam's rollback to its was-price, and a markdown split does not let an
+      # older capture rejoin as deeper. Each of those priced the live board wrong on 2026-09-26. Same shape and same
+      # reason as precedence-ladders above: a guard named only in a test is tested, not running. Hermetic, ~6s, advisory.
+      # CADENCE (7d): only the engine or the libraries it judges dates and captures through can change it.
+      if (-not $cadDue['board-clock']) {
+        Log ('board-clock: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'board-clock') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")
+      } else {
+        try {
+          $bcR = Get-FanoutRecord 'board-clock' $fanRecs
+          $bcR.Output | ForEach-Object { Log ('board-clock: ' + $_) }
+          if ($bcR.ExitCode -eq 1) { $summary += 'REVIEW    the board clock MOVED - the engine no longer judges sale expiry or rollbacks at the real date as fixtured (see test-board-clock.ps1)' }
+          elseif ($bcR.ExitCode -eq 3) { $summary += 'REVIEW    board-clock could not build its fixture tree, so how the engine judges dates went unproven this run - a BLIND is not a pass' }
+        } catch { Log ('board-clock threw: ' + $_.Exception.Message) }
+        Set-CadenceRan 'board-clock'
       }
       # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
       # HARD publish gate + daily alert so adding a new item can never silently skip a filter.

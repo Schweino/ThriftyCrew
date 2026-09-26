@@ -88,6 +88,22 @@ function Get-TcFeedSectionSize {
   return [int]@($v.PSObject.Properties).Count
 }
 
+# WHICH SALE CELLS GET A "sale ends <date>" BADGE: id|store -> sale_end, from sale-windows.json. Pure, so -SelfTest drives
+# the rule the export runs. An ended window gets none. A DATE WE CHOSE IS NOT A DATE THE STORE STATED (2026-09-26,
+# design\PLAN-board-clock-2026-09-26.md W8): Walmart, Sam's and Fareway publish no rollback end, so compare-deals dates a
+# markdown 30 days from first detection (end_basis 'ttl'). That end drives the next-day re-price; printed as "sale ends
+# <date>" it would be a date no store ever gave a reader - on 2026-09-26 37 Fareway sale cells carried one. It gets none.
+function Get-TcSaleEndBadges($SaleWindows, [string]$TodayS) {
+  $m = @{}
+  foreach ($w in @($SaleWindows.windows)) {
+    if ($null -eq $w -or -not $w.sale_end) { continue }
+    if ([string]$w.sale_end -lt $TodayS) { continue }
+    if ($w.PSObject.Properties['end_basis'] -and [string]$w.end_basis -eq 'ttl') { continue }
+    $m[([string]$w.id + '|' + [string]$w.store)] = [string]$w.sale_end
+  }
+  return $m
+}
+
 function Test-TcFeedShrink {
   <# Compare every section of the NEW feed with the PRIOR one. Returns Findings (the sections that fell past the bar)
      and Lines (one per section, both counts, for the log). A prior section of 0 cannot fall and is said so. #>
@@ -297,7 +313,17 @@ if ($SelfTest) {
   } finally {
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 21
+  # ---- THE "sale ends" BADGE NEVER SHOWS A DATE WE CHOSE (2026-09-26, PLAN-board-clock W8) ---------------------------
+  $bw = [pscustomobject]@{ windows = @(
+    [pscustomobject]@{ id = 'black-olives'; store = 'Fareway'; sale_end = '2026-10-20'; end_basis = 'ttl' },
+    [pscustomobject]@{ id = 'avocado-oil'; store = 'Fareway'; sale_end = '2026-09-26'; end_basis = 'store' },
+    [pscustomobject]@{ id = 'eggs'; store = 'Hy-Vee'; sale_end = '2026-09-25'; end_basis = 'ad' },
+    [pscustomobject]@{ id = 'rice'; store = 'Hy-Vee'; sale_end = '2026-09-30' }) }
+  $bm = Get-TcSaleEndBadges $bw '2026-09-26'
+  Test-EfCase ($kMF + '  a window whose end is our 30-day TTL (end_basis ttl) gets no "sale ends" badge') (-not $bm.ContainsKey('black-olives|Fareway')) (($bm.Keys | Sort-Object) -join ',')
+  Test-EfCase ($kCT + '  a store-stated end on its last day, and an end recorded before end_basis existed, still badge with their date') ([string]$bm['avocado-oil|Fareway'] -eq '2026-09-26' -and [string]$bm['rice|Hy-Vee'] -eq '2026-09-30') (($bm.GetEnumerator() | ForEach-Object { $_.Key + '=' + $_.Value }) -join ',')
+  Test-EfCase ($kMNF + '  a window that ended yesterday gets no badge') (-not $bm.ContainsKey('eggs|Hy-Vee')) (($bm.Keys | Sort-Object) -join ',')
+  $want = 24
   if ($script:stCases -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:stCases, $want); $script:stFail++ }
   if ($script:stFail) { Write-Output ('export-feed self-test FAIL: {0} of {1} case(s)' -f $script:stFail, $script:stCases); exit 1 }
   Write-Output ('export-feed self-test PASS: {0} of {0} cases - led by the empty recipes map of 2dcbe8622 being refused before either copy of the feed is written' -f $script:stCases)
@@ -346,17 +372,7 @@ try {
 $saleEnd = @{}
 try {
   $sw = Read-JsonFile (Join-Path $dataRoot 'sale-windows.json')
-  $todayS = (Get-Date).ToString('yyyy-MM-dd')
-  foreach ($w in $sw.windows) {
-    if (-not $w.sale_end) { continue }
-    if ([string]$w.sale_end -lt $todayS) { continue }   # expired window: no badge
-    # A DATE WE CHOSE IS NOT A DATE THE STORE STATED (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8). Walmart,
-    # Sam's and Fareway publish no rollback end, so compare-deals dates a markdown 30 days from first detection
-    # (ad_basis 'ttl'). That end drives the next-day re-price; printed as "sale ends <date>" it would be a date no
-    # store ever gave a reader - on 2026-09-26 37 Fareway sale cells carried one. Such a window gets no badge.
-    if ($w.PSObject.Properties['end_basis'] -and [string]$w.end_basis -eq 'ttl') { continue }
-    $saleEnd[([string]$w.id + '|' + [string]$w.store)] = [string]$w.sale_end
-  }
+  $saleEnd = Get-TcSaleEndBadges $sw ((Get-Date).ToString('yyyy-MM-dd'))
 } catch {}
 
 # board-price overrides (same file the page build + audit use): pin an EVERYDAY cell to the verified per-unit

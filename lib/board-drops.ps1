@@ -56,6 +56,7 @@ function Get-BoardDrops {
     $ru = [double]$rk[1].per_unit
     if ($ru -gt 0 -and (($ru - $P) / $ru) -gt $MaxOutlier) { continue }
 
+    # board-clock:allow history entries earlier than the board's own ad set: ordering within one ad-set clock
     $prior = @($h.history | Where-Object { try { [datetime]$_.week_of -lt [datetime]$Week } catch { $false } })
     if (@($prior).Count -lt 2) { continue }
 

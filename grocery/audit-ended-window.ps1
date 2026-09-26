@@ -83,9 +83,9 @@ if ($SelfTest) {
     Test-EwCase 'MUST FIRE  a window that ended 09-24 is named on 09-26 though the board is for the 09-23 ad set (week_of would have kept it)' ($lag.Count -eq 1) ('named ' + $lag.Count)
     # CLEAN TWINS.
     $ev = @(Get-EndedWindowCells (New-EwBoard @(,@('rice', 'Walmart', 'everyday', '', ''))) '2026-09-26')
-    Test-EwCase 'CLEAN TWIN  an everyday cell with no window is never named (nothing to judge)' ($ev.Count -eq 0) ('named ' + $ev.Count)
+    Test-EwCase 'MUST NOT FIRE  an everyday cell with no window is never named (nothing to judge)' ($ev.Count -eq 0) ('named ' + $ev.Count)
     $fut = @(Get-EndedWindowCells (New-EwBoard @(,@('rice', 'Hy-Vee', 'sale', '2026-10-01', 'ad'))) '2026-09-26')
-    Test-EwCase 'CLEAN TWIN  a sale running to 10-01 is not named' ($fut.Count -eq 0) ('named ' + $fut.Count)
+    Test-EwCase 'MUST NOT FIRE  a sale running to 10-01 is not named' ($fut.Count -eq 0) ('named ' + $fut.Count)
   } catch {
     Test-EwCase 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' line ' + $_.InvocationInfo.ScriptLineNumber)
   }

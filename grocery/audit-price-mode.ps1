@@ -66,6 +66,7 @@ foreach ($f in $files) {
       # date; a file touched days later was rewritten by something that is not the puller.
       try {
         $wk = [datetime]::ParseExact([string]$d.week_of, 'yyyy-MM-dd', $null)
+        # board-clock:allow in a per-store regular file week_of is that file's own capture date, not an ad set
         $age = [int]([math]::Round(($f.LastWriteTime.Date - $wk).TotalDays))
         # appended to the SAME entry, not pushed as its own: $fail.Count is the store count in the headline,
         # and a diagnostic line that inflates it reports two stores shipping bad prices when only one is

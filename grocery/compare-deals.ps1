@@ -2430,12 +2430,12 @@ function Add-Norm {
   # three flyers at once inside ONE ads file, and Baker's per-item promos in one capture legitimately
   # end 7, 14, 28 and 32 days apart. Without this check the dates would be decorative - captured,
   # carried, displayed, and never acted on - which is the shape this whole session keeps finding.
-  # Judged against the JUDGE date ($script:BoardToday = -JudgeDate, default the real date; a pinned regression run
+  # Judged against the JUDGE date ($script:JudgeDay = -JudgeDate, default the real date; a pinned regression run
   # passes its frozen date), never the ad set's date, which lags whenever no weekly ad is due (2026-09-26).
   # A row with no ad_to is NOT expired: absent evidence is not evidence, and an undated markdown is
   # handled by its own TTL rather than by being silently dropped here.
-  if ($PriceType -eq 'sale' -and $AdTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
-    if ([string]$AdTo -lt [string]$script:BoardToday) { $script:ExpiredSaleRows++; return }
+  if ($PriceType -eq 'sale' -and $AdTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:JudgeDay) {
+    if ([string]$AdTo -lt [string]$script:JudgeDay) { $script:ExpiredSaleRows++; return }
   }
   # fulfillment: the store's own word on whether this row is sold on the shelf. Carried raw ('' when the
   # capture predates the field) so Test-InStore can tell "not in store" from "not stated".
@@ -2477,7 +2477,7 @@ $judge = if ($JudgeDate) { $JudgeDate } else { (Get-Date).ToString('yyyy-MM-dd')
 if ($judge -notmatch '^\d{4}-\d{2}-\d{2}$') { throw ("compare-deals: -JudgeDate must be yyyy-MM-dd, got '" + $judge + "'") }
 # Visible to Add-Norm so it can refuse an expired sale row. Script-scoped because Add-Norm is a function and cannot
 # see this scope otherwise.
-$script:BoardToday = [string]$judge
+$script:JudgeDay = [string]$judge
 $script:ExpiredSaleRows = 0
 $script:RollbackSplit = 0      # W1b: marked-down EVERYDAY-file rows with a window, emitted as a sale half
 $script:RollbackRevert = 0     # W1b: of those, how many also emitted the store's own was-price as the everyday half
@@ -3705,9 +3705,8 @@ if ($IDENT_ON) {
       if ($res.changed) { $changedFiles++ }
       $storeSummary.Add([pscustomobject]@{ store = $store; rows = $res.rows; changed = $res.changed })
     }
-    $null = Save-IdentityManifest -GroceryRoot $root -Namespace $IdentityNamespace -RulesHash $rulesHash `
-      -BoardDate ([string]$today) -Stores $storeSummary -Reused $reused -Matched $rematched `
-      -Contested $contested -IdCollisions $ambiguous.Count
+    # -BoardDate here is the ad set, recorded as a LABEL that pairs the manifest with its board; it computes no age.
+    $null = Save-IdentityManifest -GroceryRoot $root -Namespace $IdentityNamespace -RulesHash $rulesHash -BoardDate ([string]$today) -Stores $storeSummary -Reused $reused -Matched $rematched -Contested $contested -IdCollisions $ambiguous.Count   # board-clock:allow a label pairing the manifest with its board, never an age
     $tWrite = $swW.Elapsed.TotalSeconds
     $idSw.Stop()
     $idRowTotal = 0

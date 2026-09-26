@@ -49,6 +49,7 @@ function Test-TcFeedWeekParity {
   try {
     $d1 = [datetime]::ParseExact($BoardWeek, 'yyyy-MM-dd', $null)
     $d2 = [datetime]::ParseExact($FeedWeek, 'yyyy-MM-dd', $null)
+    # board-clock:allow the distance between two ad-set names, both in the ad-set clock; it ages nothing
     $gap = (" - {0} day(s) apart" -f [math]::Abs(($d1 - $d2).Days))
   } catch { $gap = '' }
   return ([pscustomobject]@{ Ok = $false; Blind = $false

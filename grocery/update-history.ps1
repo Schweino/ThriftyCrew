@@ -125,6 +125,13 @@ if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'compa
 
 $cmpDoc = Read-JsonFile $CompareFile
 $week   = [string]$cmpDoc.week_of
+# The anchor the 21-day daily window is cut from: the board's ad set, the clock every history entry is dated in (see
+# $dailyCutR). A board naming no ad set falls back to the real date and says so, rather than throwing.
+$histAnchor = [datetime]::MinValue
+if (-not [datetime]::TryParseExact($week, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$histAnchor)) {
+  Write-Output ("update-history: the board names no ad set (week_of '" + $week + "') - the 21-day daily window is cut from the real date instead")
+  $histAnchor = (Get-Date).Date
+}
 $rows   = @($cmpDoc.comparison)
 $boardStamp = Get-BoardStamp $CompareFile $cmpDoc
 # A RAW board is not banked over a week the semantic verify judged (2026-09-22). check-ad-cycles banks such a week from
@@ -268,7 +275,11 @@ foreach ($ec in $existing) { if (-not $updatedIds.ContainsKey([string]$ec.id)) {
 $rc_weeks = 0; $rc_reconciled = 0; $rc_stamped = 0; $rc_unchanged = 0; $rc_nofile = 0; $rc_verified = 0; $rc_unreadable = 0; $rc_compacted = 0; $rc_missing = 0
 $rcUnreadable = @()
 if ($Reconcile) {
-  $dailyCutR = (Get-Date).AddDays(-21).ToString('yyyy-MM-dd')
+  # THE 21-DAY DAILY WINDOW IS MEASURED IN THE HISTORY'S OWN CLOCK (2026-09-26, design\PLAN-board-clock-2026-09-26.md). Every
+# entry is dated week_of, the AD SET it was banked under, which lags the real date whenever no weekly ad is due (3 days
+# on 09-26). Cut from the real date, an entry looked the lag older than it was and was compacted that much early. Cut
+# from the newest ad set in the history, both sides of the compare are ad-set dates.
+$dailyCutR = $histAnchor.AddDays(-21).ToString('yyyy-MM-dd')
   $byIdR = @{}; foreach ($u in $updated) { $byIdR[[string]$u.id] = $u }
   $boardWeeks = @{}; $touched = @{}
   foreach ($bf in (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name)) {
@@ -292,6 +303,7 @@ if ($Reconcile) {
       # entry by design (compacted=); inside it the board was never banked (missing=), which is the upsert's job, not a
       # disagreement with a record that exists. Adding them was measured and refused on 2026-09-22: it would have banked
       # 571 entries from comparison-2026-09-05.json, a board nobody banked or verified that day.
+      # board-clock:allow $dailyCutR is cut from the newest ad set, so this is ad-set against ad-set
       if ($ix -lt 0) { if ($bwk -ge $dailyCutR) { $rc_missing++ } else { $rc_compacted++ }; continue }
       $have = $hl[$ix]
       if ($have.PSObject.Properties['board'] -and [string]$have.board -eq $bstamp) { $rc_unchanged++; continue }
@@ -313,15 +325,18 @@ if ($Reconcile) {
 # ---- compaction (Brad 2026-07-11): keep DAILY granularity for the last 21 days, then collapse
 # older entries to ONE per calendar week. We keep each old week's LOWEST-cheapest entry (not the
 # last one) so a mid-week record low is never erased and record_low recomputation stays honest.
-$dailyCut = (Get-Date).AddDays(-21).ToString('yyyy-MM-dd')
+# Measured in the history's own clock, the newest ad set, not the real date - see $dailyCutR above (2026-09-26).
+$dailyCut = $histAnchor.AddDays(-21).ToString('yyyy-MM-dd')
 $compacted = @()
 foreach ($u in $updated) {
   $recent = @(); $old = @()
+  # board-clock:allow $dailyCut is cut from the newest ad set, so this is ad-set against ad-set
   foreach ($h in $u.history) { if ([string]$h.week_of -ge $dailyCut) { $recent += ,$h } else { $old += ,$h } }
   if (@($old).Count -gt 0) {
     $byWeek = @{}
     foreach ($h in $old) {
       try { $d = [datetime]$h.week_of } catch { continue }
+      # board-clock:allow maps an entry to the Monday of its week: a bucket, not an age
       $ws = $d.AddDays(-((([int]$d.DayOfWeek) + 6) % 7)).ToString('yyyy-MM-dd')   # Monday of that week
       if (-not $byWeek.ContainsKey($ws) -or [double]$h.cheapest_price -lt [double]$byWeek[$ws].cheapest_price) { $byWeek[$ws] = $h }
     }
