@@ -35,7 +35,7 @@
   Read-only unless -Apply.
 #>
 # The self-test runs this script as a child over temp boards, captures, rulings and commodity files; these are the libraries it loads, including the capture policy behind the union window.
-# gate-inputs: lib\json-io.ps1, grocery\regular-fileset-lib.ps1, grocery\capture-policy-lib.ps1, grocery\flag-verify-lib.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1, grocery\pu-lib.ps1, grocery\known-wrong-lib.ps1, grocery\global-exclude-lib.ps1, grocery\commodity-rules-lib.ps1
+# gate-inputs: lib\json-io.ps1, grocery\regular-fileset-lib.ps1, grocery\capture-policy-lib.ps1, grocery\flag-verify-lib.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1, grocery\pu-lib.ps1, grocery\known-wrong-lib.ps1, grocery\global-exclude-lib.ps1, grocery\commodity-rules-lib.ps1, grocery\link-sibling-lib.ps1
 # -Store scopes the derivation to one store. Added 2026-07-29 after a global -Apply re-pointed ~40 FAREWAY
 # links onto pack prices where the board holds per-unit (24x, 100x, 120x factor mismatches on the publish
 # gate) while fixing the Sam's links it was actually run for. When only one store's prices moved, only that
@@ -62,6 +62,7 @@ if (-not $KnownWrongFile) { $KnownWrongFile = Join-Path $root 'known-wrong.json'
 . (Join-Path $root 'known-wrong-lib.ps1')   # THE ruling matcher (KwNorm/KwCore) compare-deals and audit-known-wrong use
 . (Join-Path $root 'global-exclude-lib.ps1')
 . (Join-Path $root 'commodity-rules-lib.ps1')   # Add-TcRuleIndex / Get-TcReleasingPattern: an exclude releases a linked product
+. (Join-Path $root 'link-sibling-lib.ps1')      # Get-TiSiblingReason: THE sibling rule audit-tile-integrity reports by
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
 
 # ---- SAM'S ALPHANUMERIC /ip/<id> IS PROVEN BY A FILE, NOT BY THIS SCRIPT (2026-09-22, plan-2026-09-22-10 bec597) ----
@@ -297,23 +298,70 @@ if ($SelfTest) {
       ($null -eq $cItems.PSObject.Properties['Hy-Vee']) ($(if ($cItems.PSObject.Properties['Hy-Vee']) { [string]$cItems.'Hy-Vee'.name } else { '<gone>' }))
     TT "CLEAN TWIN: the Baker's pork links link, which the exclude does not refuse, keeps its url and its verified stamp" `
       (([string]$cItems."Baker's".url) -eq 'https://www.bakersplus.com/p/kroger-mercado-chorizo-sausage-pork-links/0001111062555' -and ([string]$cItems."Baker's".verified) -eq '2026-09-20 DERIVED from the price row (same record the board priced)') ([string]$cItems."Baker's".verified)
+
+    # ---- A LINK THE CELL HAS OUTGROWN IS DROPPED (2026-09-26, queue 2026-09-26-fab315) ----
+    # Its own tree. Every row is a real 2026-09-23 board cell and its real product-urls entry. Soda|Family Fare: a flyer
+    # sale row (no product row at all) took the cell, the link stayed on the Jarritos derived for the 2026-09-07 winner.
+    # Gelatin|Aldi: the everyday Orange row carries no URL, the link stayed on Strawberry at the same $0.98. Firm-tofu|
+    # Walmart: Walmart retitled item 10898985 from "House Tofu - Firm" to "Azumaya Firm Tofu", so the names disagree but
+    # the URL is the priced row's own. Avocados|Family Fare: a link that only OMITS a word of a sale cell's name.
+    $sb = Join-Path $fx 'sib'
+    [void](New-Item -ItemType Directory -Path (Join-Path $sb 'regular') -Force -ErrorAction Stop)
+    (@{ comparison = @(
+          @{ id = 'soda'; unit = 'fl oz'; stores = @(@{ store = 'Family Fare'; per_unit = 0.0237; type = 'sale'; item = 'Dr Pepper Soda 42.2 Fl Oz'; ad = '$1.00'; size = '42.2 fl oz'; source_ad = 'Weekly Ad' }) },
+          @{ id = 'gelatin'; unit = 'each'; stores = @(@{ store = 'Aldi'; per_unit = 0.98; type = 'everyday'; item = 'Baker S Corner Orange Gelatin 3 OZ'; ad = '$0.98'; size = '3 oz' }) },
+          @{ id = 'firm-tofu'; unit = 'oz'; stores = @(@{ store = 'Walmart'; per_unit = 0.1388; type = 'everyday'; item = 'Azumaya Firm Tofu, 16 oz'; ad = '$2.22'; size = 'lb' }) },
+          @{ id = 'avocados'; unit = 'each'; stores = @(@{ store = 'Family Fare'; per_unit = 1.0; type = 'sale'; item = 'Fresh Hass Avocados, Large'; ad = '10 for $10.00'; size = '1 ct'; source_ad = 'Weekly Ad' }) }) } |
+      ConvertTo-Json -Depth 8) | Set-Content -LiteralPath (Join-Path $sb 'comparison-2026-09-23.json') -Encoding UTF8
+    (@{ deals = @(@{ item = 'Baker S Corner Orange Gelatin 3 OZ'; ad_price = '$0.98'; regular = $null; size = '3 oz' }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $sb 'regular\aldi-regular-2026-09-26.json') -Encoding UTF8
+    (@{ deals = @(@{ item = 'Azumaya Firm Tofu, 16 oz'; ad_price = '$2.22'; regular = $null; size = 'lb'; item_id = '10898985' }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $sb ('regular\walmart-regular-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')) -Encoding UTF8
+    (@{ deals = @(@{ item = 'Hass Avocados, Large'; ad_price = '$1.49'; regular = $null; size = '1 ct'; canonical_url = 'https://www.shopfamilyfare.com/shop/p/9' }) } |
+      ConvertTo-Json -Depth 6) | Set-Content -LiteralPath (Join-Path $sb 'regular\family-fare-regular-2026-09-26.json') -Encoding UTF8
+    $sbPu = Join-Path $sb 'product-urls.json'
+    $sbSeed = (@{ items = @{
+          'soda'      = @{ 'Family Fare' = @{ url = 'https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/other_sodas/jarritos_soda_natural_flavor_grapefruit_1_58_qt/p/2417986'; name = 'Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt'; price = '$2.39'; size = '1.58 qt'; verified = '2026-09-07 DERIVED from the price row (same record the board priced)' } }
+          'gelatin'   = @{ 'Aldi' = @{ url = 'https://www.aldi.us/store/aldi/products/20191275-baker-s-corner-strawberry-gelatin-3-oz'; price = 0.98; size = '1 ct'; name = "Baker's Corner Strawberry Gelatin 3 oz" } }
+          'firm-tofu' = @{ 'Walmart' = @{ url = 'https://www.walmart.com/ip/10898985'; price = '2.22'; size = 'lb'; name = 'House Tofu - Firm, 16.0 oz'; verified = '2026-08-31 price-pull self-capture' } }
+          'avocados'  = @{ 'Family Fare' = @{ url = 'https://www.shopfamilyfare.com/shop/p/9'; name = 'Hass Avocados, Large'; price = '$1.49'; size = '1 ct'; verified = '2026-08-02 DERIVED from the price row (same record the board priced)' } } } } |
+      ConvertTo-Json -Depth 8)
+    $sbSeed | Set-Content -LiteralPath $sbPu -Encoding UTF8
+    # the -Store scope first: an Aldi-only run may touch the Aldi link and nothing else
+    $null = & powershell -NoProfile -File $PSCommandPath -OutDir $sb -ProductUrlsFile $sbPu -KnownWrongFile $kwNone -CommoditiesFile $cmNone -Store 'Aldi' -Apply
+    $sdoc = Read-JsonFile $sbPu
+    TT "CLEAN TWIN: a -Store 'Aldi' run drops the Aldi gelatin link and leaves the Family Fare soda link where it was" `
+      ($null -eq $sdoc.items.'gelatin'.PSObject.Properties['Aldi'] -and ([string]$sdoc.items.'soda'.'Family Fare'.name) -eq 'Jarritos Soda, Natural Flavor, Grapefruit 1.58 Qt') ("soda=" + [string]$sdoc.items.'soda'.'Family Fare'.name)
+    $sbSeed | Set-Content -LiteralPath $sbPu -Encoding UTF8
+    $os = & powershell -NoProfile -File $PSCommandPath -OutDir $sb -ProductUrlsFile $sbPu -KnownWrongFile $kwNone -CommoditiesFile $cmNone -Apply
+    $src = $LASTEXITCODE; $stext = ($os -join "`n"); $sdoc = Read-JsonFile $sbPu
+    TT "MUST FIRE: the Dr Pepper sale tile's link to Jarritos (derived for the 2026-09-07 winner) is dropped" `
+      ($src -eq 0 -and $null -eq $sdoc.items.'soda'.PSObject.Properties['Family Fare']) ("rc=$src soda=" + $(if ($sdoc.items.'soda'.PSObject.Properties['Family Fare']) { [string]$sdoc.items.'soda'.'Family Fare'.name } else { '<gone>' }))
+    TT "MUST FIRE: the Orange gelatin tile's link to Strawberry at the same price is dropped, and both drops are counted" `
+      ($null -eq $sdoc.items.'gelatin'.PSObject.Properties['Aldi'] -and $stext -match 'links DROPPED, cell now names a different product: 2') (($stext -split "`n" | Select-String 'cell now names' | Select-Object -First 1))
+    TT "CLEAN TWIN: the firm-tofu link whose URL IS the priced row's item 10898985 is kept, its name refreshed to the row's" `
+      (([string]$sdoc.items.'firm-tofu'.'Walmart'.url) -eq 'https://www.walmart.com/ip/10898985' -and ([string]$sdoc.items.'firm-tofu'.'Walmart'.name) -eq 'Azumaya Firm Tofu, 16 oz') ([string]$sdoc.items.'firm-tofu'.'Walmart'.name)
+    TT "CLEAN TWIN: a link that only omits a word of the sale cell's name (Hass Avocados, Large) keeps its url and verified stamp" `
+      (([string]$sdoc.items.'avocados'.'Family Fare'.verified) -eq '2026-08-02 DERIVED from the price row (same record the board priced)') ([string]$sdoc.items.'avocados'.'Family Fare'.verified)
+    $sbSeed | Set-Content -LiteralPath $sbPu -Encoding UTF8
+    $dryBefore = (Get-FileHash -LiteralPath $sbPu -Algorithm SHA256).Hash
+    $od = & powershell -NoProfile -File $PSCommandPath -OutDir $sb -ProductUrlsFile $sbPu -KnownWrongFile $kwNone -CommoditiesFile $cmNone
+    TT "MUST NOT FIRE: a dry run (no -Apply) names the 2 drops and leaves the link file byte-identical" `
+      ((($od -join "`n") -match 'cell now names a different product: 2') -and $dryBefore -eq (Get-FileHash -LiteralPath $sbPu -Algorithm SHA256).Hash) 'the seed file moved or the drops were not named'
   }
   finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ''
-  if ($bad -eq 0 -and $ran -eq 22) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
-  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 22 expected)")
+  if ($bad -eq 0 -and $ran -eq 28) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
+  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 28 expected)")
   exit 1
 }
 
-$STORES = @(
-  @{ store = 'Hy-Vee'; glob = 'hyvee-regular-*.json' }
-  @{ store = 'Family Fare'; glob = 'family-fare-regular-*.json' }
-  @{ store = 'Walmart'; glob = 'walmart-regular-*.json' }
-  @{ store = "Sam's Club"; glob = 'sams-regular-*.json' }
-  @{ store = "Baker's"; glob = 'bakers-regular-*.json' }
-  @{ store = 'Aldi'; glob = 'aldi-regular-*.json' }
-  @{ store = 'Fareway'; glob = 'fareway-regular-*.json' }
-)
+# THE STORE LIST IS stores.json (Brad, 2026-09-19, backlog I192: convert on touch). Converted 2026-09-26 when fab315
+# touched this script; each store's regular file glob is its registry `regular_prefix`, the same seven stores and the
+# same seven globs the hand-kept list named.
+$STORES = @(@((Read-JsonFile (Join-Path $root 'stores.json')).stores) | Sort-Object { [int]$_.order } | ForEach-Object {
+    if (-not $_.regular_prefix) { throw ("derive-links-from-prices: stores.json names '" + [string]$_.name + "' with no regular_prefix") }
+    @{ store = [string]$_.name; glob = ([string]$_.regular_prefix + '-regular-*.json') } })
 if ($Store) {
   $STORES = @($STORES | Where-Object { $_.store -eq $Store })
   if ($STORES.Count -eq 0) { throw ("derive-links-from-prices: unknown -Store '$Store'") }
@@ -492,20 +540,51 @@ foreach ($sp in $STORES) {
 
 $derived = 0; $already = 0; $noIdentity = @{}; $rowMissing = 0; $unwritable = 0; $unproven = @{}; $kwRowRefused = 0
 $changes = New-Object System.Collections.Generic.List[string]
+
+# ---- A LINK THE CELL HAS OUTGROWN IS DROPPED, NOT KEPT BECAUSE NOTHING NEWER COULD BE DERIVED (2026-09-26) ----------
+# Queue 2026-09-26-fab315. This script writes a link only when the cell's price row carries an identity, and every
+# other branch below used to `continue` - leaving the entry that was already there. So when a cell's WINNER changed
+# (a flyer sale row took it, or the new everyday row carries no URL, or its price is unproven), the link derived for
+# the PREVIOUS winner stayed on the cell and went on opening that product: 28 tiles on the 2026-09-23 board, 27 real,
+# 19 of them sale cells (Dr Pepper sale -> Jarritos, derived 2026-09-07 when Jarritos won the cell) and 9 everyday
+# (Orange gelatin -> Strawberry at the same $0.98, so no price check could ever see it). Every non-writing branch now
+# re-judges the stored link against the cell's OWN name with the one sibling rule (link-sibling-lib.ps1, the rule
+# audit-tile-integrity reports by) and drops it when the link names a different product. The URL outranks the names:
+# when the row the board priced carries the very URL the link stores, it is the same product however it is written
+# (Aldi's "California Raisins" row and its "Seedless Raisins" link are one product id), and nothing is dropped.
+# A drop spends coverage to buy accuracy, the trade audit-tile-integrity is built around; the cell re-links when a
+# row carrying its identity arrives, here or through the Family Fare board-match resolver.
+$outgrown = New-Object System.Collections.Generic.List[string]
+function Remove-OutgrownLink([string]$Id, [string]$StoreName, $Cell, [string]$ProvenUrl) {
+  if (-not $puDoc.items -or -not $puDoc.items.PSObject.Properties[$Id]) { return }
+  $bucket = $puDoc.items.$Id
+  if ($bucket -isnot [psobject] -or -not $bucket.PSObject.Properties[$StoreName]) { return }
+  $cur = $bucket.$StoreName
+  if ($cur -isnot [psobject] -or -not $cur.PSObject.Properties['name']) { return }
+  if ($ProvenUrl -and ([string]$cur.url) -eq $ProvenUrl) { return }   # the priced row carries this URL: same product
+  $why = Get-TiSiblingReason ([string]$Cell.item) ([string]$cur.name) $Id
+  if (-not $why) { return }
+  $outgrown.Add(('  {0,-13}{1,-24}{2}  ->  link "{3}"  ({4})' -f $StoreName, $Id, [string]$Cell.item, [string]$cur.name, $why))
+  if ($Apply) { $bucket.PSObject.Properties.Remove($StoreName) }
+}
+$inScope = @{}; foreach ($sp in $STORES) { $inScope[$sp.store] = $true }
+
 foreach ($row in $cmp) {
   $id = [string]$row.id
   foreach ($s in $row.stores) {
     $store = [string]$s.store
     if ([double]$s.per_unit -le 0) { continue }              # not a priced tile
-    if (-not $rowsByStore.ContainsKey($store)) { continue }
+    if (-not $inScope.ContainsKey($store)) { continue }      # -Store scoped this run away from it
+    if (-not $rowsByStore.ContainsKey($store)) { Remove-OutgrownLink $id $store $s ''; continue }
     $key = (([string]$s.item).Trim() + '|' + ([string]$s.size).Trim())
     $r = $rowsByStore[$store][$key]
-    if (-not $r) { $rowMissing++; continue }                  # board cell not traceable to a row (ad-only)
-    if (Test-KnownWrong -Blocks $kwBlocks -CommodityId $id -Store $store -ProductName ([string]$r.item)) { $kwRowRefused++; continue }
+    if (-not $r) { $rowMissing++; Remove-OutgrownLink $id $store $s ''; continue }   # board cell not traceable to a row (ad-only)
+    if (Test-KnownWrong -Blocks $kwBlocks -CommodityId $id -Store $store -ProductName ([string]$r.item)) { $kwRowRefused++; Remove-OutgrownLink $id $store $s ''; continue }
     $url = Get-RowUrl $store $r
     if (-not $url) {
       if (-not $noIdentity.ContainsKey($store)) { $noIdentity[$store] = 0 }
       $noIdentity[$store]++
+      Remove-OutgrownLink $id $store $s ''
       continue
     }
     $cur = $puDoc.items.$id.$store
@@ -516,7 +595,11 @@ foreach ($row in $cmp) {
     # audit-tile-integrity then reported PRICE-DRIFT on a link derive-links believed it had already fixed.
     # 225 of those on the 2026-09-20 board, and 2 of them blocked a gated coverage batch. So `already` now
     # means what it says: same url AND a stored snapshot that still re-prices to the cell it is attached to.
-    if ($cur -and ([string]$cur.url) -eq $url -and -not (Test-EntryStale -Entry $cur -Cell $s -Unit ([string]$row.unit))) { $already++; continue }
+    # Same URL but a stored NAME the sibling rule reads as another product (2026-09-26, fab315): the URL proves it is
+    # the same product, so the entry is re-written from the row the board priced, and its name then agrees with the
+    # tile. Only a sibling-reading name is refreshed, never a merely different spelling, so this adds no churn.
+    $nameDisagrees = ($cur -and ([string]$cur.url) -eq $url -and [bool](Get-TiSiblingReason ([string]$s.item) ([string]$cur.name) $id))
+    if ($cur -and ([string]$cur.url) -eq $url -and -not $nameDisagrees -and -not (Test-EntryStale -Entry $cur -Cell $s -Unit ([string]$row.unit))) { $already++; continue }
     # DERIVE FROM THE SAME RECORD THE BOARD PRICED - WHICH MEANS THE SAME PRICE FIELD, TOO (2026-09-20).
     # A row carries more than one observed price: ad_price (what it sells for) and regular (the store's own
     # posted everyday price). The board publishes whichever the policy chose, so when a sale expires the cell
@@ -539,6 +622,7 @@ foreach ($row in $cmp) {
       if (-not $proven) {
         if (-not $unproven.ContainsKey($store)) { $unproven[$store] = 0 }
         $unproven[$store]++
+        Remove-OutgrownLink $id $store $s $url
         continue
       }
       $entryPrice = $proven
@@ -550,6 +634,7 @@ foreach ($row in $cmp) {
       $bpu = [double]$s.per_unit
       if ($null -eq $lpu -or ($bpu -gt 0 -and ([math]::Abs($lpu - $bpu) / $bpu -gt 0.32) -and ([math]::Abs($lpu - $bpu) -gt 0.005))) {
         $unwritable++
+        Remove-OutgrownLink $id $store $s $url
         continue
       }
     }
@@ -573,6 +658,8 @@ Write-Output ("links DROPPED, product ruled wrong: " + $kwDropped.Count + "  (kn
 foreach ($c in ($kwDropped | Select-Object -First 15)) { Write-Output $c }
 Write-Output ("links DROPPED, product released by its commodity rule: " + $ruleDropped.Count + "  (the link names a product the commodity's own excludes refuse)")
 foreach ($c in ($ruleDropped | Select-Object -First 40)) { Write-Output $c }
+Write-Output ("links DROPPED, cell now names a different product: " + $outgrown.Count + "  (the link was derived for an earlier winner; no row the board prices now proves it)")
+foreach ($c in ($outgrown | Select-Object -First 40)) { Write-Output $c }
 Write-Output ("rows refused, product ruled wrong: " + $kwRowRefused)
 Write-Output ("Sam's alphanumeric /ip/<id> shape: " + $(if ($script:SamsShape.proven) { 'PROVEN' } else { 'not proven' }) + " (" + $script:SamsShape.why + ")")
 Write-Output ("links DERIVED from the price row : " + $derived)
@@ -594,7 +681,7 @@ foreach ($k in ($noIdentity.Keys | Sort-Object)) { Write-Output ('  ' + $k.PadRi
 if ($Apply) {
   ($puDoc | ConvertTo-Json -Depth 8) | Set-Content $puPath -Encoding UTF8
   Write-Output ''
-  Write-Output ("APPLIED: " + $derived + " link(s) written from the rows the board priced.")
+  Write-Output ("APPLIED: " + $derived + " link(s) written from the rows the board priced, " + $outgrown.Count + " outgrown link(s) dropped.")
 }
 else { Write-Output ''; Write-Output 'DRY RUN. Pass -Apply to write.' }
 exit 0
