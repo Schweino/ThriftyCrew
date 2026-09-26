@@ -694,6 +694,13 @@ $ded = $kept
 $outDir = Join-Path $root 'out\regular'
 if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
 $outFile = Join-Path $outDir ("walmart-regular-$Date.json")
+# A same-date rebuild keeps the ruling proof the file it replaces held (queue 2026-09-25-ef83cf): the terms only,
+# never the rows, and only from a file read at the same storeId (Get-WalmartSameDayProofCarry's header).
+. (Join-Path $root 'capture-policy-lib.ps1')
+$bwSource = (Get-WalmartSource -Store $cap.cs.store -Id $cap.cs.id -Zip $cap.cs.zip -Unrecorded:$cap.waived)
+$bwCarry = Get-WalmartSameDayProofCarry -PriorPath $outFile -WeekOf $Date -NewSource $bwSource -FreshTerms ([string[]]@($ded | ForEach-Object { [string]$_.found_by_term }))
+$bwCarry = @($bwCarry)
+if ($bwCarry.Count) { Write-Host ("same-day rebuild: kept {0} ruling-proof term(s) the replaced {1} found at this store" -f $bwCarry.Count, (Split-Path $outFile -Leaf)) }
 [ordered]@{
   store      = "Walmart"
   week_of    = $Date
@@ -701,8 +708,9 @@ $outFile = Join-Path $outDir ("walmart-regular-$Date.json")
   # THE STORE THE CAPTURE SAYS IT READ, never a literal. Until 2026-09-12 this line named
   # "Omaha L St Supercenter 68137" whatever the rows were captured at, which is why two 3153 sweeps
   # had to be caught by a human - see Split-WalmartCaptureStore's header.
-  source     = (Get-WalmartSource -Store $cap.cs.store -Id $cap.cs.id -Zip $cap.cs.zip -Unrecorded:$cap.waived)
+  source     = $bwSource
   captured   = $Date
+  proof_terms_carried = [string[]]$bwCarry
   # HOW COMPREHENSIVE was this pull? Distinct search terms in the raw capture. A full worklist pull runs ~400+
   # terms (commodity-search.json holds 447); a PerimeterX-throttled partial runs ~50. Deal COUNT cannot tell
   # them apart (the 2026-07-23 partial had 1329 deals vs the full pull's 886 - deep on few commodities), so the

@@ -337,6 +337,34 @@ try {
     Ok 'an attestation from before the store line is accepted; one dated after it is NOT, and a prose key is not a date'
   } else { Bad ("attested=[$(@($rF.Attested) -join ',')] owed=[$(@($rF.Owed) -join ',')]") }
 
+  # F2. A SAME-DAY REBUILD KEEPS THE PROOF (queue 2026-09-25-ef83cf). build-walmart-deals writes the dated file whole,
+  #     so a second build of one date from a later capture erased the first build's found_by_term proof. In its own
+  #     out directory so the shared cases' counts do not move.
+  $sdOut = Join-Path $tmp 'sameday-out'; $sdReg = Join-Path $sdOut 'regular'
+  New-Item -ItemType Directory -Path $sdReg -Force | Out-Null
+  [IO.File]::WriteAllText((Join-Path $sdOut 'walmart-store-ruling-2026-08-28.json'), (@{ ruled = '2026-08-28'; terms_to_recapture_first = $wmTerms } | ConvertTo-Json -Depth 4))
+  $sdFile = Join-Path $sdReg 'walmart-regular-2026-09-24.json'
+  [IO.File]::WriteAllText($sdFile, (@{ store = 'Walmart'; week_of = '2026-09-24'; source = $wmProven; deals = @(@{ item = 'A'; found_by_term = 'bacon' }, @{ item = 'B'; found_by_term = 'bread' }) } | ConvertTo-Json -Depth 5))
+  $cy = Get-WalmartSameDayProofCarry -PriorPath $sdFile -WeekOf '2026-09-24' -NewSource $wmProven -FreshTerms @('rice')
+  $cy = @($cy)
+  # the second build of the day, written the way build-walmart-deals now writes it
+  [IO.File]::WriteAllText($sdFile, (@{ store = 'Walmart'; week_of = '2026-09-24'; source = $wmProven; proof_terms_carried = [string[]]$cy; deals = @(@{ item = 'C'; found_by_term = 'rice' }) } | ConvertTo-Json -Depth 5))
+  $rG2 = Get-WalmartRulingOwed -OutDir $sdOut
+  if (($cy -join ',') -eq 'bacon,bread' -and @($rG2.Owed).Count -eq 1 -and @($rG2.Owed) -contains 'butter') {
+    Ok 'MUST FIRE  a same-date rebuild from a later capture keeps the terms the replaced file proved, so only butter is still owed'
+  } else { Bad ("same-day carry: carried=[$($cy -join ',')] owed=[$(@($rG2.Owed) -join ',')]") }
+  $cy3 = Get-WalmartSameDayProofCarry -PriorPath $sdFile -WeekOf '2026-09-24' -NewSource $wmProven -FreshTerms @('bread')
+  $cy3 = @($cy3)
+  if (($cy3 -join ',') -eq 'bacon,rice') { Ok 'CLEAN TWIN  a third build carries the second one''s carried terms forward, less what it found itself' }
+  else { Bad ("third build carried=[$($cy3 -join ',')]") }
+  $wm3153 = $wmProven.Replace('storeId 5361', 'storeId 3153')
+  $cyX = Get-WalmartSameDayProofCarry -PriorPath $sdFile -WeekOf '2026-09-24' -NewSource $wm3153 -FreshTerms @()
+  $cyD = Get-WalmartSameDayProofCarry -PriorPath $sdFile -WeekOf '2026-09-25' -NewSource $wmProven -FreshTerms @()
+  $cyW = Get-WalmartSameDayProofCarry -PriorPath $sdFile -WeekOf '2026-09-24' -NewSource $wmWaived -FreshTerms @()
+  if (@($cyX).Count -eq 0 -and @($cyD).Count -eq 0 -and @($cyW).Count -eq 0) {
+    Ok 'MUST NOT FIRE  nothing is carried into a build at another storeId, of another week_of, or with no recorded store'
+  } else { Bad ("carried across a boundary: store=[$(@($cyX) -join ',')] week=[$(@($cyD) -join ',')] waived=[$(@($cyW) -join ',')]") }
+
   # G. THE ROTATION KEEPS ITS DRIP, AND THE CAP HOLDS. The ruling's terms come out of the allowance the
   #    expiries get (cap minus rotation), never out of the rotation - advancing the cursor over terms a
   #    prepend displaced is the starvation bug Select-ExpiryFirstSlice's own header describes.

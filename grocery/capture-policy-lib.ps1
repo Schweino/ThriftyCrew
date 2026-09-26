@@ -494,6 +494,34 @@ $script:WalmartRulingFile = 'walmart-store-ruling-2026-08-28.json'
 # The attestation list is CLOSED by construction; it can never grow a new entry that this accepts.
 $script:WalmartStoreLineFrom = '2026-09-12'
 
+# A SAME-DAY WALMART REBUILD KEEPS THE PROOF IT DID NOT EARN ITSELF (2026-09-25, queue 2026-09-25-ef83cf, the shape
+# 818b3e took for Baker's in pull-regular-bakers-api.ps1). Get-WalmartRulingOwed reads a term as recaptured from the
+# found_by_term of rows in a walmart-regular-<date>.json read at the sanctioned store, and build-walmart-deals writes
+# that file WHOLE from one capture, so a second build of the same date from a later capture erased the first build's
+# terms and the ruling re-asked them. build-walmart-deals calls this before it writes and stores the answer as
+# proof_terms_carried. Carried only from a file of the SAME week_of whose source names the SAME storeId as the new
+# build (a file read at another store proved nothing); never the rows themselves, so no price moves. Returns the
+# sorted terms the prior file proved (its rows and its own carried set) that this build's rows do not.
+function Get-WalmartSameDayProofCarry {
+  param([string]$PriorPath, [string]$WeekOf, [string]$NewSource, [string[]]$FreshTerms = @())
+  if (-not $PriorPath -or -not (Test-Path -LiteralPath $PriorPath)) { return @() }
+  $d = $null
+  try { $d = ConvertFrom-Json ([IO.File]::ReadAllText($PriorPath)) } catch { return @() }
+  if (-not $d -or -not [string]::Equals([string]$d.week_of, $WeekOf, [StringComparison]::Ordinal)) { return @() }
+  $mNew = [regex]::Match([string]$NewSource, 'storeId\s+(\d+)\b')
+  $mOld = [regex]::Match([string]$d.source, 'storeId\s+(\d+)\b')
+  if (-not $mNew.Success -or -not $mOld.Success -or $mNew.Groups[1].Value -ne $mOld.Groups[1].Value) { return @() }
+  $fresh = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  foreach ($t in @($FreshTerms)) { $s = ([string]$t).Trim(); if ($s) { [void]$fresh.Add($s) } }
+  $carry = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
+  foreach ($row in @($d.deals)) { $s = ([string]$row.found_by_term).Trim(); if ($s -and -not $fresh.Contains($s)) { [void]$carry.Add($s) } }
+  if ($d.PSObject.Properties['proof_terms_carried']) {
+    foreach ($t in @($d.proof_terms_carried)) { $s = ([string]$t).Trim(); if ($s -and -not $fresh.Contains($s)) { [void]$carry.Add($s) } }
+  }
+  $out = [string[]]@($carry | Sort-Object)
+  return ,$out
+}
+
 function Get-WalmartRulingOwed {
   <#
     .SYNOPSIS Which of the store-drift ruling's terms are still owed a recapture at the sanctioned store.
@@ -578,6 +606,11 @@ function Get-WalmartRulingOwed {
       foreach ($row in @($d.deals)) {
         $t = ([string]$row.found_by_term).Trim()
         if ($t) { [void]$proven.Add($t) }
+      }
+      # a same-day rebuild's carried proof (Get-WalmartSameDayProofCarry): the terms an earlier build of THIS date
+      # found at THIS store, kept so a rewrite from a later capture cannot erase them
+      if ($d.PSObject.Properties['proof_terms_carried']) {
+        foreach ($t0 in @($d.proof_terms_carried)) { $t = ([string]$t0).Trim(); if ($t) { [void]$proven.Add($t) } }
       }
     }
   }
