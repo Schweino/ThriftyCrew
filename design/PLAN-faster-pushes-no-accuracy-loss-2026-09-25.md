@@ -81,6 +81,26 @@ What that means:
   With G1 in place a catch-up re-runs only the gates whose inputs the new commits touched. No new mechanism: this
   falls out of G1.
 
+### G3. A push that changes only documents runs only the gates that read documents (added 2026-09-26)
+- Brad, 2026-09-26, after a one-file plan push ran the whole gate suite and held a quarter of the box for over ten
+  minutes: "This is just a plan - why is it being routed through gates?" Measured on that push: 2 of 76 Python suites
+  were skipped as unchanged, "the rest declare nothing and always run", and the new worktree had no recorded passes for
+  the PowerShell gates.
+- This is NOT a "small change" fast path (section 3 rules those out). It is G1's rule applied to a common case: a gate
+  may be skipped only when its declared inputs prove it reads none of the changed paths. A document can still break a
+  gate: `audit-conclusion-currency`, `audit-reread-ledger`, `audit-measurement-provenance` and the plan-citation
+  check read `design\`. Those, and any gate that has not declared its inputs, still run.
+- What changes: (1) each gate that reads `design\` or other prose declares it, so it is keyed on those files; (2)
+  run-gates computes the push's changed paths once and, for a gate whose declared inputs miss all of them, prints the
+  skip with its reason; (3) nothing is skipped for a gate with no declaration, which is today's behaviour. So the saving
+  on a docs-only push grows exactly as fast as G1's declarations do, and never ahead of the proof.
+- Safety: the same SHADOW period as G1 (every would-skip still runs for 2 weeks and a disagreement switches that gate
+  back). Must-fire fixture: a push of one plan file plus one `.ps1` runs the full gate set for that script; clean twin:
+  a push of one plan file still runs the four document-reading gates and they still go red on a stale re-read.
+- Bar, written now: a push that changes only files under `design\` finishes its gates in 60 s or less (median over 10
+  such pushes after G1's shadow period), with zero shadow disagreements. Today: the full run, about 271 s median for a
+  non-chain push and over 10 minutes on the 2026-09-26 plan push.
+
 ## 3. Not in this plan, on purpose
 - Anything that skips a check without proving its inputs are unchanged (sampling, "small change" fast paths,
   post-push testing). These trade bugs for speed, which Brad ruled out.
@@ -90,7 +110,7 @@ What that means:
 
 ## 4. Order and proof
 M1 first, since every bar reads from it. Then E1, then E2 (chain pushes are half of all landings, and the rehearsal
-is two-thirds of their wait). Then G1 and G2. Each item ships with a must-fire fixture and a clean twin, and each
+is two-thirds of their wait). Then G1 and G2, then G3, which depends on G1's declarations. Each item ships with a must-fire fixture and a clean twin, and each
 claim of a saving is reported as leg medians before and after over at least 20 pushes of the same kind, with the
 number of variants tried.
 
