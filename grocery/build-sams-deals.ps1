@@ -348,9 +348,15 @@ function Test-SamsPerPieceUnit([string]$Name, [string]$Tok, [double]$Qty) {
 # let Sam's unit price pick between the readings, so Sam's error became our size (0.077/oz against a true 0.308), the
 # furniture-polish Pledge ruling of 2026-08-02 was the same shape, and neither band nor guard owned it.
 # Returns @{ count; value; unit } for the count immediately followed by a measure, or $null.
+# A MEASURE THE NAME ITSELF CALLS PER PIECE IS NOT AMBIGUOUS (2026-09-25, queue 2026-09-22-93f022, plan-2026-09-25-10).
+# "4 pk., 32 oz. Each", "15pk, 12 fl oz cans", "60 ct., 5.5 oz. Cans", "(2 Pack, 21 lb. Jugs)": the word right after
+# the measure says one piece, exactly as "8 fl. oz./pk." does, so the name is read as N pieces of it and Sam's unit price
+# is checked against that like any measure-first name. Replayed over the 4,044 distinct names in sams-deals and
+# sams-rejects 2026-09-*: 11 move, every one carrying such a word, and the 09-25 build refused 7 of those rows (LYSOL x3,
+# Member's Mark disinfectant x3, Bloom) as NAME CONFLICT while Sam's own unit price reproduced N x the measure.
 function Get-SamsCountFirstMeasure([string]$Name) {
   if (-not $Name) { return $null }
-  $m = [regex]::Match($Name.ToLowerInvariant(), '(?<![\d.-])(\d+)\s*(?:ct|count|pk|packs?)\.?\s*,?\s*(\d[\d.]*|\.\d+)\s*(fl\.?\s*oz|oz|lbs?|pounds?|gallons?|gal|ml|l|liters?|g|grams?|kg)\b(?!\.?\s*/\s*(?:pk|pack|ea|each|ct|can|bottle|pouch))')
+  $m = [regex]::Match($Name.ToLowerInvariant(), '(?<![\d.-])(\d+)\s*(?:ct|count|pk|packs?)\.?\s*,?\s*(\d[\d.]*|\.\d+)\s*(fl\.?\s*oz|oz|lbs?|pounds?|gallons?|gal|ml|l|liters?|g|grams?|kg)\b(?!\.?\s*/\s*(?:pk|pack|ea|each|ct|can|bottle|pouch))(?!\.?\s+(?:each|ea|cans?|bottles?|pouch(?:es)?|jugs?)\b)')
   if (-not $m.Success) { return $null }
   $n = [double]$m.Groups[1].Value
   $vt = $m.Groups[2].Value.TrimEnd('.')
@@ -801,6 +807,11 @@ if ($SelfTest) {
   _Chk 'CLEAN TWIN  the Febreze sibling Sam''s prints at 30.8 c/oz still builds as the name states it, 32.4 oz' (_R 'Febreze Air Mist Air Freshener Spray, Holiday Mixed Scent, 4ct., 32.4 oz.' '$9.98' '30.8 ¢/oz') '32.4 oz' '$9.98'
   _Chk 'MUST NOT FIRE  a MEASURE-first multipack (Ro-Tel 10 oz., 8 ct.) still pairs its per-can measure' (_R 'Ro-Tel Diced Tomatoes & Green Chilies 10 oz., 8 ct.' '$7.98' '99.8 ¢/ea') '8 ct 10 oz' '$7.98'
   _Chk 'MUST NOT FIRE  an explicit per-pack measure (ZEISS 2 pk., 8 fl. oz./pk.) is not ambiguous' (_R 'ZEISS Lens Cleaning Solution Kit 2 pk., 8 fl. oz./pk.' '$7.88' '$3.94/ea') '2 ct 8 fl oz' '$7.88'
+  # A measure the name calls per piece ("32 oz. Each", "12 fl oz cans"): frozen verbatim from sams-rejects-2026-09-25,
+  # where each was refused NAME CONFLICT though Sam's own unit price reproduces N x the measure (queue 2026-09-22-93f022).
+  _Chk 'MUST FIRE  LYSOL 4 pk., 32 oz. Each at 9.4 c/oz builds as four 32 oz pieces, 128 oz' (_R 'LYSOL All Purpose Cleaner Trigger. 4 pk., 32 oz. Each' '$11.98' '9.4 ¢/oz') '128 oz' '$11.98'
+  _Chk 'MUST FIRE  Bloom 15pk, 12 fl oz cans at 11.1 c/fl oz builds as fifteen 12 fl oz cans, 180 fl oz' (_R 'Bloom Pear Scare Limited Edition Sparkling Energy Drink, 15pk, 12 fl oz cans' '$19.98' '11.1 ¢/fl oz') '180 fl oz' '$19.98'
+  _Refused 'CLEAN TWIN  the per-piece word must sit right after the measure: Febreze 4ct., 32.4 oz. at 7.7 c/oz with no such word is still refused' (_R 'Febreze Air Mist Air Freshener Spray, Spring Mixed Scent, 4ct., 32.4 oz.' '$9.98' '7.7 ¢/oz') 'NAME CONFLICT: count-first'
   # 7h. a name unit from ANOTHER family must be ignored, never converted
   $r7h = Build-Row (_R 'Mystery Item 12 ct' '$6.00' '$0.50/lb')
   if ($r7h.row -and $r7h.row.size -eq '12 lb') { Write-Output "ok    foreign name-unit ignored -> size='$($r7h.row.size)'" }

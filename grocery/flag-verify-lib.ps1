@@ -413,6 +413,11 @@ function Get-TcBoardCellIndex($Board) {
       $bad = [pscustomobject]@{ item = [string]$e.bad_item; per_unit = $e.bad_per_unit }
       if ($ix.ContainsKey($k)) { $ix[$k] | Add-Member -NotePropertyName held_key -NotePropertyValue (Get-TcClaimKey $bad) -Force }
       else { $ix[$k] = [pscustomobject]@{ cell = $null; commodity = ''; unit = ''; published_key = ''; held_key = (Get-TcClaimKey $bad) } }
+      # The condition the held candidate was priced under (Add-TcHeldDealCondition, cell-quarantine-lib), when the engine stamped one.
+      if ($e.PSObject.Properties['bad_deal_qty'] -and $null -ne $e.bad_deal_qty -and [string]$e.bad_deal_qty) {
+        $ix[$k] | Add-Member -NotePropertyName held_deal_qty -NotePropertyValue $e.bad_deal_qty -Force
+        $ix[$k] | Add-Member -NotePropertyName held_deal_condition -NotePropertyValue $(if ($e.PSObject.Properties['bad_deal_condition']) { [string]$e.bad_deal_condition } else { '' }) -Force
+      }
     }
   }
   return $ix
@@ -507,6 +512,12 @@ function Update-TcFlagLedger {
       $ct = if ($cell.PSObject.Properties['deal_condition']) { [string]$cell.deal_condition } else { '' }
       $e.claim | Add-Member -NotePropertyName deal_qty -NotePropertyValue $cq -Force
       $e.claim | Add-Member -NotePropertyName deal_condition -NotePropertyValue $ct -Force
+    } elseif ($ix.ContainsKey($k) -and $ix[$k].PSObject.Properties['held_key'] -and [string]$ix[$k].held_key -eq [string]$e.claim_key -and $ix[$k].PSObject.Properties['held_deal_qty'] -and $null -ne $e.claim) {
+      # A HELD CELL CARRIES ITS CONDITION ON THE QUARANTINE RECORD (2026-09-25, queue 2026-09-25-17c0da). Withheld, the cell
+      # is gone from the board, so without this a disagreement judged before the engine stamped the condition could never be
+      # re-judged with it, and it withheld the cell again on every build for as long as the ad repeated the same claim.
+      $e.claim | Add-Member -NotePropertyName deal_qty -NotePropertyValue $ix[$k].held_deal_qty -Force
+      $e.claim | Add-Member -NotePropertyName deal_condition -NotePropertyValue ([string]$ix[$k].held_deal_condition) -Force
     }
     $v = & $Resolve $e
     $e.attempts = 1 + [int]$e.attempts; $e.last_attempt = $Today

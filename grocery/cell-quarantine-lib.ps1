@@ -510,6 +510,22 @@ function Update-TcQuarantineLinks {
   return ,($changes.ToArray())
 }
 
+function Add-TcHeldDealCondition($Entry, $Cell) {
+  # THE HELD CANDIDATE KEEPS THE CONDITION IT WAS PRICED UNDER (2026-09-25, queue 2026-09-25-17c0da, plan-2026-09-25-10).
+  # A quarantine entry records the candidate it held back (bad_item / bad_per_unit), and flag-verify-lib keeps a store
+  # disagreement open for as long as the pipeline keeps producing that candidate. It re-judges the disagreement every run
+  # with the engine's own deal_qty / deal_condition (a2af45) - but it read them off the LIVE cell only, and a withheld cell
+  # has none. So the Family Fare yellow pepper "10 for $10.00 with purchase of 10", judged wrong-price on 2026-09-22 before
+  # the condition existed, was withheld on every later board and could never be re-judged with it. The entry now carries
+  # the condition as bad_deal_qty / bad_deal_condition, and only when the engine stamped one.
+  if ($null -ne $Cell -and $Cell.PSObject.Properties['deal_qty'] -and $null -ne $Cell.deal_qty -and [string]$Cell.deal_qty) {
+    $Entry | Add-Member -NotePropertyName bad_deal_qty -NotePropertyValue $Cell.deal_qty -Force
+    $dc = if ($Cell.PSObject.Properties['deal_condition']) { [string]$Cell.deal_condition } else { '' }
+    $Entry | Add-Member -NotePropertyName bad_deal_condition -NotePropertyValue $dc -Force
+  }
+  return $Entry
+}
+
 function Invoke-TcCellQuarantine {
   # Applies a guards plan to a board IN MEMORY. The caller writes the board only when .ok is true, so a refusal can
   # never leave a half-quarantined board on disk.
@@ -549,10 +565,11 @@ function Invoke-TcCellQuarantine {
     if ($why) {
       $row.stores = @(@($row.stores) | Where-Object { $_ -and [string]$_.store -ne $st })
       if (@(@($row.stores) | Where-Object { [double]$_.per_unit -gt 0 }).Count -eq 0) { $res.refusal = "withholding $id / $st would leave $id with no priced store at all, and recipes cost from that row - hold the board instead"; return $res }
-      [void]$entries.Add([pscustomobject]@{ id = $id; store = $st; action = 'withheld'; why = $why; per_unit = $null; since = ''; kind = $kind; bad_per_unit = $candPu; bad_item = [string]$cell.item; reasons = $reasons })
+      [void]$entries.Add((Add-TcHeldDealCondition ([pscustomobject]@{ id = $id; store = $st; action = 'withheld'; why = $why; per_unit = $null; since = ''; kind = $kind; bad_per_unit = $candPu; bad_item = [string]$cell.item; reasons = $reasons }) $cell))
     } else {
       $same = ([math]::Abs([double]$lp.per_unit - $candPu) -lt 0.00005)
       $badItem = [string]$cell.item
+      $heldDeal = Add-TcHeldDealCondition ([pscustomobject]@{}) $cell   # read before the blanking below can touch the cell
       $cell.per_unit = [math]::Round([double]$lp.per_unit, 4)
       Set-TcCellField $cell 'type' 'everyday'
       if (-not $same) {
@@ -565,7 +582,9 @@ function Invoke-TcCellQuarantine {
         Set-TcCellField $cell 'source_ad' 'last verified published price'
       }
       Set-TcCellField $cell 'quarantine' ([pscustomobject]@{ since = [string]$lp.date; kind = $kind; bad_per_unit = $candPu; bad_item = $badItem; reasons = $reasons })
-      [void]$entries.Add([pscustomobject]@{ id = $id; store = $st; action = 'last-good'; why = ''; per_unit = $cell.per_unit; since = [string]$lp.date; kind = $kind; bad_per_unit = $candPu; bad_item = $badItem; reasons = $reasons })
+      $lgEntry = [pscustomobject]@{ id = $id; store = $st; action = 'last-good'; why = ''; per_unit = $cell.per_unit; since = [string]$lp.date; kind = $kind; bad_per_unit = $candPu; bad_item = $badItem; reasons = $reasons }
+      foreach ($p in @($heldDeal.PSObject.Properties)) { $lgEntry | Add-Member -NotePropertyName $p.Name -NotePropertyValue $p.Value -Force }
+      [void]$entries.Add($lgEntry)
     }
     $touched[$id] = $row
   }

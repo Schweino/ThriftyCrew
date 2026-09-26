@@ -122,6 +122,33 @@ try {
   $cPep3 = $cPep.PSObject.Copy(); $cPep3.per_unit = 1.99; $cPep3.ad = '$1.99'; $cPep3.row_type = 'sale'
   $v = Verdict $cPep3 $aPep 'yellow-bell-pepper' 'each'
   if ($v.verdict -eq 'match') { Ok 'CLEAN TWIN  a plain single-unit sale claim ($1.99 each, no deal_qty) is still verified on its shelf price and matches' } else { Bad ('a plain single claim gave ' + $v.verdict + ': ' + $v.reason) }
+  # ---- 1c. A WITHHELD CELL KEEPS ITS CONDITION ON THE QUARANTINE RECORD (queue 2026-09-25-17c0da) -------------------------
+  # Frozen from flag-verification.json on 2026-09-25: the pepper entry was judged wrong-price on 2026-09-22 before the engine
+  # stamped deal_qty, and comparison-2026-09-23 WITHHELD the cell, so the ledger never saw the condition again. The quarantine
+  # below is the REAL Invoke-TcCellQuarantine; Baker's is there because withholding a row's only priced store is refused.
+  $heldCase = {
+    param([bool]$Stamped)
+    $ffCell = [pscustomobject]@{ store = 'Family Fare'; per_unit = 1; unit = 'each'; type = 'sale'; item = 'Yellow Bell Pepper'; ad = '10 for $10.00 with purchase of 10'; size = '1 ea'; note = '10 for $10'; ad_from = '2026-09-20'; ad_to = '2026-09-26'; as_of = '' }
+    if ($Stamped) { $ffCell | Add-Member -NotePropertyName deal_qty -NotePropertyValue 10; $ffCell | Add-Member -NotePropertyName deal_condition -NotePropertyValue 'when you buy 10' }
+    $bk = [pscustomobject]@{ store = "Baker's"; per_unit = 1.67; unit = 'each'; type = 'everyday'; item = 'Fresh Yellow Bell Pepper'; ad = '$1.67'; size = '1 ct'; as_of = '2026-09-24' }
+    $hb = [pscustomobject]@{ comparison = @([pscustomobject]@{ commodity = 'Yellow Bell Pepper'; id = 'yellow-bell-pepper'; unit = 'each'; stores = @($ffCell, $bk) }) }
+    $hp = [pscustomobject]@{ cells = @([pscustomobject]@{ id = 'yellow-bell-pepper'; store = 'Family Fare'; kind = 'value'; bad_per_unit = 1; reasons = @('HARD FAIL: store-contradicted (fixture)') }); stores = @() }
+    $q = Invoke-TcCellQuarantine -Board $hb -Plan $hp -LastPublished $null -Today '2026-09-25' -MaxAgeDays 90
+    $legacy = New-TcFlagEntry $pepFlag '2026-09-21'
+    $legacy.status = 'wrong-price'; $legacy.verdict_at = '2026-09-22'; $legacy.reason = 'no reading of the store''s own figures gives our 1.0000/each: size field 1 ea -> 1.9900'
+    $led = [pscustomobject]@{ generated = '2026-09-24'; entries = [ordered]@{ 'yellow-bell-pepper|Family Fare' = $legacy }; closed = @() }
+    $r = Update-TcFlagLedger -Ledger $led -Flags @() -Board $hb -Today '2026-09-25' -Resolve { param($e) Verdict $e.claim $aPep ([string]$e.id) ([string]$e.unit) }
+    return [pscustomobject]@{ q = $q; r = $r }
+  }
+  $hc = & $heldCase $true
+  $hEnt = @(@($hc.q.cells) | Where-Object { [string]$_.store -eq 'Family Fare' })
+  if ($hc.q.ok -and $hEnt.Count -eq 1 -and [string]$hEnt[0].action -eq 'withheld' -and [string]$hEnt[0].bad_deal_qty -eq '10' -and [string]$hEnt[0].bad_deal_condition -eq 'when you buy 10') { Ok 'MUST FIRE  the real quarantine withholds the pepper cell and its record carries the engine''s condition (bad_deal_qty 10, "when you buy 10")' } else { Bad ('the withheld record lost the condition: ' + (ConvertTo-Json -InputObject @($hc.q.cells) -Compress -Depth 3) + ' ' + [string]$hc.q.refusal) }
+  $hClosed = @(@($hc.r.ledger.closed) | Where-Object { [string]$_.key -eq 'yellow-bell-pepper|Family Fare' -and [string]$_.status -eq 'match' })
+  if ($hClosed.Count -eq 1 -and [string]$hClosed[0].reason -match 'when you buy 10') { Ok 'MUST FIRE  founding 2026-09-25: the wrong-price entry for the WITHHELD pepper cell is re-judged with the condition off the quarantine record and closes as a match' } else { Bad ('the held pepper entry was not re-judged: open ' + (@($hc.r.ledger.entries.Keys) | ForEach-Object { [string]$hc.r.ledger.entries[$_].status + ' ' + [string]$hc.r.ledger.entries[$_].reason }) + ' / closed ' + (@($hc.r.ledger.closed) | ForEach-Object { [string]$_.status })) }
+  $hc2 = & $heldCase $false
+  $hEnt2 = @(@($hc2.q.cells) | Where-Object { [string]$_.store -eq 'Family Fare' })
+  $hOpen2 = if ($hc2.r.ledger.entries.Contains('yellow-bell-pepper|Family Fare')) { $hc2.r.ledger.entries['yellow-bell-pepper|Family Fare'] } else { $null }
+  if ($hEnt2.Count -eq 1 -and -not $hEnt2[0].PSObject.Properties['bad_deal_qty'] -and $null -ne $hOpen2 -and [string]$hOpen2.status -eq 'wrong-price') { Ok 'CLEAN TWIN  with no condition stamped by the engine the record carries none and the held disagreement stays wrong-price: the ledger invents no condition' } else { Bad ('an unstamped held cell changed the verdict: ' + $(if ($hOpen2) { [string]$hOpen2.status } else { 'closed' }) + ' / ' + (ConvertTo-Json -InputObject @($hc2.q.cells) -Compress -Depth 3)) }
 
   # ---- 2. THE RE-READ: only a LATER, FRESH read of the SAME product is an answer ---------------------------------------
   $rowsCarried = @((Obj '{"item":"KIND Almond & Coconut","ad_price":"$7.98","size":"6 ct","as_of":"2026-09-09","current_price":7.98}'))
@@ -316,6 +343,6 @@ try {
 catch { Bad ('the suite threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.PositionMessage) }
 finally { try { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction Stop } catch { } }
 $cases = $script:pass + $script:fail
-Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 38) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (38 expected)')
-if ($script:fail -eq 0 -and $cases -eq 38) { exit 0 }
+Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 41) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (41 expected)')
+if ($script:fail -eq 0 -and $cases -eq 41) { exit 0 }
 exit 1
