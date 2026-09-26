@@ -18,6 +18,8 @@ Design rules this module enforces (from the implementation plan):
   checkout survives this one's next export.
 """
 
+# Self-test: temp databases built from graph\sqlite\schema.sql, and the ids module this file imports.
+# gate-inputs: graph\lib\graphdb.py, graph\lib\ids.py, graph\sqlite\schema.sql
 from __future__ import annotations
 
 import io

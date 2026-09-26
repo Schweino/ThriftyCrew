@@ -45,6 +45,8 @@
 
   Self-test: powershell -File ops\audit-event-bus.ps1 -SelfTest
 #>
+# Self-test: fixtures over the bus libraries, temp bus files and a temp git repo it builds; no real bus or real repo git.
+# gate-inputs: ops\audit-event-bus.ps1, lib\guard-contract.ps1, lib\event-bus.ps1, lib\main-checkout.ps1, lib\git-repo-env.ps1, lib\append-line.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

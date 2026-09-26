@@ -47,6 +47,8 @@
 #   ops\probe-staged-corpus.ps1 -SelfTest                frozen fixtures, plus the real detector on a staged tree
 # Exit 0 = ran (findings are data, not a failure). 1 = a staged file failed the structure proof, so the
 # differential is void. 3 = BLIND: no files found, or a detector arm did not complete.
+# Self-test: frozen fixtures, plus the real audit-write-seam.ps1 run as a child over a temp tree and a temp baseline it stages itself.
+# gate-inputs: ops\probe-staged-corpus.ps1, lib\guard-contract.ps1, ops\audit-write-seam.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$Detector = 'write-seam', [string]$Root = '', [string]$OutFile = '', [switch]$KeepStage)
 $ErrorActionPreference = 'Stop'

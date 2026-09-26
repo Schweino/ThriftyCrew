@@ -50,6 +50,8 @@
   Read-only unless -Apply. -GroceryRoot and -Today exist for the self-test, which runs this script as a child
   against a temp tree; production passes neither.
 #>
+# Self-test: runs this script as a child over a temp grocery tree it writes itself; nothing under the real grocery\ is read.
+# gate-inputs: grocery\derive-not-carried.ps1
 param([switch]$Apply, [string]$OutDir = '', [string]$GroceryRoot = '', [string]$Today = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

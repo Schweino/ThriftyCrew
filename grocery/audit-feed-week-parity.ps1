@@ -26,6 +26,8 @@
 
   Self-test: powershell -File grocery\audit-feed-week-parity.ps1 -SelfTest
 #>
+# Self-test: pure fixtures over Test-TcFeedWeekParity; the board and feed are read only on the live path below it.
+# gate-inputs: grocery\audit-feed-week-parity.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

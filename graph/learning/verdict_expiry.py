@@ -55,6 +55,8 @@ that import runs again, every verdict that expires reads "no longer captured" an
 which is the correct answer to the question asked, and a loud sign the question's input stopped.
 """
 
+# Self-test: temp policy fixtures, plus graph\pipeline\state.py (loaded by path) and the graph\lib modules it and this file import.
+# gate-inputs: graph\learning\verdict_expiry.py, graph\pipeline\state.py, graph\lib\*.py
 from __future__ import annotations
 
 import argparse

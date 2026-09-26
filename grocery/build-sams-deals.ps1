@@ -46,6 +46,8 @@
   Usage: .\build-sams-deals.ps1 -In <capture.csv> -Date 2026-07-17
          .\build-sams-deals.ps1 -SelfTest
 #>
+# Self-test: row fixtures and child builds of this file into temp dirs (with -LedgerRoot and -NoCursor), through its libraries, the size hints, the placeholder patterns, the derived-size rulings and the unit aliases.
+# gate-inputs: grocery\build-sams-deals.ps1, grocery\capture-lib.ps1, grocery\pricing-math-lib.ps1, grocery\derived-size-density-lib.ps1, grocery\ingest-shape-lib.ps1, grocery\native-lib.ps1, grocery\instore-lib.ps1, grocery\rollback-ttl-lib.ps1, lib\json-io.ps1, grocery\sams-size-hints.json, grocery\placeholder-name-patterns.json, grocery\derived-size-density-rulings.json, grocery\unit-aliases.json
 param(
   [string]$In = "",
   [string]$Date = "",

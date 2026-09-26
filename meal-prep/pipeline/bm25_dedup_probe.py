@@ -26,6 +26,8 @@ WHAT THIS CANNOT TELL YOU, stated up front because a retrieval number invites ov
   * It compares BM25 against the true twin's rank, not against cosine's rank for the same pair -
     the stored neighbour lists are written at rescore time and are not in this file's inputs.
 """
+# Self-test: pure in-memory BM25 fixtures; it reads no file but this one.
+# gate-inputs: meal-prep\pipeline\bm25_dedup_probe.py
 from __future__ import annotations
 
 import io

@@ -28,6 +28,8 @@ here: the acceptance threshold is written down, in the units of the metric, befo
 A MARGIN OF 0 RESTORES PLAIN ARGMAX and is the right setting when the caller has some other reason
 to trust small differences. It is not the default because nothing here has produced that reason.
 """
+# Self-test: pure in-memory fixtures; it reads no file but this one.
+# gate-inputs: sidecar\checkpoint_selection.py
 from __future__ import annotations
 
 import argparse

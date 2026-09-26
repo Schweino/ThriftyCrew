@@ -42,6 +42,8 @@
 #
 # Run:  .\audit-count-gpu.ps1              (exit 0 = clean, 1 = at least one hard fail)
 #       .\audit-count-gpu.ps1 -SelfTest    (frozen fixtures: the founding bug + its clean twin)
+# Self-test: frozen row fixtures only; the ingredient, density and food DB files are read on the live path below it.
+# gate-inputs: meal-prep\pipeline\audit-count-gpu.ps1, lib\guard-contract.ps1
 [CmdletBinding()]
 param(
   [string]$IngredientsFile,

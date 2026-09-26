@@ -30,6 +30,8 @@
 # Exit 0 clean (at or under the mark), 1 findings, 3 could not evaluate (a sitemap unreadable, or a page that could
 # not be read twice). Last line: SITEWIDE-PRICES-COMPLETE.
 # Usage: monitor-sitewide-prices.ps1 [-NoAlert] [-ProposeBaseline <file>] | -SelfTest
+# Self-test: pure page fixtures over sitewide-price-lib, plus the exemption registry it reads by name.
+# gate-inputs: meal-prep\lib\sitewide-price-lib.ps1, meal-prep\db\sitewide-price-monitor.json
 [CmdletBinding()]   # an undeclared argument is a hard error, never a silent $args drop
 param([switch]$NoAlert, [string]$ProposeBaseline = '', [int]$DelayMs = 150, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

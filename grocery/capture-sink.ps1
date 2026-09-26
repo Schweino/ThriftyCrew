@@ -69,6 +69,8 @@
     Stop it with -Stop, or by killing the process; it also exits on its own after -MaxIdleMinutes
     with no request, so a forgotten sink does not sit listening forever.
 #>
+# Self-test: frozen command-line and process-row fixtures, and child sinks of this file on a local port and temp dirs it creates; no committed data.
+# gate-inputs: grocery\capture-sink.ps1
 [CmdletBinding()]
 param(
     [int]    $Port           = 8791,

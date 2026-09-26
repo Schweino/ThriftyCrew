@@ -35,6 +35,8 @@
   unverified - a corpus that quietly got smaller is the failure mode this whole file exists against).
 #>
 # selftest-lib: whole-file-suite - the corpus run below the -SelfTest block IS this suite (22 corpus must-fires, run by test-auditors); the gated block is only the hermetic blind-retry test (queue 2026-09-25-110a8f)
+# Self-test (the gated block only): match-lib.ps1 over a frozen two-row catalogue; the corpus below it is read only without -SelfTest.
+# gate-inputs: grocery\test-match-lib.ps1, grocery\match-lib.ps1, lib\json-io.ps1, lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [int]$MaxNames = 0, [int]$Workers = 0,
       # SHARD MODE - set by the parent on its own children, never by a human. The parent hands over the

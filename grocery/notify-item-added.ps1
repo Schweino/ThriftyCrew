@@ -46,6 +46,8 @@
 
   Self-test: powershell -File grocery\notify-item-added.ps1 -SelfTest   (pure, sends nothing)
 #>
+# Self-test: pure fixtures over the sent-log functions; nothing is read from disk, Ghost or the worker.
+# gate-inputs: grocery\notify-item-added.ps1
 param([switch]$DryRun, [string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

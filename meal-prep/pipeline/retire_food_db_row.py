@@ -34,6 +34,8 @@ USAGE
   ... --dry-run
   C:\Codex\Python312\python.exe retire_food_db_row.py --selftest
 """
+# Self-test: a temp DB, ledger and refs tree it builds itself; it reads no committed file but this one.
+# gate-inputs: meal-prep\pipeline\retire_food_db_row.py
 import argparse
 import json
 import os

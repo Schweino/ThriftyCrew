@@ -20,6 +20,8 @@
 
   -Apply writes. Without it this is a report, because it edits the publish ledger for a live paid site.
 #>
+# Self-test: pure fixtures over the ghost libs, plus sync-paywall-schema.ps1 read as text for its New-PaywallBlock.
+# gate-inputs-text: meal-prep\pipeline\sync-paywall-schema.ps1
 param(
   [switch]$Apply,
   [string[]]$Slugs = @(),

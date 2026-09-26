@@ -56,6 +56,9 @@
 
   Self-test: powershell -File ops\audit-task-registration.ps1 -SelfTest
 #>
+# Self-test: the committed task definitions, the watch registry, and the four real registrars read as text.
+# gate-inputs: ops\scheduled-tasks\*.xml, grocery\expected-automations.json
+# gate-inputs-text: graph\pipeline\install-nightly-task.ps1, meal-prep\pipeline\install-harvest-task.ps1, ops\install-grocery-tasks.ps1, media\reels\install-daily-task.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

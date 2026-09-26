@@ -32,6 +32,8 @@
   crawl reported findings, or (since 2026-09-11) its commit did not land - refused, threw, or a verdict
   nobody recognises; the FINDING line says which. Exit 2 = it could not run at all.
 #>
+# Self-test: this file's own source, harvest.py (existence), the shared names lib and its vectors, and lib\pipeline-commit.ps1's classifier.
+# gate-inputs: meal-prep\pipeline\harvest.py, meal-prep\pipeline\selftest-names-lib.ps1, meal-prep\pipeline\selftest-names-vectors.json, lib\pipeline-commit.ps1
 param([switch]$SelfTest, [int]$Limit = 400, [int]$PerDomain = 60, [switch]$DryRun,
       # A NAMED RETRY (2026-09-17). Comma-separated publishers to crawl instead of the ledger's reliable set.
       # Four publishers answered 429 to that day's one-off backlog pass and the ledger marks any domain with a

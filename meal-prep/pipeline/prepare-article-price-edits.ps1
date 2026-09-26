@@ -19,6 +19,8 @@
 #                base's, apply the edit, and with -Apply PUT it. Without -Apply it prints what it would send.
 #
 # Exit 0 ok, 1 a refused edit (named), 3 could not evaluate. Last line: ARTICLE-PRICE-EDITS-COMPLETE.
+# Self-test: pure fixtures over the edit functions and the libraries loaded above it; no article, feed or Ghost call.
+# gate-inputs: meal-prep\pipeline\prepare-article-price-edits.ps1, meal-prep\lib\sitewide-price-lib.ps1, lib\guard-contract.ps1, lib\json-io.ps1, lib\ghost-lib.ps1
 [CmdletBinding()]
 param([switch]$Inventory, [switch]$Prepare, [switch]$Land, [switch]$Apply, [string]$Slugs = '', [switch]$Refresh, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

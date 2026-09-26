@@ -59,6 +59,9 @@
   Usage: .\build-walmart-deals.ps1 -In <capture.csv> -Date 2026-07-17
          .\build-walmart-deals.ps1 -SelfTest
 #>
+# Self-test: row fixtures through walmart-row-lib and its libraries, stores.json, the multipack allowlist, the placeholder patterns, the derived-size rulings, the unit aliases, and the agent JS read as text.
+# gate-inputs: grocery\build-walmart-deals.ps1, grocery\capture-lib.ps1, grocery\pricing-math-lib.ps1, grocery\walmart-row-lib.ps1, grocery\multipack-lib.ps1, grocery\derived-size-density-lib.ps1, grocery\ingest-shape-lib.ps1, lib\json-io.ps1, grocery\stores.json, grocery\multipack-allowlist.json, grocery\placeholder-name-patterns.json, grocery\derived-size-density-rulings.json, grocery\unit-aliases.json
+# gate-inputs-text: grocery\pull-walmart-instore.js
 param(
   [string]$In = "",
   [string]$Date = "",

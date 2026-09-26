@@ -48,6 +48,8 @@
   Exit: 0 = done (or nothing to do), 2 = failure, 3 = could-not-evaluate (no name evidence, or a floor
   refusal is in effect on an affected commodity).
 #>
+# Self-test: frozen synthetic history through the pure purge functions; the history and boards are read on the live path below it.
+# gate-inputs: grocery\purge-verdict-lows.ps1, grocery\verdict-lib.ps1
 param([switch]$Apply, [switch]$SelfTest, [string]$HistoryFile = '', [string]$OutDir = '', [string]$SuppressionsFile = '')
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

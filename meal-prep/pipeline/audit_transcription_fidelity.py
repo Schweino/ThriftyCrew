@@ -31,6 +31,8 @@ live half reads the open web and belongs where the other data-dependent audits l
 
 Exit 0 = every readable page agrees. 2 = a finding. 3 = nothing could be checked at all.
 """
+# Self-test: pure in-memory fixtures (the page fetch runs only outside it); it reads no file but this one.
+# gate-inputs: meal-prep\pipeline\audit_transcription_fidelity.py
 from __future__ import annotations
 
 import argparse

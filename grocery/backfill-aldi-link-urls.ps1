@@ -70,6 +70,8 @@
   rows with not one capture resolved. Never read 3 as nothing to do.
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
+# Self-test: temp captures and a temp regular file it writes, through build-aldi-regular's dot-sourced functions and the capture lib they load.
+# gate-inputs: grocery\backfill-aldi-link-urls.ps1, lib\json-io.ps1, grocery\build-aldi-regular.ps1, grocery\capture-lib.ps1, grocery\placeholder-name-patterns.json
 param(
   [string]$Regular = '',
   [string]$CaptureDir = '',

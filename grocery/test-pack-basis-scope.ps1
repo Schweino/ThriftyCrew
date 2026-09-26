@@ -5,6 +5,8 @@
   and reads its output through the same Get-TcChildQuarantineScope guards.ps1 uses. The founding shape is Sam's
   "Pledge Furniture Polish, 3 ct., 29 oz." (29/3 = 9.67 oz, the can three peers sell).
 #>
+# Self-test: runs audit-pack-basis.ps1 as a child over a per-run fixture board, report dir and allow file; nothing else.
+# gate-inputs: grocery\audit-pack-basis.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

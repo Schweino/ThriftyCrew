@@ -50,6 +50,8 @@ Exit 0 = nothing regressed. 1 = something did. 2 = could not evaluate, never a p
 Last line is the marker lib/guard-contract.ps1 requires.
 """
 
+# Self-test: fixtures written to and read from its own temp dir; it reads no committed file but this one.
+# gate-inputs: ops\audit-seo-surface.py
 from __future__ import annotations
 
 import argparse

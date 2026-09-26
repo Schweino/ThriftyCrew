@@ -77,6 +77,8 @@
   lower mark never rode that push, and a count taken over uncommitted edits is not a baseline. So a fall is SPOKEN
   and the committed mark KEPT; -Tighten records it. ops\audit-write-only-reports.ps1 carries the full account.
 #>
+# Self-test: text fixtures, a temp worktree fixture, and this script run as a child over a temp tree and temp baselines.
+# gate-inputs: ops\audit-full-path-excludes.ps1, lib\guard-contract.ps1, lib\ratchet.ps1, lib\tree-walk.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Accept, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

@@ -71,6 +71,8 @@
 # with blind=baseline-missing or blind=baseline-unreadable and nothing written, the report included; -Accept is the one
 # road to a mark over it. A FALL, and a changed counted set at the same mark, are spoken and the committed baseline kept
 # on a plain run; -Tighten records them. guards.ps1 passes -Tighten, so the daily chain tightens exactly as it did.
+# Self-test: frozen rows, and this script run as a child over a temp out dir and baseline it writes itself.
+# gate-inputs: grocery\audit-band-censorship.ps1, lib\json-io.ps1, lib\guard-contract.ps1, lib\ratchet.ps1
 param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest, [int]$Replay = 0, [string]$ReplayRows = '', [switch]$Tighten, [switch]$Accept)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

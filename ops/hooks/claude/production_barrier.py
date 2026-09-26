@@ -25,6 +25,8 @@ Installed into ~/.claude/settings.json by procedure P1 of design/PLAN-brain-cons
 section 4.4, through a launcher that exits 0 when this file is absent, so a checkout without it degrades to today.
 Self-test: C:/Codex/Python312/python.exe ops/hooks/claude/production_barrier.py --selftest
 """
+# Self-test: a temp log dir and a child run of this file with its own env; it reads no committed file but this one.
+# gate-inputs: ops\hooks\claude\production_barrier.py
 import datetime as dt
 import json
 import os

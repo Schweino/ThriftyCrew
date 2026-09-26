@@ -25,6 +25,8 @@
     .\notify-desktop.ps1 -Title "Grocery run needs you" -Message "..." -AlsoEmail
     .\notify-desktop.ps1 -WaitForAck "Sam's Club" -TimeoutMin 20     # block until Done is clicked
 #>
+# Self-test: logs to its own temp file, reads this file's own source, and only compares the production notify log's length before and after (never its content).
+# gate-inputs: grocery\notify-desktop.ps1
 param(
   [string]$Store   = "",
   [string]$Detail  = "",

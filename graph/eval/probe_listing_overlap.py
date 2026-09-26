@@ -29,6 +29,8 @@ Usage:
   python graph/eval/probe_listing_overlap.py [--db PATH] [--source identity] --pair A,B
   python graph/eval/probe_listing_overlap.py --selftest
 """
+# Self-test: pure in-memory fixtures; it reads no file but this one (ids.py is imported only outside it).
+# gate-inputs: graph\eval\probe_listing_overlap.py
 from __future__ import annotations
 
 import argparse

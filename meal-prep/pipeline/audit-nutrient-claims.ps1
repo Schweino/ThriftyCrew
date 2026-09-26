@@ -26,6 +26,9 @@
     meal-prep\pipeline\audit-nutrient-claims.ps1 -ReportFile <md>        ...and write the per-use list
     meal-prep\pipeline\audit-nutrient-claims.ps1 -SelfTest               fixtures: must fire, must not, clean twins
 #>
+# Self-test: the claim list, build-v2-spec and wave-preaudit read as text, and a count of the recipe specs (the discovery case).
+# gate-inputs: meal-prep\pipeline\nutrient-claim-lib.ps1, meal-prep\pipeline\forbidden-prose-lib.ps1, meal-prep\pipeline\forbidden-prose-global.json, meal-prep\db\recipes\*.json
+# gate-inputs-text: meal-prep\pipeline\build-v2-spec.ps1, meal-prep\pipeline\wave-preaudit.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [string]$RecipeDir = '', [string]$ReportFile = '')
 $ErrorActionPreference = 'Stop'

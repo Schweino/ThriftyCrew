@@ -20,6 +20,8 @@
 #   .\batch-ledger.ps1 -Abandon -Batch <b> -Detail 'why'   (a wave that will never finish; refuses one that shipped)
 #   .\batch-ledger.ps1 -Verify                 (exit 1 if any open batch is stale or missing a stage)
 #   .\batch-ledger.ps1 -SelfTest
+# Self-test: frozen ledger rows driven through the pure functions; the ledger and recipes-db are read on the live path below it.
+# gate-inputs: meal-prep\pipeline\batch-ledger.ps1, lib\guard-contract.ps1
 param(
   [switch]$Start,[switch]$Stamp,[switch]$Close,[switch]$Verify,[switch]$SelfTest,[switch]$Reconcile,
   [switch]$Abandon,

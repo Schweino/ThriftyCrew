@@ -8,6 +8,8 @@
 # NO param() BLOCK, DELIBERATELY. In PS 5.1 a dot-sourced script's param() block runs in the CALLER's scope,
 # so a [switch]$SelfTest here would silently reset a caller's own -SelfTest to $false. That exact bug shipped
 # in lib\guard-contract.ps1 the same day and disarmed nine guards' self-tests; see the note there.
+# Self-test: pure fixtures, plus meal-prep\engine\publish.ps1 read as text (its Get-ContentHash and $PW literal).
+# gate-inputs-text: meal-prep\engine\publish.ps1
 $__gdSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Get-BodyHash { param($Text)

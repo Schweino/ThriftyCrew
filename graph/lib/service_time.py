@@ -28,6 +28,8 @@ READ IT WITH:  python graph/lib/service_time.py --report
 SELF-TEST:     python graph/lib/service_time.py --selftest
 Exit 0 ok, 2 self-test failure, 3 no rows yet - BLIND, and BLIND IS NEVER A PASS.
 """
+# Self-test: pure fixtures plus a temp log it writes and removes itself; it reads no committed file.
+# gate-inputs: graph\lib\service_time.py
 from __future__ import annotations
 
 import argparse

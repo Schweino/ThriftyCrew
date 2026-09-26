@@ -34,6 +34,8 @@
 
   Usage: .\test-pull-agent-lib.ps1 -SelfTest
 #>
+# Self-test: node runs fixtures against the lane's JS source files, each read by path; nothing else in the repo.
+# gate-inputs: grocery\pull-agent-lib.js, grocery\pull-walmart-instore.js, grocery\pull-sams-instore.js, grocery\pull-fareway-instore.js, grocery\pull-fareway-shop.js, grocery\pull-aldi-instore.js, grocery\walmart-capture-reducer.js
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 

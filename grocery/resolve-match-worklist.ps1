@@ -20,6 +20,8 @@
   Marker: MATCH-WORKLIST-COMPLETE scanned=N decided=N undecided=N new=N blind=<kinds>. Exit 0; 3 when every
   detector file is missing (could not evaluate - never 'no findings').
 #>
+# Self-test: relays test-match-worklist.ps1, which builds every data file in its own temp tree and runs this script over them.
+# gate-inputs: grocery\test-match-worklist.ps1
 param(
   [string]$OutDir = '',
   [string]$VerdictFile = '',

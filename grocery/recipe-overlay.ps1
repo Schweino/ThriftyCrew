@@ -10,6 +10,8 @@
   Auto-reverts: when a sale ends, the next run finds no sale for it and uses the everyday floor -> back to
   the baseline ranking. Run it in the daily job after compare-deals; it is headless + non-fatal.
 #>
+# Self-test: pure fixtures over Resolve-BuildOnlyRows; the boards are read on the live path below it.
+# gate-inputs: grocery\recipe-overlay.ps1
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

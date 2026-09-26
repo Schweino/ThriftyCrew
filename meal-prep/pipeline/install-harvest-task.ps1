@@ -39,6 +39,8 @@
   the live task's values, read from Get-ScheduledTask on 2026-09-18, and the self-test compares what this file
   would register with the committed definition, so the two cannot drift apart silently again.
 #>
+# Self-test: this file's own source, harvest-crawl.ps1 (existence), the watch registry and the committed task definition.
+# gate-inputs: grocery\expected-automations.json, ops\scheduled-tasks\tc-recipe-harvest-crawl.xml, meal-prep\pipeline\harvest-crawl.ps1
 param([switch]$Remove, [switch]$Status, [string]$At = '18:00', [switch]$SelfTest,
       # A comma-separated STRING, never [string[]]: under -File a list arrives as one string (ops-and-gates.md).
       [string]$Domains = 'thereciperebel.com,lecremedelacrumb.com,fitfoodiefinds.com,healthyfitnessmeals.com',

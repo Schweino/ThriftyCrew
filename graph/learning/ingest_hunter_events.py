@@ -35,6 +35,8 @@ chain's GPU window opens.
 EXIT CODES: 0 clean / 1 findings / 2 could-not-run / 3 BLIND. Marker HUNTER-INGEST-COMPLETE.
 """
 
+# Self-test: temp fixtures and a scratch graph built from graph\sqlite\schema.sql through the graph\lib and graph\gold modules it imports.
+# gate-inputs: graph\learning\ingest_hunter_events.py, graph\lib\*.py, graph\gold\seed_gold.py, graph\sqlite\schema.sql
 from __future__ import annotations
 
 import argparse

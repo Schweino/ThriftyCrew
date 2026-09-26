@@ -11,6 +11,9 @@
   crowned - it is NOT dead code, which is why it is converted rather than archived.
   Usage: .\import-aldi-batch.ps1 -ModeVerified 2026-07-30 ; then compare-deals -> diff-board -> vet.
 #>
+# Self-test: runs import-instacart-batch.ps1 -SelfTest, which reads stores.json and lifts Merge-IwbRows from import-walmart-batch.ps1 as text.
+# gate-inputs: grocery\import-instacart-batch.ps1, grocery\stores.json
+# gate-inputs-text: grocery\import-walmart-batch.ps1
 param([string]$Raw = 'out\staples500\aldi-batch1-raw.txt', [string]$ModeVerified = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $fwd = @('-Store', 'Aldi', '-Raw', $Raw, '-SourceLabel', 'Aldi OLA 42 Omaha In-Store shelf price (batch capture)')

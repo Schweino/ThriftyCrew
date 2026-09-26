@@ -25,6 +25,8 @@
   Exit 0 = both ads resolved (installed, or cleanly blocked by the Omaha/current gates).
   Exit 2 = an install or a post-install assertion FAILED - the images on disk are not what the ad says.
 #>
+# Self-test: the frozen adpages-shrink fixture and adpages-lib over temp dirs it seeds itself; no network.
+# gate-inputs: grocery\adpages-lib.ps1, grocery\regression-inputs\guard-fixtures\adpages-shrink.json
 param([string]$OutDir = "", [string]$Today = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference = 'SilentlyContinue'

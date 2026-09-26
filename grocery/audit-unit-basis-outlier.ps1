@@ -24,6 +24,8 @@
 #   .\audit-unit-basis-outlier.ps1 -Ratio 4        change the flag threshold (default 4x the median)
 #   .\audit-unit-basis-outlier.ps1 -SelfTest       frozen founding-bug fixture + clean twins
 # Exit 0 = clean or advisory findings only. Exit 2 = self-test regression. Exit 3 = BLIND (nothing seen).
+# Self-test: frozen board fixtures through the pure detector and pu-lib; the board and catalog are read on the live path below it.
+# gate-inputs: grocery\audit-unit-basis-outlier.ps1, lib\json-io.ps1, lib\guard-contract.ps1, grocery\pu-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = '', [double]$Ratio = 4.0, [int]$MinStores = 4, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

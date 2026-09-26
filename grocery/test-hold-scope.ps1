@@ -2,6 +2,8 @@
   test-hold-scope.ps1 -SelfTest - fixtures for hold-scope-lib.ps1 (queue 2026-09-21-d16398), then the LIVE contract over
   this tree's guards.ps1 and its delegates.
 #>
+# Self-test: the LIVE case reads guards.ps1 and every delegate its table names, as text only (none is run).
+# gate-inputs-text: grocery\guards.ps1, grocery\audit-price-mode.ps1, grocery\audit-household-in-food.ps1, grocery\audit-food-category.ps1, grocery\audit-coverage-regression.ps1, grocery\audit-known-wrong.ps1, grocery\audit-pack-basis.ps1, grocery\audit-unit-basis-outlier.ps1, grocery\audit-asof-evidence.ps1, grocery\audit-tile-integrity.ps1, grocery\audit-band-censorship.ps1, grocery\audit-board-mojibake.ps1, grocery\audit-capture-encoding.ps1, grocery\audit-flag-verification.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

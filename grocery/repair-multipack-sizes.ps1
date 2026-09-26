@@ -41,6 +41,8 @@
     .\repair-multipack-sizes.ps1 -Apply
     .\repair-multipack-sizes.ps1 -SelfTest
 #>
+# Self-test: pure multipack-lib fixtures, plus the hint file it asserts exists and parses.
+# gate-inputs: grocery\multipack-lib.ps1, grocery\multipack-unit-hints.json
 param(
   [switch]$Apply,
   [string]$RegularDir = '',
