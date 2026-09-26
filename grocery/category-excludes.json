@@ -265,6 +265,9 @@
     ],
     "canned_carrier": [
       "\\bcans?\\b"
+    ],
+    "flavour_pair_carrier": [
+      "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
     ]
   },
   "apply": [
@@ -288,7 +291,8 @@
         "soup_carrier",
         "sushi_carrier",
         "condiment_carrier",
-        "canned_carrier"
+        "canned_carrier",
+        "flavour_pair_carrier"
       ]
     },
     {
@@ -379,6 +383,21 @@
         "beverage"
       ],
       "note": "ID-SCOPED CLASSES (2026-09-18, queue 2026-09-18-f90ba6, triage-plans\\plan-2026-09-18.json). The apply blocks above scope a class by the deals page's DISPLAY category, and a display bucket can mix foods with drinks: pistachios sits in 'Snacks & Drinks' beside soda, coffee pods and iced tea, and peanuts, almonds, walnuts and mixed-nuts sit in 'Coffee, Oils & Spreads' beside coffee, so no category block can ever give a nut the beverage class. A pistachio MILK ('Whole Moon Pistachio Plant Beverage Whole Protein', Baker's, 42 fl oz, $5.99) held the pistachios crown at 0.1426/oz against real nuts at 0.4056 while audit-food-category read OK. A block here is UNIONED into whatever the category pass gave each listed id, by apply-category-excludes.ps1, audit-food-category.ps1 and build-vet-sheet.ps1 alike. It lives under its own key and NOT inside apply because every reader of apply takes the FIRST block whose categories regex matches, and a block with no regex reads as the empty pattern, which matches every label. Measured over 19,416 corpus names (plan-2026-09-18.routing.json variant B2): the five nut ids own 162 names and exactly 1 moves (the beverage, to no commodity). WIDENED 2026-09-18 to all 21 non-drink Snacks & Drinks commodities (queue 2026-09-18-55b7aa, plan-2026-09-18-4.json), and this ids list now carries them. Variant B3 had been REJECTED because the bare gatorade token re-routed two Gatorade protein bars from protein-bars to sports-drinks; the release that unblocked it was to NARROW the beverage class token to a gatorade form with a negative lookahead for protein bar, and to give snack_carrier its own protein-bar token, NOT to drop protein-bars from this list. DO NOT READ THAT REJECTION AS STILL LIVE. Re-measured 2026-09-20 (queue 2026-09-18-f90ba6, plan-2026-09-20-4.json): all 25 ids here carry all 30 beverage tokens in commodities.json, apply-category-excludes.ps1 -WhatIf bakes +0 patterns, all three readers (the bake, audit-food-category, build-vet-sheet) union this block, and comparison-2026-09-20 carries 0 beverage products across their 143 priced cells. That one stale sentence is why this condition returned a third time: plan-2026-09-19 and plan-2026-09-20-2 both carried the claim that apply_ids reaches pistachios only forward from prose the data beside it had already overtaken. Re-measure this list before quoting it."
+    },
+    {
+      "ids": [
+        "ground-cinnamon", "cinnamon-stick", "ground-ginger", "ground-nutmeg", "fresh-whole-nutmeg", "mace-spice",
+        "ground-cloves", "whole-cloves", "ground-allspice", "ground-cumin", "cumin-seeds", "ground-coriander",
+        "ground-turmeric", "ground-fennel", "ground-sumac", "cardamom", "paprika", "cayenne-pepper",
+        "chipotle-powder", "garlic-powder", "onion-powder", "dried-basil", "dried-oregano", "dried-parsley",
+        "dried-thyme", "dried-dill", "bay-leaves", "black-pepper", "black-peppercorns", "saffron",
+        "crushed-thai-chili", "red-pepper-flakes", "poppy-seeds", "caraway-seeds", "sugar", "brown-sugar",
+        "powdered-sugar", "feta"
+      ],
+      "classes": [
+        "flavour_pair_carrier"
+      ],
+      "note": "FLAVOUR-PAIR CARRIER (2026-09-26, follow-on to queue 2026-09-26-f655c7). A prepared product is NAMED BY ITS FLAVOUR, and a flavour is usually a PAIR of ingredient words: 'Quaker Apple Cinnamon Rice Crisps' routed to ground-cinnamon, 'Fresh Cravings Jalapeno Cilantro Hummus' to cilantro, 'Florida's Natural Peach Mango 59 oz' (a juice whose name never says juice) to mangoes, and a strawberry-raspberry fruit roll to raspberries once sugar let it go, because a raw-ingredient commodity includes its bare word and first-match-wins hands the product to whichever ingredient sits earlier in the file. Per-product excludes had been closing these one at a time (apples fences rice crisps, peaches fences florida's natural, strawberries fences fruit rolls, jalapenos fences hummus) and each fence only moved the product to the NEXT ingredient word in its name, which is exactly how all four surfaced as CARRIED re-routes. The class names the shape instead: two flavour words side by side, optionally joined by and, & or +, never by or (an either-or ad line is two products at one price, not a flavour). It reaches every Fruit and Vegetables commodity through the first apply block and, by id here, the single-ingredient spices and the three plain sugars, whose own products never carry a pair; blends that legitimately do (garlic-herb-seasoning, lemon-pepper-seasoning, creamy-cilantro-lime-dressing, hummus, juices, fruit-cups) are outside both scopes on purpose. 'honey' and 'tangerine' are deliberately NOT flavour words: 'Honey Mangoes' (Ataulfo) and 'Honey Tangerines' are real produce. A lookahead keeps 'orange habanero', 'orange bell' and 'orange peppers' out (a colour, not a flavour). Measured over the 37,368 names of main's match-baseline.json at rules_hash 5a5d0fc274df, with the commodity fences shipped beside it (sugar, peanut-butter, mangoes, queso, honey, frozen-waffles): 1,044 names match an added pattern and 60 change route, every one a flavoured, mixed or prepared product leaving a raw commodity; on comparison-2026-09-23 (built 2026-09-26 08:06) 0 of 2,808 store cells hold a moved name. Routing fixtures: test-match-lib.ps1 F1-F6."
     }
   ],
   "exempt": {
@@ -404,7 +423,8 @@
     "soup_carrier": "",
     "sushi_carrier": "",
     "condiment_carrier": "^(?:caesar-salad-kit|lemongrass-paste)$",
-    "canned_carrier": ""
+    "canned_carrier": "",
+    "flavour_pair_carrier": ""
   },
   "universal_for_unknown": [
     "babyfood",

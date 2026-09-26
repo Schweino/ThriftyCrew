@@ -2893,7 +2893,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -3156,7 +3157,8 @@
                         "fruit\\s+(?:strips?|rolls?)",
                         "\\bsnaps\\b",
                         "finishing\\s+sugar",
-                        "\\bbites\\b"
+                        "\\bbites\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -3397,7 +3399,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -3631,7 +3634,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -3861,7 +3865,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -4096,7 +4101,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -4345,7 +4351,8 @@
                         "fried\\s+onions",
                         "\\bminced\\b",
                         "\\bhummus\\b",
-                        "onion\\s+salt"
+                        "onion\\s+salt",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -4588,7 +4595,8 @@
                         "\\bclusters\\b",
                         "\\bblossoms\\b",
                         "\\bpuree\\b",
-                        "chocolate\\s+apples"
+                        "chocolate\\s+apples",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -4830,7 +4838,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -5081,7 +5090,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -5319,7 +5329,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -5568,7 +5579,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "florida\u0027?s\\s+natural"
+                        "florida\u0027?s\\s+natural",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -5824,7 +5836,8 @@
                         "\\bpumpkins?\\b",
                         "\\bskeletons?\\b",
                         "\\bprotein\\s+(?:shake|powder)\\b",
-                        "\\bflapjacks?\\b"
+                        "\\bflapjacks?\\b",
+                        "\\b(?:energy|protein)\\s+bites?\\b"
                     ]
     },
     {
@@ -7939,7 +7952,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\bseasoning\\b"
+                        "\\bseasoning\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -8186,7 +8200,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -8438,7 +8453,8 @@
                         "\\bstews?\\b",
                         "\\bcans?\\b",
                         "true\\s+lime",
-                        "\\bcrystallized\\b"
+                        "\\bcrystallized\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -8683,7 +8699,8 @@
                         "\\bfeta\\b",
                         "\\bcheese\\b",
                         "\\bhummus\\b",
-                        "\\bcurry\\b"
+                        "\\bcurry\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -8914,7 +8931,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -9149,7 +9167,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\branch\\b"
+                        "\\branch\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -9394,7 +9413,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -9623,7 +9643,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -9851,7 +9872,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -10079,7 +10101,8 @@
                         "\\bstews?\\b",
                         "\\bcans?\\b",
                         "\\bsticks?\\b",
-                        "\\branch\\b"
+                        "\\branch\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -10311,7 +10334,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\branch\\b"
+                        "\\branch\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -10565,7 +10589,8 @@
                         "\\bcans?\\b",
                         "\\bpork\\b",
                         "\\btenderloin\\b",
-                        "tomato\\s+basil"
+                        "tomato\\s+basil",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -10799,7 +10824,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -11043,7 +11069,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -11612,7 +11639,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\bpuree\\b"
+                        "\\bpuree\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -13071,7 +13099,11 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
+                        "\\bno\\s+added\\s+sugars?\\b",
+                        "\\b(?:finishing|sanding|decorating)\\s+sugars?\\b",
+                        "\\bcinnamon\\s+sugar\\b"
                     ]
     },
     {
@@ -13328,7 +13360,8 @@
                         "\\bbel\\s+vita\\b",
                         "\\bcascade\\b",
                         "\\bsplenda\\b",
-                        "sugar\\s+blend"
+                        "sugar\\s+blend",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -14086,7 +14119,8 @@
                         "smoked\\s+fish",
                         "\\bsalmon\\b",
                         "\\brub\\b",
-                        "\\bhoney\\s+crisp\\b"
+                        "\\bhoney\\s+crisp\\b",
+                        "\\bhoney\\s+stinger\\b"
                     ]
     },
     {
@@ -15392,7 +15426,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
                         "\\bwhole\\s+black\\s+peppercorns?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -15519,7 +15554,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -17269,7 +17305,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -17530,7 +17567,9 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
+                        "\\bno\\s+(?:added\\s+)?sugars?\\b"
                     ]
     },
     {
@@ -17756,7 +17795,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -17981,7 +18021,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -18193,7 +18234,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -18438,7 +18480,8 @@
                         "\\bstews?\\b",
                         "\\bcans?\\b",
                         "fruit\\s+bowls?",
-                        "\\bgel\\b"
+                        "\\bgel\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -18675,7 +18718,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -18904,7 +18948,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -19172,7 +19217,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\bfrosting"
+                        "\\bfrosting",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -19397,7 +19443,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -19624,7 +19671,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -19859,7 +19907,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -20084,7 +20133,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -20314,7 +20364,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -20544,7 +20595,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -20768,7 +20820,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -20994,7 +21047,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -21218,7 +21272,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -21441,7 +21496,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -21683,7 +21739,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bhummus\\b",
-                        "\\bflakes?\\b"
+                        "\\bflakes?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -21913,7 +21970,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -22153,7 +22211,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -22376,7 +22435,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -22606,7 +22666,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -22838,7 +22899,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -26844,7 +26906,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -29228,7 +29291,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -32979,7 +33043,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bcotija\\b",
                         "\\bblue\\s+bunny\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bvariety\\s+salsas?\\b"
                     ]
     },
     {
@@ -38408,7 +38473,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\bhoney\\s+stinger\\b"
                     ]
     },
     {
@@ -41477,7 +41543,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -41593,7 +41660,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -41825,7 +41893,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -41945,7 +42014,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\bfresh\\s+parsley\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42111,7 +42181,8 @@
                         "\\bbiscuits?\\b",
                         "\\bcascade\\b",
                         "\\bclusters\\b",
-                        "\\bstraws\\b"
+                        "\\bstraws\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42229,7 +42300,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42347,7 +42419,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42465,7 +42538,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42583,7 +42657,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -42697,7 +42772,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -43037,7 +43113,8 @@
                         "\\bblue\\s+bunny\\b",
                         "\\btomatoes?\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -51495,7 +51572,8 @@
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -52496,7 +52574,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -52611,7 +52690,8 @@
                         "\\bvinaigrette\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -52723,7 +52803,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -52837,7 +52918,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -52943,7 +53025,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53054,7 +53137,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53164,7 +53248,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53269,7 +53354,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53392,7 +53478,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53498,7 +53585,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53612,7 +53700,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -53725,7 +53814,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -55010,7 +55100,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -55235,7 +55326,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -55466,7 +55558,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -55696,7 +55789,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -56795,7 +56889,8 @@
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
                         "\\bcans?\\b",
-                        "\\bcurry\\b"
+                        "\\bcurry\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -57320,7 +57415,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -57798,7 +57894,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -58032,7 +58129,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -59030,7 +59128,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -59265,7 +59364,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "pint_oz":  10
     },
@@ -60440,7 +60540,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -60677,7 +60778,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -60919,7 +61021,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -61154,7 +61257,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -61398,7 +61502,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -61627,7 +61732,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -61882,7 +61988,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -62111,7 +62218,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -62342,7 +62450,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -62565,7 +62674,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -62789,7 +62899,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -63022,7 +63133,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -63249,7 +63361,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -63476,7 +63589,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -63701,7 +63815,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -63950,7 +64065,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -64189,7 +64305,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -64414,7 +64531,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -64637,7 +64755,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -64860,7 +64979,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -65082,7 +65202,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -65312,7 +65433,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -65537,7 +65659,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -65762,7 +65885,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -65984,7 +66108,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -66210,7 +66335,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -66436,7 +66562,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -66659,7 +66786,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -66883,7 +67011,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -67114,7 +67243,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -67339,7 +67469,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -67569,7 +67700,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -67801,7 +67933,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -68023,7 +68156,8 @@
                         "gatorade(?!.*\\bprotein\\s+bars?\\b)",
                         "\\bprotein\\s+bars?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -68263,7 +68397,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -68498,7 +68633,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -68726,7 +68862,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -68950,7 +69087,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -69178,7 +69316,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -69399,7 +69538,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -69629,7 +69769,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -69852,7 +69993,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -70079,7 +70221,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -70310,7 +70453,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -70538,7 +70682,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -70749,7 +70894,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -70979,7 +71125,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -71210,7 +71357,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -71441,7 +71589,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -71667,7 +71816,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -72955,7 +73105,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -76362,7 +76513,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -77185,7 +77337,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -77951,7 +78104,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -78061,7 +78215,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -78171,7 +78326,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -78563,7 +78719,8 @@
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
                         "\\bstews?\\b",
-                        "\\bcans?\\b"
+                        "\\bcans?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -78782,7 +78939,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -79167,7 +79325,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -79279,7 +79438,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -79729,7 +79889,8 @@
                         "\\bfor\\s+(?:\\w+\\s+){0,3}(?\u003c!hot\\s)(?\u003c!corn\\s)(?\u003c!chili\\s)(?:dogs?|cats?|puppies|kittens)\\b",
                         "\\bblue\\s+bunny\\b",
                         "\\bsausages?\\b",
-                        "\\bcascade\\b"
+                        "\\bcascade\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {
@@ -79956,7 +80117,8 @@
                         "\\bdips?\\b",
                         "\\bdressings?\\b",
                         "\\bspreads?\\b",
-                        "\\bstews?\\b"
+                        "\\bstews?\\b",
+                        "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[&+]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b"
                     ]
     },
     {

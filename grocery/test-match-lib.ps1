@@ -263,6 +263,23 @@ if (-not $isShard) {
   _RT 'MUST FIRE  D3 the Baker''s coconut aminos "Seasoning Sauce" is no longer hidden by the global sauce token' 'Simple Truth Organic Coconut Aminos All-Purpose Seasoning Sauce' 'coconut-aminos'
   _RT 'MUST FIRE  D3 a coconut aminos "Soy Sauce Replacement" leaves the soy-sauce cell' 'BetterBody Foods Organic Coconut Aminos Soy Sauce Replacement, 16.9 fl oz' 'coconut-aminos'
   _RT 'MUST FIRE  D4 the Sam''s individually wrapped sponges are no longer hidden by the global wrapped token' 'Scotch-Brite Heavy Duty Scrub Sponges, Individually Wrapped 24 ct.' 'sponges'
+  # FLAVOUR-PAIR CARRIER (2026-09-26, follow-on to queue 2026-09-26-f655c7). The founding names are the CARRIED
+  # re-routes that audit-match-soundness's first carried pass listed that day, verbatim: a prepared product named by
+  # its flavour pair reached the raw-ingredient commodity for whichever ingredient sat earliest in the file, and each
+  # per-product fence only moved it to the next ingredient word in its name. Never regenerate these from the board.
+  _RT 'MUST FIRE  F1 an apple-cinnamon rice crisp is not ground cinnamon (flavour_pair_carrier)' 'Quaker Apple Cinnamon Rice Crisps' '<none>'
+  _RT 'MUST FIRE  F2 a jalapeno-cilantro hummus is hummus, not fresh cilantro' 'Fresh Cravings Jalapeno Cilantro Hummus,10oz. Plastic Tub, Gluten-Free, Dairy-Free, 2 Tbsp (32g), Contains: Sesame' 'hummus'
+  _RT 'MUST FIRE  F3 a peach-mango juice whose name never says juice is not mangoes' 'Florida''s Natural Peach Mango 59 oz' '<none>'
+  _RT 'MUST FIRE  F4 a strawberry-raspberry fruit roll that says No Added Sugar is neither sugar nor raspberries' 'BEAR Fruit Rolls Variety Pack Strawberry Raspberry 8.4oz, 12 Count, No Added Sugar, Non-GMO, Made with Real Fruit' '<none>'
+  _RT 'MUST FIRE  F5 a strawberry finishing sugar is not granulated sugar' 'McCormick Kosher Strawberry Finishing Sugar, 3.67 oz Bottle' '<none>'
+  _RT 'MUST FIRE  F6 strawberry peanut butter protein bites are not peanut butter' 'RXBAR Protein Energy Bites, Strawberry Peanut Butter, 14 ct.' '<none>'
+  # CLEAN TWINS: the real single-ingredient products the class and fences were most likely to break.
+  _RT 'CLEAN TWIN  F1 a real ground cinnamon still routes to ground-cinnamon' 'McCormick Culinary Kosher Ground Cinnamon, 18.0 oz Bottle' 'ground-cinnamon'
+  _RT 'CLEAN TWIN  F2 a real cilantro bunch still routes to cilantro' 'Cilantro Each' 'cilantro'
+  _RT 'CLEAN TWIN  F3 Honey Mangos (Ataulfo) are real produce: honey is deliberately not a flavour word' 'Honey Mangos' 'mangoes'
+  _RT 'CLEAN TWIN  F3 an orange habanero is a pepper colour, not a flavour pair' 'Fresh Orange Habanero Peppers, 4 oz' 'habanero-peppers'
+  _RT 'CLEAN TWIN  F5 plain cane sugar still routes to sugar' 'Zulka Pure Cane Sugar, 4 lb, Contains No Allergens' 'sugar'
+  _RT 'CLEAN TWIN  F6 a plain peanut butter still routes to peanut-butter' 'Jif Extra Crunchy Peanut Butter 16 Oz' 'peanut-butter'
   # teriyaki-sauce sits earlier in the file and wins this name either way, so the route alone cannot see the
   # coconut-aminos fence: the detail scan's contested set can, because it lists every commodity that also wanted it.
   $script:rtRan++
@@ -366,7 +383,7 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
   _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
   _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
-  $rtWant = 35   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19
+  $rtWant = 47   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
