@@ -193,17 +193,39 @@
         "band floors and ceilings",
         "the paper goods' unit (per roll vs per sheet is Q-roll-goods-basis)"
       ],
-      "leaves_open": "Walmart paper-towels and toilet-paper stay without a cell (289 rows refused, now for the right reason) until Brad rules Q-roll-goods-basis; a wrong price under both bars that is NOT a count conflict still has no detector (4b973e R2 residual)",
+      "leaves_open": "Walmart paper-towels and toilet-paper stay without a cell until Brad rules Q-roll-goods-basis (289 rows per the plan; the ones naming 'N Sheets per Roll' are now refused as COUNT-CONFLICT, the rest still by the band); a sub-unit count with no 'per <container>' phrase (bread '20 Count') is not detected; a wrong price under both bars that is not a count conflict still has no detector (4b973e R2 residual)",
       "leaves_open_occurrences": 289,
       "leaves_open_followup": "Q-roll-goods-basis",
-      "resolution_note": "A size-field count that disagrees with the name's own count is refused as COUNT-CONFLICT instead of pricing a cell. Two live Aldi cells fell to their next row (tea bags priced as 24 instead of 100, tissues as 160 instead of 144).",
+      "resolution_note": "A size-field count that disagrees with the name's own count, or is a sheet count per roll, is now refused as COUNT-CONFLICT instead of pricing a cell. Two live Aldi cells fall to their next row (tea bags were priced as 24 instead of 100, tissues as 160 instead of 144); facial tissues' no-membership crown moves from Aldi to Fareway.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 45,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "Two narrowings of the exact_change, both from the implementation scan. (1) The sub-unit arm fires only on a count stated PER a container ('123 Sheets per Roll', 'N slices/loaf'): the plan's bare form refused 'Suavitel Complete Dryer Sheets ... 70 Sheets' sized 70 ct, where the sheet IS the unit (now a CLEAN TWIN). (2) \"'N count' on a loaf\" is not refused: nothing in such a row says the count is slices, and those bread rows already sit under the floor. The 12 non-cell rows it refuses are all name/size disagreements: 2 Aldi protein bars (6 CT / 4 CT sized 5 pk), 6 Walmart facial-tissue rows whose size differs from the name's own total (e.g. 6 Pack (720 Total Tissues) sized 718 ct), Walmart Venus razor 3 count sized 4 ct, Family Fare Energizer AA 8 Ea sized 12 count, Family Fare Ziploc quart 38 Ea sized 40 ct, and the Kleenex travel row above. None holds a cell.",
+      "shipped_commit": "see git log on triage/r2-2026-09-25 for 'Triage 8d2ad5' (unlanded; cite by blob after landing)",
+      "premise_check": "Re-read comparison-2026-09-23 (built 08:14:10, unchanged): Aldi tea-bags cell is 'Benner Black Tea Bags 100 CT' size 24 ct at 0.0621 and Aldi facial-tissues is 'Willow Facial Tissue 144 CT' size 160 ct at 0.0087, as the plan says. Ran Get-EachCountConflict over every priced each-unit row of candidates-2026-09-23 (8,090 each rows, 3,843 priced): 14 refused, and of the board's store cells exactly the two named (the scan's third per-store minimum, Walmart '(32 pack) Kleenex On-The-Go ... 8 Pack (80 Total Tissues)' at 0.0039, is not the board's Walmart cell, which is Great Value 480 ct at 0.0137 and is not refused).",
+      "cell_effects_observed": [
+        {
+          "commodity": "tea-bags",
+          "store": "Aldi",
+          "before": 0.0621,
+          "after_expected": 0.0645,
+          "note": "falls to 'Benner Chai Black Tea Bags' on candidates-2026-09-23; crown stays Walmart 0.0204"
+        },
+        {
+          "commodity": "facial-tissues",
+          "store": "Aldi",
+          "before": 0.0087,
+          "after_expected": 0.0149,
+          "note": "falls to 'Willow Ultra Soft Facial Tissue 1pk 1 Each' on candidates-2026-09-23 (plan guessed the With Lotion 65 ct at 0.0192); crown stays Sam's 0.008, but the no-membership crown moves from Aldi 0.0087 to Fareway 0.012 (Puffs Plus Lotion 496 ct)"
+        }
+      ],
+      "proof_run": "compare-deals.ps1 -SelfTest exit 0, 'SELF-TEST PASS', 12 count-conflict cases (4 MUST FIRE incl. frozen Benner through the real Get-UnitPrice, Willow, Bounty 246 ct read COUNT-CONFLICT with a refusing band, 100 CT sized 201 ct step past the multiple bar; 7 CLEAN TWIN incl. Marathon 6 pk 3000 ct, Q-tips 1750 ct 3 pk, Kroger 160 ct, 100 CT sized 200 ct at the bar, Suavitel 70 Sheets, shrimp 31-40 ct per lb; 1 MUST NOT FIRE). test-guards.ps1 refuses a live tree (exit 3, points to run-test-guards-weekly.ps1); no guard was touched, so full_suite: deferred-to-land.",
+      "full_suite": "deferred-to-land",
+      "live_check": "tea-bags Aldi: not 0.0621 (expected 0.0645 Benner Chai, or absent); facial-tissues Aldi: not 0.0087 (expected 0.0149)",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 34
     },
     {
       "queue_id": "2026-09-22-0c812e",

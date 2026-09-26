@@ -761,6 +761,54 @@ function Get-PackCount($text) {
   if ($m.Success) { $n = [int]$m.Groups[1].Value; if ($n -gt 1) { return $n } }
   return $null
 }
+# A SIZE-FIELD COUNT THAT DISAGREES WITH THE NAME'S OWN COUNT IS NOT A BASIS (2026-09-25, queue 2026-09-22-8d2ad5,
+# plan-2026-09-25-15). The each branch of Get-UnitPrice takes its pack count from the size field before the name, and
+# nothing checked the two against each other. Founding rows, comparison-2026-09-23 (both live cells, as_of 2026-08-05):
+#     Aldi  'Benner Black Tea Bags 100 CT'  $1.49  size '24 ct'   -> per-24-pack 0.0621 (the name's 100: 0.0149)
+#     Aldi  'Willow Facial Tissue 144 CT'          size '160 ct'  -> 0.0087 (the name's 144: 0.0097)
+# and the sub-unit shape that keeps Walmart off paper towels (133 of 136 rows):
+#     Walmart 'Bounty Paper Towels Select-A-Size White, 2 Triple Rolls, 123 Sheets per Roll' $6.97 size '246 ct'
+# where 246 is 2 x 123 SHEETS, priced as 246 towels. RESOLVED BY ARITHMETIC, NEVER BY A BAR (no hard-coded bands):
+#   1. the name states pack counts {N...} and the basis count M (read from the size field) is none of them, and for
+#      every N neither of M and N divides the other. 'Marathon ... 6 pk., 3000 ct.' with M=3000 names M itself, and a
+#      name of 100 against a size of 200 is a count-times-pack total, so both stay legal;
+#   2. the name or size states a SUB-UNIT count S (sheets or slices PER a container) and M is S or a multiple of it:
+#      the basis is the sub-unit, not the thing the shopper buys.
+# A count range ('31-40 ct', a shrimp grade; '12-18 ct') is not a pack count and is never read. An either/or name
+# (Test-NameOffersTwoSizes) is not a statement about one product and is never read. Returns the reason, or $null.
+# NARROWER THAN THE PLAN'S TEXT, on purpose: "'N count' on a loaf" (bread slices written '20 Count') has no word in
+# the row that says the count is slices, so it is not refused here; those rows sit under the floor already.
+function Get-NameCountSet([string]$text) {
+  $set = New-Object 'System.Collections.Generic.List[int]'
+  if (-not $text) { return ,$set }
+  $t = $text.ToLower()
+  # an optional single adjective before rolls/bags ('2 Triple Rolls', '12 Mega Rolls'); never before ct/pk/ea
+  $rx = '(?<![\d.$])(?<!\d\s*-\s*)(?<!\d\s*to\s*)(\d+)\s*[- ]?\s*(?:(?:pack|pk|count|ct|each|ea)\b|(?:[a-z]+\s+)?(?:rolls?|bags?)\b)'
+  foreach ($m in [regex]::Matches($t, $rx)) {
+    $after = $t.Substring($m.Index + $m.Length)
+    if ($after -match '^\s*-\s*\d') { continue }   # '12-18 ct' read from its left end
+    $n = [int]$m.Groups[1].Value
+    if ($n -gt 1 -and -not $set.Contains($n)) { $set.Add($n) }
+  }
+  return ,$set
+}
+function Get-EachCountConflict([string]$size, [string]$name, $pieces) {
+  $m = Get-PackCount $size
+  if (-not $m) { return $null }
+  if ($null -eq $pieces -or [double]$pieces -ne [double]$m) { return $null }   # the basis did not come from the size count
+  if (Test-NameOffersTwoSizes $name) { return $null }
+  # a sub-unit is counted PER a container ('123 Sheets per Roll', '20 slices/loaf'); a bare '70 Sheets' is not one,
+  # because on dryer-sheets the sheet IS the unit (Suavitel ... 70 Sheets, size 70 ct, candidates-2026-09-23)
+  $sub = [regex]::Match(("$name $size").ToLower(), '(?<![\d.$])(\d+)\s*(?:sheets?|slices?)\s*(?:per\s+|/\s*)[a-z]')
+  if ($sub.Success) {
+    $s = [int]$sub.Groups[1].Value
+    if ($s -gt 1 -and $m -ge $s -and ($m % $s) -eq 0) { return "size count $m is a sub-unit count ($s $($sub.Value -replace '^\d+\s*',''))" }
+  }
+  $nameSet = Get-NameCountSet $name
+  if ($nameSet.Count -eq 0 -or $nameSet.Contains([int]$m)) { return $null }
+  foreach ($n in $nameSet) { if ((($m % $n) -eq 0) -or (($n % $m) -eq 0)) { return $null } }
+  return ("name states " + (($nameSet | ForEach-Object { [string]$_ }) -join '/') + " ct, size field states $m ct")
+}
 function Get-UnitPrice($deal, $cat) {
   $pr = Get-ItemPrice $deal.price_text $deal.name $deal.regular
   if (-not $pr) { return $null }

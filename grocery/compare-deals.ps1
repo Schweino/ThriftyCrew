@@ -283,6 +283,10 @@ function Test-PieceSize($id, $size, $name, $pieces) {
 function Get-FirstRefusal($id, $unit, $up, $size, $name, $pieces, $store = '', $KwBlocks = $null) {
   $r = ''
   if (-not (Test-PieceSize $id $size $name $pieces)) { $r = 'piece' }
+  # COUNT-CONFLICT is a BASIS refusal (queue 2026-09-22-8d2ad5): the size field's count disagrees with the name's own
+  # count, or is a sub-unit (sheets, slices). It runs ahead of the band, because a wrong basis is what the band would
+  # otherwise be CALLED on, and inside the band nothing read it at all (Get-EachCountConflict, pricing-math-lib).
+  elseif ($unit -eq 'each' -and (Get-EachCountConflict ([string]$size) ([string]$name) $pieces)) { $r = 'count-conflict' }
   elseif (-not (Test-Band $id $up $store)) { $r = 'band' }
   elseif (-not (Test-Floor $unit $up)) { $r = 'floor' }
   elseif (-not (Test-PackSize $id $size $name)) { $r = 'pack-cap' }
@@ -1030,6 +1034,40 @@ if ($SelfTest) {
   $ordTony = Get-FirstRefusal '_selftest-pizza' 'each' 2.96 '18.56 oz' 'Tony''s Pepperoni Pizzeria Style Crust Frozen Pizza, 18.56 oz' 1
   if ($ordTony -eq '') { Write-Output 'ok    CLEAN TWIN  refusal order: the Walmart Tony''s 18.56 oz at $2.96 (the live cell) is refused by nothing' } else { Write-Output ('FAIL  refusal order: the live Tony''s cell read [' + $ordTony + '] - a real pizza is refused'); $script:fail++ }
   $BANDS.Remove('_selftest-pizza')
+  # --- A SIZE COUNT THAT DISAGREES WITH THE NAME IS REFUSED AS COUNT-CONFLICT (2026-09-25, queue 2026-09-22-8d2ad5) ---
+  # Frozen verbatim from comparison-2026-09-23 / candidates-2026-09-23. The Benner row goes through the REAL
+  # Get-UnitPrice first, so the case proves the engine's own basis (per-24-pack from the size field) is what is refused.
+  $ccBen = Get-UnitPrice ([pscustomobject]@{ name='Benner Black Tea Bags 100 CT'; price_text='$1.49'; size_text='24 ct'; regular=$null }) ([pscustomobject]@{ unit='each' })
+  $ccBenGot = if ($ccBen) { Get-FirstRefusal '_selftest-cc' 'each' ([math]::Round($ccBen.unit_price,4)) '24 ct' 'Benner Black Tea Bags 100 CT' $ccBen.pieces 'Aldi' } else { '<unpriced>' }
+  if ($ccBenGot -eq 'count-conflict') { Write-Output ('ok    MUST FIRE  count-conflict: Aldi Benner Black Tea Bags 100 CT sized 24 ct (' + $ccBen.basis + ') is refused, not priced per 24') } else { Write-Output ('FAIL  count-conflict: Benner 100 CT sized 24 ct read [' + $ccBenGot + '] - a size count the name contradicts is a basis again'); $script:fail++ }
+  $ccWil = Get-FirstRefusal '_selftest-cc' 'each' 0.0087 '160 ct' 'Willow Facial Tissue 144 CT' 160 'Aldi'
+  if ($ccWil -eq 'count-conflict') { Write-Output 'ok    MUST FIRE  count-conflict: Aldi Willow Facial Tissue 144 CT sized 160 ct is refused' } else { Write-Output ('FAIL  count-conflict: Willow 144 CT sized 160 ct read [' + $ccWil + ']'); $script:fail++ }
+  # The sub-unit shape, and it must be called COUNT-CONFLICT even with a band that would also refuse it.
+  $BANDS['_selftest-cc'] = [pscustomobject]@{ min = 0.5; max = 3 }
+  $ccBou = Get-FirstRefusal '_selftest-cc' 'each' 0.0283 '246 ct' 'Bounty Paper Towels Select-A-Size White, 2 Triple Rolls, 123 Sheets per Roll' 246 'Walmart'
+  if ($ccBou -eq 'count-conflict') { Write-Output 'ok    MUST FIRE  count-conflict: Walmart Bounty 2 Triple Rolls, 123 Sheets per Roll sized 246 ct (a sheet count) is COUNT-CONFLICT, not OUT-OF-BAND' } else { Write-Output ('FAIL  count-conflict: Bounty 246 ct of sheets read [' + $ccBou + '] instead of count-conflict'); $script:fail++ }
+  $BANDS.Remove('_selftest-cc')
+  # CLEAN TWINs: count-times-pack totals, a name with no count, a count that IS a multiple (at the bar: 200 = 2 x 100
+  # exactly; a step past it, 201, fires), and a shrimp grade on a per-lb commodity all still price.
+  $ccTwins = @(
+    @('Marathon Embossed 1-Ply White Beverage Napkins, 6 pk., 3000 ct.', '3000 ct', 3000, 'each'),
+    @('Q-tips Cotton Swabs, 1750 ct., 3 pk.', '1750 ct', 1750, 'each'),
+    @('Kroger Facial Tissue', '160 ct', 160, 'each'),
+    @('Selftest Tea Bags 100 CT', '200 ct', 200, 'each'),
+    @('Scott 1000 Toilet Paper, 1000 Sheets per Roll', '8 ct', 8, 'each'),
+    @('Suavitel Complete Dryer Sheets, Fabric Conditioner, Field Flowers, 70 Sheets', '70 ct', 70, 'each'),
+    @('Member''s Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct', '3 lb', 1, 'lb')
+  )
+  foreach ($tw in $ccTwins) {
+    $twUp = if ($tw[3] -eq 'lb') { 7.99 } else { 0.05 }   # a real per-lb price clears the lb floor
+    $twGot = Get-FirstRefusal '_selftest-cc' $tw[3] $twUp $tw[1] $tw[0] $tw[2] 'Walmart'
+    if ($twGot -eq '') { Write-Output ('ok    CLEAN TWIN  count-conflict: ' + $tw[0] + ' sized ' + $tw[1] + ' still prices (refused by nothing)') } else { Write-Output ('FAIL  count-conflict: ' + $tw[0] + ' sized ' + $tw[1] + ' read [' + $twGot + '] - a legal count is refused'); $script:fail++ }
+  }
+  $ccPast = Get-FirstRefusal '_selftest-cc' 'each' 0.05 '201 ct' 'Selftest Tea Bags 100 CT' 201 'Walmart'
+  if ($ccPast -eq 'count-conflict') { Write-Output 'ok    MUST FIRE  count-conflict: a step past the multiple bar (100 CT sized 201 ct) is refused' } else { Write-Output ('FAIL  count-conflict: 100 CT sized 201 ct read [' + $ccPast + ']'); $script:fail++ }
+  # MUST NOT FIRE: the basis came from somewhere other than the size count (pieces differ), so the size is not judged.
+  $ccOther = Get-FirstRefusal '_selftest-cc' 'each' 0.05 '24 ct' 'Benner Black Tea Bags 100 CT' 100 'Aldi'
+  if ($ccOther -eq '') { Write-Output 'ok    MUST NOT FIRE  count-conflict: a basis not taken from the size count is not judged against it' } else { Write-Output ('FAIL  count-conflict: pieces 100 read [' + $ccOther + ']'); $script:fail++ }
   # --- IDENTITY BEFORE SANITY (2026-09-18, queue 2026-09-18-b1d8e3) ------------------------------------------
   # Frozen verbatim from flagged-2026-09-17.json: Hy-Vee's La Banderita Yellow Corn Tortilla 30 Ct at 0.0997
   # against tortillas' real 0.1-1.2 band, a row the ruling tortillas|HyVee|la-banderita-yellow-corn-tortilla-30-ct
@@ -3044,6 +3082,12 @@ foreach ($pp in $prePass) {
       # high has to read as findings, not as a quietly emptier board. Tested FIRST since 2026-09-18 (f90ba6).
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("min_piece_oz>=$($MINPIECE[[string]$c.id])"); price_text=$d.price_text; size_text=$d.size_text })
       $uprice = $null; $basis = 'WRONG-PIECE-FORM'   # drop from ranking; board still ships via runner-up
+    }
+    elseif ($refusal -eq 'count-conflict') {
+      # The size field's count is not the name's count (or is a sheet/slice count), so the basis is wrong. Flagged,
+      # and the store falls through to its next row. No band and no threshold decide it (queue 2026-09-22-8d2ad5).
+      $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=('count-conflict: ' + (Get-EachCountConflict ([string]$d.size_text) ([string]$d.name) $up.pieces)); price_text=$d.price_text; size_text=$d.size_text })
+      $uprice = $null; $basis = 'COUNT-CONFLICT'
     }
     elseif ($refusal -eq 'band') {
       $bn = $BANDS[$c.id]
