@@ -189,7 +189,7 @@
       "actual_tool_calls": 61,
       "live_check": "mandarin-oranges Family Fare 0.2327 (new); tahini Fareway 0.5619 unchanged; no Hy-Vee mandarin-oranges cell (rebuilt board of plan-15 step 4)",
       "full_suite": "deferred-to-land",
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-23-3ba362",
@@ -304,7 +304,7 @@
       "actual_tool_calls": 42,
       "full_suite": "deferred-to-land",
       "live_check": "laundry-detergent Family Fare 0.0999 (was 0.1014)",
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-18-a0c785",
@@ -341,13 +341,13 @@
         ]
       },
       "rollback": "revert the category-excludes.json hunk",
-      "leaves_open": "nothing",
+      "leaves_open": "1 residual: the category-excludes.json beverage block from 5d50b9b69 is unbaked, so prepush-test-auditors refuses this push (bake STALE, bake-currency; test-auditors 2 failed of 792). Baking it as written drops 17 right products from 7 commodities and moves 1 cheese into coffee. Needs the beverage class narrowed for these buckets (margarita, coffee, tea, beverage patterns) or the block withdrawn from this branch.",
       "leaves_open_occurrences": 0,
-      "resolution_note": "The five non-drink display buckets (Dairy & Eggs, Canned & Soup, Sauces & Condiments, Baking & Spices, Coffee Oils & Spreads) now carry the beverage class through their own apply block, and the id exemption matches whole id segments, so a drink on a sauce, oil or vinegar is a hard fail and steak is no longer exempt as a tea. audit-food-category read 0 findings over 2628 priced cells before and after; the new must-fire unit u145 goes red against the old library.",
+      "resolution_note": "Library block committed, bake refused on measurement: 17 right-product losses and 1 wrong move over 63,689 corpus names (0 board cells on comparison-2026-09-23). Not live.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 18,
-      "status": "deviated",
+      "status": "needs-more-time",
       "premise_verified": true,
       "deviation": "exact_change said 'add beverage to the apply blocks for' the five buckets, but those five shared ONE block with Pasta, Frozen and Snacks & Drinks (regex ^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks)), and Snacks & Drinks is the drinks bucket. So beverage went on a NEW block ^(Dairy|Canned|Sauces|Baking|Coffee) inserted above the shared one (first match wins), carrying the shared block's eight classes plus beverage; Pasta, Frozen and Snacks & Drinks are unchanged. Intent and reach are exactly the plan's five buckets. apply-category-excludes.ps1 (the bake into commodities.json) was NOT run: the item names only category-excludes.json, and baking would change routing that the plan never measured.",
       "shipped_commit": null,
@@ -357,7 +357,8 @@
       "close_disposition": "fixed",
       "actual_tool_calls": 17,
       "live_check": "energy-drinks Family Fare 0.0625 (was held 0.1353) and lotion Walmart 0.1244 (was held 0.2175) pass every guard (92e552 bare-oz fix)",
-      "republished": "pending-land"
+      "republished": "pending-rebuild",
+      "bake_measurement": "2026-09-26 landing repair: apply-category-excludes.ps1 on branch triage/r2-2026-09-25 reported +7214 patterns across 242 commodities, ALL 7214 from the beverage class (0 from the other eight, already baked). Routed over 63,689 distinct names from 569 grocery\\out files dated >= 2026-06-25 (the plan-2026-09-25-15.routing.json file set; sorted-list sha256 prefix 0e83304f7d0a57e9), matcher blind 0 in both arms: 43 names moved. Correct: 20 yogurt DRINKS leave yogurt, Spylt protein drink leaves peanut-butter, margarita salt leaves salt, grenadine leaves sugar, butter-pecan K-cups butter->coffee-pods, cardamom tea bags cardamom->tea-bags. RIGHT PRODUCTS LOST: Margarita's Amigos salsa x3 (\\bmargaritas?\\b), coffee cake mix x3, coffee frosting x1, half-and-half creamer singles x5 (\\bcoffee\\b), Soeos ground cinnamon x1 and cinnamon sticks x2 (beverage), Soeos whole cloves x1 (\\btea\\b), rock sugar x1. WRONG NEW OWNER: Espresso Cheddar Cheese shredded-cheese->coffee. None of the 43 names appears on comparison-2026-09-23 (built 2026-09-25 08:14), so 0 cells move on that board; compare-deals was NOT rebuilt. Per the stop rule the bake was NOT committed (commodities.json reverted)."
     },
     {
       "queue_id": "2026-09-21-4b973e",
@@ -427,7 +428,7 @@
       "premise_check": "Row verified: grocery/out/flag-verification.json (generated 2026-09-25 08:27) holds yellow-bell-pepper|Family Fare status wrong-price, claim '10 for $10.00 with purchase of 10' with NO deal_qty, reason 'size field 1 ea -> 1.9900', and comparison-2026-09-23 quarantine withholds the cell with no bad_deal_qty. The MECHANISM premise is false against origin/main: a2af45 (88c0b05dd) reads a quantity deal off the engine's row, and 17c0da (03e294dc5, on origin/main since 20:01, not yet in local main) copies the held cell's condition off the quarantine record so this exact entry is re-judged and closes as match (its own frozen fixture 'MUST FIRE founding 2026-09-25').",
       "close_disposition": "confirmed",
       "full_suite": "not-run (no code change)",
-      "republished": "pending-land",
+      "republished": "pending-rebuild",
       "batch_chain": "SUPERSEDED the stale-checkout rebuild recorded before (not landed). Step 4 (plan-15) covering plan-16 publish_batch 1, run ONCE on 2026-09-25 23:05-23:20 in a scratch worktree of triage/r2-2026-09-25 (seeded from main) via check-ad-cycles -Force -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (its own order): repair-multipack-sizes -Apply 0 repairs, stamp-ad-as-of, compare-deals (identity staple), update-history -Reconcile COMPLETE unreadable=0, name-drift/prune-bad-links (0 dropped)/name-drift, generate-board-overrides (0 corrections), guards 2 QUARANTINE-REQUIRED 1 cell -> apply-cell-quarantine (yellow-bell-pepper|Family Fare withheld) -> guards 4 \"GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.\", export-feed exit 0 twice (week 2026-09-23, parity PASSED). Then by hand: audit-match-soundness MOVED=0 DROPPED=0 (nothing to -Accept), audit-coverage-gaps 2 actionable (Walmart paper-towels, toilet-paper UNKNOWN-VERDICT; bar 6), build-deals-page 0 (all-3 rule 2976 chips, 0 bare). publish-deals-page NOT run (orchestrator publishes after landing). Cells vs the 08:14 main board: 2782 -> 2785 priced, exactly 9 cells moved, every one expected.",
       "board_effects_observed": "comparison-2026-09-23 rebuilt 22:05 vs the 08:06 board, 2782 -> 2783 priced cells, 4 cells differ: mandarin-oranges|Family Fare new 0.2327 (Dole Mandarin Oranges In Juice, as planned); toasted-sesame-seeds/tahini Fareway 0.5619 unchanged; no Hy-Vee mandarin cell; yellow-bell-pepper|Family Fare still WITHHELD (local code lacks 17c0da). NOT in the plan's estimate: laundry-detergent|Family Fare 0.1014 -> 0.0999 (Arm & Hammer Sensitive Skin Free & Clear 140 fl oz, admitted by 3ba362's liquid-laundry include); energy-drinks|Family Fare 0.1353 held -> 0.0625 (Venom 16 oz, 2 for $2.00 sale) and lotion|Walmart 0.2175 held -> 0.1244 (Queen Helene 32 oz $3.98, read 2026-09-25): both were held this morning by the unit-basis guard (volume among weights) and pass every guard on this rebuild.",
       "live_check": {

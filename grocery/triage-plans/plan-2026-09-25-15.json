@@ -139,7 +139,7 @@
       "rules_half_tool_calls": 33,
       "batch_chain": "Step 4 (plan-15) covering plan-16 publish_batch 1, run ONCE on 2026-09-25 23:05-23:20 in a scratch worktree of triage/r2-2026-09-25 (seeded from main) via check-ad-cycles -Force -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (its own order): repair-multipack-sizes -Apply 0 repairs, stamp-ad-as-of, compare-deals (identity staple), update-history -Reconcile COMPLETE unreadable=0, name-drift/prune-bad-links (0 dropped)/name-drift, generate-board-overrides (0 corrections), guards 2 QUARANTINE-REQUIRED 1 cell -> apply-cell-quarantine (yellow-bell-pepper|Family Fare withheld) -> guards 4 \"GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.\", export-feed exit 0 twice (week 2026-09-23, parity PASSED). Then by hand: audit-match-soundness MOVED=0 DROPPED=0 (nothing to -Accept), audit-coverage-gaps 2 actionable (Walmart paper-towels, toilet-paper UNKNOWN-VERDICT; bar 6), build-deals-page 0 (all-3 rule 2976 chips, 0 bare). publish-deals-page NOT run (orchestrator publishes after landing). Cells vs the 08:14 main board: 2782 -> 2785 priced, exactly 9 cells moved, every one expected.",
       "live_check": "frozen-pizza cheapest Sam's Club 2.6367 (no Hot Pockets 1.0817 cell); bar-soap Family Fare 0.9988; Dove multibuy candidate rows price 1.812 and 1.8653 per bar (per-6-pack multibuy, count from size+name), neither wins a cell",
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-22-8d2ad5",
@@ -241,7 +241,7 @@
       "live_check": "tea-bags Aldi 0.0645 (was 0.0621); facial-tissues Aldi 0.0149 (was 0.0087), cheapest Sam's 0.008 (membership), no-membership crown Fareway 0.012",
       "close_disposition": "confirmed",
       "actual_tool_calls": 34,
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-22-0c812e",
@@ -318,7 +318,7 @@
       "actual_tool_calls": 27,
       "full_suite": "deferred-to-land",
       "board_effects_observed": "storage-bags|Fareway 0.095 -> 0.124, not 0.1596 as estimated: the range fix priced Bright Essentials 25-42 ct at 0.1596 (verified in candidates-2026-09-23), so the cheapest Fareway row is now a different real sale product at 0.124. A new detail, not a new class.",
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-23-dd290b",
@@ -488,7 +488,7 @@
       "full_suite": "deferred-to-land",
       "rules_half_tool_calls": 33,
       "live_check": "lo-mein-noodles Family Fare 0.259 (new cell); blackened-seasoning Baker's 1.3523 (new cell); sweet-potato-glass-noodles has no cell",
-      "republished": "pending-land"
+      "republished": "pending-rebuild"
     },
     {
       "queue_id": "2026-09-25-f9c8ce",
