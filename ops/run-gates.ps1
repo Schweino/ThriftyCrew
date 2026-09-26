@@ -789,7 +789,7 @@ if ($cacheDir) {
 # keeps running on every push exactly as before. The interpreter is a RUNNER here: its own bytes join the key, so a
 # pass under one Python is never replayed under another, and an interpreter found only by name on PATH has no bytes
 # to hash, so it keys nothing at all.
-$pyReused = 0
+$pyReused = 0; $pyUnkeyed = 0
 $pyRunner = @()
 if ($pyExe -and [IO.Path]::IsPathRooted([string]$pyExe) -and [IO.File]::Exists([string]$pyExe)) { $pyRunner = @($runnerFiles) + @([string]$pyExe) }
 if ($cacheDir -and $pyRunner.Count) {
@@ -797,7 +797,7 @@ if ($cacheDir -and $pyRunner.Count) {
     $pyParts = ([string]$pySuiteKeys[$i]) -split '\|', 2
     $pyFull = Join-Path $repo $pyParts[0]
     $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner
-    if (-not $k.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$k.Why; continue }
+    if (-not $k.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$k.Why; $pyUnkeyed++; continue }
     $idx = $offPySuite + $i
     $gateKey[$idx] = $k.Key
     $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId (Get-TcGateCacheId -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -Key $k.Key)
@@ -815,7 +815,7 @@ $toRun = [Collections.Generic.List[object]]::new()
 $runIdx = [Collections.Generic.List[int]]::new()
 for ($i = 0; $i -lt $allJobs.Count; $i++) { if (-not $cacheHit[$i]) { [void]$toRun.Add($allJobs[$i]); [void]$runIdx.Add($i) } }
 Write-Output ("run-gates: {0} of {1} self-test(s) already passed over these exact inputs and were not run again; {2} could not be keyed and always run" -f $reusedCount, $selfJobs.Count, $unkeyable)
-Write-Output ("run-gates: {0} of {1} Python suite(s) already passed over their declared inputs and were not run again; the rest declare nothing and always run" -f $pyReused, $pySuiteJobs.Count)
+Write-Output ("run-gates: {0} of {1} Python suite(s) already passed over their declared inputs and were not run again; {2} declare nothing and always run, and the rest ran because an input changed or no pass is recorded yet" -f $pyReused, $pySuiteJobs.Count, $pyUnkeyed)
 # SAID OUT LOUD ON EVERY RUN, because what a green run did NOT cover is part of what the green means. A reader who
 # does not know six ratchets were deferred will read this pass as wider than it is.
 if ($dailyDeferred -gt 0) {
