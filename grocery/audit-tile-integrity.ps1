@@ -64,6 +64,33 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 . (Join-Path $root 'pu-lib.ps1')   # the SAME per-unit math the page publishes with
 
+# THE SIBLING TEST (2026-09-25, queue 2026-09-22-817976). The accuracy grade compares a link's PRICE with the tile, never
+# its NAME against the tile's own name, so a link to a sibling of the right brand (a grinder for ground pepper, meat sauce
+# for tomato-basil, cherry yogurt for plain) read ACCURACY OK and surfaced only as a PRICE-DRIFT. The words returned
+# here are the board name's content words the link's name does not carry (lower-cased, sizes, digits and filler dropped,
+# a trailing plural folded); any word missing names the tile a SIBLING. It is REPORTED, NOT BLOCKING: over the
+# comparison-2026-09-23 board it flagged 76 of 2,600 linked tiles, all 9 known siblings among them, but also about half
+# the 76 on an abbreviated or omitted word of what reads as the same product (Aldi's 'Freshire Farms Asparagus' linked
+# as 'Asparagus, Package'), so as a hard accuracy fault it would have quarantined dozens of honest cells and tripped the
+# 2% breaker. Its precision has to rise before it may block (the item's leaves_open).
+$script:TiSiblingFiller = @('and','with','the','of','for','in','a','an','or','oz','lb','lbs','ct','count','pack','pk','fl','gal','gallon','each','ea','bag','box','can','jar','bottle','size','ounce','ounces','pound','pounds','qt','pt','ml','kg','dozen','fz','floz')
+function Get-TiContentWords([string]$Name) {
+  $o = @{}
+  foreach ($t in ((([string]$Name).ToLower() -replace '[^a-z0-9]', ' ') -split '\s+')) {
+    if ($t.Length -lt 2 -or $t -match '\d' -or $script:TiSiblingFiller -contains $t) { continue }
+    $f = $t
+    if ($f.Length -gt 4 -and $f.EndsWith('ies')) { $f = $f.Substring(0, $f.Length - 3) + 'y' }
+    elseif ($f.Length -gt 4 -and $f -match '(oes|ses|xes|ches|shes)$') { $f = $f.Substring(0, $f.Length - 2) }
+    elseif ($f.Length -gt 3 -and $f.EndsWith('s') -and -not $f.EndsWith('ss')) { $f = $f.Substring(0, $f.Length - 1) }
+    $o[$f] = $true
+  }
+  return $o
+}
+function Get-TiSiblingMissing([string]$BoardName, [string]$LinkName) {
+  $bw = Get-TiContentWords $BoardName; $lw = Get-TiContentWords $LinkName
+  return ,@($bw.Keys | Where-Object { -not $lw.ContainsKey($_) } | Sort-Object)
+}
+
 if ($SelfTest) {
   # THE STALENESS PRECONDITION, DRIVEN BOTH WAYS ON FROZEN FILES (2026-09-07, item 13).
   # The bounce's fifth failure was explained as "an earlier prune rewrote product-urls.json, staling
@@ -105,6 +132,17 @@ if ($SelfTest) {
     # And the parameter that makes all of this reachable at all.
     TT 'CLEAN TWIN  -ProductUrlsFile is honoured, so the precondition is testable without touching a live file' `
       ($puF -eq $ProductUrlsFile -or -not $ProductUrlsFile) ('puF=' + $puF)
+
+    # ---- THE SIBLING TEST (2026-09-25, queue 2026-09-22-817976), frozen from the 2026-09-25 08:14 report ----
+    $sibM = Get-TiSiblingMissing 'Stonemill Ground Black Pepper' 'Stonemill Black Peppercorn Grinder 1.76 OZ'
+    TT 'MUST FIRE  black-pepper|Aldi linked to the peppercorn GRINDER is a SIBLING missing ground and pepper' `
+      (($sibM.Count -eq 2) -and ($sibM -contains 'ground') -and ($sibM -contains 'pepper')) ($sibM -join ',')
+    $sibY = Get-TiSiblingMissing 'Friendly Farms Nonfat Plain Yogurt 32 OZ' 'Friendly Farms Lowfat Cherry Yogurt 6 OZ'
+    TT 'MUST FIRE  yogurt|Aldi plain nonfat linked to lowfat cherry is a SIBLING' ($sibY.Count -eq 2) ($sibY -join ',')
+    $sibP = Get-TiSiblingMissing 'Peanut Delight Creamy Peanut Butter 40 OZ' 'Peanut Delight Creamy Peanut Butter 40 oz'
+    TT 'CLEAN TWIN  peanut-butter|Aldi linked to the same product (case and size spelling differ) misses no word' ($sibP.Count -eq 0) ($sibP -join ',')
+    $sibS = Get-TiSiblingMissing 'Fresh Strawberries' 'Fresh Strawberry 1 lb'
+    TT 'MUST NOT FIRE  a trailing plural on one side only is folded, not a missing word' ($sibS.Count -eq 0) ($sibS -join ',')
 
     # ---- THE PRICE-DRIFT RATCHET, run as a CHILD over a frozen board (2026-09-22, plan-2026-09-22-10 bec597) ----
     # The frozen row is the real 2026-09-20 Sam's pads tile: the board publishes $15.48 for 92 ct (0.1683/each) while
@@ -207,6 +245,7 @@ if (Test-Path $ndF) {
 }
 
 $rows = New-Object System.Collections.Generic.List[object]
+$sibRows = New-Object System.Collections.Generic.List[object]   # REPORTED, never blocking: see Get-TiSiblingMissing
 $graded = 0   # everyday linked tiles whose link price was actually compared to the board
 foreach ($r in $cmp) {
   $id = [string]$r.id; $unit = [string]$r.unit
@@ -218,6 +257,8 @@ foreach ($r in $cmp) {
     if (-not $lnk -or -not $lnk.url) {
       $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'NO-LINK'; detail = 'priced tile with no See-item link'; board = [string]$s.item; link = '' }); continue
     }
+    $sibMiss = Get-TiSiblingMissing ([string]$s.item) ([string]$lnk.name)
+    if ($sibMiss.Count) { $sibRows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'SIBLING'; detail = ('link lacks: ' + ($sibMiss -join ', ')); board = [string]$s.item; link = [string]$lnk.name }) }
     if ($drift.ContainsKey($id + '|' + $st)) {
       $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'WRONG-PRODUCT'; detail = $drift[$id + '|' + $st]; board = [string]$s.item; link = [string]$lnk.name }); continue
     }
@@ -289,11 +330,14 @@ $report['coverage_violations'] = $covRows.Count
 $linked = [int]$report.total_tiles - $covRows.Count   # [int]: total_tiles is $null when $tiles is empty
 $report['linked_tiles'] = $linked
 $report['accuracy_graded'] = $graded
+$report['sibling_links'] = $sibRows.Count
+$report['sibling_rows'] = $sibRows.ToArray()
 ($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
 
 if (-not $Quiet) {
   # $linked hoisted above (persisted in the report; needed on the -Quiet path too)
   Write-Output ("ACCURACY  " + $accRows.Count + " of " + $linked + " LINKED tiles open a DIFFERENT product than advertised  <- must be ZERO; this is the only one that lies")
+  Write-Output ("SIBLING   " + $sibRows.Count + " linked tiles whose link name lacks a word of the board name (a sibling, or an abbreviation)  <- reported, not blocking; see sibling_rows")
   Write-Output ("DRIFT     " + $driftRows.Count + " linked tiles whose stored price snapshot is stale (right product)  <- watch, do not block; the repair re-points these")
   Write-Output ("COVERAGE  " + $covRows.Count + " of " + $report.total_tiles + " priced tiles have no See-item link at all       <- incomplete, not dishonest; needs browser passes")
   Write-Output ''

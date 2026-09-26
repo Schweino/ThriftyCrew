@@ -610,17 +610,20 @@
         ]
       },
       "rollback": "revert the audit and derive hunks; restore product-urls.json from git",
-      "leaves_open": "the 7 same-product drifts recur whenever a store moves a price between link refreshes (the drift ratchet watches them by design)",
-      "leaves_open_occurrences": 7,
-      "leaves_open_followup": "watch:grocery/audit-tile-integrity.ps1",
-      "resolution_note": "9 of the 16 were links to a sibling product (a grinder for ground pepper, meat sauce for tomato-basil); the accuracy grade now refuses a sibling and those links were re-pointed or dropped. The 7 true drifts were refreshed and Sam's fall to 2 recorded.",
+      "leaves_open": "(1) SIBLING is reported, not blocking: 75 flagged on the 2026-09-23 board, 9 known siblings among them, about half reading as the same product; a precision pass (brand-token and abbreviation tolerance, or the check moved into audit-name-drift so prune-bad-links drops them) must come before it may block. (2) The 7 same-product drifts recur whenever a store moves a price between link refreshes (the drift ratchet watches them). (3) ORCHESTRATOR, MAIN checkout, after landing: powershell -NoProfile -File grocery\\audit-tile-integrity.ps1 -Tighten -AcceptDrop  (records Sam's drift fall 67 -> 2; commit grocery/out/tile-integrity-baseline.json by pathspec). (4) The live worktree run reads ACCURACY 2 of 2,600 on the rebuilt board: not from this change (SIBLING never enters the accuracy set) and not read here.",
+      "leaves_open_occurrences": 75,
+      "leaves_open_followup": "orchestrator: mint via grocery\\send-alert.ps1 -Force -Lane weekly with the SIBLING precision measurement (75 flagged of 2,600 linked on comparison-2026-09-23, 9 true siblings dropped, ~35 same-product); the drift half stays watch:grocery/audit-tile-integrity.ps1",
+      "resolution_note": "9 of the 16 were links to a sibling product (a grinder for ground pepper, meat sauce for tomato-basil, cherry yogurt for plain); those 9 links were dropped, and audit-tile-integrity now names every sibling-shaped link on a line of its own (75 on the 2026-09-23 board) instead of passing them as ACCURACY OK. It reports rather than blocks, because the rule as written also flags about 35 same-product abbreviations and would trip the quarantine breaker. The 7 true drifts stay under the drift ratchet; Sam's fall to 2 is recorded by the orchestrator's -AcceptDrop in main.",
       "publish_batch": null,
       "lane": "ops",
       "est_tool_calls": 30,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "yes, with the plan's own bar applied: a containment rule over the comparison-2026-09-23 board (2,600 linked tiles in this worktree) flags all 9 named siblings and passes 6 of the 7 same-product rows, but flags asparagus|Aldi ('Freshire Farms Asparagus' vs 'Asparagus, Package') and 75 tiles in all, about half of them an abbreviated or omitted word of what reads as the same product (Activenergy/Activ Energy, 'Original' Saltines, 'Pure' Vegetable Oil). derive-links-from-prices writes name = the priced row's own item, so it cannot mint a sibling: the 9 are older links it never overwrote (row missing, price unproven or unwritable)",
+      "deviation": "The bar written before the run failed (1 of the 7 same-product rows flagged, and roughly 35 of 75 flags read as the same product), and as a hard ACCURACY fault the rule would quarantine about 75 cells, 2.9% of linked tiles, over the 2% breaker, so it would HOLD the board. So SIBLING ships as a REPORTED, non-blocking class in audit-tile-integrity (count on its own line, sibling_rows in tile-integrity.json, never in the accuracy exit), with a plural fold (-ies, -oes, -ses and plain -s). derive-links is unchanged, because a derived link is the priced row itself. The 9 sibling links were DROPPED from product-urls.json (a wrong link is worse than no link), each only after checking it still named the sibling. The 7 same-product drifts were not re-derived: the chain's derive-links already skips them (that is why they survived), and the drift ratchet watches them. Sam's -AcceptDrop was NOT run (orchestrator, MAIN checkout, after landing).",
+      "shipped_commit": "see the commit titled 'Triage 817976: the tile audit names SIBLING links, and the 9 known siblings are dropped' on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 18,
+      "full_suite": "deferred-to-land"
     }
   ],
   "ship_sequence": [
