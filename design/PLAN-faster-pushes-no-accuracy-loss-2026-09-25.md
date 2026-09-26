@@ -159,3 +159,14 @@ the same, print the same verdict and print the same case lines. A read of an und
 sandbox and changes the answer, so an incomplete declaration is refused on the spot, not two weeks later. Its limit,
 stated: a suite that treats a missing file exactly as the real one passes both arms; the suite's own must-fire cases
 are what rule that out. G3 falls out of G1: a gate whose declared inputs miss every changed path is already reused.
+
+**G1 built, 2026-09-26.** 250 always-run gates now declare their inputs, each proved by `ops\verify-gate-declaration.ps1`
+(same exit, verdict and case lines with only the declared files present). Over the 466 gate entries run-gates records:
+keyable 181 before, 431 after; no gate became keyable through a library's declaration without its own verified one, and
+none lost keyability. 35 stay always-run, each named with its reason in the six slice commits: they read this repo's
+git state, the network, a local port, gitignored state no declaration can hash, or code the agents could not trace to
+completeness (check-ad-cycles, compare-deals, wave-preaudit, harvest.py and its importers among them). Stated limits:
+twelve suites print no case line the verifier can count and one prints four, so for those it compared exit and verdict only, backed by the agents' reading that their self-tests read only in-file fixtures; two depend on
+node or Python outside the repo, which no key can hash; several keys are wide (test-guards 1,927 files, cost-recipes
+654) and will still re-run on most pushes. G2 and G3 need no further code: a catch-up round or a docs-only push re-runs
+only gates whose declared inputs moved.
