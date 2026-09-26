@@ -25,6 +25,8 @@
 
   Exit 0 = in sync (or fixed).  1 = error.
 #>
+# The self-test is pure over literal heads and an in-memory journal, through the two ghost libraries it loads.
+# gate-inputs: lib\ghost-lib.ps1, lib\ghost-drift-lib.ps1
 param(
   [switch]$WhatIf,
   [string[]]$Slugs = @(),

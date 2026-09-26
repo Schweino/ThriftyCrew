@@ -25,6 +25,9 @@
 # Run:  .\audit-row-age.ps1               exit 0 clean, 1 = hard finding or ratchet regression
 #       .\audit-row-age.ps1 -Baseline     re-record the baseline (do this only after a deliberate change)
 #       .\audit-row-age.ps1 -SelfTest
+# The self-test runs on frozen rows and a temp flag dir, through the policy library, and reads check-ad-cycles and build-deals-page as text.
+# gate-inputs: grocery\capture-policy-lib.ps1, grocery\flag-verify-lib.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1, lib\guard-contract.ps1, lib\strict-read.ps1
+# gate-inputs-text: grocery\check-ad-cycles.ps1, grocery\build-deals-page.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=0,[double]$Tolerance=2.0,[string]$OutDir)
 # STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a

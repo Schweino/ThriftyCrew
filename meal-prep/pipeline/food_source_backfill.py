@@ -29,6 +29,8 @@ origin in prose, and ~50 of them name the FDC food outright - "NEW wave90 (per 1
 carrot". Asking FDC for "raw carrot" beats asking it for "Carrots", which is exactly the lesson
 fdc_lookup learned with parsley: the problem was the question, not the ranking.
 """
+# The self-test works on temp copies and imports fdc_lookup and food_provenance, nothing else local.
+# gate-inputs: meal-prep\pipeline\food_source_backfill.py, meal-prep\pipeline\fdc_lookup.py, meal-prep\pipeline\food_provenance.py
 from __future__ import annotations
 
 import json

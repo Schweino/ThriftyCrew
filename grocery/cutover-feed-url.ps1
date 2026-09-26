@@ -28,6 +28,8 @@
     .\cutover-feed-url.ps1 -NewBase https://feed.thriftycrew.com -Apply
     .\cutover-feed-url.ps1 -SelfTest
 #>
+# The self-test checks literal bases and walks a temp worktree fixture built by lib\tree-walk.ps1; it reads no repo data.
+# gate-inputs: lib\tree-walk.ps1
 param([string]$NewBase, [switch]$Apply, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }

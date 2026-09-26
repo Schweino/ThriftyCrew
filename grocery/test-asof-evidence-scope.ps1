@@ -6,6 +6,8 @@
   guards.ps1 uses. The founding shape is 2026-08-02's 'Fareway Ranch Dressing' $0.99, last seen in the 07-23 extract
   and published as_of 08-01.
 #>
+# The self-test runs audit-asof-evidence.ps1 (and what it loads) with -Root at a fixture tree it writes in temp.
+# gate-inputs: grocery\audit-asof-evidence.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

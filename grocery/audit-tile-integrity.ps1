@@ -36,6 +36,8 @@
   Exit: 0 = accuracy clean and no store regressed on coverage. 2 = ANY accuracy violation, or coverage regressed.
   3 = BLIND (zero links were price-graded - the accuracy claim would be empty; a real violation still wins with 2).
 #>
+# The self-test drives temp fixtures and runs this script as a child with -OutDir and -ProductUrlsFile in temp, through these libraries.
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1, lib\ratchet.ps1, lib\lf-write.ps1, grocery\pu-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$OutDir = "",

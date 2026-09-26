@@ -26,6 +26,8 @@
   queue). The verdict line starts 'alert-registry:'; the last line is ALERT-REGISTRY-COMPLETE.
   Self-test: powershell -File grocery\audit-alert-registry.ps1 -SelfTest
 #>
+# The self-test parses fixture source text and reads the live alert-registry.json through the registry library.
+# gate-inputs: lib\guard-contract.ps1, lib\json-io.ps1, grocery\alert-registry-lib.ps1, grocery\alert-registry.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$Queue, [string]$RegistryFile = '', [string]$QueueFile = '', [int]$Days = 30)
 $ErrorActionPreference = 'Stop'

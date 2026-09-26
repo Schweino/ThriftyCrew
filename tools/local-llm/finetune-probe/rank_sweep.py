@@ -28,6 +28,8 @@ made rather than one taken while looking at three numbers.
     python tools/local-llm/finetune-probe/rank_sweep.py --selftest
 Exit 0 ok, 2 self-test failure.
 """
+# The self-test reads nothing but this file: its cases are literals and it imports only the stdlib.
+# gate-inputs: tools\local-llm\finetune-probe\rank_sweep.py
 from __future__ import annotations
 
 import argparse

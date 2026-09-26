@@ -52,6 +52,8 @@
          Read-only by default: prints what it would change and writes nothing.
   Exit 0 clean/applied, 1 blocks needing a ruling remain, 2 self-test failure.
 #>
+# The self-test is pure over frozen vocabulary, feed units and spec text; it reads no spec, feed or db file.
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1
 param([switch]$Apply, [string[]]$Slugs = @(), [switch]$SelfTest, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }

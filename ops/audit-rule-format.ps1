@@ -28,6 +28,8 @@
   EXIT: 0 clean, 1 at least one finding, 3 could not evaluate (a manifest file or its history missing).
   Last line: RULE-FORMAT-COMPLETE.
 #>
+# The self-test builds its rules, history and gate fixtures in temp and reads no repo file but this one.
+# gate-inputs: ops\audit-rule-format.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 

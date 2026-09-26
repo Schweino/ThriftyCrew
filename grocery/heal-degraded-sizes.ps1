@@ -18,6 +18,8 @@
 
   Run AFTER carry-forward, BEFORE compare-deals. Idempotent (healed rows no longer qualify).
 #>
+# The self-test writes its two capture files in temp and reads them back through lib\json-io.ps1; no board or out\ file.
+# gate-inputs: lib\json-io.ps1
 param(
   [ValidateSet('bakers','aldi','fareway')][string]$Store,
   # 0 = read the capture policy's carry (90). It was a hardcoded 14 until 2026-08-22, which under the

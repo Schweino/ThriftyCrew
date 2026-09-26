@@ -62,6 +62,8 @@
   %TEMP%, or anywhere outside the checkout is invisible here, and a case whose assertion is too weak is green however
   the daemon behaves.
 #>
+# The self-test drives fake batteries against a temp git repo it builds itself; it reads no stamp and no real checkout, only these libraries.
+# gate-inputs: lib\git-repo-env.ps1, lib\guard-contract.ps1, lib\gate-slots.ps1, lib\git-blob-lib.ps1, lib\parallel-run.ps1, grocery\run-log-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Commit = 'origin/main',

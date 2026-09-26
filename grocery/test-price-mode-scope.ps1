@@ -5,6 +5,8 @@
   through the same Get-TcChildQuarantineScope guards.ps1 uses. The founding shape is 2026-07-14's Aldi file pulled in
   Delivery mode.
 #>
+# The self-test runs audit-price-mode.ps1 (and what it loads) over fixture files it writes in temp.
+# gate-inputs: grocery\audit-price-mode.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

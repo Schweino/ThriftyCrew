@@ -23,6 +23,8 @@ reviewer), missed joins only cost tokens, so both keys are conservative. SCOPE O
   python grocery/triage-group.py --selftest
 Exit 0, 3 when the queue or the families file cannot be read. Last line: TRIAGE-GROUP-COMPLETE.
 """
+# The self-test reads nothing but this file: its cases are literals, never the queue or the families file.
+# gate-inputs: grocery\triage-group.py
 import argparse
 import json
 import os

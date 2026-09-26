@@ -29,6 +29,8 @@
 
   EXIT CODES (lib\guard-contract.ps1): 0 clean, 2 a phantom path, 3 could not evaluate.
 #>
+# The self-test counts the guidance set Get-GuidanceFiles lists (these fixed globs); its other cases are literal text.
+# gate-inputs: lib\guard-contract.ps1, CLAUDE.md, .claude\rules\*.md, .claude\agents\*.md, docs\*.md, design\RULINGS-*.md, ops\hooks\*
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

@@ -5,6 +5,8 @@
   audit as a child with -Root at a per-run fixture tree and reads its output through the same Get-TcChildQuarantineScope
   guards.ps1 uses. The founding shape is 2026-09-05's BOM-less Hy-Vee row carrying Campbell's curly apostrophe.
 #>
+# The self-test runs audit-capture-encoding.ps1 over a temp fixture tree; the audit reads its lane-to-store map from stores.json.
+# gate-inputs: grocery\audit-capture-encoding.ps1, grocery\stores.json
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

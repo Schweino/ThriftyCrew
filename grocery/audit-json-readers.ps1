@@ -49,6 +49,8 @@
 # SCOPE OF A CLEAN REPORT: UNSOUND. A line-level text scan of grocery\*.ps1 and lib\*.ps1 for the spellings
 # under WHAT IT FLAGS; a clean report means none of those spellings is present, not that every JSON read in
 # the estate states its encoding.
+# The self-test scans literal lines and runs this script as a child over a temp tree and temp out\, through these libraries.
+# gate-inputs: lib\guard-contract.ps1, lib\json-io.ps1, lib\lf-write.ps1, lib\ratchet.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [string]$OutDir = '', [switch]$Baseline, [switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten)
 $ErrorActionPreference = 'Stop'

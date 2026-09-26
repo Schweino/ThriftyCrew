@@ -14,6 +14,9 @@ with - those are different questions and only one of them was being asked.
 
 EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number (backlog E2).
 """
+# The self-test imports executor and its graph modules, and asserts the real plan's five tools exist.
+# gate-inputs: graph\agentic\executor_selftest.py, graph\agentic\executor.py, graph\agentic\plan.py, graph\agentic\verifier.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\pipeline\resolve.py
+# gate-inputs-text: grocery\check-ad-cycles.ps1, grocery\compare-deals.ps1, grocery\guards.ps1
 from __future__ import annotations
 
 import os

@@ -35,6 +35,9 @@
 #   .\audit-allergen-line.ps1 -SelfTest            frozen fixtures, hermetic
 # Exit 0 clean, 1 findings, 2 self-test failure.
 # ===================================================================================================
+# The self-test also reads the live allergen table and ingredients file, and build-card2 and propagate-recipes as text.
+# gate-inputs: lib\guard-contract.ps1, meal-prep\lib\allergen-lib.ps1, meal-prep\db\allergens.json, meal-prep\db\ingredients.json
+# gate-inputs-text: meal-prep\pipeline\build-card2.ps1, meal-prep\pipeline\propagate-recipes.ps1
 param(
   [string[]]$Slugs = @(),
   [string]$RecipesDir,

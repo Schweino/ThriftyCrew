@@ -35,6 +35,9 @@
 #   .\audit-unbid-ingredients.ps1 -SelfTest
 # Exit 0 clean, 1 findings, 2 self-test failure.
 # ---------------------------------------------------------------------------------------------------
+# The self-test is pure over literal rows, reads its own source, reads build-v2-spec.ps1 as text and checks the repair script exists.
+# gate-inputs: lib\guard-contract.ps1
+# gate-inputs-text: meal-prep\pipeline\build-v2-spec.ps1, meal-prep\pipeline\repair-missing-scaler-bid.ps1
 param(
   [string[]]$Slugs = @(),
   [string]$RecipesDir,

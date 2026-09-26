@@ -34,6 +34,8 @@
 
   Read-only unless -Apply.
 #>
+# The self-test runs this script as a child over temp boards, captures, rulings and commodity files; these are the libraries it loads, including the capture policy behind the union window.
+# gate-inputs: lib\json-io.ps1, grocery\regular-fileset-lib.ps1, grocery\capture-policy-lib.ps1, grocery\flag-verify-lib.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1, grocery\pu-lib.ps1, grocery\known-wrong-lib.ps1, grocery\global-exclude-lib.ps1, grocery\commodity-rules-lib.ps1
 # -Store scopes the derivation to one store. Added 2026-07-29 after a global -Apply re-pointed ~40 FAREWAY
 # links onto pack prices where the board holds per-unit (24x, 100x, 120x factor mismatches on the publish
 # gate) while fixing the Sam's links it was actually run for. When only one store's prices moved, only that

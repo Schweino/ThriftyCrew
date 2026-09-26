@@ -41,6 +41,9 @@
     .\hold-recipe.ps1 -Reconcile [-Apply]                     drop held slugs still keyed in published-hashes.json
     .\hold-recipe.ps1 -SelfTest
 #>
+# The self-test runs this script against temp db trees and reads engine\publish.ps1 as text for its held-recipes refusal.
+# gate-inputs: lib\json-io.ps1, lib\atomic-write.ps1
+# gate-inputs-text: meal-prep\engine\publish.ps1
 param(
   [string]$Slug = '',
   [string]$Reason = '',

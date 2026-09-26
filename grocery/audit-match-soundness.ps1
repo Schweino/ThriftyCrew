@@ -17,6 +17,8 @@
           -Accept    bless the CURRENT state as the new baseline (run after an intended rule change)
           -Alert     send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
+# The self-test runs on frozen fixtures and temp files, reads its own source and the live alert-registry.json, through these libraries.
+# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\soundness-publish-lib.ps1, grocery\alert-registry-lib.ps1, lib\json-io.ps1, grocery\alert-registry.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # -ForceAccept: bless the baseline EVEN OVER outstanding DROP verdicts. The gate below exists because

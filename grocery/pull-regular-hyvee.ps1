@@ -49,6 +49,9 @@
   the exact document lives base64'd in hyvee\query-b64.txt. storeId is a request VARIABLE, not a cookie, which
   is why this runs with no session and can sit in the daily cloud pipeline like Family Fare's.
 #>
+# The self-test is hermetic (no GraphQL call, temp cursor, history and stores.json); it loads these libraries and reads refresh-hyvee-links.ps1 as text.
+# gate-inputs: grocery\omaha-time.ps1, grocery\pu-lib.ps1, grocery\hyvee-store-lib.ps1, grocery\price-split-lib.ps1, grocery\capture-policy-lib.ps1, grocery\flag-verify-lib.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1
+# gate-inputs-text: grocery\refresh-hyvee-links.ps1
 # $StoreId defaults to 0 = "ask hyvee-store-lib", so the store identity has exactly ONE home. Passing an
 # explicit -StoreId still works for probing another store, but it then ALSO needs -LocationId: the two
 # select different halves of the response and a mismatched pair grades one store's price against another

@@ -12,6 +12,9 @@
   double decides them (.claude\rules\ops-and-gates.md). The founding case is frozen from the real 2026-09-21 rows:
   vegetable-oil / Sam's Club on comparison-2026-09-21.json and on public\board.json at origin/main aa53973d5.
 #>
+# The self-test builds every board in memory; beyond the lib it reads guards.ps1 and apply-cell-quarantine.ps1 as text only.
+# gate-inputs: grocery\cell-quarantine-lib.ps1
+# gate-inputs-text: grocery\guards.ps1, grocery\apply-cell-quarantine.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

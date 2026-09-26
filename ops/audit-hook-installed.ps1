@@ -26,6 +26,8 @@
 
   EXIT CODES (lib\guard-contract.ps1): 0 live and identical, 2 missing or stale, 3 could not evaluate.
 #>
+# The self-test classifies literal install-hooks output and reads ops\install-hooks.ps1 as text for its -Check switch.
+# gate-inputs: lib\guard-contract.ps1, ops\install-hooks.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

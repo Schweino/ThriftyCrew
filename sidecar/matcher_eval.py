@@ -29,6 +29,8 @@ RULES CARRIED IN FROM THE SAME DAY'S WORK, and each one is here because it was l
   * ONE ROW PER CASE (E24), with the totals derived from the file rather than being it
   * the ACCEPTANCE BAR WRITTEN BEFORE THE RUN (E21), in the metric's own units
 """
+# The self-test reads the prefilter floor out of sweep.py's source and imports nothing else local.
+# gate-inputs: sidecar\matcher_eval.py, sidecar\sweep.py
 from __future__ import annotations
 
 import argparse

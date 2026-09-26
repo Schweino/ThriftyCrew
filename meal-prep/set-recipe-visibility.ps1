@@ -35,6 +35,8 @@
     .\set-recipe-visibility.ps1 -Audit            (report EVERY live/db disagreement, change nothing)
     .\set-recipe-visibility.ps1 -SelfTest
 #>
+# The self-test reads its own source and, as a deliberate live twin, the shipped recipes-db.json.
+# gate-inputs: lib\json-io.ps1, meal-prep\recipes-db.json
 param(
   [string]$Slug = '',
   [switch]$Apply,

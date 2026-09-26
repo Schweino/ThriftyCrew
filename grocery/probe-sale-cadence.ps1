@@ -39,6 +39,8 @@
   board with no ad_from/ad_to fields sits in every clean checkout, so "a board resolved" is not enough). -CasesOut writes one
   JSON row per (commodity, store) pair that had any dated window, and every total printed is derived from those rows.
 #>
+# The self-test writes its dated boards in temp and loads no library; it never reads grocery\out.
+# gate-inputs: grocery\probe-sale-cadence.ps1
 [CmdletBinding()]
 param(
   [string]$BoardDir = '',

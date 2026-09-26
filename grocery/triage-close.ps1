@@ -41,6 +41,8 @@
   write it back, and nothing was closed.
   Read the verdict LINE, not the number (backlog E2).
 #>
+# The self-test closes in-memory items and runs copies of this script, triage-lib and atomic-write in temp under a fixture mutex; the queue path main-checkout resolves at the top is never read under -SelfTest.
+# gate-inputs: grocery\triage-lib.ps1, lib\atomic-write.ps1, lib\main-checkout.ps1, lib\mutex-hold.ps1
 param(
   [string]$Id,
   [string]$Disposition,

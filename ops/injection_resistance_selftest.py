@@ -49,6 +49,8 @@ Exit 0 = every property held. Exit 1 = at least one did not. Exit 2 = could not 
 which is NEVER a pass. The last line is the completion marker required by
 lib/guard-contract.ps1: without it, "no findings" and "died halfway" are indistinguishable.
 """
+# The self-test parses resolve.py's source and imports local_extract, which pulls in the rest listed here.
+# gate-inputs: ops\injection_resistance_selftest.py, graph\pipeline\resolve.py, meal-prep\pipeline\local_extract.py, graph\lib\llm.py, graph\lib\ids.py, graph\lib\service_time.py, meal-prep\pipeline\harvest.py, meal-prep\pipeline\band_precheck.py, meal-prep\pipeline\coverage_check.py, meal-prep\pipeline\hunt_lib.py
 
 from __future__ import annotations
 

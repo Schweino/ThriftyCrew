@@ -32,6 +32,8 @@
 
   Self-test: powershell -File ops\audit-memory-citations.ps1 -SelfTest
 #>
+# The self-test is pure over literal text; the memory store and scanned folders are read only by the live run.
+# gate-inputs: lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

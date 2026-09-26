@@ -39,6 +39,8 @@
 
   Exit 0 = written (or dry run clean). Exit 1 = refused, nothing written.
 #>
+# The self-test is pure over literal rows and names; it reads neither the ingredients file nor the feed.
+# gate-inputs: meal-prep\pipeline\add-ingredient-row.ps1
 # [CmdletBinding()] IS LOAD-BEARING, NOT DECORATION (2026-08-27). Without it a plain param() block
 # SILENTLY SWALLOWS undeclared parameters: -PantryPkgG 737 -PantryPkgLabel '26oz canister' was passed
 # to this script, every one of them ignored, and the tool printed its full success banner - "0 collateral

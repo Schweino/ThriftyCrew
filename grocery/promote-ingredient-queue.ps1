@@ -41,6 +41,8 @@
     promote-ingredient-queue.ps1 -SelfTest       frozen fixtures
   Exit 0 = ran. Exit 2 = self-test regression.
 #>
+# The self-test runs on frozen in-memory fixtures; it reads neither the queue, the map nor out\.
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1
 param([switch]$Apply, [switch]$SelfTest, [string]$OutDir = '', [string]$QueueFile = '', [string]$MapFile = '')
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

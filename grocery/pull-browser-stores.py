@@ -99,6 +99,8 @@ EXIT CODES  0 = every requested store captured. 1 = at least one store failed or
             could not be read, so nothing it owed was looked at (never "nothing owed"). Unchanged by
             lookup mode - existing scripts keep their own exit codes, in both directions.
 """
+# The lookup self-test is hermetic apart from its one local import, media\reels\cdp.py.
+# gate-inputs: grocery\pull-browser-stores.py, media\reels\cdp.py
 import argparse
 import datetime
 import json

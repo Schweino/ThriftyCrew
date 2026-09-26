@@ -15,6 +15,8 @@
     - eggs  -> size "dozen"      (per-dozen price computed from the count)
   Last writer wins per id (pass core first, then the rest). Skips NOT FOUND / empty-price rows.
 #>
+# The self-test re-runs this script over frozen fixtures in temp; the child reads commodities.json and its three libraries. The top-level out\fareway listing and the child's cursor commit never reach an asserted value.
+# gate-inputs: lib\json-io.ps1, grocery\native-lib.ps1, grocery\capture-lib.ps1, grocery\commodities.json
 param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "", [switch]$Force,
   # See the EXTRACT DATING block below. 90 days is not a number invented here - it is the capture
   # policy's quarter (capture-policy.ps1 MaxCarryDays), which is also the cap carry-forward-regular.ps1

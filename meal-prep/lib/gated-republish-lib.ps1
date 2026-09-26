@@ -30,6 +30,9 @@
 # NO param() BLOCK: dot-sourced under PS 5.1 it would reset the caller's own switches.
 # Dot-source:  . (Join-Path $repo 'meal-prep\lib\gated-republish-lib.ps1')
 # Self-test:   powershell -NoProfile -File meal-prep\lib\gated-republish-lib.ps1 -SelfTest
+# The self-test runs the real allergen audit over temp recipe and card dirs against the live allergen table, and reads three chain scripts as text.
+# gate-inputs: meal-prep\lib\allergen-lib.ps1, meal-prep\lib\render-tokens.ps1, meal-prep\pipeline\audit-allergen-line.ps1, meal-prep\db\allergens.json, lib\guard-contract.ps1
+# gate-inputs-text: meal-prep\engine\publish.ps1, meal-prep\engine\build-cards.ps1, grocery\check-ad-cycles.ps1
 
 $__gatedRepublishSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 $script:GatedRepublishHere = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

@@ -22,6 +22,8 @@ audit-*.ps1 scripts (2 = self-test failure), and the difference is deliberate: o
 every new surface, so a caller never has to know which script it is talking to. Do not "fix" a new
 battery back to the old numbering.
 """
+# The self-test runs the shared parity vectors and checks the parity runner embeds the current hunt-lib.js.
+# gate-inputs: meal-prep\pipeline\hunt_lib.py, meal-prep\pipeline\hunt-lib-vectors.json, meal-prep\pipeline\hunt-lib.js, meal-prep\pipeline\hunt-lib-parity.js
 from __future__ import annotations
 
 import json

@@ -43,6 +43,8 @@ USAGE
   python browser_price_work.py --watch --interval 30     one line per CHANGE, for a session's watcher
   python browser_price_work.py --selftest
 """
+# The self-test builds its queue and claim files in a temp dir and reads nothing else in the repo.
+# gate-inputs: meal-prep\pipeline\browser_price_work.py
 import argparse
 import json
 import os

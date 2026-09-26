@@ -20,6 +20,8 @@ which the suite swaps for one that records arrivals. Under the fix only the firs
 rest queue at the lock; under the founding bug nothing queues and every caller enters. Every wait carries a
 hang guard, and a guard is never a bar.
 """
+# The self-test loads sidecar\app.py with its model imports stubbed, and reads nothing else local.
+# gate-inputs: sidecar\app_selftest.py, sidecar\app.py
 from __future__ import annotations
 
 import argparse

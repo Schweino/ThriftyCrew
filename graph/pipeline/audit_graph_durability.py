@@ -55,6 +55,8 @@ a read-write handle can take a lock or leave a `-wal` file the ~07:00 bot then c
 Exit 0 = clean. 2 = a hard finding. 3 = could not evaluate (no database, no interpreter path).
 Read the verdict LINE, not the number (backlog E2).
 """
+# The self-test builds its database and baseline in temp, and imports graphdb (which imports ids).
+# gate-inputs: graph\pipeline\audit_graph_durability.py, graph\lib\graphdb.py, graph\lib\ids.py
 from __future__ import annotations
 
 import argparse
