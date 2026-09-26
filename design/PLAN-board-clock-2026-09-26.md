@@ -147,6 +147,22 @@ read), and "now" is never `week_of`. A memory recording this episode and linking
 3. The Fareway branch, rehearsed normally.
 Each through `ops\push-main.ps1`.
 
+## Build record (2026-09-26)
+Everything above was built on `claude/board-clock`. What the build itself found, beyond the plan:
+- **The A/B's first run did NOT meet the bar**: at zero lag 3 Sam's cells (oatmeal, olive-oil, sliced-cheese) moved to
+  an older, cheaper product. Cause, found by instrumenting both engines in sandboxes: the identical-row dedupe keys on
+  price_type and doubles as the union's "newest sighting wins"; W1b's retype broke the key, an older identical row
+  survived and made its capture "deeper". Fixed (a split row dedupes on its pre-split type) and fixtured in
+  test-board-clock. Second run, same harness and bar: A vs B26 53 of 2808 cells differ, 53 explained, 0 unexplained,
+  3 crowns moved (fruit cups to Aldi, black peppercorns to Sam's Club, avocado oil to Walmart); A vs B23 0 price
+  changes. All 9 ended cells revert to the same store's own regular price, 4-26% higher than the ended price shown.
+- **W6's detector found two clock uses the survey missed**: update-history cut its 21-day daily window from the real date
+  while entries are dated in week_of. Both cuts now use the board's ad set. Its other 15 findings: 8 equalities (the
+  rule no longer treats -eq as a sink), 1 fixed by renaming the engine's `$script:BoardToday` to `$script:JudgeDay`, 6
+  allowed with a stated reason. Mark 0.
+- test-board-clock runs daily as a check-ad-cycles lane (7-day cadence, or when the engine's date libraries move).
+- Harness and data: scratchpad `ab-board-clock.ps1` (one row per cell per arm), real inputs of 2026-09-26.
+
 ## Decisions (Brad, 2026-09-26)
 - **D1. RULED: the judge date for a live build is the real date of the run.**
 - **D2. RULED, in Brad's words:** *"If a sale price is dropped, it should be part of the automated job to detect that
