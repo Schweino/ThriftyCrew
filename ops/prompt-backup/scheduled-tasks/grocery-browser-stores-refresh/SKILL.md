@@ -393,6 +393,10 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     THE SWEEP IS COMMITTED CODE (2026-09-26). After the identity and In-Store checks, on a search results
     page, inject pull-fareway-shop.js and start, WITHOUT awaiting:
         farewaySweep(<terms>, <commodities>, { loc: '531573' })     // the worklist's parallel arrays
+    FAIL-SAFE: after injecting, check typeof farewaySweep === 'function'. If it is NOT, the main checkout
+    predates the 2026-09-26 landing (ec39b05d7) because no bot has synced it yet: capture NOTHING for
+    Fareway, never hand-roll a router loop in its place, and report "Fareway: main checkout stale" - the
+    08:00 driver covers Fareway the same day.
     Poll window.__fwSweep ({done, i, n, errors, aborted}) every ~30 s; ~18 s a term. It pushes each term
     on the router, waits for the route, resets the store, scrolls until the SCOPED count holds for four
     reads, then extracts that term's own search only. A term that never settles lands in errors, never as
