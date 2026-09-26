@@ -458,6 +458,21 @@ function Get-HbTriggerVerdict {
   if ($endedAll -and -not $anyFuture) { return [pscustomobject]@{ state = 'expired'; until = $null; ended = (@($ends | Sort-Object -Descending)[0]) } }
   return [pscustomobject]@{ state = 'normal'; until = $null; ended = $null }
 }
+# ---- A PLANNED END IS NOT A DEATH (2026-09-26, queue 2026-09-26-b2f93f) ----
+# 'TC Recipe Harvest Crawl' was given an EndBoundary of 2026-09-25T00:00 on purpose (Brad's ruling, 4d5d96b43: a
+# five-evening retry, then stop). All five evenings ran rc=0, the window closed as written, and the heartbeat paged
+# TASK STALE the next morning, because an expired window pages whether or not anyone meant it. A registry row may
+# now declare 'planned_end' (the EndBoundary it was given, same string as the committed task XML) and
+# 'planned_end_why'. An expired window whose latest end equals the declared one, to the minute, reads 'ended as
+# planned'. A window that ended at ANY other instant, or a row with no declaration, still pages: an EndBoundary
+# somebody moved, or one nobody meant, is exactly what the expired branch exists to catch.
+function Test-HbPlannedEnd {
+  param($Row, $Ended)
+  if (-not $Row -or -not $Ended) { return $false }
+  if (-not $Row.PSObject.Properties['planned_end'] -or -not [string]$Row.planned_end) { return $false }
+  try { $pe = [datetime]::Parse([string]$Row.planned_end, [Globalization.CultureInfo]::InvariantCulture) } catch { return $false }
+  return ([math]::Abs(($pe - [datetime]$Ended).TotalMinutes) -lt 1)
+}
 function Get-HeartbeatAlertSignature([object[]]$Issues) {
   $set = New-Object 'System.Collections.Generic.SortedSet[string]' ([StringComparer]::Ordinal)
   foreach ($i in $Issues) { [void]$set.Add([string]$i.key) }
@@ -685,6 +700,16 @@ HbCase 'MUST NOT FIRE  a row that declares nothing gets no declared verdict, so 
     HbCase 'MUST FIRE  an EndBoundary 5h past with no future trigger reads expired, and expired still pages' ($tv3.state -eq 'expired') ($tv3.state)
     $tv4 = Get-HbTriggerVerdict -Triggers @($trFuture, $trPast) -LastRunTime $tLast -Now $tNow
     HbCase 'MUST FIRE  one due trigger beside a future one is not dormant' ($tv4.state -eq 'normal') ($tv4.state)
+    # ---- b2f93f: a planned end (the harvest crawl's 2026-09-25T00:00 EndBoundary, frozen from the task XML) ----
+    $peTr = [pscustomobject]@{ Enabled = $true; StartBoundary = '2026-09-20T18:00:00-05:00'; EndBoundary = '2026-09-25T00:00:00-05:00' }
+    $peV = Get-HbTriggerVerdict -Triggers @($peTr) -LastRunTime ([datetime]'2026-09-24T18:00:01') -Now ([datetime]'2026-09-26T10:30:14')
+    HbCase 'MUST FIRE  the founding harvest window reads expired (the verdict itself is unchanged)' ($peV.state -eq 'expired') ($peV.state)
+    $peRow = [pscustomobject]@{ name = 'TC Recipe Harvest Crawl'; planned_end = '2026-09-25T00:00:00-05:00'; planned_end_why = 'fixture' }
+    HbCase 'CLEAN TWIN an expired window whose end equals the row''s planned_end reads ended as planned (2026-09-26-b2f93f)' (Test-HbPlannedEnd -Row $peRow -Ended $peV.ended) ([string]$peV.ended)
+    HbCase 'MUST FIRE  an expired window on a row with NO planned_end still pages' (-not (Test-HbPlannedEnd -Row ([pscustomobject]@{ name = 'x' }) -Ended $peV.ended))
+    HbCase 'MUST FIRE  an expired window that ended at a different instant from the planned_end still pages (a moved EndBoundary)' (-not (Test-HbPlannedEnd -Row ([pscustomobject]@{ planned_end = '2026-09-30T00:00:00-05:00' }) -Ended $peV.ended))
+    HbCase 'MUST FIRE  an unparseable planned_end still pages' (-not (Test-HbPlannedEnd -Row ([pscustomobject]@{ planned_end = 'when it is done' }) -Ended $peV.ended))
+    HbCase 'MUST FIRE  the live task loop asks Test-HbPlannedEnd before the expired branch pages' ($hbSrc.Contains("elseif (`$tv.state -eq 'expired' -and (Test-HbPlannedEnd -Row `$t -Ended `$tv.ended))"))
     $wtBase = Join-Path $env:TEMP ('hb-wt-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
     try {
       $wtMain = Join-Path $wtBase 'main'; $wtLinked = Join-Path $wtMain '.claude\worktrees\ba-land'
@@ -817,6 +842,7 @@ foreach ($t in @($cfg.windows_tasks)) {
     $tv = Get-HbTriggerVerdict -Triggers $task.Triggers -LastRunTime $last -Now $now
     $og = Test-HbOutageExplainsAge -AgeH $ageH -MaxH ([double]$t.max_age_hours) -Outage $hbOutage
     if ($tv.state -eq 'dormant') { $okLines.Add(("{0,-38} ok dormant until {1} (every enabled trigger starts after its last run, {2}h ago)" -f $name, ([datetime]$tv.until).ToString('yyyy-MM-ddTHH:mm'), $ageH)) }
+    elseif ($tv.state -eq 'expired' -and (Test-HbPlannedEnd -Row $t -Ended $tv.ended)) { $okLines.Add(("{0,-38} ok ended as planned {1} ({2}), last ran {3}h ago" -f $name, ([datetime]$tv.ended).ToString('yyyy-MM-ddTHH:mm'), [string]$t.planned_end_why, $ageH)) }
     elseif ($tv.state -eq 'expired') { Add-HbIssue 'TASK STALE' $name ((Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) + (' - trigger window expired ' + ([datetime]$tv.ended).ToString('yyyy-MM-ddTHH:mm') + ' and no trigger starts in the future')) }
     elseif ($og.held) { $heldLines.Add(("{0,-38} {1}" -f $name, $og.detail)) }
     else { Add-HbIssue 'TASK STALE' $name (Format-HbTaskStale $name $ageH $t.max_age_hours $t.why) }
