@@ -453,6 +453,46 @@ if ($SelfTest) {
       (-not ($udIds -contains '2026-09-24-a9e8a0')) ($udIds -join ',')
     _T 'CLEAN TWIN deviated "nothing" with 3 occurrences, needs-more-time "nothing", and a deviated watch-owned residual all still RESUME' `
       ($ud.Count -eq 3 -and ($udIds -contains '2026-09-24-bbbbb1') -and ($udIds -contains '2026-09-24-bbbbb2') -and ($udIds -contains '2026-09-24-bbbbb3')) ($udIds -join ',')
+    # ---- THE OWNER FINISHED THE LEFTOVER (2026-09-26, triage mid-run, resume-detector) ----
+    # Founding, frozen from plan-2026-09-26.json and plan-2026-09-26-3.json: 80f302 and e0d5cf closed deviated with
+    # their leftovers handed to 518fff and f73dc7, both of which closed confirmed with their own plan items done.
+    $fPlans = @(
+      [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-26-3.json'; items = @(
+        [pscustomobject]@{ queue_id = '2026-09-26-518fff'; status = 'done'; lane = 'ops' },
+        [pscustomobject]@{ queue_id = '2026-09-26-f73dc7'; status = 'done'; lane = 'ops' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc2'; status = 'needs-more-time'; lane = 'ops' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc4'; status = 'done'; lane = 'ops' }) },
+      [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-26.json'; items = @(
+        [pscustomobject]@{ queue_id = '2026-09-23-80f302'; status = 'deviated'; lane = 'ops'; leaves_open = '1: a held post whose commit lands on a later push'; leaves_open_occurrences = 1; leaves_open_followup = '2026-09-26-518fff' },
+        [pscustomobject]@{ queue_id = '2026-09-26-e0d5cf'; status = 'deviated'; lane = 'money'; leaves_open = '3: an asof violation on a row no board cell carries'; leaves_open_occurrences = 3; leaves_open_followup = '2026-09-26-f73dc7' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc1'; status = 'deviated'; lane = 'ops'; leaves_open = '2 rows'; leaves_open_occurrences = 2; leaves_open_followup = '2026-09-26-ccccc2' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc3'; status = 'deviated'; lane = 'ops'; leaves_open = '1 row'; leaves_open_occurrences = 1; leaves_open_followup = '2026-09-26-ccccc4' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc5'; status = 'needs-more-time'; lane = 'ops'; leaves_open = '1 row'; leaves_open_occurrences = 1; leaves_open_followup = '2026-09-26-518fff' },
+        [pscustomobject]@{ queue_id = '2026-09-26-ccccc6'; status = 'deviated'; lane = 'ops'; leaves_open = '1 row'; leaves_open_occurrences = 1; leaves_open_followup = '2026-09-26-518fff; watch:grocery/audit-food-category.ps1' }) })
+    $fQ = @(
+      [pscustomobject]@{ id = '2026-09-23-80f302'; status = 'resolved'; disposition = 'confirmed'; subject = 'Grocery page does not match its shipped data' },
+      [pscustomobject]@{ id = '2026-09-26-e0d5cf'; status = 'resolved'; disposition = 'confirmed'; subject = 'GUARDS FAILED asof' },
+      [pscustomobject]@{ id = '2026-09-26-518fff'; status = 'resolved'; disposition = 'confirmed'; subject = 'owner, closed done' },
+      [pscustomobject]@{ id = '2026-09-26-f73dc7'; status = 'resolved'; disposition = 'confirmed'; subject = 'owner, closed done' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc1'; status = 'resolved'; disposition = 'confirmed'; subject = 'fx owner closed needs-more-time' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc2'; status = 'resolved'; disposition = 'confirmed'; subject = 'fx owner, plan needs-more-time' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc3'; status = 'resolved'; disposition = 'confirmed'; subject = 'fx owner closed false-alarm' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc4'; status = 'resolved'; disposition = 'false-alarm'; subject = 'fx owner, done but false-alarm' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc5'; status = 'resolved'; disposition = 'confirmed'; subject = 'fx needs-more-time with a done owner' },
+      [pscustomobject]@{ id = '2026-09-26-ccccc6'; status = 'resolved'; disposition = 'confirmed'; subject = 'fx done owner plus a watch' })
+    $uFin = Get-TriageUnfinished $fQ $fPlans
+    $uFin = @($uFin)
+    $uFinIds = @($uFin | ForEach-Object { [string]$_.id })
+    _T 'MUST-NOT-FIRE a deviated item whose followup owner closed confirmed with its plan item done is finished, not RESUME (80f302 -> 518fff, e0d5cf -> f73dc7)' `
+      (-not ($uFinIds -contains '2026-09-23-80f302') -and -not ($uFinIds -contains '2026-09-26-e0d5cf')) ($uFinIds -join ',')
+    _T 'CLEAN TWIN an owner closed with its plan item needs-more-time, an owner closed false-alarm, a needs-more-time item with a done owner, and a done owner beside a watch: all still RESUME (ccccc2, the needs-more-time owner, is RESUME in its own right)' `
+      ($uFin.Count -eq 5 -and ($uFinIds -contains '2026-09-26-ccccc2') -and ($uFinIds -contains '2026-09-26-ccccc1') -and ($uFinIds -contains '2026-09-26-ccccc3') -and ($uFinIds -contains '2026-09-26-ccccc5') -and ($uFinIds -contains '2026-09-26-ccccc6')) ($uFinIds -join ',')
+    $fQOpen = @($fQ | ForEach-Object { if ($_.id -eq '2026-09-26-518fff') { [pscustomobject]@{ id = $_.id; status = 'open'; subject = $_.subject } } else { $_ } })
+    $uOpen = Get-TriageUnfinished $fQOpen $fPlans
+    $uOpen = @($uOpen)
+    $uOpen80 = @($uOpen | Where-Object { $_.id -eq '2026-09-23-80f302' })
+    _T 'CLEAN TWIN while 518fff is still OPEN, 80f302 is listed RESUMED-BY it, never dropped as finished' `
+      ($uOpen80.Count -eq 1 -and $uOpen80[0].owned_by -eq '2026-09-26-518fff') ("count=$($uOpen80.Count) owned_by=" + $(if ($uOpen80.Count) { $uOpen80[0].owned_by } else { '' }))
     # ---- THE ARCHIVE IS PART OF THE RECORD (2026-09-22, queue 2026-09-21-594c27) ----
     $aRet = Join-TriageQueueWithArchive @($rCur) @($rP2)
     $alA = Get-TriageReturnLines @($rCur) $aRet $rNow
