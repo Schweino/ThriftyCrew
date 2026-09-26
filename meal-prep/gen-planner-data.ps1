@@ -62,6 +62,8 @@ if ($SelfTest) {
   # THE WIRING: the live exit reads Unexpected, not the raw drop count. Needles by concatenation.
   $src = [IO.File]::ReadAllText($PSCommandPath)
   $mExit = [regex]::Match($src, '(?m)^if\(@\(\$dropSplit\.Unex' + 'pected\)\.Count -gt 0\)\{[\s\S]*?exit 1')
+  $mHeld = [regex]::Match($src, '(?m)^\s*if\(\$heldMap\.Contains' + 'Key\(\[string\]\$r\.slug\) -or -not \$cheapPs')
+  T 'MUST FIRE  a HELD recipe is dropped from the feed even when the manifest prices it (the tandoori case)' $mHeld.Success 'held check missing from the row loop'
   T 'MUST FIRE  the live run exits 1 on an UNEXPECTED drop, via Split-PlannerDrops' ($mExit.Success -and $src.Contains('$dropSplit = Split-Planner' + 'Drops')) ("exitBlock=" + $mExit.Success)
   if ($f -eq 0) { Write-Output 'gen-planner-data SELF-TEST PASS'; exit 0 }
   Write-Output ("gen-planner-data SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
@@ -204,6 +206,11 @@ $DISPLAY_OVERRIDES=@{ 'korean-turkey-japchae|Cornstarch'='Korean glass noodles (
 
 $rows=New-Object System.Collections.Generic.List[string]
 $withBid=0; $totalIng=0
+# A HELD recipe is taken down (hold-recipe.ps1), so the planner never lists it even when the manifest can price it:
+# a tile linking to a drafted page (sheet-pan-tandoori-chicken-cauliflower, 2026-09-26). It is dropped as EXPECTED.
+$heldMap=@{}
+$heldPath=Join-Path $here 'db\held-recipes.json'
+if(Test-Path $heldPath){ foreach($h in @((Read-JsonFile $heldPath).held)){ if($h -and $h.slug){ $heldMap[[string]$h.slug]=[string]$h.reason } } }
 $unpriced=@()
 foreach($r in $db){
   # COLLECT-AND-REPORT, the same contract compute-v2-perserving.ps1 runs on: a recipe the manifest cannot
@@ -212,7 +219,7 @@ foreach($r in $db){
   # which is the exact defect this block exists to close. The file is still written for every other
   # recipe (a hard throw would leave the tool serving yesterday's data with nothing said), and the run
   # exits 1 so the daily chain alerts.
-  if(-not $cheapPs.ContainsKey([string]$r.slug)){ $unpriced += [string]$r.slug; continue }
+  if($heldMap.ContainsKey([string]$r.slug) -or -not $cheapPs.ContainsKey([string]$r.slug)){ $unpriced += [string]$r.slug; continue }
   $ings=New-Object System.Collections.Generic.List[string]
   foreach($ing in $r.ingredients){
     $g=[int][Math]::Round([double]$ing.grams,0)
@@ -259,9 +266,6 @@ Write-Output ("planner-data.js: {0} of {1} recipes, {2}/{3} ingredient lines fee
 if($noPkg.Count -gt 0){ Write-Output ("ITEMS WITHOUT PACKAGE DEF ({0}): {1}" -f $noPkg.Count, (($noPkg.Keys | Sort-Object) -join ', ')) }
 # No silent caps: a recipe missing from the planner has to say so by name, or a shrinking catalog
 # reads as a clean run. Held and uncostable drops are the correct state and are named; any other drop fails.
-$heldMap=@{}
-$heldPath=Join-Path $here 'db\held-recipes.json'
-if(Test-Path $heldPath){ foreach($h in @((Read-JsonFile $heldPath).held)){ if($h -and $h.slug){ $heldMap[[string]$h.slug]=[string]$h.reason } } }
 $costedRows=@()
 $costedPath=Join-Path $here 'db\costed.json'
 if(Test-Path $costedPath){ $costedRaw=Read-JsonFile $costedPath; $costedRows=@($costedRaw) }
