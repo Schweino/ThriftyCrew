@@ -194,6 +194,17 @@ function Read-TcCensusExported([string]$Dir, [string[]]$Slugs) {
   return $ex
 }
 
+# The exported_on a re-export writes (2026-09-25, queue 2026-09-23-373ac2). It moves ONLY when the page moved: the old
+# export's date is kept when its updated_at, html_sha256 and lexical_sha256 all match the fresh read. Before this every
+# -Export rewrote all 196 declared pages' dates, so one stale page cost a 228-file diff and the export was put off; 32
+# pages sat EDITED-SINCE-EXPORT for two days after the Batch 3 article land.
+function Get-TcCensusExportedOn($Old, [string]$UpdatedAt, [string]$HtmlSha, [string]$LexSha, [string]$Today) {
+  if ($null -eq $Old -or -not $Old.PSObject.Properties['exported_on'] -or -not [string]$Old.exported_on) { return $Today }
+  $same = ([string]$Old.updated_at -ceq $UpdatedAt) -and ([string]$Old.html_sha256 -ceq $HtmlSha) -and ([string]$Old.lexical_sha256 -ceq $LexSha)
+  if ($same) { return [string]$Old.exported_on }
+  return $Today
+}
+
 # ================================================================ self-test: a stubbed Ghost, no network, no key
 if ($SelfTest) {
   $savedJournal = $env:TC_WRITE_JOURNAL
@@ -203,6 +214,16 @@ if ($SelfTest) {
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('gpc-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
   New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
   try {
+    # the export's date moves only with the page (queue 2026-09-23-373ac2)
+    $oldEx = [pscustomobject]@{ updated_at = '2026-07-05T00:33:33.000Z'; html_sha256 = 'aa'; lexical_sha256 = 'bb'; exported_on = '2026-09-19' }
+    $d1 = Get-TcCensusExportedOn $oldEx '2026-09-23T13:17:48.000Z' 'cc' 'dd' '2026-09-25'
+    Test-CensusCase 'MUST FIRE  a page Ghost edited since the export (founding: 32 Batch 3 articles, 2026-09-23) takes today''s exported_on' ($d1 -eq '2026-09-25') $d1
+    $d2 = Get-TcCensusExportedOn $oldEx '2026-07-05T00:33:33.000Z' 'aa' 'bb' '2026-09-25'
+    Test-CensusCase 'MUST NOT FIRE  an unchanged page keeps its old exported_on, so a re-export rewrites nothing for it' ($d2 -eq '2026-09-19') $d2
+    $d3 = Get-TcCensusExportedOn $oldEx '2026-07-05T00:33:33.000Z' 'aa' 'bX' '2026-09-25'
+    Test-CensusCase 'MUST FIRE  the same updated_at over a different lexical still moves the date (a hash is read, not only the clock)' ($d3 -eq '2026-09-25') $d3
+    $d4 = Get-TcCensusExportedOn $null 'x' 'y' 'z' '2026-09-25'
+    Test-CensusCase 'CLEAN TWIN  a page with no earlier export is dated today' ($d4 -eq '2026-09-25') $d4
     # the tracked-file half: a source file naming one slug, a file naming a slug only INSIDE a longer token, a binary
     $src = Join-Path $tmp 'source.ps1'
     [IO.File]::WriteAllText($src, ('$slug = ''tracked' + '-tool''' + "`n" + 'see wash-sale-rule' + '-2 and Mixed-Case-Page' + "`n"), (New-Object Text.UTF8Encoding($false)))
@@ -295,7 +316,7 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
     $env:TC_WRITE_JOURNAL = $savedJournal
   }
-  $want = 16
+  $want = 20
   if ($n -ne $want -and $f -eq 0) { Write-Output ("FAIL  ran {0} case(s), the list holds {1}" -f $n, $want); $f++ }
   if ($f -eq 0) { Write-Output ("audit-ghost-page-census SELF-TEST PASS ({0} cases)" -f $n); exit 0 }
   Write-Output ("audit-ghost-page-census SELF-TEST FAIL ({0} of {1})" -f $f, $n); exit 1
@@ -350,6 +371,9 @@ if ($Export) {
   $written = 0; $bytes = 0
   foreach ($s in @($got.Keys | Sort-Object)) {
     $o = $got[$s]
+    $oldF = Join-Path $exportDir ($s + '.json'); $old = $null
+    if (Test-Path -LiteralPath $oldF) { try { $old = Read-JsonFile $oldF } catch { $old = $null } }
+    $hSha = (& $hex $o.html); $lSha = (& $hex $o.lexical)
     # No authors, no member data: the fields that say what the page is and what it says, nothing about who.
     $meta = [ordered]@{
       slug = [string]$o.slug; kind = [string]$reg.declared[$s].kind; id = [string]$o.id; title = [string]$o.title
@@ -359,8 +383,8 @@ if ($Export) {
       canonical_url = $o.canonical_url; feature_image = $o.feature_image
       tags = @(@($o.tags) | Where-Object { $_ } | ForEach-Object { [string]$_.slug })
       codeinjection_head = $o.codeinjection_head; codeinjection_foot = $o.codeinjection_foot
-      html_file = ($s + '.html'); html_sha256 = (& $hex $o.html); lexical_sha256 = (& $hex $o.lexical)
-      exported_on = (Get-Date -Format 'yyyy-MM-dd'); exported_by = 'ops/audit-ghost-page-census.ps1 -Export (read-only Admin API GET)'
+      html_file = ($s + '.html'); html_sha256 = $hSha; lexical_sha256 = $lSha
+      exported_on = (Get-TcCensusExportedOn $old ([string]$o.updated_at) $hSha $lSha (Get-Date -Format 'yyyy-MM-dd')); exported_by = 'ops/audit-ghost-page-census.ps1 -Export (read-only Admin API GET)'
       lexical = $o.lexical
     }
     $j = ConvertTo-Json -InputObject $meta -Depth 6

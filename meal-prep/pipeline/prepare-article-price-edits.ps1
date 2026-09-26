@@ -329,6 +329,15 @@ if ($Land) {
     else { Write-Output ("WOULD PUT  {0} {1} title '{2}' ({3} replacement(s); fields: {4})" -f $res, $e.slug, $e.title_new, @($e.replacements).Count, ((@($upd.Keys) | Where-Object { $_ -notin 'lexical','title','updated_at' }) -join ',')) }
     $ok++
   }
+  # A landed PUT moves the live page past its exported copy, and the census then reads EDITED-SINCE-EXPORT until somebody
+  # re-exports: 32 Batch 3 articles sat that way from 2026-09-23 (queue 2026-09-23-373ac2). So the writer refreshes the
+  # copy itself, straight after the PUTs it made; the export dates only the pages that moved.
+  if ($Apply -and $ok -gt 0) {
+    $exOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\audit-ghost-page-census.ps1') -Export)
+    $exRc = $LASTEXITCODE
+    Write-Output ('census re-export exit ' + $exRc + ': ' + (@($exOut | Where-Object { $_ -match 'ghost-page-census' }) -join ' | '))
+    if ($exRc -ne 0) { $bad += ("re-export after landing exited {0}; run ops\audit-ghost-page-census.ps1 -Export and commit content\ghost-adopted" -f $exRc) }
+  }
   foreach ($x in $bad) { Write-Output ('REFUSED  ' + $x) }
   Exit-Guard -Name 'article-price-edits' -Summary ("land edits={0} ok={1} refused={2} applied={3}" -f $edits.Count, $ok, $bad.Count, [bool]$Apply) -Code $(if ($bad.Count) { 1 } else { 0 })
 }
