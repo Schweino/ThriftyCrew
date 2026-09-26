@@ -1,0 +1,131 @@
+{
+  "lane": "weekly",
+  "round": 1,
+  "generated": "2026-09-25T10:30:00",
+  "board_week": "comparison-2026-09-23 and flagged-2026-09-23 as rebuilt 2026-09-25 08:06-08:14 in the main checkout (read in place, never written)",
+  "head_at_dispatch": "cbbe61b42",
+  "queue_ids_seen": ["2026-09-21-149497", "2026-09-22-0c812e", "2026-09-22-8d2ad5", "2026-09-23-57b66b"],
+  "scope_note": "Weekly lane batch 2 of 9 (Brad asked for every open alert resolved end to end on 2026-09-25). Prevention is batch 1's, in plan-2026-09-25-6.json; this plan carries leftovers only. No new queue item is minted.",
+  "knowledge_consulted": [
+    "searched: 'alert triage root cause recurrence' (orchestrator, knowledge-search --estate) and 'alert pages once first seen worklist' (this lane)",
+    "reliability-craft/MAP.md section 4, 'An alert is not a check that fired': alert only where a human has to act. A row re-paged daily with nothing new to act on is a log line, not a page.",
+    "reliability-craft/MAP.md section 5: do not declare resolved on the alert going quiet. Each close below carries a re-measurement against today's board, not the silence.",
+    "grocery rules: 'No hard-coded bands (Brad, 2026-09-04)'; so no band number was touched, and the band-derivation half of every item is bounced to the money lane.",
+    "measurement rules: 'A rate is printed with its DENOMINATOR, always'; every count below names its board and its total.",
+    "grocery/match-worklist-lib.ps1 Get-MatchPageRows (plan-2026-09-22-9): the page-once-on-first-day pattern, reused for the band kind."
+  ],
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record, not a validation. Went live since the last lane run (git log since grocery/triage-weekly-lane-stamp.txt, 2026-09-20T07:45:35, over grocery/stores.json and grocery/commodities.json): 14 commits, all commodity rule edits (laundry-detergent search and rule, the lane's matching-rule batches, the chicken-drumsticks split); no new store and no new feed.",
+  "ship_sequence": [
+    "re-measure each id against flagged-2026-09-23 / comparison-2026-09-23 in the main checkout",
+    "2026-09-23-57b66b and 2026-09-22-0c812e together: audit-band-refusals pages a row outside the backlog once and hands it to the matching worklist; -Tighten the backlog",
+    "2026-09-22-8d2ad5: re-read the 4 cheap rows on today's board",
+    "2026-09-21-149497: re-read the 20 uncovered commodities and both sub-classes on today's board"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-23-57b66b",
+      "subject": "Grocery: a price band refused rows it cannot explain (re-paged 2026-09-23, 09-24 twice, 09-25)",
+      "classification": "code",
+      "evidence": [
+        "audit-band-refusals.ps1 -OutDir <main grocery\\out> on 2026-09-25: exit 2, 'band-refusals: 1423 band-refused row(s) in flagged-2026-09-23.json: 242 explained as a basis error, 1181 unexplained, of which 38 NEW (not in the backlog of 1116)'",
+        "the 2026-09-23 page named 'apple-juice | Baker's | 0.1998 against reference 0.0387 | Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz' and three Baker's conditioners; all four are among today's 38, so the same rows re-paged on every run",
+        "0 of the 38 keys were ever in the founding backlog (1,165 keys at 74cc780df), so they are genuinely new captures, not tightened keys coming back",
+        "match-worklist-lib.ps1 Read-MatchFindings read kind band from band-refusals-backlog.json ONLY, so none of the 38 was on the matching worklist and no -Decide could silence them"
+      ],
+      "root_cause": "The band audit's ratchet has two states, backlog and NEW, and nothing between them: the backlog grows only by a reviewed -Accept, and the worklist that is meant to decide band rows read only the backlog. So every row captured after 2026-09-22 that the derived band refuses re-pages on every run forever, while sitting on no docket. The other four matching detectors were moved to page-once-then-worklist in plan-2026-09-22-9; the band kind was left on the old whole-set page.",
+      "root_fix": {
+        "what": "a band-refused row outside the backlog pages once, on its first day, and then waits on the matching worklist until -Decide settles it, the pattern the other matching detectors use since plan-2026-09-22-9. Nothing is weakened: every unexplained row is still counted, printed and listed.",
+        "files": ["grocery/audit-band-refusals.ps1", "grocery/match-worklist-lib.ps1", "grocery/test-match-worklist.ps1"],
+        "exact_change": "audit-band-refusals.ps1: Get-TcBandOpenRows keeps first_seen per key (id|store|name) in grocery/out/band-refusals-open.json, drops a key with a match-verdicts.json verdict on band|key, prints UNEXPLAINED (and exits 2) only for rows first seen today and OPEN for older ones; new -OpenFile and -VerdictFile parameters. match-worklist-lib.ps1 Read-MatchFindings: reads band-refusals-open.json as kind band beside the backlog."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no band, rule, commodity or board input is touched. Live run against the main board with a scratch -OpenFile: run 1 exit 2 with 38 first seen today (the same 38 the old code paged); a simulated next day exit 0 with 38 OPEN lines and findings=0 open=38. The main checkout's grocery/out was not written (git status empty for the open file).",
+        "affected_now": 38
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-band-refusals.ps1 -SelfTest (11 -> 15 cases, count asserted) and grocery/test-match-worklist.ps1 (26 -> 28 cases)",
+        "must_fire_case": "the Evolution Fresh apple juice row of the 2026-09-23 page, frozen: with no open record it is first seen 2026-09-23 and pages; and in test-match-worklist the same row in band-refusals-open.json joins the worklist as kind band with 'first seen 2026-09-23' in its evidence",
+        "clean_twin": "the next day the same row still carries first_seen 2026-09-23 and its name for the OPEN line and the worklist (positive assertion); and the backlog's own band row (Member's Mark bay leaves) is still read beside the open file, band not blind",
+        "must_not_fire": "the same row on 2026-09-24 does not page again; a key decided in match-verdicts.json (band|id|store|name) leaves the open set while its undecided sibling still pages",
+        "ran": "audit-band-refusals -SelfTest exit 0, 'band-refusals self-test pass: 15 of 15 case(s) (15 expected)'; test-match-worklist exit 0, 'test-match-worklist self-test pass: 28 of 28 case(s)'",
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the commit's hunks in audit-band-refusals.ps1, match-worklist-lib.ps1 and test-match-worklist.ps1 and delete grocery/out/band-refusals-open.json. The audit then pages every row outside the backlog on every run, as at cbbe61b42. No board effect either way.",
+      "freshness": "measured 2026-09-25 10:00-10:30 against flagged-2026-09-23.json built 2026-09-25 08:06 in the main checkout, and the queue item's recurrences through 2026-09-25T08:27:54. A board rebuilt after this run can change the 38, never the mechanism.",
+      "leaves_open": "the 38 rows themselves are undecided: each is a wrong product (an exclude through apply-coverage-batch -FromWorklist, which edits grocery/commodities.json, THE LINE) or a real premium price the derived band censors (the band derivation, money lane). By reading: most are real premium Baker's products (Tabasco 1.095/fl oz, Kristin Ess conditioner, Halo Top), a few are wrong products (Bettergoods Hot Honey as apple-cider-vinegar, Member's Mark Calzones as pasta-sauce, Clorox 2 as bleach), and the two Walmart paper towels at 0.0248 and 0.0377 against 1.2208 look like a per-sheet basis the audit's conversion list cannot name. The first run after landing pages them once more (no open file exists yet), then they wait on the worklist.",
+      "leaves_open_occurrences": 38,
+      "leaves_open_followup": "2026-09-22-0c812e",
+      "premise_verified": "yes: the page's rows re-occur on today's flagged file and none is in the backlog; the worklist lib reads the backlog alone (match-worklist-lib.ps1 Read-MatchFindings, band block).",
+      "deviation": "",
+      "status": "done",
+      "shipped_commit": "da9e39cd6",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real, and the class fixed at its source: a band-refused row outside the backlog now pages once on its first day and waits on the matching worklist, where -Decide settles it for good. Before: the same 38 rows paged on 2026-09-23, 09-24 (twice) and 09-25. After (live, main board, scratch open file): day 1 exit 2 with 38, day 2 exit 0 with 38 OPEN. The 38 decisions ride 2026-09-22-0c812e to the money lane.",
+      "actual_tool_calls": 30
+    },
+    {
+      "queue_id": "2026-09-22-0c812e",
+      "subject": "Triage residual: 1,165 band-refused rows no basis error explains (derived-band rollout worklist)",
+      "classification": "no-code-change",
+      "evidence": [
+        "backlog at origin/main: 1,116 keys (1,165 founding at 74cc780df, then dc4be7174 turned 41 band-backlog shapes into commodity rules)",
+        "flagged-2026-09-23 (built 2026-09-25 08:06): 1,181 unexplained band-refused rows; 25 backlog keys no longer occur; -Tighten took the backlog to 1,091 keys (exit 0, 'backlog TIGHTENED at 1091 key(s) (was 1116)')",
+        "each remaining key is decided one at a time by resolve-match-worklist -Decide; a wrong product becomes an exclude through apply-coverage-batch -FromWorklist, which rewrites grocery/commodities.json"
+      ],
+      "root_cause": "The derived bands exposed wrong products the typed band floors had been hiding (gap F1 of design/RCA-holistic-2026-09-22.md). The identity rules still admit them; the band only keeps them off the board.",
+      "root_fix_none_because": "the fix is 1,091 identity decisions whose outcome is an edit of grocery/commodities.json (apply-coverage-batch -FromWorklist) or of the band derivation, both on this lane's line. Bounced to the money lane with the measurement. The paging half of this class shipped under 2026-09-23-57b66b (da9e39cd6), so the backlog no longer produces daily pages.",
+      "leaves_open": "1,091 backlog keys plus 38 open keys outside it, all undecided on the matching worklist (kind band).",
+      "leaves_open_occurrences": 1129,
+      "premise_verified": "yes, re-measured on flagged-2026-09-23 as above",
+      "deviation": "the backlog was tightened here (25 keys no longer occur), which the item body names as the step after the excludes; it is safe now because a returning key pages once and joins the worklist instead of paging daily.",
+      "status": "bounced",
+      "shipped_commit": "da9e39cd6",
+      "resolution_note": "Bounced to the money lane: deciding the 1,091 backlog keys and the 38 open keys needs commodity excludes (grocery/commodities.json) or a band-derivation change. Measured 2026-09-25 on flagged-2026-09-23: 1,423 band-refused rows, 242 explained, 1,181 unexplained; backlog 1,116 -> 1,091 by -Tighten.",
+      "actual_tool_calls": 6
+    },
+    {
+      "queue_id": "2026-09-22-8d2ad5",
+      "subject": "Triage residual: rows the derived bands newly admit that were not read (4 cheap, 1,211 dear)",
+      "classification": "no-code-change",
+      "evidence": [
+        "comparison-2026-09-23 (built 2026-09-25 08:14), text search of the board: 'Softsoap Liquid Hand Soap Pump, Fresh Breeze' 0 hits; 'Suave Skin Solutions' 0 hits",
+        "'Dr Pepper Soda' 1 hit, and it is a different row: Family Fare 'Dr Pepper Soda 42.2 Fl Oz' at 0.0237/fl oz, size 42.2 fl oz; the Fareway 0.0039/fl oz row holds no cell",
+        "'Fresh Roma Tomato, Each' at Walmart now reads 0.9692/lb with size 0.227 lb (basis 'size 0.227 lb'), against 0.2804/lb on 2026-09-22: the basis error no longer reproduces"
+      ],
+      "root_cause": "The derived band's floor is set from the store rows themselves, so a basis error that is cheap but inside the derived floor is admitted with nothing reading it; the typed floors used to refuse some of these. The dear side is harmless by construction (a dear row wins a cell only where the store has no cheaper row, and the 6 that did were read on 2026-09-22).",
+      "root_fix_none_because": "the instance no longer reproduces (0 of the 4 cheap rows holds a board cell today), and the class, a cheap basis error admitted inside a derived floor with no watcher, is fixed in the band derivation or a value guard (grocery/guards.ps1), both on this lane's line. Bounced to the money lane with the measurement.",
+      "leaves_open": "the class: a cheap basis error admitted inside the derived floor that wins a cell has no dedicated detector. 0 occurrences on today's board among the 4 named rows; the 1,211 dear rows were not re-read and hold no cell by construction.",
+      "leaves_open_occurrences": 0,
+      "premise_verified": "yes, re-measured on comparison-2026-09-23 as above",
+      "deviation": "",
+      "status": "bounced",
+      "shipped_commit": null,
+      "resolution_note": "Bounced to the money lane. Re-measured 2026-09-25 on comparison-2026-09-23: 0 of the 4 cheap rows holds a board cell (Softsoap and Suave absent, Dr Pepper's cell is a different Family Fare 42.2 oz row at 0.0237/fl oz, the Walmart Roma tomato now carries size 0.227 lb and reads 0.9692/lb). The watcher for the class belongs to the band derivation or guards.ps1.",
+      "actual_tool_calls": 5
+    },
+    {
+      "queue_id": "2026-09-21-149497",
+      "subject": "Grocery: 20 of 577 search-termed commodities have no board cell after the store-fetch fix; a band-refused CARRIED sumac and an un-askable cheaper Hy-Vee wild rice",
+      "classification": "no-code-change",
+      "evidence": [
+        "comparison-2026-09-23 (built 2026-09-25 08:14): 572 commodity rows. ground-sumac now priced: Baker's 'Morton & Bassett All Natural Sumac' 6.395/oz (the band-refused carried sumac is admitted under the derived band)",
+        "wild-rice priced: Hy-Vee 'Hy-Vee Select Wild Rice' 0.6869/oz; cardamom priced: Walmart 'McCormick Gourmet Organic Ground Cardamom, 1.75 oz Bottle' 5.3543/oz",
+        "of the 20 named commodities, 2 (ground-sumac, cardamom) hold a cell and 18 have no board row, each withheld or not carried, none holding a wrong cell",
+        "plan-2026-09-22-2 marked this item superseded by 2026-09-21-6b17b1 (derived bands) and 2026-09-20-cb8f30 (Hy-Vee ask order); both are resolved in the queue (2026-09-22T21:46:08 and 19:39:58), and this id was never closed"
+      ],
+      "root_cause": "Both sub-classes were fixed upstream by the items that superseded it: typed band floors refusing real shelf prices (6b17b1, every commodity on its derived band) and the Hy-Vee ask order skipping id-less rows (cb8f30). The id stayed open because the superseded close was recorded in a plan and never run through triage-close.",
+      "root_fix_none_because": "no code change is owed here: both sub-classes shipped under 2026-09-21-6b17b1 and 2026-09-20-cb8f30 and re-measure fixed on today's board. The 18 uncovered commodities are coverage (not carried, Walmart ship-only, no candidate), not a defect.",
+      "leaves_open": "18 of the 20 commodities still have no board row. 0 live recipes depended on any of them when the item was minted, and any live recipe line that cannot price stays NO PRICE BASIS and pages from the costing engine.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:meal-prep/engine/cost-recipes.ps1",
+      "premise_verified": "yes, re-measured on comparison-2026-09-23 as above",
+      "deviation": "",
+      "status": "done",
+      "shipped_commit": null,
+      "close_disposition": "superseded",
+      "resolution_note": "Superseded by 2026-09-21-6b17b1 and 2026-09-20-cb8f30, both resolved, and re-measured on comparison-2026-09-23: ground-sumac priced at Baker's 6.395/oz, wild-rice at Hy-Vee 0.6869/oz, cardamom at Walmart 5.3543/oz. Of the 20 uncovered, 2 now price and 18 have no row (was 20 of 577 on 2026-09-21); those are coverage, owned by the costing engine's NO PRICE BASIS page.",
+      "actual_tool_calls": 7
+    }
+  ]
+}
