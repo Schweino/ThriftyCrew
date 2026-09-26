@@ -1334,6 +1334,31 @@ else { Bad ('food-category flagged REAL produce (rc=' + $r.rc + ') - a new token
 Remove-Item $fxSnk -Recurse -Force -ErrorAction SilentlyContinue
 } # u030-d2-must-fire-for-the-2026-07-30
 
+# (d2b) MUST-FIRE for the beverage class on the five non-drink display buckets (2026-09-25, queue
+# 2026-09-18-a0c785, triage-plans\plan-2026-09-25-16.json). Dairy & Eggs, Canned & Soup, Sauces & Condiments,
+# Baking & Spices and Coffee, Oils & Spreads carried no beverage class, so an energy drink priced on a
+# fluid-ounce vinegar was seen by nothing. Frozen literal rows, never read from the board. The clean rows
+# exercise the id exemption, which since the same change matches WHOLE id segments: baking-soda and lemon-juice
+# stay exempt inside the newly scoped buckets, and ribeye-steak (no longer a 'tea') must stay silent on real meat.
+if (Use-Unit 'u145-d2b-beverage-on-the-five-non-drink-buckets') {
+$fxBev = NewFxDir 'afc-bev5'
+$bevRow = '{"week_of":"2026-09-23","comparison":[{"commodity":"White Vinegar","id":"white-vinegar","unit":"oz","stores":[{"store":"Walmart","per_unit":0.1244,"item":"Summit Energy Drink 16 FL OZ"}]}]}'
+Set-Content (Join-Path $fxBev 'comparison-2026-09-23.json') $bevRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBev)
+if ($r.rc -eq 2 -and $r.text -match 'beverage' -and $r.text -match 'white-vinegar|White Vinegar') {
+  Ok 'food-category MUST-FIRE: an energy drink on white-vinegar (Sauces & Condiments) hard-fails naming beverage (exit 2)'
+} else {
+  Bad ('food-category did NOT catch the energy drink on white-vinegar (rc=' + $r.rc + ') - the beverage class is gone from the Dairy/Canned/Sauces/Baking/Coffee apply block in category-excludes.json, or that block fell below the shared one')
+}
+# CLEAN TWIN: legitimate rows in the same buckets still pass, so the exemption still reaches them.
+$bevClean = '{"week_of":"2026-09-23","comparison":[{"commodity":"Baking Soda","id":"baking-soda","unit":"oz","stores":[{"store":"Walmart","per_unit":0.0548,"item":"Arm & Hammer Baking Soda 16 oz"}]},{"commodity":"Lemon Juice","id":"lemon-juice","unit":"oz","stores":[{"store":"Aldi","per_unit":0.0999,"item":"Nature S Nectar Lemon Juice 15 FL OZ"}]},{"commodity":"Ribeye Steak","id":"ribeye-steak","unit":"lb","stores":[{"store":"Hy-Vee","per_unit":12.99,"item":"Beef Ribeye Steak Boneless"}]}]}'
+Set-Content (Join-Path $fxBev 'comparison-2026-09-23.json') $bevClean -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBev)
+if ($r.rc -eq 0) { Ok 'food-category clean twin: baking soda, Nature S Nectar lemon juice and a ribeye stay silent under the segment-anchored beverage exemption' }
+else { Bad ('food-category flagged a legitimate baking-soda/lemon-juice/ribeye row (rc=' + $r.rc + ') - exempt.beverage no longer reaches its own ids: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxBev -Recurse -Force -ErrorAction SilentlyContinue
+} # u145-d2b-beverage-on-the-five-non-drink-buckets
+
 # (d3) MUST-FIRE for the frozen_dessert_brand class (2026-08-30, queue 2026-08-30-2611d3). THE FOUNDING ROW,
 # frozen verbatim off the live board it was crowning: Family Fare pistachios read $0.1248/oz because the
 # cheapest thing matching "pistachio" at that store was a 48 oz tub of Blue Bunny ICE CREAM at $5.99. The

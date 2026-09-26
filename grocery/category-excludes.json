@@ -326,6 +326,21 @@
       "note": "Bread & Bakery used to fall into the shared Dairy/Canned/Sauces/... block below and therefore could not be given a class the others must not have. This block MUST stay above that one: apply-category-excludes.ps1:34 takes the FIRST block whose regex matches the category label, so a block appended after the shared one would be unreachable (the first-match-wins trap that left dried_carrier baked into 0 of 83 vegetables). Its first eight classes are exactly the shared block's; the last two are what Bread gains."
     },
     {
+      "categories": "^(Dairy|Canned|Sauces|Baking|Coffee)",
+      "classes": [
+        "babyfood",
+        "pet",
+        "household",
+        "supplement",
+        "alcohol",
+        "imitation_carrier",
+        "frozen_dessert_brand",
+        "sausage_carrier",
+        "beverage"
+      ],
+      "note": "BEVERAGE ON THE FIVE NON-DRINK BUCKETS (2026-09-25, queue 2026-09-18-a0c785, triage-plans\\plan-2026-09-25-16.json). Dairy & Eggs, Canned & Soup, Sauces & Condiments, Baking & Spices and Coffee, Oils & Spreads shared the block below and carried no beverage class, so an energy drink priced on a fluid-ounce vinegar, sauce or oil was seen by nothing. The class cannot go on the shared block because that block also serves Pasta, Frozen and Snacks & Drinks, and Snacks & Drinks IS the drinks bucket. This block MUST stay above the shared one (first match wins, see the Bread note); its first eight classes are exactly the shared block's and beverage is what these five gain. Drinks that legitimately live in these buckets (milks, coffee, tea, juices) keep their cells through exempt.beverage, which since the same change matches WHOLE id segments: the old unanchored substring exempted ribeye-steak, sirloin-steak, shaved-beef-steak and steak-sauce as a 'tea' and watermelon as a 'water'. Measured by the weekly lane over the 1,152 priced cells of the five buckets on comparison-2026-09-23: 22 beverage token hits, every one exempt by id, 0 findings."
+    },
+    {
       "categories": "^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks)",
       "classes": [
         "babyfood",
@@ -382,7 +397,7 @@
     }
   ],
   "exempt": {
-    "beverage": "juice|soda|drink|water|tea|coffee|lemonade|punch|cider|kombucha|milk",
+    "beverage": "(?:^|-)(?:juice|soda|drinks?|water|tea|coffee|lemonade|punch|cider|kombucha|(?:butter)?milk)(?:$|-)",
     "babyfood": "baby|formula|infant",
     "pet": "dog|cat|pet",
     "household": "",
