@@ -1500,6 +1500,40 @@ else { Bad ('food-category flagged a REAL snack cell under the widened beverage 
 Remove-Item $fxWs -Recurse -Force -ErrorAction SilentlyContinue
 } # u143b-d5d-must-fire-for-the-widened-beverage-scope
 
+# (d5e) MUST-FIRE for a PREPARED PRODUCT on a raw ingredient and a ROAST on a steak (2026-09-26, queue 2026-09-26-8deaa4).
+# THE FOUNDING ROWS, frozen verbatim off comparison-2026-09-23 (built 2026-09-26 08:06): Family Fare's broccoli sale cell
+# was a Michelina's frozen entree, its jarred-gravy cell a Michelina's frozen dinner, its raspberries cell Pillsbury fruit
+# rolls and its sun-dried-tomatoes cell Wheat Thins; Fareway's raspberries CROWN was an AE Dairy Yolite yogurt cup;
+# Baker's sirloin-steak cell a Kevin's heat-and-eat entree and Family Fare's sirloin-steak CROWN a whole sirloin tip
+# subprimal. This guard read OK over every one: no class carried an entree brand, Yolite or Wheat Thins, jarred-gravy
+# and sun-dried-tomatoes sit in the 'Canned & Soup' bucket beside real soups, and no class said a roast is not a steak.
+# per_unit is read only as > 0. Never regenerate these rows from the board: the bake removes them, so a regenerated
+# fixture would pass by finding nothing ([[guard-fixture-rule]]).
+if (Use-Unit 'u143c-d5e-must-fire-for-prepared-product-and-roast-on-steak') {
+$fxPp = NewFxDir 'afc-prepared'
+# store-subset-ok: u143c food-class fixture board; audit-food-category judges the item NAME per cell and reads store only to match a food-class-allowlist entry
+$ppRow = '{"week_of":"2026-09-23","comparison":[{"commodity":"Broccoli (fresh)","id":"broccoli","unit":"lb","stores":[{"store":"Family Fare","per_unit":2.0833,"item":"Michelina''s Beef & Broccoli 9.6 Oz"}]},{"commodity":"Jarred / Canned Gravy","id":"jarred-gravy","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.1302,"item":"Michelina''s Salisbury Steak With Mashed Potatoes & Gravy 9.6 Oz"}]},{"commodity":"Raspberries","id":"raspberries","unit":"oz","stores":[{"store":"Fareway","per_unit":0.165,"item":"AE Dairy Raspberry Yolite"},{"store":"Family Fare","per_unit":0.2851,"item":"Pillsbury Poppin'' Flavor Raspberry Fruit Rolls 5 Ea"}]},{"commodity":"Sun-Dried Tomatoes","id":"sun-dried-tomatoes","unit":"oz","stores":[{"store":"Family Fare","per_unit":0.4694,"item":"Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz"}]},{"commodity":"Sirloin Steak","id":"sirloin-steak","unit":"lb","stores":[{"store":"Family Fare","per_unit":5.49,"item":"Fresh Usda Choice Whole Sirloin Tip"},{"store":"Baker''s","per_unit":9.99,"item":"Kevin''s Natural Foods Ranchero Sirloin Steak"}]},{"commodity":"Peaches","id":"peaches","unit":"lb","stores":[{"store":"Sam''s Club","per_unit":1.9967,"item":"Member''s Mark Organic Diced Peach Bowls, 4 oz., 24 pk."}]}]}'
+Set-Content (Join-Path $fxPp 'comparison-2026-09-23.json') $ppRow -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxPp)
+$ppWant = @('broccoli\s+\[Family Fare\s*\]\s+class=frozen_entree_carrier', 'jarred-gravy\s+\[Family Fare\s*\]\s+class=frozen_entree_carrier', 'raspberries\s+\[Fareway\s*\]\s+class=dairy_carrier', 'raspberries\s+\[Family Fare\s*\]\s+class=bakery_carrier', 'sun-dried-tomatoes\s+\[Family Fare\s*\]\s+class=snack_carrier', 'sirloin-steak\s+\[Family Fare\s*\]\s+class=whole_cut_carrier', 'sirloin-steak\s+\[Baker''s\s*\]\s+class=frozen_entree_carrier', 'peaches\s+\[Sam''s Club\s*\]\s+class=cup_bowl_carrier')
+$ppMiss = @($ppWant | Where-Object { $r.text -notmatch $_ })
+if ($r.rc -eq 2 -and $ppMiss.Count -eq 0) {
+  Ok 'food-category MUST-FIRE: the eight founding cells (two Michelina''s, a Kevin''s entree, a Yolite, Pillsbury fruit rolls, Wheat Thins, a whole sirloin tip, Sam''s diced peach bowls) each hard-fail under their own class (exit 2)'
+} else {
+  Bad ('food-category missed a founding prepared-product or roast-on-steak cell (rc=' + $r.rc + '; missing ' + ($ppMiss -join ' ; ') + ') - a class token, the Fruit/Vegetables/Meat block, or the jarred-gravy/sun-dried-tomatoes or steak apply_ids entry is gone: ' + ($r.text -replace "`n", ' '))
+}
+# CLEAN TWIN: the real products beside them on the same board stay silent, including the two the new tokens were most
+# likely to take: frozen broccoli florets on broccoli's neighbour and a chuck ROAST (whole_cut_carrier reaches steak and
+# chop ids only), plus Sam's whole chuck roll case, which is a ruling (Q-2026-09-26-subprimal-case), not this class.
+# store-subset-ok: clean twin for the u143c classes - the verdict never branches on store
+$ppLegal = '{"week_of":"2026-09-23","comparison":[{"commodity":"Broccoli (fresh)","id":"broccoli","unit":"lb","stores":[{"store":"Aldi","per_unit":2.09,"item":"Broccoli Crowns Per LB"},{"store":"Fareway","per_unit":2.2629,"item":"Fareway Broccoli Florets"}]},{"commodity":"Jarred / Canned Gravy","id":"jarred-gravy","unit":"oz","stores":[{"store":"Walmart","per_unit":0.1956,"item":"Heinz HomeStyle Turkey Gravy Value Size, 18 oz Jar"},{"store":"Sam''s Club","per_unit":0.0912,"item":"Chef-mate Country Sausage Gravy, 105 oz."}]},{"commodity":"Raspberries","id":"raspberries","unit":"oz","stores":[{"store":"Baker''s","per_unit":0.4167,"item":"Fresh Red Raspberries - 6 OZ Clamshell"}]},{"commodity":"Sun-Dried Tomatoes","id":"sun-dried-tomatoes","unit":"oz","stores":[{"store":"Sam''s Club","per_unit":0.4158,"item":"Terra Verde Italian Sundried Tomatoes in Oil, 24 oz."}]},{"commodity":"Sirloin Steak","id":"sirloin-steak","unit":"lb","stores":[{"store":"Hy-Vee","per_unit":10.99,"item":"Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak"}]},{"commodity":"Chuck Roast","id":"chuck-roast","unit":"lb","stores":[{"store":"Aldi","per_unit":6.99,"item":"Choice Black Angus Chuck Roast Per LB"},{"store":"Sam''s Club","per_unit":6.97,"item":"Whole Beef Chuck Roll, Case, priced per pound"}]}]}'
+Set-Content (Join-Path $fxPp 'comparison-2026-09-23.json') $ppLegal -Encoding UTF8
+$r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxPp)
+if ($r.rc -eq 0) { Ok 'food-category CLEAN TWIN: real broccoli, gravy jars, raspberries, oil-packed sun-dried tomatoes, a loin sirloin steak and chuck roasts (a whole chuck roll case included) stay silent' }
+else { Bad ('food-category flagged a real product beside the founding cells (rc=' + $r.rc + ') - a u143c token is too broad or whole_cut_carrier reached a roast commodity: ' + ($r.text -replace "`n", ' ')) }
+Remove-Item $fxPp -Recurse -Force -ErrorAction SilentlyContinue
+} # u143c-d5e-must-fire-for-prepared-product-and-roast-on-steak
+
 # THE FRESHOP PAGER AND THE CIRCULAR PICKER (2026-09-11, queue 2026-09-10-fa6ad6). Family Fare's weekly-ad pull asked
 # Freshop for limit=200&page=N; Freshop clamps limit to 100 and ignores page=, so every ad file from 09-02 to 09-09
 # held the same 100 rows of a ~1,045-row circular, recorded as 1,100 deals. pull-grocery-ads.ps1 -SelfTest drives
