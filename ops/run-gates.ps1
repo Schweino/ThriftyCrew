@@ -431,7 +431,11 @@ $static = @(
   # already-tracked file or a commit message. ON EVERY PUSH, because a secret is exposed the moment it leaves the box and no later
   # morning can take it back. Hermetic (git grep over tracked files plus the unpushed messages), about 20 s on 8,625 files.
   @{ f = 'ops\audit-secrets.ps1';              n = 'no tracked file and no unpushed commit message carries a secret - a Ghost Admin key, a private key or service-account JSON, a Cloudflare, FDC or Anthropic key, or a random value assigned to a key/token/secret/password name - a gate at ZERO with one allowlisted public flyer token (file + name + fingerprint + Brad''s reason)' }
-  @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
+  # design\PLAN-board-clock-2026-09-26.md W6: on 2026-09-26 the ad set's date (week_of, the ads file's today) lagged the
+  # real date by 3 days and every consumer that used it as "now" went wrong - ended sales priced, a 93-day window, every
+  # chain push refused. ON EVERY PUSH, because C1 and C5 put a wrong price in front of a paying reader. About 12 s.
+  @{ f = 'ops\audit-board-clock.ps1';          n = 'no NEW code treats the ad set''s date (week_of, the ads file''s today, BoardToday, or a variable carrying one) as now - a compare with a non-literal, date arithmetic or a clock-named parameter; a ratchet held by key, AST taint within one file, hermetic, reads source only' }
+  @{ f = 'ops\audit-unread-wait.ps1';         n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
   @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
   # Brad's ruling (2026-09-12, backlog I112): a lesson may state a rate of return only beside its source, the
   # period it covers, whether it is nominal or after inflation, and the fee position. ON EVERY PUSH rather than

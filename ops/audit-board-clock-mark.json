@@ -1,0 +1,30 @@
+{
+    "generated":  "2026-09-26T09:50:50",
+    "sites":  17,
+    "keys":  [
+                 "grocery\\audit-coverage-gaps.ps1 | compare | [string]$cdoc.week_of -eq $cgBoardWeek",
+                 "grocery\\audit-feed-week-parity.ps1 | compare | $BoardWeek -eq $FeedWeek",
+                 "grocery\\audit-feed-week-parity.ps1 | date-math | $d1 - $d2",
+                 "grocery\\audit-price-mode.ps1 | date-math | $f.LastWriteTime.Date - $wk",
+                 "grocery\\compare-deals.ps1 | compare | [string]$AdTo -lt [string]$script:BoardToday",
+                 "grocery\\compare-deals.ps1 | param | -BoardDate ([string]$today)",
+                 "grocery\\guards.ps1 | compare | $Matches[1] -eq [string]$cmp.week_of",
+                 "grocery\\purge-verdict-lows.ps1 | compare | $_.week -eq $wk",
+                 "grocery\\sanity-check.ps1 | compare | $PriorWeek -eq $script:week",
+                 "grocery\\sanity-check.ps1 | date-math | ([datetime]::ParseExact($week, \u0027yyyy-MM-dd\u0027, [Globalization.CultureInfo]::InvariantCulture)).AddDays(-$lookDays)",
+                 "grocery\\update-history.ps1 | compare | $bwk -ge $dailyCutR",
+                 "grocery\\update-history.ps1 | compare | [string]$_.week_of -eq $w",
+                 "grocery\\update-history.ps1 | compare | [string]$_.week_of -eq $w",
+                 "grocery\\update-history.ps1 | compare | [string]$h.week_of -ge $dailyCut",
+                 "grocery\\update-history.ps1 | date-math | $d.AddDays(-((([int]$d.DayOfWeek) + 6) % 7))",
+                 "lib\\board-drops.ps1 | compare | [datetime]$_.week_of -lt [datetime]$Week",
+                 "meal-prep\\rotate-free-dinners.ps1 | compare | [string]$state.week_of -eq $boardWeek"
+             ],
+    "history":  [
+                    {
+                        "date":  "2026-09-26T09:50:50",
+                        "count":  17
+                    }
+                ],
+    "note":  "HIGH-WATER MARK for code that treats the AD SET date (week_of, the ads file today, BoardToday, or a variable carrying one) as now: a compare with a non-literal, date arithmetic, or a clock-named parameter. keys are path | kind | normalised expression, never a line. It may only go DOWN (ops\\audit-board-clock.ps1 -Tighten)."
+}
