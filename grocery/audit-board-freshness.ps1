@@ -35,6 +35,8 @@
 
   Usage:  audit-board-freshness.ps1 [-OutDir <grocery\out>]      exit 0, findings on stdout (the chain alerts)
           audit-board-freshness.ps1 -SelfTest
+# WHAT THE SELF-TEST READS: only in-memory fixture boards; the real board is read below the self-test branch.
+# gate-inputs: grocery\audit-board-freshness.ps1
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$SelfTest)

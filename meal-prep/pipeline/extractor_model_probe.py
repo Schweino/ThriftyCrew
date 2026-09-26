@@ -23,6 +23,8 @@ model reproduced these transcriptions, not that it will hold on a page shaped un
 with sections, fractions in unicode, or an ingredient list inside an image is exactly where a weaker
 model would be expected to slip, and a small sample of ordinary pages will not contain one.
 """
+# WHAT THE SELF-TEST READS: in-file fixture payloads and the extractor agent definition (agent_def reads its frontmatter).
+# gate-inputs: meal-prep\pipeline\extractor_model_probe.py, .claude\agents\recipe-hunter-extractor.md
 from __future__ import annotations
 
 import argparse

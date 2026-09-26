@@ -48,6 +48,8 @@
     audit-store-taxonomy.ps1 -SelfTest       frozen must-fire + clean-twin fixtures, no live data
     audit-store-taxonomy.ps1 -FailOnFlag     exit 2 on any disagreement (NOT wired into the publish)
 #>
+# WHAT THE SELF-TEST READS: only a frozen in-file store map and URLs; the map file and feeds are read below the self-test branch.
+# gate-inputs: grocery\audit-store-taxonomy.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Root = "",

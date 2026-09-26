@@ -63,6 +63,8 @@
   Usage: audit-graph-gates.ps1 [-Quiet] [-Python <path>] [-SkipImport] [-SelfTest]
   Exit 0 = ran (findings are advisory). Exit 2 = self-test regression. Exit 3 = BLIND.
 #>
+# WHAT THE SELF-TEST READS: frozen status text, its own source (needle checks), and a temp db file it writes; graph\ is read only below the self-test.
+# gate-inputs: grocery\audit-graph-gates.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [string]$Python = '', [switch]$SkipImport, [switch]$SelfTest, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'

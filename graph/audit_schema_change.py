@@ -33,6 +33,8 @@ wrote down why.
     python graph/audit_schema_change.py --selftest
 Exit 0 unchanged, 2 the schema moved with no record, 3 could not evaluate (never a pass).
 """
+# WHAT THE SELF-TEST READS: in-file fixture schemas and a temp sqlite database it builds itself; stdlib only.
+# gate-inputs: graph\audit_schema_change.py
 from __future__ import annotations
 
 import argparse

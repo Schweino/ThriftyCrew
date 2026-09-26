@@ -49,6 +49,8 @@
            powershell -File ops\member-cohorts.ps1 -WhatIf    (assert the path, fetch NOTHING)
            powershell -File ops\member-cohorts.ps1 -SelfTest  (pure, touches no network)
 #>
+# WHAT THE SELF-TEST READS: only in-file fixture members and a stubbed Ghost fetch; the key file and the network are read only below the self-test.
+# gate-inputs: ops\member-cohorts.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$WhatIf, [string]$OutFile = '',
       [switch]$AppendHistory, [switch]$CheckFresh, [switch]$Force, [string]$HistoryFile = '')

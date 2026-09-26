@@ -40,6 +40,8 @@
   Usage: .\import-walmart-batch.ps1 [-TrustNoSeller] ; then compare-deals -> diff-board -> vet.
   -OutRoot writes out\regular + the itemid map under a different root (sandbox testing; default = live).
 #>
+# WHAT THE SELF-TEST READS: the live stores.json (batch accepted stores), multipack-allowlist.json (read at load), and unit-aliases.json (Build-Row's unit fallback).
+# gate-inputs: grocery\import-walmart-batch.ps1, grocery\stores.json, grocery\multipack-allowlist.json, grocery\unit-aliases.json
 param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '',
       [switch]$Reheal, [string]$Shape = '(?i)\bpacks?\s+of\s+\d+')
 $ErrorActionPreference = 'Stop'

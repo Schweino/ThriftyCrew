@@ -25,6 +25,8 @@ TRAP: Chrome silently ignores a launch if another instance owns the same profile
 process exits, the port never opens, and the failure looks like a timeout. Every launch here gets a
 throwaway --user-data-dir for that reason (same trap the daily reel hit with --screenshot).
 """
+# WHAT THE SELF-TEST READS: a fake socket and fake clock built in this file; no Chrome, no network, no repo data.
+# gate-inputs: media\reels\cdp.py
 import base64
 import json
 import os

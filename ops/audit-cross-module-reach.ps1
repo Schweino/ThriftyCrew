@@ -50,6 +50,8 @@
 #   .\audit-cross-module-reach.ps1 -SelfTest
 # Exit 0 clean, 2 the ratchet rose, 3 could not evaluate.
 # ---------------------------------------------------------------------------------------------------
+# WHAT THE SELF-TEST READS: in-file fixture text, and a sandbox it builds from this script plus EVERY lib\*.ps1 (copied whole).
+# gate-inputs: ops\audit-cross-module-reach.ps1, lib\*.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param(
   [switch]$UpdateBaseline,

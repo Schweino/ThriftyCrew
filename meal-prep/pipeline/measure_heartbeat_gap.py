@@ -28,6 +28,8 @@ maximum wearing a percentile's clothes, and runs with too little history say so.
 
 Exit 0 always: this is a measurement, not a gate.
 """
+# WHAT THE SELF-TEST READS: only in-file fixture timestamps; stdlib imports only.
+# gate-inputs: meal-prep\pipeline\measure_heartbeat_gap.py
 from __future__ import annotations
 
 import argparse

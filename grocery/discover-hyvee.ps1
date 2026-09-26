@@ -52,6 +52,8 @@
     .\discover-hyvee.ps1 -Slice 40            discover across the next 40 terms, advance the cursor
     .\discover-hyvee.ps1 -Ids apples,coffee   discover for named commodities, cursor untouched
 #>
+# WHAT THE SELF-TEST READS: only frozen in-file candidates; the network, feeds and boards are read below the self-test branch.
+# gate-inputs: grocery\discover-hyvee.ps1
 param(
   [int]$Slice = 40,
   [string[]]$Ids = @(),

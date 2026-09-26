@@ -38,6 +38,8 @@ Usage:
   python graph/pipeline/probe_basis_modes.py --db PATH [--arm pool|day|both] [--n 8] [--out rows.jsonl]
   python graph/pipeline/probe_basis_modes.py --selftest
 """
+# WHAT THE SELF-TEST READS: in-file fixture prices only; flag_outliers is imported only by load(), off the self-test path.
+# gate-inputs: graph\pipeline\probe_basis_modes.py
 from __future__ import annotations
 
 import argparse

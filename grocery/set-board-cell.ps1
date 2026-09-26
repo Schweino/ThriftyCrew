@@ -32,6 +32,8 @@
 
   Exit 0 = written (or dry run clean). Exit 1 = refused, nothing written.
 #>
+# WHAT THE SELF-TEST READS: a scratch board it writes under a per-run temp dir, and this script run as a child; the real board is never read.
+# gate-inputs: grocery\set-board-cell.ps1
 param(
   [string]$Id = '',
   [string]$Store = '',

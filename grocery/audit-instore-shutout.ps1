@@ -49,6 +49,8 @@
     .\audit-instore-shutout.ps1 -List        print the current set and exit 0
     .\audit-instore-shutout.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: only capture files it writes under a per-run temp dir, and this script run as a child on that dir.
+# gate-inputs: grocery\audit-instore-shutout.ps1
 # -BaselineSpec is a quote-free 'store=count[;store=count]' string, NOT a hashtable: a hashtable
 # cannot cross a `powershell -File` argument boundary, and PS 5.1 strips embedded double quotes
 # from a native exe's arguments, so a JSON literal would not survive either. The self-test drives

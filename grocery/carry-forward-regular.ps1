@@ -20,6 +20,8 @@
   Called by: the weekly browser SKILL (Baker's step C, Aldi step F2), the Fareway builds
   (build-fareway-regular.ps1 tail). Run manually anytime; it only ever touches the newest file.
 #>
+# WHAT THE SELF-TEST READS: only regular files it writes under per-run temp dirs, dated relative to today.
+# gate-inputs: grocery\carry-forward-regular.ps1
 param(
   [ValidateSet('bakers','aldi','fareway')][string]$Store,
   [int]$MaxCarryDays = 90,   # = capture policy MaxCarryDays (quarterly rotation); -SelfTest passes its own

@@ -25,6 +25,8 @@
 
   Usage: .\audit-cloud-readiness.ps1 [-ShowAll] | -SelfTest
 #>
+# WHAT THE SELF-TEST READS: only frozen in-file script text; the chain and scripts are read below the self-test branch.
+# gate-inputs: grocery\audit-cloud-readiness.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ShowAll, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

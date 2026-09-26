@@ -33,6 +33,8 @@
   Usage: .\build-aldi-regular.ps1 -In out\captures\aldi-capture-2026-07-29.csv -Date 2026-07-29
          .\build-aldi-regular.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: in-file fixture rows and temp capture files it writes, plus capture-lib's placeholder-name-patterns.json (read by the row filter).
+# gate-inputs: grocery\build-aldi-regular.ps1, grocery\placeholder-name-patterns.json
 param(
   [string]$In = "",
   [string]$Date = "",

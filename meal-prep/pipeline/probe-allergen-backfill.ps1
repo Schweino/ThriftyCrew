@@ -30,6 +30,9 @@
 #   .\probe-allergen-backfill.ps1 -Slugs a,b -KeepScratch       a sample, keeping the rendered cards
 #   .\probe-allergen-backfill.ps1 -SelfTest                     frozen fixtures, hermetic
 # Exit 0 the report ran, 1 a rebuilt card still fails the allergen check, 3 could not evaluate.
+# WHAT THE SELF-TEST READS: in-file card fixtures and the TEXT of engine\publish.ps1 (hash-formula lockstep); the catalogue is read below the self-test.
+# gate-inputs: meal-prep\pipeline\probe-allergen-backfill.ps1
+# gate-inputs-text: meal-prep\engine\publish.ps1
 # ===================================================================================================
 param(
   [string]$Slugs = '',

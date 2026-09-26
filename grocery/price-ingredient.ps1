@@ -36,6 +36,8 @@
     .\price-ingredient.ps1 -Name quinoa -Json
     .\price-ingredient.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: only frozen in-file commodities; the boards and registry are read below the self-test branch.
+# gate-inputs: grocery\price-ingredient.ps1
 param(
   # Position 0 matters: under `powershell -File script.ps1 foo bar` the args arrive positionally, and
   # ValueFromRemainingArguments alone does not bind them without a position.

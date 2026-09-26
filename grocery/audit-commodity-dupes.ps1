@@ -31,6 +31,8 @@
     .\audit-commodity-dupes.ps1
     .\audit-commodity-dupes.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: only frozen in-file fixtures; the registry and board reads are below the self-test branch.
+# gate-inputs: grocery\audit-commodity-dupes.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [string]$OutDir = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

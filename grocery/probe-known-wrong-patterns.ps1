@@ -54,6 +54,8 @@
           probe-known-wrong-patterns.ps1 -SelfTest
   Exit:   0 measured, 3 BLIND (no board or no capture could be read). Last line: PROBE-KNOWN-WRONG-PATTERNS-COMPLETE.
 #>
+# WHAT THE SELF-TEST READS: only in-file product names through known-wrong-lib; the rulings, boards and captures are read below the self-test.
+# gate-inputs: grocery\probe-known-wrong-patterns.ps1, grocery\known-wrong-lib.ps1, lib\json-io.ps1
 [CmdletBinding()]
 param(
   [string]$Root,

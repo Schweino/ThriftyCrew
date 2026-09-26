@@ -32,6 +32,8 @@
 
   EXIT 0 always - a RED stage is content. 3 when not one source could run.
 #>
+# WHAT THE SELF-TEST READS: in-file fixture sources, a temp bus file it writes, and its own source (needle checks); the live sources run only below.
+# gate-inputs: ops\brain-report.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json)
 

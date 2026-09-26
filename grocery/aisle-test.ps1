@@ -76,6 +76,8 @@
     .\aisle-test.ps1 -Candidates candidates.json      [{id, store, product, canonical_url}]
     .\aisle-test.ps1 -Id watermelon -Product "..." -Url "https://.../shop/household/..."
 #>
+# WHAT THE SELF-TEST READS: frozen in-file category maps and shelf rows, and one temp candidates file it writes itself.
+# gate-inputs: grocery\aisle-test.ps1
 param(
   [string]$Candidates = '',
   [string]$Id = '',

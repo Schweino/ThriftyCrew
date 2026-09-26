@@ -73,6 +73,8 @@
   Exit 0 ran (the result says what it did), 3 could not evaluate (nothing acted), 1 a self-test failure.
   Last line: UNPRICED-TAKEDOWN-COMPLETE mode=<m> live=<n> down=<n> would=<n> restored=<n> breaker=<held|ok> ...
 #>
+# WHAT THE SELF-TEST READS: fixture meal-prep trees it writes under a per-run temp dir, the real hold-recipe.ps1 run against them, and this script as a dry-run child.
+# gate-inputs: meal-prep\pipeline\unpriced-takedown.ps1, meal-prep\pipeline\hold-recipe.ps1, lib\json-io.ps1, lib\atomic-write.ps1, lib\ledger-lock.ps1, meal-prep\lib\held-state.ps1
 param(
   [string]$Root = '',
   [switch]$DryRun,

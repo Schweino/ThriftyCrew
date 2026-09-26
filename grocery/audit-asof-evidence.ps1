@@ -46,6 +46,8 @@
   | 3 could not evaluate (named, not silent).
   Usage: .\audit-asof-evidence.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
+# WHAT THE SELF-TEST READS: only fixture captures and regular files it writes under a per-run temp root.
+# gate-inputs: grocery\audit-asof-evidence.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [string]$Root = "")
 $ErrorActionPreference = 'Stop'

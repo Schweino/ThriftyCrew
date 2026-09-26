@@ -28,6 +28,8 @@ an abstention is never silently dropped from the denominator.
     python tools/local-llm/finetune-probe/eval_holdout.py --selftest
 Exit 0 scored, 2 self-test failure, 3 nothing to score (BLIND, never a pass).
 """
+# WHAT THE SELF-TEST READS: only in-file fixture pairs; stdlib imports only.
+# gate-inputs: tools\local-llm\finetune-probe\eval_holdout.py
 from __future__ import annotations
 
 import argparse

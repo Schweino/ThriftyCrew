@@ -6,6 +6,8 @@
   guards.ps1 uses. The founding row is the 2026-09-20 Sam's pads tile (0.1683/each on the board), here linked at a
   factor-off price so it is a PRICE-MISMATCH.
 #>
+# WHAT THE SELF-TEST READS: fixture boards and links it writes under a per-run temp dir, read by the real audit-tile-integrity.ps1 run as a child with -OutDir and -ProductUrlsFile.
+# gate-inputs: grocery\test-tile-integrity-scope.ps1, grocery\audit-tile-integrity.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

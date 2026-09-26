@@ -60,6 +60,8 @@
   Exit: 0 = no finding outside the baseline. 2 = a NEW failing recipe or index row, or -Tighten refused.
   3 = could not evaluate: no baseline, or nothing could be judged.
 #>
+# WHAT THE SELF-TEST READS: frozen in-file specs, and this script run as a child on a temp meal-prep tree and temp baselines it writes.
+# gate-inputs: meal-prep\engine\audit-published-macros.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

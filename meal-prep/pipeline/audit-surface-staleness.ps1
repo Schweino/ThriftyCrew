@@ -29,6 +29,9 @@
   EXIT: 0 clean / 1 findings / 2 self-test failed / 3 could-not-evaluate.
   Self-test: powershell -File meal-prep\pipeline\audit-surface-staleness.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: frozen payloads, a temp verdict dir, and the TEXT of the daily chain and the three tool builders (wiring and splice checks).
+# gate-inputs: meal-prep\pipeline\audit-surface-staleness.ps1
+# gate-inputs-text: grocery\check-ad-cycles.ps1, meal-prep\build-dinner-data.ps1, meal-prep\build-stretcher-data.ps1, meal-prep\build-cheapnow-data.ps1
 param([switch]$SelfTest, [switch]$ShowAll, [switch]$SkipHub)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

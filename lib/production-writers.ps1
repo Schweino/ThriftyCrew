@@ -20,6 +20,8 @@
 #
 # NO param() BLOCK HERE, DELIBERATELY - same rule as lib\bot-paths.ps1: dot-sourced under PS 5.1 a param() block
 # runs in the CALLER's scope and resets the caller's own -SelfTest.
+# WHAT THE SELF-TEST READS: only a temp git repo and temp registry files it builds itself, plus the libraries loaded above.
+# gate-inputs: lib\production-writers.ps1
 $__pwSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 if (-not (Get-Command Test-BotPathOwned -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'bot-paths.ps1') }

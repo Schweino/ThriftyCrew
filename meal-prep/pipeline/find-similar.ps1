@@ -17,6 +17,8 @@
 # adjudicator and decider still rule. A crude shortlist an agent can check beats a clever score it
 # cannot see behind.
 # ---------------------------------------------------------------------------------------------------
+# WHAT THE SELF-TEST READS: in-file fixtures and the live catalog digest (meal-prep\pipeline\catalog-digest.json, gitignored, seeded).
+# gate-inputs: meal-prep\pipeline\find-similar.ps1, meal-prep\pipeline\catalog-digest.json
 param(
   [string]$Name = '',
   [string]$Protein = '',

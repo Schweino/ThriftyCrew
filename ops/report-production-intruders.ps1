@@ -18,6 +18,8 @@
           powershell -NoProfile -File ops\report-production-intruders.ps1 -SelfTest
   -Repo defaults to the production checkout: the parent of this repository's git common dir.
 #>
+# WHAT THE SELF-TEST READS: a temp git repo and temp registry it builds, and this script run as a child; the real registry is never read.
+# gate-inputs: ops\report-production-intruders.ps1
 param([string]$Repo = '', [string]$Registry = '', [switch]$Record, [string]$Today = '', [switch]$SelfTest)
 
 $ErrorActionPreference = 'Stop'

@@ -45,6 +45,8 @@
         -Evidence "Pasta Roni VERMICELLI - a boxed pasta side, not olive oil. Matched the include on 'olive oil'."
     .\adjudicate-discovery.ps1 -SelfTest
 #>
+# WHAT THE SELF-TEST READS: a fixture docket, ledger and catalogue it writes under a per-run temp dir, and this script run as a child on them.
+# gate-inputs: grocery\adjudicate-discovery.ps1
 param(
   [string]$Key = '',
   [switch]$Accept,

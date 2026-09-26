@@ -8,6 +8,8 @@
   This is what the weekly automation runs so it only re-resolves what changed (incremental refresh).
   Output: out\url-worklist.json  { generated, tolerance, stores{ <store>: [ {id,commodity,term,unit,price_per_unit,reason} ] } }
 #>
+# WHAT THE SELF-TEST READS: only frozen in-file per-unit fixtures through pu-lib; the board reads sit under if (-not $SelfTest).
+# gate-inputs: grocery\resolve-worklist.ps1
 param([double]$Tolerance = 0.15, [string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

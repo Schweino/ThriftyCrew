@@ -45,6 +45,8 @@ WHAT IS STILL THIS FILE'S JOB, unchanged from 4.1a:
 EXIT CODES (section 4.5): 0 clean / 1 findings / 2 could-not-run. Marker HUNT-DISPATCH-COMPLETE.
 INTERPRETER: C:\\Codex\\Python312\\python.exe.
 """
+# WHAT THE SELF-TEST READS: the imported hunt_lib, and every .claude\agents\*.md (it parses each agent definition); dispatches are injected.
+# gate-inputs: meal-prep\pipeline\hunt_dispatch.py, meal-prep\pipeline\hunt_lib.py, .claude\agents\*.md
 from __future__ import annotations
 
 import json

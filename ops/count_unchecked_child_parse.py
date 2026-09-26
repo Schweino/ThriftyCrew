@@ -24,6 +24,8 @@ Usage:
   python ops/count_unchecked_child_parse.py --selftest
 Last line is COUNT-UNCHECKED-CHILD-PARSE-PY-COMPLETE (or the self-test verdict).
 """
+# WHAT THE SELF-TEST READS: only fixture source strings built in this file; stdlib imports only.
+# gate-inputs: ops\count_unchecked_child_parse.py
 import argparse
 import ast
 import json

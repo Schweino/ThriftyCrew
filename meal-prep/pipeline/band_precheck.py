@@ -28,6 +28,8 @@ AND IT SPEAKS ONLY WHEN IT HAS THE EVIDENCE. Below MIN_COVERAGE of the lines res
 main protein line unparsed, it returns coverage and NO verdict - because a band computed over half a
 dinner is not a smaller truth, it is a different dish.
 """
+# WHAT THE SELF-TEST READS: the food DB and densities table (load_food_db, load_densities) and the imported coverage_check module.
+# gate-inputs: meal-prep\pipeline\band_precheck.py, meal-prep\pipeline\coverage_check.py, meal-prep\food-macros-db.json, meal-prep\db\densities.json
 import json
 import os
 

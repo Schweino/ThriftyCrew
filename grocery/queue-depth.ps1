@@ -33,6 +33,8 @@
 
   Exit 0 always: this reports. `health-heartbeat.ps1` is what turns a report into an issue.
 #>
+# WHAT THE SELF-TEST READS: only in-file fixture depths and fixed dates; the live queues are read below the self-test branch.
+# gate-inputs: grocery\queue-depth.ps1
 param([switch]$SelfTest, [switch]$Json)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }

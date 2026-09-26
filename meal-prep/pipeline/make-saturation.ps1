@@ -18,6 +18,8 @@
 # axis that makes it distinct. Suppressing a genuinely novel dish because its neighbourhood is busy is
 # the failure mode this must avoid, so the brief says so in as many words.
 # ---------------------------------------------------------------------------------------------------
+# WHAT THE SELF-TEST READS: in-file fixtures, and whether meal-prep\pipeline\catalog-digest.json exists (gitignored, seeded).
+# gate-inputs: meal-prep\pipeline\make-saturation.ps1, meal-prep\pipeline\catalog-digest.json
 param(
   [string]$DigestFile, [string]$OutFile, [int]$CrowdedAt = 8, [int]$Top = 15,
   [switch]$Brief, [switch]$Json, [switch]$SelfTest
