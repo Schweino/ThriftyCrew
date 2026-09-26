@@ -1,0 +1,530 @@
+{
+    "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages on its first day only; a match-verdicts.json verdict (band|key) removes it.",
+    "from":  "flagged-2026-09-23.json",
+    "written":  "2026-09-26",
+    "count":  58,
+    "rows":  [
+                 {
+                     "key":  "apple-cider-vinegar|Baker\u0027s|Bragg Organic Apple Cider Vinegar with the Mother",
+                     "first_seen":  "2026-09-26",
+                     "id":  "apple-cider-vinegar",
+                     "store":  "Baker\u0027s",
+                     "name":  "Bragg Organic Apple Cider Vinegar with the Mother",
+                     "unit_price":  0.3119,
+                     "band_ref":  0.0546
+                 },
+                 {
+                     "key":  "apple-cider-vinegar|Family Fare|Bragg Apple Cider Vinegar, Organic 16 Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "apple-cider-vinegar",
+                     "store":  "Family Fare",
+                     "name":  "Bragg Apple Cider Vinegar, Organic 16 Oz",
+                     "unit_price":  0.4181,
+                     "band_ref":  0.0546
+                 },
+                 {
+                     "key":  "apple-cider-vinegar|Walmart|Bettergoods Hot Honey 12 oz Bottle with Habanero and Apple Cider Vinegar",
+                     "first_seen":  "2026-09-26",
+                     "id":  "apple-cider-vinegar",
+                     "store":  "Walmart",
+                     "name":  "Bettergoods Hot Honey 12 oz Bottle with Habanero and Apple Cider Vinegar",
+                     "unit_price":  0.4133,
+                     "band_ref":  0.0546
+                 },
+                 {
+                     "key":  "apple-juice|Baker\u0027s|Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "apple-juice",
+                     "store":  "Baker\u0027s",
+                     "name":  "Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz",
+                     "unit_price":  0.1998,
+                     "band_ref":  0.0387
+                 },
+                 {
+                     "key":  "bay-leaves|Family Fare|Mc Cormick Bay Leaves 0.12 Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "bay-leaves",
+                     "store":  "Family Fare",
+                     "name":  "Mc Cormick Bay Leaves 0.12 Oz",
+                     "unit_price":  58.25,
+                     "band_ref":  9.8824
+                 },
+                 {
+                     "key":  "bleach|Walmart|Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "bleach",
+                     "store":  "Walmart",
+                     "name":  "Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
+                     "unit_price":  0.1965,
+                     "band_ref":  0.0356
+                 },
+                 {
+                     "key":  "cajun-seasoning|Baker\u0027s|Weber N\u0027Orleans Cajun Seasoning, Gluten-Free, Kosher, 2.75 oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "cajun-seasoning",
+                     "store":  "Baker\u0027s",
+                     "name":  "Weber N\u0027Orleans Cajun Seasoning, Gluten-Free, Kosher, 2.75 oz",
+                     "unit_price":  1.8145,
+                     "band_ref":  0.348
+                 },
+                 {
+                     "key":  "conditioner|Baker\u0027s|Kristin Ess Hair Strengthening Conditioner",
+                     "first_seen":  "2026-09-26",
+                     "id":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "name":  "Kristin Ess Hair Strengthening Conditioner",
+                     "unit_price":  1.249,
+                     "band_ref":  0.2137
+                 },
+                 {
+                     "key":  "conditioner|Baker\u0027s|Kristin Ess Weightless Shine Leave In Conditioner Spray For Dry Hair - Moisture Repair + Detangler",
+                     "first_seen":  "2026-09-26",
+                     "id":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "name":  "Kristin Ess Weightless Shine Leave In Conditioner Spray For Dry Hair - Moisture Repair + Detangler",
+                     "unit_price":  1.4781,
+                     "band_ref":  0.2137
+                 },
+                 {
+                     "key":  "conditioner|Baker\u0027s|Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
+                     "first_seen":  "2026-09-26",
+                     "id":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "name":  "Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
+                     "unit_price":  1.4158,
+                     "band_ref":  0.2137
+                 },
+                 {
+                     "key":  "cookies|Baker\u0027s|Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
+                     "first_seen":  "2026-09-26",
+                     "id":  "cookies",
+                     "store":  "Baker\u0027s",
+                     "name":  "Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
+                     "unit_price":  0.8681,
+                     "band_ref":  0.1533
+                 },
+                 {
+                     "key":  "crackers|Aldi|Savoritz Almond Flour Crackers Rosemary 4.25 OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "crackers",
+                     "store":  "Aldi",
+                     "name":  "Savoritz Almond Flour Crackers Rosemary 4.25 OZ",
+                     "unit_price":  0.8212,
+                     "band_ref":  0.1178
+                 },
+                 {
+                     "key":  "deodorant|Walmart|Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Completely Clean, 2.6 oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "deodorant",
+                     "store":  "Walmart",
+                     "name":  "Secret Clinical 100HR Antiperspirant Deodorant, Invisible Solid, Completely Clean, 2.6 oz",
+                     "unit_price":  5.3731,
+                     "band_ref":  1.07
+                 },
+                 {
+                     "key":  "deodorant|Walmart|Wild Refillable Deodorant Starter Pack  Aluminum Free. Love Heart Case + Fresh Cotton \u0026 Sea Salt Refill, for Women and Men, 1.4oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "deodorant",
+                     "store":  "Walmart",
+                     "name":  "Wild Refillable Deodorant Starter Pack  Aluminum Free. Love Heart Case + Fresh Cotton \u0026 Sea Salt Refill, for Women and Men, 1.4oz",
+                     "unit_price":  12.1214,
+                     "band_ref":  1.07
+                 },
+                 {
+                     "key":  "disinfecting-wipes|Baker\u0027s|Clorox On the Go Travel Disinfecting Wipes Crisp Lemon",
+                     "first_seen":  "2026-09-26",
+                     "id":  "disinfecting-wipes",
+                     "store":  "Baker\u0027s",
+                     "name":  "Clorox On the Go Travel Disinfecting Wipes Crisp Lemon",
+                     "unit_price":  0.3322,
+                     "band_ref":  0.0605
+                 },
+                 {
+                     "key":  "dog-treats|Baker\u0027s|Beggin\u0027 With Real Meat Dog Treats, Fun Size Original With Bacon Flavor",
+                     "first_seen":  "2026-09-26",
+                     "id":  "dog-treats",
+                     "store":  "Baker\u0027s",
+                     "name":  "Beggin\u0027 With Real Meat Dog Treats, Fun Size Original With Bacon Flavor",
+                     "unit_price":  0.665,
+                     "band_ref":  0.0975
+                 },
+                 {
+                     "key":  "dog-treats|Baker\u0027s|Blue Buffalo Soft \u0026 Chewy Health Bars Natural Dog Treats Chicken \u0026 Mixed Berries",
+                     "first_seen":  "2026-09-26",
+                     "id":  "dog-treats",
+                     "store":  "Baker\u0027s",
+                     "name":  "Blue Buffalo Soft \u0026 Chewy Health Bars Natural Dog Treats Chicken \u0026 Mixed Berries",
+                     "unit_price":  0.6656,
+                     "band_ref":  0.0975
+                 },
+                 {
+                     "key":  "dog-treats|Baker\u0027s|Pet Pride Chicken Jerky Dog Treats BIG DEAL!",
+                     "first_seen":  "2026-09-26",
+                     "id":  "dog-treats",
+                     "store":  "Baker\u0027s",
+                     "name":  "Pet Pride Chicken Jerky Dog Treats BIG DEAL!",
+                     "unit_price":  0.6559,
+                     "band_ref":  0.0975
+                 },
+                 {
+                     "key":  "dog-treats|Baker\u0027s|Pup-Peroni Original Beef Recipe Dog Treats",
+                     "first_seen":  "2026-09-26",
+                     "id":  "dog-treats",
+                     "store":  "Baker\u0027s",
+                     "name":  "Pup-Peroni Original Beef Recipe Dog Treats",
+                     "unit_price":  0.6589,
+                     "band_ref":  0.0975
+                 },
+                 {
+                     "key":  "frozen-pizza|Baker\u0027s|DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
+                     "first_seen":  "2026-09-26",
+                     "id":  "frozen-pizza",
+                     "store":  "Baker\u0027s",
+                     "name":  "DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
+                     "unit_price":  9.99,
+                     "band_ref":  1.9975
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|TABASCO Green Pepper Sauce, Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "TABASCO Green Pepper Sauce, Hot Sauce",
+                     "unit_price":  0.898,
+                     "band_ref":  0.1375
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "unit_price":  0.898,
+                     "band_ref":  0.1375
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "unit_price":  1.095,
+                     "band_ref":  0.1375
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|Yellowbird Serrano Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "Yellowbird Serrano Hot Sauce",
+                     "unit_price":  0.7448,
+                     "band_ref":  0.1375
+                 },
+                 {
+                     "key":  "ice-cream|Baker\u0027s|Halo Top Low-Calorie Vanilla Bean Light Ice Cream",
+                     "first_seen":  "2026-09-26",
+                     "id":  "ice-cream",
+                     "store":  "Baker\u0027s",
+                     "name":  "Halo Top Low-Calorie Vanilla Bean Light Ice Cream",
+                     "unit_price":  0.3431,
+                     "band_ref":  0.06035
+                 },
+                 {
+                     "key":  "instant-coffee|Baker\u0027s|Nescafe Gold Decaf Espresso Instant Coffee",
+                     "first_seen":  "2026-09-26",
+                     "id":  "instant-coffee",
+                     "store":  "Baker\u0027s",
+                     "name":  "Nescafe Gold Decaf Espresso Instant Coffee",
+                     "unit_price":  3.6246,
+                     "band_ref":  0.7129
+                 },
+                 {
+                     "key":  "instant-coffee|Baker\u0027s|Simple Truth Organic Mushroom Instant Coffee",
+                     "first_seen":  "2026-09-26",
+                     "id":  "instant-coffee",
+                     "store":  "Baker\u0027s",
+                     "name":  "Simple Truth Organic Mushroom Instant Coffee",
+                     "unit_price":  5.184,
+                     "band_ref":  0.7129
+                 },
+                 {
+                     "key":  "lotion|Baker\u0027s|Cerave, Cerave Daily Moisturizing Lotion 12Oz, 12 Fl Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Baker\u0027s",
+                     "name":  "Cerave, Cerave Daily Moisturizing Lotion 12Oz, 12 Fl Oz",
+                     "unit_price":  1.4992,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "lotion|Walmart|AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin Relief, Exfoliating, 14.1OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Walmart",
+                     "name":  "AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin Relief, Exfoliating, 14.1OZ",
+                     "unit_price":  1.67,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "lotion|Walmart|AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin, Exfoliating, 7.9 oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Walmart",
+                     "name":  "AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin, Exfoliating, 7.9 oz",
+                     "unit_price":  1.5152,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "lotion|Walmart|Aquaphor Daily Hydrating Face and Body Lotion, 3 fl oz Tube",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Walmart",
+                     "name":  "Aquaphor Daily Hydrating Face and Body Lotion, 3 fl oz Tube",
+                     "unit_price":  1.66,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "lotion|Walmart|Aquaphor Daily Hydrating Face and Body Lotion, 8 fl oz Pump Bottle",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Walmart",
+                     "name":  "Aquaphor Daily Hydrating Face and Body Lotion, 8 fl oz Pump Bottle",
+                     "unit_price":  1.62,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "lotion|Walmart|Gold Bond Age Renew Retinol Overnight Body and Face Lotion, Retinol Face and Body Lotion with Peptide Complex, 7 oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "lotion",
+                     "store":  "Walmart",
+                     "name":  "Gold Bond Age Renew Retinol Overnight Body and Face Lotion, Retinol Face and Body Lotion with Peptide Complex, 7 oz",
+                     "unit_price":  1.71,
+                     "band_ref":  0.2943
+                 },
+                 {
+                     "key":  "paper-towels|Family Fare|Bounty White 2 Ply Mega Rolls Paper Towels 2 Ea",
+                     "first_seen":  "2026-09-26",
+                     "id":  "paper-towels",
+                     "store":  "Family Fare",
+                     "name":  "Bounty White 2 Ply Mega Rolls Paper Towels 2 Ea",
+                     "unit_price":  5.495,
+                     "band_ref":  1.07915
+                 },
+                 {
+                     "key":  "paper-towels|Walmart|Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
+                     "first_seen":  "2026-09-26",
+                     "id":  "paper-towels",
+                     "store":  "Walmart",
+                     "name":  "Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
+                     "unit_price":  0.023,
+                     "band_ref":  1.07915
+                 },
+                 {
+                     "key":  "pasta-sauce|Sam\u0027s Club|Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
+                     "first_seen":  "2026-09-26",
+                     "id":  "pasta-sauce",
+                     "store":  "Sam\u0027s Club",
+                     "name":  "Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
+                     "unit_price":  0.4088,
+                     "band_ref":  0.0766
+                 },
+                 {
+                     "key":  "raisins|Fareway|Sun-Maid California Sun-Dried Raisins",
+                     "first_seen":  "2026-09-26",
+                     "id":  "raisins",
+                     "store":  "Fareway",
+                     "name":  "Sun-Maid California Sun-Dried Raisins",
+                     "unit_price":  0.0346,
+                     "band_ref":  0.22395
+                 },
+                 {
+                     "key":  "raisins|Fareway|Sun-Maid California Sun-Dried Raisins",
+                     "first_seen":  "2026-09-26",
+                     "id":  "raisins",
+                     "store":  "Fareway",
+                     "name":  "Sun-Maid California Sun-Dried Raisins",
+                     "unit_price":  0.0415,
+                     "band_ref":  0.22395
+                 },
+                 {
+                     "key":  "rice|Baker\u0027s|Rice-A-Roni Cilantro Lime Rice",
+                     "first_seen":  "2026-09-26",
+                     "id":  "rice",
+                     "store":  "Baker\u0027s",
+                     "name":  "Rice-A-Roni Cilantro Lime Rice",
+                     "unit_price":  4.5429,
+                     "band_ref":  0.847
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Herbal Essences Chamomile Shine Shampoo 13.5 OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Herbal Essences Chamomile Shine Shampoo 13.5 OZ",
+                     "unit_price":  0.5163,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Herbal Essences Clarifying Tea Tree Shampoo 400 0 ML",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Herbal Essences Clarifying Tea Tree Shampoo 400 0 ML",
+                     "unit_price":  0.5163,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Herbal Essences Rose Hips Smooth Shampoo 13.5 OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Herbal Essences Rose Hips Smooth Shampoo 13.5 OZ",
+                     "unit_price":  0.5163,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
+                     "unit_price":  0.4775,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
+                     "unit_price":  0.4775,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Aldi|Pantene Pro-V 2 IN 1 Classic Clean",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Aldi",
+                     "name":  "Pantene Pro-V 2 IN 1 Classic Clean",
+                     "unit_price":  0.4775,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|Aussie Miracle Curls Shampoo with Coconut Oil Paraben Free",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "Aussie Miracle Curls Shampoo with Coconut Oil Paraben Free",
+                     "unit_price":  0.4785,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|Garnier Whole Blends Smoothing Shampoo, Coconut Oil and Cocoa Butter, 12.5 fl oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "Garnier Whole Blends Smoothing Shampoo, Coconut Oil and Cocoa Butter, 12.5 fl oz",
+                     "unit_price":  0.4792,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|L\u0027Oreal Paris Elvive Glycolic Gloss Shine Boosting Shampoo, 12.6 fl oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "L\u0027Oreal Paris Elvive Glycolic Gloss Shine Boosting Shampoo, 12.6 fl oz",
+                     "unit_price":  0.5151,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|MONDAY Haircare Gardenia Scented Smooth Shampoo",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "MONDAY Haircare Gardenia Scented Smooth Shampoo",
+                     "unit_price":  0.6658,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|MONDAY Haircare Gardenia Volume + Collagen Shampoo for Thin \u0026 Fine Hair",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "MONDAY Haircare Gardenia Volume + Collagen Shampoo for Thin \u0026 Fine Hair",
+                     "unit_price":  0.6658,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Baker\u0027s|Raw Sugar The Scalp Restore Shampoo Bottle",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "name":  "Raw Sugar The Scalp Restore Shampoo Bottle",
+                     "unit_price":  0.6869,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Walmart|MONDAY Haircare Moisture Shampoo, Hydration Boost Dry Hair, Hyaluronic Acid Shea Butter 11.98 Fl Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Walmart",
+                     "name":  "MONDAY Haircare Moisture Shampoo, Hydration Boost Dry Hair, Hyaluronic Acid Shea Butter 11.98 Fl Oz",
+                     "unit_price":  0.4983,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "shampoo|Walmart|Pantene Pro-V Shampoo, Volume and Body, All Hair Types, 10.4 fl oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "shampoo",
+                     "store":  "Walmart",
+                     "name":  "Pantene Pro-V Shampoo, Volume and Body, All Hair Types, 10.4 fl oz",
+                     "unit_price":  0.4779,
+                     "band_ref":  0.0941
+                 },
+                 {
+                     "key":  "soda|Baker\u0027s|Coca-Cola Zero Sugar Cherry Soda Cans",
+                     "first_seen":  "2026-09-26",
+                     "id":  "soda",
+                     "store":  "Baker\u0027s",
+                     "name":  "Coca-Cola Zero Sugar Cherry Soda Cans",
+                     "unit_price":  0.0833,
+                     "band_ref":  0.0148
+                 },
+                 {
+                     "key":  "soda|Baker\u0027s|RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
+                     "first_seen":  "2026-09-26",
+                     "id":  "soda",
+                     "store":  "Baker\u0027s",
+                     "name":  "RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
+                     "unit_price":  0.0833,
+                     "band_ref":  0.0148
+                 },
+                 {
+                     "key":  "taco-seasoning|Family Fare|Siete Mild Taco Seasoning 1.31 Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "taco-seasoning",
+                     "store":  "Family Fare",
+                     "name":  "Siete Mild Taco Seasoning 1.31 Oz",
+                     "unit_price":  2.8931,
+                     "band_ref":  0.494
+                 },
+                 {
+                     "key":  "taco-seasoning|Family Fare|Siete Spicy Taco Seasoning 1.31 Oz",
+                     "first_seen":  "2026-09-26",
+                     "id":  "taco-seasoning",
+                     "store":  "Family Fare",
+                     "name":  "Siete Spicy Taco Seasoning 1.31 Oz",
+                     "unit_price":  2.8931,
+                     "band_ref":  0.494
+                 },
+                 {
+                     "key":  "tortilla-chips|Baker\u0027s|Siete Sea Salt Tortilla Chips",
+                     "first_seen":  "2026-09-26",
+                     "id":  "tortilla-chips",
+                     "store":  "Baker\u0027s",
+                     "name":  "Siete Sea Salt Tortilla Chips",
+                     "unit_price":  1.098,
+                     "band_ref":  0.17315
+                 }
+             ]
+}

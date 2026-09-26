@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4812,
+    "evidence_rows":  4804,
     "derived_commodities":  105,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1442
+                                "newly_refused_rows":  1447
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  968
+                                "newly_refused_rows":  970
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  690
+                                "newly_refused_rows":  693
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  534
+                                "newly_refused_rows":  537
                             }
                 },
     "typed_fields_ignored":  [
@@ -254,12 +254,12 @@
                               "derived":  "0.16-4"
                           },
                           {
-                              "id":  "brown-sugar",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Dove Macadamia+Rice Milk and Brown Sugar+Coco Body Scrub Mixed Pack, 15 oz., 2 pk.",
-                              "per_unit":  0.4313,
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
+                              "per_unit":  0.4917,
                               "typed":  "none",
-                              "derived":  "0.01238-0.3095"
+                              "derived":  "0.01601-0.40025"
                           },
                           {
                               "id":  "apple",
@@ -270,12 +270,12 @@
                               "derived":  "0.1387-3.4675"
                           },
                           {
-                              "id":  "butter",
+                              "id":  "carrots",
                               "store":  "Aldi",
-                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
-                              "per_unit":  0.4917,
+                              "name":  "Organic Mango And Carrot Puffs",
+                              "per_unit":  29.7297,
                               "typed":  "none",
-                              "derived":  "0.01601-0.40025"
+                              "derived":  "0.1985-4.9625"
                           },
                           {
                               "id":  "carrots",
@@ -356,14 +356,6 @@
                               "per_unit":  0.7533,
                               "typed":  "none",
                               "derived":  "0.01238-0.3095"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Aldi",
-                              "name":  "Organic Mango And Carrot Puffs",
-                              "per_unit":  29.7297,
-                              "typed":  "none",
-                              "derived":  "0.1985-4.9625"
                           },
                           {
                               "id":  "butter",
@@ -1982,6 +1974,62 @@
                               "derived":  "0.1387-3.4675"
                           },
                           {
+                              "id":  "dijon-mustard",
+                              "store":  "Walmart",
+                              "name":  "Maille Old Style Whole Grain Dijon Mustard, 7.3 oz Jar",
+                              "per_unit":  1.4288,
+                              "typed":  "none",
+                              "derived":  "0.034-0.85"
+                          },
+                          {
+                              "id":  "honey-dijon-mustard",
+                              "store":  "Walmart",
+                              "name":  "KOOPS\u0027 Mustard Honey Dijon, 12 oz",
+                              "per_unit":  0.9017,
+                              "typed":  "none",
+                              "derived":  "0.03233-0.80825"
+                          },
+                          {
+                              "id":  "honey-dijon-mustard",
+                              "store":  "Walmart",
+                              "name":  "Maille Mustard Honey Dijon 8 oz",
+                              "per_unit":  1.5499,
+                              "typed":  "none",
+                              "derived":  "0.03233-0.80825"
+                          },
+                          {
+                              "id":  "dijon-mustard",
+                              "store":  "Walmart",
+                              "name":  "Edmond Fallout Dijon Mustard, 7.4 Oz",
+                              "per_unit":  1.0622,
+                              "typed":  "none",
+                              "derived":  "0.034-0.85"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Walmart",
+                              "name":  "Martin\u0027s Slider Potato Rolls, 12 Count, 3 inch, fresh",
+                              "per_unit":  4,
+                              "typed":  "none",
+                              "derived":  "0.105-2.625"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Walmart",
+                              "name":  "Martin\u0027s Potato Sandwich Rolls, Fresh 3.5 inch Buns, Ready to Eat",
+                              "per_unit":  4.2721,
+                              "typed":  "none",
+                              "derived":  "0.105-2.625"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Walmart",
+                              "name":  "Martin\u0027s Potato Long Rolls, 8 Count, Hot Dog Bun, 5\" Fresh Buns",
+                              "per_unit":  4.2721,
+                              "typed":  "none",
+                              "derived":  "0.105-2.625"
+                          },
+                          {
                               "id":  "curry-powder",
                               "store":  "Walmart",
                               "name":  "Simply Organic Curry Powder, .53 Oz",
@@ -2155,7 +2203,7 @@
                               "name":  "Maille Mustard Honey Dijon 8 oz",
                               "per_unit":  1.53,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -2182,30 +2230,6 @@
                               "derived":  "0.034-0.85"
                           },
                           {
-                              "id":  "potato",
-                              "store":  "Walmart",
-                              "name":  "Martin\u0027s Slider Potato Rolls, 12 Count, 3 inch, fresh",
-                              "per_unit":  4,
-                              "typed":  "none",
-                              "derived":  "0.105-2.625"
-                          },
-                          {
-                              "id":  "potato",
-                              "store":  "Walmart",
-                              "name":  "Martin\u0027s Potato Sandwich Rolls, Fresh 3.5 inch Buns, Ready to Eat",
-                              "per_unit":  4.2721,
-                              "typed":  "none",
-                              "derived":  "0.105-2.625"
-                          },
-                          {
-                              "id":  "potato",
-                              "store":  "Walmart",
-                              "name":  "Martin\u0027s Potato Long Rolls, 8 Count, Hot Dog Bun, 5\" Fresh Buns",
-                              "per_unit":  4.2721,
-                              "typed":  "none",
-                              "derived":  "0.105-2.625"
-                          },
-                          {
                               "id":  "peanut-butter",
                               "store":  "Walmart",
                               "name":  "DREAMBONE 10 COUNT PEANUT BUTTER COLLAYUM TWISTS",
@@ -2228,6 +2252,14 @@
                               "per_unit":  0.3102,
                               "typed":  "none",
                               "derived":  "0.01079-0.26975"
+                          },
+                          {
+                              "id":  "dried-rosemary",
+                              "store":  "Walmart",
+                              "name":  "Badia Rosemary 0.5 oz – Aromatic Single Herb Spice for Versatile Culinary Use",
+                              "per_unit":  15.98,
+                              "typed":  "none",
+                              "derived":  "0.53066-13.2665"
                           },
                           {
                               "id":  "carrots",
@@ -2395,7 +2427,7 @@
                               "name":  "Inglehoffer Honey Mustard, 4 Oz",
                               "per_unit":  2.495,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "honey-dijon-mustard",
@@ -2403,7 +2435,7 @@
                               "name":  "Gold\u0027s Honey Mustard, 10 Oz.",
                               "per_unit":  0.998,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "honey",
@@ -3281,17 +3313,9 @@
                               "id":  "fajita-seasoning",
                               "store":  "Walmart",
                               "name":  "Blues Hog Ritas \u0026 Fajitas Seasoning, Gluten-Free, 6.5 oz",
-                              "per_unit":  8.99,
-                              "typed":  "none",
-                              "derived":  "0.349-8.725"
-                          },
-                          {
-                              "id":  "fajita-seasoning",
-                              "store":  "Walmart",
-                              "name":  "Blues Hog Ritas \u0026 Fajitas Seasoning, Gluten-Free, 6.5 oz",
                               "per_unit":  12.71,
                               "typed":  "none",
-                              "derived":  "0.349-8.725"
+                              "derived":  "0.498-12.45"
                           },
                           {
                               "id":  "butter",
@@ -4091,7 +4115,7 @@
                               "name":  "Maille Mustard Honey Dijon 8 oz",
                               "per_unit":  1.3801,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -4107,7 +4131,7 @@
                               "name":  "Inglehoffer Honey Mustard, 4 Oz",
                               "per_unit":  2.11,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "balsamic-vinegar",
@@ -4216,10 +4240,10 @@
                           {
                               "id":  "dried-rosemary",
                               "store":  "Walmart",
-                              "name":  "Frontier Co-op Organic Rosemary Leaf, Whole , 16 oz (453 g)",
-                              "per_unit":  0.9844,
+                              "name":  "Badia Rosemary 0.5 oz – Aromatic Single Herb Spice for Versatile Culinary Use",
+                              "per_unit":  15.94,
                               "typed":  "none",
-                              "derived":  "1.05082-26.2705"
+                              "derived":  "0.53066-13.2665"
                           },
                           {
                               "id":  "carrots",
@@ -4963,7 +4987,7 @@
                               "name":  "Maille Mustard Honey Dijon 8 oz",
                               "per_unit":  1.4,
                               "typed":  "none",
-                              "derived":  "0.03142-0.7855"
+                              "derived":  "0.03233-0.80825"
                           },
                           {
                               "id":  "ketchup",

@@ -1,108 +1,26 @@
 ﻿{
-    "generated":  "2026-09-25 08:21",
+    "generated":  "2026-09-26 08:18",
     "drift_vs_engine":  0,
     "drift_products":  [
 
                        ],
     "moved":  [
                   {
-                      "name":  "Puffs Plus Lotion 2-Ply Facial Tissues 12 Cube Boxes, 72 tissues/box",
+                      "name":  "Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box",
                       "from":  "lotion",
                       "to":  "facial-tissues"
                   }
               ],
     "dropped":  [
-                    {
-                        "name":  "Fresh Cut In Store Carrot \u0026 Cucumber Ranch",
-                        "from":  "carrots"
-                    },
-                    {
-                        "name":  "Member\u0027s Mark Zero Sugar Green Tea, 16.9 fl. oz., 35 pk.",
-                        "from":  "tea-bags"
-                    },
-                    {
-                        "name":  "True Lime Crystallized Lime Packets, 100 ct.",
-                        "from":  "limes"
-                    },
-                    {
-                        "name":  "Colgate Max Fresh Wisp Disposable Travel Toothbrushes, Mini Toothbrush, Peppermint, 24 Count",
-                        "from":  "toothbrushes"
-                    },
-                    {
-                        "name":  "Fresh Cut In Store Cucumber Ranch Bowl",
-                        "from":  "cucumbers"
-                    }
+
                 ],
     "new_contested":  [
-                          {
-                              "name":  "Deutsche Küche Lentil Chickpea or Harvest Potato",
-                              "chain":  "chickpeas (oz) \u003e brown-lentils (lb)",
-                              "form":  true,
-                              "winner":  "chickpeas",
-                              "verdict":  "not in the newest candidates file",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
-                              "chain":  "deli-ham (oz) \u003e sliced-cheese (oz)",
-                              "form":  false,
-                              "winner":  "deli-ham",
-                              "verdict":  "UNPRICED",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
-                              "chain":  "horseradish (oz) \u003e horseradish-sauce (oz)",
-                              "form":  false,
-                              "winner":  "horseradish",
-                              "verdict":  "size 9.5 oz = 0.2989/oz",
-                              "cell":  "horseradish @ Aldi 0.2989/oz",
-                              "crown":  true
-                          },
-                          {
-                              "name":  "Kroger Orange Rind Muenster Block Cheese",
-                              "chain":  "block-cheese (oz) \u003e oranges (lb)",
-                              "form":  true,
-                              "winner":  "block-cheese",
-                              "verdict":  "size 16 oz = 0.2306/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Lay\u0027s Honey Barbecue Potato Chips",
-                              "chain":  "honey (oz) \u003e potato-chips (oz)",
-                              "form":  false,
-                              "winner":  "honey",
-                              "verdict":  "size 7.75 oz = 0.5148/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
-                              "chain":  "all-purpose-cleaner (floz) \u003e furniture-polish (oz)",
-                              "form":  true,
-                              "winner":  "all-purpose-cleaner",
-                              "verdict":  "WITHHELD-UNPROVEN-CHANNEL",
-                              "cell":  "",
-                              "crown":  false
-                          }
+
                       ],
     "new_contested_names":  [
-                                "Deutsche Küche Lentil Chickpea or Harvest Potato",
-                                "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
-                                "Inglehoffer Horseradish Cream Style 9.5 OZ",
-                                "Kroger Orange Rind Muenster Block Cheese",
-                                "Lay\u0027s Honey Barbecue Potato Chips",
-                                "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3"
+
                             ],
     "cell_by_contest":  [
-                            {
-                                "name":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
-                                "cell":  "horseradish @ Aldi 0.2989/oz",
-                                "crown":  true,
-                                "claimed_by":  "horseradish \u003e horseradish-sauce"
-                            }
+
                         ]
 }

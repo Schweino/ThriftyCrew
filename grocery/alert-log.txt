@@ -494,3 +494,11 @@
 [2026-09-26T06:45:53] DIGEST 'Brain digest: the night, the weakest link, and what is waiting' [type: brain digest the night the weakest link and what is waiting] - registry entry brain-digest is digest class, so it is mailed and NOT queued
 [2026-09-26T06:45:54] SENT 'Brain digest: the night, the weakest link, and what is waiting' -> schweino68@gmail.com (id 1a0dd893bc57f611)
 [2026-09-26T07:00:17] SENT 'Grocery bot checkout sync partial - 2026-09-26' -> schweino68@gmail.com (id 1a0dd9667048d871)
+[2026-09-26T07:02:09] SENT 'Grocery bot checkout sync blocked at the push - 2026-09-26' -> schweino68@gmail.com (id 1a0dd981a505faaa)
+[2026-09-26T08:14:14] SENT 'Grocery: GUARDS FAILED - board not published - 2026-09-26' -> schweino68@gmail.com (id 1a0ddda18c777462)
+[2026-09-26T08:16:15] REVIEW 'Grocery: a commodity is in no category (no filter) - review' [type: grocery a commodity is in no category no filter review] - queued, NOT emailed (registry entry no-category)
+[2026-09-26T08:18:48] REVIEW 'Grocery matching soundness: RULE CHANGE UNREVIEWED' [type: grocery matching soundness rule change unreviewed] - queued, NOT emailed (registry entry match-soundness-rule-change-unreviewed)
+[2026-09-26T08:22:36] REVIEW 'Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-26' [type: grocery store s dropped from a commodity they carry] - queued, NOT emailed (registry entry stores-dropped)
+[2026-09-26T08:25:18] SENT 'Recipe ingredient priced as a different food' -> schweino68@gmail.com (id 1a0dde43c11eec48)
+[2026-09-26T08:26:35] REVIEW 'Grocery: a price band refused rows it cannot explain - 2026-09-26' [type: grocery a price band refused rows it cannot explain] - queued, NOT emailed (registry entry band-refusal-unexplained)
+[2026-09-26T08:41:40] SENT 'Grocery: a GUARD has gone blind (test-auditors failed)' -> schweino68@gmail.com (id 1a0ddf335f88ca80)

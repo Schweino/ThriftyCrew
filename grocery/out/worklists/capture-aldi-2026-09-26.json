@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-29; next_pull 2026-09-30",
-    "cursor_start":  210,
-    "cursor_next":  218,
+    "cursor_start":  218,
+    "cursor_next":  226,
     "total_terms":  640,
     "rotation_terms":  [
-                           "diapers size 4",
-                           "diced ham",
-                           "diced tomatoes canned",
-                           "dijon mustard",
-                           "dinner rolls",
-                           "dish soap",
-                           "dishwasher detergent pacs",
-                           "disinfectant spray"
+                           "disinfecting wipes",
+                           "dry dog food",
+                           "dog treats",
+                           "glazed donuts",
+                           "chili bean sauce",
+                           "drain cleaner",
+                           "ancho chiles",
+                           "chile de arbol"
                        ],
     "sale_terms":  [
 
@@ -24,26 +24,26 @@
     "terms":  [
                   "fresh cherries",
                   "gelatin cups",
-                  "diapers size 4",
-                  "diced ham",
-                  "diced tomatoes canned",
-                  "dijon mustard",
-                  "dinner rolls",
-                  "dish soap",
-                  "dishwasher detergent pacs",
-                  "disinfectant spray"
+                  "disinfecting wipes",
+                  "dry dog food",
+                  "dog treats",
+                  "glazed donuts",
+                  "chili bean sauce",
+                  "drain cleaner",
+                  "ancho chiles",
+                  "chile de arbol"
               ],
     "commodities":  [
                         "cherries",
                         "gelatin",
-                        "diapers",
-                        "diced-ham",
-                        "diced-tomatoes",
-                        "dijon-mustard",
-                        "dinner-rolls",
-                        "dish-soap",
-                        "dishwasher-detergent",
-                        "disinfectant-spray"
+                        "disinfecting-wipes",
+                        "dog-food",
+                        "dog-treats",
+                        "donuts",
+                        "doubanjiang",
+                        "drain-cleaner",
+                        "dried-ancho-chiles",
+                        "dried-arbol-chiles"
                     ],
     "ruling_terms":  [
 

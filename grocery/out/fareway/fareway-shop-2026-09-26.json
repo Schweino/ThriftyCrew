@@ -1,16 +1,18 @@
 ﻿[
     {
         "id":  "bacon",
-        "name":  "Webster City Bacon Ends",
-        "price":  "11.99",
+        "name":  "Fareway Hickory Smoked Bacon",
+        "price":  "2.99",
         "per":  "",
-        "orig":  "",
+        "orig":  "4.99",
         "unit":  "",
-        "size":  "80 oz",
-        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/64453654-bells-mill-hardwood-smoked-bacon-ends-and-pieces-80-oz",
+        "size":  "16 oz",
+        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/33112296-fareway-hickory-bacon",
         "term":  "bacon",
         "taxonomy_path":  "",
-        "store_loc":  "531573"
+        "store_loc":  "531573",
+        "sale_ends_days":  4,
+        "sale_note":  "Sale ends in 4 days"
     },
     {
         "id":  "cornstarch",

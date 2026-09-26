@@ -5,49 +5,41 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-26; next_pull 2026-09-27",
-    "cursor_start":  223,
-    "cursor_next":  231,
+    "cursor_start":  231,
+    "cursor_next":  239,
     "total_terms":  640,
     "rotation_terms":  [
-                           "drain cleaner",
-                           "ancho chiles",
-                           "chile de arbol",
-                           "chili de arbol",
-                           "dried basil",
-                           "dried cranberries",
-                           "dill weed",
-                           "guajillo chiles"
+                           "oregano leaves",
+                           "parsley flakes",
+                           "rosemary leaves",
+                           "dried thyme",
+                           "dryer sheets",
+                           "dry green lentils",
+                           "egg noodles",
+                           "eggplant"
                        ],
     "sale_terms":  [
-                       "fresh blackberries",
-                       "black olives canned",
-                       "black peppercorns"
+
                    ],
     "terms":  [
-                  "drain cleaner",
-                  "ancho chiles",
-                  "chile de arbol",
-                  "chili de arbol",
-                  "dried basil",
-                  "dried cranberries",
-                  "dill weed",
-                  "guajillo chiles",
-                  "fresh blackberries",
-                  "black olives canned",
-                  "black peppercorns"
+                  "oregano leaves",
+                  "parsley flakes",
+                  "rosemary leaves",
+                  "dried thyme",
+                  "dryer sheets",
+                  "dry green lentils",
+                  "egg noodles",
+                  "eggplant"
               ],
     "commodities":  [
-                        "drain-cleaner",
-                        "dried-ancho-chiles",
-                        "dried-arbol-chiles",
-                        "dried-arbol-chiles",
-                        "dried-basil",
-                        "dried-cranberries",
-                        "dried-dill",
-                        "dried-guajillo-chiles",
-                        "blackberries",
-                        "black-olives",
-                        "black-peppercorns"
+                        "dried-oregano",
+                        "dried-parsley",
+                        "dried-rosemary",
+                        "dried-thyme",
+                        "dryer-sheets",
+                        "dry-green-lentils",
+                        "egg-noodles",
+                        "eggplant"
                     ],
     "ruling_terms":  [
 
@@ -73,6 +65,6 @@
     "call_cap":  45,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
-    "expiry_oldest_owed":  "2026-09-26",
+    "expiry_oldest_owed":  "",
     "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here. ruling_terms are a STANDING RULING\u0027s owed recaptures and lead this list; they leave it on their own once a built file proves them recaptured at the sanctioned store, so never edit a ruling file to discharge one. ruling_blind means this checkout could not read what has already landed and is reporting everything the ruling named."
 }

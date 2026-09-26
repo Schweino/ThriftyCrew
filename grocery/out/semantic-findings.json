@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-26 05:34",
+    "generated":  "2026-09-26 08:20",
     "board":  "comparison-2026-09-23.json",
-    "sidecar_generated":  "2026-09-26 05:33:56",
+    "sidecar_generated":  "2026-09-26 08:20:16",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,38 +9,19 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2780,
-                     "corpus":  44088,
+                     "board_pairs":  2808,
+                     "corpus":  44134,
                      "rule_invisible":  8831
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  0,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "laundry-detergent",
-                         "commodity":  "Laundry Detergent (liquid, any brand)",
-                         "store":  "Family Fare",
-                         "product":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
-                         "cos":  0.5732,
-                         "score":  0.917124,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "hot-sauce",
-                         "commodity":  "Hot Sauce",
-                         "store":  "Family Fare",
-                         "product":  "Trappey\u0027s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz",
-                         "cos":  0.6803,
-                         "score":  0.913109,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     }
+
                  ],
-    "coverage_excluded_count":  6,
+    "coverage_excluded_count":  7,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
@@ -77,6 +58,18 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "tea-bags",
+                                  "commodity":  "Tea Bags",
+                                  "store":  "Walmart",
+                                  "product":  "Taylors of Harrogate Assam, Black Tea, Individually Wrapped Bags, 20 Count (Pack of 1), Full-bodied, Satisfying \u0026 Malty, Caffeinated, Enjoy Hot or Iced, 20 Teabags",
+                                  "cos":  0.6629,
+                                  "score":  0.915973,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027black\\s+tea\u0027 matched, exclude \u0027iced\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",

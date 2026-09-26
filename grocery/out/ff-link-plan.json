@@ -1,16 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "corn-dogs",
-                         "fault":  "NO-LINK",
-                         "board":  "Bar S Corn Dogs, Classic, Honey Crisp, Batter Dipped 16 Ea",
-                         "board_pu":  0.6244,
-                         "name":  "Bar S Corn Dogs, Classic, Honey Crisp, Batter Dipped 16 Ea",
-                         "url":  "https://www.shopfamilyfare.com/shop/freezer/other_frozen_items/bar_s_corn_dogs_classic_honey_crisp_batter_dipped_16_ea/p/3127552",
-                         "price":  "$9.99",
-                         "size":  "16 ea",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -91,7 +81,7 @@
                     },
                     {
                         "id":  "french-bread",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "frosting",
@@ -99,11 +89,11 @@
                     },
                     {
                         "id":  "frozen-fries",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.3392 vs link $0.3958 (14.3%)"
                     },
                     {
                         "id":  "hash-browns",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.1184 vs link $0.1653 (28.4%)"
                     },
                     {
                         "id":  "frozen-lasagna",
@@ -131,7 +121,7 @@
                     },
                     {
                         "id":  "jumbo-pasta-shells",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.2106 vs link $0.3158 (33.3%)"
                     },
                     {
                         "id":  "eggs",
@@ -198,7 +188,7 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  47,
-    "generated":  "2026-09-25 08:12",
+    "worked":  46,
+    "generated":  "2026-09-26 08:12",
     "board":  "comparison-2026-09-23.json"
 }

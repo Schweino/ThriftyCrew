@@ -414,6 +414,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "cajun-seasoning",
+        "store":  "Family Fare",
+        "product":  "Louisiana Fish Fry Products Original Cajun Seasoning 8 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "cake-mix",
         "store":  "Family Fare",
         "product":  "Jiffy Cake Mix, Golden Yellow 9 Oz",
@@ -1566,6 +1575,15 @@
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lime-juice\u0027"
     },
     {
+        "id":  "lo-mein-noodles",
+        "store":  "Family Fare",
+        "product":  "Wel Pac Egg Noodles, Lo Mein 10 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/pasta_sauces",
+        "verdict":  "BLIND",
+        "reason":  "\u0027lo-mein-noodles\u0027 is in no estate category - refused rather than guessed"
+    },
+    {
         "id":  "mangoes",
         "store":  "Family Fare",
         "product":  "Red Mango, Small",
@@ -2259,6 +2277,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "taco-seasoning",
+        "store":  "Family Fare",
+        "product":  "Taco Bell Seasoning Mix, Original Taco 1 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "tampons",
         "store":  "Family Fare",
         "product":  "Top Care Light/Regular/Super Unscented Tampons Multipack 40 Ea",
@@ -2480,6 +2507,15 @@
         "product":  "Our Family Onion Yellow",
         "dept":  "fresh_fruits_vegetables",
         "aisle":  "fresh_fruits_vegetables/onions",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "yellow-bell-pepper",
+        "store":  "Family Fare",
+        "product":  "Yellow Bell Pepper",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/peppers",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
