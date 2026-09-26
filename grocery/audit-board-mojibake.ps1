@@ -1,5 +1,5 @@
 # audit-board-mojibake.ps1 - does the PUBLISHED BOARD show a reader a mangled product name?
-# HOLD SCOPE: board - not yet taught; a mangled name is one cell (queue 2026-09-21-d16398)
+# HOLD SCOPE: cell - a broken ratchet names every mangled cell (QUARANTINE-CELL <id>|<store>|selection); a finding with no id or store names nothing, so the board holds (queue 2026-09-22-6e6a3b; test-board-mojibake-scope.ps1)
 #
 # WHY THIS EXISTS (2026-09-05). The estate has had encoding defences for a while and every one of them
 # watches an INPUT: guards.ps1 check 0d pins commodities.json's encoding, capture-lib repairs on ingest,
@@ -332,6 +332,24 @@ if (-not $Quiet) {
 # guards.ps1 treats as a hard fail - a name that was clean on the last board and is mangled on this one is
 # a reader bug happening RIGHT NOW, and it will bake itself one generation deeper on every rebuild.
 if ($count -gt $base) {
+  # THE QUARANTINE PROTOCOL (2026-09-26, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # A mangled name is one cell's defect: the shopper reads the wrong words there, and audit-name-drift reads a wrong
+  # product there. Every finding is named, not only the ones above the mark, because nothing records WHICH names the
+  # mark already counted, and naming fewer than all would affirm a scope that is not complete. It is a SELECTION hold:
+  # the name is what is wrong, not the number, so the cell's last published value may show. One finding with no id
+  # or no store names nothing, and guards holds the board as before. A rise large enough to be a systemic reader bug
+  # trips guards' circuit breaker and holds the board anyway.
+  $mjKeys = New-Object System.Collections.Generic.List[string]
+  $mjOk = $true
+  foreach ($f in $res.findings) {
+    if (-not ([string]$f.id).Trim() -or -not ([string]$f.store).Trim() -or ([string]$f.id + [string]$f.store) -match '\|') { $mjOk = $false; break }
+    $kk = ([string]$f.id).Trim() + '|' + ([string]$f.store).Trim()
+    if (-not $mjKeys.Contains($kk)) { [void]$mjKeys.Add($kk) }
+  }
+  if ($mjOk -and $mjKeys.Count -gt 0) {
+    foreach ($kk in $mjKeys) { Write-Output ('QUARANTINE-CELL ' + $kk + '|selection') }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + $mjKeys.Count + ' stores=0')
+  }
   Write-Output ("audit-board-mojibake: RATCHET BROKEN - $count mangled name(s) now, baseline $base. A name that was clean is now corrupted, so a reader is actively mangling input. Find it with audit-json-readers.ps1, fix it with Read-JsonFile (lib\json-io.ps1), then heal-mojibake.ps1 -Apply and rebuild.")
   Exit-Guard -Name 'board-mojibake' -Summary ("RATCHET BROKEN - $count over baseline $base") -Code 2
 }

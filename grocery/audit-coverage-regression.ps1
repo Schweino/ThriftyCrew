@@ -1,5 +1,5 @@
 <#
-  HOLD SCOPE: board - a coverage ratchet is a whole-board fact (a store fell below its floor); store scope is the next step (d16398)
+  HOLD SCOPE: board - the lost cells are ABSENT from this board, so there is no cell to hold, and dropping the store (QUARANTINE-STORE withholds its everyday cells) would widen the very loss it found; holding keeps the last board, which still has them (measured 2026-09-26, queue 2026-09-22-6e6a3b)
 audit-coverage-regression.ps1 - catch a store QUIETLY LOSING coverage between two boards.
 
 WHY THIS EXISTS

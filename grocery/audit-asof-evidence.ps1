@@ -58,8 +58,15 @@ $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:
 # "clean", it is UNWATCHED, and the report says so by name rather than leaving a silent gap.
 #   json = a JSON array of capture rows with a .name field   (Fareway storefront DOM extractor)
 #   csv  = the pipe-delimited storefront sweep, name in col 3 (Aldi: id|term|name|prices|unit|size|href)
+#   raw  = (optional) the RAW capture beside the selected one, a JSONL of {id, term, candidates[{name,...}]}.
+#          The .json is select-fareway-shop's per-commodity WINNER, re-derived from the raw capture every time the
+#          selection runs; the .jsonl is what the page actually showed. A product the store showed on date D is
+#          seen on D whether or not it won its commodity's slot on the last selection pass (2026-09-26, queue
+#          2026-09-26-e0d5cf: the 06:58 build dated 'Webster City Bacon Ends' $11.99 to the 09-26 capture that
+#          held it, the 08:0x re-selection gave the bacon slot to a sale row, and this audit - reading only the
+#          winners - called a measured date laundered and held the whole board).
 $SOURCES = @(
-  @{ store = 'Fareway'; prefix = 'fareway'; glob = 'out\fareway\fareway-shop-*.json';    kind = 'json' },
+  @{ store = 'Fareway'; prefix = 'fareway'; glob = 'out\fareway\fareway-shop-*.json';    kind = 'json'; raw = 'out\fareway\fareway-shop-*.jsonl' },
   @{ store = 'Aldi';    prefix = 'aldi';    glob = 'out\captures\aldi-capture-*.csv';    kind = 'csv'; nameIx = 2 }
 )
 # Stores deliberately NOT checkable here, with the reason, so "2 of 7 stores" never reads as a pass for the
@@ -84,10 +91,31 @@ function Get-EvidenceKey([string]$s) {
   return ($k -replace '\s+', ' ').Trim()
 }
 
-function Get-LastSeen([string]$glob, [string]$kind, [int]$nameIx, [string]$base) {
+function Get-LastSeen([string]$glob, [string]$kind, [int]$nameIx, [string]$base, [string]$rawGlob = '') {
   $seen = @{}
+  $ext = [IO.Path]::GetExtension($glob)
   $files = @(Get-ChildItem (Join-Path $base $glob) -ErrorAction SilentlyContinue |
-             Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' } | Sort-Object Name)
+             Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' -and $_.Extension -eq $ext } | Sort-Object Name)
+  if ($rawGlob) {
+    # The raw capture's candidates are sightings too. Walked FIRST and kept as the newest date per name, so the
+    # selected files below (also newest-wins) can only ever agree with or move a date forward to a real sighting.
+    $rext = [IO.Path]::GetExtension($rawGlob)
+    $rawFiles = @(Get-ChildItem (Join-Path $base $rawGlob) -ErrorAction SilentlyContinue |
+                  Where-Object { $_.BaseName -match '\d{4}-\d{2}-\d{2}$' -and $_.Extension -eq $rext } | Sort-Object Name)
+    foreach ($f in $rawFiles) {
+      $dt = [regex]::Match($f.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value
+      foreach ($line in [IO.File]::ReadAllLines($f.FullName, [Text.Encoding]::UTF8)) {
+        if (-not $line.Trim()) { continue }
+        $o = $null; try { $o = $line | ConvertFrom-Json } catch { continue }
+        if ($null -eq $o -or -not $o.PSObject.Properties['candidates']) { continue }
+        foreach ($c in @($o.candidates)) {
+          if ($null -eq $c -or -not $c.PSObject.Properties['name']) { continue }
+          $k = Get-EvidenceKey ([string]$c.name)
+          if ($k -and (-not $seen.ContainsKey($k) -or $dt -gt $seen[$k])) { $seen[$k] = $dt }
+        }
+      }
+    }
+  }
   foreach ($f in $files) {
     $dt = [regex]::Match($f.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value
     if ($kind -eq 'json') {
@@ -96,14 +124,14 @@ function Get-LastSeen([string]$glob, [string]$kind, [int]$nameIx, [string]$base)
       foreach ($r in @($rows)) {
         if (-not $r.PSObject.Properties['name']) { continue }
         $k = Get-EvidenceKey ([string]$r.name)
-        if ($k) { $seen[$k] = $dt }   # files walked oldest-first, so the last write is the newest sighting
+        if ($k -and (-not $seen.ContainsKey($k) -or $dt -gt $seen[$k])) { $seen[$k] = $dt }   # files walked oldest-first, so the last write is the newest sighting
       }
     } else {
       foreach ($line in (Get-Content $f.FullName -Encoding UTF8)) {
         $p = $line -split '\|'
         if ($p.Count -le $nameIx) { continue }
         $k = Get-EvidenceKey $p[$nameIx]
-        if ($k) { $seen[$k] = $dt }
+        if ($k -and (-not $seen.ContainsKey($k) -or $dt -gt $seen[$k])) { $seen[$k] = $dt }
       }
     }
   }
@@ -124,7 +152,8 @@ function Invoke-AsOfEvidence([string]$base) {
     $rows = @($doc.deals)
     if ($rows.Count -eq 0) { $out.blind += ("{0}: {1} parsed to ZERO rows" -f $s.store, $regF[0].Name); continue }
     $nameIx = if ($s.ContainsKey('nameIx')) { [int]$s.nameIx } else { 0 }
-    $ev = Get-LastSeen $s.glob $s.kind $nameIx $base
+    $rawG = if ($s.ContainsKey('raw')) { [string]$s.raw } else { '' }
+    $ev = Get-LastSeen $s.glob $s.kind $nameIx $base $rawG
     if ($ev.files -eq 0) { $out.blind += ("{0}: no dated capture files matched {1} - this store's dates are unchecked, NOT clean" -f $s.store, $s.glob); continue }
     $viol = New-Object System.Collections.Generic.List[object]
     $unbacked = 0; $checked = 0
@@ -217,6 +246,26 @@ if ($SelfTest) {
     Chk 'UNBACKED row is counted, never a violation' ($fw.unbacked -eq 1 -and $fw.checked -eq 3) ("unbacked=$($fw.unbacked) checked=$($fw.checked)")
     Chk 'MUST FIRE  the CSV surface works too (Aldi, 1 violation)' ($al -and $al.violations -eq 1) ("violations=$($al.violations)")
     Chk 'unwatched stores are NAMED, so 2-of-7 never reads as a pass' ($res.unwatched.Count -ge 5) ("unwatched=$($res.unwatched.Count)")
+    # FROZEN FIXTURE 2026-09-26 (queue 2026-09-26-e0d5cf), verbatim. 'Webster City Bacon Ends' $11.99 was read on
+    # 09-26 (it is a candidate in fareway-shop-2026-09-26.jsonl) and the regular file dated it 09-26, but the later
+    # re-selection gave the bacon slot to 'Fareway Hickory Smoked Bacon', so the SELECTED 09-26 file lacks it and
+    # its newest selected sighting is 09-25. MUST NOT FIRE: a raw sighting on 09-26 backs the 09-26 date.
+    # MUST FIRE twin: the same row dated 09-27, a day no capture - raw or selected - ever saw it.
+    $B = Join-Path $T 'bacon'
+    foreach ($d in @('out\regular', 'out\fareway')) { New-Item -ItemType Directory -Path (Join-Path $B $d) -Force | Out-Null }
+    $bu = New-Object Text.UTF8Encoding($false)
+    $bacon = 'Webster City Bacon Ends'
+    [IO.File]::WriteAllText((Join-Path $B 'out\fareway\fareway-shop-2026-09-25.json'), ('[{"id":"bacon","name":"' + $bacon + '","price":"11.99"}]'), $bu)
+    [IO.File]::WriteAllText((Join-Path $B 'out\fareway\fareway-shop-2026-09-26.json'), '[{"id":"bacon","name":"Fareway Hickory Smoked Bacon","price":"2.99"}]', $bu)
+    [IO.File]::WriteAllText((Join-Path $B 'out\fareway\fareway-shop-2026-09-26.jsonl'), ('{"id":"bacon","term":"bacon","candidates":[{"name":"Fareway Hickory Smoked Bacon","price":"2.99"},{"name":"' + $bacon + '","price":"11.99","loc":"531573"}]}' + "`n"), $bu)
+    [IO.File]::WriteAllText((Join-Path $B 'out\regular\fareway-regular-2026-09-27.json'), ('{"store":"Fareway","deals":[' +
+      '{"store":"Fareway","item":"' + $bacon + '","ad_price":"$11.99","as_of":"2026-09-26"},' +
+      '{"store":"Fareway","item":"' + $bacon + '","ad_price":"$11.99","as_of":"2026-09-27"}]}'), $bu)
+    $res3 = Invoke-AsOfEvidence $B
+    $fw3 = @($res3.stores | Where-Object { $_.store -eq 'Fareway' })[0]
+    Chk 'MUST NOT FIRE a row dated to a RAW capture sighting (jsonl candidate) is backed, though the selected file dropped it (bacon ends 09-26)' ($fw3 -and -not (@($fw3.detail | Where-Object { $_.says -eq '2026-09-26' }).Count)) (($fw3.detail | ConvertTo-Json -Compress))
+    Chk 'MUST FIRE  the same row dated 09-27, past every raw and selected sighting, still fires with evidence 09-26' ($fw3 -and $fw3.violations -eq 1 -and $fw3.detail[0].says -eq '2026-09-27' -and $fw3.detail[0].evidence -eq '2026-09-26') (($fw3.detail | ConvertTo-Json -Compress))
+    Chk 'CLEAN TWIN a .jsonl is never read as a selected .json file (2 selected capture files counted, not 3)' ($fw3 -and $fw3.capture_files -eq 2) ("capture_files=$($fw3.capture_files)")
     # BLIND: a store with a regular file but no capture files at all must be named, not scored clean.
     Remove-Item (Join-Path $T 'out\captures\aldi-capture-2026-07-29.csv') -Force
     $res2 = Invoke-AsOfEvidence $T
