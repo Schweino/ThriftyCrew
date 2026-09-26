@@ -168,7 +168,7 @@ function Invoke-Board([string]$tag, [string]$kwJson, [string]$adsJson) {
   New-Item -ItemType Directory -Force $od | Out-Null
   $null = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dst 'compare-deals.ps1') `
     -MinStores 1 -OutDir $od -AdsFile $adsFile -RegularDir (Join-Path $fxOut 'regular') -ExtraDir $fxOut `
-    -CommoditiesFile $comFile -BandsFile $bandFile -OutName 'prec'
+    -CommoditiesFile $comFile -BandsFile $bandFile -OutName 'prec' -JudgeDate '2026-08-21'   # the fixture ads file's date, SAID (PLAN-board-clock W1)
   $rc = $LASTEXITCODE
   $boardFile = Join-Path $od 'prec-2026-08-21.json'
   $candFile = Join-Path $od 'prec-candidates-2026-08-21.json'

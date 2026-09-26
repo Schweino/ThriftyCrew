@@ -17,10 +17,20 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
       3. start grocery\capture-sink.ps1 ONCE, in the background (see constraint 2 below); every store posts to it.
          PASS -MaxIdleMinutes 90 (2026-09-24): the default 30 expired between the fast stores' posts (~06:40) and
          Fareway's (~07:15), the POST hit a dead port, and the whole Fareway sweep was lost. Probe the sink from the
-         shell before a slow store posts. A router-driven Fareway sweep pushes '/fareway-meat-grocery/s?k=<term>' (basename is /store),
-         waits ~1.5 s, THEN resetStore(), then settles - an immediate reset still leaks the previous term's rows:
-         memory fareway-router-sweep-needs-apollo-reset.
-      4. Spawn the four store agents together. Give each ONLY its own store's section of PER-STORE METHOD below,
+         shell before a slow store posts. Fareway's router sweep is COMMITTED CODE since 2026-09-26: farewaySweep() in
+         grocery\pull-fareway-shop.js pushes each term, waits for the route, resets the store, settles, and
+         extracts only that term's own search (memory fareway-router-sweep-needs-apollo-reset). Never hand-roll it.
+      3a. CREATE THE TABS YOURSELF, BEFORE SPAWNING (2026-09-26). All agents share ONE Chrome MCP tab group. When
+         any agent closes the group's LAST tab the group is destroyed and recreated, and every other agent's tab
+         drops out of it and becomes unreachable mid-sweep (its in-memory results are lost); and a call made
+         without a tabId lands on the group's first tab, whoever owns it. Measured 2026-09-26: Aldi lost three
+         tabs and captured nothing, Sam's lost a finished 45-term sweep and re-swept (90 searches). So: call
+         tabs_context_mcp(createIfEmpty) and keep that first tab as a KEEPER nobody uses or closes; create one
+         tab per store with tabs_create_mcp; pass each agent ITS tabId. Agents must pass that tabId on EVERY
+         call, never call tabs_create_mcp, tabs_close_mcp or tabs_context_mcp(createIfEmpty), and never
+         navigate without a tabId. You close all five tabs after the last agent reports.
+      4. Spawn the four store agents together (overriding the tab lines below: each agent works ONLY in the tabId you
+         gave it and creates or closes no tab). Give each ONLY its own store's section of PER-STORE METHOD below,
          the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
          its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
          assert its store and In-Store/pickup mode before trusting a price; post the emitter's output UNALTERED to
@@ -28,6 +38,31 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
          promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
          task on 2026-09-13, and the stores went unread for six days.
+         MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5).
+         This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
+         refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
+         and the builders REFUSE a capture with no store line, the wrong store or a non-In-Store mode, so a
+         slip by the cheaper model is refused, not published. The pasted script text is most of each agent's
+         cost, and that is billed at the agent's model.
+         FAREWAY MOVES TO SONNET TOO (2026-09-26): its contamination and settled-count checks are now enforced
+         in code, not in this brief. farewayShopExtract keeps only the items its own term's search returned and
+         stamps each row scope_query; farewaySweep settles on that scoped count before extracting; and
+         select-fareway-shop REFUSES a capture with a row scoped to another term, an unscoped row, or counts that
+         rise at every step over 8 consecutive terms. A slip is refused, not published. Same trial bar as the
+         others. Fareway's Opus baseline, captures 2026-09-21..25 (rows / terms with rows): 53-79 (1636/28,
+         711/9, 741/14, 2666/45, 2796/40).
+         TRIAL BAR, written 2026-09-26 before any Sonnet run. Over the first 5 Sonnet days, per store:
+           - zero builder refusals for store/mode/straddle, and for Fareway scope/climb (any one sends that
+             store back to Opus);
+           - terms with rows / terms requested >= 90%, stated with both numbers in the report;
+           - capture rows per term, 5-day mean within 20% of the Opus baseline below.
+         Opus baseline, captures 2026-09-21..25 (rows / terms with rows): Walmart 48-50 (1462/30, 1544/32,
+         1335/27, 1719/35, 1750/35); Aldi 57-69 (522/9, 1082/19, 1099/17, 1453/21, 1291/21); Sam's 20-28
+         (2034/95, 278/10, 1459/71, 887/45, 1645/69). Terms REQUESTED were not recorded on those days, so
+         coverage has no Opus baseline; the 90% bar is absolute. Rows per term moves with WHICH terms are asked,
+         so a miss on that line alone is a reason to look, not to revert. Record each trial day as one row per
+         store in grocery\out\logs\browser-refresh-model-trial.jsonl
+         ({date, store, model, requested, with_rows, rows, unusable, builder_refused}).
       5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
          build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
          they write out\regular and advance the shared cursor, so they do not run side by side.
@@ -344,20 +379,32 @@ actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
     rows pasted without a line are FLAGGED as attributed to a club they were not read at.
     Then: build-sams-deals.ps1 -In <that> -Date <date>
 
-  FAREWAY (everyday, only if 0800 failed). Navigate per term to
-    /store/fareway-meat-grocery/s?k=<term>, then read window.__APOLLO_CLIENT__ via
-    farewayShopExtract(term) from pull-fareway-shop.js. The fetch-and-regex probe is DEAD - the
-    storefront is client-rendered and returns a shell.
+  FAREWAY (everyday). Open /store/fareway-meat-grocery/s?k=<first term>; the data is read from
+    window.__APOLLO_CLIENT__ by pull-fareway-shop.js, driven by farewaySweep (below). The
+    fetch-and-regex probe is DEAD - the storefront is client-rendered and returns a shell.
     Assert retailerLocation 531573 AND In-Store before trusting anything.
     ON 2026-09-19 THE SESSION WAS SITTING ON PICKUP, at the right store. The store id alone did not
     catch it: read the fulfilment mode the page shows and switch it to In-Store in the page's own
     picker before the first term, then assert again. Pickup prices are not shelf prices.
     WAIT FOR A SETTLED COUNT BEFORE EXTRACTING (2026-09-21). The results page paints ~9 items, pauses
     several seconds, then fills the rest. An extract taken at first paint read 1-14 candidates per term
-    where the settled page held 13-109 - partial rows that look like success. Wait for the page's own
-    "Results for" heading, then scroll every ~2.5 s until the item count holds for four reads, THEN
-    call farewayShopExtract. 19-27 s per term. A capture whose terms cluster at 9 is this defect.
-    Emit JSONL {id,term,candidates:[...]} -> out\fareway\fareway-shop-<date>.jsonl
+    where the settled page held 13-109 - partial rows that look like success. A capture whose terms
+    cluster at 9 is this defect.
+    THE SWEEP IS COMMITTED CODE (2026-09-26). After the identity and In-Store checks, on a search results
+    page, inject pull-fareway-shop.js and start, WITHOUT awaiting:
+        farewaySweep(<terms>, <commodities>, { loc: '531573' })     // the worklist's parallel arrays
+    FAIL-SAFE: after injecting, check typeof farewaySweep === 'function'. If it is NOT, the main checkout
+    predates the 2026-09-26 landing (ec39b05d7) because no bot has synced it yet: capture NOTHING for
+    Fareway, never hand-roll a router loop in its place, and report "Fareway: main checkout stale" - the
+    08:00 driver covers Fareway the same day.
+    Poll window.__fwSweep ({done, i, n, errors, aborted}) every ~30 s; ~18 s a term. It pushes each term
+    on the router, waits for the route, resets the store, scrolls until the SCOPED count holds for four
+    reads, then extracts that term's own search only. A term that never settles lands in errors, never as
+    a line; any row read off 531573 stops the sweep (aborted). When done, post farewaySweepJsonl()
+    UNALTERED to the sink as out\fareway\fareway-shop-<date>.jsonl, and report errors and aborted.
+    Every row carries scope_query; select-fareway-shop refuses a capture with a row scoped to another
+    term, an unscoped row, or counts rising over 8 consecutive terms - so never strip, merge or hand-build
+    lines. A rescue appended later must come from farewaySweep too.
     Then: select-fareway-shop.ps1 -In <that> -Today <date>
           build-fareway-regular.ps1 -Today <date> -ModeVerified <date>
     -ModeVerified is only legitimate because the identity check proved In-Store. Without it

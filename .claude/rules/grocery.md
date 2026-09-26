@@ -32,6 +32,9 @@ restating it, so there is one copy of every rule and nothing here can drift from
   guard to scope is a per-guard change with its own fixture, never a default.** The rules and every consumer of the
   exit code are in `grocery/cell-quarantine-lib.ps1` and `grocery/triage-plans/plan-2026-09-21-4.json`; the fixtures are
   `grocery/test-cell-quarantine.ps1`. `design/PLAN-per-cell-quarantine-2026-09-21.md` is the spec.
+- **"NOW" IS NEVER `week_of`** (2026-09-26). `week_of` and the board's file-name date are the AD SET and lag the real
+  date; ages run from per-cell `as_of`, or `judged_on`, to the real date (`lib/board-clock.ps1`), never `built_at`.
+  `ops/audit-board-clock.ps1` holds it. [[the-board-has-three-dates]]
 - **`known-wrong.json` is the MAIN-board corrector, and `comparison-*.json` is rebuilt daily.** A fresh
   ruling reads as red until the next build. That is on purpose, not a bug to chase.
   [[known-wrong-is-the-main-board-corrector]]

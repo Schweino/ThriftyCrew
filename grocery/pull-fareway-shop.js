@@ -46,11 +46,65 @@
   UNRECORDED, two stores, or any store but the sanctioned one in stores.json), so the hunter's lookup lane,
   which also calls this, behaves exactly as before.
 
+  EVERY ROW IS SCOPED TO ITS OWN SEARCH, IN CODE (2026-09-26). This used to walk the WHOLE cache. Navigating per
+  term reloaded the page, so the cache held one search; driving terms with the router keeps the cache alive, and
+  on 2026-09-24 a 45-term sweep read 81 -> 1910 candidates, every term carrying every earlier term's rows, all
+  stamped the right store (memory fareway-router-sweep-needs-apollo-reset). Resetting the store too early still
+  leaked the previous term ("yogurt" led by Yellow Onions). The cache is keyed by operation, then by the query's
+  variables, measured 2026-09-26 on the live page:
+        cache.SearchResultsPlacements['{"query":"pork ribs",...}']  ->  the result list, naming every item id
+                                                                        ("items_<loc>-<pid>") that search returned
+        cache.Items['{"ids":["items_<loc>-<pid>"],...}']            ->  the priced ItemsItem nodes, id the same
+  After a router push from "pork ribs" to "yogurt" the cache held both searches and 104 priced items; the 68 whose
+  id is in the yogurt result list covered all 63 tiles on screen, and none of the 36 rib rows. So a row is kept
+  only when its node id is in the result list of the search whose query IS the term (lowercased, whitespace
+  collapsed: the site lowercases "Campbell's" and keeps a doubled space), and every row carries that query as
+  `scope_query`. No search for the term in the cache THROWS: the router has not mounted it yet, and extracting
+  anyway is how another term's rows get recorded under this one. select-fareway-shop.ps1 refuses a capture whose
+  rows are scoped to any query but their own term, and one whose candidate counts climb term after term.
+
   USAGE (in Brad's Chrome, on a shop.fareway.com search results page):
       farewayShopExtract('pork ribs')        -> [{ id, term, name, price, per, orig, unit, size, url,
-                                                   sale_ends_days, sale_note, loc }, ...]
+                                                   sale_ends_days, sale_note, loc, scope_query }, ...]
   Window functions do NOT survive navigation - re-inline this after every navigate.
+
+  THE SWEEP DRIVER (router, no navigation, so it survives the whole sweep). Start it as a background promise and
+  poll; the agent's only jobs are to inject, start, poll and post:
+      farewaySweep(terms, commodities, { loc: '531573' });     // parallel arrays, as the worklist carries them
+      window.__fwSweep                     -> { done, i, n, lines, errors, aborted }
+      farewaySweepJsonl()                  -> the capture, one {id, term, candidates, settle} line per term
+  Per term it pushes the route, waits for it to mount, resets the store, scrolls until the SCOPED candidate count
+  holds for four reads (the page paints ~9 and fills the rest seconds later: memory fareway-capture-defects), then
+  extracts. A term that never settles, or whose search never mounts, is an ERROR for that term, never a line. A row
+  read at any store but opts.loc stops the sweep.
 */
+
+/** The query text as the storefront keys it: lowercased, whitespace collapsed. */
+function farewayNormQuery(s) {
+  return String(s == null ? '' : s).toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * The item ids the search for `term` returned, read from the cache's own SearchResultsPlacements entry for it.
+ * Returns { query: <the query as the cache keys it, or ''>, ids: Set, queries: [every query the cache holds] }.
+ */
+function farewayQueryItemIds(cache, term) {
+  const want = farewayNormQuery(term);
+  const out = { query: '', ids: new Set(), queries: [] };
+  const srp = cache && cache.SearchResultsPlacements;
+  if (!srp || typeof srp !== 'object') return out;
+  for (const k of Object.keys(srp)) {
+    let v = null;
+    try { v = JSON.parse(k); } catch (e) { continue; }
+    const q = v && typeof v.query === 'string' ? v.query : '';
+    if (!q) continue;
+    out.queries.push(q);
+    if (farewayNormQuery(q) !== want) continue;
+    out.query = q;
+    for (const m of (JSON.stringify(srp[k]).match(/items_\d+-\d+/g) || [])) out.ids.add(m);
+  }
+  return out;
+}
 
 /** The retailerLocation a cache blob names, by farewayIdentity()'s own regex: the first match, or ''. */
 function farewayReadLocation(blob) {
@@ -96,11 +150,28 @@ function farewayShopExtract(term) {
     throw new Error('REFUSING TO EXTRACT: no __APOLLO_CLIENT__ on this page. This is blindness, not an ' +
                     'empty result - do not record it as "no products found".');
   }
+  if (!farewayNormQuery(term)) {
+    throw new Error('REFUSING TO EXTRACT: no term. Rows are scoped to the search for their term, and there is ' +
+                    'no search to scope to.');
+  }
   const cache = c.cache.extract();
-  const nodes = farewayItemNodes(cache);
-  if (!nodes.length) {
+  const all = farewayItemNodes(cache);
+  if (!all.length) {
     throw new Error('REFUSING TO EXTRACT: the Apollo cache holds no priced item nodes. Either the results ' +
                     'have not hydrated yet (scroll/wait and retry) or the cache shape moved.');
+  }
+  // THE SCOPE (see the header): only items the search for THIS term returned.
+  const scope = farewayQueryItemIds(cache, term);
+  if (!scope.query) {
+    throw new Error('REFUSING TO EXTRACT: the Apollo cache holds no search for "' + farewayNormQuery(term) +
+                    '" (it holds: ' + (scope.queries.map(q => '"' + q + '"').join(', ') || 'none') + '). The route ' +
+                    'has not mounted this search yet - wait and retry; never record another search\'s rows.');
+  }
+  const nodes = all.filter(x => scope.ids.has(String(x.node.id || '')));
+  if (!nodes.length) {
+    throw new Error('REFUSING TO EXTRACT: the search for "' + scope.query + '" names ' + scope.ids.size +
+                    ' item(s) and none is priced in the cache yet (' + all.length + ' priced item(s) belong to ' +
+                    'other searches). Scroll/wait and retry.');
   }
   // The store, read from the very object the rows are read from - never from an earlier page.
   const loc = farewayReadLocation(JSON.stringify(cache)) || 'UNRECORDED';
@@ -148,13 +219,93 @@ function farewayShopExtract(term) {
       // visible in the capture instead of silently dropped.
       sale_note: disc || '',
       // The retailerLocation this page's cache named when the row was read. See the header.
-      loc: loc
+      loc: loc,
+      // The search this row was scoped to, as the cache keys it. select-fareway-shop refuses a row whose
+      // scope is not its own term.
+      scope_query: scope.query
     });
   }
   return rows;
 }
 
+/** How many candidates the search for `term` has hydrated so far; 0 while it cannot be read at all. */
+function farewayScopedCount(term) {
+  try { return farewayShopExtract(term).length; } catch (e) { return 0; }
+}
+
+/**
+ * The router sweep (see the header). terms and commodities are PARALLEL arrays. Resolves to window.__fwSweep,
+ * which it also keeps current while it runs, so a caller can start it without awaiting and poll.
+ * opts: loc (the retailerLocation every row must carry, else the sweep stops), mountMs (1500), pollMs (2500),
+ * stableReads (4), maxPolls (16), sleep (a promise-returning ms timer; tests pass an instant one).
+ */
+async function farewaySweep(terms, commodities, opts) {
+  const o = opts || {};
+  const sleep = o.sleep || (ms => new Promise(r => setTimeout(r, ms)));
+  const mountMs = o.mountMs != null ? o.mountMs : 1500;
+  const pollMs = o.pollMs != null ? o.pollMs : 2500;
+  const stableReads = o.stableReads || 4;
+  const maxPolls = o.maxPolls || 16;
+  const T = Array.isArray(terms) ? terms : [];
+  const C = Array.isArray(commodities) ? commodities : [];
+  const st = { done: false, i: 0, n: T.length, lines: [], errors: [], aborted: '' };
+  window.__fwSweep = st;
+  if (T.length !== C.length) {
+    st.aborted = 'terms (' + T.length + ') and commodities (' + C.length + ') are not parallel arrays';
+    st.done = true;
+    return st;
+  }
+  for (let k = 0; k < T.length; k++) {
+    const term = String(T[k]), id = String(C[k]);
+    st.i = k + 1;
+    try {
+      window.__do_not_use_me_history.push('/fareway-meat-grocery/s?k=' + encodeURIComponent(term));
+      // Mount first, THEN reset: a reset fired before the route mounts refetches the PREVIOUS search.
+      await sleep(mountMs);
+      if (window.__APOLLO_CLIENT__ && typeof window.__APOLLO_CLIENT__.resetStore === 'function') {
+        await window.__APOLLO_CLIENT__.resetStore();
+      }
+      // SETTLE on the count this term will actually emit, never on a sleep: the page paints ~9 and fills later.
+      let last = -1, same = 0, polls = 0, n = 0;
+      while (polls < maxPolls && same < stableReads) {
+        try { window.scrollTo(0, window.document.body.scrollHeight); } catch (e) { /* no layout in a test */ }
+        await sleep(pollMs);
+        n = farewayScopedCount(term);
+        same = (n > 0 && n === last) ? same + 1 : (n > 0 ? 1 : 0);
+        last = n;
+        polls++;
+      }
+      if (same < stableReads) {
+        throw new Error('UNSETTLED: the scoped count for "' + term + '" did not hold for ' + stableReads +
+                        ' reads in ' + polls + ' polls (last ' + n + ')');
+      }
+      const rows = farewayShopExtract(term);
+      if (o.loc) {
+        const off = rows.filter(r => r.loc !== String(o.loc));
+        if (off.length) {
+          st.aborted = 'term "' + term + '": ' + off.length + ' row(s) read at retailerLocation ' + off[0].loc +
+                       ', not ' + o.loc + ' - the session is on the wrong store; nothing after this was read';
+          break;
+        }
+      }
+      st.lines.push({ id: id, term: term, candidates: rows, settle: { count: n, polls: polls } });
+    } catch (e) {
+      st.errors.push({ id: id, term: term, error: String((e && e.message) || e) });
+    }
+  }
+  st.done = true;
+  return st;
+}
+
+/** The finished sweep as the capture file: one {id, term, candidates, settle} JSON line per term that read. */
+function farewaySweepJsonl() {
+  const st = window.__fwSweep;
+  if (!st || !st.done) throw new Error('the sweep has not finished (window.__fwSweep.done is not true)');
+  return st.lines.map(l => JSON.stringify(l)).join('\n') + (st.lines.length ? '\n' : '');
+}
+
 /* Node/test surface. In the browser these are just globals; the PowerShell self-test requires the file. */
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { farewaySaleEndsDays, farewayShopExtract, farewayItemNodes, farewayReadLocation };
+  module.exports = { farewaySaleEndsDays, farewayShopExtract, farewayItemNodes, farewayReadLocation,
+                     farewayNormQuery, farewayQueryItemIds, farewayScopedCount, farewaySweep, farewaySweepJsonl };
 }

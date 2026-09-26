@@ -6,10 +6,15 @@
   Title: "<Label> Price in Omaha This Week"
   Meta:  "<Label> Price in Omaha This Week (Tracked Weekly) | Thrifty Crew"
 
-  WEEKLY GATE: after a successful full run this script writes out\trend-pages.stamp containing
-  the newest week_of in price-history.json. On the next run, if the stamp already equals the
-  newest week_of, it exits 0 immediately and does nothing, so a daily caller only republishes
-  when a new week of history lands. Use -Force to republish anyway.
+  CONTENT GATE, NOT A WEEKLY ONE (2026-09-26, Brad's D3, design\PLAN-board-clock-2026-09-26.md). A page is upserted
+  only when what it SHOWS changed: lib\trend-publish-key.ps1's Get-TcTrendPageHash over its fragment, title, excerpt
+  and meta, compared with the hash recorded for its slug in out\trend-pages-published.json. Each hash is recorded the
+  moment its page lands, so a run that dies half way has still recorded the pages it published
+  (publish-wave-crash-loses-the-journal). After a run with no failure, out\trend-pages.stamp holds
+  Get-TcTrendInputKey (price-history.json's content key), which publish-deals-page compares to skip the builds on a
+  day no tracked price moved. Until 2026-09-26 both gates compared the newest week_of, which is the AD SET's date and
+  does not move while no weekly ad is due, so a price that moved mid-week never reached these pages or the tracker.
+  -Force republishes every page regardless.
 
   Key resolution copied from publish-resource.ps1: $env:GHOST_ADMIN_KEY, then a gitignored
   .ghostkey file here or in meal-prep\.
@@ -27,6 +32,7 @@ $utf8 = New-Object System.Text.UTF8Encoding($false)
 $HistoryFile = Join-Path $here 'price-history.json'
 $TrendDir    = Join-Path $here 'out\trend'
 $StampFile   = Join-Path $here 'out\trend-pages.stamp'
+$LedgerFile  = Join-Path $here 'out\trend-pages-published.json'   # slug -> the page hash it was last published with
 $MinWeeks    = 3
 
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
@@ -35,13 +41,18 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl = 'https://map-to-success.ghost.io'
 
-# Board store coverage - keep the count in lockstep with $storeOrder (build-deals-page.ps1) / the audit store lists.
-# Derived to a word so the copy can never silently go stale when a store is added.
-$StoreNames = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
+# Board store coverage, derived to a word so the copy can never silently go stale when a store is added. Read from the
+# registry, never a copy of the store list here (Brad, 2026-09-19, backlog I192: convert on touch - converted
+# 2026-09-26 with PLAN-board-clock's D3 change). An unreadable registry THROWS: publishing "tracked across <wrong
+# number> stores" to every page is worse than publishing nothing today.
+$StoreNames = @(@((Read-JsonFile (Join-Path $here 'stores.json')).stores) | Where-Object { $_ -and $_.name } | Sort-Object { [int]$_.order } | ForEach-Object { [string]$_.name })
+if ($StoreNames.Count -eq 0) { throw 'publish-trend-pages: stores.json names no store - refusing to publish a store count' }
 $numWords   = @('zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve')
 $StoreWord  = if ($StoreNames.Count -lt $numWords.Count) { $numWords[$StoreNames.Count] } else { [string]$StoreNames.Count }
 . (Join-Path $PSScriptRoot '..\lib\ghost-lib.ps1')   # 2026-07-26: single Ghost helper (was one of 50+ inline copies)
 . (Join-Path $PSScriptRoot '..\lib\trend-keep.ps1')  # 2026-08-04: single source for which commodities get a page
+. (Join-Path $PSScriptRoot '..\lib\trend-publish-key.ps1')  # 2026-09-26: publish on CONTENT change (Brad's D3)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')       # Write-TcAtomicFile: the per-page ledger is replaced whole
 function New-GhostJWT { Get-GhostJWT -Key $adminKey }
 
 # THE FOURTH COPY (2026-08-31). Same four-decimal renderer as build-trend-pages had, and this one writes
@@ -67,20 +78,19 @@ function Get-UnitPhrase { param([string]$u)
 if (-not (Test-Path $HistoryFile)) { throw "History file not found: $HistoryFile" }
 $data = Read-JsonFile $HistoryFile
 
-$allWeeks = @()
-foreach ($c in $data.commodities) { foreach ($e in $c.history) { $allWeeks += [string]$e.week_of } }
-if ($allWeeks.Count -eq 0) { throw 'No history entries found in price-history.json' }
-$newestWeek = (@($allWeeks | Sort-Object))[-1]
-
-if (-not $Force) {
-  if (Test-Path $StampFile) {
-    $stamp = ((Get-Content $StampFile -Raw) + '').Trim()
-    if ($stamp -eq $newestWeek) {
-      Write-Host ('Trend pages already published for week {0} (stamp match). Nothing to do. Use -Force to republish.' -f $newestWeek)
-      exit 0
-    }
-  }
+if (@($data.commodities).Count -eq 0) { throw 'No commodities found in price-history.json' }
+$inputKey = Get-TcTrendInputKey $HistoryFile
+# The per-page ledger. An unreadable one is treated as EMPTY, which republishes every page once - never as "all current".
+$published = @{}
+if (Test-Path -LiteralPath $LedgerFile) {
+  try { $lj = Read-JsonFile $LedgerFile; foreach ($pp in $lj.pages.PSObject.Properties) { $published[$pp.Name] = [string]$pp.Value } } catch { $published = @{}; Write-Warning 'trend-pages-published.json unreadable - every page will be republished once' }
 }
+function Save-TrendLedger {
+  $o = [ordered]@{ updated = (Get-Date).ToString('s'); note = 'slug -> Get-TcTrendPageHash of the page as last published (publish-trend-pages.ps1)'; pages = [ordered]@{} }
+  foreach ($k in @($published.Keys | Sort-Object)) { $o.pages[$k] = $published[$k] }
+  [void](Write-TcAtomicFile -Path $LedgerFile -Text ($o | ConvertTo-Json -Depth 4) -NoBom)
+}
+$unchanged = 0
 
 if (-not (Test-Path $TrendDir)) { throw "Trend dir not found: $TrendDir  (run build-trend-pages.ps1 first)" }
 
@@ -129,6 +139,9 @@ foreach ($c in $data.commodities) {
   $metaDesc = 'Cheapest ' + $c.label.ToLower() + ' in Omaha this week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across ' + $StoreWord + ' stores, with the record low and full price history. Updates every week.'
   $excerpt = 'This week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across ' + $StoreWord + ' Omaha stores.'
 
+  $pageHash = Get-TcTrendPageHash $html $title $excerpt $metaTitle $metaDesc
+  if (-not $Force -and $published.ContainsKey($slug) -and [string]::Equals($published[$slug], $pageHash, [StringComparison]::Ordinal)) { $unchanged++; continue }
+
   try {
     $jwt = New-GhostJWT $adminKey
     $existing = $null
@@ -155,6 +168,8 @@ foreach ($c in $data.commodities) {
     $verb = if ($existing) { 'UPDATED' } else { 'CREATED' }
     Write-Host ('{0}: /{1}/  status={2} visibility={3}' -f $verb, $slug, $saved.status, $saved.visibility) -ForegroundColor Green
     $okCount++
+    # Recorded the moment it lands (a Draft run records nothing: a draft is not what readers see).
+    if (-not $Draft) { $published[$slug] = $pageHash; Save-TrendLedger }
   } catch {
     Write-Warning ('FAILED {0}: {1}' -f $slug, $_.Exception.Message)
     $failCount++
@@ -163,12 +178,14 @@ foreach ($c in $data.commodities) {
 }
 
 Write-Host ''
-Write-Host ('Done: {0} upserted, {1} failed.' -f $okCount, $failCount)
+Write-Host ('Done: {0} upserted, {1} unchanged (content identical to what is live), {2} failed.' -f $okCount, $unchanged, $failCount)
 
-if ($failCount -eq 0 -and $okCount -gt 0) {
-  [IO.File]::WriteAllText($StampFile, $newestWeek, $utf8)
-  Write-Host ('Stamp written: {0} = {1}' -f $StampFile, $newestWeek)
+# The stamp is the INPUT key, written after a run with no failure whether or not any page needed an upsert: "nothing
+# changed" is a clean, complete result now, where the weekly gate needed at least one upsert to arm.
+if ($failCount -eq 0 -and $inputKey -and -not $Draft) {
+  [IO.File]::WriteAllText($StampFile, $inputKey, $utf8)
+  Write-Host ('Stamp written: {0} = {1}' -f $StampFile, $inputKey)
 } else {
-  Write-Warning 'Not writing stamp (failures or nothing published), so the next run will retry.'
+  Write-Warning 'Not writing stamp (failures, a draft run, or no readable history), so the next run will rebuild and retry.'
   if ($failCount -gt 0) { exit 1 }
 }

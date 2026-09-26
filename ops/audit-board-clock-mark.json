@@ -1,0 +1,18 @@
+{
+    "generated":  "2026-09-26T10:11:23",
+    "sites":  0,
+    "keys":  [
+
+             ],
+    "history":  [
+                    {
+                        "date":  "2026-09-26T09:50:50",
+                        "count":  17
+                    },
+                    {
+                        "date":  "2026-09-26T10:11:23",
+                        "count":  0
+                    }
+                ],
+    "note":  "HIGH-WATER MARK for code that treats the AD SET date (week_of, the ads file today, BoardToday, or a variable carrying one) as now: a compare with a non-literal, date arithmetic, or a clock-named parameter. keys are path | kind | normalised expression, never a line. It may only go DOWN (ops\\audit-board-clock.ps1 -Tighten)."
+}

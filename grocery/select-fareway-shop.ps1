@@ -28,6 +28,17 @@
   store IS pinned, unlike Aldi's and Sam's: pull-fareway-instore.js has refused anything but 531573 since before this
   file existed. Every selected row carries `store_loc`, which build-fareway-regular writes as `store_location`.
 
+  EVERY CANDIDATE MUST BE SCOPED TO ITS OWN TERM, AND THE CAPTURE MUST NOT CLIMB (2026-09-26). A router-driven sweep keeps
+  the storefront's cache alive, and on 2026-09-24 the extractor, which walked the whole cache, gave a 45-term capture
+  81 -> 1910 candidates: every term carried every earlier term's rows, all stamped the right store, so the store ruling
+  above passed it and cheapest-wins would have handed cells to other commodities' products. farewayShopExtract now keeps
+  only the items its term's own search returned and stamps each row `scope_query`. The capture is REFUSED when a
+  candidate has no scope stamp (-WaiveMissingScopeStamp re-reads a capture made before the stamp, and only when NO
+  candidate carries one), carries one beside unstamped ones, or is scoped to a query other than its line's term
+  (compared lowercased, whitespace collapsed). Independently of any stamp, it is REFUSED when the candidate counts of
+  $script:CLIMB_REFUSE_RUN or more consecutive non-empty terms rise at every step - the accumulating shape itself, which
+  a waived old capture is still held to. See Get-FarewayCaptureScope for the bar and what else was tried.
+
     .\select-fareway-shop.ps1 -In <capture.jsonl> -Today 2026-09-10
     .\select-fareway-shop.ps1 -SelfTest          frozen coconut fixture + clean twins, no data read
 #>
@@ -43,6 +54,10 @@ param(
   # store, UNRECORDED, two stores, a stamped/unstamped mix) is refused exactly as without it. Its rows say
   # store_loc "UNRECORDED", never a store. capture-run never passes it.
   [switch]$WaiveMissingStoreStamp,
+  # For RE-SELECTING a capture written before farewayShopExtract stamped `scope_query` (2026-09-26), and nothing else.
+  # It waives the no-scope-stamp refusal only when NO candidate carries one; a foreign scope, a stamped/unstamped mix
+  # and a climbing capture are refused exactly as without it. capture-run never passes it.
+  [switch]$WaiveMissingScopeStamp,
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
@@ -361,6 +376,58 @@ function Get-FarewayCaptureStore {
   return @{ loc = $loc; total = $total; refuse = $why; nostamp = ($total -gt 0 -and $stamped -eq 0) }
 }
 
+# ---- EVERY CANDIDATE SCOPED TO ITS OWN TERM, AND NO CLIMB (2026-09-26) - see the header ----------------------------
+# CLIMB_REFUSE_RUN = 8: a run of 8 consecutive non-empty terms whose candidate counts rise at EVERY step is refused.
+# Measured before the bar was set, over every grocery\out\fareway\fareway-shop-*.jsonl on 2026-09-26 (29 captures,
+# 2026-08-22..09-25, none contaminated: the contaminated 09-24 sweep was discarded before it was posted):
+#   strictly rising, longest run per capture: max 5 (on 08-31, 09-19 of 178 terms, 09-20, 09-21, 09-25).
+#   non-decreasing (>=), tried first and REJECTED: 08-23 reaches 13 on repeated equal counts, so it cannot separate.
+# The contaminated sweep rose at all 45 terms. 8 is the clean maximum plus 3; two variants tried, strict kept.
+# A capture shorter than the bar is out of this check's reach, and the scope stamp is what holds it.
+$script:CLIMB_REFUSE_RUN = 8
+
+function ConvertTo-FwQuery([string]$s) { return ((([string]$s).ToLowerInvariant()) -replace '\s+', ' ').Trim() }
+
+# Returns @{ refuse = <why, or ''>; nostamp = [bool]; total; climb = <longest strictly rising run> }. Prints nothing.
+# $Lines are the parsed {id,term,candidates[]} objects in FILE ORDER, which is the order the sweep read them.
+function Get-FarewayCaptureScope {
+  param($Lines)
+  $total = 0; $unstamped = 0; $foreign = 0; $example = ''
+  $counts = New-Object 'System.Collections.Generic.List[int]'
+  foreach ($ln in @($Lines)) {
+    if ($null -eq $ln) { continue }
+    $cands = @($ln.candidates | Where-Object { $null -ne $_ })
+    if ($cands.Count -gt 0) { $counts.Add($cands.Count) }
+    $want = ConvertTo-FwQuery ([string]$ln.term)
+    foreach ($c in $cands) {
+      $total++
+      $q = if ($c.PSObject.Properties['scope_query']) { [string]$c.scope_query } else { '' }
+      if (-not $q.Trim()) { $unstamped++; continue }
+      if (-not [string]::Equals((ConvertTo-FwQuery $q), $want, [StringComparison]::Ordinal)) {
+        $foreign++
+        if (-not $example) { $example = ("term '" + $want + "' carries '" + [string]$c.name + "' scoped to '" + (ConvertTo-FwQuery $q) + "'") }
+      }
+    }
+  }
+  $run = 0; $best = 0
+  for ($i = 0; $i -lt $counts.Count; $i++) {
+    if ($i -gt 0 -and $counts[$i] -gt $counts[$i - 1]) { $run++ } else { $run = 1 }
+    if ($run -gt $best) { $best = $run }
+  }
+  $why = ''
+  $stamped = $total - $unstamped
+  if ($best -ge $script:CLIMB_REFUSE_RUN) {
+    $why = ('the candidate counts rise at every step over ' + $best + ' consecutive terms (bar ' + $script:CLIMB_REFUSE_RUN + ') - each term is carrying the terms before it: a router sweep read the whole cache. Counts in order: ' + ($counts.ToArray() -join ', ') + '.')
+  } elseif ($foreign -gt 0) {
+    $why = ('{0} of {1} candidate(s) are scoped to a search other than their own term ({2}) - another search''s rows were recorded under it.' -f $foreign, $total, $example)
+  } elseif ($total -gt 0 -and $stamped -eq 0) {
+    $why = ('the capture carries no scope stamp on any of its ' + $total + ' candidate(s), so nothing says each row came from its own term''s search. Re-capture through farewayShopExtract / farewaySweep in pull-fareway-shop.js, which stamps every row with scope_query; never strip it or hand-assemble the file.')
+  } elseif ($unstamped -gt 0) {
+    $why = ('{0} of {1} candidate(s) carry no scope stamp beside stamped ones - rows from another capture were merged in.' -f $unstamped, $total)
+  }
+  return @{ refuse = $why; nostamp = ($total -gt 0 -and $stamped -eq 0); total = $total; climb = $best }
+}
+
 # ---- THE SELECTED ROW, as a pure function so -SelfTest drives the code the main loop runs --------------------------
 # THE STORE'S OWN SALE COUNTDOWN RIDES THE ROW (2026-09-18, backlog I223). farewayShopExtract reads "Sale ends in N
 # days" out of the page's Apollo cache and emits it as sale_ends_days (the integer) and sale_note (the text), and
@@ -462,6 +529,8 @@ if ($SelfTest) {
     $a = $kindBar.PSObject.Copy(); $b = $coconut.PSObject.Copy()
     if ($null -ne $loc1) { $a | Add-Member -NotePropertyName loc -NotePropertyValue $loc1 -Force }
     if ($null -ne $loc2) { $b | Add-Member -NotePropertyName loc -NotePropertyValue $loc2 -Force }
+    # Scoped to its own term, as farewayShopExtract stamps it since 2026-09-26; the store cases are about loc alone.
+    foreach ($x in @($a, $b)) { $x | Add-Member -NotePropertyName scope_query -NotePropertyValue 'whole coconut' -Force }
     return [pscustomobject]@{ id = 'coconut'; term = 'whole coconut'; candidates = @($a, $b) }
   }
   $tblS = @(
@@ -487,6 +556,40 @@ if ($SelfTest) {
   $regLoc = Get-FarewaySanctionedLocation $root
   $instSrc = [IO.File]::ReadAllText((Join-Path $root 'pull-fareway-instore.js'))
   $mirM = [regex]::Match($instSrc, "if \(loc !== '(\d+)'\)")
+  # ---- EVERY CANDIDATE SCOPED TO ITS OWN TERM, AND NO CLIMB (2026-09-26) --------------------------------------------
+  # FOUNDING SHAPE: 2026-09-24's router sweep, where every term carried every earlier term's rows (81 -> 1910 over 45
+  # terms), all stamped 531573. _FwScoped builds one line of $n coconut-shaped candidates scoped to $scope ($null = none).
+  function _FwScoped([string]$term, [int]$n, $scope) {
+    $cs = for ($j = 0; $j -lt $n; $j++) {
+      $x = $coconut.PSObject.Copy(); $x.id = [string](5000 + $j); $x.name = 'Coconut'
+      $x | Add-Member -NotePropertyName loc -NotePropertyValue '531573' -Force
+      if ($null -ne $scope) { $x | Add-Member -NotePropertyName scope_query -NotePropertyValue $scope -Force }
+      $x
+    }
+    return [pscustomobject]@{ id = 'coconut'; term = $term; candidates = @($cs) }
+  }
+  function _FwRising([int]$runLen, [bool]$stamp) {
+    $ls = for ($j = 0; $j -lt $runLen; $j++) { $t = 'term ' + $j; _FwScoped $t (10 + 5 * $j) $(if ($stamp) { $t } else { $null }) }
+    return @($ls)
+  }
+  $sc1 = Get-FarewayCaptureScope -Lines @((_FwScoped 'yogurt' 3 'yogurt'), (_FwScoped 'yogurt' 2 'yellow onion'))
+  T 'MUST FIRE  a candidate scoped to another search (yogurt carrying a yellow onion row) is refused, naming both' ([bool]$sc1.refuse -and $sc1.refuse.Contains('scoped to a search other than their own term') -and $sc1.refuse.Contains("scoped to 'yellow onion'")) ('refuse=[' + $sc1.refuse + ']')
+  $sc2 = Get-FarewayCaptureScope -Lines @((_FwScoped 'yogurt' 3 $null))
+  T 'MUST FIRE  a capture with no scope stamp on any candidate is refused, and only that shape is marked waivable' ([bool]$sc2.refuse -and $sc2.refuse.Contains('carries no scope stamp') -and $sc2.nostamp) ('refuse=[' + $sc2.refuse + '] nostamp=' + $sc2.nostamp)
+  $sc3 = Get-FarewayCaptureScope -Lines @((_FwScoped 'yogurt' 3 'yogurt'), (_FwScoped 'kale' 2 $null))
+  T 'MUST FIRE  unscoped rows merged beside scoped ones are refused, and are not waivable' ([bool]$sc3.refuse -and $sc3.refuse.Contains('beside stamped ones') -and -not $sc3.nostamp) ('refuse=[' + $sc3.refuse + '] nostamp=' + $sc3.nostamp)
+  $sc4 = Get-FarewayCaptureScope -Lines @((_FwScoped 'Pork  Ribs' 3 'pork ribs'), (_FwScoped 'yogurt' 2 'Yogurt'))
+  T 'MUST NOT FIRE  a scope that differs from its term only in case and spacing is its own term' (-not $sc4.refuse -and $sc4.total -eq 5) ('refuse=[' + $sc4.refuse + ']')
+  $sc5 = Get-FarewayCaptureScope -Lines (_FwRising $script:CLIMB_REFUSE_RUN $true)
+  T ('MUST FIRE at the bar  ' + $script:CLIMB_REFUSE_RUN + ' consecutive terms whose counts rise at every step are refused, though every row is scoped to its own term') ([bool]$sc5.refuse -and $sc5.refuse.Contains('rise at every step') -and $sc5.climb -eq $script:CLIMB_REFUSE_RUN) ('climb=' + $sc5.climb + ' refuse=[' + $sc5.refuse + ']')
+  $sc6 = Get-FarewayCaptureScope -Lines (_FwRising ($script:CLIMB_REFUSE_RUN - 1) $true)
+  T ('MUST NOT FIRE one step under the bar  ' + ($script:CLIMB_REFUSE_RUN - 1) + ' rising terms pass') (-not $sc6.refuse -and $sc6.climb -eq ($script:CLIMB_REFUSE_RUN - 1)) ('climb=' + $sc6.climb + ' refuse=[' + $sc6.refuse + ']')
+  # FROZEN, never regenerated: candidate counts of lines 14-23 of out\fareway\fareway-shop-2026-09-19.jsonl, the clean
+  # capture holding the longest rising run measured (5: 23, 39, 46, 47, 50), with an empty term inserted, which is skipped.
+  $real = @(31, 26, 60, 23, 39, 0, 46, 47, 50, 42, 36)
+  $realLines = for ($j = 0; $j -lt $real.Count; $j++) { $t = 'real ' + $j; _FwScoped $t $real[$j] $t }
+  $sc7 = Get-FarewayCaptureScope -Lines @($realLines)
+  T 'CLEAN TWIN  a real clean capture''s counts (longest rising run 5, an empty term between) are not refused' (-not $sc7.refuse -and $sc7.climb -eq 5) ('climb=' + $sc7.climb + ' refuse=[' + $sc7.refuse + ']')
   T 'CLEAN TWIN  stores.json''s Fareway retailer_location equals farewayIdentity()''s literal' ($regLoc -and $mirM.Success -and [string]::Equals($regLoc, $mirM.Groups[1].Value, [StringComparison]::Ordinal)) ('stores.json=' + $regLoc + ' js=' + $(if ($mirM.Success) { $mirM.Groups[1].Value } else { '<no literal found>' }))
 
   # END TO END, through this script as a child over a frozen capture in a per-run temp directory: the path capture-run
@@ -525,12 +628,29 @@ if ($SelfTest) {
     $e6 = _FwRun 'sale' $saleLine @()
     $e6Row = if ($e6.doc) { @($e6.doc)[0] } else { $null }
     T 'MUST FIRE  end to end, the selected Coconut keeps sale_ends_days 1 and its sale_note in the shop file' ($e6.rc -eq 0 -and $e6Row -and [string]$e6Row.name -eq 'Coconut' -and [string]$e6Row.sale_ends_days -eq '1' -and [string]$e6Row.sale_note -eq 'Sale ends in 1 day') ('rc=' + $e6.rc + ' row=' + ($e6Row | ConvertTo-Json -Compress) + ' | ' + ($e6.lines -join ' / '))
+    # THE SCOPE, end to end. _FwRun writes one line; a many-line capture is written here the same way.
+    function _FwRunLines([string]$name, $lines, [string[]]$extra) {
+      $inP = Join-Path $stT ($name + '.jsonl'); $outP = Join-Path $stT ($name + '.json')
+      $txt = (@($lines) | ForEach-Object { $_ | ConvertTo-Json -Depth 6 -Compress }) -join "`n"
+      [IO.File]::WriteAllText($inP, ($txt + "`n"), (New-Object Text.UTF8Encoding($false)))
+      $argv = @('-In', $inP, '-Out', $outP, '-Today', '1999-01-01') + @($extra)
+      $run = Invoke-NativeScript $selfP @argv
+      return @{ rc = $run.ExitCode; lines = @($run.Lines | ForEach-Object { [string]$_ }); made = (Test-Path -LiteralPath $outP) }
+    }
+    $foreignLine = _FwLine '531573' '531573'
+    $foreignLine.candidates[0].scope_query = 'pork ribs'
+    $e7 = _FwRun 'foreign' $foreignLine @()
+    T 'MUST FIRE  end to end, a capture carrying another search''s row exits 1 with a REFUSED line naming it and writes NO shop file' ($e7.rc -eq 1 -and $null -eq $e7.doc -and (@($e7.lines | Where-Object { $_ -like "REFUSED:*scoped to 'pork ribs'*" }).Count -eq 1)) ('rc=' + $e7.rc + ' | ' + ($e7.lines -join ' / '))
+    $e8 = _FwRunLines 'oldscope' @((_FwScoped 'whole coconut' 2 $null)) @('-WaiveMissingScopeStamp')
+    T 'CLEAN TWIN  -WaiveMissingScopeStamp re-selects a capture made before the scope stamp' ($e8.rc -eq 0 -and $e8.made -and (@($e8.lines | Where-Object { $_ -like 'scope: NOT RECORDED*' }).Count -eq 1)) ('rc=' + $e8.rc + ' | ' + ($e8.lines -join ' / '))
+    $e9 = _FwRunLines 'climb' (_FwRising $script:CLIMB_REFUSE_RUN $false) @('-WaiveMissingScopeStamp')
+    T 'MUST FIRE  end to end, the waiver does not waive a climbing capture: exit 1, REFUSED, no shop file' ($e9.rc -eq 1 -and -not $e9.made -and (@($e9.lines | Where-Object { $_ -like 'REFUSED:*rise at every step*' }).Count -eq 1)) ('rc=' + $e9.rc + ' | ' + ($e9.lines -join ' / '))
   } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
 
-  $stTotal = 8 + 2 + 10 + $tblS.Count + 3 + 6
+  $stTotal = 8 + 2 + 10 + $tblS.Count + 3 + 7 + 6 + 3
   if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
   if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
-  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', end to end x6)')
+  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', scope and climb x7, end to end x9)')
   exit 0
 }
 
@@ -558,6 +678,15 @@ if ($fwStore.refuse -and -not $fwWaived) {
   Write-Output ('REFUSED: ' + (Split-Path $In -Leaf) + ' - ' + $fwStore.refuse + ' No shop file was written.')
   exit 1
 }
+# THE SCOPE SECOND, also before a single row is selected: a capture whose rows are not its own terms' is refused whole.
+$fwScope = Get-FarewayCaptureScope -Lines $rows
+$fwScopeWaived = [bool]($WaiveMissingScopeStamp -and $fwScope.nostamp -and $fwScope.climb -lt $script:CLIMB_REFUSE_RUN)
+if ($fwScope.refuse -and -not $fwScopeWaived) {
+  Write-Output ('REFUSED: ' + (Split-Path $In -Leaf) + ' - ' + $fwScope.refuse + ' No shop file was written.')
+  exit 1
+}
+if ($fwScopeWaived) { Write-Output ('scope: NOT RECORDED - ' + $fwScope.total + ' candidate(s) predate the scope stamp; selected under -WaiveMissingScopeStamp (longest rising run ' + $fwScope.climb + ', under the bar of ' + $script:CLIMB_REFUSE_RUN + ')') }
+else { Write-Output ('scope: every one of ' + $fwScope.total + ' candidate(s) is scoped to its own term; longest rising run ' + $fwScope.climb + ' (bar ' + $script:CLIMB_REFUSE_RUN + ')') }
 $storeLoc = if ($fwWaived) { 'UNRECORDED' } else { [string]$fwStore.loc }
 if ($fwWaived) { Write-Output ('store: NOT RECORDED - ' + $fwStore.total + ' candidate(s) predate the loc stamp; selected under -WaiveMissingStoreStamp, so every row says store_loc UNRECORDED') }
 elseif ($storeLoc) { Write-Output ('store: retailerLocation ' + $storeLoc + ' read on all ' + $fwStore.total + ' candidate(s)') }
