@@ -1,5 +1,6 @@
 <#
-  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398)
+  HOLD SCOPE: cell - names each CONFIRMED pack-total cell (QUARANTINE-CELL ... value); -Strict over an undecidable
+  finding still holds the whole board (queue 2026-09-22-6e6a3b; fixtures: test-pack-basis-scope.ps1)
   audit-pack-basis.ps1 - catches the MULTIPACK TOTAL read as an EACH-SIZE (2026-07-28).
 
   The engine's count-first idiom ("24 ct 16.9 fl oz") means 24 bottles OF 16.9 oz, so it multiplies to a
@@ -206,6 +207,16 @@ foreach ($f in $findings) {
 }
 Write-Output ("  report: " + $rep)
 if ($confirmedCount -gt 0) {
+  # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # A CONFIRMED pack total is one cell whose per-unit is wrong by the count, so it is named for guards.ps1 to hold as
+  # a VALUE (the condemned number is never re-shown) instead of holding the board. Under -Strict an undecidable
+  # finding is a failure too and names no cell by arithmetic, so then no scope is affirmed and the board holds.
+  if (-not ($Strict -and $findings.Count -gt $confirmedCount)) {
+    $pbKeys = New-Object System.Collections.Generic.List[string]
+    foreach ($f in $findings) { if ($f.fingerprint -ne 'CONFIRMED-PACK-TOTAL') { continue }; $kk = $f.id + '|' + $f.store; if (-not $pbKeys.Contains($kk)) { [void]$pbKeys.Add($kk) } }
+    foreach ($kk in $pbKeys) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + $pbKeys.Count + ' stores=0')
+  }
   Write-Output ("PACK-BASIS BLOCKED: " + $confirmedCount + " cell(s) carry the arithmetic fingerprint of a pack TOTAL read as an each-size. That is not a judgement call, it is stated-size/count reproducing a size other stores sell, so the published per-unit is wrong by a factor of the count. Correct the size at capture, or rule the row wrong with add-known-wrong.ps1, then rebuild. Do NOT publish over this.")
   Exit-Guard -Name 'pack-basis' -Code 2
 }

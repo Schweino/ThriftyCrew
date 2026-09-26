@@ -1,5 +1,6 @@
 ﻿<#
-  HOLD SCOPE: board - not yet taught; its BLOCKED lines already name commodity and store (queue 2026-09-21-d16398)
+  HOLD SCOPE: cell - names each BLOCKED comparison-board cell (QUARANTINE-CELL ... value); a blocked recipe-board cell,
+  a malformed list or a BLOCKED-LINK still holds the whole board (queue 2026-09-22-6e6a3b; fixtures: test-known-wrong-scope.ps1)
   audit-known-wrong.ps1 - THE BLOCKLIST GATE. "No crown a reasoner has ruled wrong is on the page."
 
   FOUNDING BUG (2026-07-29): audit findings lived as PROSE in .md files. honeydew was written up with the
@@ -461,6 +462,22 @@ if ($evaluable -eq 0) {
   exit 3
 }
 if ($blocked.Count -gt 0) {
+  # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; grocery\cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # Every BLOCKED finding is one priced cell, so it is named for guards.ps1 to quarantine instead of holding the board
+  # (Brad, 2026-09-21: one bad item must not hold the board). Kind is VALUE, never selection: a value hold at a different
+  # number blanks the cell's item, so the rerun no longer sees the ruled-wrong name, and a hold at the SAME number is
+  # withheld because that number is the wrong product's. The complete line is printed ONLY when every blocked cell sits on
+  # the comparison board, the one guards quarantines; a blocked recipe-board.json cell cannot be reached by a cell hold,
+  # so then nothing is affirmed and the whole board holds as before.
+  $kwOffBoard = @($blocked | Where-Object { -not ([string]$_.cell.board).StartsWith('comparison-', [StringComparison]::Ordinal) })
+  if ($kwOffBoard.Count -eq 0) {
+    $kwKeys = New-Object System.Collections.Generic.List[string]
+    foreach ($b in $blocked) { $kk = [string]$b.cell.id + '|' + [string]$b.cell.store; if (-not $kwKeys.Contains($kk)) { [void]$kwKeys.Add($kk) } }
+    foreach ($kk in $kwKeys) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + $kwKeys.Count + ' stores=0')
+  } else {
+    Say ('  NOTE          ' + $kwOffBoard.Count + ' blocked cell(s) sit on ' + ((@($kwOffBoard | ForEach-Object { [string]$_.cell.board } | Sort-Object -Unique)) -join ', ') + ', which a cell quarantine cannot reach, so no scope is affirmed and the whole board holds.')
+  }
   Say ("KNOWN-WRONG AUDIT FAILED: " + $blocked.Count + " adjudicated-wrong product(s) are priced on the board. Board NOT safe to publish. Each one was already ruled wrong with evidence in known-wrong.json - fix the commodity rule (or reverse the ruling with add-known-wrong.ps1 -Reverse and say why).")
   exit 2
 }
