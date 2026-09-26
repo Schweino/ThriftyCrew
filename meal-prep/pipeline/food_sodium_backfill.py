@@ -41,6 +41,8 @@ Usage:
   food_sodium_backfill.py --coverage                    how many recipes have sodium on EVERY ingredient
   food_sodium_backfill.py --selftest
 """
+# The self-test is pure over in-file rows and temp specs; it imports three sibling modules the key cannot walk.
+# gate-inputs: meal-prep\pipeline\food_sodium_backfill.py, meal-prep\pipeline\fdc_lookup.py, meal-prep\pipeline\food_provenance.py, meal-prep\pipeline\food_source_backfill.py
 from __future__ import annotations
 
 import collections

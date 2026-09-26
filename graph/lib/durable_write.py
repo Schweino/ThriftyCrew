@@ -67,6 +67,8 @@ NOTHING HERE PROVES BYTES REACHED THE PLATTER. That needs a power cut, not a tes
 SELF-TEST:  python graph/lib/durable_write.py --selftest
 Exit 0 ok, 2 self-test failure.
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: graph\lib\durable_write.py
 from __future__ import annotations
 
 import os

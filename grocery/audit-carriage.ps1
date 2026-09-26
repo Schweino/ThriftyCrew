@@ -22,6 +22,8 @@
 
 param([switch]$Live, [switch]$Revivable, [switch]$Thin, [switch]$Json, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file ledgers and feeds; two libraries come through a computed repo path.
+# gate-inputs: grocery\audit-carriage.ps1, lib\carriage-lib.ps1, lib\guard-contract.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $root

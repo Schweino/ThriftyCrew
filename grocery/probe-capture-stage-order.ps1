@@ -37,6 +37,8 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# The self-test is hermetic: in-file fixtures and temp files it writes itself, no repo file but this one.
+# gate-inputs: grocery\probe-capture-stage-order.ps1
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $LogDir) { $LogDir = Join-Path $here 'out\logs' }   # grocery\out\logs: this probe lives beside the chain it reads
 

@@ -41,6 +41,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# The self-test is hermetic: in-file fixtures and temp files it writes itself, no repo file but this one.
+# gate-inputs: grocery\probe-sams-unit-price-shapes.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 <#

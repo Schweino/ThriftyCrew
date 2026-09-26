@@ -25,6 +25,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# The self-test is hermetic: in-file prompts and temp transcripts it writes itself, no repo file but this one.
+# gate-inputs: meal-prep\pipeline\harvest-lane-tokens.ps1
 
 function Get-LaneFromPrompt([string]$text) {
   # The laneLog preamble is the first thing in every instrumented prompt.

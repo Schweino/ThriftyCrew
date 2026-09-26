@@ -49,6 +49,8 @@ param([string]$OutDir = '', [switch]$Quiet, [switch]$SelfTest)
 # prove the functions work in the mode the live run uses. Remove this line to leave the pilot.
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file queue documents; two libraries come through a computed repo path.
+# gate-inputs: grocery\audit-price-capture-reach.ps1, lib\guard-contract.ps1, lib\atomic-write.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }

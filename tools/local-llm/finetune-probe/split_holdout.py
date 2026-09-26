@@ -25,6 +25,8 @@ before trusting a result, and pretending it is empty would be the fabrication.
     python tools/local-llm/finetune-probe/split_holdout.py --selftest
 Exit 0 ok, 2 self-test failure, 3 no corpus to split (BLIND, never a pass).
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: tools\local-llm\finetune-probe\split_holdout.py
 from __future__ import annotations
 
 import argparse

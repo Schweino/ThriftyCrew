@@ -19,6 +19,9 @@
 #
 # NO param() BLOCK HERE, DELIBERATELY - dot-sourced under PS 5.1 a param() block runs in the CALLER's scope and
 # would reset the caller's own -SelfTest. Same rule as lib\append-line.ps1.
+# The self-test reads grocery\capture-run.ps1 once, as text, to check where it calls Enter-TcKeepAwake.
+# gate-inputs: lib\keep-awake.ps1
+# gate-inputs-text: grocery\capture-run.ps1
 $__kaSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 $script:TcEsContinuous     = [uint32]2147483648   # ES_CONTINUOUS 0x80000000

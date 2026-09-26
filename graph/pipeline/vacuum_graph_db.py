@@ -23,6 +23,8 @@ The proof, all of which must hold or it exits 1: integrity_check returns 'ok', e
 count is identical before and after, and freelist_count is 0 after. It never changes the schema,
 the page size or auto_vacuum.
 """
+# The self-test builds its own temp databases and imports only the stdlib; it reads no repo file but this one.
+# gate-inputs: graph\pipeline\vacuum_graph_db.py
 from __future__ import annotations
 
 import argparse

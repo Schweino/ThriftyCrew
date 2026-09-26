@@ -86,6 +86,8 @@ SCOPE OF A CLEAN REPORT: sound for what it checks and nothing more. A clean plan
 plan HAS the section, never that the section is honest or that the design used it well; a judgement has
 no exit code. A clean commit check proves the named files exist, not that they were read.
 """
+# The self-test builds temp repos and homes itself, and reads two repo files: the commit-msg hook it copies and the plan it copies byte for byte.
+# gate-inputs: ops\store_citation.py, ops\hooks\commit-msg, design\PLAN-brain-consults-on-code-and-analysis-2026-09-22.md
 import json
 import os
 import re

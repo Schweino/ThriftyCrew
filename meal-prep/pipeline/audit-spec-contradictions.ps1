@@ -75,6 +75,8 @@
 [CmdletBinding()]
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "", [string]$ReportDir = "")
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over frozen fixtures and re-runs this script with -Root at an empty temp dir; its libraries come through computed paths, so they are named.
+# gate-inputs: meal-prep\pipeline\audit-spec-contradictions.ps1, lib\json-io.ps1, lib\guard-contract.ps1, meal-prep\pipeline\spec-contradiction-lib.ps1
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
 . (Join-Path $__jioRoot 'lib\json-io.ps1')   # walk UP to find it: this file is two levels below the repo root, and a fixed -Parent hop assumed one

@@ -38,6 +38,8 @@
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = '')
 
 $ErrorActionPreference = 'Stop'
+# The self-test is hermetic: in-file fixtures and temp files it writes itself, no repo file but this one.
+# gate-inputs: grocery\stamp-ad-as-of.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 function Get-AdDealFiles {

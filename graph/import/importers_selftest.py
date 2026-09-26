@@ -22,6 +22,8 @@ trail) is replaced for the whole suite so no fixture writes a tracked file. Noth
 
 EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
 """
+# The self-test runs on temp trees and databases; it imports the graph modules below (a closure Python cannot be walked for) and the importers read the placeholder-name library and the schema.
+# gate-inputs: graph\import\importers_selftest.py, graph\import\importers.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\learning_reconcile.py, graph\lib\supersede.py, graph\lib\units.py, graph\lib\authority.py, graph\lib\llm.py, graph\lib\service_time.py, graph\lib\placeholder_names.py, graph\pipeline\resolve.py, graph\pipeline\state.py, graph\sqlite\schema.sql, grocery\placeholder-name-patterns.json
 from __future__ import annotations
 
 import json

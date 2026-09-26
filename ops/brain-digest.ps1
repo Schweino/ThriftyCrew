@@ -35,6 +35,8 @@
 param([switch]$SelfTest, [switch]$Alert, [switch]$Quiet)
 
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file rows and temp files; three libraries come through a computed repo path.
+# gate-inputs: ops\brain-digest.ps1, lib\guard-contract.ps1, lib\event-bus.ps1, grocery\run-log-lib.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')

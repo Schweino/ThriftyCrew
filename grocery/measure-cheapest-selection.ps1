@@ -34,6 +34,8 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file cells; it dot-sources package-cost-lib through a computed repo path, so it is named here.
+# gate-inputs: grocery\measure-cheapest-selection.ps1, meal-prep\lib\package-cost-lib.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $root -Parent

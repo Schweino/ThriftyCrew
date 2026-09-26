@@ -78,6 +78,8 @@ param(
   [string]$EventsFile = ''
 )
 $ErrorActionPreference = 'Stop'
+# The self-test drives the real ingredient-resolutions.ps1 -Invalidate and learn_apply.py --append-event against a scratch ledger and event log; the Python half cannot be walked, so it and its libraries are named.
+# gate-inputs: meal-prep\pipeline\rebid-ingredient.ps1, meal-prep\pipeline\ingredient-resolutions.ps1, lib\guard-contract.ps1, lib\atomic-write.ps1, lib\ledger-fixture.ps1, lib\json-io.ps1, meal-prep\pipeline\learn_apply.py, meal-prep\pipeline\hunt_lib.py
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp

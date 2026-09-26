@@ -41,6 +41,8 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file strings; it reads no repo file but this one and the libraries it dot-sources.
+# gate-inputs: grocery\build-sale-windows.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ledger-lock.ps1')    # Enter-TcLedgerLock: capture-policy's Set-SaleExpiryProcessed writes this same file from concurrent lanes
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile: the daily-due guards and export-feed read this file lock-free

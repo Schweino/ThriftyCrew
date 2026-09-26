@@ -36,6 +36,8 @@
 param([switch]$SelfTest, [switch]$Json, [switch]$Write, [int]$MaxDrafts = 2)
 
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file events at a fixed epoch and a temp dir; two libraries come through a computed repo path.
+# gate-inputs: ops\incident-trigger.ps1, lib\guard-contract.ps1, lib\event-bus.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')

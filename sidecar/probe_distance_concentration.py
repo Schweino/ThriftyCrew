@@ -38,6 +38,8 @@ from the file and a later question can be asked of the same run without re-runni
     python sidecar/probe_distance_concentration.py --selftest
 Exit 0 ok, 2 self-test failure, 3 could not evaluate (no cache to read - never a pass).
 """
+# The self-test is pure over numpy fixtures it draws itself; it reads no repo file but this one.
+# gate-inputs: sidecar\probe_distance_concentration.py
 from __future__ import annotations
 
 import argparse

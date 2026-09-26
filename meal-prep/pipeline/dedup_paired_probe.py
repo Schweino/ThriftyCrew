@@ -50,6 +50,8 @@ says BLIND rather than reporting a clean zero.
 
 Exit 0 = emitted or scored. 2 = a bar was missed. 3 = could not evaluate (never read that as ok).
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: meal-prep\pipeline\dedup_paired_probe.py
 from __future__ import annotations
 
 import argparse

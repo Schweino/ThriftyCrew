@@ -18,6 +18,8 @@
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$WhatIfVerdict)
 $ErrorActionPreference = 'Stop'
+# The self-test works on a temp fixture tree; it dot-sources two libraries through a computed repo path, so they are named here.
+# gate-inputs: grocery\refresh-chain-verdict.ps1, lib\chain-verdict-lib.ps1, lib\guard-contract.ps1
 $repo = Split-Path $PSScriptRoot -Parent
 . (Join-Path $repo 'lib\chain-verdict-lib.ps1')
 . (Join-Path $repo 'lib\guard-contract.ps1')

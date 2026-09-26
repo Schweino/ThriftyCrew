@@ -48,6 +48,8 @@ PRIVACY: Search Console page and query rows only. Aggregate search data, no memb
 
 Exit 0 = read. 3 = no credential, or nothing to read, and 3 is NEVER a pass.
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: ops\seo_reach_position.py
 from __future__ import annotations
 
 import argparse

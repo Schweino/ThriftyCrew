@@ -21,6 +21,8 @@
 #>
 param([switch]$DryRun, [switch]$Force, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test reads only its own source (source assertions); the libraries it dot-sources first are found by the walk.
+# gate-inputs: meal-prep\rotate-free-dinners.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
 $gout = Join-Path (Split-Path $root -Parent) 'grocery\out'

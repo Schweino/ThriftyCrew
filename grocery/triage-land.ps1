@@ -27,6 +27,8 @@ param(
   [string]$LogDir = ''
 )
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file lines and a fixture push script it writes to temp; it reads no repo file but this one.
+# gate-inputs: grocery\triage-land.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $here -Parent
 

@@ -32,6 +32,8 @@ counted by what it did print, and an old-tail push refused by the hook is not at
 git's output). The cause of each failed landing is a HAND reading of that run's own log (CAUSE below, each entry
 naming its evidence); a run not in the table is printed UNATTRIBUTED, never guessed.
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: ops\measure-bot-checkout.py
 import collections
 import datetime as dt
 import fnmatch

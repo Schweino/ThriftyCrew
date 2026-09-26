@@ -98,6 +98,8 @@ param(
   [switch]$SkipHunterIngest
 )
 $ErrorActionPreference = 'Stop'
+# The self-test reads its own source, checks sidecar\stop-sidecar.ps1 exists, and writes only temp files; two libraries come through a computed repo path.
+# gate-inputs: graph\pipeline\nightly.ps1, grocery\run-log-lib.ps1, lib\lf-write.ps1, sidecar\stop-sidecar.ps1
 
 $root     = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)   # repo root
 $graph    = Join-Path $root 'graph'

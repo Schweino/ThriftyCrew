@@ -51,6 +51,8 @@
 #>
 param([string]$OutFile = '', [switch]$NegativeTest, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test dot-sources cook-measure-lib and compares its fraction table with the scaler template, reading both as text.
+# gate-inputs: meal-prep\pipeline\test-scaler-labels.ps1, meal-prep\pipeline\cook-measure-lib.ps1, meal-prep\pipeline\tpl2-scaler-prefix.html
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # ---------------------------------------------------------------------------------------------------

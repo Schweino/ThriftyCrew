@@ -16,6 +16,8 @@
 param([string]$FeedPath = '', [string]$PublicPath = '', [string]$BuiltDir = '', [string]$NodeExe = '',
       [string]$JsdomEnv = 'C:\Codex\tools\jsdom-env', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test is pure over in-file values and temp dirs; it dot-sources guard-contract through a computed repo path, so it is named here.
+# gate-inputs: meal-prep\pipeline\feed-everyday-ps.ps1, lib\guard-contract.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp = Split-Path -Parent $here
 $repo = Split-Path -Parent $mp

@@ -46,6 +46,8 @@ LINE, not the number.
 
 Self-test: python graph/audit_graph_shape.py --selftest   (pure, no database needed)
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: graph\audit_graph_shape.py
 from __future__ import annotations
 
 import argparse

@@ -31,6 +31,8 @@ tracked JSON, and no case calls log_event, so the tracked graph/provenance trail
 
 EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
 """
+# The self-test works in temp databases; it imports graphdb (and its ids, learning_reconcile) and graphdb reads the schema.
+# gate-inputs: graph\lib\graphdb_selftest.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\learning_reconcile.py, graph\sqlite\schema.sql
 from __future__ import annotations
 
 import json

@@ -33,6 +33,8 @@ param(
   [switch]$SelfTest
 )
 $ErrorActionPreference = 'Stop'
+# The self-test builds its captures and regular files in a temp tree; it reads no repo file but this one and the libraries it dot-sources.
+# gate-inputs: grocery\repair-asof-evidence.ps1
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'regular-fileset-lib.ps1')
 # 0 = ask. Only build-fareway-regular passes -MaxAgeDays today, so this default was reachable

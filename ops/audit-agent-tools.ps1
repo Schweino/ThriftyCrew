@@ -53,6 +53,8 @@
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test runs on in-memory agent files and reads the canonical store-step file; guard-contract comes through a computed repo path.
+# gate-inputs: ops\audit-agent-tools.ps1, lib\guard-contract.ps1, ops\agent-blocks\store-step.md
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')

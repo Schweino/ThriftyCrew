@@ -27,6 +27,9 @@
 param([switch]$SelfTest, [string]$Root = '')
 
 $ErrorActionPreference = 'Stop'
+# The self-test reads ops\run-gates.ps1 as text for its daily list and checks each file it names exists; the git cases use a temp repo.
+# gate-inputs: ops\run-daily-ratchets.ps1, lib\git-repo-env.ps1
+# gate-inputs-text: ops\run-gates.ps1, ops\audit-fixture-inputs.ps1, ops\audit-mustfire-census.ps1, ops\audit-source-control-bytes.ps1, ops\audit-write-only-reports.ps1, ops\audit-full-path-excludes.ps1, ops\audit-keyword-arguments.ps1
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = if ($Root) { $Root } else { Split-Path $here -Parent }
 . (Join-Path $repo 'lib\git-repo-env.ps1')

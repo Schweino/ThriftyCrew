@@ -170,6 +170,8 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }
 $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\git-repo-env.ps1')
 Clear-TcGitRepoEnv
+# The self-test builds throwaway git repos in TEMP and runs this script against them; it and that child read the shipped .worktreeinclude, and two libraries come through a computed repo path.
+# gate-inputs: ops\seed-worktree.ps1, lib\git-repo-env.ps1, lib\guard-contract.ps1, .worktreeinclude
 . (Join-Path $repo 'lib\guard-contract.ps1')
 
 # THE DIRECTORIES .worktreeinclude CANNOT CARRY. Each line names the self-test it fixes, because a line

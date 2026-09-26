@@ -61,6 +61,8 @@ the column stops lying going forward without the retrieval depending on it.
     python graph/lib/authority.py --selftest
 """
 
+# The self-test is pure over literals and imports only the stdlib; it reads no file but this one.
+# gate-inputs: graph\lib\authority.py
 from __future__ import annotations
 
 import re

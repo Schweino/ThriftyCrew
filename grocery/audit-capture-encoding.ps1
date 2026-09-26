@@ -57,6 +57,8 @@
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [switch]$Fix, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
+# The self-test builds temp capture dirs and re-runs this script over them; that child reads stores.json for its lane-to-store map.
+# gate-inputs: grocery\audit-capture-encoding.ps1, grocery\stores.json
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-TextFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

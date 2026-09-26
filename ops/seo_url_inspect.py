@@ -31,6 +31,8 @@ A RATE IS PRINTED WITH ITS DENOMINATOR. `12 of 14` is a measurement; `86%` is a 
 Exit 0 = inspected. 2 = a page carries a rich-result ERROR. 3 = no credential, or nothing inspected -
 and 3 is never a pass.
 """
+# The self-test is pure over in-file fixtures (temp files it creates itself); it reads no repo file but this one.
+# gate-inputs: ops\seo_url_inspect.py
 from __future__ import annotations
 
 import argparse
