@@ -6,7 +6,66 @@
 #        bid/gpu only when the LIVE FEED can price the item; gpu is reconciled to the FEED row's unit
 #        (the brown-sugar 16x lesson: a map gpu is calibrated to its era's board unit, never trust blindly)
 # JSON is built manually (PS5.1 ConvertTo-Json chokes on big graphs).
+#
+# EXIT: 0 when every recipe shipped or every drop is EXPECTED; 1 when any drop is UNEXPECTED (2026-09-26,
+# design\ready-for-brad\propagate-backlog-2026-09-26.md defect 3). A drop is expected when the slug is in
+# db\held-recipes.json or its db\costed.json row has an unpriced or uncarried line: Brad's 2026-09-25 ruling
+# takes an uncostable recipe down, so leaving it out of the planner is the correct state, and exiting 1 on it
+# halted every live propagate at this stage. Any other drop (a manifest that silently lost a priced recipe)
+# still exits 1. Both kinds are named on their own line; neither is ever silent.
+param([switch]$SelfTest)
 $ErrorActionPreference='Stop'
+
+# Split dropped slugs into expected (held, or costed with unpriced/uncarried lines) and unexpected.
+# $Held: hashtable slug->reason. $Costed: rows with slug, lines_unpriced, lines_uncarried.
+function Split-PlannerDrops {
+  param($Dropped, $Held, $Costed)
+  $bad = @{}
+  foreach ($c in @($Costed)) {
+    if (-not $c -or -not $c.slug) { continue }
+    $nu = 0; $nc = 0
+    if ($c.PSObject.Properties['lines_unpriced']) { $nu = [int]$c.lines_unpriced }
+    if ($c.PSObject.Properties['lines_uncarried']) { $nc = [int]$c.lines_uncarried }
+    if ($nu -gt 0 -or $nc -gt 0) { $bad[[string]$c.slug] = ("costed: {0} unpriced, {1} uncarried" -f $nu, $nc) }
+  }
+  $exp = @(); $unexp = @()
+  foreach ($s in @($Dropped)) {
+    if (-not $s) { continue }
+    if ($Held.ContainsKey([string]$s)) { $exp += ([string]$s + ' (held)') }
+    elseif ($bad.ContainsKey([string]$s)) { $exp += ([string]$s + ' (' + $bad[[string]$s] + ')') }
+    else { $unexp += [string]$s }
+  }
+  return [pscustomobject]@{ Expected = $exp; Unexpected = $unexp }
+}
+
+if ($SelfTest) {
+  $f = 0
+  function T($m, $c, $g) { if ($c) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $g); $script:f++ } }
+  $held = @{ 'held-one' = 'drafted' }
+  $costed = @(
+    [pscustomobject]@{ slug = 'unpriced-one'; lines_unpriced = 1; lines_uncarried = 0 },
+    [pscustomobject]@{ slug = 'uncarried-one'; lines_unpriced = 0; lines_uncarried = 2 },
+    [pscustomobject]@{ slug = 'fine-one'; lines_unpriced = 0; lines_uncarried = 0 })
+  $r = Split-PlannerDrops -Dropped @('fine-one') -Held $held -Costed $costed
+  T 'MUST FIRE  a dropped recipe that is neither held nor short a price is UNEXPECTED (the run still exits 1)' `
+    ($r.Unexpected.Count -eq 1 -and $r.Unexpected[0] -eq 'fine-one' -and $r.Expected.Count -eq 0) ("unexp=" + ($r.Unexpected -join ',') + " exp=" + ($r.Expected -join ','))
+  $r = Split-PlannerDrops -Dropped @('never-costed') -Held $held -Costed $costed
+  T 'MUST FIRE  a dropped recipe with no costed row at all is UNEXPECTED, never assumed held' ($r.Unexpected.Count -eq 1) ("unexp=" + ($r.Unexpected -join ','))
+  $r = Split-PlannerDrops -Dropped @('held-one', 'unpriced-one', 'uncarried-one') -Held $held -Costed $costed
+  T 'MUST NOT FIRE held, unpriced and uncarried drops are EXPECTED, each with its reason' `
+    ($r.Unexpected.Count -eq 0 -and $r.Expected.Count -eq 3 -and ($r.Expected -join '|') -match 'held-one \(held\)' -and ($r.Expected -join '|') -match 'unpriced-one \(costed: 1 unpriced') ("unexp=" + ($r.Unexpected -join ',') + " exp=" + ($r.Expected -join '|'))
+  $r = Split-PlannerDrops -Dropped @('held-one', 'fine-one') -Held $held -Costed $costed
+  T 'CLEAN TWIN one expected drop beside one unexpected: the unexpected still fails, the expected is still named' `
+    ($r.Unexpected.Count -eq 1 -and $r.Expected.Count -eq 1) ("unexp=" + ($r.Unexpected -join ',') + " exp=" + ($r.Expected -join ','))
+  $r = Split-PlannerDrops -Dropped @() -Held $held -Costed $costed
+  T 'MUST NOT FIRE nothing dropped is nothing unexpected' ($r.Unexpected.Count -eq 0 -and $r.Expected.Count -eq 0) 'nonzero'
+  # THE WIRING: the live exit reads Unexpected, not the raw drop count. Needles by concatenation.
+  $src = [IO.File]::ReadAllText($PSCommandPath)
+  $mExit = [regex]::Match($src, '(?m)^if\(@\(\$dropSplit\.Unex' + 'pected\)\.Count -gt 0\)\{[\s\S]*?exit 1')
+  T 'MUST FIRE  the live run exits 1 on an UNEXPECTED drop, via Split-PlannerDrops' ($mExit.Success -and $src.Contains('$dropSplit = Split-Planner' + 'Drops')) ("exitBlock=" + $mExit.Success)
+  if ($f -eq 0) { Write-Output 'gen-planner-data SELF-TEST PASS'; exit 0 }
+  Write-Output ("gen-planner-data SELF-TEST FAIL: {0} case(s)" -f $f); exit 1
+}
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $db=(Read-JsonFile (Join-Path $here 'recipes-db.json')).recipes
@@ -198,9 +257,21 @@ $noPkg=@{}
 foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and $null -eq (Resolve-PlannerPkg ([string]$r.slug) ([string]$ing.item))){ $noPkg[$ing.item]=1 } } }
 Write-Output ("planner-data.js: {0} of {1} recipes, {2}/{3} ingredient lines feed-priced, {4} KB, pkg table {5} items" -f $rows.Count,@($db).Count,$withBid,$totalIng,$kb,$pkg.Count)
 if($noPkg.Count -gt 0){ Write-Output ("ITEMS WITHOUT PACKAGE DEF ({0}): {1}" -f $noPkg.Count, (($noPkg.Keys | Sort-Object) -join ', ')) }
-if($unpriced.Count -gt 0){
-  # No silent caps: a recipe missing from the planner has to say so by name, or a shrinking catalog
-  # reads as a clean run. Re-run pipeline\compute-v2-perserving.ps1 and check what it skipped.
-  Write-Output ("DROPPED {0} recipe(s) with no v2-perserving row (not shown in the Meal Plan Builder): {1}" -f $unpriced.Count, ($unpriced -join ', '))
+# No silent caps: a recipe missing from the planner has to say so by name, or a shrinking catalog
+# reads as a clean run. Held and uncostable drops are the correct state and are named; any other drop fails.
+$heldMap=@{}
+$heldPath=Join-Path $here 'db\held-recipes.json'
+if(Test-Path $heldPath){ foreach($h in @((Read-JsonFile $heldPath).held)){ if($h -and $h.slug){ $heldMap[[string]$h.slug]=[string]$h.reason } } }
+$costedRows=@()
+$costedPath=Join-Path $here 'db\costed.json'
+if(Test-Path $costedPath){ $costedRaw=Read-JsonFile $costedPath; $costedRows=@($costedRaw) }
+$dropSplit = Split-PlannerDrops -Dropped $unpriced -Held $heldMap -Costed $costedRows
+if(@($dropSplit.Expected).Count -gt 0){
+  Write-Output ("DROPPED-EXPECTED {0} held or uncostable recipe(s) (not shown in the Meal Plan Builder, by design): {1}" -f @($dropSplit.Expected).Count, (@($dropSplit.Expected) -join ', '))
+}
+if(@($dropSplit.Unexpected).Count -gt 0){
+  # Re-run pipeline\compute-v2-perserving.ps1 and check what it skipped.
+  Write-Output ("DROPPED {0} recipe(s) with no v2-perserving row that are neither held nor uncostable (not shown in the Meal Plan Builder): {1}" -f @($dropSplit.Unexpected).Count, (@($dropSplit.Unexpected) -join ', '))
   exit 1
 }
+exit 0

@@ -387,5 +387,9 @@ if($refusedCreate){
 # STAGED SLUGS ARE UNSTAMPABLE. They did not publish, so a caller must withhold their stamps exactly as
 # it does for a failure or a refused create - otherwise propagate marks them clean and they are never
 # published at all, which is the silent-skip failure this line already exists to prevent.
-$unstampable = @(@($failed) + @($refusedCreate) + @($staged) + @($rolloutHeld) | Sort-Object -Unique)
+# HELD AND CARRIAGE REFUSALS ARE UNSTAMPABLE TOO (2026-09-26, design\ready-for-brad\propagate-backlog-2026-09-26.md
+# defect 2). They were missing, so a held recipe refused here was stamped propagate-clean, and on its release
+# propagate would never republish it. Every refusal list initialised above belongs here except $orphaned (a
+# card with no spec has no stamp to withhold); propagate-recipes.ps1 -SelfTest pins that from this source.
+$unstampable = @(@($failed) + @($refusedCreate) + @($refusedHeld) + @($refusedCarriage) + @($staged) + @($rolloutHeld) | Sort-Object -Unique)
 Write-Output ("PUBLISH-UNSTAMPABLE: " + ($unstampable -join ','))

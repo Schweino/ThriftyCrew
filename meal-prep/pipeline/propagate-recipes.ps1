@@ -47,7 +47,7 @@
 # caller passes -AllowCatalogue. See Test-PropagateScope below for why.
 # The self-test copies lib\*.ps1 into a sandbox, runs the allergen gate on a temp card against allergens.json, reads the reanchor patterns as text, and its -DryRun child reads the stamps:
 # gate-inputs: lib\*.ps1, meal-prep\lib\allergen-lib.ps1, meal-prep\db\allergens.json, meal-prep\pipeline\audit-allergen-line.ps1, meal-prep\pipeline\propagate-stamps.json
-# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1
+# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1
 param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
       [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue)
 $ErrorActionPreference = 'Stop'
@@ -135,13 +135,21 @@ function Get-DirtySlugs { param([hashtable]$Stamps, $Files)
 # THE BAR: -MaxUnnamed defaults to 0, the strictest value, chosen as a policy and not from a sweep - no other
 # value was tried. A positive value lets that much unnamed drift ride; nothing measured says what size is safe.
 # WHAT IT DOES WHEN THE PRODUCER STOPS: nothing dirty means nothing unnamed, so it is silent, as it should be.
+# -SlugsFile NARROWS (2026-09-26, design\ready-for-brad\propagate-backlog-2026-09-26.md defect 1). Until then it
+# only authorised: naming 63 of 70 dirty slugs was refused, and the only ways past (-MaxUnnamed 7,
+# -AllowCatalogue) carried all 70, three held recipes included. With -Narrow (set by -SlugsFile, and ONLY by it)
+# and no -AllowCatalogue, the run carries exactly Dirty intersected with Named; the unnamed are left dirty and
+# unstamped, listed, never refused and never carried. -AllowCreateFile alone does NOT narrow, so a wave (which
+# names only its own slugs through it) is still refused over foreign dirt, exactly as before.
 function Test-PropagateScope {
-  param($Dirty, $Named, [int]$Max = 0, [bool]$AllowCatalogue = $false)
+  param($Dirty, $Named, [int]$Max = 0, [bool]$AllowCatalogue = $false, [bool]$Narrow = $false)
   $namedSet = @{}
   foreach ($n in @($Named)) { if ($n) { $namedSet[[string]$n] = $true } }
   $unnamed = @(@($Dirty) | Where-Object { $_ -and -not $namedSet.ContainsKey([string]$_) })
-  $refuse = ($unnamed.Count -gt $Max) -and (-not $AllowCatalogue)
-  return [pscustomobject]@{ Refuse = $refuse; Unnamed = $unnamed; Named = $namedSet.Count; Max = $Max; Consented = $AllowCatalogue }
+  $narrowed = $Narrow -and (-not $AllowCatalogue)
+  $carry = if ($narrowed) { @(@($Dirty) | Where-Object { $_ -and $namedSet.ContainsKey([string]$_) }) } else { @(@($Dirty) | Where-Object { $_ }) }
+  $refuse = (-not $narrowed) -and ($unnamed.Count -gt $Max) -and (-not $AllowCatalogue)
+  return [pscustomobject]@{ Refuse = $refuse; Unnamed = $unnamed; Named = $namedSet.Count; Max = $Max; Consented = $AllowCatalogue; Narrowed = $narrowed; Carry = $carry }
 }
 function Read-SlugFile([string]$Path, [string]$Label) {
   if (-not $Path) { return @() }
@@ -279,6 +287,27 @@ if ($SelfTest) {
     $stamped = @($dirtySet | Where-Object { $unst -notcontains $_ })
     T 'MUST FIRE  an unstampable slug is withheld while its neighbours advance' `
       ($stamped.Count -eq 2 -and $stamped -notcontains 'bravo') ($stamped -join ',')
+    # ---- EVERY REFUSAL publish.ps1 KEEPS IS ON ITS UNSTAMPABLE LINE (2026-09-26, defect 2). refusedHeld and
+    # refusedCarriage were missing, so a held recipe was refused and then stamped clean. The rule is read off
+    # publish's OWN source: every list its tally line initialises to @() must be summed into $unstampable,
+    # except $ok/$skipped (counters) and $orphaned (a card with no spec has no stamp to withhold).
+    function Get-UnstampableGaps([string]$Src) {
+      $init = [regex]::Match($Src, '(?m)^\$ok=0;[^\r\n]*')
+      $sum = [regex]::Match($Src, '(?m)^\$unstampable = [^\r\n]*')
+      if (-not $init.Success -or -not $sum.Success) { return , @('CONTRACT-UNREADABLE') }
+      $lists = @([regex]::Matches($init.Value, '\$(\w+)=@\(\)') | ForEach-Object { $_.Groups[1].Value } | Where-Object { $_ -ne 'orphaned' })
+      return , @($lists | Where-Object { $sum.Value -notmatch ('@\(\$' + $_ + '\)') })
+    }
+    $initFx = '$ok=0; $skipped=0; $failed=@(); $refusedCreate=@(); $refusedCarriage=@(); $refusedHeld=@(); $orphaned=@(); $staged=@(); $rolloutHeld=@()'
+    $oldSum = '$unstampable = @(@($failed) + @($refusedCreate) + @($staged) + @($rolloutHeld) | Sort-Object -Unique)'
+    $newSum = '$unstampable = @(@($failed) + @($refusedCreate) + @($refusedHeld) + @($refusedCarriage) + @($staged) + @($rolloutHeld) | Sort-Object -Unique)'
+    $gOld = Get-UnstampableGaps ($initFx + "`n" + $oldSum)
+    T 'MUST FIRE  the pre-2026-09-26 unstampable line (no refusedHeld, no refusedCarriage) is caught, naming both' `
+      ((($gOld | Sort-Object) -join ',') -eq 'refusedCarriage,refusedHeld') ($gOld -join ',')
+    $gNew = Get-UnstampableGaps ($initFx + "`n" + $newSum)
+    T 'MUST NOT FIRE a line summing every refusal list is clean, and $orphaned is not demanded' ($gNew.Count -eq 0) ($gNew -join ',')
+    $gLive = Get-UnstampableGaps ([IO.File]::ReadAllText((Join-Path $mp 'engine\publish.ps1')))
+    T 'MUST NOT FIRE the REAL engine\publish.ps1 sums every refusal list it keeps into PUBLISH-UNSTAMPABLE' ($gLive.Count -eq 0) ($gLive -join ',')
     # the founding class: an edit AFTER stamping is dirt, byte-precise
     Set-Content (Join-Path $tmp 'a.json') '{"x":1,"y":3}' -Encoding UTF8
     $d = Get-DirtySlugs $stamps @(Get-ChildItem "$tmp\*.json")
@@ -361,6 +390,20 @@ if ($SelfTest) {
     T 'CLEAN TWIN -AllowCatalogue carries the unnamed slugs, and still counts them so the run can say so' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 3) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
     $sc = Test-PropagateScope -Dirty @() -Named @() -Max 0 -AllowCatalogue $false
     T 'MUST NOT FIRE nothing dirty is nothing unnamed' ((-not $sc.Refuse) -and $sc.Unnamed.Count -eq 0) ("refuse=" + $sc.Refuse + " unnamed=" + $sc.Unnamed.Count)
+    # ---- -SlugsFile NARROWS (2026-09-26, defect 1). The founding case: 70 dirty, 63 named, 7 not - the run must
+    # carry exactly the 63 and leave the 7 dirty, never refuse and never carry them. Scaled to 2 named of 5.
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 0 -AllowCatalogue $false -Narrow $true
+    T 'MUST FIRE  a -SlugsFile run NARROWS: it carries exactly the named dirty slugs, is not refused, and lists the unnamed as left dirty' `
+      ((-not $sc.Refuse) -and $sc.Narrowed -and ((@($sc.Carry) | Sort-Object) -join ',') -eq 'wave-one,wave-two' -and $sc.Unnamed.Count -eq 3) ("refuse=" + $sc.Refuse + " carry=" + (@($sc.Carry) -join ',') + " unnamed=" + $sc.Unnamed.Count)
+    $sc = Test-PropagateScope -Dirty @('wave-one', 'other-a') -Named ($wave + @('clean-x')) -Max 0 -AllowCatalogue $false -Narrow $true
+    T 'MUST NOT FIRE a named slug that is NOT dirty is never carried (narrowing is an intersection, not the named list)' `
+      ((@($sc.Carry) -join ',') -eq 'wave-one') ("carry=" + (@($sc.Carry) -join ','))
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 0 -AllowCatalogue $true -Narrow $true
+    T 'CLEAN TWIN -AllowCatalogue with -SlugsFile still carries the whole dirty set (consent is not narrowed)' `
+      ((-not $sc.Narrowed) -and @($sc.Carry).Count -eq 5) ("narrowed=" + $sc.Narrowed + " carry=" + @($sc.Carry).Count)
+    $sc = Test-PropagateScope -Dirty ($wave + $foreign) -Named $wave -Max 0 -AllowCatalogue $false -Narrow $false
+    T 'CLEAN TWIN names from -AllowCreateFile alone (the wave road) do NOT narrow: foreign dirt is still REFUSED' `
+      ($sc.Refuse -and (-not $sc.Narrowed)) ("refuse=" + $sc.Refuse + " narrowed=" + $sc.Narrowed)
     $threw = $false
     try { $null = Read-SlugFile (Join-Path $tmp 'no-such-scope.txt') '-SlugsFile' } catch { $threw = $true }
     T 'MUST FIRE  a -SlugsFile that is not there throws rather than naming nothing' $threw 'silent'
@@ -376,8 +419,15 @@ if ($SelfTest) {
     Set-Content $scopeFile "wave-one`nwave-two" -Encoding UTF8
     $dr = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -DryRun -SlugsFile $scopeFile)
     $drLine = @($dr | Where-Object { $_ -match '^propagate scope:' }) -join ''
-    T 'MUST FIRE  through the real -File call, a two-slug -SlugsFile names TWO slugs and the third dirty spec is reported as refusable' `
-      ($drLine -match '^propagate scope: 1 of 3 dirty' -and $drLine -match 'REFUSES without -AllowCatalogue') ("line='" + $drLine + "' rc=" + $LASTEXITCODE)
+    $drList = @($dr | Where-Object { $_ -match '^  \S' -and $_ -notmatch 'left dirty' } | ForEach-Object { $_.Trim() })
+    T 'MUST FIRE  through the real -File call, a two-slug -SlugsFile NARROWS to TWO slugs and names the third as left dirty' `
+      ($drLine -match '^propagate scope: NARROWED by -SlugsFile - carrying 2 of 3 dirty' -and (($drList | Sort-Object) -join ',') -eq 'wave-one,wave-two' -and (@($dr) -join '|') -match 'left dirty \(not named\): other-a') ("line='" + $drLine + "' list=" + ($drList -join ',') + " rc=" + $LASTEXITCODE)
+    $allowOnly = Join-Path $tmp 'allow-only.txt'
+    Set-Content $allowOnly "wave-one`nwave-two" -Encoding UTF8
+    $dr2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -DryRun -AllowCreateFile $allowOnly)
+    $drLine2 = @($dr2 | Where-Object { $_ -match '^propagate scope:' }) -join ''
+    T 'CLEAN TWIN through the real -File call, -AllowCreateFile alone still reports the third dirty spec as refusable' `
+      ($drLine2 -match '^propagate scope: 1 of 3 dirty' -and $drLine2 -match 'REFUSES without -AllowCatalogue') ("line='" + $drLine2 + "' rc=" + $LASTEXITCODE)
     # THE ORDER, on the live path: the refusal exits before the first stage runs. Needles by concatenation.
     # The needle is the whole refusal BLOCK up to its exit, not the condition: the scope line above it spells
     # the same condition inside a subexpression, and the first version of this pin matched that and SURVIVED
@@ -411,8 +461,17 @@ $dirty = @(Get-DirtySlugs $stamps $files)
 Write-Output ("propagate: {0} dirty spec(s) of {1}" -f $dirty.Count, $files.Count)
 $scopeA = Read-SlugFile $SlugsFile '-SlugsFile'; $scopeB = Read-SlugFile $AllowCreateFile '-AllowCreateFile'
 $scopeNamed = @(@($scopeA) + @($scopeB) | Where-Object { $_ })
-$scope = Test-PropagateScope -Dirty $dirty -Named $scopeNamed -Max $MaxUnnamed -AllowCatalogue ([bool]$AllowCatalogue)
-Write-Output ("propagate scope: {0} of {1} dirty spec(s) were not named by the caller (bar {2}){3}" -f $scope.Unnamed.Count, $dirty.Count, $MaxUnnamed, $(if ($scope.Refuse) { ' - a live run REFUSES without -AllowCatalogue' } elseif ($AllowCatalogue -and $scope.Unnamed.Count) { ' - carried on -AllowCatalogue' } else { '' }))
+$scope = Test-PropagateScope -Dirty $dirty -Named $scopeNamed -Max $MaxUnnamed -AllowCatalogue ([bool]$AllowCatalogue) -Narrow ([bool]$SlugsFile)
+if ($scope.Narrowed) {
+  Write-Output ("propagate scope: NARROWED by -SlugsFile - carrying {0} of {1} dirty spec(s); {2} unnamed left dirty and unstamped" -f $scope.Carry.Count, $dirty.Count, $scope.Unnamed.Count)
+  $scope.Unnamed | ForEach-Object { Write-Output ('  left dirty (not named): ' + $_) }
+}
+else {
+  Write-Output ("propagate scope: {0} of {1} dirty spec(s) were not named by the caller (bar {2}){3}" -f $scope.Unnamed.Count, $dirty.Count, $MaxUnnamed, $(if ($scope.Refuse) { ' - a live run REFUSES without -AllowCatalogue' } elseif ($AllowCatalogue -and $scope.Unnamed.Count) { ' - carried on -AllowCatalogue' } else { '' }))
+}
+# FROM HERE ON $dirty IS WHAT THIS RUN CARRIES: every stage, the publish and the stamp loop read it, so a
+# narrowed run can neither build, send nor stamp a slug its caller did not name.
+$dirty = @($scope.Carry)
 # -DryRun's WHOLE JOB is to answer "what would this publish?", and it capped the list at 30 with no
 # remainder line - so a 91-slug set printed 30 names ending at 'h' and looked complete. The count on the
 # line above is right, but a reader checking the list against it has to notice a number they were not
