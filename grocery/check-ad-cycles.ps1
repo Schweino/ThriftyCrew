@@ -2272,7 +2272,15 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         # INGREDIENT IDENTITY (2026-09-22, plan-2026-09-22-9): each recipe ingredient's commodity id must name the same food the
         # board prices (a proxy, a yield row bought in the parent's grams, a union row that is the other member). Keyed ratchet: exit 2 is a NEW finding.
         $iidBoard = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-    New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Arguments $(if ($iidBoard) { @('-BoardFile', $iidBoard.FullName) } else { @() }) -Marker 'INGREDIENT-IDENTITY-COMPLETE'
+        # Check (d) (2026-09-26, queue 2026-09-22-5a9676) reads every store cell a line can be priced from, so it also needs the
+        # recipe board (recipeboard-*/nomem lines) and the alias map (feed: lines); without them those pairs are BLIND and the lane exits 3.
+        $iidArgs = @()
+        if ($iidBoard) { $iidArgs += @('-BoardFile', $iidBoard.FullName) }
+        $iidRecipeBoard = Join-Path $OutDir 'recipe-board.json'
+        if (Test-Path $iidRecipeBoard) { $iidArgs += @('-RecipeBoardFile', $iidRecipeBoard) }
+        $iidAliasMap = Join-Path $root 'recipe-floor-id-map.json'
+        if (Test-Path $iidAliasMap) { $iidArgs += @('-AliasMapFile', $iidAliasMap) }
+    New-FanoutLane -Name 'ingredient-identity' -File (Join-Path $mealPrep 'pipeline\audit-ingredient-identity.ps1') -TimeoutSec 600 -Arguments $iidArgs -Marker 'INGREDIENT-IDENTITY-COMPLETE'
         # SITE-WIDE PRICES (2026-09-22, RCA F1): every live URL in Ghost's sitemaps plus the homepage, for a grocery price typed as a
         # literal no feed backs. Ratcheted at the 2026-09-22 count (meal-prep\db\sitewide-price-monitor.json); pages by itself on a new
         # literal (prefix 'sitewide price literals'), resolver meal-prep\pipeline\prepare-article-price-edits.ps1. About 1,090 GETs.

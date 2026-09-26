@@ -11,18 +11,33 @@
       on another commodity (Shallots bid onions routed to shallots), UNROUTED when it lands nowhere.
   (b) each `derived` row: buy_pkg_g == yield_g_per_parent_unit x parent_units_per_purchase (Orange Zest bought
       131 g of zest-grams, 6.30 lb of oranges, for one orange).
-  (c) each costed line priced `board:<id>:<store>`: the product that prices it at that store on the newest board
-      must name the ingredient's head word (a thigh line priced by "Tyson Fresh Chicken Drumstick").
+  (c) RETIRED 2026-09-26. It asked about ONE store per costed line, on one pricing surface: it skipped 946 of 7,616
+      board-basis lines (board:<id>:recipeboard-* and board:<id>:nomem:*), never read the 234 feed:<id> lines that
+      price through grocery/recipe-floor-id-map.json, and keyed without the product (queue 2026-09-22-5a9676).
+  (d) EVERY STORE CELL a costed line can be priced from (the card and compute-v2 take the cheapest across all of
+      them): each distinct (item, priced id), the id read off board:<id>:* or feed:<id> through the alias map, the
+      cell the comparison row or else the recipe-board row, and every product in it must name the ingredient's
+      head word unless a reviewed identity_same_as spelling or identity_reviewed says it is the same food. The key
+      carries the store and the product, so a standing key never hides the next wrong product in the same cell.
   `substitute` is a finding by name: Brad ruled no substitute of any kind on 2026-09-22.
 
-  RATCHET. Findings are KEYED, and the committed mark (ops/out/ingredient-identity-baseline.json) holds the keys
-  of the day it landed. A key not in the mark is a RISE and exits 2, whatever the count does. A fall is spoken
-  and the mark KEPT; -Tighten records it. A plain run never writes the mark.
+  INPUTS ARE PASSED, NEVER DISCOVERED (ops/audit-cross-module-reach.ps1: meal-prep may not go looking in grocery's
+  outputs). check-ad-cycles' fan-out passes -BoardFile (newest comparison), -RecipeBoardFile (out/recipe-board.json)
+  and -AliasMapFile (recipe-floor-id-map.json). Without -BoardFile nothing runs (exit 3). Without either of the
+  other two, the pairs that need it are counted BLIND and printed, the run exits 3 unless something ROSE, and the
+  cell mark is never written from that partial view. A pair whose id is on neither board is BLIND too: printed and
+  counted, never ok, and it does not fail the run (its line prices from no board this check can read).
+
+  RATCHET, TWO MARKS. Findings are KEYED. Checks (a)+(b) ratchet in ops/out/ingredient-identity-baseline.json,
+  check (d) in ops/out/ingredient-identity-cell-baseline.json. A key not in its mark is a RISE and exits 2, whatever
+  the count does. A fall is spoken and the mark KEPT; -Tighten records it, and records a day-one mark when absent.
+  A plain run never writes a mark. The main mark's fall of 2026-09-26 is the union| family moving to the cell mark,
+  not findings fixed.
 
   SCOPE OF A CLEAN REPORT: unsound. A pricing row that names the head word can still be the wrong member of a
   union (Cherry Tomatoes priced by Grape Tomato shares `tomato`), and a qualifier inside one class (pork vs beef
-  chorizo) is invisible to a word test; the 75 rows on recipe-board-only ids get only check (b). A finding is a
-  candidate to read, not a verdict: the head-word test is incomplete where a store's name omits the class word.
+  chorizo) is invisible to a word test. A finding is a candidate to read, not a verdict: the head-word test is
+  incomplete where a store's name omits the class word (garbanzo for chickpeas), which is what identity_same_as is for.
 
   Exit: 0 no rise (fall spoken), 2 a new finding key (a rise), 3 could not evaluate. Last line:
   INGREDIENT-IDENTITY-COMPLETE.
@@ -34,8 +49,11 @@ param(
   [string]$RowsFile = '',
   [string]$CommoditiesFile = '',
   [string]$BoardFile = '',
+  [string]$RecipeBoardFile = '',
+  [string]$AliasMapFile = '',
   [string]$CostedFile = '',
-  [string]$BaselineFile = ''
+  [string]$BaselineFile = '',
+  [string]$CellBaselineFile = ''
 )
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -48,16 +66,58 @@ $repo = Split-Path -Parent $mp
 # The matcher is dot-sourced at SCRIPT scope: a resolver closure cannot see functions dot-sourced inside a function.
 . (Join-Path $repo 'grocery\match-lib.ps1')
 . (Join-Path $repo 'grocery\global-exclude-lib.ps1')
-if (-not $RowsFile)        { $RowsFile = Join-Path $mp 'db\ingredients.json' }
-if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $repo 'grocery\commodities.json' }
-if (-not $CostedFile)      { $CostedFile = Join-Path $mp 'db\costed.json' }
-if (-not $BaselineFile)    { $BaselineFile = Join-Path $repo 'ops\out\ingredient-identity-baseline.json' }
+if (-not $RowsFile)         { $RowsFile = Join-Path $mp 'db\ingredients.json' }
+if (-not $CommoditiesFile)  { $CommoditiesFile = Join-Path $repo 'grocery\commodities.json' }
+if (-not $CostedFile)       { $CostedFile = Join-Path $mp 'db\costed.json' }
+if (-not $BaselineFile)     { $BaselineFile = Join-Path $repo 'ops\out\ingredient-identity-baseline.json' }
+if (-not $CellBaselineFile) { $CellBaselineFile = Join-Path $repo 'ops\out\ingredient-identity-cell-baseline.json' }
 
 function New-IdentityResolver {
   <# name -> commodity id or $null, over a commodity list, through the SAME matcher the board uses. #>
   param($Commodities, [string[]]$GlobalExclude)
   $m = New-CommodityMatcher -Commodities $Commodities -GlobalExclude $GlobalExclude
   return { param($n) $c = Resolve-Commodity -Matcher $m -Name ([string]$n); if ($c) { [string]$c.id } else { $null } }.GetNewClosure()
+}
+
+function Invoke-KeyRatchet {
+  <# One keyed mark. Returns { Code; Lines }: 0 no rise, 2 a rise, 3 no mark to compare with. $MayWrite is $false
+     when the findings came from a partial view, so -Tighten can neither record nor lower that mark from it. #>
+  param($Findings, [string]$File, [string]$Label, [string]$Why, [bool]$MayWrite, [string]$ReadFrom)
+  $lines = New-Object System.Collections.ArrayList
+  $keys = @($Findings | ForEach-Object { [string]$_.key } | Sort-Object -Unique)
+  $base = $null
+  if (Test-Path $File) { $base = Read-JsonFile $File }
+  if ($null -eq $base) {
+    if ($Tighten -and $MayWrite) {
+      $doc = [ordered]@{ recorded = (Get-Date -Format 'yyyy-MM-dd'); why = $Why; read_from = $ReadFrom; count = $keys.Count; keys = @($keys) }
+      [void](Write-TcLfFile -Path $File -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
+      [void]$lines.Add('  ' + $Label + ' mark RECORDED at ' + $keys.Count + ' finding key(s): ' + $File)
+      return [pscustomobject]@{ Code = 0; Lines = $lines }
+    }
+    $how = if ($MayWrite) { '(record one with -Tighten)' } else { '(and none is recorded from a partial view: pass every input)' }
+    [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - no committed ' + $Label + ' mark at ' + $File + ' ' + $how)
+    return [pscustomobject]@{ Code = 3; Lines = $lines }
+  }
+  $known = New-Object 'System.Collections.Generic.HashSet[string]'
+  foreach ($k in @($base.keys)) { [void]$known.Add([string]$k) }
+  $new = @($Findings | Where-Object { -not $known.Contains([string]$_.key) })
+  if ($new.Count -gt 0) {
+    [void]$lines.Add(('  RISE: {0} {1} finding(s) not in the mark of {2} (mark {3}):' -f $new.Count, $Label, [string]$base.recorded, [int]$base.count))
+    foreach ($x in $new) { [void]$lines.Add('  NEW  ' + $x.kind + '  ' + $x.detail) }
+    return [pscustomobject]@{ Code = 2; Lines = $lines }
+  }
+  if ($keys.Count -lt [int]$base.count) {
+    if ($Tighten -and $MayWrite) {
+      $doc = [ordered]@{ recorded = (Get-Date -Format 'yyyy-MM-dd'); why = [string]$base.why; read_from = $ReadFrom; count = $keys.Count; keys = @($keys) }
+      [void](Write-TcLfFile -Path $File -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
+      [void]$lines.Add(('  {0} mark TIGHTENED {1} -> {2}' -f $Label, [int]$base.count, $keys.Count))
+    } elseif ($Tighten) {
+      [void]$lines.Add(('  {0} mark KEPT at {1}: a partial view ({2}) cannot tighten it' -f $Label, [int]$base.count, $keys.Count))
+    } else {
+      [void]$lines.Add(('  {0} ratchet CAN tighten: {1} -> {2} (mark kept; -Tighten records it)' -f $Label, [int]$base.count, $keys.Count))
+    }
+  }
+  return [pscustomobject]@{ Code = 0; Lines = $lines }
 }
 
 function Invoke-IdentityRun {
@@ -70,53 +130,49 @@ function Invoke-IdentityRun {
     $resolve = New-IdentityResolver -Commodities $coms -GlobalExclude $gex
     $weekly = New-Object 'System.Collections.Generic.HashSet[string]'
     foreach ($c in @($coms)) { [void]$weekly.Add([string]$c.id) }
-    # THE BOARD IS PASSED, NEVER DISCOVERED (ops/audit-cross-module-reach.ps1): the board is grocery's internal
-    # output, so the grocery caller that owns it (check-ad-cycles' fan-out) names the newest comparison. With no
-    # -BoardFile, check (c) cannot run and the ratchet cannot be compared fairly, so the run is BLIND (exit 3).
     $bf = $BoardFile
-    if (-not $bf -or -not (Test-Path $bf)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - check (c) needs -BoardFile <comparison-YYYY-MM-DD.json>; check-ad-cycles passes the newest one'); return [pscustomobject]@{ Code = 3; Lines = $lines } }
+    if (-not $bf -or -not (Test-Path $bf)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - check (d) needs -BoardFile <comparison-YYYY-MM-DD.json>; check-ad-cycles passes the newest one'); return [pscustomobject]@{ Code = 3; Lines = $lines } }
     if (-not (Test-Path $CostedFile)) { [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - no costed.json at ' + $CostedFile); return [pscustomobject]@{ Code = 3; Lines = $lines } }
     $bix = Get-IdentityBoardIndex (Read-JsonFile $bf)
+    $rbix = $null
+    if ($RecipeBoardFile -and (Test-Path $RecipeBoardFile)) { $rbix = Get-IdentityBoardIndex (Read-JsonFile $RecipeBoardFile) }
+    $alias = $null
+    if ($AliasMapFile -and (Test-Path $AliasMapFile)) {
+      $alias = @{}
+      $am = Read-JsonFile $AliasMapFile
+      foreach ($pp in $am.map.PSObject.Properties) { $alias[[string]$pp.Name] = [string]$pp.Value }
+    }
     $costed = Read-JsonFile $CostedFile
-    $f = @(Get-IngredientIdentityFindings -Rows $rows -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix -Costed $costed)
+    $f = @(Get-IngredientIdentityFindings -Rows $rows -Resolve $resolve -WeeklyIds $weekly)
+    $d = Get-IngredientCellFindings -Rows $rows -Costed $costed -BoardIndex $bix -RecipeBoardIndex $rbix -AliasMap $alias
   } catch {
     [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - ' + $_.Exception.Message); return [pscustomobject]@{ Code = 3; Lines = $lines }
   }
+  $cf = @($d.findings)
+  $blind = @($d.blind)
+  $partial = ($null -eq $rbix -or $null -eq $alias)
+  $inputBlind = @($blind | Where-Object { $_.why -ne 'on neither board' })
   $keys = @($f | ForEach-Object { [string]$_.key } | Sort-Object -Unique)
+  $ckeys = @($cf | ForEach-Object { [string]$_.key } | Sort-Object -Unique)
   $kinds = @($f | Group-Object kind | Sort-Object Name | ForEach-Object { $_.Name + '=' + $_.Count }) -join ' '
-  [void]$lines.Add(('audit-ingredient-identity: {0} vocabulary row(s), {1} costed recipe(s), board {2}: {3} finding(s) [{4}]' -f @($rows).Count, @($costed).Count, (Split-Path $bf -Leaf), $keys.Count, $kinds))
-  $base = $null
-  if (Test-Path $BaselineFile) { $base = Read-JsonFile $BaselineFile }
-  if ($null -eq $base) {
-    if ($Tighten) {
-      $doc = [ordered]@{ recorded = (Get-Date -Format 'yyyy-MM-dd'); why = 'day-one mark of the ingredient identity check (plan-2026-09-22-9); may only fall'; count = $keys.Count; keys = @($keys) }
-      [void](Write-TcLfFile -Path $BaselineFile -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
-      [void]$lines.Add('  mark RECORDED at ' + $keys.Count + ' finding key(s): ' + $BaselineFile)
-      foreach ($x in $f) { [void]$lines.Add('  ' + $x.kind + '  ' + $x.detail) }
-      return [pscustomobject]@{ Code = 0; Lines = $lines }
-    }
-    [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - no committed mark at ' + $BaselineFile + ' (record one with -Tighten)')
-    return [pscustomobject]@{ Code = 3; Lines = $lines }
-  }
-  $known = New-Object 'System.Collections.Generic.HashSet[string]'
-  foreach ($k in @($base.keys)) { [void]$known.Add([string]$k) }
-  $new = @($f | Where-Object { -not $known.Contains([string]$_.key) })
-  if ($new.Count -gt 0) {
-    [void]$lines.Add(('  RISE: {0} finding(s) not in the mark of {1} (mark {2}):' -f $new.Count, [string]$base.recorded, [int]$base.count))
-    foreach ($x in $new) { [void]$lines.Add('  NEW  ' + $x.kind + '  ' + $x.detail) }
-    return [pscustomobject]@{ Code = 2; Lines = $lines }
-  }
-  if ($keys.Count -lt [int]$base.count) {
-    if ($Tighten) {
-      $doc = [ordered]@{ recorded = (Get-Date -Format 'yyyy-MM-dd'); why = [string]$base.why; count = $keys.Count; keys = @($keys) }
-      [void](Write-TcLfFile -Path $BaselineFile -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
-      [void]$lines.Add(('  mark TIGHTENED {0} -> {1}' -f [int]$base.count, $keys.Count))
-    } else {
-      [void]$lines.Add(('  ratchet CAN tighten: {0} -> {1} (mark kept; -Tighten records it)' -f [int]$base.count, $keys.Count))
-    }
+  $via = @($d.by_via.Keys | Sort-Object | ForEach-Object { $_ + '=' + $d.by_via[$_] }) -join ' '
+  $readFrom = (Split-Path $bf -Leaf) + $(if ($rbix) { ' + ' + (Split-Path $RecipeBoardFile -Leaf) } else { '' }) + $(if ($null -ne $alias) { ' + ' + (Split-Path $AliasMapFile -Leaf) } else { '' })
+  [void]$lines.Add(('audit-ingredient-identity: {0} vocabulary row(s), {1} costed recipe(s), read {2}: checks (a)+(b) {3} finding(s) [{4}]; check (d) {5} finding key(s) over {6} store cell(s) of {7} (item, priced id) pair(s) from {8} costed line(s) [{9}], {10} reviewed, {11} BLIND' -f @($rows).Count, @($costed).Count, $readFrom, $keys.Count, $kinds, $ckeys.Count, $d.cells, $d.pairs, $d.lines, $via, $d.reviewed, $blind.Count))
+  foreach ($b in $blind) { [void]$lines.Add('  BLIND  "' + $b.item + '" -> ' + $b.id + ': ' + $b.why) }
+  $r1 = Invoke-KeyRatchet -Findings $f -File $BaselineFile -Label 'main' -Why 'day-one mark of the ingredient identity check (plan-2026-09-22-9); may only fall' -MayWrite $true -ReadFrom $readFrom
+  $r2 = Invoke-KeyRatchet -Findings $cf -File $CellBaselineFile -Label 'cell' -Why 'day-one mark of check (d), every store cell a costed line can be priced from (plan-2026-09-26-2, queue 2026-09-22-5a9676); may only fall' -MayWrite (-not $partial) -ReadFrom $readFrom
+  foreach ($l in $r1.Lines) { [void]$lines.Add($l) }
+  foreach ($l in $r2.Lines) { [void]$lines.Add($l) }
+  $code = 0
+  if ($r1.Code -eq 2 -or $r2.Code -eq 2) { $code = 2 }
+  elseif ($r1.Code -eq 3 -or $r2.Code -eq 3) { $code = 3 }
+  elseif ($inputBlind.Count -gt 0) {
+    [void]$lines.Add('audit-ingredient-identity: COULD NOT EVALUATE - check (d) could not read ' + $inputBlind.Count + ' of ' + $d.pairs + ' pair(s): pass -RecipeBoardFile and -AliasMapFile (check-ad-cycles passes both)')
+    $code = 3
   }
   foreach ($x in $f) { [void]$lines.Add('  ' + $x.kind + '  ' + $x.detail) }
-  return [pscustomobject]@{ Code = 0; Lines = $lines }
+  foreach ($x in $cf) { [void]$lines.Add('  ' + $x.kind + '  ' + $x.detail) }
+  return [pscustomobject]@{ Code = $code; Lines = $lines }
 }
 
 # ---- SELF-TEST ------------------------------------------------------------------------------------------
@@ -137,7 +193,13 @@ if ($SelfTest) {
   $weekly = New-Object 'System.Collections.Generic.HashSet[string]'
   foreach ($c in $coms) { [void]$weekly.Add([string]$c.id) }
   function Rw([string]$item, [string]$bid, [hashtable]$more = @{}) { $h = [ordered]@{ item = $item; bid = $bid }; foreach ($k in $more.Keys) { $h[$k] = $more[$k] }; return [pscustomobject]$h }
-  function KindsOf($rows, $bix = $null, $costed = $null) { $x = @(Get-IngredientIdentityFindings -Rows $rows -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix -Costed $costed); return ,@($x | ForEach-Object { [string]$_.kind }) }
+  function KindsOf($rows) { $x = @(Get-IngredientIdentityFindings -Rows $rows -Resolve $resolve -WeeklyIds $weekly); return ,@($x | ForEach-Object { [string]$_.kind }) }
+  function Bd([string]$id, [object[]]$pairs) { $st = @(); for ($i = 0; $i -lt $pairs.Count; $i += 2) { $st += [pscustomobject]@{ store = [string]$pairs[$i]; item = [string]$pairs[$i + 1] } }; return [pscustomobject]@{ id = $id; cheapest_store = [string]$pairs[0]; stores = $st } }
+  function Ix([object[]]$boardRows) { return (Get-IdentityBoardIndex ([pscustomobject]@{ comparison = @($boardRows) })) }
+  function Ln([string]$item, [string]$basis, [string]$slug = 'fixture') { return [pscustomobject]@{ slug = $slug; lines = @([pscustomobject]@{ item = $item; basis = $basis }) } }
+  function CellRun($rows, $cost, $bix, $rbix = $null, $alias = $null) { return (Get-IngredientCellFindings -Rows $rows -Costed $cost -BoardIndex $bix -RecipeBoardIndex $rbix -AliasMap $alias) }
+  function KeysOf($res) { return ,@(@($res.findings) | ForEach-Object { [string]$_.key }) }
+  $emptyIx = @{}
 
   $k = KindsOf @(Rw 'Shallots' 'onions')
   Check 'MUST FIRE  Shallots bid onions (relation same) is a PROXY: its own name routes to shallots' ($k -contains 'PROXY') ($k -join ',')
@@ -163,74 +225,116 @@ if ($SelfTest) {
   $k = KindsOf @(Rw 'Lemon Zest' 'lemons' @{ relation = 'derived'; parent_units_per_purchase = 1; yield_g_per_parent_unit = 6; buy_pkg_g = 6 })
   Check 'MUST NOT FIRE  Lemon Zest (buy_pkg_g 6 == 6 x 1 on an each fruit) stays clean' ($k.Count -eq 0) ($k -join ',')
 
-  # (c) the union row: a thigh line priced by the drumstick bag that won chicken-thighs on 2026-09-22.
-  $board = [pscustomobject]@{ comparison = @(
-    [pscustomobject]@{ id = 'chicken-thighs'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; item = 'Tyson Fresh Chicken Drumstick, 10 lb Bag' }, [pscustomobject]@{ store = "Sam's Club"; item = "Member's Mark Bone-In Chicken Thighs, priced per pound" }) },
-    [pscustomobject]@{ id = 'oranges'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; item = 'Navel Oranges, 8 lb Bag' }) },
-    [pscustomobject]@{ id = 'onions'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; item = 'Fresh Yellow Onions, 3 lb Bag' }) }) }
-  $bix = Get-IdentityBoardIndex $board
-  $cost = @([pscustomobject]@{ slug = 'fixture-thighs'; lines = @([pscustomobject]@{ item = 'Bone-In Skin-On Chicken Thighs'; basis = 'board:chicken-thighs:walmart' }) })
-  $k = KindsOf @(Rw 'Bone-In Skin-On Chicken Thighs' 'chicken-thighs') $bix $cost
-  Check 'MUST FIRE  a thigh line priced by "Tyson Fresh Chicken Drumstick, 10 lb Bag" is a UNION-ROW finding' ($k -contains 'UNION-ROW') ($k -join ',')
-  $cost2 = @([pscustomobject]@{ slug = 'fixture-thighs'; lines = @([pscustomobject]@{ item = 'Bone-In Skin-On Chicken Thighs'; basis = "board:chicken-thighs:sam's club" }) })
-  $k = KindsOf @(Rw 'Bone-In Skin-On Chicken Thighs' 'chicken-thighs') $bix $cost2
-  Check "MUST NOT FIRE  the same line priced by Sam's bone-in thighs names its food" ($k.Count -eq 0) ($k -join ',')
-  $cost3 = @([pscustomobject]@{ slug = 'fixture-zest'; lines = @([pscustomobject]@{ item = 'Orange Zest'; basis = 'board:oranges:walmart' }, [pscustomobject]@{ item = 'Yellow Onion'; basis = 'board:onions:walmart' }) })
-  $k = KindsOf @((Rw 'Orange Zest' 'oranges' ($oz + @{ buy_pkg_g = 6 })), (Rw 'Yellow Onion' 'onions')) $bix $cost3
-  Check 'MUST NOT FIRE  a derived zest line is asked about its PARENT and "Navel Oranges" answers; Yellow Onion by yellow onions answers' ($k.Count -eq 0) ($k -join ',')
-
-  # (c) a REVIEWED same-food spelling, scoped to the product (queue 2026-09-23-9999c0): 42 Red Pepper Flakes lines
-  # priced by "Great Value Crushed Red Pepper" on 2026-09-25. The record silences that spelling and no other.
-  $rpb = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'red-pepper-flakes'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; item = 'Great Value Crushed Red Pepper, 12 oz' }, [pscustomobject]@{ store = 'Hy-Vee'; item = 'Hy-Vee Paprika, 2.5 oz' }) }) }
-  $rpx = Get-IdentityBoardIndex $rpb
-  $rpc = @([pscustomobject]@{ slug = 'fixture-rpf'; lines = @([pscustomobject]@{ item = 'Red Pepper Flakes'; basis = 'board:red-pepper-flakes:walmart' }) })
-  $rpcH = @([pscustomobject]@{ slug = 'fixture-rpf'; lines = @([pscustomobject]@{ item = 'Red Pepper Flakes'; basis = 'board:red-pepper-flakes:hy-vee' }) })
+  # (d) FOUNDING CASES, frozen from plan-2026-09-26-2 (queue 2026-09-22-5a9676). Never regenerated.
+  # 1. Zucchini costed at board:zucchini:nomem:Aldi, a store key check (c) never matched; Walmart's cell was yellow squash.
+  $zix = Ix @(Bd 'zucchini' @('Aldi', 'Zucchini Squash 1 LB', 'Walmart', 'Fresh Yellow Squash, Each'))
+  $zres = CellRun @(Rw 'Zucchini' 'zucchini') @(Ln 'Zucchini' 'board:zucchini:nomem:Aldi') $zix
+  $zk = KeysOf $zres
+  Check 'MUST FIRE  a nomem:Aldi zucchini line names the Walmart yellow squash cell: cell|Zucchini|zucchini|walmart|freshyellowsquasheach' (($zk.Count -eq 1) -and ($zk -contains 'cell|Zucchini|zucchini|walmart|freshyellowsquasheach')) ($zk -join ',')
+  $zres = CellRun @(Rw 'Zucchini' 'zucchini') @(Ln 'Zucchini' 'board:zucchini:nomem:Aldi') (Ix @(Bd 'zucchini' @('Aldi', 'Zucchini Squash 1 LB', 'Walmart', 'Fresh Zucchini, Each')))
+  Check 'CLEAN TWIN  the same zucchini cell with Walmart "Fresh Zucchini, Each" has no finding and reads 2 cells' ((@($zres.findings).Count -eq 0) -and ($zres.cells -eq 2)) ((KeysOf $zres) -join ',')
+  # 2. Rotini Pasta priced feed:rotini-pasta through the alias map to pasta, whose Aldi cell is spaghetti.
+  $pix = Ix @(Bd 'pasta' @('Aldi', 'Reggano Spaghetti'))
+  $rres = CellRun @(Rw 'Rotini Pasta' 'rotini-pasta') @(Ln 'Rotini Pasta' 'feed:rotini-pasta') $pix $emptyIx @{ 'rotini-pasta' = 'pasta' }
+  $rk = KeysOf $rres
+  Check 'MUST FIRE  a feed:rotini-pasta line resolved through the alias map fires on the pasta cell: cell|Rotini Pasta|pasta|aldi|regganospaghetti' ($rk -contains 'cell|Rotini Pasta|pasta|aldi|regganospaghetti') ($rk -join ',')
+  $rres = CellRun @(Rw 'Rotini Pasta' 'rotini-pasta') @(Ln 'Rotini Pasta' 'feed:rotini-pasta') $pix $emptyIx $null
+  Check 'MUST FIRE  with no alias map the feed: pair is BLIND (counted, never ok) and yields no finding' ((@($rres.blind).Count -eq 1) -and (@($rres.findings).Count -eq 0) -and ([string]$rres.blind[0].why -match 'AliasMapFile')) ('blind=' + @($rres.blind).Count)
+  $pp = Resolve-IdentityPricedId -Basis 'feed:cannellini-beans+drained' -AliasMap @{ 'cannellini-beans' = 'canned-white-beans' }
+  Check 'CLEAN TWIN  a pack-form suffix is not part of the id: feed:cannellini-beans+drained resolves to canned-white-beans (was BLIND on 2026-09-26)' (($pp.id -eq 'canned-white-beans') -and ($pp.via -eq 'feed-alias')) ([string]$pp.id)
+  # 3. A recipe-board-only id: read with the recipe board, BLIND without it.
+  $gix = Ix @(Bd '93-7-ground-turkey' @('Walmart', 'Honeysuckle White Ground Chicken, 1 lb'))
+  $gres = CellRun @(Rw 'Ground Turkey' '93-7-ground-turkey') @(Ln 'Ground Turkey' 'board:93-7-ground-turkey:recipeboard-walmart') $emptyIx $gix
+  Check 'MUST FIRE  a recipeboard-* line is read on the recipe board: a ground chicken cell for Ground Turkey fires' ((KeysOf $gres) -contains 'cell|Ground Turkey|93-7-ground-turkey|walmart|honeysucklewhitegroundchicken1lb') ((KeysOf $gres) -join ',')
+  $gres = CellRun @(Rw 'Ground Turkey' '93-7-ground-turkey') @(Ln 'Ground Turkey' 'board:93-7-ground-turkey:recipeboard-walmart') $emptyIx $null
+  Check 'MUST FIRE  with no recipe board the same pair is BLIND, never ok' ((@($gres.blind).Count -eq 1) -and (@($gres.findings).Count -eq 0) -and ([string]$gres.blind[0].why -match 'RecipeBoardFile')) ('blind=' + @($gres.blind).Count)
+  $nres = CellRun @(Rw 'Ground Turkey' 'ground-turkey') @(Ln 'Ground Turkey' 'board:no-such-id:walmart') $emptyIx $gix
+  Check 'MUST FIRE  a pair whose id is on neither board is counted BLIND "on neither board"' ((@($nres.blind).Count -eq 1) -and ([string]$nres.blind[0].why -eq 'on neither board')) ('blind=' + @($nres.blind).Count)
+  # 4. Reviewed same-food spellings are scoped to the product: garbanzo is chickpeas, black beans are not.
+  $cix = Ix @(Bd 'chickpeas' @('Aldi', 'Aldi Garbanzo Beans 15.5 OZ', "Baker's", 'Kroger Black Beans 15 oz'))
+  $cln = @(Ln 'Chickpeas' 'board:chickpeas:aldi')
+  $ck = KeysOf (CellRun @(Rw 'Chickpeas' 'chickpeas') $cln $cix)
+  Check 'MUST FIRE  with no record, "Aldi Garbanzo Beans 15.5 OZ" in the chickpeas cell is a finding' ($ck -contains 'cell|Chickpeas|chickpeas|aldi|aldigarbanzobeans155oz') ($ck -join ',')
+  $gar = @{ identity_same_as = @([pscustomobject]@{ product = '\bgarbanzo\b'; reason = 'garbanzo beans are chickpeas' }) }
+  $ck = KeysOf (CellRun @(Rw 'Chickpeas' 'chickpeas' $gar) $cln $cix)
+  Check 'MUST NOT FIRE  identity_same_as "\bgarbanzo\b" silences the Aldi garbanzo row' (-not ($ck -contains 'cell|Chickpeas|chickpeas|aldi|aldigarbanzobeans155oz')) ($ck -join ',')
+  Check 'CLEAN TWIN  the same record leaves "Kroger Black Beans" in the same cell a finding' (($ck.Count -eq 1) -and ($ck -contains 'cell|Chickpeas|chickpeas|bakers|krogerblackbeans15oz')) ($ck -join ',')
+  # 5. A derived row is asked about its PARENT; a reviewed row silences its cells.
+  $eres = CellRun @(Rw 'Egg Yolk' 'eggs' @{ relation = 'derived'; parent_units_per_purchase = 12; yield_g_per_parent_unit = 17; buy_pkg_g = 204 }) @(Ln 'Egg Yolk' 'board:eggs:walmart') (Ix @(Bd 'eggs' @('Walmart', 'Great Value Large White Eggs, 60 Count')))
+  Check 'MUST NOT FIRE  Egg Yolk declared derived from eggs is silent on "Great Value Large White Eggs, 60 Count"' ((@($eres.findings).Count -eq 0) -and ($eres.cells -eq 1)) ((KeysOf $eres) -join ',')
+  $tres = CellRun @(Rw 'High Fiber Tortilla' 'tortillas' @{ identity_reviewed = 'the carb-balance wrap is the high fiber tortilla' }) @(Ln 'High Fiber Tortilla' 'board:tortillas:walmart') (Ix @(Bd 'tortillas' @('Walmart', 'Mission Carb Balance Wraps')))
+  Check 'MUST NOT FIRE  an identity_reviewed row silences every cell and is counted reviewed' ((@($tres.findings).Count -eq 0) -and ($tres.reviewed -eq 1)) ((KeysOf $tres) -join ',')
+  # 6. Check (c)'s founding union: a thigh line costed at Sam's (which (c) passed) is still reachable by the Walmart drumstick cell.
+  $thix = Ix @(Bd 'chicken-thighs' @('Walmart', 'Tyson Fresh Chicken Drumstick, 10 lb Bag', "Sam's Club", "Member's Mark Bone-In Chicken Thighs, priced per pound"))
+  $thk = KeysOf (CellRun @(Rw 'Bone-In Skin-On Chicken Thighs' 'chicken-thighs') @(Ln 'Bone-In Skin-On Chicken Thighs' "board:chicken-thighs:sam's club") $thix)
+  Check "MUST FIRE  a thigh line costed at Sam's still names the Walmart drumstick cell, and not Sam's own thighs" (($thk.Count -eq 1) -and ($thk[0] -like 'cell|Bone-In Skin-On Chicken Thighs|chicken-thighs|walmart|*')) ($thk -join ',')
+  $zsk = KeysOf (CellRun @(Rw 'Orange Zest' 'oranges' ($oz + @{ buy_pkg_g = 6 })) @(Ln 'Orange Zest' 'board:oranges:walmart') (Ix @(Bd 'oranges' @('Walmart', 'Navel Oranges, 8 lb Bag'))))
+  Check 'MUST NOT FIRE  a derived zest line is asked about its PARENT and "Navel Oranges" answers' ($zsk.Count -eq 0) ($zsk -join ',')
+  # 7. The Red Pepper Flakes record (queue 2026-09-23-9999c0), now over every cell.
+  $rpx = Ix @(Bd 'red-pepper-flakes' @('Walmart', 'Great Value Crushed Red Pepper, 12 oz', 'Hy-Vee', 'Hy-Vee Paprika, 2.5 oz'))
+  $rpl = @(Ln 'Red Pepper Flakes' 'board:red-pepper-flakes:walmart')
   $same = @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+red\s+pepper\b'; reason = 'crushed red pepper IS red pepper flakes' }) }
-  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes') $rpx $rpc
-  Check 'MUST FIRE  with no record, Red Pepper Flakes priced by "Great Value Crushed Red Pepper" is a UNION-ROW finding' ($k -contains 'UNION-ROW') ($k -join ',')
-  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' $same) $rpx $rpc
-  Check 'MUST NOT FIRE  a reviewed identity_same_as naming "crushed red pepper" silences that spelling' ($k.Count -eq 0) ($k -join ',')
-  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' $same) $rpx $rpcH
-  Check 'CLEAN TWIN  the same record does NOT silence a paprika row pricing the same line: still a UNION-ROW' ($k -contains 'UNION-ROW') ($k -join ',')
-  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+red\s+pepper\b'; reason = '' }) }) $rpx $rpc
-  Check 'MUST FIRE  a record with no reason silences nothing' ($k -contains 'UNION-ROW') ($k -join ',')
+  $k = KeysOf (CellRun @(Rw 'Red Pepper Flakes' 'red-pepper-flakes') $rpl $rpx)
+  Check 'MUST FIRE  with no record, "Great Value Crushed Red Pepper" in the red-pepper-flakes cell is a finding' (@($k | Where-Object { $_ -like '*|walmart|*' }).Count -eq 1) ($k -join ',')
+  $k = KeysOf (CellRun @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' $same) $rpl $rpx)
+  Check 'MUST NOT FIRE  a reviewed identity_same_as naming "crushed red pepper" silences that spelling' (@($k | Where-Object { $_ -like '*|walmart|*' }).Count -eq 0) ($k -join ',')
+  Check 'CLEAN TWIN  the same record does NOT silence the Hy-Vee paprika row in the same cell' (@($k | Where-Object { $_ -like '*|hyvee|hyveepaprika25oz' }).Count -eq 1) ($k -join ',')
+  $k = KeysOf (CellRun @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+red\s+pepper\b'; reason = '' }) }) $rpl $rpx)
+  Check 'MUST FIRE  a record with no reason silences nothing' (@($k | Where-Object { $_ -like '*|walmart|*' }).Count -eq 1) ($k -join ',')
+  # 8. A store listing two products is asked about both (the store -> product map keeps only the last).
+  $k = KeysOf (CellRun @(Rw 'Zucchini' 'zucchini') @(Ln 'Zucchini' 'board:zucchini:walmart') (Ix @(Bd 'zucchini' @('Walmart', 'Fresh Yellow Squash, Each', 'Walmart', 'Fresh Zucchini, Each'))))
+  Check 'MUST FIRE  a store that lists yellow squash before zucchini still names the squash row' ($k -contains 'cell|Zucchini|zucchini|walmart|freshyellowsquasheach') ($k -join ',')
 
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
-  $why = Test-ReuseIdentity -Term 'bone-in skin-on chicken thighs' -Id 'chicken-thighs' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
+  $why = Test-ReuseIdentity -Term 'bone-in skin-on chicken thighs' -Id 'chicken-thighs' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $thix
   Check 'MUST FIRE  the mapper refuses the chicken-thighs REUSE while its crown is the drumstick bag' ([bool]$why) ([string]$why)
-  $why = Test-ReuseIdentity -Term 'pork chorizo' -Id 'ground-pork' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
+  $why = Test-ReuseIdentity -Term 'pork chorizo' -Id 'ground-pork' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $thix
   Check 'MUST FIRE  the mapper refuses pork chorizo -> ground-pork (the chorizo-as-ground-pork line)' ([bool]$why) ([string]$why)
-  $why = Test-ReuseIdentity -Term 'yellow onion' -Id 'onions' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
+  $why = Test-ReuseIdentity -Term 'yellow onion' -Id 'onions' -Resolve $resolve -WeeklyIds $weekly -BoardIndex (Ix @(Bd 'onions' @('Walmart', 'Fresh Yellow Onions, 3 lb Bag')))
   Check 'MUST NOT FIRE  the mapper does not refuse yellow onion -> onions' ($null -eq $why) ([string]$why)
   Check 'CLEAN TWIN  Get-TokenStem folds the plural the vocabulary missed: shallots -> shallot, and keeps asparagus' (((Get-TokenStem 'shallots') -eq 'shallot') -and ((Get-TokenStem 'asparagus') -eq 'asparagus')) ((Get-TokenStem 'shallots') + '/' + (Get-TokenStem 'asparagus'))
 
-  # THE RATCHET, run as a child over temp files: a fall keeps the mark byte-identical, -Tighten writes it,
-  # and a new key is a RISE (exit 2).
+  # THE TWO RATCHETS, run as a child over temp files: a fall keeps the mark byte-identical, -Tighten writes it, a
+  # new key is a RISE (exit 2), a partial view is exit 3 and writes nothing, and a standing cell key does not hide
+  # a new product in the same cell.
   $tmp = Join-Path ([IO.Path]::GetTempPath()) ('iid-' + [Guid]::NewGuid().ToString('N'))
   New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
   try {
     $enc = New-Object System.Text.UTF8Encoding($false)
-    $cf = Join-Path $tmp 'c.json'; $rf = Join-Path $tmp 'r.json'; $bfile = Join-Path $tmp 'comparison-2026-09-22.json'; $kf = Join-Path $tmp 'k.json'; $mf = Join-Path $tmp 'mark.json'
+    $cf = Join-Path $tmp 'c.json'; $rf = Join-Path $tmp 'r.json'; $bfile = Join-Path $tmp 'comparison-2026-09-22.json'; $kf = Join-Path $tmp 'k.json'
+    $rbf = Join-Path $tmp 'recipe-board.json'; $af = Join-Path $tmp 'alias.json'; $mf = Join-Path $tmp 'mark.json'; $cmf = Join-Path $tmp 'cellmark.json'
+    function WriteBoard([string]$bakersProduct) { [IO.File]::WriteAllText($bfile, ([pscustomobject]@{ comparison = @((Bd 'chickpeas' @('Aldi', 'Aldi Garbanzo Beans 15.5 OZ', "Baker's", $bakersProduct))) } | ConvertTo-Json -Depth 6), $enc) }
+    $rowsB = @((Rw 'Shallots' 'onions'), (Rw 'Pork Chorizo' 'ground-pork'), (Rw 'Chickpeas' 'chickpeas'), (Rw 'Ground Turkey' '93-7-ground-turkey'))
     [IO.File]::WriteAllText($cf, (ConvertTo-Json -InputObject @($coms) -Depth 5), $enc)
-    [IO.File]::WriteAllText($bfile, ($board | ConvertTo-Json -Depth 6), $enc)
-    [IO.File]::WriteAllText($kf, '[]', $enc)
-    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject @((Rw 'Shallots' 'onions'), (Rw 'Pork Chorizo' 'ground-pork')) -Depth 4), $enc)
-    $a = @('-NoProfile', '-File', $PSCommandPath, '-RowsFile', $rf, '-CommoditiesFile', $cf, '-BoardFile', $bfile, '-CostedFile', $kf, '-BaselineFile', $mf)
+    WriteBoard 'Kroger Chickpeas 15 oz'
+    [IO.File]::WriteAllText($rbf, ([pscustomobject]@{ comparison = @((Bd '93-7-ground-turkey' @('Walmart', 'Honeysuckle White 93% Lean Ground Turkey, 1 lb'))) } | ConvertTo-Json -Depth 6), $enc)
+    [IO.File]::WriteAllText($af, '{"map":{}}', $enc)
+    [IO.File]::WriteAllText($kf, (ConvertTo-Json -InputObject @([pscustomobject]@{ slug = 'fx'; lines = @([pscustomobject]@{ item = 'Chickpeas'; basis = 'board:chickpeas:aldi' }, [pscustomobject]@{ item = 'Ground Turkey'; basis = 'board:93-7-ground-turkey:recipeboard-walmart' }) }) -Depth 5), $enc)
+    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject $rowsB -Depth 4), $enc)
+    $base = @('-NoProfile', '-File', $PSCommandPath, '-RowsFile', $rf, '-CommoditiesFile', $cf, '-BoardFile', $bfile, '-CostedFile', $kf, '-BaselineFile', $mf, '-CellBaselineFile', $cmf)
+    $a = $base + @('-RecipeBoardFile', $rbf, '-AliasMapFile', $af)
     $o = & powershell @a; $c0 = $LASTEXITCODE
     Check 'MUST FIRE  no committed mark is COULD NOT EVALUATE (exit 3), never a pass' ($c0 -eq 3) ("exit $c0")
     $o = & powershell @($a + '-Tighten'); $c1 = $LASTEXITCODE; $o1 = ($o | Select-Object -Last 2) -join ' | '
-    Check 'CLEAN TWIN  -Tighten records the day-one mark (2 keys)' (($c1 -eq 0) -and (Test-Path $mf) -and ([int](Read-JsonFile $mf).count -eq 2)) ("exit $c1 " + $o1)
-    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject @((Rw 'Shallots' 'shallots'), (Rw 'Pork Chorizo' 'ground-pork')) -Depth 4), $enc)
+    Check 'CLEAN TWIN  -Tighten records both day-one marks (main 2 keys, cell 1 key: the garbanzo row)' (($c1 -eq 0) -and (Test-Path $mf) -and ([int](Read-JsonFile $mf).count -eq 2) -and (Test-Path $cmf) -and ([int](Read-JsonFile $cmf).count -eq 1)) ("exit $c1 " + $o1)
+    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject @((Rw 'Shallots' 'shallots'), (Rw 'Pork Chorizo' 'ground-pork'), (Rw 'Chickpeas' 'chickpeas'), (Rw 'Ground Turkey' '93-7-ground-turkey')) -Depth 4), $enc)
     $h0 = (Get-FileHash -LiteralPath $mf).Hash
     $o = & powershell @a; $c2 = $LASTEXITCODE
     Check 'MUST NOT FIRE  a FALL exits 0, says it can tighten, and leaves the mark byte-identical' (($c2 -eq 0) -and ((Get-FileHash -LiteralPath $mf).Hash -eq $h0) -and (($o -join ' ') -match 'CAN tighten')) ("exit $c2")
-    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject @((Rw 'Shallots' 'onions'), (Rw 'Pork Chorizo' 'ground-pork'), (Rw 'Shallot Rings' 'onions')) -Depth 4), $enc)
+    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject ($rowsB + @(Rw 'Shallot Rings' 'onions')) -Depth 4), $enc)
     $o = & powershell @a; $c3 = $LASTEXITCODE
     Check 'MUST FIRE  a NEW finding key is a RISE (exit 2) and names it' (($c3 -eq 2) -and (($o -join ' ') -match 'Shallot Rings')) ("exit $c3")
+    [IO.File]::WriteAllText($rf, (ConvertTo-Json -InputObject $rowsB -Depth 4), $enc)
+    $hc = (Get-FileHash -LiteralPath $cmf).Hash
+    $o = & powershell @($base + @('-AliasMapFile', $af, '-Tighten')); $c4 = $LASTEXITCODE
+    Check 'MUST FIRE  run without -RecipeBoardFile, the recipe-board pair is BLIND: exit 3, and -Tighten leaves the cell mark byte-identical' (($c4 -eq 3) -and (($o -join ' ') -match 'BLIND  "Ground Turkey"') -and ((Get-FileHash -LiteralPath $cmf).Hash -eq $hc)) ("exit $c4")
+    WriteBoard 'Kroger Black Beans 15 oz'
+    $o = & powershell @a; $c5 = $LASTEXITCODE
+    Check 'MUST FIRE  a standing chickpeas key does not hide a NEW "Kroger Black Beans" product in the same cell: RISE, exit 2' (($c5 -eq 2) -and (($o -join ' ') -match 'NEW  CELL .*Kroger Black Beans')) ("exit $c5")
   } finally { Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 25) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 25 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 40) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 40 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
