@@ -41,6 +41,17 @@
 
   Exit: 0 no rise (fall spoken), 2 a new finding key (a rise), 3 could not evaluate. Last line:
   INGREDIENT-IDENTITY-COMPLETE.
+
+  -RoutesOnly (2026-09-26, queue 2026-09-26-177835, plan-2026-09-26-2): the PUSH-TIME half, run by run-gates through
+  meal-prep/pipeline/audit-ingredient-routes.ps1. Check (a) only - rows, commodities, Get-TcGlobalExclude; no board,
+  no costed.json, so it is hermetic on a bare checkout - compared per (item, bid) PAIR with the mark's proxy| and
+  unrouted| keys (Get-IdentityRouteChanges in the lib). A push whose commodities.json, ingredients.json or matcher
+  change moves a row newly off its bid exits 2 naming the row, its new route and the rebid that repairs it; a
+  proxy -> unrouted move is spoken, never refused. Exit 3 when a file cannot be read or there is no mark. It never
+  writes the mark and ignores -Tighten: the daily data pass above keeps its RISE semantics unchanged.
+  SCOPE OF A CLEAN -RoutesOnly REPORT: unsound. It sees a row whose OWN NAME moves; it cannot see a union cell that
+  admits another member while the row's name still routes to its bid (Zucchini / Yellow Squash was exactly that).
+  A refusal is complete: the row's own name routed differently from its mark, which is the defect.
 #>
 [CmdletBinding()]
 param(
@@ -53,7 +64,8 @@ param(
   [string]$AliasMapFile = '',
   [string]$CostedFile = '',
   [string]$BaselineFile = '',
-  [string]$CellBaselineFile = ''
+  [string]$CellBaselineFile = '',
+  [switch]$RoutesOnly
 )
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -173,6 +185,34 @@ function Invoke-IdentityRun {
   foreach ($x in $f) { [void]$lines.Add('  ' + $x.kind + '  ' + $x.detail) }
   foreach ($x in $cf) { [void]$lines.Add('  ' + $x.kind + '  ' + $x.detail) }
   return [pscustomobject]@{ Code = $code; Lines = $lines }
+}
+
+function Invoke-RoutesOnlyRun {
+  <# The push-time pass (-RoutesOnly). Returns [pscustomobject]@{ Code; Lines }: 0 nothing refused (speaks kept),
+     2 a pair moved off its bid, 3 could not evaluate. Never reads a board or costed.json, never writes the mark. #>
+  $lines = New-Object System.Collections.ArrayList
+  try {
+    $rows = Read-JsonFile $RowsFile
+    $coms = Read-JsonFile $CommoditiesFile
+    if (-not (Test-Path $BaselineFile)) { [void]$lines.Add('audit-ingredient-identity -RoutesOnly: COULD NOT EVALUATE - no committed mark at ' + $BaselineFile); return [pscustomobject]@{ Code = 3; Lines = $lines } }
+    $base = Read-JsonFile $BaselineFile
+    $gex = @(Get-TcGlobalExclude)
+    $resolve = New-IdentityResolver -Commodities $coms -GlobalExclude $gex
+    $weekly = New-Object 'System.Collections.Generic.HashSet[string]'
+    foreach ($c in @($coms)) { [void]$weekly.Add([string]$c.id) }
+    $markKeys = [string[]]@(@($base.keys) | ForEach-Object { [string]$_ })
+    $got = Get-IdentityRouteChanges -Rows $rows -Resolve $resolve -WeeklyIds $weekly -MarkKeys $markKeys
+    $moves = @($got | Where-Object { $null -ne $_ })
+  } catch {
+    [void]$lines.Add('audit-ingredient-identity -RoutesOnly: COULD NOT EVALUATE - ' + $_.Exception.Message); return [pscustomobject]@{ Code = 3; Lines = $lines }
+  }
+  $ref = @($moves | Where-Object { $_.verdict -eq 'REFUSE' })
+  $spk = @($moves | Where-Object { $_.verdict -eq 'SPEAK' })
+  [void]$lines.Add(('audit-ingredient-identity -RoutesOnly: {0} vocabulary row(s) routed under {1} commodities against the mark of {2}: {3} refused, {4} spoken' -f @($rows).Count, @($coms).Count, [string]$base.recorded, $ref.Count, $spk.Count))
+  foreach ($x in $ref) { [void]$lines.Add('  REFUSE  ' + $x.detail) }
+  foreach ($x in $spk) { [void]$lines.Add('  SPEAK   ' + $x.detail) }
+  if ($ref.Count -gt 0) { return [pscustomobject]@{ Code = 2; Lines = $lines } }
+  return [pscustomobject]@{ Code = 0; Lines = $lines }
 }
 
 # ---- SELF-TEST ------------------------------------------------------------------------------------------
@@ -334,12 +374,68 @@ if ($SelfTest) {
     Check 'MUST FIRE  a standing chickpeas key does not hide a NEW "Kroger Black Beans" product in the same cell: RISE, exit 2' (($c5 -eq 2) -and (($o -join ' ') -match 'NEW  CELL .*Kroger Black Beans')) ("exit $c5")
   } finally { Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 40) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 40 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  # -RoutesOnly, THE PUSH-TIME PAIR CHECK (queue 2026-09-26-177835). FROZEN, never regenerated: lo-mein-noodles' three
+  # includes as HEAD held them on 2026-09-26, placed BEFORE egg-noodles, and the founding mark key of 4880ebc98's gap.
+  $rLo = @(
+    [pscustomobject]@{ id = 'lo-mein-noodles'; include = @('\blo\s*mein\b.{0,20}\bnoodles?\b', '\bnoodles?\b.{0,20}\blo\s*mein\b', '\bchinese\s+lo\s*mein\b'); exclude = @() },
+    [pscustomobject]@{ id = 'egg-noodles'; include = @('egg\s+noodles?', 'egg\s+pasta'); exclude = @() })
+  $rPep = @(
+    [pscustomobject]@{ id = 'pepperoncini'; include = @('pepp?eroncini'); exclude = @() },
+    [pscustomobject]@{ id = 'banana-peppers'; include = @('banana\s+pepper'); exclude = @('pepp?eroncini') })
+  $rRice = @([pscustomobject]@{ id = 'rice'; include = @('\brice\b'); exclude = @('cooked') })
+  $rTor = @(
+    [pscustomobject]@{ id = 'tortillas'; include = @('flour\s+tortillas?'); exclude = @() },
+    [pscustomobject]@{ id = 'corn-tortillas'; include = @('white\s+corn\s+tortillas?'); exclude = @() })
+  function RoutesOf($coms, $rows, [string[]]$mark) {
+    $rs = New-IdentityResolver -Commodities $coms -GlobalExclude @('\bzz-fixture-never-matches\b')
+    $wk = New-Object 'System.Collections.Generic.HashSet[string]'; foreach ($c in $coms) { [void]$wk.Add([string]$c.id) }
+    $g = Get-IdentityRouteChanges -Rows $rows -Resolve $rs -WeeklyIds $wk -MarkKeys $mark
+    return ,@($g | Where-Object { $null -ne $_ })
+  }
+  $x = RoutesOf $rLo @((Rw 'Lo Mein Noodles' 'egg-noodles'), (Rw 'Egg Noodles' 'egg-noodles')) @('unrouted|Lo Mein Noodles|egg-noodles')
+  Check 'MUST FIRE  -RoutesOnly: Lo Mein Noodles marked unrouted on egg-noodles now routes to lo-mein-noodles (the 4880ebc98 re-shape) and is REFUSED, naming both' ((@($x | Where-Object { $_.verdict -eq 'REFUSE' -and $_.item -eq 'Lo Mein Noodles' -and $_.route -eq 'lo-mein-noodles' }).Count -eq 1) -and ($x.Count -eq 1)) (($x | ForEach-Object { $_.verdict + ' ' + $_.detail }) -join ' | ')
+  $x = RoutesOf $rLo @((Rw 'Lo Mein Noodles' 'lo-mein-noodles'), (Rw 'Egg Noodles' 'egg-noodles')) @()
+  $rsLo = New-IdentityResolver -Commodities $rLo -GlobalExclude @('\bzz-fixture-never-matches\b')
+  Check 'MUST NOT FIRE  -RoutesOnly: Lo Mein Noodles rebid onto lo-mein-noodles with the mark tightened is silent' ($x.Count -eq 0) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  Check 'CLEAN TWIN  Egg Noodles still routes to egg-noodles beside the lo-mein-noodles include (the row sharing the old bid keeps it)' ((& $rsLo 'Egg Noodles') -eq 'egg-noodles') ([string](& $rsLo 'Egg Noodles'))
+  $x = RoutesOf $rPep @(Rw 'Pepperoncini' 'banana-peppers') @()
+  Check 'MUST FIRE  -RoutesOnly: Pepperoncini bid banana-peppers with no mark key, under the split rules, is REFUSED (on-bid -> off-bid, the shape the split push creates)' ((@($x | Where-Object { $_.verdict -eq 'REFUSE' -and $_.route -eq 'pepperoncini' }).Count -eq 1)) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  $x = RoutesOf $rPep @(Rw 'Pepperoncini' 'pepperoncini') @()
+  Check 'MUST NOT FIRE  -RoutesOnly: Pepperoncini rebid onto pepperoncini under the split rules is silent' ($x.Count -eq 0) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  $x = RoutesOf $rRice @(Rw 'Cooked White Rice' 'rice') @()
+  Check 'MUST FIRE  -RoutesOnly: Cooked White Rice bid rice, now routing nowhere with no mark key, is REFUSED (828d5226b)' ((@($x | Where-Object { $_.verdict -eq 'REFUSE' -and $_.route -eq '' }).Count -eq 1)) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  $x = RoutesOf $rTor @(Rw 'Corn Tortillas' 'corn-tortillas') @('proxy|Corn Tortillas|corn-tortillas|tortillas')
+  Check 'MUST NOT FIRE  -RoutesOnly: a pair marked proxy that now routes nowhere (proxy -> unrouted) SPEAKS and is never refused' (($x.Count -eq 1) -and ($x[0].verdict -eq 'SPEAK')) (($x | ForEach-Object { $_.verdict + ' ' + $_.detail }) -join ' | ')
+  $x = RoutesOf $rLo @(Rw 'Lo Mein Noodles' 'egg-noodles') @('proxy|Lo Mein Noodles|egg-noodles|lo-mein-noodles')
+  Check 'MUST NOT FIRE  -RoutesOnly: a standing proxy whose mark key is unchanged (the Tandoori Masala shape) is silent' ($x.Count -eq 0) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  $x = RoutesOf $rLo @(Rw 'Lo Mein Noodles' 'egg-noodles') @('proxy|Lo Mein Noodles|egg-noodles|ramen')
+  Check 'MUST FIRE  -RoutesOnly: a pair marked proxy onto ramen that now routes to lo-mein-noodles (a new commodity took the name) is REFUSED' ((@($x | Where-Object { $_.verdict -eq 'REFUSE' }).Count -eq 1)) (($x | ForEach-Object { $_.detail }) -join ' | ')
+  # the same, as a child over temp files: the exit codes run-gates reads through audit-ingredient-routes.ps1
+  $tmp2 = Join-Path ([IO.Path]::GetTempPath()) ('iidr-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $tmp2 -ErrorAction Stop | Out-Null
+  try {
+    $enc = New-Object System.Text.UTF8Encoding($false)
+    $cf2 = Join-Path $tmp2 'c.json'; $rf2 = Join-Path $tmp2 'r.json'; $mf2 = Join-Path $tmp2 'mark.json'
+    [IO.File]::WriteAllText($cf2, (ConvertTo-Json -InputObject @($rLo) -Depth 5), $enc)
+    [IO.File]::WriteAllText($rf2, (ConvertTo-Json -InputObject @((Rw 'Lo Mein Noodles' 'egg-noodles'), (Rw 'Egg Noodles' 'egg-noodles')) -Depth 4), $enc)
+    $a2 = @('-NoProfile', '-File', $PSCommandPath, '-RoutesOnly', '-RowsFile', $rf2, '-CommoditiesFile', $cf2, '-BaselineFile', $mf2)
+    $o = & powershell @a2; $d0 = $LASTEXITCODE
+    Check 'MUST FIRE  -RoutesOnly child with no committed mark is COULD NOT EVALUATE (exit 3), never a pass' (($d0 -eq 3) -and (($o | Select-Object -Last 1) -match 'INGREDIENT-IDENTITY-COMPLETE')) ("exit $d0")
+    [IO.File]::WriteAllText($mf2, '{ "recorded": "2026-09-25", "count": 1, "keys": [ "unrouted|Lo Mein Noodles|egg-noodles" ] }', $enc)
+    $o = & powershell @a2; $d1 = $LASTEXITCODE
+    Check 'MUST FIRE  -RoutesOnly child exits 2 and names Lo Mein Noodles and lo-mein-noodles, with no -BoardFile and no costed.json' (($d1 -eq 2) -and (($o -join ' ') -match 'Lo Mein Noodles') -and (($o -join ' ') -match 'ToBid lo-mein-noodles')) ("exit $d1 " + ($o -join ' | '))
+    $h1 = (Get-FileHash -LiteralPath $mf2).Hash
+    [IO.File]::WriteAllText($rf2, (ConvertTo-Json -InputObject @((Rw 'Lo Mein Noodles' 'lo-mein-noodles'), (Rw 'Egg Noodles' 'egg-noodles')) -Depth 4), $enc)
+    $o = & powershell @($a2 + '-Tighten'); $d2 = $LASTEXITCODE
+    Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
+  } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
+
+  if ($ran -ne 52) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 52 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
 }
 
-$res = Invoke-IdentityRun
+$res = if ($RoutesOnly) { Invoke-RoutesOnlyRun } else { Invoke-IdentityRun }
 foreach ($l in $res.Lines) { Write-Output $l }
 Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code $res.Code -Summary ('exit=' + $res.Code)

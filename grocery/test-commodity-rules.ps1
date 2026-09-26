@@ -501,6 +501,34 @@ $cases = @(
      why='MUST FIRE the Fareway blackened seasoning cajun-seasoning held (dd290b)' }
   @{ id='egg-noodles'; name='Great Value Extra Wide Egg Noodles, 16 oz'; expect='included'
      why='CLEAN TWIN plain egg noodles stay on egg-noodles (dd290b)' }
+  # plan-2026-09-26-2 (queue 2026-09-26-177835): two two-food unions split so each recipe food prices from its own
+  # food. Names are the real listings from the plan-2026-09-26-2 routing artifact and candidates-2026-09-23.
+  @{ id='zucchini'; name='Fresh Yellow Squash, Each'; expect='no-include-match'
+     why='MUST FIRE the founding row: Walmart yellow squash priced 18 Zucchini recipe lines at $1.52/lb; zucchini no longer includes yellow squash (177835)' }
+  @{ id='yellow-squash'; name='Fresh Yellow Squash, Each'; expect='included'
+     why='MUST FIRE yellow squash lands on its own commodity (177835)' }
+  @{ id='zucchini'; name='Yellow Zucchini/Yellow Squash'; expect='excluded'
+     why='MUST FIRE the Family Fare yellow zucchini row leaves zucchini through the \byellow\b exclude (177835)' }
+  @{ id='yellow-squash'; name='Yellow Zucchini/Yellow Squash'; expect='included'
+     why='MUST FIRE and lands on yellow-squash (177835)' }
+  @{ id='zucchini'; name='Fresh Zucchini, Each'; expect='included'
+     why='CLEAN TWIN green zucchini still routes to zucchini past the new yellow exclude (177835)' }
+  @{ id='zucchini'; name='Zucchini & Summer Squash Vegetable Seeds 5 Pack - Full Sun Annual'; expect='excluded'
+     why='MUST FIRE a seed packet is not zucchini (177835)' }
+  @{ id='banana-peppers'; name='Great Value Whole Pepperoncini, 12 fl oz'; expect='no-include-match'
+     why='MUST FIRE the founding row: banana pepper rings priced the Pepperoncini lines; banana-peppers no longer includes pepperoncini (177835)' }
+  @{ id='banana-peppers'; name='Banana Pepper and Pepperoncini Mix'; expect='excluded'
+     why='MUST FIRE a name carrying both words leaves banana-peppers through the pepp?eroncini exclude (177835)' }
+  @{ id='pepperoncini'; name='Great Value Whole Pepperoncini, 12 fl oz'; expect='included'
+     why='MUST FIRE pepperoncini lands on its own commodity (177835)' }
+  @{ id='pepperoncini'; name='Mezzetta Medium-Heat Golden Greek Peperoncini'; expect='included'
+     why='MUST FIRE the Italian one-p spelling Baker''s sells is included by pepp?eroncini (177835)' }
+  @{ id='banana-peppers'; name='Mezzetta Mild Banana Pepper Rings, 32 fl oz Jar'; expect='included'
+     why='CLEAN TWIN banana pepper rings stay on banana-peppers (177835)' }
+  @{ id='pepperoncini'; name='Mezzetta Mild Banana Pepper Rings, 32 fl oz Jar'; expect='no-include-match'
+     why='MUST NOT FIRE banana pepper rings never reach pepperoncini (177835)' }
+  @{ id='banana-peppers'; name='(2 pack) Bonnie Plants Green Sweet Banana Pepper Live Plant in Grower Pot'; expect='excluded'
+     why='MUST FIRE a live pepper plant is not a jar of banana peppers (177835)' }
 )
 
 $bad = 0

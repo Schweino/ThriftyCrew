@@ -276,6 +276,10 @@ $static = @(
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
   @{ f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
+  # 2026-09-26 (queue 2026-09-26-177835, plan-2026-09-26-2): a commodity registration and the vocabulary row naming the
+  # same food are two records by two tools; 4880ebc98 landed three commodities that claimed three rows while the rows
+  # kept their old bids. Board-free and hermetic (rows + rules + the tracked mark), so it runs at push.
+  @{ f = 'meal-prep\pipeline\audit-ingredient-routes.ps1'; n = 'no push moves a recipe vocabulary row off its bid (a commodity claiming its name, or a rule change) unless the rebid rides in the same push' }
   # Every agent declares its tools, and what a definition SAYS about them matches what it HAS. Four of
   # twelve declared none until today and inherited Write and Edit, two of them on agents whose job is a
   # verdict. An absent tools: line does not look wrong in a diff (2026-09-06, backlog E3).

@@ -1558,12 +1558,12 @@
     },
     {
         "item":  "Lo Mein Noodles",
-        "bid":  "egg-noodles",
+        "bid":  "lo-mein-noodles",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "weekly",
-        "buy_pkg_g":  397,
-        "buy_pkg_label":  "14oz pack"
+        "buy_pkg_g":  283,
+        "buy_pkg_label":  "10oz pack"
     },
     {
         "item":  "Mango",
@@ -1803,7 +1803,8 @@
     },
     {
         "item":  "Pepperoncini",
-        "bid":  "banana-peppers",
+        "identity_same_as":  [ { "product":  "\\bpep+eroncini\\b", "reason":  "peperoncini is the Italian spelling (Baker's sells 'Mezzetta Medium-Heat Golden Greek Peperoncini')", "queue_id":  "2026-09-26-177835" } ],
+        "bid":  "pepperoncini",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "weekly",
@@ -2614,13 +2615,13 @@
     },
     {
         "item":  "Korean glass noodles (dangmyeon)",
-        "bid":  "rice-noodles",
+        "bid":  "sweet-potato-glass-noodles",
         "gpu":  28.3495,
         "unit":  "oz",
-        "board":  "recipe",
+        "board":  "weekly",
         "buy_pkg_g":  397,
         "buy_pkg_label":  "14oz box",
-        "note":  "Priced off bid rice-noodles - same box, same shelf, same gpu - but a DISTINCT food from Rice Noodles for macros: sweet potato starch is ~0.2 g protein/100 g against 7.1 g. The package fields are copied from the Rice Noodles row so this name costs identically; before 2026-08-16 they were missing, so the three dangmyeon specs had to carry canon 'Rice Noodles' to get a buy line, which split the cost key from the macro key and made cost-render-lib drop the noodles."
+        "note":  "Rebid rice-noodles -> sweet-potato-glass-noodles 2026-09-26 (queue 2026-09-26-177835, plan-2026-09-26-2): 4880ebc98 registered sweet-potato-glass-noodles, so this name routes to its own commodity; no Omaha store carries a cell yet, so its lines are NO PRICE BASIS and its 3 recipes stay held. Before that it was priced off bid rice-noodles - same box, same shelf, same gpu - but a DISTINCT food from Rice Noodles for macros: sweet potato starch is ~0.2 g protein/100 g against 7.1 g. The package fields are copied from the Rice Noodles row so this name costs identically; before 2026-08-16 they were missing, so the three dangmyeon specs had to carry canon 'Rice Noodles' to get a buy line, which split the cost key from the macro key and made cost-render-lib drop the noodles."
     },
     {
         "item":  "Cauliflower",
@@ -2769,6 +2770,9 @@
         "board":  "weekly",
         "buy_pkg_g":  204,
         "buy_pkg_label":  "dozen",
+        "relation":  "derived",
+        "parent_units_per_purchase":  12,
+        "yield_g_per_parent_unit":  17,
         "note":  "gpu is grams of YOLK per PURCHASE UNIT, and the purchase unit is one dozen: 12 yolks at about 17 g each = 204 g. Priced per dozen PURCHASED - you buy whole eggs to get yolks, so that is the real cost. buy_pkg_label must NOT state a count on this row: the carton IS one priced unit (one dozen), not 12 of them. It read '12ct carton' until 2026-09-02, which made audit-count-gpu parse the pack as 12 priced units and demand gpu 17 (FAIL [PACK] x0.083). Corrected to 'dozen', the same label the sibling Eggs row on this bid already uses. No number moved: french-chicken-fricassee still costs 68/204 = 1/3 carton = $0.54."
     },
     {
@@ -3123,6 +3127,7 @@
     },
     {
         "item":  "Fresh Red Chili",
+        "identity_same_as":  [ { "product":  "\\bjalape", "reason":  "Brad 2026-08-31 (this row's note): a recipe's fresh red chili is the jalapeno purchase class; kept by plan-2026-09-22-11", "queue_id":  "2026-09-26-177835" } ],
         "bid":  "jalapenos",
         "gpu":  453.592,
         "unit":  "lb",
@@ -3133,14 +3138,14 @@
     },
     {
         "item":  "Blackened Seasoning",
-        "bid":  "cajun-seasoning",
+        "bid":  "blackened-seasoning",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "weekly",
-        "pantry_pkg_g":  71,
-        "pantry_pkg_label":  "2.5oz shaker",
+        "pantry_pkg_g":  184,
+        "pantry_pkg_label":  "6.5oz container",
         "bulk":  true,
-        "note":  "Registrar ruling 2026-08-28: REUSE, and minting would have repeated the lasagna-noodles trap. The only carried SKU (carriage.json:734, Fareway $2.49) is literally \"Louisiana Fish Fry BLACKENED CAJUN Seasoning\", which cajun-seasoning's include (cajun|creole)\\s+seasoning ALREADY matches - so a minted blackened-seasoning id would have fought the existing one for its own crown product. cajun-seasoning is live at $0.1666/oz (Sam's Club). A pure non-cajun blackening rub would need an include carve-out on cajun-seasoning first; that is a Brad variant call."
+        "note":  "Rebid cajun-seasoning -> blackened-seasoning 2026-09-26 (queue 2026-09-26-177835, plan-2026-09-26-2): 4880ebc98 registered blackened-seasoning, so this name routes to its own commodity. The 2026-08-28 REUSE ruling onto cajun-seasoning was superseded by dd290b. Pantry package follows the only carried cell, Baker's 'Cajun's Choice Blackened Seasoning & Rub' 6.5 oz (184 g)."
     },
     {
         "item":  "Romaine Lettuce",
