@@ -1,0 +1,679 @@
+{
+  "generated": "2026-09-26T17:30:00",
+  "round": 1,
+  "board_week": "2026-09-23",
+  "queue_ids_seen": [
+    "2026-09-26-4b6616",
+    "2026-09-26-3fdb1d",
+    "2026-09-26-03e565",
+    "2026-09-26-50914e",
+    "2026-09-26-f691ee",
+    "2026-09-26-a62c43",
+    "2026-09-26-b2f93f",
+    "2026-09-26-ef3d50",
+    "2026-09-26-ab03c2",
+    "2026-09-26-d21fb2"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "searched 'guard blind test-auditors', 'pipeline push blocked', 'guards failed board not published' (dispatch)",
+    "searched 'push retry replayed commit landed twin': lib/checkout-sync.ps1 Get-TcCsLandedTwins reused as the one identity test",
+    "memory:one-tally-two-verdicts (one in-flight fact read with two verdicts in check-skills)",
+    "memory:push-data-sweeps-your-edit (every commit by pathspec, git show --stat checked)",
+    ".claude/rules/ops-and-gates.md (a fixture name is claimed once; three fixture labels)"
+  ],
+  "integration": "Integration round 2 (mid-run arrivals), worktree C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-land2 on branch triage/0926-land2 off origin/main 5bf7e3bf1: merged --no-ff triage/0926-mid1, triage/0926-mid3, then triage/0926-mid2 (conflict in grocery/test-capture-run-sync.ps1 resolved and the two retry mechanisms reconciled into one, merge c625eedfd). d21fb2 fixed in the C:\\Users\\Owner\\.claude store (7f49063). No board change, no republish.",
+  "ship_sequence": [
+    "2026-09-26-4b6616",
+    "2026-09-26-3fdb1d",
+    "2026-09-26-03e565",
+    "2026-09-26-50914e",
+    "2026-09-26-f691ee",
+    "2026-09-26-a62c43",
+    "2026-09-26-b2f93f",
+    "2026-09-26-ef3d50",
+    "2026-09-26-ab03c2",
+    "2026-09-26-d21fb2"
+  ],
+  "publish_batch": [],
+  "open_questions_for_brad": [],
+  "items": [
+    {
+      "queue_id": "2026-09-26-4b6616",
+      "lane": "mid-run",
+      "status": "done",
+      "classification": "confirmed",
+      "evidence": [
+        {
+          "quote": "hook-installed: hook(s) missing or stale:   pre-commit STALE - differs from ops\\hooks / HOOK-INSTALLED-COMPLETE code=2",
+          "source": "ops\\install-hooks.ps1 -Check via ops\\audit-hook-installed.ps1, main checkout 2026-09-26 ~15:40"
+        },
+        {
+          "quote": "commit-msg same=True, post-commit same=True, pre-commit same=False (installed 2026-09-11, source 2026-09-25 b06a3628e), pre-push same=True",
+          "source": "Get-FileHash ops\\hooks\\* vs .git\\hooks\\*"
+        },
+        {
+          "quote": "unset (exit 1): hooks are read from .git\\hooks, not a hooksPath; nothing un-set it",
+          "source": "git config --get core.hooksPath (main)"
+        }
+      ],
+      "premise_verified": "Partly true. One hook stale (pre-commit, the W1.1 production-barrier WARN arm plus bulk-edit/bot-scope checks from b06a3628e); pre-push, the push gate, was byte-identical throughout, so pushes were NOT ungated. Not caused by today's worktrees, merges or checkout sync: .git\\hooks\\pre-commit was last written 2026-09-11.",
+      "root_cause": "Nothing re-installs .git\\hooks when a commit to ops\\hooks lands: .git\\hooks is untracked, install-hooks.ps1 runs only by hand, and the daily watchdog only REPORTED staleness, so every ops\\hooks change is dead in the main checkout until a human reinstalls.",
+      "root_fix": {
+        "files": [
+          "ops/audit-hook-installed.ps1",
+          "grocery/capture-watchdog.ps1"
+        ],
+        "what": "ops\\audit-hook-installed.ps1 -Repair re-installs and re-checks, from the MAIN working tree only and only while ops\\hooks has no uncommitted change; grocery\\capture-watchdog.ps1 calls it with -Repair daily"
+      },
+      "local_repair": "Main checkout: ran powershell -File ops\\install-hooks.ps1 (exit 0, \"4 hook(s) live ... byte-identical to ops\\hooks\"); audit-hook-installed then exit 0 code=0. No git config changed.",
+      "proof": {
+        "must_fire_case": "ops\\audit-hook-installed.ps1 -SelfTest: \"-Repair on the main tree reinstalls a stale hook, re-checks, exits 0 REPAIRED\" (founding output pre-commit STALE) and \"a repair the re-check does not confirm stays a finding (2)\"",
+        "clean_twin": "\"live hooks under -Repair: pass (0), not REPAIRED, nothing installed\"; plus MUST NOT FIRE for no -Repair, dirty ops\\hooks, linked worktree, git silent",
+        "ran": "audit-hook-installed -SelfTest exit 0, 13 of 13; live -Repair from the worktree exit 0 code=0; hooks fired on the worktree commit (post-commit printed its -Prepare line)",
+        "guard_or_fixture": "ops/audit-hook-installed.ps1 -SelfTest (13 cases)"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep of the worktree for ops/audit-hook-installed.ps1 callers: grocery/capture-watchdog.ps1:1577 is the one production caller that passes -Repair",
+        "affected_now": 1,
+        "names": "The watchdog may now write .git\\hooks in the main checkout once a day; install-hooks replaces atomically and verifies bytes."
+      },
+      "rollback": "Drop -Repair from the watchdog call (one token); the audit reverts to report-only.",
+      "leaves_open": "The watchdog headline says \"pushes are ungated\" for ANY stale hook, which overstated today (pre-push was current). After -Repair a stale hook pages only when the repair is refused or fails. (1 occurrence(s)); Up to ~24 h between an ops\\hooks landing and the next 10:30 watchdog repair. (1 occurrence(s))",
+      "close_disposition": "confirmed",
+      "resolution_note": "One hook (pre-commit) was stale since b06a3628e landed on 09-25 because nothing re-installs hooks after an ops\\hooks change; pre-push was current, so pushes stayed gated. Reinstalled in main (exit 0, audit code=0); the watchdog now re-asserts via audit-hook-installed -Repair.",
+      "actual_tool_calls": 16,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid1",
+      "worktree": "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-mid1",
+      "commits": [
+        "a2058d2bd (unlanded; cite blob after landing)"
+      ],
+      "leaves_open_detail": [
+        {
+          "occurrences": 1,
+          "what": "The watchdog headline says \"pushes are ungated\" for ANY stale hook, which overstated today (pre-push was current). After -Repair a stale hook pages only when the repair is refused or fails.",
+          "owner": "watch:grocery/capture-watchdog.ps1"
+        },
+        {
+          "occurrences": 1,
+          "what": "Up to ~24 h between an ops\\hooks landing and the next 10:30 watchdog repair.",
+          "owner": "watch:ops/audit-hook-installed.ps1"
+        }
+      ],
+      "leaves_open_occurrences": "2 over 2026-09-26, summed from leaves_open_detail",
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1; watch:ops/audit-hook-installed.ps1",
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1"
+    },
+    {
+      "queue_id": "2026-09-26-3fdb1d",
+      "lane": "mid-run",
+      "status": "done",
+      "classification": "confirmed",
+      "evidence": [
+        {
+          "quote": "sync[tail 1]: blocked/foreign 2a365ec33.. ... grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M); nothing was written / FAILED LANES: sync",
+          "source": "grocery\\out\\logs\\capture-run-ad-2026-09-26.log line 95-98"
+        },
+        {
+          "quote": "PUSH-RETRY [ad]: not-on-head pushed=False - HEAD no longer holds 2a365ec3373a... so there is no commit of this run to push",
+          "source": "capture-run-ad log lines 177-259 (10:00, 11:00, 12:00, 13:00)"
+        },
+        {
+          "quote": "- 2a365ec3373a... (equal patch upstream) ; sync[start]: synced 2a365ec33..ef7edb1a3 ... 2 local commit(s) replayed",
+          "source": "git cherry origin/main 2a365ec33 2a365ec33~1; capture-run-daily log line 21"
+        }
+      ],
+      "premise_verified": "True that the 07:00 task exited 1, but the data was not lost: the 08:00 start sync replayed the [ad] commit as ef7edb1a3, which is on origin/main. The alert fired off the 10:00 retry, and the task stayed rc=1 at 13:00. Not caused by today's landings or branch changes: the 07:00 tail was blocked by a session's uncommitted files in the main checkout (plan-2026-09-25-15 work).",
+      "root_cause": "Invoke-CaptureRunPushRetry identified the run's work by commit id only, and the checkout sync legitimately replays a local bot commit under a new id, so every retry after a replay read not-on-head and exited 1, a false FAILED for the rest of the task window.",
+      "root_fix": {
+        "files": [
+          "grocery/capture-run.ps1"
+        ],
+        "what": "Reconciled: Get-CaptureRunCopies (Get-TcCsLandedTwins, the sync's own identity test, over every commit of the run) asked of origin/main -> already-landed rc 0, and of HEAD -> HEAD is what lands, the HEAD copy excluded from the foreign-commits scan. Replaces the lane's git cherry test (looser: patch-id ignores whitespace; $Sha only)."
+      },
+      "prior_closes": [
+        "2026-09-24-a0e558"
+      ],
+      "prevention": {
+        "what": "the push-only retry (the emitting step of the task exit code)",
+        "exact_change": "ask by content (the sync's own byte-identical twin test, Get-CaptureRunCopies) before answering not-on-head, in Invoke-CaptureRunPushRetry",
+        "source": "grocery/capture-run.ps1"
+      },
+      "proof": {
+        "fixture_occurrences": [
+          "2026-09-24-a0e558: the retry's blocked lane is untouched and still covered by the existing 924782 PUSH-RETRY MUST FIRE group",
+          "2026-09-26-3fdb1d: the replayed-commit groups above"
+        ],
+        "must_fire_case": "grocery\\test-capture-run-sync.ps1 \"PUSH-RETRY MUST FIRE - a commit the next run REPLAYED under a new id reads landed\" (the 09-26 shape) and \"a replay on HEAD that origin does not hold yet is pushed\"",
+        "clean_twin": "\"PUSH-RETRY CLEAN TWIN - a commit nobody carried, under any id, still reads not-on-head and exits 1\"",
+        "ran": "at integration round 2: powershell -File grocery/test-capture-run-sync.ps1 exit 0, 'capture-run-sync: 59 passed, 0 failed, 59 of 59 literal cases ran', 'capture-run-sync SELF-TEST PASS'",
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (59 cases)",
+        "ran_at_lane": "test-capture-run-sync.ps1 exit 0, 54 of 54 literal cases, SELF-TEST PASS"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep -rl Invoke-CaptureRunPushRetry over the worktree's .ps1 (grocery/out excluded): 1 production call site, grocery/capture-run.ps1:633 (the hourly push-only retry), plus the fixture grocery/test-capture-run-sync.ps1",
+        "affected_now": 1,
+        "names": "Only the hourly push-retry path of capture-run; the full run and the tail sync are unchanged."
+      },
+      "rollback": "git revert -m 1 the reconciled merge on triage/0926-land2 (and the mid1 merge), restoring id-only answers",
+      "leaves_open": "The 07:00 tail was blocked by uncommitted session files in the production checkout (the design D barrier, W1.1 WARN only) - an existing, owned class. (1 occurrence(s)); Until this lands, the Ad Pulls 0700 task keeps reading rc=1 each hour today; tomorrow's full run resets it. (4 occurrence(s))",
+      "close_disposition": "confirmed",
+      "resolution_note": "The [ad] task exited 1 because its hourly push retry asked for commit 2a365ec33 by id after the 08:00 sync had replayed it as ef7edb1a3, which landed; no data was lost. The retry now asks by patch-id (git cherry), so a carried replay reads already-landed.",
+      "actual_tool_calls": 12,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid1",
+      "worktree": "C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-mid1",
+      "commits": [
+        "a2058d2bd (unlanded; cite blob after landing)",
+        "c625eedfd (reconciled merge, unlanded)"
+      ],
+      "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
+      "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
+      "leaves_open_detail": [
+        {
+          "occurrences": 1,
+          "what": "The 07:00 tail was blocked by uncommitted session files in the production checkout (the design D barrier, W1.1 WARN only) - an existing, owned class.",
+          "owner": "watch:grocery/capture-watchdog.ps1"
+        },
+        {
+          "occurrences": 4,
+          "what": "Until this lands, the Ad Pulls 0700 task keeps reading rc=1 each hour today; tomorrow's full run resets it.",
+          "owner": "watch:grocery/capture-watchdog.ps1"
+        }
+      ],
+      "leaves_open_occurrences": "5 over 2026-09-26, summed from leaves_open_detail",
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1",
+      "root_fix_as_lane_shipped": {
+        "files": [
+          "grocery/capture-run.ps1"
+        ],
+        "what": "Test-CaptureRunPatchCarried (git cherry, patch-id): equal patch on origin/main -> already-landed rc 0; equal patch on HEAD only -> push HEAD. Unequal or git failure keeps not-on-head."
+      }
+    },
+    {
+      "queue_id": "2026-09-26-03e565",
+      "lane": "ops",
+      "status": "done",
+      "premise_verified": "yes, and the alert's claim 'live board and feed are STALE' is false: git range-diff 2a365ec33~1..2a365ec33 ef7edb1a3~1..ef7edb1a3 reads '1: 2a365ec33 = 1: ef7edb1a3', and ef7edb1a3 (07:01 [ad]) is on origin/main",
+      "classification": "confirmed",
+      "root_cause": "lib/checkout-sync.ps1 (W0.2) drops a local commit whose byte-identical twin is already upstream, so the run's sha leaves HEAD while its change is live; the push retry only asked 'is the sha on origin' and 'is it on HEAD', never 'is its twin on origin', so a landed run reads not-on-head and pages that the board is stale.",
+      "root_fix": {
+        "what": "grocery/capture-run.ps1: before not-on-head, the retry runs Get-TcCsLandedTwins (the sync's own identity test) over every non-merge commit between the merge base and the sha; when each has a twin on origin/main the outcome is already-landed, pushed=true.",
+        "files": [
+          "grocery/capture-run.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep -rl Invoke-CaptureRunPushRetry over the worktree's .ps1 (grocery/out excluded): 1 production call site, grocery/capture-run.ps1:633 (the hourly push-only retry), plus the fixture grocery/test-capture-run-sync.ps1",
+        "affected_now": 1,
+        "names": "push-retry path only; a scan that cannot run, or any commit without a twin, falls through to not-on-head exactly as before."
+      },
+      "proof": {
+        "must_fire_case": "grocery/test-capture-run-sync.ps1 group 'PUSH-RETRY LANDED COPY': the run's sha reset off HEAD with its byte-identical twin on origin -> already-landed, rc 0, origin unmoved. Unfixed code: outcome=not-on-head (fails).",
+        "clean_twin": "same group: a commit reset away with NO copy upstream (a different change to the same file landed) still reads not-on-head, not pushed.",
+        "ran": "at integration round 2: powershell -File grocery/test-capture-run-sync.ps1 exit 0, 'capture-run-sync: 59 passed, 0 failed, 59 of 59 literal cases ran', 'capture-run-sync SELF-TEST PASS'",
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (59 cases)",
+        "ran_at_lane": "grocery\\test-capture-run-sync.ps1 55 of 55, exit 0; mutant 52 of 55, exit 1"
+      },
+      "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
+      "freshness": "2026-09-26 ~16:00, origin/main 5bf7e3bf1",
+      "leaves_open": "none for this class; the ad record still reads not-on-head until its next retry or tomorrow's run, which now resolves it to already-landed.",
+      "leaves_open_occurrences": "0",
+      "leaves_open_owner": "none",
+      "close_disposition": "confirmed",
+      "resolution_note": "Before: 4 ad retries (10:00 to 13:00) read not-on-head for 2a365ec33 and paged the board stale. After: the change is on origin as ef7edb1a3 (range-diff identical), so nothing was ever held; with the fix the same state reads already-landed. The alert's 'STALE' claim was false; the class (a landed twin read as missing) is fixed.",
+      "actual_tool_calls": 5,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid2",
+      "commits": [
+        "b92441b6e (unlanded)",
+        "c625eedfd (reconciled merge, unlanded)"
+      ],
+      "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
+      "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
+      "leaves_open_followup": "none",
+      "classification_detail": {
+        "class": "push-retry reads a landed byte-identical copy as not-on-head",
+        "evidence": [
+          {
+            "source": "queue body",
+            "quote": "HEAD no longer holds 2a365ec3373a52c7bdb8a3a4ed3e7cc1f081771a (rev-list exited 0, merge-base exited 1)"
+          },
+          {
+            "source": "git range-diff",
+            "quote": "1:  2a365ec33 = 1:  ef7edb1a3 Daily pipeline: refresh prices + feed (2026-09-26) [ad]"
+          },
+          {
+            "source": "grocery/out/logs/capture-run-status.json ad.push_retry",
+            "quote": "\"outcome\":\"not-on-head\" ... \"tries\":4"
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "2026-09-26-50914e",
+      "lane": "ops",
+      "status": "done",
+      "premise_verified": "yes: capture-run-daily-2026-09-26.log reads 'sync[push-retry 2]: current c6783fa8e..c6783fa8e' then 'git push exited 1 on attempt 4'; c6783fa8e is 'Triage plan-2026-09-26: script census prunes vendored dirs', a session commit stacked on the bot's 8df33b9be in the main checkout",
+      "classification": "confirmed",
+      "root_cause": "Invoke-CaptureRunPushRetry pushes `HEAD:main`, the whole branch, without asking whether HEAD holds commits a session made after the run's own sha; and the caller then records HEAD as committed_sha on every non-landed outcome, so the bot adopts a session's commits as its own for every later retry and page.",
+      "root_fix": {
+        "what": "grocery/capture-run.ps1: the retry lists `HEAD ^<sha> ^origin/main`; any commit there refuses with outcome foreign-commits (no sync, no push). It sets head_owned only after that check passes, and the caller records HEAD as committed_sha only when head_owned; a refusal or already-landed keeps the run's own sha.",
+        "files": [
+          "grocery/capture-run.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep -rl Invoke-CaptureRunPushRetry over the worktree's .ps1 (grocery/out excluded): 1 production call site, grocery/capture-run.ps1:633 (the hourly push-only retry), plus the fixture grocery/test-capture-run-sync.ps1",
+        "affected_now": 1,
+        "names": "grocery/capture-run.ps1 push-retry path only (hourly occurrences after a complete-but-unlanded run). The full run's tail push is unchanged."
+      },
+      "proof": {
+        "must_fire_case": "grocery/test-capture-run-sync.ps1 group 'PUSH-RETRY FOREIGN COMMITS': a session commit on top of the bot's -> foreign-commits, nothing synced or pushed, origin unmoved, HEAD not claimed. Against the unfixed capture-run.ps1 it fails with outcome=landed (the session's commit pushed).",
+        "clean_twin": "same group: HEAD holding only the bot's commit still lands it, claims HEAD, and carries no session file.",
+        "ran": "at integration round 2: powershell -File grocery/test-capture-run-sync.ps1 exit 0, 'capture-run-sync: 59 passed, 0 failed, 59 of 59 literal cases ran', 'capture-run-sync SELF-TEST PASS'",
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (59 cases)",
+        "ran_at_lane": "powershell -NoProfile -File grocery\\test-capture-run-sync.ps1: 55 of 55, exit 0, 'capture-run-sync SELF-TEST PASS'; mutant (unfixed capture-run) 52 of 55, exit 1"
+      },
+      "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
+      "freshness": "measured 2026-09-26 ~16:00 against origin/main 5bf7e3bf1; main == origin/main, nothing of the bot's is held",
+      "leaves_open": "Sessions still merge and commit in the main checkout the bot syncs (the triage integration did today), which is what put foreign commits and a MERGE_HEAD under the bot. The retry no longer fights them, but the structural fix is D2 of design/PLAN-bot-dedicated-checkout-2026-09-25.md (sessions leave the main checkout), under way.",
+      "leaves_open_occurrences": "1 day (2026-09-26), 5 retries on the daily record",
+      "leaves_open_owner": "watch:ops/hooks/claude/production_barrier.py (W1.1 barrier, warn-only; the plan's Stage 2 turns it to block)",
+      "close_disposition": "confirmed",
+      "resolution_note": "Before: the 10:47 retry pushed HEAD c6783fa8e (triage commits on top of the bot's 8df33b9be), push exited 1, and the record adopted triage shas. After: the bot's 8df33b9be is on origin (carried by the triage landing; merge-base --is-ancestor exit 0) and the daily record's committed_sha 06f6f7f40 is on origin, so the next retry reads already-landed. Class fixed: the retry refuses foreign-commits and never adopts HEAD it does not own.",
+      "actual_tool_calls": 8,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid2",
+      "commits": [
+        "b92441b6e (unlanded, worktree C:\\Codex\\ThriftyCrew\\.claude\\worktrees\\tri0926-mid2)",
+        "c625eedfd (reconciled merge, unlanded)"
+      ],
+      "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
+      "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
+      "leaves_open_followup": "watch:ops/hooks/claude/production_barrier.py (W1.1 barrier, warn-only; the plan's Stage 2 turns it to block)",
+      "classification_detail": {
+        "class": "push-retry pushes and adopts another owner's unlanded commits",
+        "evidence": [
+          {
+            "source": "grocery/out/logs/capture-run-daily-2026-09-26.log",
+            "quote": "sync[push-retry 2]: current c6783fa8e..c6783fa8e behind=0 behind_after=0 - HEAD already contains origin; nothing was written"
+          },
+          {
+            "source": "grocery/out/logs/capture-run-daily-2026-09-26.log",
+            "quote": "PUSH-RETRY [daily]: push-failed pushed=False - git push exited 1 on attempt 4"
+          },
+          {
+            "source": "grocery/capture-run.ps1 line 576 (before fix)",
+            "quote": "-HeadSha $(if ($prRes.outcome -eq 'not-on-head') { '' } else { $prHead })"
+          },
+          {
+            "source": "git merge-base --is-ancestor 8df33b9be origin/main",
+            "quote": "exit 0: the bot's daily commit is on origin now, carried out by the triage landing"
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "2026-09-26-f691ee",
+      "lane": "ops",
+      "status": "done",
+      "premise_verified": "yes: two retries (11:00, 12:00) ended blocked/foreign on a dirty ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md in the main checkout on a path upstream e38424461 changed; a third ended degraded/in-progress on MERGE_HEAD (the triage integration merge). The sync refused correctly in all three; nothing was written.",
+      "classification": "confirmed",
+      "root_cause": "Sessions (today the triage integration) worked and merged in the main checkout the bot syncs; the sync's refusal to write a session's file or touch its merge is the designed behaviour (checkout-sync D7, plan D4 pending). The defect riding on it was the retry's claimed sha c6783fa8e, a triage commit it had adopted from HEAD.",
+      "root_fix": {
+        "what": "Adopting HEAD is fixed in grocery/capture-run.ps1 (see 2026-09-26-50914e): the retry keeps its own sha and refuses foreign-commits before any sync. The blocked-on-a-session-file refusal itself stays: it is the guard that keeps the bot from writing a session's file.",
+        "files": [
+          "grocery/capture-run.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep -rl Invoke-CaptureRunPushRetry over the worktree's .ps1 (grocery/out excluded): 1 production call site, grocery/capture-run.ps1:633 (the hourly push-only retry), plus the fixture grocery/test-capture-run-sync.ps1",
+        "affected_now": 1,
+        "names": "as 50914e"
+      },
+      "proof": {
+        "must_fire_case": "grocery/test-capture-run-sync.ps1 'PUSH-RETRY FOREIGN COMMITS' MUST FIRE (shared with 50914e); the existing 'PUSH-RETRY MUST FIRE' group still proves a foreign dirty file blocks and the file is untouched.",
+        "clean_twin": "'PUSH-RETRY FOREIGN COMMITS' CLEAN TWIN: HEAD holding only the bot's commit still lands.",
+        "ran": "at integration round 2: powershell -File grocery/test-capture-run-sync.ps1 exit 0, 'capture-run-sync: 59 passed, 0 failed, 59 of 59 literal cases ran', 'capture-run-sync SELF-TEST PASS'",
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (59 cases)",
+        "ran_at_lane": "55 of 55, exit 0"
+      },
+      "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
+      "freshness": "2026-09-26 ~16:00",
+      "leaves_open": "Sessions in the main checkout still block the bot's sync whenever they dirty a path upstream changed or hold a merge open. Structural fix: design/PLAN-bot-dedicated-checkout-2026-09-25.md D2 (sessions leave the main checkout) and D4 (set the file aside), ruled and under way.",
+      "leaves_open_occurrences": "2 blocked/foreign + 1 degraded/in-progress retries on 2026-09-26",
+      "leaves_open_owner": "watch:ops/hooks/claude/production_barrier.py",
+      "close_disposition": "by-design",
+      "resolution_note": "Before: 11:00 and 12:00 retries blocked/foreign on a session's SKILL.md, 13:00 degraded on the triage MERGE_HEAD, each claiming triage sha c6783fa8e as the bot's commit. After: main == origin/main 5bf7e3bf1, the bot's 8df33b9be is on origin; the refusals were the sync guarding a session's file and merge (by design), and the adopted-sha defect is fixed with 50914e.",
+      "actual_tool_calls": 3,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid2",
+      "commits": [
+        "b92441b6e (unlanded)",
+        "c625eedfd (reconciled merge, unlanded)"
+      ],
+      "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
+      "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
+      "leaves_open_followup": "watch:ops/hooks/claude/production_barrier.py",
+      "classification_detail": {
+        "class": "session work in the bot's checkout blocks the retry sync (by design) and the retry was pushing a session HEAD",
+        "evidence": [
+          {
+            "source": "grocery/out/logs/capture-run-daily-2026-09-26.log",
+            "quote": "sync[push-retry 1]: blocked/foreign 0b1ef1c4b.. behind=8 behind_after=0 - uncommitted work the bot does not own sits on path(s) upstream changed"
+          },
+          {
+            "source": "grocery/out/logs/capture-run-daily-2026-09-26.log",
+            "quote": "an operation is in progress in this checkout (MERGE_HEAD) after a 120 s wait; the sync never touches another owner's operation"
+          },
+          {
+            "source": "queue body",
+            "quote": "committed c6783fa8e ... which is still not on origin/main"
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "2026-09-26-a62c43",
+      "lane": "ops",
+      "status": "done",
+      "premise_verified": "the refusal fired, but on a sha that was not the bot's: the page names 984755f57 'Merge triage/0926-177835 into main' and the status record's committed_sha became 06f6f7f40, the triage merge of origin's board-clock work. The live feed is NOT older than its code: public/smp-feed.json last changed at 5bf7e3bf1 (15:39) and its producers (export-feed, guards, build-sale-windows, check-ad-cycles) last changed at 06f6f7f40 (13:52) on origin/main.",
+      "classification": "confirmed",
+      "root_cause": "Same as 2026-09-26-50914e: the retry recorded HEAD as its commit after each refusal, so by 14:00 its base was a triage merge and its 'feed this commit ships' was the triage integration's feed; the stale-code check then judged a session's work, not the bot's.",
+      "root_fix": {
+        "what": "grocery/capture-run.ps1 (shared with 50914e): foreign-commits refusal before any sync, and committed_sha only moves when head_owned. The stale-code-feed check itself is correct for the bot's own range and is unchanged.",
+        "files": [
+          "grocery/capture-run.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "grep -rl Invoke-CaptureRunPushRetry over the worktree's .ps1 (grocery/out excluded): 1 production call site, grocery/capture-run.ps1:633 (the hourly push-only retry), plus the fixture grocery/test-capture-run-sync.ps1",
+        "affected_now": 1,
+        "names": "as 50914e"
+      },
+      "proof": {
+        "must_fire_case": "grocery/test-capture-run-sync.ps1 'PUSH-RETRY FOREIGN COMMITS' MUST FIRE (shared).",
+        "clean_twin": "same group CLEAN TWIN: the bot's own commit alone still lands.",
+        "ran": "at integration round 2: powershell -File grocery/test-capture-run-sync.ps1 exit 0, 'capture-run-sync: 59 passed, 0 failed, 59 of 59 literal cases ran', 'capture-run-sync SELF-TEST PASS'",
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (59 cases)",
+        "ran_at_lane": "55 of 55, exit 0"
+      },
+      "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
+      "freshness": "2026-09-26 ~16:00, origin/main 5bf7e3bf1",
+      "leaves_open": "none beyond 50914e's",
+      "leaves_open_occurrences": "0",
+      "leaves_open_owner": "none",
+      "close_disposition": "confirmed",
+      "resolution_note": "Before: the 14:00 retry refused stale-code-feed over triage's range (base 984755f57, board-clock producers brought in). After: the live feed (5bf7e3bf1, 15:39) is newer than every producer change on origin (06f6f7f40, 13:52), so it is not stale code; the daily record's sha 06f6f7f40 is on origin, so the next retry reads already-landed. The adoption that produced the bad range is fixed with 50914e.",
+      "actual_tool_calls": 3,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid2",
+      "commits": [
+        "b92441b6e (unlanded)",
+        "c625eedfd (reconciled merge, unlanded)"
+      ],
+      "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
+      "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
+      "leaves_open_followup": "none",
+      "classification_detail": {
+        "class": "stale-code-feed refusal computed over a range the retry adopted from a session HEAD",
+        "evidence": [
+          {
+            "source": "queue body",
+            "quote": "committed 984755f57bc0ee6a71a3e513926e8708d41aee09 ... ended stale-code-feed"
+          },
+          {
+            "source": "git log -1 origin/main -- public/smp-feed.json",
+            "quote": "5bf7e3bf1 2026-09-26 15:39:02 -0500 Triage 177835 batch 2: release the 7 lo mein and blackened recipes, feed carries them"
+          },
+          {
+            "source": "git log -1 origin/main -- grocery/export-feed.ps1 grocery/guards.ps1 grocery/build-sale-windows.ps1 grocery/check-ad-cycles.ps1",
+            "quote": "06f6f7f40 2026-09-26 13:52:53 -0500 Merge origin/main (board clock W1-W8, Fareway capture scoping)"
+          },
+          {
+            "source": "grocery/out/logs/capture-run-status.json daily",
+            "quote": "\"committed_sha\":\"06f6f7f40927b53c3eaa16bebdd0f69e8edd8075\""
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "2026-09-26-b2f93f",
+      "lane": "ops",
+      "status": "done",
+      "classification": "false-alarm",
+      "evidence": [
+        "Get-ScheduledTask 'TC Recipe Harvest Crawl': State Ready, LastRunTime 2026-09-24 18:00:01, LastTaskResult 0, NextRunTime empty; trigger StartBoundary 2026-09-20T18:00:00-05:00 EndBoundary 2026-09-25T00:00:00-05:00",
+        "4d5d96b43 (2026-09-17): \"Brad's ruling 2026-09-17: finish the backlog once and stop the daily crawl ... runs once each evening from 2026-09-20 18:00 ... and stops at its EndBoundary of 2026-09-25\"",
+        "grocery/out/logs/harvest-crawl-2026-09-20..24.log: five runs, each 'harvest-crawl: exit 0'; the 09-24 run added 1 pool entry (backlog drained)",
+        "health-heartbeat.ps1 (b1d371 design): 'A task whose every enabled trigger has an EndBoundary in the past and none starts in the future still PAGES' - no way to declare a planned end"
+      ],
+      "root_cause": "The watch registry could not say that a task's trigger window was MEANT to end. health-heartbeat pages every expired window, so a finite job that ends exactly as ruled (the harvest crawl's five-evening retry) reads as silent death the morning after it finishes. Not caused by today's triage activity: the task ran rc=0 on all five scheduled evenings and ended on its committed EndBoundary.",
+      "root_fix": {
+        "what": "grocery/expected-automations.json rows may declare planned_end (the EndBoundary string from the committed task XML) and planned_end_why; health-heartbeat.ps1 Test-HbPlannedEnd reads an expired window whose latest end equals planned_end to the minute as 'ok ended as planned'. Any other end instant, an unparseable value, or no declaration still pages TASK STALE. The harvest crawl row now declares 2026-09-25T00:00:00-05:00 with Brad's ruling as the why. No scheduled task was changed.",
+        "files": [
+          "grocery/expected-automations.json",
+          "grocery/health-heartbeat.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "grep -c '\"planned_end\"' grocery/expected-automations.json: 1 row declares it (the harvest crawl)",
+        "affected_now": 1,
+        "names": "health-heartbeat.ps1's expired branch only, and only for a row that declares planned_end; one registry row gains two fields. No reader of expected-automations.json validates row keys."
+      },
+      "proof": {
+        "must_fire_case": "health-heartbeat -SelfTest: 'an expired window on a row with NO planned_end still pages', 'an expired window that ended at a different instant from the planned_end still pages (a moved EndBoundary)', 'an unparseable planned_end still pages', and the source case that the live loop asks Test-HbPlannedEnd before the expired branch pages.",
+        "clean_twin": "'an expired window whose end equals the row's planned_end reads ended as planned (2026-09-26-b2f93f)', frozen from the task XML's triggers and the 10:30:14 alert time.",
+        "ran": "powershell -File grocery/health-heartbeat.ps1 -SelfTest: exit 0, 'health-heartbeat self-test: 80 case(s), 0 failed' (6 new)",
+        "guard_or_fixture": "grocery/health-heartbeat.ps1 -SelfTest (80 cases)"
+      },
+      "rollback": "git revert the commit; the row's extra fields are ignored by the old heartbeat.",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "close_disposition": "false-alarm",
+      "resolution_note": "Not a death: TC Recipe Harvest Crawl's five-evening retry (Brad 2026-09-17, 4d5d96b43) ran rc=0 on 09-20..09-24 and ended on its EndBoundary 2026-09-25T00:00 as ruled. Class fixed: a registry row may declare planned_end and the heartbeat reads that exact end as ended as planned; any other expiry still pages. Self-test 80/80. Not caused by today's triage load.",
+      "actual_tool_calls": 14,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid3",
+      "commits": [
+        "bdd5960ce"
+      ],
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1"
+    },
+    {
+      "queue_id": "2026-09-26-ef3d50",
+      "lane": "ops",
+      "status": "done",
+      "classification": "infra",
+      "evidence": [
+        "ops/out/logs/run-once/daily-ratchets-2026-09-26.out.log: 'run-daily-ratchets: 6 ratchet(s), 3 passed, 3 failed ... failed: ops\\audit-fixture-inputs.ps1, ops\\audit-mustfire-census.ps1, ops\\audit-write-only-reports.ps1' and 'NOTE this run judged 2f17a7284, which is not origin/main ... on_origin_main=False'",
+        "Re-run on origin/main 5bf7e3bf1 in the worktree: audit-mustfire-census exit 0 ('0 lost'), audit-write-only-reports exit 0 ('families=32 baseline=32'), audit-fixture-inputs exit 1 ('NEW: grocery\\test-known-wrong-scope.ps1|comparison-2026-09-25.json', '|known-wrong.json', '|recipe-board.json')",
+        "grocery/test-known-wrong-scope.ps1: '$tmp = Join-Path ([IO.Path]::GetTempPath()) ...' and '$root = Join-Path $tmp $name' - every flagged read is a fixture the test wrote into a temp tree",
+        "ops/out/logs/run-once/recall-sleep-2026-09-2[0-6].stamp: rc=1 on 7 of 7 nights; recall-sleep-latest.md: gate FAIL recall-forget / recall-consolidate (unruled counts over mark 0), dangling links 4 vs 3, MEMORY.md links untracked the-board-has-three-dates.md",
+        "Queue 2026-09-26-32500f (resolved today): fixed recall-sleep's broken reasons in the store (03a430b, 73727bc, aa3dc18); 'Re-run 11:07: exit 1 only on one foreign in-flight memory ... plus Brad's judgement queues'"
+      ],
+      "root_cause": "Two tasks, two causes, neither from today's triage load. TC Daily Ratchets 0315: its detectors judged the main checkout while it sat on a local triage commit (2f17a7284, 22:18 the night before); two reds were the 110a8f conditions since fixed on origin/main, and the third that still stands on origin/main is a detector false positive, audit-fixture-inputs keying a live read on the variable NAME $root even where $root is a per-run temp tree. TC Recall Sleep 0435: its gate counts Brad's waiting judgements (unruled counts over a mark) as BROKEN, so it exits 1 nightly instead of the review exit 3, plus one foreign untracked memory.",
+      "root_fix": {
+        "what": "ops/audit-fixture-inputs.ps1 Get-UnpinnedReads: a variable whose EVERY assignment in the self-test block is temp-derived (GetTempPath(), $env:TEMP/$env:TMP, New-TemporaryFile, or a Join-Path over another temp-rooted variable) is exempt; a single repo assignment re-arms every read through it. Recall Sleep is outside the repo and was worked today by 32500f; its remaining class is minted as residual 2026-09-26-d21fb2.",
+        "files": [
+          "ops/audit-fixture-inputs.ps1"
+        ]
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "ops/audit-fixture-inputs.ps1 live scan over 424 scripts with a -SelfTest block (re-run at integration: exit 0, 0 dependencies, 0 new)",
+        "affected_now": 3,
+        "names": "audit-fixture-inputs only (daily ratchet); the exemption applies only to root/repo/OutDir/OutDirectory variables whose assignments are all temp-derived. Live scan over 424 self-tests: 3 new -> 0 new; no baseline change."
+      },
+      "proof": {
+        "must_fire_case": "audit-fixture-inputs -SelfTest: 'a $root assigned once from a temp dir and once from the repo is still the repo', 'a variable merely NAMED tmp that holds the repo does not exempt the reads through it', 'a temp-rooted $root does not exempt a read through a DIFFERENT variable ($repo)'; every pre-existing must-fire still passes.",
+        "clean_twin": "'a $root whose only assignment is a Join-Path over a GetTempPath() variable is a fixture tree, not the repo', frozen from grocery/test-known-wrong-scope.ps1.",
+        "fixture_occurrences": "2026-09-23-4f9842 (09-24/09-25 reds: write-only-reports, mustfire-census, fixture-inputs on audit-search-terms|commodities.json; all three green on origin/main today, fixed via 110a8f) and 2026-09-26-ef3d50 (fixture-inputs on test-known-wrong-scope: the new frozen clean twin; mustfire and write-only re-run green).",
+        "ran": "audit-fixture-inputs -SelfTest exit 0 ('FIXTURE-INPUTS SELF-TEST PASSED', 26 PASS); live scan exit 0 ('0 dependenc(y/ies), 0 new', was exit 1 with 3 new); mustfire-census exit 0; write-only-reports exit 0",
+        "guard_or_fixture": "ops/audit-fixture-inputs.ps1 -SelfTest"
+      },
+      "prior_closes": [
+        "2026-09-23-4f9842"
+      ],
+      "prevention": {
+        "source": "ops/audit-fixture-inputs.ps1",
+        "what": "The emitting ratchet mistook a temp fixture tree for the repo because it matched on the variable name alone.",
+        "exact_change": "Get-UnpinnedReads computes the set of temp-rooted variables (every assignment temp-derived, propagated through Join-Path to a fixpoint) and skips a Join-Path read through one; four frozen cases."
+      },
+      "rollback": "git revert the commit; the live scan returns to 3 new findings.",
+      "leaves_open": "TC Recall Sleep 0435 will keep exiting 1 while Brad's forgetting/cluster judgements wait (recall-sleep.py classifies them BROKEN, not review exit 3) and while a foreign session's the-board-has-three-dates.md stays untracked in the memory store. The daily ratchets still judge whatever the main checkout has checked out; the dedicated bot checkout is design/PLAN-bot-dedicated-checkout-2026-09-25.md.",
+      "leaves_open_occurrences": 7,
+      "leaves_open_followup": "2026-09-26-d21fb2",
+      "close_disposition": "confirmed",
+      "resolution_note": "Daily Ratchets: 2 of its 3 04:18 reds were already fixed on origin/main (run judged local triage commit 2f17a7284); the third was an audit-fixture-inputs false positive on test-known-wrong-scope's temp $root, fixed at the detector (temp-rooted variables exempt, one repo assignment re-arms), live scan 3 new -> 0. Recall Sleep: store fixes shipped today by 32500f; the judgement-as-broken class is residual 2026-09-26-d21fb2. Not caused by today's triage load (both ran 03:15-04:42, before it).",
+      "actual_tool_calls": 24,
+      "full_suite": "deferred-to-land",
+      "branch": "triage/0926-mid3",
+      "commits": [
+        "bdd5960ce"
+      ],
+      "follow_on": {
+        "queue_id": null,
+        "lane": "ops",
+        "status": "done",
+        "classification": "infra",
+        "evidence": [
+          "triage-due after today's run listed 2026-09-23-80f302 and 2026-09-26-e0d5cf as RESUME; plan-2026-09-26.json items: status deviated, leaves_open_followup 2026-09-26-518fff and 2026-09-26-f73dc7",
+          "Queue: 518fff and f73dc7 status resolved, disposition confirmed; Get-TriageReturnRoute -> plan-2026-09-26-3.json status done for both",
+          "triage-return-lib.ps1 (before): 'An owner that is CLOSED, absent or not a queue id leaves the item RESUME: the owner finished and the class did not.'"
+        ],
+        "root_cause": "Get-TriageUnfinished knew only one relation between a deviated item and the follow-on that owns its leftover: an OPEN owner (RESUMED-BY). It had no way to see that the owner had FINISHED the leftover, so every deviated item handed off correctly came back as RESUME once its owner closed, and cost the next run a lane spawn to re-measure finished work.",
+        "root_fix": "grocery/triage-return-lib.ps1 Get-TriageUnfinished: a deviated item is finished when every queue id its leaves_open_followup names is resolved with disposition confirmed AND that owner's newest plan item (Get-TriageReturnRoute) is done. A followup that also names a watch: owner, an owner closed with any other disposition or with its plan item needs-more-time/deviated/absent, and any needs-more-time item stay RESUME; an open owner still prints RESUMED-BY.",
+        "blast_radius": "RESUME section of triage-due.ps1 only. On the live queue and plans: origin/main's lib lists 6 unfinished, the new lib 4; the two removed are exactly 80f302 and e0d5cf.",
+        "proof": {
+          "must_fire_case": "triage-due -SelfTest 'MUST-NOT-FIRE a deviated item whose followup owner closed confirmed with its plan item done is finished, not RESUME (80f302 -> 518fff, e0d5cf -> f73dc7)', frozen from plan-2026-09-26.json and plan-2026-09-26-3.json.",
+          "clean_twin": "'an owner closed with its plan item needs-more-time, an owner closed false-alarm, a needs-more-time item with a done owner, and a done owner beside a watch: all still RESUME' and 'while 518fff is still OPEN, 80f302 is listed RESUMED-BY it'; the existing fccb69 case (owner closed, no plan item) still RESUMEs.",
+          "ran": "powershell -File grocery/triage-due.ps1 -SelfTest: exit 0, 'SELF-TEST PASS (56 triage-due cases)' (53 before, all still passing)"
+        },
+        "rollback": "git revert the commit.",
+        "leaves_open": "nothing",
+        "leaves_open_occurrences": 0,
+        "close_disposition": "confirmed",
+        "resolution_note": "Detector fixed: a deviated item whose leftover owner(s) closed confirmed with their own plan item done is finished and no longer RESUME. 80f302 and e0d5cf drop off; the 4 other live unfinished items are unchanged. Self-test 56/56.",
+        "actual_tool_calls": 11,
+        "full_suite": "deferred-to-land",
+        "branch": "triage/0926-mid3",
+        "commits": [
+          "c8015db48 (triage/0926-mid3, merged --no-ff into triage/0926-land2)"
+        ]
+      },
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1"
+    },
+    {
+      "queue_id": "2026-09-26-ab03c2",
+      "lane": "mid-run",
+      "status": "done",
+      "classification": "no-code-change",
+      "evidence": [
+        {
+          "quote": "09-23 fresh 0, 09-24 fresh 0, 09-25 fresh 1 (refreshed_today=1), 09-26 fresh 0 (newest as_of 2026-09-25), 1546 rows",
+          "source": "grocery\\out\\regular\\hyvee-regular-2026-09-2{3..6}.json, deals[].as_of"
+        },
+        {
+          "quote": "20 asks, all last_asked 2026-09-26: 12 size conflicts with the worklist variant, 5 no usable offer, 3 refused-below-shelf-tag",
+          "source": "grocery\\out\\hyvee-ask-ledger.json (created by today's run)"
+        },
+        {
+          "quote": "e035a9ecc 2026-09-25 18:56 Triage plan-2026-09-25-4: Hy-Vee asks by last ASK and parks size conflicts",
+          "source": "git log grocery/pull-regular-hyvee.ps1"
+        }
+      ],
+      "premise_verified": "True: Hy-Vee lane rc=0 at 08:00 and contributed 0 rows dated 2026-09-26. Not caused by today's landings or the Sam's/Fareway branch changes: it is the 90de7b condition on the first run after its fix, which by design only writes the ask ledger that the NEXT run orders by.",
+      "root_cause": "carried from 2026-09-23-90de7b: Get-HyVeeAskOrder ranked by last successful READ, so the same 20 refused products fill the 20-ask budget; the fix (e035a9ecc) orders by last ASK, and the ledger it reads was first written by today's run.",
+      "root_fix_none_because": "The source fix e035a9ecc is landed; 2026-09-27 08:00 is its first effective run (its plan: \"takes effect from the second run after landing\"). No new code.",
+      "prior_closes": [
+        "2026-09-23-90de7b"
+      ],
+      "prevention_none_because": "No-code RETURN: the prior close's prevention in grocery/pull-regular-hyvee.ps1 has not yet had its effective run; today's ledger (12/5/3 refusals) matches its 09-25 diagnosis (12/4/4).",
+      "proof": {
+        "fixture_occurrences": [
+          "2026-09-23-90de7b: fixtured in plan-2026-09-25-4",
+          "2026-09-26-ab03c2: same condition, pre-effect run"
+        ],
+        "must_fire_case": "n/a (no code); the watchdog NO FRESH ROWS check re-pages on 2026-09-27 if Hy-Vee again contributes 0 rows",
+        "clean_twin": "n/a (no code)",
+        "guard_or_fixture": "n/a (no code): grocery/capture-watchdog.ps1 NO FRESH ROWS re-pages on 2026-09-27 if Hy-Vee again contributes 0 rows"
+      },
+      "leaves_open": "Whether e035a9ecc frees ask slots on 2026-09-27 (its dry run claimed 19 of 20) (0 occurrence(s))",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real: Hy-Vee added 0 fresh rows on 09-26 because the 90de7b fix (e035a9ecc, landed 09-25 18:56) first writes its ask ledger on this run and first reorders asks on 09-27. Today's 20 asks were the same refused set (12 size conflicts, 5 no offer, 3 below tag). The watchdog re-pages on 09-27 if it did not hold.",
+      "actual_tool_calls": 6,
+      "full_suite": "not-applicable",
+      "branch": "",
+      "commits": [],
+      "leaves_open_detail": [
+        {
+          "occurrences": 0,
+          "what": "Whether e035a9ecc frees ask slots on 2026-09-27 (its dry run claimed 19 of 20)",
+          "owner": "watch:grocery/capture-watchdog.ps1"
+        }
+      ],
+      "leaves_open_occurrences": "0 over 2026-09-26, summed from leaves_open_detail",
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "classification_lane": "confirmed",
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1 (no code; reads the 2026-09-26 Hy-Vee ledger as the lane recorded it)"
+    },
+    {
+      "queue_id": "2026-09-26-d21fb2",
+      "lane": "ops",
+      "subject": "TC Recall Sleep 0435 exits 1 on judgement-only gate reds (7 of 7 nights, 2026-09-20..26)",
+      "status": "done",
+      "premise_verified": false,
+      "premise_check": "PARTLY FALSE. The queue body says recall-sleep.py counts an unruled-count rise inside the gate as BROKEN. recall-sleep-log.jsonl says otherwise: on every classified night (09-23..26) forgetting and memory clusters were class judgement, and the gate's restated judgement lines ('unruled', 'above the high-water mark') were judgement too; the review exit 3 already existed (Brad's ruling A, 2026-09-22). What made the gate BROKEN on 4 of 4 classified nights was check-skills' 'MEMORY.md links N file(s) git does not track', each night a DIFFERENT fresh memory another session had not yet committed (refused-bot-commit-freezes-the-checkout, fareway-router-sweep-needs-apollo-reset, write-tool-decodes-backslash-u-escapes, the-board-has-three-dates), and on 09-26 the dangling rise 3 -> 4, which was that same untracked file's [[dates-written-not-measured]] link. 09-24/25 also had real breaks (brain commit hook, reflex cap) that 32500f addressed.",
+      "classification": "infra",
+      "evidence": [
+        "recall-sleep-log.jsonl 2026-09-26T11:07:08: forgetting exit 1 judgement, memory clusters exit 1 judgement, gate exit 1 broken",
+        "gate tail 09-26 11:07: 'dangling memory [[links]] rose to 4 against a mark of 3' and 'MEMORY.md links 1 file(s) git does not track (the-board-has-three-dates.md)'",
+        "check-skills dangling_links(C--Codex-ThriftyCrew) 4th pair: the-board-has-three-dates.md -> dates-written-not-measured; uncommitted_memory: untracked the-board-has-three-dates.md 6.4 h",
+        "check-skills UNCOMMITTED_MAX_AGE_HOURS = 48 already graced in-flight files for the uncommitted check; index_links_untracked and dangling_links had no such bar"
+      ],
+      "root_cause": "One in-flight fact, two verdicts: check-skills lets another session's uncommitted memory stand for 48 h in its uncommitted-file check, but the index-link and dangling-link checks read the same file with no bar and FAIL at once, so a foreign session's write in progress made the gate BROKEN and the task exit 1 over nights whose only other reds were Brad's pending judgements.",
+      "root_fix": {
+        "files": [
+          "C:\\Users\\Owner\\.claude\\skills\\check-skills.py",
+          "C:\\Users\\Owner\\.claude\\skills\\recall-sleep.py"
+        ],
+        "what": "check-skills.py: in_flight_files/split_in_flight give the index-link and dangling-link checks the uncommitted check's own 48 h bar; an UNTRACKED file at or under it is IN FLIGHT and a warning. Past the bar, no age, a link to no file, a modified tracked file, or git unable to answer fail exactly as before. recall-sleep.py: the exit mapping moves into night_exit_code (EXIT_BROKEN 1, EXIT_REVIEW 3, EXIT_GREEN 0), same semantics, now driven by the self-test on the frozen 09-26 night."
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "recall-sleep-log.jsonl nights 2026-09-20..26 (7 rows) and a live check-skills.py run over every memory store under ~/.claude/projects",
+        "affected_now": 1,
+        "names": "knowledge-store gate verdict only; no board, price or matching effect. Live check-skills run after the fix: FAIL block is the 2 judgement lines only, the in-flight file printed IN FLIGHT."
+      },
+      "proof": {
+        "must_fire_case": "recall-sleep --selftest 'a real break beside the same judgements (a dangling rise in committed memory) still exits 1' and 'a step that crashed with no FAIL line beside pending judgements still exits 1'; check-skills selftest_in_flight MUST FIRE: 49 h (one step past the 48 h bar), a modified tracked file, a link to no file, a committed dangling link, rows None all still count.",
+        "clean_twin": "'the 09-26 night with only Brad's pending judgements exits the REVIEW code 3, not BROKEN 1', 'the same judgements with no VERDICT: FAIL line anywhere exit 0, never 1', 'a green night exits 0'; selftest_in_flight: 6.4 h and exactly-at-bar 48 h set aside.",
+        "ran": "C:/Codex/Python312/python.exe recall-sleep.py --selftest: exit 0, 'recall-sleep selftest: 80 of 80 cases pass'. check-skills.py live: exit 1 on the 2 judgement FAIL lines only (read as judgement by step_class). Two mutants of in_flight_files (no grace; no age bar) killed, 3 and 2 cases.",
+        "guard_or_fixture": "C:/Users/Owner/.claude/skills/recall-sleep.py --selftest (80 cases) and check-skills.py selftest_in_flight (run inside the gate)"
+      },
+      "full_suite": "not applicable (outside the ThriftyCrew repo)",
+      "commits": [
+        "7f49063 in the C:\\Users\\Owner\\.claude store (local git), not ThriftyCrew; not pushed"
+      ],
+      "store_remote_note": "The dispatch said the .claude store has no remote; it has origin https://github.com/Schweino/claude-store.git. Nothing was pushed.",
+      "rollback": "git -C C:\\Users\\Owner\\.claude revert 7f49063",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "close_disposition": "fixed",
+      "resolution_note": "Fixed. The waiting judgements already read as review; the nightly exit 1 came from another session's uncommitted memory, which check-skills' index-link and dangling-link checks failed at once while its own uncommitted check graced it for 48 h. Both now take that bar (in flight = warning; stale, missing or committed = fail as before), and recall-sleep's exit mapping is one tested function: judgements only -> 3 (review_exit), a real break -> 1.",
+      "actual_tool_calls": 30,
+      "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1"
+    }
+  ]
+}
