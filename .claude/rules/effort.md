@@ -1,6 +1,10 @@
+---
+paths:
+  - ".claude/agents/**"
+---
 # Choosing effort
 
-Loaded in every ThriftyCrew session. Full account and source: `docs/EFFORT-GUIDE.md`.
+Loaded when an agent definition under .claude/agents is touched, where effort is pinned. Full account and source: `docs/EFFORT-GUIDE.md`.
 
 - **Effort buys verification and edge-case testing, not a better approach.** Raise effort where edge cases are
   hidden or no human is in the loop (review, audits, brownfield bug fixes, money-path checks). When the approach is
