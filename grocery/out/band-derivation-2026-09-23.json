@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  39081,
-    "derived_commodities":  561,
+    "evidence_rows":  38950,
+    "derived_commodities":  562,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  8082
+                                "newly_refused_rows":  8019
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  5099
+                                "newly_refused_rows":  5040
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  3512
+                                "newly_refused_rows":  3457
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  2578
+                                "newly_refused_rows":  2523
                             }
                 },
     "typed_fields_ignored":  [
@@ -154,6 +154,11 @@
                              },
                              {
                                  "id":  "pomegranate-molasses",
+                                 "rows":  2,
+                                 "override":  null
+                             },
+                             {
+                                 "id":  "pomegranates",
                                  "rows":  2,
                                  "override":  null
                              },
@@ -801,14 +806,6 @@
                               "derived":  "0.01532-0.383"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "BranchOut Crunchy Fruit Chips with Strawberry, Apple, Banana \u0026 Pineapple, No Added Sugar, 7 oz.",
-                              "per_unit":  19.3829,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "dog-treats",
                               "store":  "Sam\u0027s Club",
                               "name":  "Member\u0027s Mark Chicken Jerky Recipe Dog Treats, 48 oz.",
@@ -1235,14 +1232,6 @@
                           {
                               "id":  "bananas",
                               "store":  "Sam\u0027s Club",
-                              "name":  "5-hour ENERGY Shot, Extra Strength, Strawberry Banana 1.93 oz., 24 pk.",
-                              "per_unit":  14.7979,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
-                          },
-                          {
-                              "id":  "bananas",
-                              "store":  "Sam\u0027s Club",
                               "name":  "Dole Freshly Fetched Molded Chew, Banana, 2 lb. Bag",
                               "per_unit":  9.99,
                               "typed":  "none",
@@ -1431,22 +1420,6 @@
                               "per_unit":  21.3139,
                               "typed":  "none",
                               "derived":  "0.605-15.125"
-                          },
-                          {
-                              "id":  "strawberries",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Honey Stinger Energy Gel, Strawberry Kiwi, 32mg Caffeine, 1.1 oz., 24 pk.",
-                              "per_unit":  1.0572,
-                              "typed":  "none",
-                              "derived":  "0.03056-0.764"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Health Garden Organic Coconut Sugar, 3 lbs.",
-                              "per_unit":  3.9933,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "shampoo",
@@ -2121,14 +2094,6 @@
                               "derived":  "0.04687-1.17175"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Cinnamon Sugar 3.5 OZ",
-                              "per_unit":  9.0971,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "brown-sugar",
                               "store":  "Aldi",
                               "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
@@ -2305,14 +2270,6 @@
                               "derived":  "0.00296-0.074"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Aldi",
-                              "name":  "Specially Selected Cinnamon Sugar Butter Spread 3 OZ",
-                              "per_unit":  13.28,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "oranges",
                               "store":  "Aldi",
                               "name":  "Moser Roth Privat Chocolatiers Orange Almond 4.4 OZ",
@@ -2359,14 +2316,6 @@
                               "per_unit":  0.998,
                               "typed":  "none",
                               "derived":  "0.0195-0.4875"
-                          },
-                          {
-                              "id":  "bananas",
-                              "store":  "Aldi",
-                              "name":  "Simply Nature Dark Chocolate Banana 4 OZ",
-                              "per_unit":  15.96,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
                           },
                           {
                               "id":  "toilet-paper",
@@ -3486,7 +3435,7 @@
                               "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
                               "per_unit":  0.6658,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "mayonnaise",
@@ -3494,7 +3443,7 @@
                               "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo",
                               "per_unit":  0.7492,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "mayonnaise",
@@ -3502,7 +3451,7 @@
                               "name":  "Primal Kitchen Avocado Oil Mayo",
                               "per_unit":  0.7325,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "mayonnaise",
@@ -3510,7 +3459,7 @@
                               "name":  "Primal Kitchen Avocado Oil Mayo",
                               "per_unit":  0.8325,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "pasta-sauce",
@@ -4297,22 +4246,6 @@
                               "derived":  "0.02074-0.5185"
                           },
                           {
-                              "id":  "bananas",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pure Organic Strawberry Banana 6.2oz",
-                              "per_unit":  18.0387,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
-                          },
-                          {
-                              "id":  "bananas",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pure Organic Strawberry Banana 6.2oz",
-                              "per_unit":  20.6194,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
-                          },
-                          {
                               "id":  "yogurt",
                               "store":  "Baker\u0027s",
                               "name":  "Chobani Lowfat* Greek Yogurt Drink Strawberry Banana 7 fl oz 4PK",
@@ -4871,14 +4804,6 @@
                               "per_unit":  0.4738,
                               "typed":  "none",
                               "derived":  "0.00244-0.061"
-                          },
-                          {
-                              "id":  "jalapenos",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Jalapeno and Habanero Feta Cheese Crumbles",
-                              "per_unit":  13.3067,
-                              "typed":  "none",
-                              "derived":  "0.398-9.95"
                           },
                           {
                               "id":  "cheese-crackers",
@@ -5751,14 +5676,6 @@
                               "per_unit":  1.18,
                               "typed":  "none",
                               "derived":  "0.018-0.45"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Baker\u0027s",
-                              "name":  "Stacy\u0027s Pita Chips Cinnamon Sugar No Artificial Colors or Flavors",
-                              "per_unit":  10.8922,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "pizza-sauce",
@@ -7417,38 +7334,6 @@
                               "derived":  "0.02212-0.553"
                           },
                           {
-                              "id":  "oranges",
-                              "store":  "Family Fare",
-                              "name":  "Top Care Fiber Powder, Sugar Free, Orange Flavor 23.3 Oz",
-                              "per_unit":  9.4009,
-                              "typed":  "none",
-                              "derived":  "0.226-5.65"
-                          },
-                          {
-                              "id":  "oranges",
-                              "store":  "Family Fare",
-                              "name":  "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber\u003e, 114 Tsp 23.3 Oz",
-                              "per_unit":  21.9674,
-                              "typed":  "none",
-                              "derived":  "0.226-5.65"
-                          },
-                          {
-                              "id":  "oranges",
-                              "store":  "Family Fare",
-                              "name":  "Metamucil Metamucil Psyllium Fiber Powder, Sugar Free, Orange, Glp 1 Friendly Fiber\u003e, 72 Tsp 15 Oz",
-                              "per_unit":  27.7227,
-                              "typed":  "none",
-                              "derived":  "0.226-5.65"
-                          },
-                          {
-                              "id":  "oranges",
-                              "store":  "Family Fare",
-                              "name":  "Top Care Fiber Powder, Sugar Free, 4 In 1, Orange Flavor 36.8 Oz",
-                              "per_unit":  10.4304,
-                              "typed":  "none",
-                              "derived":  "0.226-5.65"
-                          },
-                          {
                               "id":  "pancake-mix",
                               "store":  "Family Fare",
                               "name":  "Bisquick Pancake Mix, Blueberry 11.4 Oz",
@@ -7782,7 +7667,7 @@
                               "name":  "Hellmann\u0027s Real Mayonnaise 5.75 Fl Oz",
                               "per_unit":  0.7287,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "salt",
@@ -8207,14 +8092,6 @@
                               "per_unit":  1.1956,
                               "typed":  "none",
                               "derived":  "0.04496-1.124"
-                          },
-                          {
-                              "id":  "bananas",
-                              "store":  "Family Fare",
-                              "name":  "Core Power Strawberry Banana 26g Protein Shake Bottle 14 Fl Oz",
-                              "per_unit":  83.5656,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
                           },
                           {
                               "id":  "chicken-thighs",
@@ -8753,14 +8630,6 @@
                               "derived":  "0.00624-0.156"
                           },
                           {
-                              "id":  "oranges",
-                              "store":  "Family Fare",
-                              "name":  "Metamucil 4 In 1 Psyllium Fiber Powder, Sugar Free, Orange, 114 Tsp 23.3 Oz",
-                              "per_unit":  21.9674,
-                              "typed":  "none",
-                              "derived":  "0.226-5.65"
-                          },
-                          {
                               "id":  "eggs",
                               "store":  "Family Fare",
                               "name":  "Vital Farms Vital Farms Pasture Raised Organic Eggs Large 12 Ea",
@@ -8967,22 +8836,6 @@
                               "per_unit":  0.1246,
                               "typed":  "none",
                               "derived":  "0.2334-5.835"
-                          },
-                          {
-                              "id":  "pears",
-                              "store":  "Fareway",
-                              "name":  "Fareway Diced No Sugar Added Pears",
-                              "per_unit":  11.7053,
-                              "typed":  "none",
-                              "derived":  "0.368-9.2"
-                          },
-                          {
-                              "id":  "pears",
-                              "store":  "Fareway",
-                              "name":  "Fareway Diced No Sugar Added Pears",
-                              "per_unit":  13.8526,
-                              "typed":  "none",
-                              "derived":  "0.368-9.2"
                           },
                           {
                               "id":  "raisins",
@@ -12049,14 +11902,6 @@
                               "derived":  "0.02356-0.589"
                           },
                           {
-                              "id":  "strawberries",
-                              "store":  "Walmart",
-                              "name":  "Taste Salud Strawberry Watermelon",
-                              "per_unit":  7.8583,
-                              "typed":  "none",
-                              "derived":  "0.03056-0.764"
-                          },
-                          {
                               "id":  "cranberry-juice",
                               "store":  "Walmart",
                               "name":  "Lakewood Organic Pure Cranberry Juice, 32 Fl Oz",
@@ -12617,14 +12462,6 @@
                               "derived":  "0.00296-0.074"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "BEAR Fruit Rolls Variety Pack Strawberry Raspberry 8.4oz, 12 Count, No Added Sugar, Non-GMO, Made with Real Fruit",
-                              "per_unit":  16.1524,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "fruit-snacks",
                               "store":  "Walmart",
                               "name":  "Solely Mango \u0026 Raspberry Organic Fruit Snack Jerky, 0.8 oz (5 Count)",
@@ -12879,14 +12716,6 @@
                               "per_unit":  1.0153,
                               "typed":  "none",
                               "derived":  "0.03324-0.831"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Non-GMO Kosher Cinnamon Sugar, 3.62 oz Bottle",
-                              "per_unit":  12.6851,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "ground-cinnamon",
@@ -13518,7 +13347,7 @@
                               "name":  "McCormick No Artificial Flavors Gluten Free Simply Better Turkey Gravy, 12.0 oz Brick",
                               "per_unit":  0.8492,
                               "typed":  "none",
-                              "derived":  "0.02604-0.651"
+                              "derived":  "0.03086-0.7715"
                           },
                           {
                               "id":  "rice",
@@ -13569,12 +13398,12 @@
                               "derived":  "0.2085-5.2125"
                           },
                           {
-                              "id":  "sugar",
+                              "id":  "jelly",
                               "store":  "Walmart",
                               "name":  "GOOD GOOD Concord Grape Jelly, No Added Sugar, Low Calorie, Keto Friendly, 12 oz",
-                              "per_unit":  7.96,
+                              "per_unit":  0.4975,
                               "typed":  "none",
-                              "derived":  "0.15021-3.75525"
+                              "derived":  "0.01788-0.447"
                           },
                           {
                               "id":  "jelly",
@@ -13593,12 +13422,12 @@
                               "derived":  "0.15021-3.75525"
                           },
                           {
-                              "id":  "sugar",
+                              "id":  "jelly",
                               "store":  "Walmart",
                               "name":  "Good Good Concord Grape Jelly, No Added Sugar, Low Calorie, Keto Friendly, 12 oz, 2 pack",
-                              "per_unit":  11.4933,
+                              "per_unit":  0.7183,
                               "typed":  "none",
-                              "derived":  "0.15021-3.75525"
+                              "derived":  "0.01788-0.447"
                           },
                           {
                               "id":  "jelly",
@@ -14022,7 +13851,7 @@
                               "name":  "Chosen Foods 100% Pure Avocado Oil Classic Mayo 12 oz Jar",
                               "per_unit":  0.665,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "milk",
@@ -14409,12 +14238,12 @@
                               "derived":  "0.02368-0.592"
                           },
                           {
-                              "id":  "banana-peppers",
+                              "id":  "pepperoncini",
                               "store":  "Walmart",
                               "name":  "Krinos, Pepperoncini, 16 oz, (Pack of 6)",
                               "per_unit":  2.8369,
                               "typed":  "none",
-                              "derived":  "0.03928-0.982"
+                              "derived":  "0.04556-1.139"
                           },
                           {
                               "id":  "frozen-pizza",
@@ -14513,14 +14342,6 @@
                               "derived":  "0.00766-0.1915"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Kosher Strawberry Finishing Sugar, 3.67 oz Bottle",
-                              "per_unit":  14.0381,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "powdered-sugar",
                               "store":  "Walmart",
                               "name":  "C\u0026H Pure Cane Sugar Confectioners Powdered 1 lb Box",
@@ -14583,14 +14404,6 @@
                               "per_unit":  4.6725,
                               "typed":  "none",
                               "derived":  "0.1321-3.3025"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Looney Pruney Organic Pitted Dried Prunes 9 oz Bag for the Entire Family, Always California Grown, Kosher, No Added Sugar \u0026 No Preservatives",
-                              "per_unit":  18.4889,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "baby-food",
@@ -15310,7 +15123,7 @@
                               "name":  "Bella Sun Luci Julienne - Cut California Sun Dried Tomatoes with Italian Basil, 3 oz",
                               "per_unit":  3.9867,
                               "typed":  "none",
-                              "derived":  "0.09976-2.494"
+                              "derived":  "0.1055-2.6375"
                           },
                           {
                               "id":  "canned-corn",
@@ -16017,14 +15830,6 @@
                               "derived":  "0.1694-4.235"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Chocolate Hazelnut Finishing Sugar, 3.61 oz Bottle",
-                              "per_unit":  15.6011,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "brown-sugar",
                               "store":  "Walmart",
                               "name":  "Dixie Crystals Dark Brown Sugar, 32 oz",
@@ -16045,14 +15850,6 @@
                               "store":  "Walmart",
                               "name":  "Domino Premium Pure Cane Dark Brown Sugar 2 lb",
                               "per_unit":  6.24,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Maple Brown Sugar Finishing Sugar, 3.09 oz Bottle",
-                              "per_unit":  67.2621,
                               "typed":  "none",
                               "derived":  "0.198-4.95"
                           },
@@ -16166,7 +15963,7 @@
                               "name":  "Tony Chachere\u0027s, Brown Gravy, Cajun, Instant, 10 oz, Shelf-Stable, Nut Free, Can, No MSG",
                               "per_unit":  0.999,
                               "typed":  "none",
-                              "derived":  "0.02604-0.651"
+                              "derived":  "0.03086-0.7715"
                           },
                           {
                               "id":  "brown-gravy-mix",
@@ -16841,36 +16638,28 @@
                               "derived":  "0.01537-0.38425"
                           },
                           {
-                              "id":  "banana-peppers",
-                              "store":  "Walmart",
-                              "name":  "Jeff\u0027S Natural Jeff\u0027S Natural Greek Pepperoncini Greek Pepperoncini, 12 Oz",
-                              "per_unit":  0.9858,
-                              "typed":  "none",
-                              "derived":  "0.03928-0.982"
-                          },
-                          {
-                              "id":  "banana-peppers",
+                              "id":  "pepperoncini",
                               "store":  "Walmart",
                               "name":  "Delallo Mild Pepperoncini, 25.5 oz (Pack of 6)",
                               "per_unit":  39.27,
                               "typed":  "none",
-                              "derived":  "0.03928-0.982"
+                              "derived":  "0.04556-1.139"
                           },
                           {
-                              "id":  "banana-peppers",
+                              "id":  "pepperoncini",
                               "store":  "Walmart",
                               "name":  "Divina All Natural Sliced Pepperoncini, 7.75 oz.",
                               "per_unit":  2.009,
                               "typed":  "none",
-                              "derived":  "0.03928-0.982"
+                              "derived":  "0.04556-1.139"
                           },
                           {
-                              "id":  "banana-peppers",
+                              "id":  "pepperoncini",
                               "store":  "Walmart",
                               "name":  "(Pack of 12) Dell\u0027Alpe Pepperoncini, 24 fl oz",
                               "per_unit":  52.01,
                               "typed":  "none",
-                              "derived":  "0.03928-0.982"
+                              "derived":  "0.04556-1.139"
                           },
                           {
                               "id":  "rice",
@@ -16959,30 +16748,6 @@
                               "per_unit":  16.29,
                               "typed":  "none",
                               "derived":  "0.01287-0.32175"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "KIND ZERO Added Sugar Bars, Keto Friendly Snacks, Raspberry Vanilla Cashew, 6.2oz Box (5 Bars)",
-                              "per_unit":  18.7871,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "zucchini",
-                              "store":  "Walmart",
-                              "name":  "Dehydrated Zucchini, 1 Full Quart Mylar Bag",
-                              "per_unit":  146.56,
-                              "typed":  "none",
-                              "derived":  "0.378-9.45"
-                          },
-                          {
-                              "id":  "zucchini",
-                              "store":  "Walmart",
-                              "name":  "Italian Striped Zucchini Summer Squash Garden Seeds - 5 Lbs Bulk - Non-GMO, Heirloom - Vegetable Gardening Seed",
-                              "per_unit":  1711.04,
-                              "typed":  "none",
-                              "derived":  "0.378-9.45"
                           },
                           {
                               "id":  "hot-dogs",
@@ -17203,14 +16968,6 @@
                           {
                               "id":  "brown-sugar",
                               "store":  "Walmart",
-                              "name":  "McCormick Maple Brown Sugar Finishing Sugar, 3.09 oz Bottle",
-                              "per_unit":  67.055,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Walmart",
                               "name":  "Wholesome Live Sweetly Organic Light Brown Sugar, 24 oz",
                               "per_unit":  7.78,
                               "typed":  "none",
@@ -17398,7 +17155,7 @@
                               "name":  "Primal Kitchen Avocado Oil Mayo 12 oz",
                               "per_unit":  0.8325,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "mayonnaise",
@@ -17406,7 +17163,7 @@
                               "name":  "Sir Kensington\u0027s Classic Mayonnaise Condiments Made with Free-Range Eggs, 12 fl oz Squeeze Bottle",
                               "per_unit":  1.4117,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "ranch-dressing",
@@ -19087,14 +18844,6 @@
                               "per_unit":  4.2475,
                               "typed":  "none",
                               "derived":  "0.1321-3.3025"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "BEAR Fruit Rolls Variety Pack Strawberry Raspberry 8.4oz, 12 Count, No Added Sugar, Non-GMO, Made with Real Fruit",
-                              "per_unit":  15.8857,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "toaster-pastries",
@@ -21001,14 +20750,6 @@
                               "derived":  "0.03066-0.7665"
                           },
                           {
-                              "id":  "brown-sugar",
-                              "store":  "Walmart",
-                              "name":  "Goodie Girl Cinnamon Brown Sugar Breakfast Biscuits, Shelf Stable, 1.73 oz, 3 Per Pack",
-                              "per_unit":  14.56,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
-                          },
-                          {
                               "id":  "brown-rice",
                               "store":  "Walmart",
                               "name":  "Lotus Foods - Noodles Organic Brown Rice Udon - 8 oz",
@@ -21043,18 +20784,10 @@
                           {
                               "id":  "sun-dried-tomatoes",
                               "store":  "Walmart",
-                              "name":  "Pure Anatolia Sun Dried Organic Halves Tomato Bites, 1 - 3.17 oz Pouch",
-                              "per_unit":  2.5016,
-                              "typed":  "none",
-                              "derived":  "0.09976-2.494"
-                          },
-                          {
-                              "id":  "sun-dried-tomatoes",
-                              "store":  "Walmart",
                               "name":  "Bella Sun Luci Julienne - Cut California Sun Dried Tomatoes with Italian Basil, 3 oz",
                               "per_unit":  3.33,
                               "typed":  "none",
-                              "derived":  "0.09976-2.494"
+                              "derived":  "0.1055-2.6375"
                           },
                           {
                               "id":  "chili-powder",
@@ -21094,7 +20827,7 @@
                               "name":  "Tony Chachere\u0027s, Brown Gravy, Cajun, Instant, 10 oz, Shelf-Stable, Nut Free, Can, No MSG",
                               "per_unit":  0.99,
                               "typed":  "none",
-                              "derived":  "0.02604-0.651"
+                              "derived":  "0.03086-0.7715"
                           },
                           {
                               "id":  "dog-treats",
@@ -21463,14 +21196,6 @@
                               "per_unit":  3.996,
                               "typed":  "none",
                               "derived":  "0.09539-2.38475"
-                          },
-                          {
-                              "id":  "cherries",
-                              "store":  "Walmart",
-                              "name":  "Kinder\u0027s Black Cherry Chipotle Seasoning for Grilling, 6 oz",
-                              "per_unit":  24,
-                              "typed":  "none",
-                              "derived":  "0.79734-19.9335"
                           },
                           {
                               "id":  "hot-sauce",
@@ -22049,14 +21774,6 @@
                               "derived":  "0.09177-2.29425"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Non-GMO Kosher Cinnamon Sugar, 3.62 oz Bottle",
-                              "per_unit":  12.4641,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "oatmeal",
                               "store":  "Walmart",
                               "name":  "Wild Oats Marketplace Organic Ground Cumin, 1.7 oz",
@@ -22399,22 +22116,6 @@
                               "per_unit":  6.97,
                               "typed":  "none",
                               "derived":  "0.12433-3.10825"
-                          },
-                          {
-                              "id":  "strawberries",
-                              "store":  "Walmart",
-                              "name":  "That\u0027s It. Crispy, Gluten-Free, Organic Apple + Strawberry Crunchables, 6 Count",
-                              "per_unit":  2.3701,
-                              "typed":  "none",
-                              "derived":  "0.03056-0.764"
-                          },
-                          {
-                              "id":  "apples",
-                              "store":  "Walmart",
-                              "name":  "That\u0027s It. Crispy, Gluten-Free, Organic Apple + Cinnamon Crunchables, 6 Count",
-                              "per_unit":  37.9208,
-                              "typed":  "none",
-                              "derived":  "0.241-6.025"
                           },
                           {
                               "id":  "hot-sauce",
@@ -22923,64 +22624,8 @@
                           {
                               "id":  "sugar",
                               "store":  "Walmart",
-                              "name":  "Great Value Red Sanding Sugar, 3.7 oz",
-                              "per_unit":  9.6,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Cinnamon Sugar, 3.62 oz",
-                              "per_unit":  8.7072,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value 4-Cell Sanding Sugar, Multicolor, 4 oz",
-                              "per_unit":  19.84,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
                               "name":  "Splenda Sweetener with Sugar Baking Blend (2 lb) Resealable Pouch",
                               "per_unit":  3.89,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Pink Sanding Sugar, 3.7 oz",
-                              "per_unit":  10.1428,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Rainbow Sanding Sugar, 3.3 oz",
-                              "per_unit":  12.2667,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value White Sanding Sugar for Dessert Decorations, 3.5 oz",
-                              "per_unit":  10.1486,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Blue Sanding Sugar, 3.7 oz",
-                              "per_unit":  10.1428,
                               "typed":  "none",
                               "derived":  "0.15021-3.75525"
                           },
@@ -22991,14 +22636,6 @@
                               "per_unit":  2.4598,
                               "typed":  "none",
                               "derived":  "0.07214-1.8035"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Silver Sanding Sugar, 3.3 oz",
-                              "per_unit":  11.569,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "pretzels",
@@ -23049,28 +22686,12 @@
                               "derived":  "0.01788-0.447"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "GHOST PROTEIN BAR, CHOCOLATE CARAMEL Flavor, 20G Protein, 2G Sugar, 4 Ct, 9.2 oz",
-                              "per_unit":  15.4435,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "raspberries",
                               "store":  "Walmart",
                               "name":  "Kencko Raspberry Snaps, Superfood Fruit Straws, 1 oz Resealable Bag",
                               "per_unit":  4.44,
                               "typed":  "none",
-                              "derived":  "0.07018-1.7545"
-                          },
-                          {
-                              "id":  "raspberries",
-                              "store":  "Walmart",
-                              "name":  "Ocean Spray Berry Splash  Strawberry \u0026 Raspberry 50.7 fl oz Bottle",
-                              "per_unit":  0.045,
-                              "typed":  "none",
-                              "derived":  "0.07018-1.7545"
+                              "derived":  "0.11771-2.94275"
                           },
                           {
                               "id":  "razors",
@@ -23241,30 +22862,6 @@
                               "derived":  "0.06106-1.5265"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "BetterBody Foods Organic Coconut Sugar, 24 oz",
-                              "per_unit":  6.08,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Madhava Organic Unrefined Coconut Sugar, Shelf-Stable, 3 lb Bag",
-                              "per_unit":  4.7067,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Yellow Sanding Sugar, 3.7 oz",
-                              "per_unit":  9.6,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "toilet-bowl-cleaner",
                               "store":  "Walmart",
                               "name":  "Lysol Automatic in-The-Bowl Toilet Cleaner, Cleans and Freshens Toilet Bowl, Atlantic Fresh Scent, 2 Count",
@@ -23351,14 +22948,6 @@
                               "per_unit":  6.5946,
                               "typed":  "none",
                               "derived":  "0.25014-6.2535"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "Great Value Organic Coconut Sugar, 32 oz",
-                              "per_unit":  4.71,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "fruit-cups",
@@ -23593,12 +23182,12 @@
                               "derived":  "0.314-7.85"
                           },
                           {
-                              "id":  "apples",
+                              "id":  "peanut-butter",
                               "store":  "Walmart",
                               "name":  "Dippin Stix Sliced Apples \u0026 Peanut Butter, 2.75oz",
-                              "per_unit":  8.5527,
+                              "per_unit":  0.5345,
                               "typed":  "none",
-                              "derived":  "0.241-6.025"
+                              "derived":  "0.02128-0.532"
                           },
                           {
                               "id":  "shaving-cream",
@@ -24321,14 +23910,6 @@
                               "derived":  "0.01678-0.4195"
                           },
                           {
-                              "id":  "sugar",
-                              "store":  "Walmart",
-                              "name":  "McCormick Strawberry Finishing Sugar, 3.67 oz Bottle",
-                              "per_unit":  14.0381,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
-                          },
-                          {
                               "id":  "powdered-sugar",
                               "store":  "Walmart",
                               "name":  "Wholesome Organic Powdered Confectioners Sugar, Fair Trade, Corn-Free, 16 oz Pouch",
@@ -24689,14 +24270,6 @@
                               "derived":  "0.12506-3.1265"
                           },
                           {
-                              "id":  "raspberries",
-                              "store":  "Walmart",
-                              "name":  "Tru Fru Freeze Dried Raspberries in Dark \u0026 White Chocolate - 3.4 oz",
-                              "per_unit":  2.9001,
-                              "typed":  "none",
-                              "derived":  "0.07018-1.7545"
-                          },
-                          {
                               "id":  "paper-towels",
                               "store":  "Walmart",
                               "name":  "Great Value Everyday Strong Paper Towels, 2 Double Rolls",
@@ -24926,7 +24499,7 @@
                               "name":  "Kraft Real Mayo Creamy \u0026 Smooth Mayonnaise, 12 fl oz Bottle",
                               "per_unit":  1.1117,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "rice",
@@ -26043,14 +25616,6 @@
                           {
                               "id":  "brown-sugar",
                               "store":  "Walmart",
-                              "name":  "McCormick Maple Brown Sugar Finishing Sugar, 3.09 oz Bottle",
-                              "per_unit":  61.877,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Walmart",
                               "name":  "Goya Brown Sugar Cane, 8 oz",
                               "per_unit":  15.98,
                               "typed":  "none",
@@ -26158,7 +25723,7 @@
                               "name":  "Bella Sun Luci Premium California Sun-Dried Tomatoes, Julienne Cut, Ready-to-Use Pouch, 3 oz",
                               "per_unit":  3.9667,
                               "typed":  "none",
-                              "derived":  "0.09976-2.494"
+                              "derived":  "0.1055-2.6375"
                           },
                           {
                               "id":  "sun-dried-tomatoes",
@@ -26166,7 +25731,7 @@
                               "name":  "Bella Sun Luci Julienne - Cut California Sun Dried Tomatoes with Italian Basil, 3 oz",
                               "per_unit":  3.7267,
                               "typed":  "none",
-                              "derived":  "0.09976-2.494"
+                              "derived":  "0.1055-2.6375"
                           },
                           {
                               "id":  "shaving-cream",
@@ -27582,7 +27147,7 @@
                               "name":  "Kencko Raspberry Snaps, Superfood Fruit Straws, 1 oz Resealable Bag",
                               "per_unit":  3.97,
                               "typed":  "none",
-                              "derived":  "0.07018-1.7545"
+                              "derived":  "0.11771-2.94275"
                           },
                           {
                               "id":  "sandwich-bags",
@@ -28086,7 +27651,7 @@
                               "name":  "Kraft Real Mayo Creamy \u0026 Smooth Mayonnaise, 12 fl oz Bottle",
                               "per_unit":  0.8,
                               "typed":  "none",
-                              "derived":  "0.0259-0.6475"
+                              "derived":  "0.02654-0.6635"
                           },
                           {
                               "id":  "rice",

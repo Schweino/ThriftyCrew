@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4804,
+    "evidence_rows":  4811,
     "derived_commodities":  105,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1447
+                                "newly_refused_rows":  1448
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  970
+                                "newly_refused_rows":  971
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  693
+                                "newly_refused_rows":  694
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  537
+                                "newly_refused_rows":  538
                             }
                 },
     "typed_fields_ignored":  [
@@ -220,6 +220,14 @@
                               "per_unit":  6.5177,
                               "typed":  "none",
                               "derived":  "0.105-2.625"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Honey Smoked Fish Honey Salmon Stackers, 3 oz., 3 pk.",
+                              "per_unit":  1.0967,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
                           },
                           {
                               "id":  "butter",

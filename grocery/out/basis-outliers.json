@@ -2,7 +2,7 @@
     "kind_mismatch":  [
                           {
                               "id":  "banana-peppers",
-                              "commodity":  "Banana Peppers / Pepperoncini",
+                              "commodity":  "Banana Peppers",
                               "unit":  "oz",
                               "store":  "Family Fare",
                               "per_unit":  0.2056,
@@ -430,7 +430,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-26T08:13:07",
+    "generated":  "2026-09-26T13:29:17",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",
@@ -462,7 +462,7 @@
                                                    },
                                                    {
                                                        "id":  "banana-peppers",
-                                                       "commodity":  "Banana Peppers / Pepperoncini",
+                                                       "commodity":  "Banana Peppers",
                                                        "unit":  "oz",
                                                        "store":  "Family Fare",
                                                        "per_unit":  0.2056,
