@@ -3076,13 +3076,6 @@
                                                         "board_pu":  2.49,
                                                         "verified":  "2026-09-18"
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/broccoli/broccoli_crowns/p/77935",
-                                                       "price":  "$2.99",
-                                                       "size":  "lb",
-                                                       "name":  "Broccoli Crowns",
-                                                       "board_pu":  3.69
-                                                   },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8801/broccoli-florettes",
                                                   "name":  "Broccoli Florettes",
@@ -14845,13 +14838,6 @@
                                                        "size":  "15 oz",
                                                        "verified":  "2026-09-05 DERIVED from the price row (same record the board priced)"
                                                    },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/gravy/heinz_home_style_turkey_gravy_12_oz_jar/p/14935",
-                                                           "name":  "Heinz Home Style Turkey Gravy, 12 Oz Jar",
-                                                           "price":  "$3.19",
-                                                           "size":  "12 oz",
-                                                           "verified":  "2026-09-08 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/15561355",
                                                        "name":  "Heinz HomeStyle Turkey Gravy Value Size, 18 oz Jar",
@@ -16123,20 +16109,6 @@
                                    },
                   "mayonnaise":  {
                                      "commodity":  "mayonnaise",
-                                     "Aldi":  {
-                                                  "url":  "https://www.aldi.us/store/aldi/products/20208894-burman-s-light-mayonnaise-30-fl-oz",
-                                                  "name":  "Burman S Light Mayonnaise 30 FL OZ",
-                                                  "price":  "$2.89",
-                                                  "size":  "30 fl oz",
-                                                  "verified":  "2026-07-30 DERIVED from the price row (same record the board priced)",
-                                                  "board_pu":  0.0963
-                                              },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24453283-fareway-mayonnaise-light-30-oz",
-                                                     "price":  3.79,
-                                                     "size":  "30 fl oz",
-                                                     "name":  "Fareway Light Mayonnaise"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/25821/hy-vee-mayonnaise",
                                                     "price":  3.98,
@@ -16144,34 +16116,41 @@
                                                     "name":  "Hy-Vee Mayonnaise",
                                                     "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                 },
-                                     "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/our_family_mayo_light_30_fl_oz/p/1564405684713442916",
-                                                         "name":  "Our Family Mayo, Light 30 Fl Oz",
-                                                         "price":  "$3.99",
-                                                         "size":  "30 fl oz",
-                                                         "verified":  "2026-08-31 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/17056887",
-                                                     "name":  "Great Value Light Mayonnaise, 30 fl oz",
-                                                     "price":  "$2.97",
-                                                     "size":  "30 fl oz",
-                                                     "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                     "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/kroger-light-mayo/0001111000780",
-                                                          "name":  "Kroger Light Mayo",
-                                                          "price":  "$3.99",
-                                                          "size":  "30 fl oz",
-                                                          "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                      },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/2CUVLTUE0IMK",
                                                              "name":  "Kraft Real Mayo Creamy and Smooth Real Mayonnaise, 1 gal.",
                                                              "price":  "$14.98",
                                                              "size":  "128.034 oz",
                                                              "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                         }
+                                                         },
+                                     "Aldi":  {
+                                                  "url":  "https://www.aldi.us/store/aldi/products/20208894-burman-s-light-mayonnaise-30-fl-oz",
+                                                  "name":  "Burman S Light Mayonnaise 30 FL OZ",
+                                                  "price":  "$2.89",
+                                                  "size":  "30 fl oz",
+                                                  "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                              },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/17056887",
+                                                     "name":  "Great Value Light Mayonnaise, 30 fl oz",
+                                                     "price":  "$2.97",
+                                                     "size":  "30 fl oz",
+                                                     "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                 },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/kroger-light-mayo/0001111000780",
+                                                          "name":  "Kroger Light Mayo",
+                                                          "price":  "$3.99",
+                                                          "size":  "30 fl oz",
+                                                          "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                      },
+                                     "Family Fare":  {
+                                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/our_family_mayo_light_30_fl_oz/p/1564405684713442916",
+                                                         "name":  "Our Family Mayo, Light 30 Fl Oz",
+                                                         "price":  "$3.99",
+                                                         "size":  "30 fl oz",
+                                                         "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                     }
                                  },
                   "medjool-dates":  {
                                         "commodity":  "Medjool Dates",
@@ -17865,7 +17844,7 @@
                                                           "name":  "Member\u0027s Mark Organic Diced Peach Bowls, 4 oz., 24 pk.",
                                                           "price":  "$11.98",
                                                           "size":  "96 oz",
-                                                          "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                          "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
                                                       }
                               },
                   "peanut-butter":  {
@@ -19797,13 +19776,6 @@
                                                       "size":  "12 oz",
                                                       "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
                                                   },
-                                      "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/the_fresh_divide/raspberry_blueberry_cup_fresh_divide/p/1564405684713033920",
-                                                          "name":  "Raspberry/Blueberry Cup Fresh Divide",
-                                                          "price":  "$7.99",
-                                                          "size":  "lb",
-                                                          "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
-                                                      },
                                       "Aldi":  {
                                                    "url":  "https://www.aldi.us/store/aldi/products/17327097-raspberries-package-6-oz",
                                                    "name":  "Raspberries Package 6 OZ",
@@ -20452,13 +20424,6 @@
                                                             "size":  "lb",
                                                             "verified":  "2026-09-18"
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_ribeye_whole/p/1564405684713030634",
-                                                           "name":  "Fresh Ribeye, Whole",
-                                                           "price":  "$18.49",
-                                                           "size":  "lb",
-                                                           "verified":  "2026-08-21 DERIVED from the price row (same record the board priced)"
-                                                       },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2538738/beef-ribeye-steak-thin",
                                                       "name":  "Beef Ribeye Steak - Thin",
@@ -20479,8 +20444,15 @@
                                                                "name":  "Member\u0027s Mark USDA Choice Angus Whole Beef Cowboy Ribeye, Cryovac, priced per pound",
                                                                "price":  "$13.84",
                                                                "size":  "lb",
-                                                               "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                               "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                           },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_ribeye_whole/p/1564405684713030634",
+                                                           "name":  "Fresh Ribeye, Whole",
+                                                           "price":  "$18.49",
+                                                           "size":  "lb",
+                                                           "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "rice":  {
                                "commodity":  "rice",
@@ -21794,13 +21766,6 @@
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
-                                 "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/our_family_shrimp_raw_small/p/1564405684714906255",
-                                                     "name":  "Our Family Shrimp Raw Small",
-                                                     "price":  9.99,
-                                                     "size":  "16 oz",
-                                                     "board_pu":  9.99
-                                                 },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/1579791/fish-market-raw-shrimp-41-50-count",
                                                 "name":  "Fish Market Raw Shrimp 41/50 Count",
@@ -21848,21 +21813,6 @@
                              },
                   "sirloin-steak":  {
                                         "commodity":  "sirloin-steak",
-                                        "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/kevin-s-natural-foods-ranchero-sirloin-steak/0081026402863",
-                                                             "name":  "Kevin\u0027s Natural Foods Ranchero Sirloin Steak",
-                                                             "price":  9.99,
-                                                             "size":  "16 oz",
-                                                             "verified":  "2026-09-18",
-                                                             "board_pu":  6.99
-                                                         },
-                                        "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_usda_choice_whole_sirloin_tip/p/1564405684714630310",
-                                                            "price":  5.49,
-                                                            "size":  "lb",
-                                                            "name":  "Fresh Usda Choice Whole Sirloin Tip",
-                                                            "board_pu":  5.49
-                                                        },
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387764-usda-choice-sirloin-tip-steak-1-each",
                                                         "price":  7.99,
@@ -21896,8 +21846,15 @@
                                                                 "name":  "Sirloin Tip, Case  priced per pound",
                                                                 "price":  "$6.47",
                                                                 "size":  "lb",
-                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                                "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                            },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kevin-s-natural-foods-ranchero-sirloin-steak/0081026402863",
+                                                             "name":  "Kevin\u0027s Natural Foods Ranchero Sirloin Steak",
+                                                             "price":  "$9.99",
+                                                             "size":  "16 oz",
+                                                             "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "sliced-cheese":  {
                                         "commodity":  "sliced-cheese",
@@ -23007,13 +22964,6 @@
                                                              "size":  "8.5 oz",
                                                              "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
                                                          },
-                                             "Baker\u0027s":  {
-                                                                  "url":  "https://www.bakersplus.com/p/california-sun-dry-sun-dried-tomatoes-bruschetta-jar/0073820312100",
-                                                                  "name":  "California Sun Dry Sun-Dried Tomatoes Bruschetta Jar",
-                                                                  "price":  4.49,
-                                                                  "size":  "9 oz",
-                                                                  "verified":  "2026-09-18"
-                                                              },
                                              "Aldi":  {
                                                           "url":  "https://www.aldi.us/store/aldi/products/73476370-tuscan-garden-sundried-tomatoes-8-oz",
                                                           "name":  "Tuscan Garden Sundried Tomatoes 8 OZ",
@@ -23027,7 +22977,14 @@
                                                                      "price":  "$9.98",
                                                                      "size":  "24 oz",
                                                                      "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                                 }
+                                                                 },
+                                             "Baker\u0027s":  {
+                                                                  "url":  "https://www.bakersplus.com/p/california-sun-dry-sun-dried-tomatoes-bruschetta-jar/0073820312100",
+                                                                  "name":  "California Sun Dry Sun-Dried Tomatoes Bruschetta Jar",
+                                                                  "price":  "$4.49",
+                                                                  "size":  "9 oz",
+                                                                  "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                              }
                                          },
                   "sweet-chili-sauce":  {
                                             "commodity":  "Sweet Chili Sauce",

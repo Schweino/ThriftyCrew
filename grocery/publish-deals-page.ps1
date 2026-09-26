@@ -262,7 +262,7 @@ if ($msRc -ne 0 -and $msRc -ne 3) {
   $msV = Read-SoundnessPublishVerdict -ReportFile (Join-Path $OutDir 'audit\soundness-report.json') -CompareFile $CompareFile -NotBefore $msStart
   foreach ($w in $msV.Winners) { Write-Output ('match-soundness HOLD: ' + $w) }
   foreach ($rv in $msV.Review) { Write-Output ('match-soundness REVIEW (on no published cell, does not hold the post): ' + $rv) }
-  if ($msV.Hold -and -not $Force) { Write-Output ('HELD: commodity matching changed vs the reviewed baseline and ' + $msV.Reason + ' (audit rc=' + $msRc + '; see out\audit\soundness-report.json). Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'); exit 2 }
+  if ($msV.Hold -and -not $Force) { Write-Output ('HELD: commodity matching changed vs the reviewed baseline and ' + $msV.Reason + ' (audit rc=' + $msRc + '; see out\audit\soundness-report.json). Review, then `audit-match-soundness.ps1 -Accept` for a moved or dropped product; a CONTESTED one is cleared only by `resolve-match-worklist.ps1 -Decide`, which -Accept no longer bypasses (or -Force to override).'); exit 2 }
   if ($msV.Hold) { Write-Output ('match-soundness: -Force overrides a HOLD (' + $msV.Reason + '; audit rc=' + $msRc + ').') }
   else { Write-Output ('match-soundness: NOT held (' + $msV.Reason + '; audit rc=' + $msRc + '). The baseline still waits for a reviewed `audit-match-soundness.ps1 -Accept`.') }
 }

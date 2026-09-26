@@ -263,6 +263,65 @@ if (-not $isShard) {
   _RT 'MUST FIRE  D3 the Baker''s coconut aminos "Seasoning Sauce" is no longer hidden by the global sauce token' 'Simple Truth Organic Coconut Aminos All-Purpose Seasoning Sauce' 'coconut-aminos'
   _RT 'MUST FIRE  D3 a coconut aminos "Soy Sauce Replacement" leaves the soy-sauce cell' 'BetterBody Foods Organic Coconut Aminos Soy Sauce Replacement, 16.9 fl oz' 'coconut-aminos'
   _RT 'MUST FIRE  D4 the Sam''s individually wrapped sponges are no longer hidden by the global wrapped token' 'Scotch-Brite Heavy Duty Scrub Sponges, Individually Wrapped 24 ct.' 'sponges'
+  # FLAVOUR-PAIR CARRIER (2026-09-26, follow-on to queue 2026-09-26-f655c7). The founding names are the CARRIED
+  # re-routes that audit-match-soundness's first carried pass listed that day, verbatim: a prepared product named by
+  # its flavour pair reached the raw-ingredient commodity for whichever ingredient sat earliest in the file, and each
+  # per-product fence only moved it to the next ingredient word in its name. Never regenerate these from the board.
+  _RT 'MUST FIRE  F1 an apple-cinnamon rice crisp is not ground cinnamon (flavour_pair_carrier)' 'Quaker Apple Cinnamon Rice Crisps' '<none>'
+  _RT 'MUST FIRE  F2 a jalapeno-cilantro hummus is hummus, not fresh cilantro' 'Fresh Cravings Jalapeno Cilantro Hummus,10oz. Plastic Tub, Gluten-Free, Dairy-Free, 2 Tbsp (32g), Contains: Sesame' 'hummus'
+  _RT 'MUST FIRE  F3 a peach-mango juice whose name never says juice is not mangoes' 'Florida''s Natural Peach Mango 59 oz' '<none>'
+  _RT 'MUST FIRE  F4 a strawberry-raspberry fruit roll that says No Added Sugar is neither sugar nor raspberries' 'BEAR Fruit Rolls Variety Pack Strawberry Raspberry 8.4oz, 12 Count, No Added Sugar, Non-GMO, Made with Real Fruit' '<none>'
+  _RT 'MUST FIRE  F5 a strawberry finishing sugar is not granulated sugar' 'McCormick Kosher Strawberry Finishing Sugar, 3.67 oz Bottle' '<none>'
+  _RT 'MUST FIRE  F6 strawberry peanut butter protein bites are not peanut butter' 'RXBAR Protein Energy Bites, Strawberry Peanut Butter, 14 ct.' '<none>'
+  # CLEAN TWINS: the real single-ingredient products the class and fences were most likely to break.
+  _RT 'CLEAN TWIN  F1 a real ground cinnamon still routes to ground-cinnamon' 'McCormick Culinary Kosher Ground Cinnamon, 18.0 oz Bottle' 'ground-cinnamon'
+  _RT 'CLEAN TWIN  F2 a real cilantro bunch still routes to cilantro' 'Cilantro Each' 'cilantro'
+  _RT 'CLEAN TWIN  F3 Honey Mangos (Ataulfo) are real produce: honey is deliberately not a flavour word' 'Honey Mangos' 'mangoes'
+  _RT 'CLEAN TWIN  F3 an orange habanero is a pepper colour, not a flavour pair' 'Fresh Orange Habanero Peppers, 4 oz' 'habanero-peppers'
+  _RT 'CLEAN TWIN  F5 plain cane sugar still routes to sugar' 'Zulka Pure Cane Sugar, 4 lb, Contains No Allergens' 'sugar'
+  _RT 'CLEAN TWIN  F6 a plain peanut butter still routes to peanut-butter' 'Jif Extra Crunchy Peanut Butter 16 Oz' 'peanut-butter'
+  # PREPARED PRODUCT ON A RAW INGREDIENT, AND A ROAST ON A STEAK (2026-09-26, queue 2026-09-26-8deaa4). The founding
+  # names are the cells comparison-2026-09-23 (built 2026-09-26 08:06) published, verbatim, most of them crowns or
+  # sale cells: a frozen entree, a frozen dinner, a refrigerated fruit roll, a yogurt cup, a cracker, a bruschetta
+  # topping, a heat-and-eat entree, a whole subprimal and a case of them, and light (not standard-of-identity)
+  # mayonnaise. Never regenerate these from the board: the rules this change adds remove them from it.
+  _RT 'MUST FIRE  W1 a Michelina''s beef and broccoli entree is not fresh broccoli (frozen_entree_carrier)' 'Michelina''s Beef & Broccoli 9.6 Oz' '<none>'
+  _RT 'MUST FIRE  W2 a Michelina''s Salisbury steak dinner is not jarred gravy (the & gravy fence and frozen_entree_carrier)' 'Michelina''s Salisbury Steak With Mashed Potatoes & Gravy 9.6 Oz' '<none>'
+  _RT 'MUST FIRE  W3 Pillsbury fruit rolls are not raspberries (bakery_carrier)' 'Pillsbury Poppin'' Flavor Raspberry Fruit Rolls 5 Ea' '<none>'
+  _RT 'MUST FIRE  W4 an AE Dairy Yolite yogurt is not raspberries (dairy_carrier)' 'AE Dairy Raspberry Yolite' '<none>'
+  _RT 'MUST FIRE  W5 Wheat Thins are not sun-dried tomatoes (snack_carrier by id)' 'Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz' '<none>'
+  _RT 'MUST FIRE  W6 a sun-dried tomato bruschetta topping is not sun-dried tomatoes' 'California Sun Dry Sun-Dried Tomatoes Bruschetta Jar' '<none>'
+  _RT 'MUST FIRE  W6 a garlic jar (garlic is its first ingredient) is not sun-dried tomatoes: the bruschetta cell''s next fallback' 'California Sun Dry Garlic with Sun Dried Tomatoes' '<none>'
+  _RT 'MUST FIRE  W6 a sun-dried tomato spread is not sun-dried tomatoes: the fallback after that' 'California Sun Dry Sun-Dried Tomato Spread' '<none>'
+  _RT 'MUST FIRE  W7 a Kevin''s heat-and-eat entree is not sirloin steak (frozen_entree_carrier)' 'Kevin''s Natural Foods Ranchero Sirloin Steak' '<none>'
+  _RT 'MUST FIRE  W8 a whole sirloin tip subprimal is not a steak (whole_cut_carrier)' 'Fresh Usda Choice Whole Sirloin Tip' '<none>'
+  _RT 'MUST FIRE  W8 a case of sirloin tip is not a steak (whole_cut_carrier)' 'Sirloin Tip, Case  priced per pound' '<none>'
+  _RT 'MUST FIRE  W8 a sirloin tip roast is not a steak (whole_cut_carrier)' 'Member''s Mark USDA Choice Angus Beef Boneless Sirloin Tip Roast, priced per pound' '<none>'
+  _RT 'MUST FIRE  W9 light mayonnaise is not standard mayonnaise' 'Burman S Light Mayonnaise 30 FL OZ' '<none>'
+  # CLEAN TWINS: the real products those rules were most likely to take with them.
+  _RT 'CLEAN TWIN  W1 fresh broccoli crowns still route to broccoli' 'Broccoli Crowns Per LB' 'broccoli'
+  _RT 'CLEAN TWIN  W1 frozen broccoli florets still route to frozen-broccoli' 'Great Value Frozen Broccoli Florets, 12 oz Steamable Bag' 'frozen-broccoli'
+  _RT 'CLEAN TWIN  W2 a real jar of gravy still routes to jarred-gravy' 'Heinz HomeStyle Turkey Gravy Value Size, 18 oz Jar' 'jarred-gravy'
+  _RT 'CLEAN TWIN  W3 a raspberry clamshell still routes to raspberries' 'Fresh Red Raspberries - 6 OZ Clamshell' 'raspberries'
+  _RT 'CLEAN TWIN  W5 sun-dried tomatoes in oil still route to sun-dried-tomatoes' 'Terra Verde Italian Sundried Tomatoes in Oil, 24 oz.' 'sun-dried-tomatoes'
+  _RT 'CLEAN TWIN  W8 a loin sirloin steak still routes to sirloin-steak' 'Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak' 'sirloin-steak'
+  _RT 'CLEAN TWIN  W8 a ribeye steak still routes to ribeye-steak' 'Beef Choice Angus Ribeye Steak, 0.66 - 1.53 lb Tray' 'ribeye-steak'
+  _RT 'CLEAN TWIN  W8 the roast token does not reach a ROAST commodity: a chuck roast still routes to chuck-roast' 'Fresh Beef Chuck Roast, Boneless' 'chuck-roast'
+  _RT 'CLEAN TWIN  W9 full-fat mayonnaise still routes to mayonnaise' 'Hy-Vee Mayonnaise' 'mayonnaise'
+  # THE SAME CLASS, SWEPT (2026-09-26, 8deaa4 and weekly 2026-09-26-ed86c6): a single flavour word before a type word
+  # (flavour_word_carrier), a sugar claim on fresh produce (sweetener_claim_carrier), a flavour pair written with a slash,
+  # a sorbet or gelato, and a gel cup, diced-fruit bowl or salad bowl on a fresh commodity. Founding names verbatim from
+  # main's match-baseline.json at rules 51bc5779; each routed to the raw commodity named before this change.
+  _RT 'MUST FIRE  X1 coconut sugar is not granulated sugar (flavour_word_carrier)' 'Health Garden Organic Coconut Sugar, 3 lbs.' '<none>'
+  _RT 'MUST FIRE  X2 a no-sugar-added jar of grapefruit is not fresh grapefruit (sweetener_claim_carrier)' 'Del Monte No Sugar Added Red Grapefruit 6.5 Oz' '<none>'
+  _RT 'MUST FIRE  X3 a raspberry/blueberry cup is not raspberries (flavour pair written with a slash)' 'Raspberry/Blueberry Cup Fresh Divide' '<none>'
+  _RT 'MUST FIRE  X4 a raspberry sorbetto is not raspberries (frozen_dessert_brand)' 'Talenti Dairy Free Roman Raspberry Sorbetto 1 Pt' '<none>'
+  _RT 'MUST FIRE  X5 diced peach bowls are not fresh peaches (cup_bowl_carrier)' 'Member''s Mark Organic Diced Peach Bowls, 4 oz., 24 pk.' '<none>'
+  _RT 'MUST FIRE  X5 a raspberry chickpea salad bowl is neither raspberries nor canned chickpeas' 'Private Selection Raspberry Chickpea Salad Bowl with Chicken' '<none>'
+  _RT 'CLEAN TWIN  X1 plain ground black pepper still routes to black-pepper' 'Mc Cormick Pure Ground Black Pepper 1.5 Oz' 'black-pepper'
+  _RT 'CLEAN TWIN  X2 dried prunes that say unsweetened still route to prunes (the exempt)' 'Great Value Unsweetened Pitted Prunes, 16 oz' 'prunes'
+  _RT 'CLEAN TWIN  X2 a fresh grapefruit bag still routes to grapefruit' 'Fresh Red Grapefruit, 5 lb Bag' 'grapefruit'
+  _RT 'CLEAN TWIN  X5 a fresh-cut cantaloupe bowl is still cantaloupe (bowl alone is not the token)' 'Fresh Cut In Store Cantaloupe Bowl' 'cantaloupe'
   # teriyaki-sauce sits earlier in the file and wins this name either way, so the route alone cannot see the
   # coconut-aminos fence: the detail scan's contested set can, because it lists every commodity that also wanted it.
   $script:rtRan++
@@ -366,7 +425,7 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
   _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
   _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
-  $rtWant = 35   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19
+  $rtWant = 79   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
