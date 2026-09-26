@@ -104,6 +104,22 @@ function Test-PricingRowNamesIngredient {
   return ($ask.Length -ge 5 -and $joined.Contains($ask))
 }
 
+function Test-IdentitySameAs {
+  <# A REVIEWED same-food record scoped to ONE product spelling (2026-09-25, queue 2026-09-23-9999c0). A row's
+     `identity_same_as` is an array of { product, reason }: `product` a case-insensitive regex over the pricing
+     product's name, `reason` why that spelling is the ingredient's own food ("Crushed Red Pepper" IS red pepper
+     flakes). Unlike `identity_reviewed`, which silences every product for the row, this silences only the
+     spellings it names, so the next wrong product on the same cell is still a UNION-ROW. An entry with no
+     reason, no product, or a pattern that does not parse silences nothing. #>
+  param($Row, [string]$ProductName)
+  if (-not $Row -or $null -eq $Row.PSObject.Properties['identity_same_as']) { return $false }
+  foreach ($e in @($Row.identity_same_as)) {
+    if (-not $e -or [string]::IsNullOrWhiteSpace([string]$e.product) -or [string]::IsNullOrWhiteSpace([string]$e.reason)) { continue }
+    try { if ([regex]::IsMatch([string]$ProductName, [string]$e.product, 'IgnoreCase', [TimeSpan]::FromSeconds(1))) { return $true } } catch { continue }
+  }
+  return $false
+}
+
 function ConvertTo-IdentityStoreKey { param([string]$S) return (([string]$S).ToLower() -replace '[^a-z0-9]', '') }
 
 function Get-IdentityBoardIndex {
@@ -172,6 +188,7 @@ function Get-IngredientIdentityFindings {
         $row = $byItem[[string]$ln.item]
         $rel = if ($row) { Get-IdentityRelation $row } else { 'same' }
         if ($row -and $null -ne $row.PSObject.Properties['identity_reviewed'] -and [string]$row.identity_reviewed -ne '') { continue }
+        if (Test-IdentitySameAs -Row $row -ProductName $prod) { continue }
         if (-not (Test-PricingRowNamesIngredient -Ingredient ([string]$ln.item) -ProductName $prod -Relation $rel -Bid $id)) {
           [void]$out.Add([pscustomobject]@{ key = ('union|' + [string]$rec.slug + '|' + [string]$ln.item + '|' + $id); kind = 'UNION-ROW'; item = [string]$ln.item; detail = ([string]$rec.slug + ': "' + [string]$ln.item + '" is priced by "' + $prod + '" (' + $basis + '), which does not name ' + (Get-IdentityHeadWord ([string]$ln.item))) })
         }

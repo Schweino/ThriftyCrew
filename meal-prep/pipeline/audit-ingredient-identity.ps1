@@ -179,6 +179,22 @@ if ($SelfTest) {
   $k = KindsOf @((Rw 'Orange Zest' 'oranges' ($oz + @{ buy_pkg_g = 6 })), (Rw 'Yellow Onion' 'onions')) $bix $cost3
   Check 'MUST NOT FIRE  a derived zest line is asked about its PARENT and "Navel Oranges" answers; Yellow Onion by yellow onions answers' ($k.Count -eq 0) ($k -join ',')
 
+  # (c) a REVIEWED same-food spelling, scoped to the product (queue 2026-09-23-9999c0): 42 Red Pepper Flakes lines
+  # priced by "Great Value Crushed Red Pepper" on 2026-09-25. The record silences that spelling and no other.
+  $rpb = [pscustomobject]@{ comparison = @([pscustomobject]@{ id = 'red-pepper-flakes'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; item = 'Great Value Crushed Red Pepper, 12 oz' }, [pscustomobject]@{ store = 'Hy-Vee'; item = 'Hy-Vee Paprika, 2.5 oz' }) }) }
+  $rpx = Get-IdentityBoardIndex $rpb
+  $rpc = @([pscustomobject]@{ slug = 'fixture-rpf'; lines = @([pscustomobject]@{ item = 'Red Pepper Flakes'; basis = 'board:red-pepper-flakes:walmart' }) })
+  $rpcH = @([pscustomobject]@{ slug = 'fixture-rpf'; lines = @([pscustomobject]@{ item = 'Red Pepper Flakes'; basis = 'board:red-pepper-flakes:hy-vee' }) })
+  $same = @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+red\s+pepper\b'; reason = 'crushed red pepper IS red pepper flakes' }) }
+  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes') $rpx $rpc
+  Check 'MUST FIRE  with no record, Red Pepper Flakes priced by "Great Value Crushed Red Pepper" is a UNION-ROW finding' ($k -contains 'UNION-ROW') ($k -join ',')
+  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' $same) $rpx $rpc
+  Check 'MUST NOT FIRE  a reviewed identity_same_as naming "crushed red pepper" silences that spelling' ($k.Count -eq 0) ($k -join ',')
+  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' $same) $rpx $rpcH
+  Check 'CLEAN TWIN  the same record does NOT silence a paprika row pricing the same line: still a UNION-ROW' ($k -contains 'UNION-ROW') ($k -join ',')
+  $k = KindsOf @(Rw 'Red Pepper Flakes' 'red-pepper-flakes' @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+red\s+pepper\b'; reason = '' }) }) $rpx $rpc
+  Check 'MUST FIRE  a record with no reason silences nothing' ($k -contains 'UNION-ROW') ($k -join ',')
+
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
   $why = Test-ReuseIdentity -Term 'bone-in skin-on chicken thighs' -Id 'chicken-thighs' -Resolve $resolve -WeeklyIds $weekly -BoardIndex $bix
@@ -214,7 +230,7 @@ if ($SelfTest) {
     Check 'MUST FIRE  a NEW finding key is a RISE (exit 2) and names it' (($c3 -eq 2) -and (($o -join ' ') -match 'Shallot Rings')) ("exit $c3")
   } finally { Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 21) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 21 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 25) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 25 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)

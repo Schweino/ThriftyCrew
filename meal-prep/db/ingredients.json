@@ -201,6 +201,7 @@
     },
     {
         "item":  "BBQ Sauce",
+        "identity_same_as":  [ { "product":  "\\bbarbecue\\s+sauce\\b", "reason":  "barbecue sauce is BBQ sauce spelled out (11 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "bbq-sauce",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -360,6 +361,7 @@
     },
     {
         "item":  "Bulgur Wheat",
+        "identity_same_as":  [ { "product":  "\\bbulgur\\b", "reason":  "bulgur is cracked wheat: the store name drops the word wheat (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "bulgur-wheat",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1429,6 +1431,7 @@
     },
     {
         "item":  "Japanese Curry Roux",
+        "identity_same_as":  [ { "product":  "\\bjapanese\\s+curry\\s+mix\\b", "reason":  "S&B Golden Curry mix is sold as the roux block (2 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "japanese-curry-roux",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1946,6 +1949,7 @@
     },
     {
         "item":  "Pumpkin Puree",
+        "identity_same_as":  [ { "product":  "\\bpure\\s+pumpkin\\b", "reason":  "canned 100% pure pumpkin is pumpkin puree (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "canned-pumpkin",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2000,6 +2004,7 @@
     },
     {
         "item":  "Red Pepper Flakes",
+        "identity_same_as":  [ { "product":  "\\bcrushed\\s+red\\s+pepper\\b", "reason":  "crushed red pepper is red pepper flakes: one food, two shelf names (42 costed lines, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "red-pepper-flakes",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2753,6 +2758,7 @@
     },
     {
         "item":  "Sun-Dried Tomatoes (Oil-Packed)",
+        "identity_same_as":  [ { "product":  "\\bsun[\\s-]dried\\s+tomatoes\\s+in\\s+(olive\\s+)?oil\\b", "reason":  "sun dried tomatoes in olive oil are the oil-packed food; the hyphen split the head word (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" } ],
         "bid":  "sun-dried-tomatoes",
         "gpu":  28.3495,
         "unit":  "oz",

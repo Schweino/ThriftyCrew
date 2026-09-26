@@ -1,0 +1,165 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-25T20:10:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (seeded copy, written 2026-09-25 08:14) and the served feed generated 2026-09-25T08:15:36",
+  "queue_ids_seen": ["2026-09-23-749d31", "2026-09-23-9999c0", "2026-09-23-dd290b", "2026-09-25-602457"],
+  "scope_note": "Weekly lane batch 7 of 9 (2026-09-25, Brad asked for every open alert resolved end to end). LEFTOVERS ONLY: prevention is batch 1's plan (plan-2026-09-25-6) by this run's dispatch.",
+  "knowledge_consulted": [
+    "searched 'alert triage root cause recurrence' (dispatch) and 'build card missing gitignored worktree' (knowledge-search --estate): claude-code-craft/applies-here.md 'A worktree is not the main tree' (a worktree gets TRACKED files only, so db/built made in one never reaches another)",
+    "reliability-craft/MAP.md s5 'do not declare resolved on the alert going quiet' (each item re-measured before its outcome)",
+    ".claude/rules/meal-prep.md: every price fetched from an Omaha store by the pipeline; a price in a recipe post renders from the feed at view time, the fallback on the FILL's basis",
+    "meal-prep/lib/ingredient-identity-lib.ps1 header: 'identity_reviewed' silences every product for a row, which is why the new record is scoped to one spelling"
+  ],
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record. Went live since the last lane run (git log origin/main since grocery/triage-weekly-lane-stamp.txt 2026-09-20T07:45 over grocery/stores.json, grocery/commodities.json and the capture builders): 20 commits, no new store or feed; the newest are 967f06033 (a unit spelling met at ingest), 9cf5ca974 (Sam's count-first names), 828d5226b (warehouse reference group), 027f21909 and 3e054a87f (Walmart and Sam's row builders).",
+  "ship_sequence": ["2026-09-23-749d31", "2026-09-23-9999c0", "2026-09-23-dd290b", "2026-09-25-602457"],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-25-per-serving-canonical",
+      "question": "Two producers publish one per-serving cheapest cost and disagree on 32 of 570 shared recipes (by more than a cent): the feed's per_serving (grocery/out/recipe-costs.json via export-feed.ps1) and meal-prep/pipeline/v2-perserving.json cheapest_ps (compute-v2-perserving.ps1). The dinner tools and recipe cards render the feed; the meal-prep hub bakes v2 into a static data-cost. Recommended (long-term): the feed is canonical, v2's cheapest_ps is derived from it, and the hub renders its cost chips from the feed at view time like the recipe pages (your 2026-09-21 instruction). Alternative: keep both and only make the hub bake from the feed (what f4ab3d20e did for cheap-dinners and dinner-tonight). Which?",
+      "owns": "2026-09-25-602457"
+    },
+    {
+      "id": "Q-2026-09-25-pasta-shape",
+      "question": "Is a pasta SHAPE the same food under your 2026-09-22 no-substitute ruling? 37 costed lines (Pasta Shells 13, Spaghetti 10, Ziti 8, Orzo 4, Fettuccine 2) are priced by 'Great Value Penne, 32 oz' on the one pasta commodity. Yes: record them reviewed. No: each shape needs its own commodity or the recipes hold.",
+      "owns": "2026-09-25-f9c8ce (part B)"
+    }
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-23-749d31",
+      "subject": "Articles: welcome waits for the feed to carry free-chicken-alfredo everyday_ps",
+      "classification": "infra",
+      "evidence": [
+        "served feed feed.thriftycrew.com/smp-feed.json generated 2026-09-25T08:15:36: 570 recipes, everyday_ps on 566; the four without are free-chicken-alfredo, shredded-bbq-chicken-sammies, chicken-marinara-pasta, beef-protein-pasta (the legacy rebuilds of c05390ae1)",
+        "free-chicken-alfredo is LIVE (plan-2026-09-22-6 item discovered:free-chicken-alfredo-live-2026-09-21 status done, 'published by the integrator') but C:\\Codex\\ThriftyCrew\\meal-prep\\db\\built\\free-chicken-alfredo.body.html does not exist; the card exists only in worktrees agent-ac5f626bdaf27c684 and agent-acc4db640d784b57b",
+        "feed-everyday-ps.ps1 line 96 (before): a slug is filled only when Join-Path $BuiltDir ($s + '.body.html') exists, so a card built elsewhere fails closed for good",
+        "after the fix, run over a copy of that same feed: 'feed-everyday-ps: 4 card(s) built here for recipes with no card ... free-chicken-alfredo,shredded-bbq-chicken-sammies,chicken-marinara-pasta,beef-protein-pasta; 0 could not be built', 'everyday_ps for 570 of 570 recipes', free-chicken-alfredo everyday_ps 2.00 (the live card read ~$2.00 on 2026-09-23)"
+      ],
+      "surface_fix": {
+        "what": "the next daily export writes everyday_ps for free-chicken-alfredo, so prepare-article-price-edits -Land stops refusing welcome",
+        "files": ["meal-prep/pipeline/feed-everyday-ps.ps1"],
+        "exact_change": "Resolve-TcEverydayCards: a feed slug with no card in BuiltDir and a spec in db\\recipes is built by build-card2 into a per-run scratch directory and handed to the harness"
+      },
+      "root_cause": "db/built is gitignored, so a recipe built and published from a worktree leaves no card in the chain's checkout, and the only writer of the feed's everyday_ps reads cards from that checkout alone: every span on another page naming such a recipe keeps its stamped fallback forever, and nothing pages",
+      "root_fix": {
+        "what": "feed-everyday-ps builds a missing card from its tracked spec with the card's own builder instead of requiring a card this checkout never received",
+        "files": ["meal-prep/pipeline/feed-everyday-ps.ps1"],
+        "exact_change": "new function Resolve-TcEverydayCards (builder seam $Build); the live path passes build-card2 -SpecFile -CostedFile db\\costed.json -OutDir <scratch>, prints how many it built and which could not be built, removes the scratch in finally"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changed; measured as feed recipes gaining everyday_ps over a copy of the served feed of 2026-09-25T08:15:36",
+        "affected_now": 4,
+        "names": ["free-chicken-alfredo", "shredded-bbq-chicken-sammies", "chicken-marinara-pasta", "beef-protein-pasta"],
+        "risk": "the 566 recipes with a card keep that card and are never rebuilt (CLEAN TWIN); a build that throws or writes no body leaves the recipe without the key, as before",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/feed-everyday-ps.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE  a recipe with a spec and NO built card here (free-chicken-alfredo, built in a worktree) is built into scratch and filled",
+        "clean_twin": "CLEAN TWIN  a recipe whose card IS built here uses that card and is never rebuilt; MUST NOT FIRE a build that throws, a build with no body and a recipe with no spec get no card",
+        "commands": ["powershell -NoProfile -File meal-prep\\pipeline\\feed-everyday-ps.ps1 -SelfTest (exit 0, PASS 11 cases)", "feed-everyday-ps.ps1 -FeedPath <copy of the served feed> -PublicPath <scratch> (exit 0, 570 of 570)"]
+      },
+      "rollback": "revert the feed-everyday-ps.ps1 hunk; the next export writes everyday_ps for built cards only, as before",
+      "freshness": "measured against the served feed of 2026-09-25T08:15:36 and the main checkout's db/built on 2026-09-25 evening",
+      "leaves_open": "the welcome article landing (a Ghost write this lane may not make: prepare-article-price-edits -Land -Apply -Slugs welcome after the next export) and published-hashes.json in the main checkout missing the four live rebuilds, so recipe_stats covers 566 of 570",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-25-d835e2",
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "done",
+      "premise_verified": "true, and narrower than written: the body blamed derived files predating origin/main; re-measured, the feed is two days newer and still lacks the key, because the card was never built in the chain's checkout",
+      "deviation": "the item's close path (a Ghost landing of welcome) is not this lane's to run; the class fix ships and the landing is the minted residual",
+      "shipped_commit": "this plan's commit on branch worktree-agent-a6faa5ab800119d8c (unlanded; cite the landed hash after triage-land)",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 26,
+      "close_disposition": "confirmed",
+      "resolution_note": "Confirmed and fixed at the class: feed-everyday-ps now builds, from the tracked spec, any live recipe's card the chain checkout never received (worktree-published). 566 -> 570 of 570 feed recipes carry everyday_ps over the same served feed; free-chicken-alfredo 2.00. Welcome's Ghost landing and the published-hashes gap are 2026-09-25-d835e2."
+    },
+    {
+      "queue_id": "2026-09-23-9999c0",
+      "subject": "Triage residual: recipe ingredient identity union rows, 138 lines over 30 pairs",
+      "classification": "wrong-product",
+      "evidence": [
+        "audit-ingredient-identity.ps1 -BoardFile comparison-2026-09-23.json, 2026-09-25: exit 0, '149 finding(s) [PROXY=2 UNION-ROW=138 UNROUTED=9]' - 138 union lines, now over 20 pairs",
+        "Red Pepper Flakes <= 'Great Value Crushed Red Pepper, 12 oz' 42; Zucchini <= 'Fresh Yellow Squash, Each' 18; Pasta Shells 13 / Spaghetti 10 / Ziti 8 / Orzo 4 / Fettuccine 2 <= 'Great Value Penne, 32 oz'; BBQ Sauce <= 'Kraft Hint of Honey Slow-Simmered Barbecue Sauce' 11; Enchilada Sauce <= 'Las Palmas Medium Red Chile Sauce' 9",
+        "after: '91 finding(s) [PROXY=2 UNION-ROW=80 UNROUTED=9]', 'ratchet CAN tighten: 149 -> 91'; -Tighten recorded it"
+      ],
+      "surface_fix": {
+        "what": "record the six pairs that are one food under two shelf names",
+        "files": ["meal-prep/db/ingredients.json"],
+        "exact_change": "identity_same_as on Red Pepper Flakes (crushed red pepper), BBQ Sauce (barbecue sauce), Japanese Curry Roux (japanese curry mix), Pumpkin Puree (pure pumpkin), Bulgur Wheat (bulgur), Sun-Dried Tomatoes (Oil-Packed) (sun dried tomatoes in olive oil)"
+      },
+      "root_cause": "the identity check's only reviewed record is row-wide (identity_reviewed silences every product for the ingredient), so a same-food spelling had two bad choices: stay a standing finding that pages nowhere, or be silenced so broadly that the next wrong product on that cell is invisible",
+      "root_fix": {
+        "what": "a reviewed record scoped to one product spelling, with a required reason",
+        "files": ["meal-prep/lib/ingredient-identity-lib.ps1", "meal-prep/pipeline/audit-ingredient-identity.ps1", "ops/out/ingredient-identity-baseline.json"],
+        "exact_change": "Test-IdentitySameAs: a row's identity_same_as [{product regex, reason}] skips the UNION-ROW finding only for a product whose name matches; no reason or an unparseable pattern silences nothing; four self-test cases; ratchet mark tightened 149 -> 91"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no commodity rule changed; measured as UNION-ROW findings before/after over 587 costed recipes against comparison-2026-09-23",
+        "affected_now": 58,
+        "names": ["Red Pepper Flakes 42", "BBQ Sauce 11", "Japanese Curry Roux 2", "Pumpkin Puree 1", "Bulgur Wheat 1", "Sun-Dried Tomatoes (Oil-Packed) 1"],
+        "risk": "a record silences one spelling only: the CLEAN TWIN keeps a paprika row on the same Red Pepper Flakes line a finding; no price, cost or cell moves (the audit reads, it does not price)",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (asserts 25 cases ran)",
+        "must_fire_case": "MUST FIRE  with no record, Red Pepper Flakes priced by 'Great Value Crushed Red Pepper' is a UNION-ROW finding; MUST FIRE a record with no reason silences nothing",
+        "clean_twin": "CLEAN TWIN  the same record does NOT silence a paprika row pricing the same line: still a UNION-ROW",
+        "commands": ["powershell -NoProfile -File meal-prep\\pipeline\\audit-ingredient-identity.ps1 -SelfTest (exit 0, PASS 25 cases)", "audit-ingredient-identity.ps1 -BoardFile grocery\\out\\comparison-2026-09-23.json (exit 0, 91 findings, UNION-ROW 80)"]
+      },
+      "rollback": "revert the lib function and its call, the six identity_same_as lines and the baseline; the 58 lines return as findings already in the old mark",
+      "freshness": "measured against comparison-2026-09-23 (seeded copy written 2026-09-25 08:14) and db/costed.json at this branch's base; a rebuilt board may move the union rows",
+      "leaves_open": "80 union lines over 14 pairs: 26 real substitutes (Zucchini by yellow squash 18, glass noodles by rice noodles 3, pepperoncini by banana peppers 3, fresh red chili by jalapenos 1, blackened by cajun 1) needing commodities.json (money lane) or a hold; 53 awaiting a ruling (pasta shapes 37 in Q-2026-09-25-pasta-shape, enchilada 9, pineapple chunks 4, chili crisp 3); Egg Yolk 1 needing relation derived",
+      "leaves_open_occurrences": 80,
+      "leaves_open_followup": "2026-09-25-f9c8ce",
+      "lane": "ops",
+      "est_tool_calls": 25,
+      "status": "done",
+      "premise_verified": "true: 138 union lines re-measured 2026-09-25 (the body's 30 pairs are 20 today); the body's same-food reading of Red Pepper Flakes and BBQ Sauce held",
+      "deviation": null,
+      "shipped_commit": "this plan's commit on branch worktree-agent-a6faa5ab800119d8c (unlanded; cite the landed hash after triage-land)",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 16,
+      "close_disposition": "confirmed",
+      "resolution_note": "Confirmed. Shipped a reviewed same-food record scoped to one product spelling (identity_same_as, fixtured) and recorded six pairs: UNION-ROW 138 -> 80, mark 149 -> 91. The 26 substitute lines, the 53 awaiting a ruling and Egg Yolk are 2026-09-25-f9c8ce."
+    },
+    {
+      "queue_id": "2026-09-23-dd290b",
+      "subject": "Triage residual: sourcing for 11 held recipes (lo mein, glass noodles, blackened, tandoori) plus bacon-ends exclude and red chili",
+      "classification": "no-code-change",
+      "evidence": [
+        "meal-prep/db/held-recipes.json on 2026-09-25: 11 of the 11 named recipes still held",
+        "grocery/commodities.json at this branch: no id matching lo-mein, glass-noodle, sweet-potato-noodle, dangmyeon, bacon-ends or red-chil; comparison-2026-09-23 carries no blackened or tandoori cell; commodities.json changed since 2026-09-23 only for laundry-detergent (81a961a00, fc2b4c6fd)",
+        "the item's own body: 'Owner: the matching-worklist lane (commodities.json)'"
+      ],
+      "root_cause": "four foods the recipes need have no commodity reaching an Omaha board cell (lo mein, sweet potato glass noodles, blackened seasoning, tandoori masala), and the bacon-ends exclude and red chili are matching-rule changes",
+      "root_fix_none_because": "every fix is a commodities.json change (new commodities, a carve-out, an exclude), which is on the line this lane does not cross",
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "bounced",
+      "premise_verified": "true: 11 of 11 still held, no commodity added since 2026-09-23 for any of the named foods",
+      "deviation": "bounced: the measurement shows it touches matching (grocery/commodities.json), so it goes to the money lane; its queue id stays open",
+      "resolution_note": "Bounced to the money lane: every fix is in grocery/commodities.json. Re-measured 2026-09-25: 11 of 11 recipes still held, no lo mein / glass noodle / bacon-ends / red chili commodity, no blackened or tandoori board cell."
+    },
+    {
+      "queue_id": "2026-09-25-602457",
+      "subject": "Triage residual: per-serving cost feed vs v2-perserving disagree (30 of 570)",
+      "classification": "needs-brad",
+      "evidence": [
+        "grocery/out/smp-feed.json (generated 2026-09-25T08:15:36) per_serving against meal-prep/pipeline/v2-perserving.json cheapest_ps (seeded copy written 19:38): 32 of 570 shared slugs differ by more than a cent, e.g. beef-birria-rice-bowls feed 7.12 v2 7.21, chile-colorado-bowls 5.08 v2 5.21 (the two files are 11 hours apart, so 32 is not a same-run count; the item measured 30 on same-morning files)",
+        "export-feed.ps1 line 603 takes per_serving from grocery/out/recipe-costs.json; compute-v2-perserving.ps1 computes cheapest_ps from feed.cheapest; build-hub-grid.ps1 line 177 bakes v2 cheapest_ps into data-cost and the hub never hydrates it"
+      ],
+      "root_cause": "one fact (a recipe's cheapest per-serving cost) has two producers and each reader surface picks one, so the site can show two prices for one recipe",
+      "root_fix_none_because": "which producer is canonical, and whether the hub hydrates or bakes, is the ruling the item asks for (Q-2026-09-25-per-serving-canonical); a recommendation is written there",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "status": "needs-brad",
+      "premise_verified": "true: the disagreement stands (32 of 570 on files 11 hours apart) and no check watches the pair",
+      "resolution_note": "Needs a ruling: Q-2026-09-25-per-serving-canonical (recommended: the feed is canonical, v2 derives from it, the hub renders from the feed at view time). Measured 32 of 570 differ."
+    }
+  ]
+}

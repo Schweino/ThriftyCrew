@@ -66,6 +66,27 @@ function Get-TcRecipePriceStats { param([hashtable]$Values, [hashtable]$Publishe
   }
 }
 
+# CARD RESOLUTION (2026-09-25, queue 2026-09-23-749d31). db\built is gitignored, so a recipe built and published from a
+# WORKTREE leaves no card in the chain's checkout, and this writer failed closed on it for good: free-chicken-alfredo and
+# the other three legacy rebuilds (c05390ae1) were live with no feed everyday_ps (566 of 570 on 2026-09-25), and every
+# span naming them on another page (welcome) waited on a card nobody would ever build there. A feed recipe with no card in
+# BuiltDir but a spec in SpecDir is now rendered by build-card2 (the card's own builder, never a second copy of the rule)
+# into a scratch directory and filled like any other; a build that throws or writes no body leaves it without the key.
+# $Build is the builder seam (param: spec path, out dir), so the self-test is hermetic.
+function Resolve-TcEverydayCards { param([string[]]$Slugs, [string]$BuiltDir, [string]$SpecDir, [string]$ScratchDir, [scriptblock]$Build)
+  $cards = @(); $built = @(); $failed = @()
+  foreach ($s in $Slugs) {
+    $b = Join-Path $BuiltDir ($s + '.body.html')
+    if (Test-Path -LiteralPath $b) { $cards += @{ slug = $s; htmlPath = $b; kind = 'body' }; continue }
+    $spec = Join-Path $SpecDir ($s + '.json')
+    if (-not $SpecDir -or -not (Test-Path -LiteralPath $spec)) { continue }
+    try { & $Build $spec $ScratchDir | Out-Null } catch { $failed += $s; continue }
+    $sb = Join-Path $ScratchDir ($s + '.body.html')
+    if (Test-Path -LiteralPath $sb) { $cards += @{ slug = $s; htmlPath = $sb; kind = 'body' }; $built += $s } else { $failed += $s }
+  }
+  return @{ cards = $cards; built = $built; failed = $failed }
+}
+
 if ($SelfTest.IsPresent) {
   $script:fl = 0; $script:n = 0
   function T($m, $c, $g) { $script:n++; if ($c) { Write-Output ('ok    ' + $m) } else { Write-Output ('FAIL  ' + $m + '   got: ' + $g); $script:fl++ } }
@@ -82,6 +103,23 @@ if ($SelfTest.IsPresent) {
   T 'MUST NOT FIRE  an empty population writes NO stats (the spans keep their fallbacks), never a 0' ($null -eq $st0) ($st0 | ConvertTo-Json -Compress)
   $stT = Get-TcRecipePriceStats -Values @{ zz = 1.5; aa = 1.5; mm = 2.0 } -Published @{ zz = 1; aa = 1; mm = 1 } -Held @{}
   T 'CLEAN TWIN  a tie for cheapest is broken by ordinal slug (aa before zz)' ($stT.cheapest.slug -eq 'aa') ($stT | ConvertTo-Json -Compress)
+  # card resolution (queue 2026-09-23-749d31): a live recipe whose card was built in another checkout
+  $rt = Join-Path ([IO.Path]::GetTempPath()) ('tc-fep-st-' + [guid]::NewGuid().ToString('N'))
+  try {
+    $rB = Join-Path $rt 'built'; $rS = Join-Path $rt 'specs'; $rX = Join-Path $rt 'scratch'
+    New-Item -ItemType Directory -Path $rB, $rS, $rX -ErrorAction Stop | Out-Null
+    Set-Content -LiteralPath (Join-Path $rB 'has-card.body.html') -Value 'x'
+    foreach ($sp in 'has-card', 'no-card', 'build-throws', 'build-empty') { Set-Content -LiteralPath (Join-Path $rS ($sp + '.json')) -Value '{}' }
+    $script:calls = @()
+    $fake = { param($spec, $out) $s = [IO.Path]::GetFileNameWithoutExtension($spec); $script:calls += $s
+      if ($s -eq 'build-throws') { throw 'card refused' }
+      if ($s -ne 'build-empty') { Set-Content -LiteralPath (Join-Path $out ($s + '.body.html')) -Value 'y' } }
+    $rc = Resolve-TcEverydayCards -Slugs @('has-card', 'no-card', 'build-throws', 'build-empty', 'no-spec') -BuiltDir $rB -SpecDir $rS -ScratchDir $rX -Build $fake
+    $rcs = @($rc.cards | ForEach-Object { $_.slug })
+    T 'MUST FIRE  a recipe with a spec and NO built card here (free-chicken-alfredo, built in a worktree) is built into scratch and filled' (($rcs -contains 'no-card') -and (@($rc.built) -contains 'no-card') -and ((@($rc.cards | Where-Object { $_.slug -eq 'no-card' })[0].htmlPath) -like ($rX + '*'))) ($rcs -join ',')
+    T 'CLEAN TWIN  a recipe whose card IS built here uses that card and is never rebuilt' (($rcs -contains 'has-card') -and -not ($script:calls -contains 'has-card') -and ((@($rc.cards | Where-Object { $_.slug -eq 'has-card' })[0].htmlPath) -like ($rB + '*'))) ($script:calls -join ',')
+    T 'MUST NOT FIRE  a build that throws, a build that writes no body, and a recipe with no spec get NO card (fail closed)' (-not ($rcs -contains 'build-throws') -and -not ($rcs -contains 'build-empty') -and -not ($rcs -contains 'no-spec') -and (@($rc.failed).Count -eq 2)) ($rcs -join ',')
+  } finally { Remove-Item -LiteralPath $rt -Recurse -Force -ErrorAction SilentlyContinue }
   if ($script:fl -eq 0) { Write-Output ("feed-everyday-ps self-test PASS ($script:n cases)"); exit 0 } else { Write-Output ("feed-everyday-ps self-test FAIL ($script:fl of $script:n)"); exit 1 }
 }
 
@@ -93,12 +131,19 @@ $raw = [IO.File]::ReadAllText($FeedPath)
 $feed = $raw.TrimStart([char]0xFEFF) | ConvertFrom-Json
 $slugs = @($feed.recipes.PSObject.Properties | ForEach-Object { $_.Name })
 if ($slugs.Count -eq 0) { Write-Output 'BLIND  the feed carries no recipes, so there is nothing to price: the feed is left as written'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=no-recipes' -Code 3 }
-$cards = @(); foreach ($s in $slugs) { $b = Join-Path $BuiltDir ($s + '.body.html'); if (Test-Path $b) { $cards += @{ slug = $s; htmlPath = $b; kind = 'body' } } }
+$scratch = Join-Path ([IO.Path]::GetTempPath()) ('tc-fep-cards-' + [guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path $scratch -ErrorAction Stop | Out-Null
+$costedF = Join-Path $mp 'db\costed.json'
+$b2 = Join-Path $here 'build-card2.ps1'
+$buildOne = { param($spec, $out) & $b2 -SpecFile $spec -CostedFile $costedF -OutDir $out *> $null }
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ('tc-fep-' + [guid]::NewGuid().ToString('N') + '.json')
 try {
+  $rcx = Resolve-TcEverydayCards -Slugs $slugs -BuiltDir $BuiltDir -SpecDir (Join-Path $mp 'db\recipes') -ScratchDir $scratch -Build $buildOne
+  $cards = @($rcx.cards)
+  if (@($rcx.built).Count -or @($rcx.failed).Count) { Write-Output ("feed-everyday-ps: {0} card(s) built here for recipes with no card in {1}: {2}; {3} could not be built: {4}" -f @($rcx.built).Count, $BuiltDir, (@($rcx.built) -join ','), @($rcx.failed).Count, (@($rcx.failed) -join ',')) }
   [IO.File]::WriteAllText($tmp, (@{ jsdom = $JsdomEnv; feedPath = $FeedPath; feedMode = 'ok'; waitMs = 4000; cards = $cards } | ConvertTo-Json -Depth 5), (New-Object Text.UTF8Encoding($false)))
   $lines = & $node (Join-Path $here 'live-price-fill.js') $tmp
-} finally { Remove-Item $tmp -ErrorAction SilentlyContinue }
+} finally { Remove-Item $tmp -ErrorAction SilentlyContinue; Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue }
 $res = @{}; $done = $false
 foreach ($l in @($lines)) { if ($l -match '^LIVE-PRICE-FILL-COMPLETE') { $done = $true } elseif ($l -match '^\{') { $o = $l | ConvertFrom-Json; $res[[string]$o.key] = $o } }
 if (-not $done) { Write-Output 'BLIND  live-price-fill.js died before its completion marker: the feed is left as written'; Exit-Guard -Name 'feed-everyday-ps' -Summary 'blind=harness' -Code 3 }
