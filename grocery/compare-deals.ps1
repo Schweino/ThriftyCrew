@@ -670,6 +670,16 @@ if ($SelfTest) {
   _Near 'or-size: Xtra 3/$10 at 56 oz /floz' (Get-UnitPrice (_D '3/ $10.00' 'Xtra laundry detergent, 56 or 67.5 oz.' $null '56 or 67.5 oz') (_C 'floz')).unit_price 0.0595 0.0001
   $orOne = Get-SizeAmount '67.5 oz' 'floz'
   if ($null -ne $orOne -and [math]::Abs([double]$orOne - 67.5) -lt 0.0001) { Write-Output "ok    CLEAN TWIN a single size '67.5 oz' still reads 67.5" } else { Write-Output ("FAIL  single size read as " + $orOne); $script:fail++ }
+  # 10d. A COUNT RANGE TAKES ITS SMALLER COUNT TOO (2026-09-25, queue 2026-09-19-dc1b5b). Frozen founding row,
+  # Fareway on comparison-2026-09-23: storage-bags priced per-42-pack 0.095; the least favourable end is 3.99/25.
+  _Near 'MUST FIRE  Fareway storage bags 25-42 ct prices per bag on 25' (Get-UnitPrice (_D '$3.99' 'Bright Essentials Storage Bags' $null '25-42 ct') (_C 'each')).unit_price 0.1596 0.00005
+  $crDesc = Get-EachPackCount '24-12 ct'; $crDescOld = Get-PackCount '24-12 ct'
+  if ($crDesc -eq $crDescOld) { Write-Output "ok    MUST NOT FIRE a descending '24-12 ct' is not a range and reads as Get-PackCount does ($crDescOld)" } else { Write-Output ("FAIL  '24-12 ct' read " + $crDesc + ", Get-PackCount reads " + $crDescOld); $script:fail++ }
+  $crOne = Get-EachPackCount '42 ct'
+  if ($crOne -eq 42) { Write-Output "ok    CLEAN TWIN a single '42 ct' still reads 42" } else { Write-Output ("FAIL  '42 ct' read as " + $crOne); $script:fail++ }
+  $crMm = Get-SizeAmount '10-10.5 oz' 'oz'
+  if ($null -ne $crMm -and [math]::Abs([double]$crMm - 10) -lt 0.0001) { Write-Output "ok    CLEAN TWIN Fireside Marshmallows '10-10.5 oz' still reads 10 oz" } else { Write-Output ("FAIL  '10-10.5 oz' read as " + $crMm); $script:fail++ }
+  _Near 'CLEAN TWIN  shrimp 31-40 ct 3 lb bag still prices per lb' (Get-UnitPrice (_D '$20.97' 'Member''s Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct' $null '3 lb bag') (_C 'lb')).unit_price 6.99 0.0005
   # 11. the tightened GLOBAL_EXCLUDE 'mix' token must SKIP "mix & match" (a multibuy) but still catch "drink mix"
   $mixTok = '(?i)\bmix\b(?!\s*(?:&|and)\s*match)'
   if ('tyson chicken thighs, mix & match buy 1 get 2 free' -notmatch $mixTok) { Write-Output "ok    'mix & match' not excluded" } else { Write-Output "FAIL  'mix & match' wrongly excluded"; $script:fail++ }
@@ -755,8 +765,10 @@ if ($SelfTest) {
   # MUST NOT FIRE: a real cents PRICE is not a fuel-saver reward. The strip is anchored on OFF PER GALLON,
   # so the shape that made this fix risky at all still prices exactly as it did.
   _Near 'MUST NOT FIRE  "Bananas, 49 cents lb." still prices 0.49/lb' (Get-UnitPrice (_D ('Bananas, 49' + [char]0x00A2 + ' lb.') 'Bananas' $null '') (_C 'lb')).unit_price 0.49 0.001
-  # CLEAN TWIN: the Hy-Vee storage-bags row from the same ad, no fuel-saver clause, unchanged at 0.0299.
-  _Near 'CLEAN TWIN  Hy-Vee storage bags 75 to 100 ct., $2.99' (Get-UnitPrice (_D 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 'Hy-Vee storage bags' $null '') (_C 'each')).unit_price 0.0299 0.001
+  # CLEAN TWIN: the Hy-Vee storage-bags row from the same ad, no fuel-saver clause, still priced (not blanked).
+  # Its value moved 0.0299 -> 0.0399 on 2026-09-25 (queue 2026-09-19-dc1b5b): a count range takes its SMALLER count,
+  # 2.99/75, the same least favourable reading a weight range has taken since plan-2026-09-22-5.
+  _Near 'CLEAN TWIN  Hy-Vee storage bags 75 to 100 ct., $2.99 (least favourable 75)' (Get-UnitPrice (_D 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 'Hy-Vee storage bags' $null '') (_C 'each')).unit_price 0.0399 0.0001
 
   # --- 11c-quater: A SAVINGS CLAUSE IS NOT A PRICE EITHER (2026-09-18, queue 2026-09-18-f90ba6) ------------
   # The two rows that held the board from 09-14 to 09-18, frozen verbatim off comparison-2026-09-17 (Hy-Vee,

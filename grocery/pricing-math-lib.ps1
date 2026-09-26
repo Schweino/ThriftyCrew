@@ -761,6 +761,25 @@ function Get-PackCount($text) {
   if ($m.Success) { $n = [int]$m.Groups[1].Value; if ($n -gt 1) { return $n } }
   return $null
 }
+# A COUNT RANGE TAKES ITS LEAST FAVOURABLE END, LIKE A WEIGHT RANGE (2026-09-25, queue 2026-09-19-dc1b5b,
+# plan-2026-09-25-15). Get-SizeAmount's range rule (plan-2026-09-22-5: the SMALLER size, so the per-unit is the most a
+# shopper pays) sits in the size path, and the each branch of Get-UnitPrice returns on a pack count before it gets
+# there. Get-PackCount reads '25-42 ct' from its unit-adjacent end, 42, so the founding row
+#     Fareway 'Bright Essentials Storage Bags' $3.99 size '25-42 ct' (storage-bags, comparison-2026-09-23)
+# priced 0.095/bag against a least-favourable 0.1596. ASCENDING pairs only, the same guard the weight path uses:
+# '24-12 ct' is not a range. Used ONLY where Get-UnitPrice reads an each-commodity pack count; Get-PackCount itself is
+# unchanged, because the multibuy resolver and Get-EachCountConflict read it and neither prices a range. A '31-40 ct'
+# shrimp grade never reaches this: shrimp is per-lb, and the weight branch never reads a count.
+function Get-EachPackCount($text) {
+  if (-not $text) { return $null }
+  $t = ("" + $text).ToLower()
+  $r = [regex]::Match($t, '(?<![\d.$])(\d+)\s*(?:to|or|-|&ndash;|thru)\s*(\d+)\s*[- ]?\s*(?:count|ct)\b')
+  if ($r.Success) {
+    $lo = [int]$r.Groups[1].Value; $hi = [int]$r.Groups[2].Value
+    if ($lo -lt $hi -and $lo -gt 1) { return $lo }
+  }
+  return (Get-PackCount $text)
+}
 # A SIZE-FIELD COUNT THAT DISAGREES WITH THE NAME'S OWN COUNT IS NOT A BASIS (2026-09-25, queue 2026-09-22-8d2ad5,
 # plan-2026-09-25-15). The each branch of Get-UnitPrice takes its pack count from the size field before the name, and
 # nothing checked the two against each other. Founding rows, comparison-2026-09-23 (both live cells, as_of 2026-08-05):
@@ -892,9 +911,9 @@ function Get-UnitPrice($deal, $cat) {
       # against a real $3.48 - and it took the crown. Refusing here lets the per-each marker below answer
       # $3.48, which is the price the ad actually states for one cauliflower.
       $pkm = $null
-      if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pkm = Get-PackCount $deal.price_text }
-      if (-not $pkm) { $pkm = Get-PackCount $deal.size_text }
-      if ((-not $pkm) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pkm = Get-PackCount $deal.name }
+      if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pkm = Get-EachPackCount $deal.price_text }
+      if (-not $pkm) { $pkm = Get-EachPackCount $deal.size_text }
+      if ((-not $pkm) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pkm = Get-EachPackCount $deal.name }
       if ($pkm) { return @{ unit_price=($pr.per_item/$pkm); basis="per-$pkm-pack (pack count beats the per-each marker)"; note=$pr.note } }
     }
     return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note }
@@ -1020,9 +1039,9 @@ function Get-UnitPrice($deal, $cat) {
     # took "3 ct" from price_text, divided, and crowned cauliflower at $1.16 against a real $3.48.
     # size_text stays trusted - that one really is a statement about the unit being priced, not prose.
     $pk = $null
-    if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pk = Get-PackCount $deal.price_text }
-    if (-not $pk) { $pk = Get-PackCount $deal.size_text }
-    if ((-not $pk) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pk = Get-PackCount $deal.name }
+    if (-not (Test-NameOffersTwoSizes $deal.price_text)) { $pk = Get-EachPackCount $deal.price_text }
+    if (-not $pk) { $pk = Get-EachPackCount $deal.size_text }
+    if ((-not $pk) -and -not (Test-NameOffersTwoSizes $deal.name)) { $pk = Get-EachPackCount $deal.name }
     # PORTION COUNT INSIDE ONE PACKAGE IS NOT A PACK COUNT (2026-07-30, garlic bread).
     # For most 'each' commodities the count IS the unit a shopper buys - a bagel, a bun, a popsicle, an ear of
     # corn - so dividing is right, and 55 of the 56 each-commodities on the board price that way at every store.
