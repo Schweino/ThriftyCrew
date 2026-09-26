@@ -4312,6 +4312,31 @@ else { Bad ('script-census let out\ grow past its recorded baseline (rc=' + $r.r
 $r = RunPS 'audit-script-census.ps1' @('-Root', $fxSc, '-ScanRoot', $fxSc, '-OutBaseline', '1', '-WholeTreeIsStrict')
 if ($r.rc -eq 0) { Ok 'script-census ratchet SILENT at the recorded baseline (a ratchet, not a hard zero)' }
 else { Bad ('script-census ratchet fires at its own recorded baseline (rc=' + $r.rc + ') - it would fail from day one') }
+# A VENDORED ENVIRONMENT IS NOT A REPO SCRIPT (2026-09-26, queue 2026-09-26-1f95a4 and its 7 prior closes of this type).
+# The main checkout's gitignored sidecar venv carried an activate script no worktree has, so the wide tier read one over
+# its mark only where the bot pushes from, and the bot's push was refused four times.
+$fxScV = NewFxDir 'sc-venv'
+New-Item -ItemType Directory -Force (Join-Path $fxScV 'side\.venv\Scripts') | Out-Null
+New-Item -ItemType Directory -Force (Join-Path $fxScV 'web\node_modules\pkg') | Out-Null
+Set-Content (Join-Path $fxScV 'side\.venv\Scripts\activate.ps1') 'Write-Output "venv"' -Encoding UTF8
+Set-Content (Join-Path $fxScV 'web\node_modules\pkg\install.ps1') 'Write-Output "npm"' -Encoding UTF8
+Set-Content (Join-Path $fxScV 'zzz-real-orphan.ps1') 'Write-Output "real"' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScV, '-ScanRoot', $fxScV, '-WholeTreeIsStrict')
+if ($r.text -notmatch 'activate\.ps1' -and $r.text -notmatch 'install\.ps1') { Ok 'script-census MUST NOT FIRE on a script inside a .venv or node_modules directory (vendored, not the repo''s own)' }
+else { Bad ('script-census counted a vendored environment''s script as a repo orphan (rc=' + $r.rc + '): ' + $r.text) }
+if ($r.rc -eq 2 -and $r.text -match 'ORPHAN zzz-real-orphan\.ps1') { Ok 'script-census CLEAN TWIN: a real orphan beside the pruned vendored dirs still fires' }
+else { Bad ('script-census stopped seeing a real orphan once vendored dirs were pruned (rc=' + $r.rc + '): ' + $r.text) }
+# A RISE NAMES ITS SCRIPTS (same day): the wide mark is a count, so the failure lists every unrecorded wide orphan.
+$fxScW = NewFxDir 'sc-wide'
+Set-Content (Join-Path $fxScW 'zzz-wide-orphan.ps1') 'Write-Output "wide"' -Encoding UTF8
+Set-Content (Join-Path $fxScW 'script-census-wide-baseline.json') '{"uncalled": 0}' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScW, '-ScanRoot', $fxScW)
+if ($r.rc -eq 2 -and $r.text -match 'WIDE RATCHET ROSE' -and $r.text -match 'wide-unrecorded zzz-wide-orphan\.ps1') { Ok 'script-census MUST FIRE: a wide-tier rise over its mark of 0 names the unrecorded script' }
+else { Bad ('script-census wide rise did not fire or did not name its script (rc=' + $r.rc + '): ' + $r.text) }
+Set-Content (Join-Path $fxScW 'script-census-wide-baseline.json') '{"uncalled": 1}' -Encoding UTF8
+$r = RunPS 'audit-script-census.ps1' @('-Root', $fxScW, '-ScanRoot', $fxScW)
+if ($r.rc -eq 0 -and $r.text -notmatch 'wide-unrecorded') { Ok 'script-census CLEAN TWIN: at its wide mark of 1 it passes and lists nothing' }
+else { Bad ('script-census failed or listed names at its own wide mark (rc=' + $r.rc + '): ' + $r.text) }
 $fxScB = NewFxDir 'sc-blind'
 $r = RunPS 'audit-script-census.ps1' @('-Root', $fxScB, '-ScanRoot', $fxScB, '-WholeTreeIsStrict')
 if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'script-census goes BLIND (exit 3) with nothing to examine instead of reporting a clean zero' }

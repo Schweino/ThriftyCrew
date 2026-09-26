@@ -1,0 +1,483 @@
+{
+  "generated": "2026-09-26T10:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (built 2026-09-26 08:06:07 by the daily run; guards held it, so the live board is still the last good one)",
+  "queue_ids_seen": [
+    "2026-09-26-1f95a4",
+    "2026-09-26-e0d5cf",
+    "2026-09-26-2a80fa",
+    "2026-09-26-e3566b",
+    "2026-09-26-a988a8",
+    "2026-09-26-32500f",
+    "2026-09-20-cb8f30",
+    "2026-09-21-4b973e",
+    "2026-09-22-2dae07",
+    "2026-09-22-6e6a3b",
+    "2026-09-22-817976",
+    "2026-09-22-20fecf",
+    "2026-09-22-5a9676",
+    "2026-09-23-80f302"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": {
+    "searched": [
+      "\"guard blind test-auditors\"",
+      "\"pipeline push blocked\"",
+      "\"guards failed board not published\"",
+      "\"hygiene finding pages as blind guard\"",
+      "\"script census wide ratchet orphan\"",
+      "\"bot checkout sync blocked foreign dirty\"",
+      "\"census prune vendored venv directory\""
+    ],
+    "used": [
+      "memory:one-tally-two-verdicts (C--Codex store): read WHICH test-auditors check failed before calling it a blind guard; it was the script census, a hygiene finding, and the residual 2026-09-26-8163f7 carries the tier split",
+      "data-quality-craft/applies-here.md ('A guard that exists and reads green while its defect is live'): checked the census's own input (its population) before believing its colour; the population differed between the main checkout and worktrees",
+      ".claude/rules/ops-and-gates.md ('A walk over this tree excludes on the path BELOW its root'): the vendored-dir exclusion PRUNES and FILTERS, on Get-TcPathBelowRoot",
+      ".claude/rules/ops-and-gates.md ('Do not add a gate that is red on day one'): the wide mark was tightened 73 -> 71 with -WideBaseline, never raised"
+    ]
+  },
+  "ship_sequence": [
+    "1. ops (this spawn): 1f95a4 grocery/audit-script-census.ps1 + grocery/test-auditors.ps1 unit u079 + grocery/out/script-census-wide-baseline.json (71). Proof: test-auditors -SkipUnitsFile (u079 only) exit 0; audit-script-census live exit 0. full_suite: deferred-to-land. This alone unblocks the bot's three held commits (c444bcc0b graph, ef7edb1a3 ad, 8df33b9be daily): their pre-push was refused on gate grocery\\audit-script-census.ps1 four times.",
+    "2. money (triage-developer): e0d5cf. Re-read today's two HARD FAILs (audit-asof-evidence, audit-flag-verification) and why guards reached disposition=hold rather than QUARANTINE-REQUIRED; fix at the scope decision, run the real chain from check-ad-cycles.ps1 in a scratch clone (repair-multipack-sizes -Apply, stamp-ad-as-of -Apply, compare-deals, update-history -Reconcile, guards MUST be 0 or 4), then publish-deals-page.",
+    "3. money (triage-developer): 20fecf, 5a9676, 80f302 re-measure only (each root fix is already on origin/main); confirm on today's board and close.",
+    "4. orchestrator: land with grocery\\triage-land.ps1 (push-main runs every gate and prepush-test-auditors), then close each finished id with triage-close.ps1 from its resolution_note and close_disposition. Check that the next bot sync lands the held bot commits."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-26-1f95a4",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "verdict_for_the_day": "NOT BLIND. 790 of 791 cases passed; the one FAIL is the script census's live-tree case, a hygiene finding (an unrecorded script), and every census fixture fired.",
+      "evidence": [
+        "grocery/out/test-auditors-fail-2026-09-26.txt:996-997 'test-auditors FAIL (1 failed, 790 passed)'; :410 the only FAIL 'script-census fires on the live tree'; :606 'WIDE RATCHET ROSE: 74 unrecorded orphan(s) outside grocery\\, over the high-water mark of 73'",
+        "re-run 10:05 in the main checkout: audit-script-census rc=2, same 74 over 73. The 74 names (listed by a scratch copy that prints $wideNew; 109 uncalled, identical to the real run): the two newest are ops/verify-gate-declaration.ps1 (added 2026-09-26 9fe97ed8d) and ops/report-push-time.ps1 (2026-09-25 db2772297), both BY-HAND tools with no executable caller; and exactly one is untracked: sidecar/.venv/Scripts/activate.ps1 (gitignored by .gitignore:39, present only in the main checkout)",
+        "push ledger pushes-2026-09-26.jsonl 13:50Z..14:11Z: four 'hook-refused' rows, cause run-gates, gate grocery\\audit-script-census.ps1, local_sha 8df33b9be, checkout C:\\Codex\\ThriftyCrew: the bot's push from the main checkout was refused by this gate while worktree pushes (663e2dd5c 06:35, d6aedc2f3 07:07) landed, because a worktree has no sidecar\\.venv and read the wide tier one lower"
+      ],
+      "surface_fix": {
+        "what": "record the two by-hand scripts in KNOWN with their reasons, and tighten the wide mark to what the census now reads",
+        "files": [
+          "grocery/audit-script-census.ps1",
+          "grocery/out/script-census-wide-baseline.json"
+        ],
+        "exact_change": "KNOWN += ops\\report-push-time.ps1, ops\\verify-gate-declaration.ps1; -WideBaseline 73 -> 71"
+      },
+      "root_cause": "the census's population is 'every .ps1 on disk under the repo', so it includes gitignored vendored files (a Python venv's activate script) that exist in the main checkout and in no worktree; the wide mark was set and is re-checked by pushes from worktrees, so the main checkout, which is where the bot pushes from and where the daily test-auditors runs, reads one over the mark and any single new by-hand script tips it red there only. And a rise names no script, so every fixer has to rebuild the census to find the newcomer.",
+      "root_fix": {
+        "what": "prune vendored environment directories (.venv, venv, node_modules) from the census population wherever they sit, on the path below the root, prune and filter both; and make a wide-tier rise list every unrecorded wide orphan by name",
+        "files": [
+          "grocery/audit-script-census.ps1",
+          "grocery/test-auditors.ps1"
+        ],
+        "exact_change": "$VendoredDirs = '(^|\\\\)(\\.venv|venv|node_modules)\\\\'; Get-TcTreeFiles -PruneBelow ('\\\\archive\\\\|' + $VendoredDirs) and a Where-Object on Get-TcPathBelowRoot; after the WIDE RATCHET ROSE finding, one 'wide-unrecorded <path>' line per $wideNew entry"
+      },
+      "prior_closes": [
+        "2026-08-30-b9d48f",
+        "2026-08-31-4b2f47",
+        "2026-09-04-0b63d3",
+        "2026-09-07-76ec7f",
+        "2026-09-11-220094",
+        "2026-09-19-ae9df2",
+        "2026-09-24-3ca22f"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-script-census.ps1"
+        ],
+        "what": "the emitting check measures the same population in every checkout, so a mark set from a worktree holds in the main checkout, and a rise names its scripts",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "live census in the main checkout before and after: 109 -> 108 uncalled, wide unrecorded 74 -> 71 (the venv script pruned, the two by-hand scripts recorded); no pricing or matching code touched",
+        "affected_now": 3,
+        "names": [
+          "sidecar/.venv/Scripts/activate.ps1",
+          "ops/report-push-time.ps1",
+          "ops/verify-gate-declaration.ps1"
+        ],
+        "risk": "a repo script inside a directory named venv or node_modules would stop being censused; there is none today (the only such path found was the untracked venv script)",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-26 10:05 in the main checkout at HEAD 8df33b9be; a script added or wired since then changes the counts",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 unit u079 (script census), four new cases",
+        "must_fire_case": "a wide-tier fixture tree with one uncalled zzz-wide-orphan.ps1 and a mark of 0 must exit 2 with WIDE RATCHET ROSE AND print 'wide-unrecorded zzz-wide-orphan.ps1'; and a fixture holding side\\.venv\\Scripts\\activate.ps1 and web\\node_modules\\pkg\\install.ps1 (the founding shape) MUST NOT name either",
+        "clean_twin": "the same venv fixture's real orphan zzz-real-orphan.ps1 still fires ORPHAN (rc 2); the wide fixture at a mark of 1 exits 0 and lists nothing",
+        "fixture_occurrences": [
+          "2026-08-30-b9d48f",
+          "2026-08-31-4b2f47",
+          "2026-09-04-0b63d3",
+          "2026-09-07-76ec7f",
+          "2026-09-11-220094",
+          "2026-09-19-ae9df2",
+          "2026-09-24-3ca22f",
+          "2026-09-26-1f95a4"
+        ],
+        "commands": [
+          "powershell -File grocery\\test-auditors.ps1 -SkipUnitsFile <every unit but u079>  (exit 0: 12 passed, 0 failed, SELECTIVE)",
+          "powershell -File grocery\\audit-script-census.ps1  (exit 0, 'no unrecorded orphan')"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the census and test-auditors hunks and restore script-census-wide-baseline.json to 73",
+      "do_not_touch": [
+        "the grocery\\ hard tier",
+        "the out\\ baseline",
+        "any other KNOWN entry"
+      ],
+      "leaves_open": "test-auditors still scores a census orphan as a blind guard rather than HYGIENE (the one-tally-two-verdicts shape): 1 occurrence, today",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-26-8163f7",
+      "premise_verified": "true: re-ran the census live (rc 2, 74 over 73) and read which of the 791 cases failed; the prior close's cause (a regex timeout) is not today's",
+      "deviation": "the dispatch framed it as possibly a blind guard; it is a hygiene finding, and its real damage was refusing the bot's push. The fix goes to the census's population rather than only to KNOWN.",
+      "resolution_note": "Not blind: the one failing case was the script census (74 unrecorded wide orphans over a mark of 73). A gitignored venv script counted only in the main checkout, so the bot's pushes were refused there while worktree pushes passed. The census now prunes .venv/node_modules, names every unrecorded wide orphan when the mark rises, records the two by-hand push tools, and holds a mark of 71. Tier split residual: 2026-09-26-8163f7.",
+      "close_disposition": "confirmed",
+      "publish_batch": "none",
+      "status": "done",
+      "shipped_commit": "the commit carrying this plan, subject 'Triage plan-2026-09-26: script census prunes vendored dirs and names a wide rise (1f95a4)'",
+      "actual_tool_calls": 40
+    },
+    {
+      "queue_id": "2026-09-26-e0d5cf",
+      "subject": "Grocery: GUARDS FAILED - board not published - 2026-09-26",
+      "classification": "infra",
+      "lane": "money",
+      "est_tool_calls": 60,
+      "evidence": [
+        "grocery/ad-cycle-log.txt:38217-38221 [08:14:12] 'HARD FAIL: no published price claims a date newer than the capture it came from (as_of evidence) (see audit-asof-evidence.ps1)'; 'HARD FAIL: no published cell carries a price its own store contradicted on a later read of the same product (see audit-flag-verification.ps1)'; 'GUARDS-COMPLETE hard=2 warn=19 disposition=hold'",
+        "both delegates are cell-scoped by now: audit-flag-verification quarantines its cell by design (plan-2026-09-21-8), and asof-evidence was taught to name its cells in 30a2e4907 (queue note of 2026-09-22-6e6a3b, landed). Yet the disposition was HOLD, not QUARANTINE-REQUIRED"
+      ],
+      "root_cause": "carried from 2026-09-23-0c8e6e (plan-2026-09-25-4): one cell can still hold the whole board when the disposition cannot scope a failure; today two delegates that should scope to cells produced a board HOLD, so either one did not print its QUARANTINE-SCOPE complete line, or a held value was condemned, or the breaker tripped. Not yet measured which.",
+      "root_fix": {
+        "what": "to be measured by triage-developer: find which of the three roads produced HOLD and fix it at the scope decision so these two failures quarantine their cells",
+        "files": [
+          "grocery/guards.ps1",
+          "grocery/cell-quarantine-lib.ps1",
+          "grocery/audit-asof-evidence.ps1",
+          "grocery/audit-flag-verification.ps1"
+        ],
+        "exact_change": "decided after reading guards' per-delegate scope lines for 2026-09-26 08:14"
+      },
+      "prior_closes": [
+        "2026-08-31-0465b5",
+        "2026-09-03-83b57e",
+        "2026-09-06-79fe01",
+        "2026-09-07-e9edb9",
+        "2026-09-10-d9e085",
+        "2026-09-18-f90ba6",
+        "2026-09-19-b66b54",
+        "2026-09-21-da5011",
+        "2026-09-23-0c8e6e"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/guards.ps1",
+          "grocery/cell-quarantine-lib.ps1"
+        ],
+        "what": "the emitting disposition quarantines a scoped delegate's cells instead of holding the board, so one bad cell cannot hold it (Brad, 2026-09-21)",
+        "exact_change": "at Get-TcGuardsDisposition or the delegate's scope output, per the measurement above"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not yet measured (planned item)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "unmeasured",
+        "cell_effects": []
+      },
+      "freshness": "measured against the 08:14 guards run on comparison-2026-09-23 built 08:06:07; a later chain run replaces it",
+      "proof": {
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1",
+        "must_fire_case": "today's two findings, frozen: guards must exit 2 QUARANTINE-REQUIRED (then 4 QUARANTINED), not a board HOLD",
+        "clean_twin": "an unscoped delegate's HARD FAIL still holds the board",
+        "fixture_occurrences": [
+          "2026-08-31-0465b5",
+          "2026-09-03-83b57e",
+          "2026-09-06-79fe01",
+          "2026-09-07-e9edb9",
+          "2026-09-10-d9e085",
+          "2026-09-18-f90ba6",
+          "2026-09-19-b66b54",
+          "2026-09-21-da5011",
+          "2026-09-23-0c8e6e",
+          "2026-09-26-e0d5cf"
+        ]
+      },
+      "rollback": "revert the scope change; the board holds as before",
+      "leaves_open": "unknown until measured",
+      "leaves_open_occurrences": 0,
+      "resolution_note": "PROVISIONAL (triage-developer rewrites at close): guards held the 2026-09-26 board on two HARD FAILs from cell-scoped delegates (asof-evidence, flag-verification); fixed at the scope decision so they quarantine their cells.",
+      "publish_batch": 1,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-26-2a80fa",
+      "subject": "Grocery bot checkout sync blocked at the push - 2026-09-26",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 3,
+      "evidence": [
+        "queue body 07:02: 'uncommitted work the bot does not own sits on path(s) upstream changed ... grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M)'",
+        "10:00: git status of those three paths is clean, and capture-run-daily-2026-09-26.log:214-217 'sync[tail 1..4]: current 8df33b9be..8df33b9be behind=0 ... HEAD already contains origin; nothing was written': the foreign blockers had cleared by 09:11; what refused the later pushes was the census gate (2026-09-26-1f95a4)"
+      ],
+      "root_cause": "carried from 2026-09-24-f72978 (plan-2026-09-24): the designed refusal of the bot checkout sync (blocked/foreign never writes a foreign file) when a session leaves untracked work in the shared main checkout on a path upstream later adds; the class is the shared checkout itself",
+      "root_fix_none_because": "the refusal is the design (PLAN-bot-checkout-self-heal-2026-09-23 outcome table), and the class owner is design/PLAN-bot-dedicated-checkout-2026-09-25.md, which moves the bot to its own checkout",
+      "prevention_none_because": "the source fix is the dedicated bot checkout already planned in design/PLAN-bot-dedicated-checkout-2026-09-25.md; this instance cleared by itself and the held commits land once 1f95a4's census fix is on main",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "resolution_note": "Designed refusal: three untracked files of another session sat on paths upstream added. They were committed by their owner and the 09:11 sync found HEAD already containing origin; the bot's pushes after that were refused by the script census gate, fixed under 2026-09-26-1f95a4. Class owner: design/PLAN-bot-dedicated-checkout-2026-09-25.md.",
+      "close_disposition": "by-design",
+      "status": "done",
+      "premise_verified": "true: the three paths are clean now and the tail sync reads behind=0",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 3
+    },
+    {
+      "queue_id": "2026-09-26-e3566b",
+      "subject": "Grocery pipeline could not push - 2026-09-26",
+      "classification": "superseded",
+      "lane": "ops",
+      "est_tool_calls": 2,
+      "evidence": [
+        "push ledger pushes-2026-09-26.jsonl 14:11:32Z: event hook-refused, cause run-gates, gate 'grocery\\audit-script-census.ps1', local_sha 8df33b9be (the four refusals 13:50Z-14:11Z are the four attempts of capture-run-daily-2026-09-26.log:218 'PUSH FAILED after 4 attempts'); the sync lines before each read behind=0, so the foreign blocker of 2a80fa was NOT the cause"
+      ],
+      "root_cause": "the same condition as 2026-09-26-1f95a4: the script census read one over its wide mark in the main checkout and refused the bot's pre-push. Superseded by 1f95a4, not by 2a80fa as grouped.",
+      "resolution_note": "Superseded by 2026-09-26-1f95a4: all four push attempts were refused by the script census gate (push ledger, gate grocery\\audit-script-census.ps1), not by the foreign-dirty sync of 2a80fa. The census fix lets the next bot push land the three held commits.",
+      "close_disposition": "superseded",
+      "status": "superseded",
+      "premise_verified": "false for the dispatch's join: its evidence names a different primary, 1f95a4, which is in this plan and ops; so it is superseded there rather than promoted",
+      "deviation": "grouped under 2a80fa by triage-group; the ledger shows 1f95a4's gate as the cause",
+      "actual_tool_calls": 3
+    },
+    {
+      "queue_id": "2026-09-26-a988a8",
+      "subject": "Grocery bot checkout sync partial - 2026-09-26",
+      "classification": "superseded",
+      "lane": "ops",
+      "est_tool_calls": 1,
+      "evidence": [
+        "queue body 07:00:16: 'partial (foreign) ... uncommitted work the bot does not own sits on path(s) first changed upstream by 73efe379e ...: grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M)': the same three paths as 2a80fa, the start sync of the same 07:00 run"
+      ],
+      "root_cause": "the same condition as 2026-09-26-2a80fa (the start sync of the run whose push sync 2a80fa reports); carried from 2026-09-24-f293ee (plan-2026-09-25): a session's uncommitted work in the shared checkout",
+      "resolution_note": "Superseded by 2026-09-26-2a80fa: the start sync of the same 07:00 run, blocked by the same three foreign paths, which have since cleared.",
+      "close_disposition": "superseded",
+      "status": "superseded",
+      "premise_verified": "true: same three paths named in both bodies",
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-26-32500f",
+      "subject": "The knowledge store's nightly pass went RED",
+      "classification": "infra",
+      "lane": "ops",
+      "est_tool_calls": 15,
+      "evidence": [
+        "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md:47-51 'gate (exit 1): BROKEN' with why: 'recall_append.py FAIL exit 1 APPEND-SELFTEST-COMPLETE'; 'C--Codex-ThriftyCrew: memory NO_COST rose to 152 against a mark of 151'; 'MEMORY.md links 1 file(s) git does not track (write-tool-decodes-backslash-u-escapes.md)'",
+        ":45-46 forgetting and memory clusters exit 1 'waiting on a judgement' (Q-recall-judgement-queues, already Brad's)"
+      ],
+      "root_cause": "carried from 2026-09-23-a83841 (plan-2026-09-25-4): sessions write to the knowledge store without passing its gate (an untracked memory linked from MEMORY.md, an edit that broke a memory's cost line, and a failing recall_append self-test), and the store's gate only reads it the next night. The a83841 prevention worked as designed: the report now names each broken step's reason.",
+      "root_fix": {
+        "what": "commit or unlink the untracked memory, fix the memory that raised NO_COST, and repair recall_append.py's self-test, in the ~/.claude store",
+        "files": [
+          "~/.claude/skills/recall_append.py",
+          "~/.claude/projects/C--Codex-ThriftyCrew/memory/MEMORY.md"
+        ],
+        "exact_change": "owed by a session that may write the knowledge store; this lane's store is read-only (agent brief) and the files are outside this repository"
+      },
+      "prior_closes": [
+        "2026-09-11-18da92",
+        "2026-09-18-35e0f5",
+        "2026-09-19-4fc24c",
+        "2026-09-23-a83841"
+      ],
+      "prevention": {
+        "source": [
+          "~/.claude/skills/recall-sleep.py",
+          "ops/scheduled-tasks/tc-recall-sleep-0435.xml"
+        ],
+        "what": "carried from a83841: the emitter separates a ruling owed from a broken step and names the broken step's reason; the missing half is refusing a memory write that breaks the gate at write time, in the store's own hook",
+        "exact_change": "not made here: outside this lane's write scope"
+      },
+      "proof": {
+        "must_fire_case": "the 2026-09-26 report's three BROKEN reasons, frozen, must keep the gate BROKEN",
+        "clean_twin": "a night with only the judgement queues reads 'waiting on a judgement', never BROKEN",
+        "fixture_occurrences": [
+          "2026-09-11-18da92",
+          "2026-09-18-35e0f5",
+          "2026-09-19-4fc24c",
+          "2026-09-23-a83841",
+          "2026-09-26-32500f"
+        ],
+        "guard_or_fixture": "~/.claude/skills/recall-sleep.py gate step (its own report's why lines)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: no board or matching code",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none in this repository",
+        "cell_effects": []
+      },
+      "rollback": "not applicable",
+      "freshness": "the 04:35 pass of 2026-09-26",
+      "leaves_open": "the three BROKEN reasons stay until a store-writing session repairs them; the pass pages again nightly through its own emitter",
+      "leaves_open_occurrences": 1,
+      "resolution_note": "Not closed: the knowledge store gate is BROKEN on three reasons in ~/.claude (recall_append self-test, a NO_COST rise 151 -> 152, an untracked memory linked from MEMORY.md), outside this lane's write scope; left open for a store-writing session.",
+      "status": "blocked",
+      "premise_verified": "true: read the report's why lines",
+      "deviation": "blocked, not fixed: every repair is in the ~/.claude knowledge store, which this lane may not write",
+      "shipped_commit": null,
+      "actual_tool_calls": 2
+    },
+    {
+      "queue_id": "2026-09-20-cb8f30",
+      "subject": "Grocery pipeline alert",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 1,
+      "evidence": [
+        "queue notes: closed by-design; the class shipped in plan-2026-09-22-10 publish 1, landed 1ec218d5f (git merge-base --is-ancestor 1ec218d5f origin/main: yes); residual 312 id-less Hy-Vee rows owned by 2026-09-22-3366e4"
+      ],
+      "root_cause": "carried from plan-2026-09-22-5: askability was not a notion the ask order had; both halves were already in the code",
+      "resolution_note": "Re-measured 2026-09-26: the root fix is on origin/main (1ec218d5f) and the id-less Hy-Vee residual is owned by 2026-09-22-3366e4. Nothing left to resume.",
+      "close_disposition": "superseded",
+      "status": "done",
+      "premise_verified": "true: commit is an ancestor of origin/main",
+      "actual_tool_calls": 1,
+      "prior_closes": [
+        "2026-09-11-1139c4"
+      ],
+      "prevention_none_because": "no code change: its class (send-alert's default subject merging unrelated alerts into one type) was fixed at the emitter in 1ec218d5f, on origin/main; the old shared type is why 2026-09-11-1139c4 reads as a prior close",
+      "proof": {
+        "fixture_occurrences": [
+          "2026-09-11-1139c4",
+          "2026-09-20-cb8f30"
+        ],
+        "must_fire_case": "audit-alert-registry refuses a Send-Alert call with no -Subject (shipped in 1ec218d5f)",
+        "clean_twin": "a call with a registered subject passes"
+      }
+    },
+    {
+      "queue_id": "2026-09-21-4b973e",
+      "subject": "Grocery: price-flag verification residuals (plan-2026-09-21-8)",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 2,
+      "evidence": [
+        "queue notes 2026-09-26 05:14: R1 median 1 day (76 of 91), R2 in 8d2ad5, landed 30a2e4907 (ancestor of origin/main: yes); 'Product-level re-reads of ad-flyer sales remain open under this queue id', but the id was closed"
+      ],
+      "root_cause": "carried from plan-2026-09-25-6: the verifier re-reads only what a later capture of the SAME product can answer, so ad-flyer sale cells stay outside it",
+      "resolution_note": "Re-measured 2026-09-26: landed 30a2e4907; the ad-flyer sale residual that the close left with no open owner is now 2026-09-26-ab11be (weekly lane, 15 of 21 replayed sale claims).",
+      "close_disposition": "superseded",
+      "leaves_open": "ad-flyer sale cells have no product-level re-read: 15 of 21 replayed sale claims",
+      "leaves_open_occurrences": 15,
+      "leaves_open_followup": "2026-09-26-ab11be",
+      "status": "done",
+      "premise_verified": "true",
+      "actual_tool_calls": 2
+    },
+    {
+      "queue_id": "2026-09-22-2dae07",
+      "subject": "Grocery matching soundness: NEW CONTESTED",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 1,
+      "evidence": [
+        "queue notes: landed on origin/main 0c06fcf1d (ancestor: yes) with plan-2026-09-22-9 publish 3; contested arrivals residual owned by 2026-09-23-5aa22a"
+      ],
+      "root_cause": "carried from plan-2026-09-22-2: an arrival review whose only consumer is a person",
+      "resolution_note": "Re-measured 2026-09-26: root fix on origin/main (0c06fcf1d); the contested-arrival residual is 2026-09-23-5aa22a. Nothing left to resume.",
+      "close_disposition": "superseded",
+      "status": "done",
+      "premise_verified": "true",
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-22-6e6a3b",
+      "subject": "Triage residual: 9 delegated guard audits still hold the whole board",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 1,
+      "evidence": [
+        "queue notes 2026-09-26 05:14: hold-scope mark fell 7 -> 2 (13 delegates, 2 board-scoped: board-mojibake and coverage-regression, board-scoped by nature), landed 30a2e4907 (ancestor: yes)"
+      ],
+      "root_cause": "carried from plan-2026-09-25-6: delegated audits predate the quarantine protocol and report in prose",
+      "resolution_note": "Re-measured 2026-09-26: landed 30a2e4907; the two board-scoped delegates left are board-scoped by nature. Today's HOLD (2026-09-26-e0d5cf) came from two cell-scoped delegates and is planned there.",
+      "close_disposition": "superseded",
+      "status": "done",
+      "premise_verified": "true",
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-22-817976",
+      "subject": "Triage residual: 16 non-Sam's tile links the chain cannot re-price",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 1,
+      "evidence": [
+        "queue notes 2026-09-26 05:14: 9 of 16 were sibling-product links, dropped; audit-tile-integrity names every sibling-shaped link; the 7 true drifts stay under the per-store drift ratchet; landed 30a2e4907 (ancestor: yes)"
+      ],
+      "root_cause": "carried from plan-2026-09-25-6: derive-links re-points a link only when a row re-prices to the cell, and Aldi's pack basis is refused unless proven",
+      "resolution_note": "Re-measured 2026-09-26: landed 30a2e4907; the 7 true drifts are owned by the tile-integrity drift ratchet, which pages on a rise.",
+      "close_disposition": "superseded",
+      "status": "done",
+      "premise_verified": "true",
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-22-20fecf",
+      "subject": "Chain rehearsal residual: a failure that needs same-morning data is still first met in production (F2)",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 7,
+      "evidence": [
+        "queue notes: plan-2026-09-22-10 shipped the ingest-shape check (grocery/audit-ingest-shape.ps1, grocery/unit-aliases.json); residual owned by 2026-09-22-293660"
+      ],
+      "root_cause": "carried from plan-2026-09-22-10: a builder meets a store rendering it has never seen and its only outputs are a rejects line and a smaller board",
+      "resolution_note": "PROVISIONAL: the ingest-shape check shipped in plan-2026-09-22-10 and runs in capture-run; residual owned by 2026-09-22-293660.",
+      "publish_batch": "none",
+      "status": "planned",
+      "premise_verified": "partly: the fix is named as landed in the queue notes; triage-developer confirms audit-ingest-shape ran in today's capture-run log and closes",
+      "deviation": null
+    },
+    {
+      "queue_id": "2026-09-22-5a9676",
+      "subject": "Triage residual: recipe ingredient identity, 149 standing findings",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 7,
+      "evidence": [
+        "queue notes: plan-2026-09-22-11 landed 479a8591b (ancestor of origin/main: yes); sourcing owned by 2026-09-23-dd290b, union rows by 2026-09-23-9999c0"
+      ],
+      "root_cause": "carried from plan-2026-09-22-11: ingredient rows bid the nearest commodity when the real food had none",
+      "resolution_note": "PROVISIONAL: landed 479a8591b, 11 recipes held; sourcing owned by 2026-09-23-dd290b, union rows by 2026-09-23-9999c0.",
+      "publish_batch": "none",
+      "status": "planned",
+      "premise_verified": "partly: landed; triage-developer confirms the 11 held slugs are still held on today's board and closes",
+      "deviation": null
+    },
+    {
+      "queue_id": "2026-09-23-80f302",
+      "subject": "Grocery page HELD after its data shipped - 2026-09-23",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 7,
+      "evidence": [
+        "queue notes: root fix per Q-2026-09-25-2-A shipped (grocery/soundness-publish-lib.ps1); residual owned by 2026-09-25-a84dcf"
+      ],
+      "root_cause": "carried from plan-2026-09-25-2: the soundness gate held the whole post on any moved name",
+      "resolution_note": "PROVISIONAL: the post holds only on a moved, dropped or contested winner of a published cell (Q-2026-09-25-2-A); residual owned by 2026-09-25-a84dcf.",
+      "publish_batch": "none",
+      "status": "planned",
+      "premise_verified": "partly: landed per the queue; today's publish was held by guards (e0d5cf), not by soundness, so triage-developer confirms on the next publish",
+      "deviation": null
+    }
+  ],
+  "open_questions_for_brad": []
+}

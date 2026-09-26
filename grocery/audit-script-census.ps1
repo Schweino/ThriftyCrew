@@ -75,7 +75,9 @@ if ($OutBaseline -lt 0) { $OutBaseline = 38 }
 $KNOWN = [ordered]@{
   # -- OUTSIDE grocery\, recordable here since 2026-09-09 (backlog I85 rung 2). Before the population
   #    widened there was literally nowhere to write these down, which the item named as unresolved.
-  'ops\merge-backlog-inbox.ps1'      = 'BY HAND, and uncalled on purpose. It merges design\backlog-inbox\*.md into design\BACKLOG-course-findings.md, allocating ids as it goes. Id allocation is a one-writer operation - two runs racing would mint the same id twice - and the merge is a judgement about whether a course agent''s finding is really new. A scheduled run would do both unattended. It was the script whose orphan status could not be recorded anywhere, which is how backlog I85 was found.'
+  'ops\report-push-time.ps1'         = 'BY HAND, and uncalled on purpose (2026-09-25, M1 of design\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md). A REPORT over the push ledger that every bar in that plan is read from; committed rather than rerun as scratch (.claude\rules\measurement.md). Nothing schedules it and nothing reads its exit code.'
+  'ops\verify-gate-declaration.ps1'  = 'BY HAND, and uncalled on purpose (2026-09-26, G1 of design\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md). An author runs it on a gate whose declared inputs changed, to prove the declaration in an isolated copy before run-gates reuses a pass on it; grocery\detector-manual-allowlist.json names it as manual.'
+  'ops\merge-backlog-inbox.ps1'      ='BY HAND, and uncalled on purpose. It merges design\backlog-inbox\*.md into design\BACKLOG-course-findings.md, allocating ids as it goes. Id allocation is a one-writer operation - two runs racing would mint the same id twice - and the merge is a judgement about whether a course agent''s finding is really new. A scheduled run would do both unattended. It was the script whose orphan status could not be recorded anywhere, which is how backlog I85 was found.'
   'ops\cpu-load.ps1'                 = 'BY HAND, or by a session''s load-test harness, and uncalled on purpose (Brad, 2026-09-11). It is the only sanctioned way to put deliberate CPU load on this shared box: it takes its cores all-or-nothing from the machine-wide budget run-gates uses, refuses more than that or longer than 15 minutes, and its burners stop on a stale heartbeat if it is killed. Nothing in the repo should run load on a schedule, so no file here calls it; ops\audit-cpu-load.ps1 names it as the compliant way.'
   'ops\probe-gate-slot-admission.ps1' = 'BY HAND, during a busy period, and uncalled on purpose (2026-09-11). A READ-ONLY observer of who owns each machine-wide gate worker slot: it reads the system handle table and duplicates other processes'' mutant handles, which is a deliberate attended act and not something a schedule should do unwatched. It answers a question about the MACHINE at a moment - which run got each freed slot while several run-gates competed - so a daily run would only re-record a different afternoon. It measured design\MEASURE-gate-slot-admission-2026-09-11.md, and the line in lib\gate-slots.ps1 is what that measurement produced; it is committed so the next person to doubt the admission order can re-run it rather than rebuild it.'
   'ops\report-gate-slot-admission.ps1' = 'BY HAND, beside the probe above: it reads that probe''s event file and prints each verdict against the bars written before the run. Nothing schedules it because nothing schedules the probe.'
@@ -222,8 +224,14 @@ function Test-InOtherCheckout {
 # -Filter *.ps1 is the legacy 8.3 matcher and also matches .ps1xml, so the extension is re-checked exactly.
 # The nested checkouts and archives are PRUNED from the walk, not only filtered out of it (2026-09-12, lib\tree-walk.ps1):
 # from the main checkout this listed every worktree's copy of the tree before throwing it away.
-$all = @(Get-TcTreeFiles -RootFull $Root -Filter *.ps1 -SkipDirs $nested -PruneBelow '\\archive\\' |
+# A VENDORED ENVIRONMENT IS NOT A REPO SCRIPT (2026-09-26, queue 2026-09-26-1f95a4). sidecar\.venv is gitignored and
+# exists only in the main checkout, so its Scripts\activate.ps1 counted as an unrecorded orphan there and nowhere
+# else: a worktree's push gate read the wide tier at the mark while the bot's push from the main checkout read it one
+# over, and was refused four times with the board stale. A .venv or node_modules directory is pruned wherever it sits.
+$VendoredDirs = '(^|\\)(\.venv|venv|node_modules)\\'
+$all = @(Get-TcTreeFiles -RootFull $Root -Filter *.ps1 -SkipDirs $nested -PruneBelow ('\\archive\\|' + $VendoredDirs) |
          Where-Object { $_.Extension -eq '.ps1' -and $_.FullName -notmatch '\\archive\\' -and
+                        -not ((Get-TcPathBelowRoot $_.FullName $Root) -match $VendoredDirs) -and
                         -not (Test-InOtherCheckout $_.FullName) })
 # AN `out\` SEGMENT ANYWHERE, not just at the top of $Root (2026-09-09, backlog I85 rung 2). This test
 # used to be anchored at the start of the $Root-relative path, which was right while $Root was
@@ -351,6 +359,9 @@ if ($null -ne $wideBase) {
   if ($wideNew.Count -gt $wideBase) {
     [void]$fail.Add("WIDE RATCHET ROSE: " + $wideNew.Count + " unrecorded orphan(s) outside " + $STRICT_PREFIX +
                     ", over the high-water mark of " + $wideBase + ". A NEW uncensused script appeared. Wire it in, archive it, or record it in KNOWN.")
+    # NAME THEM (2026-09-26, 1f95a4): the mark is a count, so the census cannot say which one is new, but a reader
+    # who has the list finds the newcomer with one git log instead of rebuilding the census by hand.
+    foreach ($w in ($wideNew | Sort-Object)) { Write-Output ("  wide-unrecorded " + $w) }
   } elseif ($wideNew.Count -lt $wideBase) {
     Write-Output ("  note    wide ratchet is below its mark (" + $wideNew.Count + " < " + $wideBase + ") - re-run with -WideBaseline to hold the ground")
   }
