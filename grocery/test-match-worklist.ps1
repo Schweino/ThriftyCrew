@@ -178,6 +178,7 @@ try {
   # out\archive\triage-queue.archived-2026-09-17.json name only commodity @ store, never the candidate, so the frozen
   # rows carry that pair and a placeholder candidate, in the pre-verdicts gap shape those days wrote. The assertion is
   # the property that matters: every actionable gap of that shape is keyed, none silently unkeyed.
+  # store-subset-ok: these are the 17 FROZEN commodity|store pairs the recurrences actually named (Baker's and Sam's had none); Read-MatchFindings keys a gap by concatenating its store and never branches on it, so this subset proves the keying for all 7
   $old = @('garlic-bread|Hy-Vee','aji-amarillo-paste|Walmart','yukon-gold-potatoes|Fareway','coleslaw-mix|Hy-Vee','pomegranates|Walmart','coleslaw-mix|Walmart','cooked-jasmine-rice|Walmart','block-cheese|Family Fare','coleslaw-mix|Aldi','red-potatoes|Fareway','pecorino-romano|Fareway','cinnamon-stick|Aldi','baked-beans|Hy-Vee','anaheim-peppers|Fareway','quinoa-uncooked|Hy-Vee','couscous|Hy-Vee','sea-salt|Hy-Vee')
   $og = @($old | ForEach-Object { $p = $_ -split '\|'; [pscustomobject]@{ commodity = $p[0]; store = $p[1]; candidate = ('candidate not recorded in the queue body (' + $_ + ')'); reason = 'RULE-INVISIBLE'; detail = 'no include matched'; actionable = $true } })
   [IO.File]::WriteAllText((Join-Path $kd 'coverage-gaps.json'), (([pscustomobject]@{ gaps = $og }) | ConvertTo-Json -Depth 6))

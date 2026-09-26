@@ -149,7 +149,15 @@ function Get-MatchClassification {
     # is a flavour or an add-on, and those releases are right (5 of the 24 frozen labels).
     $coreWords = @((($h.core -replace '[,()/&+]', ' ') -split '\s+') | Where-Object { $_ -and -not $script:MwlStop.ContainsKey($_.ToLowerInvariant().Trim(',', '.')) })
     $claimerLeads = ''
-    for ($ci = 0; $ci -lt ($coreWords.Count - 2); $ci++) { if (Test-MwlIn $coreWords[$ci] $C.tokens) { $claimerLeads = $coreWords[$ci]; break } }
+    # The claimer word LEADS only when it stands as its own noun: the next word opens the target phrase or is a
+    # preparation word ('Tahini | Ground Sesame Seeds'). Followed by another flavour word it is a compound modifier of
+    # the head ('Honey Barbecue Potato Chips', 'Banana Nut Instant Oatmeal'), and those releases are right: two of the
+    # four labelled contested releases in test-match-worklist.ps1 (plan-2026-09-25-8) went undecided without this.
+    for ($ci = 0; $ci -lt ($coreWords.Count - 2); $ci++) {
+      if (-not (Test-MwlIn $coreWords[$ci] $C.tokens)) { continue }
+      $nx = $coreWords[$ci + 1].ToLowerInvariant().Trim(',', '.')
+      if ((Test-MwlIn $nx $T.tokens) -or $script:MwlForm.ContainsKey($nx) -or $nx -eq 'ground' -or $nx -match 'ed$') { $claimerLeads = $coreWords[$ci]; break }
+    }
     if ($claimerLeads -and (($inT -and -not $inC) -or ($preT -and -not $preC))) {
       $r.why = ("the claimer's own word '" + $claimerLeads + "' leads the name ahead of the head phrase, so " + $Claimer.id + ' may be what the product IS; a release is not decided by rule'); return $r }
     if ($inT -and -not $inC) {

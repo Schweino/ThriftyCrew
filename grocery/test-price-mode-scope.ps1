@@ -30,12 +30,14 @@ try {
   $sc = Get-TcChildQuarantineScope $r.out
   $st = @(); if ($sc) { $st = @($sc.stores) }
   Pmc 'MUST FIRE  a Delivery-mode Aldi file exits 2 and is named for guards as the store Aldi, scope complete' (($r.rc -eq 2) -and ($null -ne $sc) -and ($st.Count -eq 1) -and ([string]$st[0] -eq 'Aldi') -and (@($sc.cells).Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
-  # CLEAN TWIN: the in-store Fareway file beside it is still checked and reported OK, and never named.
-  Pmc 'CLEAN TWIN  the in-store Fareway file beside it is still read as OK and is not named' (($r.text -match 'OK    Fareway: in-store') -and (@($r.out | Where-Object { $_ -match '^QUARANTINE-STORE Fareway' }).Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
+  # CLEAN TWIN: the in-store Fareway file beside it is still checked and reported OK (a positive assertion).
+  Pmc 'CLEAN TWIN  the in-store Fareway file beside it is still read as OK' ($r.text -match 'OK    Fareway: in-store') ('rc=' + $r.rc + ' ' + $r.text)
+  # MUST NOT FIRE: and it is never named for quarantine (the absence, split out of the twin for audit-fixture-vocabulary).
+  Pmc 'MUST NOT FIRE  the in-store Fareway file beside it is not named QUARANTINE-STORE' (@($r.out | Where-Object { $_ -match '^QUARANTINE-STORE Fareway' }).Count -eq 0) ('rc=' + $r.rc + ' ' + $r.text)
   # MUST NOT FIRE: both stores in-store exits 0 and prints no quarantine line.
   $r = Invoke-Pm 'clean' 'in-store'
   Pmc 'MUST NOT FIRE  both stores in-store exits 0 and prints no QUARANTINE line' (($r.rc -eq 0) -and (@($r.out | Where-Object { $_ -match '^QUARANTINE-' }).Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
 } catch { Write-Output ('FAIL  a case threw: ' + $_.Exception.Message); $script:bad++ }
 finally { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue } }
-Write-Output ('test-price-mode-scope self-test ' + $(if ($script:bad -eq 0 -and $script:n -eq 3) { 'pass' } else { 'FAIL' }) + ': ' + ($script:n - $script:bad) + ' of ' + $script:n + ' case(s) passed (3 expected)')
-exit $(if ($script:bad -eq 0 -and $script:n -eq 3) { 0 } else { 1 })
+Write-Output ('test-price-mode-scope self-test ' + $(if ($script:bad -eq 0 -and $script:n -eq 4) { 'pass' } else { 'FAIL' }) + ': ' + ($script:n - $script:bad) + ' of ' + $script:n + ' case(s) passed (4 expected)')
+exit $(if ($script:bad -eq 0 -and $script:n -eq 4) { 0 } else { 1 })

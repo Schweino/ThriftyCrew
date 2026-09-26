@@ -178,7 +178,14 @@ if ($SelfTest) {
 # The store a capture file prices, for the quarantine protocol (2026-09-25, queue 2026-09-22-6e6a3b): its own top-level
 # `store` field, decoded as the UTF-8 the file is, else the one store its lane holds. The regular lane holds every store,
 # so a regular file with no store field names none, and '' makes the caller affirm no scope.
-$script:LANE_STORE = @{ sams = "Sam's Club"; bakers = "Baker's"; fareway = 'Fareway' }
+# The lane-to-store map is read from stores.json (a lane directory is a store's regular_prefix: out\sams, out\bakers,
+# out\fareway), never a copy of the store list here (Brad, 2026-09-19, backlog I192: convert on touch). An unreadable
+# registry leaves the map empty, so a lane file with no store field names none and the board holds: fail closed.
+$script:LANE_STORE = @{}
+try {
+  $ceReg = Read-TextFile (Join-Path $here 'stores.json') | ConvertFrom-Json
+  foreach ($ceS in @($ceReg.stores)) { if ($ceS -and $ceS.regular_prefix -and $ceS.name) { $script:LANE_STORE[[string]$ceS.regular_prefix] = [string]$ceS.name } }
+} catch { $script:LANE_STORE = @{} }
 function Get-CaptureFileStore([byte[]]$Bytes, [string]$Lane) {
   $s = ''
   try { $d = [Text.Encoding]::UTF8.GetString($Bytes).TrimStart([char]0xFEFF) | ConvertFrom-Json; if ($d -isnot [array] -and $d.PSObject.Properties['store']) { $s = ([string]$d.store).Trim() } } catch { $s = '' }

@@ -140,7 +140,7 @@ if ($SelfTest) {
     $sibY = Get-TiSiblingMissing 'Friendly Farms Nonfat Plain Yogurt 32 OZ' 'Friendly Farms Lowfat Cherry Yogurt 6 OZ'
     TT 'MUST FIRE  yogurt|Aldi plain nonfat linked to lowfat cherry is a SIBLING' ($sibY.Count -eq 2) ($sibY -join ',')
     $sibP = Get-TiSiblingMissing 'Peanut Delight Creamy Peanut Butter 40 OZ' 'Peanut Delight Creamy Peanut Butter 40 oz'
-    TT 'CLEAN TWIN  peanut-butter|Aldi linked to the same product (case and size spelling differ) misses no word' ($sibP.Count -eq 0) ($sibP -join ',')
+    TT 'MUST NOT FIRE  peanut-butter|Aldi linked to the same product (case and size spelling differ) misses no word' ($sibP.Count -eq 0) ($sibP -join ',')
     $sibS = Get-TiSiblingMissing 'Fresh Strawberries' 'Fresh Strawberry 1 lb'
     TT 'MUST NOT FIRE  a trailing plural on one side only is folded, not a missing word' ($sibS.Count -eq 0) ($sibS -join ',')
 

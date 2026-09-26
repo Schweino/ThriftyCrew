@@ -1351,6 +1351,7 @@ if ($r.rc -eq 2 -and $r.text -match 'beverage' -and $r.text -match 'white-vinega
   Bad ('food-category did NOT catch the energy drink on white-vinegar (rc=' + $r.rc + ') - the beverage class is gone from the Dairy/Canned/Sauces/Baking/Coffee apply block in category-excludes.json, or that block fell below the shared one')
 }
 # CLEAN TWIN: legitimate rows in the same buckets still pass, so the exemption still reaches them.
+# store-subset-ok: audit-food-category decides a row's class from its commodity id and item name only; the store is read solely to match an allowlist entry and to print, so three stores prove the beverage exemption for all 7
 $bevClean = '{"week_of":"2026-09-23","comparison":[{"commodity":"Baking Soda","id":"baking-soda","unit":"oz","stores":[{"store":"Walmart","per_unit":0.0548,"item":"Arm & Hammer Baking Soda 16 oz"}]},{"commodity":"Lemon Juice","id":"lemon-juice","unit":"oz","stores":[{"store":"Aldi","per_unit":0.0999,"item":"Nature S Nectar Lemon Juice 15 FL OZ"}]},{"commodity":"Ribeye Steak","id":"ribeye-steak","unit":"lb","stores":[{"store":"Hy-Vee","per_unit":12.99,"item":"Beef Ribeye Steak Boneless"}]}]}'
 Set-Content (Join-Path $fxBev 'comparison-2026-09-23.json') $bevClean -Encoding UTF8
 $r = RunPS 'audit-food-category.ps1' @('-OutDir', $fxBev)
