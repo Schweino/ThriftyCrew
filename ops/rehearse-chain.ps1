@@ -164,6 +164,7 @@ $script:RhRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $script:RhRoot 'lib\append-line.ps1')     # Add-TcLine
 . (Join-Path $script:RhRoot 'lib\gate-slots.ps1')     # Enter-TcGateSlots / Exit-TcGateSlots: the rehearsal cap is a slot budget, not a second lock
 . (Join-Path $script:RhRoot 'lib\mutex-hold.ps1')     # Start-TcMutexHold: the self-test holds slots from ANOTHER process
+. (Join-Path $script:RhRoot 'lib\board-clock.ps1')    # Get-TcBoardClockFromFile: a board's data age is its newest READ, never its name
 
 # Brad's F2 spec: "data no older than two days". The first number named, not a sweep. What it does when the producer
 # stops: no new board means the newest seeded board ages past it, every rehearsal is blind=stale-data, and every
@@ -564,19 +565,30 @@ function Format-RhCheckComplete($Decision) {
   return ('CHAIN-REHEARSAL-CHECK-COMPLETE code={0} outcome={1}{2}' -f $Decision.Code, $Decision.Outcome, $tail)
 }
 
-function Get-RhNewestBoardDate([string]$Root, [string]$BoardGlob) {
+function Get-RhBoardDataDate([string]$Root, [string]$BoardGlob) {
   # $BoardGlob is the manifest's board_glob, one * standing for the board's yyyy-MM-dd.
-  if (-not $BoardGlob -or $BoardGlob -notmatch '^[^*]+/[^/*]*\*[^/*]*$') { return '' }
+  # Returns @{ file = the newest board, or ''; date = the NEWEST PRICE READ on it (lib\board-clock.ps1), or '' }.
+  # THE NAME PICKS THE FILE AND NOTHING ELSE (2026-09-26, design\PLAN-board-clock-2026-09-26.md). The date in the
+  # name is the AD SET the board is for, and it lags the real date whenever no weekly ad is due: on 2026-09-26 it
+  # read 2026-09-23 over a board whose prices were read that morning at 6 of 7 stores, and every chain push was
+  # refused as stale data. So the age F2 bounds ("data no older than two days") is read from the cells' own as_of.
+  # Never built_at: a board rebuilt today from old captures would read fresh (dates-written-not-measured).
+  # When the producer stops, the newest read stops moving, so this goes blind two days after the last capture.
+  $none = [pscustomobject]@{ file = ''; date = '' }
+  if (-not $BoardGlob -or $BoardGlob -notmatch '^[^*]+/[^/*]*\*[^/*]*$') { return $none }
   $out = Join-Path $Root ((Split-Path $BoardGlob -Parent) -replace '/', '\')
   $leaf = Split-Path $BoardGlob -Leaf
-  if (-not [IO.Directory]::Exists($out)) { return '' }
+  if (-not [IO.Directory]::Exists($out)) { return $none }
   $rx = '^' + ([regex]::Escape($leaf) -replace '\\\*', '(\d{4}-\d{2}-\d{2})') + '$'
-  $best = ''
+  $best = ''; $bestFile = ''
   foreach ($f in [IO.Directory]::GetFiles($out, $leaf)) {
     $m = [regex]::Match([IO.Path]::GetFileName($f), $rx)
-    if ($m.Success -and [string]::CompareOrdinal($m.Groups[1].Value, $best) -gt 0) { $best = $m.Groups[1].Value }
+    if ($m.Success -and [string]::CompareOrdinal($m.Groups[1].Value, $best) -gt 0) { $best = $m.Groups[1].Value; $bestFile = $f }
   }
-  return $best
+  if (-not $bestFile) { return $none }
+  $clock = Get-TcBoardClockFromFile $bestFile
+  $d = if ($clock) { [string]$clock.newest_read } else { '' }
+  return [pscustomobject]@{ file = $bestFile; date = $d }
 }
 
 function Get-RhMainCheckout([string]$Repo) {
@@ -752,8 +764,10 @@ function Invoke-RhArm {
   foreach ($cp in $script:RhCredentialPaths) {
     if ([IO.File]::Exists((Join-Path $tree $cp))) { return (& $mk 'blind' 'credential-present' ('a live credential arrived in the scratch clone (' + $cp + '); a rehearsal must be unable to mail or publish, so it is not started') @() @() '') }
   }
-  $dd = Get-RhNewestBoardDate $tree $Manifest.BoardGlob
-  if (-not $dd) { return (& $mk 'blind' 'no-seed-board' 'the seed brought no comparison board (comparison-*.json), so there is no real data to rehearse over' @() @() '') }
+  $tb = Get-RhBoardDataDate $tree $Manifest.BoardGlob
+  if (-not $tb.file) { return (& $mk 'blind' 'no-seed-board' 'the seed brought no comparison board (comparison-*.json), so there is no real data to rehearse over' @() @() '') }
+  if (-not $tb.date) { return (& $mk 'blind' 'stale-data' ('the seeded board ' + [IO.Path]::GetFileName($tb.file) + ' carries no dated price (no as_of), so the age of its data cannot be read') @() @() '') }
+  $dd = $tb.date
   # TC_REHEARSAL_RUN=1 (W9.1 step 3): a post-commit hook that sees it starts nothing, so no commit made inside a
   # rehearsal can start a rehearsal from inside a rehearsal.
   $childEnv = @{ GHOST_ADMIN_KEY = $script:RhSentinelKey; KROGER_CLIENT_ID = 'tc-rehearsal-sentinel'; KROGER_CLIENT_SECRET = 'tc-rehearsal-sentinel'; TC_REHEARSAL = '1'; TC_REHEARSAL_RUN = '1'; TEMP = $childTemp; TMP = $childTemp }
@@ -938,10 +952,13 @@ function Invoke-RhRehearsal {
     if (-not $SourceRoot) { $SourceRoot = Get-RhMainCheckout $Repo }
     if (-not $SourceRoot -or -not [IO.Directory]::Exists($SourceRoot)) { $rec.blind = 'no-source'; $rec.cause = 'no main checkout to seed from (pass -Source)'; return (& $finish) }
     if (-not $ms.BoardGlob -or -not $ms.VerdictPath) { $rec.blind = 'no-manifest-readable'; $rec.cause = 'the manifest at this commit declares no board_glob or chain_verdict, so there is nothing to seed-check or read'; return (& $finish) }
-    $srcDate = Get-RhNewestBoardDate $SourceRoot $ms.BoardGlob
-    if (-not $srcDate) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
+    $srcBoard = Get-RhBoardDataDate $SourceRoot $ms.BoardGlob
+    if (-not $srcBoard.file) { $rec.blind = 'no-seed-board'; $rec.cause = ('the source checkout ' + $SourceRoot + ' holds no comparison board (comparison-*.json)'); return (& $finish) }
+    $srcName = [IO.Path]::GetFileName($srcBoard.file)
+    if (-not $srcBoard.date) { $rec.blind = 'stale-data'; $rec.cause = ('the newest board in ' + $SourceRoot + ' (' + $srcName + ') carries no dated price (no as_of), so the age of its data cannot be read'); return (& $finish) }
+    $srcDate = $srcBoard.date
     $sd = [datetime]::ParseExact($srcDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
-    if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest board in ' + $SourceRoot + ' is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
+    if (($Today.Date - $sd).Days -gt $ms.MaxAge) { $rec.blind = 'stale-data'; $rec.data_date = $srcDate; $rec.cause = ('the newest price read on the newest board in ' + $SourceRoot + ' (' + $srcName + ') is ' + $srcDate + ', older than ' + $ms.MaxAge + ' day(s)'); return (& $finish) }
     # THE CAP, taken before any clone exists. Waiting is not a verdict: nothing is recorded while this waits.
     $slot = $null
     try {
@@ -1474,7 +1491,12 @@ if ($SelfTest) {
     $srcHead = Save-RhCommit $src 'chain change'
     $null = Invoke-RhGit $src @('update-ref', 'refs/remotes/origin/main', ($srcHead + '~1'))
     $seedDir = Join-Path $st 'seed'
-    Write-RhFile $seedDir 'grocery\out\comparison-2026-09-21.json' '{}'   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+    # A seed board's data age is its newest READ (Get-RhBoardDataDate), so a fixture board carries one dated cell. The
+    # read here equals the name, so every case below means exactly what it meant when the name was the clock.
+    function New-RhFixtureBoard([string]$WeekOf, [string]$ReadOn) {
+      return ('{"week_of":"' + $WeekOf + '","comparison":[{"id":"milk","stores":[{"store":"Aldi","as_of":"' + $ReadOn + '"}]}]}')
+    }
+    Write-RhFile $seedDir 'grocery\out\comparison-2026-09-21.json' (New-RhFixtureBoard '2026-09-21' '2026-09-21')   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $fakeSeeder = { param($Tree, $SourceRoot) Copy-Item -Recurse -Force (Join-Path $SourceRoot 'grocery') $Tree; [pscustomobject]@{ Rc = 0; Tail = @() } }
     $mkRunner = { param([bool]$EmptyFlags)
       return { param($Tree, $TimeoutMin, $ChildEnv)
@@ -1508,6 +1530,28 @@ if ($SelfTest) {
     Test-RhCase 'MUST FIRE  a seed that carries a live credential is never started: blind=credential-present' { (($cred.result -eq 'blind') -and ($cred.blind -eq 'credential-present')), ($cred.result + ' ' + $cred.blind) }
     $stale = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $seedDir -VerdictDir $vd -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
     Test-RhCase 'MUST FIRE  data older than the bar is not rehearsed over: blind=stale-data (09-21 board on 09-24)' { (($stale.result -eq 'blind') -and ($stale.blind -eq 'stale-data')), ($stale.result + ' ' + $stale.blind) }
+    # ---- THE DATA'S AGE IS ITS NEWEST READ, NEVER THE BOARD'S NAME (2026-09-26, PLAN-board-clock) -----------------
+    # FOUNDING SHAPE: the board is named for the ad set of 09-21 (no ad was due since) and was rebuilt from reads of
+    # 09-24. Before the fix this was refused blind=stale-data, and so was every chain push on the box.
+    $mkSeed = { param([string]$Tag, [string]$Week, [string]$Read, [string]$Text)
+      $sdir = Join-Path $st ('seed-' + $Tag)
+      $body = if ($Text) { $Text } else { New-RhFixtureBoard $Week $Read }
+      Write-RhFile $sdir ('grocery\out\comparison-' + $Week + '.json') $body   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+      $vdir = Join-Path $st ('verdicts-' + $Tag); $null = [IO.Directory]::CreateDirectory($vdir)
+      [pscustomobject]@{ Seed = $sdir; Verdicts = $vdir }
+    }
+    $lagS = & $mkSeed 'lag' '2026-09-21' '2026-09-24' ''
+    $lag = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $lagS.Seed -VerdictDir $lagS.Verdicts -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
+    Test-RhCase 'MUST FIRE  a board NAMED 09-21 whose prices were READ 09-24 is rehearsed on 09-24, and its data date is the read (the founding false blind)' { (($lag.result -eq 'pass') -and ([string]$lag.data_date -eq '2026-09-24')), ($lag.result + ' ' + $lag.blind + ' data=' + $lag.data_date) }
+    $oldS = & $mkSeed 'old' '2026-09-24' '2026-09-21' ''
+    $old = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $oldS.Seed -VerdictDir $oldS.Verdicts -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
+    Test-RhCase 'MUST FIRE  a board NAMED today whose prices were read 09-21 is stale on 09-24, and the cause names the read, not the name' { (($old.result -eq 'blind') -and ($old.blind -eq 'stale-data') -and ([string]$old.cause -match 'newest price read .* is 2026-09-21')), ($old.result + ' ' + $old.blind + ' cause=' + $old.cause) }
+    $barS = & $mkSeed 'bar' '2026-09-21' '2026-09-22' ''
+    $bar = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $barS.Seed -VerdictDir $barS.Verdicts -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
+    Test-RhCase 'MUST NOT FIRE at the bar  prices read exactly 2 days before (the F2 bar) are rehearsed; one day older is the 09-21 case above' { (($bar.result -eq 'pass') -and ([string]$bar.data_date -eq '2026-09-22')), ($bar.result + ' ' + $bar.blind + ' data=' + $bar.data_date) }
+    $nodS = & $mkSeed 'nodate' '2026-09-24' '' '{"week_of":"2026-09-24","comparison":[]}'
+    $nod = Invoke-RhRehearsal -Repo $src -Commit 'HEAD' -SourceRoot $nodS.Seed -VerdictDir $nodS.Verdicts -Today ([datetime]'2026-09-24') -Seeder $fakeSeeder -ChainRunner (& $mkRunner $false) -NoPair
+    Test-RhCase 'MUST FIRE  a board named today that carries no dated price is BLIND, never fresh by its name' { (($nod.result -eq 'blind') -and ($nod.blind -eq 'stale-data') -and ([string]$nod.cause -match 'carries no dated price')), ($nod.result + ' ' + $nod.blind + ' cause=' + $nod.cause) }
 
     # ---- 4. BRAD'S CAP: at most 6 at once, through gate-slots with a private prefix and queue. Slots are held from
     # OTHER processes (lib\mutex-hold.ps1), because a Windows mutex is reentrant on its owning thread.
@@ -1907,7 +1951,7 @@ if ($SelfTest) {
     # chain stub blocks on a release file when TC_RHFX_BLOCK names one, in a CHILD it starts, so the stop has a child to stop.
     $esToday = (Get-Date).ToString('yyyy-MM-dd')
     $esSeed = Join-Path $st 'eseed'
-    Write-RhFile $esSeed ('grocery\out\comparison-' + $esToday + '.json') '{}'   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
+    Write-RhFile $esSeed ('grocery\out\comparison-' + $esToday + '.json') (New-RhFixtureBoard $esToday $esToday)   # reach-fixture-ok: builds a throwaway fixture repo under %TEMP%; nothing opens the live module
     $esBox = Join-Path $er 'le'
     $null = [IO.Directory]::CreateDirectory((Join-Path $esBox 'ops')); $null = [IO.Directory]::CreateDirectory((Join-Path $esBox 'lib'))
     foreach ($f in [IO.Directory]::GetFiles((Join-Path $script:RhRoot 'lib'), '*.ps1')) { [IO.File]::Copy($f, (Join-Path (Join-Path $esBox 'lib') ([IO.Path]::GetFileName($f)))) }
@@ -2039,7 +2083,7 @@ if ($SelfTest) {
     if (-not $e1Hold.HasExited) { $null = $e1Hold.WaitForExit(10000) }
     Remove-Item -LiteralPath $e1Root -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 66
+  $want = 70   # 66 + the four data-age cases of 2026-09-26 (PLAN-board-clock)
   if ($script:rhCases -ne $want) { Write-Output ('rehearse-chain self-test FAIL: ran {0} case(s), the suite lists {1}' -f $script:rhCases, $want); exit 1 }
   if ($script:rhFail) { Write-Output ('rehearse-chain self-test FAIL: {0} of {1} case(s)' -f $script:rhFail, $script:rhCases); exit 1 }
   Write-Output ('rehearse-chain self-test PASS: {0} of {0} cases - led by the founding defect (an empty cost-flags.txt refused by the 09-05 hook) and a manifest change with no verdict being refused' -f $script:rhCases)

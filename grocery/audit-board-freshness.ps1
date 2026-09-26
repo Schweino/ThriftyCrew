@@ -36,17 +36,23 @@
   Usage:  audit-board-freshness.ps1 [-OutDir <grocery\out>]      exit 0, findings on stdout (the chain alerts)
           audit-board-freshness.ps1 -SelfTest
 # WHAT THE SELF-TEST READS: only in-memory fixture boards; the real board is read below the self-test branch.
-# gate-inputs: grocery\audit-board-freshness.ps1
+# gate-inputs: grocery\audit-board-freshness.ps1, lib\board-clock.ps1, lib\json-io.ps1
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+. (Join-Path (Split-Path $root -Parent) 'lib\board-clock.ps1')   # Get-TcBoardNewestReads, Get-TcDaysSince: the one walk, measured to a real date
 $script:ProducerStopDays = 3
 $script:StaleShareMax = 0.10
 
 # One pure function over the two documents, so the self-test drives exactly what production runs.
-function Get-BoardFreshness($Board, $Withheld, [int]$StopDays, [double]$ShareMax) {
+# $Now IS THE REAL DATE, NEVER THE BOARD'S week_of (2026-09-26, design\PLAN-board-clock-2026-09-26.md). week_of is the
+# ad set the board is for and lags the real date whenever no weekly ad is due - 3 days on 2026-09-26 - and measuring
+# PRODUCER STOPPED against it read a stopped store up to that lag FRESHER than it was, in the one check whose job is
+# catching a stopped feed. Production passes today; fixtures pass a literal. The per-store newest read is
+# lib\board-clock.ps1's walk (board cells and withheld rows), the one copy of it.
+function Get-BoardFreshness($Board, $Withheld, [int]$StopDays, [double]$ShareMax, [datetime]$Now) {
   $lines = New-Object System.Collections.Generic.List[string]
   $findings = 0
   if (-not $Board) { [void]$lines.Add('! BLIND  no board to judge'); return [pscustomobject]@{ lines = $lines.ToArray(); findings = 1; stores = 0 } }
@@ -55,22 +61,12 @@ function Get-BoardFreshness($Board, $Withheld, [int]$StopDays, [double]$ShareMax
     [void]$lines.Add("! BLIND  the $bd board carries no provenance record (provenance_contract='" + [string]$Board.provenance_contract + "'), so how old its prices are cannot be judged")
     return [pscustomobject]@{ lines = $lines.ToArray(); findings = 1; stores = 0 }
   }
-  $boardD = [datetime]::ParseExact($bd, 'yyyy-MM-dd', $null)
-  $newest = @{}; $published = @{}
-  foreach ($r in @($Board.comparison)) {
-    foreach ($s in @($r.stores)) {
-      $st = [string]$s.store
-      if (-not $published.ContainsKey($st)) { $published[$st] = 0 }
-      if ([string]$s.as_of -match '^\d{4}-\d{2}-\d{2}$') {
-        $published[$st]++
-        if (-not $newest.ContainsKey($st) -or [string]$s.as_of -gt $newest[$st]) { $newest[$st] = [string]$s.as_of }
-      }
-    }
-  }
+  $nowS = $Now.ToString('yyyy-MM-dd')
+  $reads = Get-TcBoardNewestReads $Board $Withheld
+  $newest = $reads.by_store; $published = $reads.published
   $stale = @{}
   foreach ($w in @($Withheld.withheld)) {
     $st = [string]$w.store
-    if ([string]$w.as_of -match '^\d{4}-\d{2}-\d{2}$' -and (-not $newest.ContainsKey($st) -or [string]$w.as_of -gt $newest[$st])) { $newest[$st] = [string]$w.as_of }
     if (@('STALE', 'UNDATED') -contains [string]$w.why) { $stale[$st] = 1 + $(if ($stale.ContainsKey($st)) { $stale[$st] } else { 0 }) }
   }
   $judged = @{}
@@ -81,11 +77,11 @@ function Get-BoardFreshness($Board, $Withheld, [int]$StopDays, [double]$ShareMax
     $sN = if ($stale.ContainsKey($st)) { $stale[$st] } else { 0 }
     $share = if ($j -gt 0) { $sN / [double]$j } else { 0.0 }
     $nw = if ($newest.ContainsKey($st)) { $newest[$st] } else { '' }
-    $age = if ($nw) { [int]($boardD - [datetime]::ParseExact($nw, 'yyyy-MM-dd', $null)).TotalDays } else { $null }
+    $age = Get-TcDaysSince $nw $Now
     $pub = if ($published.ContainsKey($st)) { $published[$st] } else { 0 }
-    [void]$lines.Add(("  {0,-12} newest read {1} ({2} d before the board); {3} captured cell(s) published; withheld for age {4} of {5} judged row(s) ({6:P0})" -f $st, $(if ($nw) { $nw } else { 'NONE' }), $(if ($null -ne $age) { $age } else { '-' }), $pub, $sN, $j, $share))
+    [void]$lines.Add(("  {0,-12} newest read {1} ({2} d before {7}); {3} captured cell(s) published; withheld for age {4} of {5} judged row(s) ({6:P0})" -f $st, $(if ($nw) { $nw } else { 'NONE' }), $(if ($null -ne $age) { $age } else { '-' }), $pub, $sN, $j, $share, $nowS))
     if ($j -gt 0 -and ($null -eq $age -or $age -gt $StopDays)) {
-      [void]$lines.Add(("! PRODUCER STOPPED  {0}: newest price read {1}, more than {2} day(s) before the {3} board - its capture is not landing" -f $st, $(if ($nw) { "$nw ($age d)" } else { 'never' }), $StopDays, $bd)); $findings++
+      [void]$lines.Add(("! PRODUCER STOPPED  {0}: newest price read {1}, more than {2} day(s) before today ({3}; the board is for the {4} ad set) - its capture is not landing" -f $st, $(if ($nw) { "$nw ($age d)" } else { 'never' }), $StopDays, $nowS, $bd)); $findings++
     }
     if ($j -gt 0 -and $share -gt $ShareMax) {
       [void]$lines.Add(("! AGING  {0}: {1} of {2} judged row(s) ({3:P0}) withheld as older than the publish limit (max {4:P0}) - the rotation is not re-reading this store fast enough" -f $st, $sN, $j, $share, $ShareMax)); $findings++
@@ -107,27 +103,33 @@ if ($SelfTest) {
   try {
     $B = '2026-09-17'
     # healthy: read yesterday, nothing stale
-    $ok = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-16'))) (_Wh @{ Aldi = 50 } @()) 3 0.10
+    $ok = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-16'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]$B)
     _T 'MUST NOT FIRE  a store read yesterday with nothing withheld for age raises nothing' ($ok.findings -eq 0) (($ok.lines) -join ' | ')
     # at the bar: newest exactly 3 days old
-    $at = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-14'))) (_Wh @{ Aldi = 50 } @()) 3 0.10
+    $at = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-14'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]$B)
     _T 'MUST NOT FIRE  newest read exactly 3 days before the board (the bar) is not a stopped producer' ($at.findings -eq 0) (($at.lines) -join ' | ')
-    $past = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-13'))) (_Wh @{ Aldi = 50 } @()) 3 0.10
+    $past = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-13'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]$B)
     _T 'MUST FIRE  newest read 4 days before the board (one day past the bar) is PRODUCER STOPPED - the 2026-09-13 stop' (@($past.lines | Where-Object { $_ -match '^! PRODUCER STOPPED  Aldi: newest price read 2026-09-13 \(4 d\)' }).Count -eq 1) (($past.lines) -join ' | ')
     # every row withheld, nothing published: the store still counts as judged, and its newest read comes from the withheld rows
-    $gone = Get-BoardFreshness (_Board $B @()) (_Wh @{ "Sam's Club" = 20 } @(@("Sam's Club", 'STALE', '2026-08-15'), @("Sam's Club", 'STALE', '2026-08-20'))) 3 0.10
+    $gone = Get-BoardFreshness (_Board $B @()) (_Wh @{ "Sam's Club" = 20 } @(@("Sam's Club", 'STALE', '2026-08-15'), @("Sam's Club", 'STALE', '2026-08-20'))) 3 0.10 ([datetime]$B)
     _T 'MUST FIRE  a store whose every row was withheld still reports, from the withheld rows, as PRODUCER STOPPED' (@($gone.lines | Where-Object { $_ -match "^! PRODUCER STOPPED  Sam's Club: newest price read 2026-08-20" }).Count -eq 1) (($gone.lines) -join ' | ')
     # aging share at and past its bar
     $wh10 = @(1..5 | ForEach-Object { ,@('Walmart', 'STALE', '2026-08-30') })
-    $sAt = Get-BoardFreshness (_Board $B @(,@('eggs', 'Walmart', '2026-09-17'))) (_Wh @{ Walmart = 50 } $wh10) 3 0.10
+    $sAt = Get-BoardFreshness (_Board $B @(,@('eggs', 'Walmart', '2026-09-17'))) (_Wh @{ Walmart = 50 } $wh10) 3 0.10 ([datetime]$B)
     _T 'MUST NOT FIRE  exactly 10% withheld for age (5 of 50, the bar) is not AGING' (@($sAt.lines | Where-Object { $_ -match '^! AGING' }).Count -eq 0) (($sAt.lines) -join ' | ')
     $wh6 = @(1..6 | ForEach-Object { ,@('Walmart', 'STALE', '2026-08-30') })
-    $sPast = Get-BoardFreshness (_Board $B @(,@('eggs', 'Walmart', '2026-09-17'))) (_Wh @{ Walmart = 50 } $wh6) 3 0.10
+    $sPast = Get-BoardFreshness (_Board $B @(,@('eggs', 'Walmart', '2026-09-17'))) (_Wh @{ Walmart = 50 } $wh6) 3 0.10 ([datetime]$B)
     _T 'MUST FIRE  6 of 50 (12%, one row past the bar) withheld for age is AGING' (@($sPast.lines | Where-Object { $_ -match '^! AGING  Walmart' }).Count -eq 1) (($sPast.lines) -join ' | ')
-    $wrongStore = Get-BoardFreshness (_Board $B @(,@('eggs', 'Hy-Vee', '2026-09-17'))) (_Wh @{ 'Hy-Vee' = 50 } @(1..20 | ForEach-Object { ,@('Hy-Vee', 'WRONG-STORE', '2026-09-10') })) 3 0.10
+    $wrongStore = Get-BoardFreshness (_Board $B @(,@('eggs', 'Hy-Vee', '2026-09-17'))) (_Wh @{ 'Hy-Vee' = 50 } @(1..20 | ForEach-Object { ,@('Hy-Vee', 'WRONG-STORE', '2026-09-10') })) 3 0.10 ([datetime]$B)
     _T 'MUST NOT FIRE  rows withheld for a reason other than age (WRONG-STORE) do not count toward AGING' (@($wrongStore.lines | Where-Object { $_ -match '^! AGING' }).Count -eq 0) (($wrongStore.lines) -join ' | ')
-    $blind = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-16')) 'OFF') $null 3 0.10
+    $blind = Get-BoardFreshness (_Board $B @(,@('milk', 'Aldi', '2026-09-16')) 'OFF') $null 3 0.10 ([datetime]$B)
     _T 'MUST FIRE  a board built without the provenance contract is BLIND, never a clean report' (@($blind.lines | Where-Object { $_ -match '^! BLIND' }).Count -eq 1) (($blind.lines) -join ' | ')
+    # THE LAG (2026-09-26, PLAN-board-clock). The board is for the 09-23 ad set and no ad was due since. Measured against
+    # week_of, a store last read 09-22 was 1 day old; it is 4 days old on 09-26, one past the 3-day bar.
+    $lag = Get-BoardFreshness (_Board '2026-09-23' @(,@('milk', 'Aldi', '2026-09-22'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]'2026-09-26')
+    _T 'MUST FIRE  a store last read 09-22 is PRODUCER STOPPED on 09-26 though the board is for the 09-23 ad set (the lag read it 1 day old)' (@($lag.lines | Where-Object { $_ -match '^! PRODUCER STOPPED  Aldi: newest price read 2026-09-22 \(4 d\), more than 3 day\(s\) before today \(2026-09-26; the board is for the 2026-09-23 ad set\)' }).Count -eq 1) (($lag.lines) -join ' | ')
+    $lagOk = Get-BoardFreshness (_Board '2026-09-23' @(,@('milk', 'Aldi', '2026-09-26'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]'2026-09-26')
+    _T 'CLEAN TWIN  a store read today under the same lagging ad set raises nothing, and its line says 0 d before today' ($lagOk.findings -eq 0 -and @($lagOk.lines | Where-Object { $_ -match 'newest read 2026-09-26 \(0 d before 2026-09-26\)' }).Count -eq 1) (($lagOk.lines) -join ' | ')
   } catch { _T 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' line ' + $_.InvocationInfo.ScriptLineNumber) }
   Write-Output ('audit-board-freshness SELF-TEST {0} ({1} of {2} failed)' -f $(if ($bad) { 'FAIL' } else { 'PASS' }), $bad, $n)
   if ($bad) { exit 1 }
@@ -142,7 +144,7 @@ if ($board) {
   $wf = Join-Path $OutDir ('provenance-withheld-' + [string]$board.week_of + '.json')
   if (Test-Path -LiteralPath $wf) { $wh = [IO.File]::ReadAllText($wf) | ConvertFrom-Json }
 }
-$res = Get-BoardFreshness $board $wh $script:ProducerStopDays $script:StaleShareMax
+$res = Get-BoardFreshness $board $wh $script:ProducerStopDays $script:StaleShareMax (Get-Date)
 Write-Output ("board freshness: " + $(if ($bf) { $bf.Name } else { 'no board' }) + " (producer-stop floor " + $script:ProducerStopDays + " d, age-withheld ceiling " + ('{0:P0}' -f $script:StaleShareMax) + ")")
 foreach ($l in $res.lines) { Write-Output $l }
 Write-Output ('BOARD-FRESHNESS-COMPLETE stores=' + $res.stores + ' findings=' + $res.findings)
