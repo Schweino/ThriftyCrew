@@ -688,9 +688,13 @@ function load(cache) {
   const window = { __APOLLO_CLIENT__: { cache: { extract: () => cache } } };
   return new Function('window', 'module', src + '\nreturn { farewayShopExtract, farewayReadLocation };')(window, undefined);
 }
-const item = { evergreenUrl: '3402271-coconut-each', viewSection: { itemName: 'Coconut' },
+const item = { id: 'items_531573-3402271', evergreenUrl: '3402271-coconut-each', viewSection: { itemName: 'Coconut' },
   price: { viewSection: { itemDetails: { priceString: '$3.99', fullPriceString: '', pricingUnitString: '1 each' } } } };
-const at = loc => Object.assign({ 'Item:3402271': item }, loc ? { 'RetailerLocation:x': { retailerLocationId: loc, lineOneString: 'somewhere' } } : {});
+// The cache's own shape, measured 2026-09-26 on the live page: a search's result list keyed by its variables.
+const srpKey = q => JSON.stringify({ filters: [], first: 4, orderBy: 'bestMatch', query: q, shopId: '1' });
+const srp = (q, ids) => ({ [srpKey(q)]: { searchResultsPlacements: { placements: [{ content: { itemIds: ids } }] } } });
+const at = loc => Object.assign({ Items: { k: { items: [item] } }, SearchResultsPlacements: srp('whole coconut', ['items_531573-3402271']) },
+  loc ? { 'RetailerLocation:x': { retailerLocationId: loc, lineOneString: 'somewhere' } } : {});
 try {
   const om = load(at('531573')).farewayShopExtract('whole coconut');
   T('MUST FIRE  every row carries the retailerLocation its own cache named (loc)', om.length === 1 && om[0].loc === '531573', JSON.stringify(om));
@@ -707,7 +711,94 @@ try {
   const reOf = s => (s.match(/\/"retailerLocation\(\?:Id\)\?":"\?\(\\d\+\)"\?\//) || [])[0];
   T('the two copies of the retailerLocation regex are identical text', !!reOf(src) && reOf(src) === reOf(inst), reOf(src) + ' vs ' + reOf(inst));
 } catch (e) { console.log('  X     the Fareway store test threw: ' + (e && e.stack)); bad++; }
-process.exit(bad === 0 ? 0 : 1);
+
+// --- 8b. every row is SCOPED to its own search (2026-09-26) ------------------------------------------------------
+// FOUNDING BUG (2026-09-24): a router-driven sweep kept the cache alive, the extractor walked all of it, and a
+// 45-term capture read 81 -> 1910 candidates, each term carrying every earlier term's rows. The shape below is the
+// one the live page showed on 2026-09-26 after a router push from "pork ribs" to "yogurt": both searches still in
+// the cache, each keyed by its own query, and the priced items of both beside them.
+const pitem = (pid, name, price) => ({ id: 'items_531573-' + pid, evergreenUrl: pid + '-' + name.toLowerCase().replace(/\W+/g, '-'),
+  viewSection: { itemName: name }, price: { viewSection: { itemDetails: { priceString: '$' + price, fullPriceString: '', pricingUnitString: '1 each' } } } });
+const ribs = [pitem('84387836', 'Baby Back Pork Ribs', '4.99'), pitem('84388900', 'St. Louis Pork Ribs', '3.99')];
+const yog = [pitem('1111', 'Plain Greek Yogurt', '5.49'), pitem('2222', 'Vanilla Yogurt', '0.79')];
+const both = pitem('3333', 'Yogurt Ribs Glaze', '2.99');   // an item BOTH searches returned
+const loc531 = { 'RetailerLocation:x': { retailerLocationId: '531573' } };
+const ids = a => a.map(x => x.id);
+const mixed = Object.assign({ Items: { a: { items: ribs }, b: { items: yog }, c: { items: [both] } },
+  SearchResultsPlacements: Object.assign(srp('pork ribs', ids(ribs).concat(both.id)), srp('Yogurt', ids(yog).concat(both.id))) }, loc531);
+try {
+  const y = load(mixed).farewayShopExtract('yogurt');
+  const yn = y.map(r => r.name).sort().join(' | ');
+  T('MUST FIRE  with two searches in the cache, "yogurt" returns ONLY the yogurt search\'s rows (no pork ribs)',
+    y.length === 3 && !/Pork Ribs/.test(yn), yn);
+  T('MUST FIRE  every row carries the query it was scoped to (scope_query, as the cache keys it)',
+    y.every(r => r.scope_query === 'Yogurt'), JSON.stringify(y.map(r => r.scope_query)));
+  const r = load(mixed).farewayShopExtract('  PORK   Ribs ');
+  T('CLEAN TWIN  the term matches its search lowercased and whitespace-collapsed, and an item both searches returned is kept for each',
+    r.length === 3 && r.some(x => x.id === '3333') && r.every(x => x.scope_query === 'pork ribs'), JSON.stringify(r.map(x => x.name)));
+  let t1 = '';
+  try { load(mixed).farewayShopExtract('yellow onion'); } catch (e) { t1 = String(e.message || e); }
+  T('MUST FIRE  a term whose search is not in the cache THROWS and names the searches that are (the too-early reset)',
+    /no search for "yellow onion"/.test(t1) && /"pork ribs"/.test(t1), t1);
+  let t2 = '';
+  try { load(Object.assign({}, mixed, { SearchResultsPlacements: srp('kale', ['items_531573-9']) })).farewayShopExtract('kale'); } catch (e) { t2 = String(e.message || e); }
+  T('MUST FIRE  a search whose items are not priced yet THROWS rather than returning another search\'s rows', /none is priced in the cache yet/.test(t2), t2);
+  let t3 = '';
+  try { load(mixed).farewayShopExtract(''); } catch (e) { t3 = String(e.message || e); }
+  T('MUST FIRE  no term THROWS - there is no search to scope to', /no term/.test(t3), t3);
+} catch (e) { console.log('  X     the Fareway scope test threw: ' + (e && e.stack)); bad++; }
+
+// --- 8c. the router sweep driver (2026-09-26) ------------------------------------------------------------------
+// A fake storefront: push() mounts a search whose priced items hydrate one poll at a time (paint 1, then the rest),
+// and the cache is NEVER cleared - the contaminating case, so the scope, not the reset, is what keeps rows apart.
+function store(catalogue, locId) {
+  const cache = Object.assign({ Items: {}, SearchResultsPlacements: {} }, { 'RetailerLocation:x': { retailerLocationId: locId || '531573' } });
+  let cur = null, hydrated = 0, resets = 0, pushes = [];
+  const w = {
+    document: { body: { scrollHeight: 1 } }, scrollTo: () => { if (cur && hydrated < catalogue[cur].length) hydrated++; },
+    __do_not_use_me_history: { push: p => { pushes.push(p); cur = decodeURIComponent(p.split('?k=')[1]); hydrated = catalogue[cur] && catalogue[cur].length ? 1 : 0; } },
+    __APOLLO_CLIENT__: { resetStore: async () => { resets++; }, cache: { extract: () => {
+      if (cur && catalogue[cur]) {
+        Object.assign(cache.SearchResultsPlacements, srp(cur, ids(catalogue[cur])));
+        cache.Items[cur] = { items: catalogue[cur].slice(0, hydrated) };
+      }
+      return cache; } } }
+  };
+  w.stats = () => ({ resets, pushes });
+  return w;
+}
+function loadSweep(w) {
+  return new Function('window', 'module', src + '\nreturn { farewaySweep, farewaySweepJsonl };')(w, undefined);
+}
+const instant = () => Promise.resolve();
+(async () => {
+  try {
+    const w = store({ 'pork ribs': ribs, 'yogurt': yog });
+    const f = loadSweep(w);
+    const st = await f.farewaySweep(['pork ribs', 'yogurt'], ['pork-ribs', 'yogurt'], { sleep: instant, loc: '531573' });
+    const l2 = st.lines[1] || { candidates: [] };
+    T('MUST FIRE  the second term of a router sweep carries only its own rows, though the cache kept the first term\'s',
+      st.done && st.lines.length === 2 && l2.candidates.length === 2 && l2.candidates.every(c => c.scope_query === 'yogurt'), JSON.stringify(l2.candidates.map(c => c.name)));
+    T('CLEAN TWIN  each term waits for its whole result list to hydrate before extracting (2 of 2, never the first paint)',
+      st.lines[0] && st.lines[0].candidates.length === 2 && st.lines[0].settle.count === 2, JSON.stringify(st.lines[0] && st.lines[0].settle));
+    T('CLEAN TWIN  one push and one reset per term, pushed on the router basename', w.stats().resets === 2 && w.stats().pushes[1] === '/fareway-meat-grocery/s?k=yogurt', JSON.stringify(w.stats()));
+    const jl = f.farewaySweepJsonl().trim().split('\n').map(s => JSON.parse(s));
+    T('CLEAN TWIN  the JSONL is one {id, term, candidates, settle} line per term, in order', jl.length === 2 && jl[1].id === 'yogurt' && jl[1].term === 'yogurt', JSON.stringify(jl.map(x => x.id)));
+
+    const w2 = store({ 'pork ribs': ribs, 'kale': [] });
+    const st2 = await loadSweep(w2).farewaySweep(['kale', 'pork ribs'], ['kale', 'pork-ribs'], { sleep: instant, maxPolls: 6 });
+    T('MUST FIRE  a term that never settles is an ERROR for that term, never a line - and the sweep carries on',
+      st2.lines.length === 1 && st2.lines[0].id === 'pork-ribs' && st2.errors.length === 1 && /UNSETTLED/.test(st2.errors[0].error), JSON.stringify(st2.errors));
+
+    const w3 = store({ 'pork ribs': ribs, 'yogurt': yog }, '513473');
+    const st3 = await loadSweep(w3).farewaySweep(['pork ribs', 'yogurt'], ['pork-ribs', 'yogurt'], { sleep: instant, loc: '531573' });
+    T('MUST FIRE  a row read at Des Moines 513473 stops the sweep and writes no line', st3.lines.length === 0 && /513473/.test(st3.aborted) && w3.stats().pushes.length === 1, st3.aborted);
+
+    const st4 = await loadSweep(store({})).farewaySweep(['a', 'b'], ['a'], { sleep: instant });
+    T('MUST FIRE  terms and commodities that are not parallel refuse before a single push', /not parallel/.test(st4.aborted) && st4.lines.length === 0, st4.aborted);
+  } catch (e) { console.log('  X     the Fareway sweep test threw: ' + (e && e.stack)); bad++; }
+  process.exit(bad === 0 ? 0 : 1);
+})();
 '@
 $fws = Join-Path $here 'pull-fareway-shop.js'
 $fwi = Join-Path $here 'pull-fareway-instore.js'
