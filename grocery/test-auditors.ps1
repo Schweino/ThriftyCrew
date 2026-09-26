@@ -1734,7 +1734,9 @@ Remove-Item $fxCe -Recurse -Force -ErrorAction SilentlyContinue
 # set on a live daily path, which is exactly when the certificate would lie).
 if (Use-Unit 'u037-e-audit-tile-integrity-accuracy') {
 $fxTi = NewFxDir 'ti-blind'
-foreach ($cf in @('audit-tile-integrity.ps1','pu-lib.ps1')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxTi $cf) }
+# The copy list is the subject's own grocery\ gate-inputs: audit-tile-integrity dot-sources link-sibling-lib.ps1
+# since 2026-09-26 (queue fab315), and without it the copy threw at start-up with rc=1 on all four cases below.
+foreach ($cf in @('audit-tile-integrity.ps1','pu-lib.ps1','link-sibling-lib.ps1')) { Copy-Item (Join-Path $root $cf) (Join-Path $fxTi $cf) }
 New-Item -ItemType Directory -Force (Join-Path $fxTi 'out') | Out-Null
 Set-Content (Join-Path $fxTi 'product-urls.json') '{"items":{}}' -Encoding UTF8
 Set-Content (Join-Path $fxTi 'out\comparison-2026-01-01.json') '{"comparison":[{"id":"test-oats","unit":"oz","stores":[{"store":"Hy-Vee","per_unit":0.10,"type":"everyday","item":"Test Oats 16 oz"}]}]}' -Encoding UTF8
@@ -2383,6 +2385,9 @@ foreach ($d in @($fxLeLf, $fxLeCrLf)) {
   # copy must now carry the dependency, exactly as the lib\ copy above already does for ps-source and
   # git-blob-lib. This is defect 4 of the 2026-09-05 sweep: a copied script does NOT keep its dependencies.
   Copy-Item (Join-Path $root 'fanout-lib.ps1') (Join-Path $d 'fanout-lib.ps1') -Force
+  # AND check-ad-cycles.ps1 (2026-09-26, queue 518fff): the held-post cases read its source from the fixture's
+  # own directory to prove it records board_sha256. Without the copy the fixture threw at that read with rc=1.
+  Copy-Item (Join-Path $root 'check-ad-cycles.ps1') (Join-Path $d 'check-ad-cycles.ps1') -Force
 }
 [IO.File]::WriteAllText((Join-Path $fxLeLf   'capture-run.ps1'), $crLf,   (New-Object Text.UTF8Encoding $true))
 [IO.File]::WriteAllText((Join-Path $fxLeCrLf 'capture-run.ps1'), $crCrLf, (New-Object Text.UTF8Encoding $true))
@@ -2395,13 +2400,13 @@ if ($nLf -eq 0 -and $nCrLf -gt 1000 -and (($crCrLf -replace "`r`n", "`n") -eq $c
 } else { Bad ('line-ending fixture integrity FAILED (CR counts ' + $nLf + ' / ' + $nCrLf + ') - the two copies are not the same bytes under two regimes, so neither run below means anything') }
 $rLf = RunPSAt $fxLeLf 'test-capture-builders.ps1' @()
 if ($rLf.rc -eq 0 -and $rLf.text -match 'CAPTURE-BUILDERS-COMPLETE cases=(\d+) failed=0' -and [int]$Matches[1] -ge $TCB_MIN_CASES) { Ok ('capture-run builder block under LF (today''s regime): test-capture-builders finds its subject and passes ' + $Matches[1] + ' cases') }
-elseif ($rLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against an LF capture-run.ps1 (rc=' + $rLf.rc + ') - this is the 2026-09-07 defect returning: ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
+elseif ($rLf.text -match '(?m)^BLIND:') { Bad ('test-capture-builders is BLIND against an LF capture-run.ps1 (rc=' + $rLf.rc + ') - this is the 2026-09-07 defect returning: ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match '^BLIND:' }) -join ' | ')) }
 else { Bad ('test-capture-builders failed against an LF capture-run.ps1 (rc=' + $rLf.rc + '): ' + (($rLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 # CLEAN TWIN: the regime the fixture was written under. The fix folds CRLF to LF, and the thing that fold
 # was most likely to break is the case it used to handle. The builders' behaviour is not a line ending.
 $rCrLf = RunPSAt $fxLeCrLf 'test-capture-builders.ps1' @()
 if ($rCrLf.rc -eq 0 -and $rCrLf.text -match 'CAPTURE-BUILDERS-COMPLETE cases=(\d+) failed=0' -and [int]$Matches[1] -ge $TCB_MIN_CASES) { Ok ('CLEAN TWIN: capture-run builder block under CRLF (a fresh checkout''s regime) still passes ' + $Matches[1] + ' cases - the fold did not trade one regime for the other') }
-elseif ($rCrLf.text -match 'BLIND') { Bad ('test-capture-builders is BLIND against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + ') - the fix traded the old blindness for a new one, and every fresh worktree is CRLF: ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'BLIND' }) -join ' | ')) }
+elseif ($rCrLf.text -match '(?m)^BLIND:') { Bad ('test-capture-builders is BLIND against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + ') - the fix traded the old blindness for a new one, and every fresh worktree is CRLF: ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match '^BLIND:' }) -join ' | ')) }
 else { Bad ('test-capture-builders failed against a CRLF capture-run.ps1 (rc=' + $rCrLf.rc + '): ' + (($rCrLf.text -split "`r?`n" | Where-Object { $_ -match 'FAIL|SELFTEST' }) -join ' | ')) }
 # MUST FIRE (the founding bug, frozen). The OLD locate logic, reconstructed here so it cannot be edited
 # away with the fixture it used to live in. FROZEN, not read off the live file: capture-run.ps1 now carries
@@ -2423,6 +2428,10 @@ $oldJLive = $crLf.IndexOf($oldEndMark, [Math]::Max(0, $crLf.IndexOf('      $bLan
 if ($oldJLive -lt 0) { Ok 'MUST FIRE (live): the OLD CRLF end marker still finds nothing in the shipped LF capture-run.ps1 - a fixture locating by literal line ending would be BLIND right now' }
 else { Bad 'the OLD CRLF end marker matches the shipped capture-run.ps1 again, so the file has gone back to CRLF - check .gitattributes eol=lf before trusting any byte-exact comparison in this estate' }
 # and the named markers themselves must be present in the SHIPPED file, not only in the copies above.
+# THIS UNIT READS ITS OWN SOURCES (2026-09-26). $crSrc and $cacSrc used to arrive from u046/u047, so a push
+# that selected u051 alone judged 12 cases against $null and read every one red. Same files, same reader.
+$crSrc  = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
+$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
 if ($crSrc -match '# >>> BUILDER-BLOCK >>>' -and $crSrc -match '# <<< BUILDER-BLOCK <<<') {
   Ok 'capture-run.ps1 still carries the named BUILDER-BLOCK markers the fixture locates by'
 } else { Bad 'capture-run.ps1 has lost one of its BUILDER-BLOCK markers - test-capture-builders will go BLIND on the next run' }
