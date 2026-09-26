@@ -602,6 +602,28 @@ if ($SelfTest) {
   _Near 'B2G1-50off /each'       (Get-UnitPrice (_D 'Buy 2 Get 1 50% off' 'yogurt cup' 3.00 'each') (_C 'each')).unit_price 2.50 0.001
   # 5. Buy 3 Get 2 for $1, regular $2.50 -> (3*2.50 + 2*1)/5
   _Near 'B3G2-for-1 /each'       (Get-UnitPrice (_D 'Buy 3 Get 2 for $1' 'bread loaf' 2.50 'each') (_C 'each')).unit_price 1.90 0.001
+  # 5b. A MULTIBUY DIVIDES ITS PACK COUNT (2026-09-25, queue 2026-09-23-9459a1). Frozen from flagged-2026-09-23,
+  # Family Fare, bar-soap (each): BOGO 40% on a 6-bar pack at reg 13.59 is 10.872 a PACK, (13.59 + 13.59 * 0.6) / 2,
+  # and 1.812 a bar. It published nothing (the band refused 10.872) and paged as "a bad multibuy parse".
+  _Near 'MUST FIRE  Dove 6 Ea BOGO 40% prices per BAR' (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Beauty Bar Soap Sensitive, 6 Ea' 13.59 '6 ea') (_C 'each')).unit_price 1.812 0.0005
+  _Near 'MUST FIRE  Dove Replenish 6 Ea per BAR'      (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Replenish Dragon Fruit & Coconut Cream Scent Beauty Bar 6 Ea' 13.99 '6 ea') (_C 'each')).unit_price 1.8653 0.0005
+  _Near 'MUST FIRE  a count in the name alone divides' (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Beauty Bar Soap Sensitive, 6 Ea' 13.59 '') (_C 'each')).unit_price 1.812 0.0005
+  # a count CONFLICT is refused, never guessed: the name says 6, the size says 4
+  _Null 'MUST FIRE  name 6 Ea vs size 4 ct is a count conflict' (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Beauty Bar Soap Sensitive, 6 Ea' 13.59 '4 ct') (_C 'each'))
+  $mbCf = Resolve-MultibuyPackCount (_D 'Buy 1 get 1 40% off' 'Dove Beauty Bar Soap Sensitive, 6 Ea' 13.59 '4 ct')
+  if ($mbCf.conflict -and $null -eq $mbCf.count) { Write-Output ('ok    MUST FIRE  the conflict names both counts (' + $mbCf.from + ')') } else { Write-Output 'FAIL  a 6-vs-4 count conflict was not reported as a conflict'; $script:fail++ }
+  # CLEAN TWIN: a multibuy with no stated count keeps its per-each answer (case 4 above), and a pack_is_package
+  # commodity still prices the PACKAGE, because that declaration answers before the multibuy division.
+  _Near 'CLEAN TWIN  multibuy on a pack_is_package commodity stays per package' (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Texas Toast 6 ct' 3.00 '6 ct') (_CP 'each')).unit_price 2.40 0.001
+  # CLEAN TWIN: the real premium sale on a complete basis still prices exactly as before (Dove Hand Wash 12 fl oz,
+  # BOGO 40% at reg 5.99 = 4.792 / 12 = 0.3993/fl oz), and is filed on the COMPLETE-BASIS half, not the unresolved one.
+  $hw = Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Hand Wash, Antibacterial 12 Fl Oz' 5.99 '12 oz') (_C 'floz')
+  _Near 'CLEAN TWIN  Dove Hand Wash 12 fl oz still 0.3993/fl oz' $hw.unit_price 0.3993 0.0005
+  $h1 = Get-MultibuyRefusalHalf ([string]$hw.basis) 'floz'
+  $h2 = Get-MultibuyRefusalHalf 'per-each' 'each'
+  $h3 = Get-MultibuyRefusalHalf '' 'each'
+  if ($h1 -eq 'complete-basis' -and $h2 -eq 'unresolved' -and $h3 -eq 'unresolved') { Write-Output 'ok    CLEAN TWIN  hand wash is complete-basis; a per-each fall-through and an UNPRICED row are unresolved' }
+  else { Write-Output ("FAIL  refusal halves wrong: handwash=$h1 per-each=$h2 unpriced=$h3"); $script:fail++ }
   # 6. plain N-for-$M (no regular needed): milk 2 for $5 -> 2.50/gal
   _Near '2-for-5 milk /gal'      (Get-UnitPrice (_D '2 for $5' 'milk gallon' $null 'gallon') (_C 'gallon')).unit_price 2.50 0.001
   # 7. multibuy MISSING regular -> UNPRICED (can't compute the discount without it)
@@ -3030,10 +3052,13 @@ foreach ($pp in $prePass) {
       $bGrp = if ($BAND_GROUPS.ContainsKey([string]$d.store)) { [string]$BAND_GROUPS[[string]$d.store] } else { 'retail' }
       $bLo = if ($bGrp -eq 'warehouse' -and $bn.PSObject.Properties['wmin'] -and $null -ne $bn.wmin) { $bn.wmin } else { $bn.min }
       $flagged.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; unit=$c.unit; unit_price=$uprice; band=("$($bLo)-$($bn.max)"); band_ref=$(if ($bn.PSObject.Properties['reference']) { $bn.reference } else { $null }); band_group=$bGrp; band_kind=$(if ($bn.PSObject.Properties['reference']) { 'derived' } else { 'typed' }); price_text=$d.price_text; size_text=$d.size_text })
-      # if the out-of-band price came from a multibuy, it's a bad multibuy parse - reflect it in the multibuy
-      # signal too (not just the generic out-of-band bucket the human is told is "usually normal").
+      # An out-of-band multibuy is reflected in the multibuy signal too, and SAYS WHICH HALF IT IS (2026-09-25,
+      # queue 2026-09-23-9459a1): on a complete basis the band refused a real price (band review owns it, and
+      # check-ad-cycles does not page it as a price flag); with an unresolved pack count the capture needs review.
       if (Test-IsMultibuy $d.price_text) {
-        $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; reason=("priced but OUT-OF-BAND (`$$uprice outside $($bn.min)-$($bn.max)) - likely a bad multibuy size/regular parse, review capture") })
+        $mbHalf = Get-MultibuyRefusalHalf ([string]$basis) ([string]$c.unit)
+        $mbWhy = if ($mbHalf -eq 'complete-basis') { "on a complete basis ($basis) - the band refuses a real price; see band review" } else { "with an unresolved pack count ($basis) - review the capture" }
+        $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; half=$mbHalf; reason=("priced but OUT-OF-BAND (`$$uprice outside $($bn.min)-$($bn.max)) $mbWhy") })
       }
       $uprice = $null; $basis = 'OUT-OF-BAND'   # bad parse -> drop from ranking
     }
@@ -3087,9 +3112,11 @@ foreach ($pp in $prePass) {
   # SAFETY NET: a recognized multibuy that came back UNPRICED means the capture is incomplete
   # (this is exactly how the Baker's chicken-thighs Buy-1-Get-2 was lost). Surface it loudly.
   if ((-not $up) -and (Test-IsMultibuy $d.price_text)) {
+    $mbPc = Resolve-MultibuyPackCount $d
     $why = if (-not $d.regular -or ("" + $d.regular) -eq '') { 'missing regular price - a Buy-N-Get-K needs the "regular retail" number to price' }
+           elseif ([string]$c.unit -eq 'each' -and $mbPc.conflict) { ('pack count conflict (' + $mbPc.from + ') - the row states two different counts, so it is refused rather than guessed; an unresolved pack count, review the capture') }
            else { 'has regular but no unit basis - add the pack size (e.g. "12 pk 12 fl oz"), or "lb" for a per-pound item' }
-    $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; reason=$why })
+    $mbUnpriced.Add([pscustomobject]@{ id=$c.id; label=$c.label; store=$d.store; name=$d.name; price_text=$d.price_text; regular=$d.regular; size_text=$d.size_text; half='unresolved'; reason=$why })
   }
   # PER-CELL membership (not whole-store): a Hy-Vee row whose price is the PERKS member price is membership-gated
   # just like a Sam's Club cell, so it is excluded from the "cheapest without membership" column. Hy-Vee's regular

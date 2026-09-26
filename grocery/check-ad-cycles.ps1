@@ -3295,7 +3295,21 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       if ($sanityVerified -gt 0) { Log ("review flags: $sanityVerified sanity flag(s) put to their own store by verify-price-flags.ps1 instead of paged (only a store disagreement pages)") }
       if ($sanityQuiet -gt 0) { Log ("review flags: $sanityQuiet quiet flag(s) recorded in guards-*.json, not paged (" + (@($sanityQuietBy.Keys | ForEach-Object { [string]$sanityQuietBy[$_] + ' ' + $_ }) -join ', ') + "; outlier-verified = the store's own published unit price reproduces ours, wow-explained = the previous board accounts for the move)") }
       $ff = Get-ChildItem (Join-Path $OutDir 'flagged-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-      if ($ff) { $mb = @((Read-JsonFile $ff.FullName).multibuy_unpriced); foreach ($m in $mb) { $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id) } }
+      # <<MULTIBUY-PAGER-BEGIN>> test-auditors.ps1 extracts this region and runs it against a frozen flagged file.
+      # ONLY THE UNRESOLVED HALF PAGES (2026-09-25, queue 2026-09-23-9459a1). compare-deals marks each multibuy row with
+      # `half`: 'complete-basis' means the band refused a real price, which audit-band-refusals already carries as an
+      # open row from flagged[], so paging it here as a price flag sent it to the wrong owner. Fail closed: a row with
+      # no `half` (a flagged file written before the field) or any value but 'complete-basis' still pages.
+      $mbBandHalf = 0
+      if ($ff) {
+        $mbAll = (Read-JsonFile $ff.FullName).multibuy_unpriced
+        foreach ($m in @(@($mbAll) | Where-Object { $null -ne $_ })) {
+          if ($m.PSObject.Properties['half'] -and [string]$m.half -eq 'complete-basis') { $mbBandHalf++; continue }
+          $flagParts += ('MULTIBUY|' + $m.store + '|' + $m.label); $flagKeys += ('MULTIBUY|' + $m.store + '|' + $m.id)
+        }
+      }
+      # <<MULTIBUY-PAGER-END>>
+      if ($mbBandHalf -gt 0) { Log ("review flags: $mbBandHalf out-of-band multibuy row(s) on a complete basis left to band review (audit-band-refusals), not paged as price flags") }
       # MATCHER COULD-NOT-LOOK (2026-09-19, backlog I183/I209): names compare-deals left off the board because a
       # commodity's regex hit match-lib's time bound. Not unmatched - undecided - so it pages, ONE flag per commodity
       # and kind (a quarantined include can blind hundreds of names, and the fix is the one pattern). Filtered for
@@ -3526,7 +3540,8 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         $summary += ("REVIEW    $($flagParts.Count) price flag(s) on the board ($($newIdx.Count) new, $stillOpen already seen$extra) - see guards-/flagged- json")
         if ($newIdx.Count -gt 0 -and -not $NoAlert) {
           $newLines = @($newIdx | ForEach-Object { $flagParts[$_] })
-          $body = "$($newIdx.Count) NEW price flag(s) on $asofS (these still published; verify they are real):`n`n" + ($newLines -join "`n") +
+          $mbNote = if (@($newLines | Where-Object { [string]$_ -like 'MULTIBUY|*' }).Count -gt 0) { " MULTIBUY lines are NOT published: the engine refused them with an unresolved pack count or basis; review the capture." } else { '' }
+          $body = "$($newIdx.Count) NEW price flag(s) on $asofS (the SANITY lines still published; verify they are real).$mbNote`n`n" + ($newLines -join "`n") +
                   "`n`n$stillOpen other flag(s) were already reported and are still open - the full set is in guards-*.json / flagged-*.json in $OutDir ."
           Send-Alert -Subject "Grocery: $($newIdx.Count) NEW price flag(s) - $asofS" -Body $body | Out-Null
           if ($LASTEXITCODE -eq 0) { Log ("review-flag alert sent (" + $newIdx.Count + " new of " + $flagParts.Count + ")") }

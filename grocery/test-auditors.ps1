@@ -3636,6 +3636,35 @@ if (-not $spM.Success) {
 }
 } # u070-and-the-pager-a-verified-outlier-is
 
+# ---- the MULTIBUY pager: only the UNRESOLVED half of an out-of-band multibuy pages as a price flag ----------
+# (2026-09-25, queue 2026-09-23-9459a1, grocery/triage-plans/plan-2026-09-25-15.json). Extracted and run, never
+# transcribed. Rows FROZEN from flagged-2026-09-23 (Family Fare); the half field is what compare-deals now writes.
+# A row with no half (every flagged file before this change) must still page: fail closed.
+if (Use-Unit 'u146-multibuy-pager-pages-only-the-unresolved-half' -Reads 'grocery/check-ad-cycles.ps1') {
+$mpM = [regex]::Match((Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw), '(?s)<<MULTIBUY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<MULTIBUY-PAGER-END>>')
+if (-not $mpM.Success) {
+  Bad 'MULTIBUY-PAGER region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the multibuy half filter is untested'
+} else {
+  $fxMp = NewFxDir 'multibuy-pager'
+  $mpJson = '{"week_of":"2026-09-23","flagged_count":0,"flagged":[],"multibuy_unpriced":[' +
+    '{"id":"hand-soap","label":"Hand Soap","store":"Family Fare","name":"Dove Hand Wash, Antibacterial 12 Fl Oz","price_text":"Buy 1 get 1 40% off","regular":5.99,"size_text":"12 oz","half":"complete-basis","reason":"priced but OUT-OF-BAND ($0.3993 outside 0.01216-0.304) on a complete basis (size 12 floz) - the band refuses a real price; see band review"},' +
+    '{"id":"bar-soap","label":"Bar Soap","store":"Family Fare","name":"Dove Cleansing Bar, Relax, Eucalyptus + Cedar Oil 5 Oz","price_text":"Buy 1 get 1 40% off","regular":7.99,"size_text":"5 oz","half":"unresolved","reason":"priced but OUT-OF-BAND ($6.392 outside 0.19976-4.994) with an unresolved pack count (per-each) - review the capture"},' +
+    '{"id":"deodorant","label":"Deodorant","store":"Family Fare","name":"Dove Men+Care Antiperspirant, Extra Fresh, Twin Pack 2 Ea","price_text":"Buy 1 get 1 40% off","regular":16.99,"size_text":"2 ea","reason":"has regular but no unit basis - a row written before the half field"}' +
+    ']}'
+  Set-Content (Join-Path $fxMp 'flagged-2026-09-23.json') $mpJson -Encoding UTF8
+  $ff = Get-Item (Join-Path $fxMp 'flagged-2026-09-23.json')
+  $flagParts = @(); $flagKeys = @(); $mbBandHalf = $null
+  . ([scriptblock]::Create($mpM.Groups[1].Value))
+  if (($flagKeys -contains 'MULTIBUY|Family Fare|bar-soap') -and ($flagKeys -contains 'MULTIBUY|Family Fare|deodorant')) {
+    Ok 'multibuy pager: MUST FIRE - the unresolved Dove Cleansing Bar pages, and a legacy row with no half still pages (fail closed)'
+  } else { Bad ('multibuy pager: an unresolved or legacy multibuy row went quiet. keys=' + ($flagKeys -join ' ; ')) }
+  if (($flagKeys -notcontains 'MULTIBUY|Family Fare|hand-soap') -and $mbBandHalf -eq 1 -and $flagKeys.Count -eq 2) {
+    Ok 'multibuy pager: MUST NOT FIRE - the complete-basis Dove Hand Wash (a real 0.3993/fl oz premium sale) is counted for band review and NOT paged as a price flag'
+  } else { Bad ('multibuy pager: the complete-basis half still pages or was not counted (bandHalf=' + $mbBandHalf + ', keys=' + ($flagKeys -join ' ; ') + ')') }
+  Remove-Item $fxMp -Recurse -Force -ErrorAction SilentlyContinue
+}
+} # u146-multibuy-pager-pages-only-the-unresolved-half
+
 # ---- a week-over-week move the PREVIOUS BOARD explains is recorded, not paged; a defect still pages --------
 # (2026-09-21, queue 2026-09-19-fccb69, grocery/triage-plans/plan-2026-09-21-6.json). Every row below is FROZEN
 # from the real boards and price-history of the day it names, never regenerated from a live board. The four

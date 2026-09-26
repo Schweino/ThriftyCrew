@@ -1043,12 +1043,55 @@ function Get-UnitPrice($deal, $cat) {
     # drop below and Hy-Vee simply had no lettuce cell. It now reads $script:TC_WholePurchaseTokens, the same
     # list Get-SizeAmount's bare-token gate reads, so the two cannot drift again. What it must NOT gain is
     # pk/pkg/package: those name a container of unknown count, and the mystery-tray fixture pins the drop.
+    # A MULTIBUY DIVIDES ITS PACK COUNT TOO (2026-09-25, queue 2026-09-23-9459a1, plan-2026-09-25-15). The plain
+    # line above divides a stated pack count; a multibuy never reached it, so the line below returned the multibuy's
+    # per-PACK price as the price of ONE unit. Founding rows (Family Fare, flagged-2026-09-23, bar-soap):
+    #     'Dove Beauty Bar Soap Sensitive, 6 Ea' | Buy 1 get 1 40% off | reg 13.59 | size '6 ea'  -> 10.872 "per bar"
+    # against a true 1.812, refused by the band and paged as "a bad multibuy parse". The count is RESOLVED BY PROOF,
+    # the way build-aldi-regular resolves a pack basis: every party that states a count (price text, size field,
+    # name) must state the SAME one, and two different counts are a conflict that is REFUSED, never guessed. An
+    # either/or line is not a party (the same Test-NameOffersTwoSizes refusal the plain path uses).
+    # SCOPED TO BUY-N-GET-K (Test-IsMultibuy), NOT EVERY NON-PLAIN PRICE: an "N for $M" deal is non-plain too and has
+    # the same per-pack defect (18 each-unit Family Fare rows on candidates-2026-09-23: Eggo 10 Ea, Bomb Pop 12 Ea,
+    # Little Bites 5 Ea ...), but those move cells the plan never measured, so they are left for their own item.
+    if ((-not $plain) -and (Test-IsMultibuy ([string]$deal.price_text))) {
+      $mbPack = Resolve-MultibuyPackCount $deal
+      if ($mbPack.conflict) { return $null }
+      if ($mbPack.count) { return @{ unit_price=($pr.per_item/$mbPack.count); basis=('per-' + $mbPack.count + '-pack (multibuy, count from ' + $mbPack.from + ')'); note=$pr.note; pieces=$mbPack.count } }
+    }
     if ((-not $plain) -or ($deal.size_text -match ('(?i)^\s*(1\s*)?(' + (Get-TcWholePurchaseTokens) + ')\.?\s*$')) -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note; pieces=1 } }
     return $null   # bare package price with unknown count -> not confident, drop
   }
   return $null
 }
 function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t)) -match '(?i)buy\s*\d+\s*,?\s*get\s*\d+') }
+
+# THE PACK COUNT A MULTIBUY ROW PROVES (2026-09-25, queue 2026-09-23-9459a1). Each party that states a count - the
+# price text and the name unless they offer two sizes, and the size field always - is read with Get-PackCount.
+# One distinct count: that is the pack. Two different counts: a CONFLICT, and the caller refuses the row (UNPRICED)
+# rather than choosing. None: no count, the caller keeps its old per-each answer.
+function Resolve-MultibuyPackCount($deal) {
+  $seen = [ordered]@{}
+  if (-not (Test-NameOffersTwoSizes ([string]$deal.price_text))) { $n = Get-PackCount $deal.price_text; if ($n) { $seen['price'] = $n } }
+  $n = Get-PackCount $deal.size_text; if ($n) { $seen['size'] = $n }
+  if (-not (Test-NameOffersTwoSizes ([string]$deal.name))) { $n = Get-PackCount $deal.name; if ($n) { $seen['name'] = $n } }
+  $distinct = @($seen.Values | Sort-Object -Unique)
+  if ($distinct.Count -gt 1) { return @{ count = $null; conflict = $true; from = (@($seen.Keys | ForEach-Object { $_ + '=' + $seen[$_] }) -join ' ') } }
+  if ($distinct.Count -eq 1) { return @{ count = [int]$distinct[0]; conflict = $false; from = (@($seen.Keys) -join '+') } }
+  return @{ count = $null; conflict = $false; from = '' }
+}
+
+# WHICH HALF AN OUT-OF-BAND MULTIBUY REFUSAL IS (2026-09-25, queue 2026-09-23-9459a1). compare-deals used to call
+# every one "likely a bad multibuy size/regular parse", so a real premium sale on a complete basis (Dove Hand Wash
+# 12 fl oz, BOGO 40% at 0.3993/fl oz) paged exactly like a basis bug. The basis string decides it: a price divided
+# by a stated size or a stated pack count is COMPLETE, so the band refused a real price (band review owns it); an
+# each-unit row that fell through to 'per-each' with no stated count or whole-purchase size is UNRESOLVED (review
+# the capture). A row with no basis at all (the safety net's UNPRICED rows) is unresolved.
+function Get-MultibuyRefusalHalf([string]$basis, [string]$unit) {
+  if (-not $basis) { return 'unresolved' }
+  if ($unit -eq 'each' -and $basis -eq 'per-each') { return 'unresolved' }
+  return 'complete-basis'
+}
 
 # ---------------------------------------------------------------- A QUANTITY-CONDITIONAL DEAL IS THE PRICE, AND ITS CONDITION IS SHOWN
 # (Brad's ruling, 2026-09-22, queue 2026-09-22-a2af45: "A - just make sure that we add this to the UI and also make
