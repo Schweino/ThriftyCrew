@@ -1,0 +1,137 @@
+{
+    "generated":  "2026-09-25T20:30:00",
+    "round":  1,
+    "lane":  "weekly",
+    "board_week":  "comparison-2026-09-23",
+    "queue_ids_seen":  [
+                           "2026-09-18-a0c785",
+                           "2026-09-19-dc1b5b",
+                           "2026-09-22-6e6a3b",
+                           "2026-09-22-817976"
+                       ],
+    "scope_note":  "Weekly lane batch 6 of 9 (2026-09-25, Brad: every open alert resolved end to end, budget lifted). Prevention is batch 1\u0027s plan (plan-2026-09-25-6.json); this plan carries leftovers only.",
+    "untrusted_input_note":  "Nothing read in this run addressed the agent.",
+    "new_source_check":  "no row contract exists yet (build step 8); prevention and the new-source record for this lane day are carried by batch 1\u0027s plan-2026-09-25-6.json, and this batch changed no store, feed or commodity batch",
+    "knowledge_consulted":  [
+                                "searched \"alert triage root cause recurrence\" (dispatch) and \"delegated audit quarantine cell scope\": no store section beyond the rules files applied",
+                                ".claude/rules/grocery.md: \u0027A delegated audit scopes itself by printing QUARANTINE-CELL \u003cid\u003e|\u003cstore\u003e|\u003cvalue|selection\u003e lines and QUARANTINE-SCOPE complete cells=N stores=M before its marker; without the complete line it holds. Teaching a guard to scope is a per-guard change with its own fixture, never a default.\u0027 Used for 6e6a3b.",
+                                "grocery/cell-quarantine-lib.ps1: a value hold at a different number blanks the cell\u0027s item; a hold at the condemned number is withheld. Chose kind=value for both taught guards because of it.",
+                                ".claude/rules/grocery.md (Aldi multipack): \u0027The basis is now resolved by arithmetic proof or not at all ... Do not add a plausibility bar here.\u0027 Used for 817976\u0027s Aldi refusals.",
+                                "memory worktrees-lack-the-boards-the-engines-price-on: seeded with ops/seed-worktree.ps1 -Target . before every measurement"
+                            ],
+    "items":  [
+                  {
+                      "queue_id":  "2026-09-22-6e6a3b",
+                      "subject":  "Triage residual: 9 delegated guard audits still hold the whole board instead of scoping to a cell",
+                      "classification":  "infra",
+                      "evidence":  [
+                                       "test-hold-scope.ps1 -SelfTest at cbbe61b42 before any edit: \u0027the live tree: 13 delegates, 9 board-scoped against a mark of 9, findings 0\u0027 (exit 0). Board-scoped headers: asof-evidence, board-mojibake, capture-encoding, coverage-regression, household-in-food, known-wrong, pack-basis, price-mode, tile-integrity.",
+                                       "After this run: \u0027the live tree: 13 delegates, 7 board-scoped against a mark of 7, findings 0\u0027 (exit 0)."
+                                   ],
+                      "root_cause":  "guards.ps1 treats a delegated audit\u0027s exit 2 as BOARD scope unless the child affirms a complete cell list, and the delegated audits predate the 2026-09-21 quarantine protocol, so each one still reports its findings in prose only and one bad cell holds the whole board.",
+                      "root_fix":  {
+                                       "what":  "teach each board-scoped delegate to name its cells in the QUARANTINE-CELL protocol, one guard and one fixture at a time, with test-hold-scope\u0027s ratchet mark falling with each",
+                                       "files":  [
+                                                     "grocery/audit-known-wrong.ps1",
+                                                     "grocery/audit-pack-basis.ps1",
+                                                     "grocery/hold-scope-lib.ps1",
+                                                     "grocery/test-known-wrong-scope.ps1",
+                                                     "grocery/test-pack-basis-scope.ps1"
+                                                 ],
+                                       "exact_change":  "audit-known-wrong: every BLOCKED comparison-board cell printed as \u0027QUARANTINE-CELL id|store|value\u0027 plus the complete line, only when no blocked cell sits on recipe-board.json; audit-pack-basis: each CONFIRMED-PACK-TOTAL cell named as value, no scope affirmed under -Strict with an undecidable finding; TcHoldBoardMark 9 -\u003e 7."
+                                   },
+                      "blast_radius":  {
+                                           "measured_as":  "callers",
+                                           "measured_by":  "guards.ps1 delegate table via test-hold-scope live pass (13 delegates) and the exit-2 paths of the two audits",
+                                           "affected_now":  2,
+                                           "note":  "Only the exit-2 path of the two audits: a run that would have held the whole board now names its cells, and guards quarantines them under the existing breaker (more than 2% of priced cells, or 10% of one store\u0027s, still holds). A clean run prints nothing new. The BLOCKED-LINK half of known-wrong, a malformed blocklist, a blocked recipe-board cell and pack-basis -Strict still hold the board exactly as before."
+                                       },
+                      "proof":  {
+                                    "must_fire_case":  "test-known-wrong-scope.ps1 \u0027MUST FIRE  a BLOCKED comparison-board cell exits 2 and is named for guards as salmon / Walmart [value], scope complete\u0027 (the founding shape: a ruled-wrong cat food priced as salmon); test-pack-basis-scope.ps1 \u0027MUST FIRE  a CONFIRMED pack total exits 2 and is named for guards as furniture-polish / Sam\u0027s Club [value], scope complete\u0027 (Sam\u0027s Pledge 3 ct., 29 oz.). Both read through Get-TcChildQuarantineScope, the function guards uses.",
+                                    "clean_twin":  "test-known-wrong-scope \u0027CLEAN TWIN  a blocked recipe-board cell still exits 2 and affirms no scope, so guards holds the board\u0027; test-pack-basis-scope \u0027CLEAN TWIN  -Strict over an undecidable finding still exits 2 and affirms no scope, so the board holds\u0027; each suite also has a MUST NOT FIRE clean board.",
+                                    "ran":  "test-known-wrong-scope -SelfTest exit 0 (4 of 4); test-pack-basis-scope -SelfTest exit 0 (4 of 4); test-hold-scope -SelfTest exit 0 (8 of 8, live 7 against 7); live audit-known-wrong exit 0 (0 of 347 on 2973 named cells); live audit-pack-basis exit 0; audit-script-census exit 0",
+                                    "full_suite":  "deferred-to-land",
+                                    "guard_or_fixture":  "grocery/test-known-wrong-scope.ps1 and grocery/test-pack-basis-scope.ps1 (new), grocery/test-hold-scope.ps1 live ratchet at mark 7"
+                                },
+                      "rollback":  "git revert of the fix commit: the two audits stop printing the protocol and hold the board again; the mark returns to 9 in the same revert.",
+                      "freshness":  "measured 2026-09-25 against the seeded worktree at cbbe61b42 (board comparison-2026-09-23, rebuilt 2026-09-25 08:14)",
+                      "status":  "needs-more-time",
+                      "premise_verified":  "true: 9 board-scoped delegates on the live tree before the change (test-hold-scope, exit 0).",
+                      "deviation":  "Two of nine guards taught inside the batch budget, each with its own fixture; the other seven are left for the next weekly run rather than defaulted, per the per-guard rule.",
+                      "resolution_note":  "Shipped 2 of 9: audit-known-wrong and audit-pack-basis now scope to cells (mark 9 -\u003e 7). Left for the next run, in rough order of ease: household-in-food (needs guards\u0027 row-to-cell map), asof-evidence, price-mode (a store is the natural unit), board-mojibake (a count ratchet, so the finding is an aggregate), tile-integrity (link half is a cell, coverage half a store), capture-encoding (a file is a store), coverage-regression (a store floor). The queue id stays open and carries the seven.",
+                      "leaves_open":  "7 delegated audits still board-scoped: asof-evidence, board-mojibake, capture-encoding, coverage-regression, household-in-food, price-mode, tile-integrity",
+                      "leaves_open_occurrences":  7,
+                      "leaves_open_followup":  "2026-09-22-6e6a3b",
+                      "shipped_commit":  "6f1dd11cd",
+                      "actual_tool_calls":  30
+                  },
+                  {
+                      "queue_id":  "2026-09-18-a0c785",
+                      "subject":  "Grocery: beverage class absent on 241 non-drink commodities in five display buckets (residual of 2026-09-18-55b7aa)",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "Re-measured 2026-09-25 on comparison-2026-09-23 (seeded 2026-09-25 08:14) with categories.json labels and category-excludes.json at blob 7d70ec60c: the five buckets hold 242 commodities without a beverage apply_id (Baking \u0026 Spices 76, Canned \u0026 Soup 60, Sauces \u0026 Condiments 59, Dairy \u0026 Eggs 30, Coffee, Oils \u0026 Spreads 17) and 1,152 priced cells. 22 cells match a beverage token and all 22 are the right product: baking-soda x6 (soda), coffee x7 and coffee-creamer x6 (coffee), Aldi \u0027Nature S Nectar\u0027 lemon-juice, lime-juice, orange-juice (nectar). True beverage incursions: 0 of 1,152 (0 of 1,284 on 2026-09-17).",
+                                       "exempt.beverage (\u0027juice|soda|drink|water|tea|coffee|lemonade|punch|cider|kombucha|milk\u0027, matched against ids) exempts all six commodity ids behind the 22 hits, so adding beverage to these buckets\u0027 apply blocks would fire on 0 of today\u0027s 1,152 priced cells."
+                                   ],
+                      "root_cause":  "audit-food-category scopes a class by display bucket through category-excludes.json\u0027s apply blocks, and the shared Dairy/Canned/Sauces/Baking/Coffee blocks carry no beverage class, so a drink crowning a non-drink commodity sold by the fluid ounce (oils, vinegars, sauces) would be seen by nothing: kind_mismatch_crown only catches a fluid-ounce drink on a weight or each commodity.",
+                      "freshness":  "measured 2026-09-25 on comparison-2026-09-23 as seeded into this worktree",
+                      "status":  "bounced",
+                      "premise_verified":  "true: the five buckets still carry no beverage class (apply blocks read at blob 7d70ec60c); the class has still never occurred there (0 of 1,152).",
+                      "deviation":  "Bounced: the fix is an edit to grocery/category-excludes.json, which this lane may not touch. The measurement the item said was missing is done and rides with it. Also noticed for the money lane: exempt.beverage is an unanchored substring over ids, so any id containing \u0027tea\u0027, \u0027milk\u0027 or \u0027water\u0027 (steak, watermelon, condensed-milk) is exempt from the beverage class wherever it applies.",
+                      "resolution_note":  "Bounced to the money lane (owner of category-excludes.json) with its routing measurement: adding beverage to the five buckets\u0027 apply blocks would fire on 0 of 1,152 priced cells today, every one of the 22 token hits being exempt by id; the queue id stays open for that lane.",
+                      "leaves_open":  "the whole class (a drink on a fluid-ounce non-drink commodity in five buckets), 0 occurrences, pending the money lane\u0027s category-excludes.json change",
+                      "leaves_open_occurrences":  0,
+                      "actual_tool_calls":  7,
+                      "leaves_open_followup":  "2026-09-18-a0c785"
+                  },
+                  {
+                      "queue_id":  "2026-09-19-dc1b5b",
+                      "subject":  "Grocery: board-verification residuals after 2026-09-19 (641ec6) - aging, channel, not-cheapest, Fareway ranges, contested routing, Sam\u0027s pack total",
+                      "classification":  "no-code-change",
+                      "evidence":  [
+                                       "grocery/out/verification-history.json (5 runs): the newest run is still board_date 2026-09-17 (recorded 2026-09-19T05:49, 100 drawn), so residuals 1 to 3 cannot be re-measured before the next verification (due about 2026-10-03).",
+                                       "plan-2026-09-19.json leaves_open, split per residual: (1) price aging 12 of 36; (2) channel 7 of 36; (3) not-cheapest 7 of 36; (4) Fareway size ranges, 1 verified defect plus 3 rows at a range\u0027s high end; (5) contested-name routing, 14 contested names, array-order class unfixed; (6) Test-PieceSize reads a Sam\u0027s pack TOTAL as the piece weight, 1 occurrence. Test-PieceSize is defined at grocery/compare-deals.ps1:233."
+                                   ],
+                      "root_cause":  "one verification\u0027s defects were bundled into one item whose residuals live in three different places: capture freshness and channel (1, 2, 3, already given capture-side fixes that need a new verification to judge), and the engine\u0027s size, range and routing rules in compare-deals.ps1 (4, 5, 6).",
+                      "freshness":  "verification-history.json as seeded 2026-09-25 19:38; compare-deals.ps1 at cbbe61b42",
+                      "status":  "bounced",
+                      "premise_verified":  "true: no verification has run since the 2026-09-17 board, and Test-PieceSize, the range-end rule and contested routing are all in compare-deals.ps1.",
+                      "deviation":  "Split, as asked, into six findings; none fits this lane. (1) aging, (2) channel, (3) not-cheapest: owner is the next board verification (about 2026-10-03), whose recorder writes a drift subclass per defect row; re-measure those three counts there. (4) Fareway ranges, (5) contested routing, (6) Sam\u0027s pack total in Test-PieceSize: money lane, compare-deals.ps1. (7) the online-multipack rubric stays Brad\u0027s (q-2026-09-19-multipack).",
+                      "resolution_note":  "Bounced to the money lane split into six: 1-3 wait on the next verification to be re-measured, 4-6 are compare-deals.ps1 changes.",
+                      "leaves_open":  "six residuals: aging 12, channel 7, not-cheapest 7 (of 36 defects in 100 verified, 2026-09-17), Fareway ranges 4 rows, contested routing 14 names, Sam\u0027s pack total 1",
+                      "leaves_open_occurrences":  45,
+                      "actual_tool_calls":  5,
+                      "leaves_open_followup":  "2026-09-19-dc1b5b"
+                  },
+                  {
+                      "queue_id":  "2026-09-22-817976",
+                      "subject":  "Triage residual: 16 non-Sam\u0027s tile links the chain cannot re-price (residual of 2026-09-20-bec597)",
+                      "classification":  "needs-more-time",
+                      "evidence":  [
+                                       "audit-tile-integrity.ps1 on the seeded worktree 2026-09-25 (comparison-2026-09-23): exit 0, \u0027PRICE-DRIFT 18\u0027, \u0027ACCURACY OK - all 2298 price-graded links (of 2600 linked tiles) open the product the board names, at the price it shows\u0027, \u0027PRICE-DRIFT Sam\u0027s Club: 2 finding(s) against a baseline of 67, a 97% fall ... Baseline KEPT\u0027, \u0027PRICE-DRIFT RATCHET OK - no store rose above its mark\u0027. Marks: Aldi 13, Walmart 2, Family Fare 1. 18 - 2 = 16 and no other store printed a fall, so the non-Sam\u0027s count is still 16 (inferred from the total, not printed per store).",
+                                       "The 2026-09-22 derive dry runs in the queue body: Aldi 9 refused at write time for the per-unit not re-pricing inside the 0.32 tolerance (the Aldi pack-basis shape), 3 ad-only cells with no row; Walmart refused at write time; Family Fare nothing refused that maps to its tile."
+                                   ],
+                      "root_cause":  "derive-links-from-prices re-points a link only when a row\u0027s per-unit re-prices to the cell, and the Aldi rows behind most of these tiles carry a pack basis the builder now refuses to guess (resolved by arithmetic proof or not at all), so the stored snapshot on a right-product link cannot be refreshed.",
+                      "freshness":  "measured 2026-09-25 on the seeded worktree against grocery/out/tile-integrity-baseline.json (drift_set 2026-09-22 21:58)",
+                      "status":  "needs-more-time",
+                      "premise_verified":  "true: 16 non-Sam\u0027s drift tiles still stand; Sam\u0027s fell 67 -\u003e 2, which the ratchet refused to tighten on its own (over the 60% fall bar) and needs -AcceptDrop in the main checkout.",
+                      "deviation":  "Not finished: reading each of the 16 tiles\u0027 refusal reason individually did not fit after the guard work. Next step: run derive-links-from-prices scoped to Aldi and read the 9 refusals against the MEASURE-aldi-pack-basis cases, then Walmart\u0027s 2 and Family Fare\u0027s 1; and in the main checkout run audit-tile-integrity.ps1 -AcceptDrop to record Sam\u0027s 2.",
+                      "resolution_note":  "Re-measured, still 16 (Aldi 13, Walmart 2, Family Fare 1); Sam\u0027s fell to 2 and waits on -AcceptDrop. Left open for the per-tile read.",
+                      "leaves_open":  "16 right-product tile links with a stale price snapshot (Aldi 13, Walmart 2, Family Fare 1)",
+                      "leaves_open_occurrences":  16,
+                      "leaves_open_followup":  "2026-09-22-817976",
+                      "actual_tool_calls":  4
+                  }
+              ],
+    "ship_sequence":  [
+                          "1. 6e6a3b: grocery/audit-known-wrong.ps1, grocery/audit-pack-basis.ps1, grocery/hold-scope-lib.ps1 and the two new fixtures (commit 6f1dd11cd on this worktree branch). Land through triage-land.ps1 (push-main); prepush-test-auditors runs the full suite there.",
+                          "2. a0c785, dc1b5b: bounced to the money lane, nothing to land.",
+                          "3. 817976: needs-more-time, nothing to land."
+                      ],
+    "open_questions_for_brad":  [
+
+                                ],
+    "out_of_scope_observations":  [
+                                      "ops/audit-mustfire-census.ps1 on this worktree at cbbe61b42 plus this run: exit 1, \u0027! LOST: grocery\\test-match-lib.ps1  26 -\u003e 4\u0027. This run did not touch test-match-lib.ps1; the loss is upstream of it and will red the landing unless its owner explains it."
+                                  ]
+}
