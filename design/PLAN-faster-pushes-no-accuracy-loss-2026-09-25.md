@@ -150,3 +150,12 @@ in-flight early run of the EXACT key it would rehearse, and uses its verdict; if
 verdict (stopped, blind, died), the push rehearses itself, as today.** Accuracy: the same key, the same rehearsal,
 done once. Limit of the evidence: the prepare log keeps only each checkout's LAST run, so 6 of 16 is a floor on this
 cause, not a rate.
+
+**Brad, 2026-09-26: "I dont want a shadow mode. I want everything completed and live right now."** Section 0's shadow
+period is withdrawn for G1, G2 and G3. What replaces it, so that a declaration still cannot skip a check whose answer is
+not already known: `ops\verify-gate-declaration.ps1`. Before a `# gate-inputs:` declaration lands, the gate runs twice,
+once in the real checkout and once in an empty sandbox holding ONLY the files its key hashes, and both arms must exit
+the same, print the same verdict and print the same case lines. A read of an undeclared file finds nothing in the
+sandbox and changes the answer, so an incomplete declaration is refused on the spot, not two weeks later. Its limit,
+stated: a suite that treats a missing file exactly as the real one passes both arms; the suite's own must-fire cases
+are what rule that out. G3 falls out of G1: a gate whose declared inputs miss every changed path is already reused.
