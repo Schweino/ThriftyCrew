@@ -408,17 +408,30 @@
         ]
       },
       "rollback": "revert the flag-verify-lib hunk; the verdict returns to wrong-price and the cell is withheld again",
-      "leaves_open": "R2 beyond the count class (a wrong price under both bars that is not a count conflict) still has no detector; R4's other half, a product-level re-read of ad-flyer sale claims, is unbuilt (15 of 21 replayed sale claims in the lane's replay)",
+      "leaves_open": "R2 beyond the count class (a wrong price under both bars that is not a count conflict) has no detector; R4's product-level re-read of ad-flyer sale claims is unbuilt (15 of 21 replayed sale claims in the lane's replay); yellow-bell-pepper|Family Fare stays withheld until a build on origin/main's 17c0da code stamps its held condition (1 cell)",
       "leaves_open_occurrences": 15,
       "leaves_open_followup": "2026-09-21-4b973e",
-      "resolution_note": "R1 measured: median 1 day to a verdict (76 of 91). The verifier no longer condemns an in-window ad sale from a shelf-price read; its only wrong-price verdict was that shape and had withheld Family Fare's yellow pepper. R2's count class ships in 8d2ad5.",
+      "resolution_note": "R1 measured: median 1 day to a verdict (76 of 91). R4's only live wrong-price sale verdict (Family Fare yellow pepper, 10 for $10) is closed by 17c0da (the withheld cell keeps the engine's deal condition, so the verifier re-judges it as a match); the plan's broader sale-unreadable rule was not shipped because it would silence the founding laundry-pods must-fire and contradict the a2af45 and 17c0da fixtures. R2's count class ships in 8d2ad5. Product-level re-reads of ad-flyer sales remain open under this queue id.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 30,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": false,
+      "deviation": "No code shipped. The exact_change ('an in-window sale whose reading shows no promotion is sale-unreadable') contradicts three landed fixtures in grocery/test-flag-verification.ps1: the founding laundry-pods MUST FIRE (an in-window sale claim of $0.10 against Hy-Vee's plain $9.94 / 31 ct read must stay wrong-price; the general rule turns it pending), a2af45's MECHANISM case (a multibuy claim without the engine's deal_qty is wrong-price: the verifier never re-derives a condition), and 17c0da's CLEAN TWIN ('with no condition stamped by the engine the held disagreement stays wrong-price: the ledger invents no condition'). Narrowing it to multibuy ad text would re-derive the condition those two rulings forbid. The root_fix half (a read after the window is left-board) contradicts the laundry MUST NOT FIRE (after-window read is could-not-look, stays pending) and would settle a question on a could-not-look. The live instance is closed by 17c0da on landing: the next build stamps bad_deal_qty on the withheld record and the verifier re-judges the entry as a match (may take two builds: this batch's quarantine record, then the verifier). 0 other wrong-price sale verdicts exist in the ledger (1 of 91 entries is wrong-price).",
+      "shipped_commit": null,
+      "premise_check": "Row verified: grocery/out/flag-verification.json (generated 2026-09-25 08:27) holds yellow-bell-pepper|Family Fare status wrong-price, claim '10 for $10.00 with purchase of 10' with NO deal_qty, reason 'size field 1 ea -> 1.9900', and comparison-2026-09-23 quarantine withholds the cell with no bad_deal_qty. The MECHANISM premise is false against origin/main: a2af45 (88c0b05dd) reads a quantity deal off the engine's row, and 17c0da (03e294dc5, on origin/main since 20:01, not yet in local main) copies the held cell's condition off the quarantine record so this exact entry is re-judged and closes as match (its own frozen fixture 'MUST FIRE founding 2026-09-25').",
+      "close_disposition": "confirmed",
+      "full_suite": "not-run (no code change)",
+      "republished": true,
+      "batch_chain": "publish_batch 1 chain run ONCE in a scratch worktree of local HEAD 5d50b9b69 (a rebase onto origin/main stopped on a grocery/match-verdicts.json conflict, both sides appending verdicts, so it was aborted; the landing must resolve it). Order from check-ad-cycles: repair-multipack-sizes -Apply 0, stamp-ad-as-of -Apply 0, compare-deals (Baker's 2026-09-09, Fareway 2026-09-20 pinned) 0, update-history -Reconcile 0, audit-food-category 0, name-drift/prune-bad-links/name-drift 0, generate-board-overrides 0, build-deals-page 0, guards 2 QUARANTINE-REQUIRED (1 cell) -> apply-cell-quarantine 0 -> guards 4 'GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.', audit-match-soundness MOVED=0 DROPPED=0, audit-coverage-gaps 'no ACTIONABLE gap', basis-reconcile 0, pack-basis 0, export-feed 0 (week 2026-09-23, shrink 0.0%). publish-deals-page exited 2 HELD by design: 'the post names board.json?v=87d08ab2a2 but feed.thriftycrew.com serves v=a14a8c805c. NOT publishing: land the push ... then publish (nothing was written to Ghost)'. The orchestrator runs grocery\\publish-deals-page.ps1 after the landing is served.",
+      "board_effects_observed": "comparison-2026-09-23 rebuilt 22:05 vs the 08:06 board, 2782 -> 2783 priced cells, 4 cells differ: mandarin-oranges|Family Fare new 0.2327 (Dole Mandarin Oranges In Juice, as planned); toasted-sesame-seeds/tahini Fareway 0.5619 unchanged; no Hy-Vee mandarin cell; yellow-bell-pepper|Family Fare still WITHHELD (local code lacks 17c0da). NOT in the plan's estimate: laundry-detergent|Family Fare 0.1014 -> 0.0999 (Arm & Hammer Sensitive Skin Free & Clear 140 fl oz, admitted by 3ba362's liquid-laundry include); energy-drinks|Family Fare 0.1353 held -> 0.0625 (Venom 16 oz, 2 for $2.00 sale) and lotion|Walmart 0.2175 held -> 0.1244 (Queen Helene 32 oz $3.98, read 2026-09-25): both were held this morning by the unit-basis guard (volume among weights) and pass every guard on this rebuild.",
+      "live_check": {
+        "commodity": "mandarin-oranges",
+        "store": "Family Fare",
+        "expect": 0.2327,
+        "also": "tahini Fareway 0.5619; yellow-bell-pepper Family Fare withheld until 17c0da's build"
+      },
+      "actual_tool_calls": 50
     }
   ],
   "ship_sequence": [
