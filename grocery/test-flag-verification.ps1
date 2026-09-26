@@ -164,6 +164,47 @@ try {
   $rr = Find-TcStoreReread -Claim $cById -Rows $rowsId
   if ($null -ne $rr.row -and [string]$rr.row.as_of -eq '2026-09-02') { Ok 'CLEAN TWIN  the same product is still found by the product id its own source row carries when the store renames it' } else { Bad 'a later read of the same product id was not found' }
 
+  # ---- 2b. AN AD-FLYER LINE THAT NAMES NO PRODUCT (queue 2026-09-26-ab11be) ------------------------------------------------
+  # The founding row is a live Hy-Vee cell of comparison-2026-09-23 (aluminum-foil, Weekly Ad from 2026-09-21): the flyer's
+  # LINE is the item, price and size range included, and no capture carries a product under it. The rows below hand the
+  # verifier a LATER read under the identical text (the flyer re-reading itself): it must still not be taken as an answer.
+  $cFoil = Obj '{"item":"Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49","per_unit":4.49,"ad":"Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49","size":"","row_type":"sale","ad_from":"2026-09-21","ad_to":"2026-09-27","as_of":""}'
+  $rowsFoil = @((Obj '{"item":"Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49","ad_price":"$4.49","current_price":"4.49","size":"1 each","as_of":"2026-09-23"}'))
+  $rr = Find-TcStoreReread -Claim $cFoil -Rows $rowsFoil
+  if ($null -eq $rr.row -and [string]$rr.road -eq 'none' -and $rr.why -match 'names no product') { Ok 'MUST FIRE  Hy-Vee flyer line ''aluminum foil, 50 or 75 sq. ft., $4.49'' (2026-09-23 board): road none, and a later read under the identical text is NOT an answer (the flyer re-reading itself can never confirm it)' } else { Bad ('a flyer line was answered or not marked: road=' + [string]$rr.road + ' row=' + $(if ($rr.row) { 'yes' } else { 'no' }) + ' why=' + $rr.why) }
+  $cApples = Obj '{"item":"Our Family Apples Michigan Gala","per_unit":0.083125,"ad":"$3.99","size":"48 oz","row_type":"sale","ad_from":"2026-09-20","ad_to":"2026-09-26","as_of":""}'
+  $rowsApples = @((Obj '{"item":"Our Family Apples Michigan Gala","ad_price":"$3.99","current_price":"3.99","size":"48 oz","as_of":"2026-09-22"}'))
+  $rr = Find-TcStoreReread -Claim $cApples -Rows $rowsApples
+  $vA = if ($null -ne $rr.row) { Resolve-TcRereadVerdict -Claim $cApples -Answer $rr.row -Unit 'oz' -Identity $null } else { $null }
+  if ([string]$rr.road -eq 'product' -and $null -ne $vA -and $vA.verdict -eq 'match') { Ok 'CLEAN TWIN  a Family Fare flyer sale that NAMES a product (Our Family Apples Michigan Gala, $3.99, 48 oz) keeps the product road: the in-window product read is found and matches' } else { Bad ('a product-named flyer sale lost its road: road=' + [string]$rr.road + ' verdict=' + $(if ($vA) { $vA.verdict + ' ' + $vA.reason } else { 'no row' })) }
+  $boardFoil = [pscustomobject]@{ comparison = @(
+      [pscustomobject]@{ commodity = 'Aluminum Foil'; id = 'aluminum-foil'; unit = 'each'; stores = @([pscustomobject]@{ store = 'Hy-Vee'; item = [string]$cFoil.item; per_unit = 4.49; type = 'sale'; ad = [string]$cFoil.ad; ad_from = '2026-09-21'; ad_to = '2026-09-27' }) },
+      [pscustomobject]@{ commodity = 'Parchment Paper'; id = 'parchment-paper'; unit = 'sq ft'; stores = @([pscustomobject]@{ store = 'Hy-Vee'; item = 'Reynolds Kitchens Parchment Paper 45 sq ft'; per_unit = 0.1109; type = 'everyday'; as_of = '2026-09-22' }) }) }
+  $flagsFoil = @(
+    [pscustomobject]@{ type = 'outlier'; commodity = 'Aluminum Foil'; id = 'aluminum-foil'; store = 'Hy-Vee'; unit = 'each'; item = [string]$cFoil.item; per_unit = 4.49; ad = [string]$cFoil.ad; size = ''; row_type = 'sale'; ad_from = '2026-09-21'; ad_to = '2026-09-27'; as_of = '' },
+    [pscustomobject]@{ type = 'outlier'; commodity = 'Parchment Paper'; id = 'parchment-paper'; store = 'Hy-Vee'; unit = 'sq ft'; item = 'Reynolds Kitchens Parchment Paper 45 sq ft'; per_unit = 0.1109; ad = '$4.99'; size = '45 sq ft'; row_type = 'everyday'; ad_from = ''; ad_to = ''; as_of = '2026-09-22' })
+  $resFoil = { param($e) $x = Find-TcStoreReread -Claim $e.claim -Rows @(); [pscustomobject]@{ verdict = 'could-not-look'; reason = $x.why; readings = @(); road = [string]$x.road } }
+  $LFoil = (Update-TcFlagLedger -Ledger (New-TcFlagLedger) -Flags $flagsFoil -Board $boardFoil -Today '2026-09-26' -Resolve $resFoil).ledger
+  $eFoil = if ($LFoil.entries.Contains('aluminum-foil|Hy-Vee')) { $LFoil.entries['aluminum-foil|Hy-Vee'] } else { $null }
+  if ($null -ne $eFoil -and [string]$eFoil.status -eq 'pending' -and [string]$eFoil.road -eq 'none' -and [string]$eFoil.reason -match 'names no product') { Ok 'MUST FIRE  the ledger keeps the flyer line PENDING (a could-not-look never settles) and records road none with the reason' } else { Bad ('the flyer line''s ledger entry: ' + $(if ($eFoil) { [string]$eFoil.status + ' road=' + [string]$eFoil.road } else { 'missing' })) }
+  $foilOut = Join-Path $tmp 'foil-owed'; New-Item -ItemType Directory -Path $foilOut -ErrorAction Stop | Out-Null
+  [IO.File]::WriteAllText((Join-Path $foilOut 'flag-verification.json'), ($LFoil | ConvertTo-Json -Depth 12), (New-Object Text.UTF8Encoding($false)))
+  $owedFoil = Get-TcFlagVerifyOwed -OutDir $foilOut -Store 'Hy-Vee'
+  if (@($owedFoil.Ids) -notcontains 'aluminum-foil' -and @($owedFoil.Items) -notcontains [string]$cFoil.item) { Ok 'MUST FIRE  the flyer line is owed NO re-read: it never leads a Hy-Vee worklist, because no capture can answer it' } else { Bad ('the flyer line was owed: ids=' + (@($owedFoil.Ids) -join ',')) }
+  if (@($owedFoil.Ids) -contains 'parchment-paper' -and @($owedFoil.Items) -contains 'Reynolds Kitchens Parchment Paper 45 sq ft') { Ok 'CLEAN TWIN  a pending product claim at the same store is still owed its re-read and leads the worklist' } else { Bad ('the product claim beside it lost its lead: ids=' + (@($owedFoil.Ids) -join ',')) }
+
+  # ---- 2c. A READ THE BUILDER REFUSED ONLY FOR 'no unitPrice' IS STILL THE STORE'S READ (Sam's Club 0 of 1, 4b973e) ------
+  # The REAL rows: the hummus|Sam's Club claim of 2026-09-22 and sams-rejects-2026-09-26.json, where the lane's re-read of
+  # the same product landed as 'no unitPrice' (and a NAME CONFLICT row the builder doubted, which must stay no answer).
+  $cHummus = Obj '{"item":"Member''s Mark Classic Hummus Singles 2.5 oz., 16 ct.","per_unit":0.1395,"ad":"$5.58","size":"16 ct 2.5 oz","row_type":"everyday","ad_from":"","ad_to":"","as_of":"2026-09-22"}'
+  $rejDoc = @((Obj '{"name":"Member''s Mark Classic Hummus Singles 2.5 oz., 16 ct.","lp":"$5.58","up":"","reason":"no unitPrice"}'), (Obj '{"name":"Member''s Mark Classic Hummus Singles 2.5 oz., 16 ct. (conflict twin)","lp":"$5.58","up":"$0.29","reason":"NAME CONFLICT: name states 16 ct but none reproduces Sam''s 0.29/ct (lp/up derives 19.24)"}'))
+  $rej0 = ConvertTo-TcRejectedReadRows -Rejects $rejDoc -Day '2026-09-26'
+  $rejRows = @($rej0)
+  $rr = Find-TcStoreReread -Claim $cHummus -Rows $rejRows
+  $vH = if ($null -ne $rr.row) { Resolve-TcRereadVerdict -Claim $cHummus -Answer $rr.row -Unit 'oz' -Identity $null } else { $null }
+  if ($null -ne $vH -and $vH.verdict -eq 'match' -and [string]$rr.row.as_of -eq '2026-09-26') { Ok 'MUST FIRE  Sam''s hummus 2026-09-26: the re-read the builder refused only for no unitPrice ($5.58, name 16 x 2.5 oz) answers the flag and reproduces 0.1395/oz' } else { Bad ('the no-unitPrice re-read was not an answer: ' + $(if ($vH) { $vH.verdict + ' ' + $vH.reason } else { 'no row: ' + $rr.why })) }
+  if ($rejRows.Count -eq 1 -and [string]$rejRows[0].item -notmatch 'conflict twin') { Ok 'CLEAN TWIN  a NAME CONFLICT reject (the builder doubted the read itself) is not taken as a read' } else { Bad ('rejected rows taken: ' + $rejRows.Count) }
+
   # ---- 3. END TO END: ledger -> audit -> the real apply-cell-quarantine -> second guards pass ---------------------------
   $storesN = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway', "Baker's", "Sam's Club", 'Walmart')
   $cells = [ordered]@{
@@ -343,6 +384,6 @@ try {
 catch { Bad ('the suite threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.PositionMessage) }
 finally { try { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction Stop } catch { } }
 $cases = $script:pass + $script:fail
-Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 41) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (41 expected)')
-if ($script:fail -eq 0 -and $cases -eq 41) { exit 0 }
+Write-Output ('flag-verification self-test ' + $(if ($script:fail -eq 0 -and $cases -eq 48) { 'pass' } else { 'FAIL' }) + ': ' + $script:pass + ' of ' + $cases + ' case(s) passed (48 expected)')
+if ($script:fail -eq 0 -and $cases -eq 48) { exit 0 }
 exit 1

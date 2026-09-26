@@ -103,11 +103,17 @@ function Get-TcChildQuarantineScope($Lines) {
   # THE PROTOCOL A DELEGATED AUDIT USES TO SCOPE ITS OWN HARD FAILURE. On stdout, before its COMPLETE marker:
   #   QUARANTINE-CELL <commodity-id>|<store>|<value|selection>
   #   QUARANTINE-STORE <store>
-  #   QUARANTINE-SCOPE complete cells=<N> stores=<M>
+  #   QUARANTINE-OFFBOARD <store>|<what>
+  #   QUARANTINE-SCOPE complete cells=<N> stores=<M> [offboard=<K>]
   # The last line is the child AFFIRMING that every hard finding it has is listed. Without it - or with a count that
   # does not match the lines, or with a malformed line - this returns $null and guards treats the failure as board
   # scoped: a child that cannot say what is wrong holds the board, exactly as before this protocol existed.
+  # OFFBOARD (2026-09-26, queue 2026-09-26-f73dc7): a finding the child PROVED sits on no board cell - it looked the row
+  # up on the board it judged and no cell, live or held, carries it - so it cannot put a wrong number on the page. It
+  # holds nothing; guards reports it as a WARN. It is count-checked like a cell: offboard lines with no offboard=<K>, or
+  # a K that disagrees, is a malformed scope and holds the board. A child that cannot look (no board) must not use it.
   $cells = New-Object System.Collections.ArrayList; $stores = New-Object System.Collections.ArrayList
+  $offboard = New-Object System.Collections.ArrayList
   $complete = $null
   foreach ($l in @($Lines)) {
     $t = ([string]$l).Trim()
@@ -119,12 +125,33 @@ function Get-TcChildQuarantineScope($Lines) {
     } elseif ($t.StartsWith('QUARANTINE-STORE ', [StringComparison]::Ordinal)) {
       $sn = $t.Substring(17).Trim(); if (-not $sn) { return $null }
       [void]$stores.Add($sn)
+    } elseif ($t.StartsWith('QUARANTINE-OFFBOARD ', [StringComparison]::Ordinal)) {
+      $op = $t.Substring(20).Split('|')
+      if ($op.Count -lt 2 -or -not $op[0].Trim() -or -not (($op[1..($op.Count - 1)] -join '|').Trim())) { return $null }
+      [void]$offboard.Add([pscustomobject]@{ store = $op[0].Trim(); what = ($op[1..($op.Count - 1)] -join '|').Trim() })
     } elseif ($t.StartsWith('QUARANTINE-SCOPE complete', [StringComparison]::Ordinal)) { $complete = $t }
   }
-  if (-not $complete -or ($cells.Count + $stores.Count) -eq 0) { return $null }
+  if (-not $complete -or ($cells.Count + $stores.Count + $offboard.Count) -eq 0) { return $null }
   $mc = [regex]::Match($complete, 'cells=(\d+)'); if ($mc.Success -and [int]$mc.Groups[1].Value -ne $cells.Count) { return $null }
   $ms = [regex]::Match($complete, 'stores=(\d+)'); if ($ms.Success -and [int]$ms.Groups[1].Value -ne $stores.Count) { return $null }
-  return [pscustomobject]@{ cells = $cells.ToArray(); stores = $stores.ToArray() }
+  $mo = [regex]::Match($complete, 'offboard=(\d+)')
+  if ($offboard.Count -gt 0 -and -not $mo.Success) { return $null }
+  if ($mo.Success -and [int]$mo.Groups[1].Value -ne $offboard.Count) { return $null }
+  return [pscustomobject]@{ cells = $cells.ToArray(); stores = $stores.ToArray(); offboard = $offboard.ToArray() }
+}
+
+function Get-TcKidScopeOutcome($Scope, [string]$Name, [string]$File) {
+  # What guards does with a child's affirmed scope (2026-09-26, queue 2026-09-26-f73dc7): hold = the child named cells or
+  # stores, so a scoped fail is recorded for exactly those; warn = the WARN line for the findings it proved are on no board
+  # cell ('' when none). A scope naming only off-board findings holds nothing. $null scope is not handled here: guards keeps
+  # a child that affirmed no scope BOARD scoped before it ever calls this.
+  $off = @(@($Scope.offboard) | Where-Object { $null -ne $_ })
+  $hold = ((@(@($Scope.cells) | Where-Object { $null -ne $_ }).Count + @(@($Scope.stores) | Where-Object { $_ }).Count) -gt 0)
+  $w = ''
+  if ($off.Count -gt 0) {
+    $w = ("{0}: {1} finding(s) on NO board cell, so nothing was held for them (see {2}): {3}" -f $Name, $off.Count, $File, ((@($off | Select-Object -First 8 | ForEach-Object { [string]$_.store + ' / ' + [string]$_.what })) -join '; '))
+  }
+  return [pscustomobject]@{ hold = $hold; warn = $w }
 }
 
 function Get-TcBoardPricedCounts($Board) {

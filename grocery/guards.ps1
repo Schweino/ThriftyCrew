@@ -320,6 +320,9 @@ else { Say '  ok    pu-lib per-unit engine self-check' }
 # throttle window); correctness does not depend on it, because every result is HARVESTED at its original call
 # site further down, in the original order. Adding a child here without harvesting it would leave a process
 # running and its verdict unread - so each Register-Kid below has exactly one matching Wait-Kid.
+# flag-verification FIRST since 2026-09-26 (queue 2026-09-26-f73dc7): it now re-judges every open ledger entry against the
+# store captures before naming a cell, measured 44s over the 29 open entries of that day, so it starts in the first window.
+$null = Register-Kid 'flag-verification'   'audit-flag-verification.ps1'    @()
 $null = Register-Kid 'known-wrong'          'audit-known-wrong.ps1'          @()
 $null = Register-Kid 'walmart-fullpull'     'audit-walmart-fullpull.ps1'     @()
 $null = Register-Kid 'household-in-food'    'audit-household-in-food.ps1'    @()
@@ -339,7 +342,6 @@ $null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @('
 # board with no board cell behind it. It runs at push time in ops\run-gates.ps1, where a source defect belongs.
 $null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet', '-Tighten')
 $null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
-$null = Register-Kid 'flag-verification'   'audit-flag-verification.ps1'    @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -627,8 +629,15 @@ foreach ($g in @(
     $kidScope = $null; if ($kidRc -eq 2) { $kidScope = Get-TcChildQuarantineScope $o }
     $kidMsg = ("HARD FAIL: " + $g.n + " (see " + $g.f + ")")
     if ($kidScope) {
-      Add-ScopedFail -Message $kidMsg -Family 'cell' -Cells $kidScope.cells -Stores $kidScope.stores -Check $g.k
-      foreach ($kc in @($kidScope.cells)) { Say ("  scope {0} / {1} [{2}] named by {3}" -f $kc.id, $kc.store, $kc.kind, $g.f) }
+      # A finding the child proved is on NO board cell holds nothing (2026-09-26, queue 2026-09-26-f73dc7): it is a WARN
+      # naming each one, so a broken capture behind it is still read. Only when the child ALSO named cells or stores is
+      # anything held, and then only those.
+      $kidOut = Get-TcKidScopeOutcome -Scope $kidScope -Name $g.n -File $g.f
+      if ($kidOut.warn) { [void]$warn.Add($kidOut.warn) }
+      if ($kidOut.hold) {
+        Add-ScopedFail -Message $kidMsg -Family 'cell' -Cells $kidScope.cells -Stores $kidScope.stores -Check $g.k
+        foreach ($kc in @($kidScope.cells)) { Say ("  scope {0} / {1} [{2}] named by {3}" -f $kc.id, $kc.store, $kc.kind, $g.f) }
+      } else { Say ("  warn  " + $g.n + " - every finding is on no board cell (WARN, nothing held)") }
     } else { [void]$fail.Add($kidMsg) }
   }
   else { Say ("  ok    " + $g.n) }

@@ -1,6 +1,8 @@
 ﻿<#
   HOLD SCOPE: cell - a regression names each violated row's board cell (QUARANTINE-CELL <id>|<store>|value); a violation
-  no board cell carries names nothing, so the board holds (queue 2026-09-22-6e6a3b; test-asof-evidence-scope.ps1)
+  no board cell carries, live or held, is named QUARANTINE-OFFBOARD and holds nothing (guards WARNs it; queue
+  2026-09-26-f73dc7); with no readable board, or a violated row with no name, nothing is affirmed and the board holds
+  (queue 2026-09-22-6e6a3b; test-asof-evidence-scope.ps1)
   audit-asof-evidence.ps1 - "no published price may claim a date newer than the capture it came from."
 
   WHY THIS EXISTS (2026-08-02, found by the C3 out-of-band sample).
@@ -178,27 +180,44 @@ function Invoke-AsOfEvidence([string]$base) {
   return $out
 }
 
-# The board cells a set of stores' violations priced: '<id>|<store>' keys, or $null when any violation cannot be
-# placed on the newest comparison board (no board, or a violated row whose store and folded name no cell carries).
+# The board cells a set of stores' violations priced. Returns { keys = '<id>|<store>'; offboard = 'store|item' } or $null.
+# $null - FAIL CLOSED, the board holds - when the evidence to place a violation is missing: no board, an unreadable one,
+# or a violated row with no name to look up. A violation whose store and folded name NO cell carries, live or held by an
+# applied quarantine, is OFF-BOARD (2026-09-26, queue 2026-09-26-f73dc7): it cannot put a wrong number on the page, so it
+# holds nothing and guards reports it as a WARN. Founding case: 'Webster City Bacon Ends' (Fareway) held the whole
+# 2026-09-26 board from no cell at all.
 function Get-AsOfViolationCells($Stores, [string]$Base) {
   $bf = @(Get-ChildItem (Join-Path $Base 'out\comparison-*.json') -ErrorAction SilentlyContinue |
           Where-Object { $_.Name -match '^comparison-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1)
   if ($bf.Count -eq 0) { return $null }
   $board = $null; try { $board = Read-JsonFile $bf[0].FullName } catch { return $null }
+  if ($null -eq $board -or $null -eq $board.PSObject.Properties['comparison']) { return $null }
   $at = @{}
   foreach ($r in @($board.comparison)) {
     if ($null -eq $r) { continue }
     foreach ($s in @($r.stores)) { if ($null -eq $s) { continue }; $k = [string]$s.store + '|' + (Get-EvidenceKey ([string]$s.item)); if (-not $at.ContainsKey($k)) { $at[$k] = New-Object System.Collections.Generic.List[string] }; [void]$at[$k].Add([string]$r.id) }
   }
+  # A cell an applied quarantine holds is still this row's cell: its held-back candidate is bad_item, so the second guards
+  # run names it again (the hold stays) instead of calling it off-board.
+  if ($board.PSObject.Properties['quarantine'] -and $board.quarantine) {
+    foreach ($e in @($board.quarantine.cells)) {
+      if ($null -eq $e -or -not [string]$e.bad_item) { continue }
+      $k = [string]$e.store + '|' + (Get-EvidenceKey ([string]$e.bad_item)); if (-not $at.ContainsKey($k)) { $at[$k] = New-Object System.Collections.Generic.List[string] }
+      if (-not $at[$k].Contains([string]$e.id)) { [void]$at[$k].Add([string]$e.id) }
+    }
+  }
   $keys = New-Object System.Collections.Generic.List[string]
+  $off = New-Object System.Collections.Generic.List[string]
   foreach ($st in @($Stores)) {
     foreach ($v in @($st.detail)) {
-      $k = [string]$st.store + '|' + (Get-EvidenceKey ([string]$v.item))
-      if (-not $at.ContainsKey($k)) { return $null }
+      $ek = Get-EvidenceKey ([string]$v.item)
+      if (-not $ek -or -not [string]$st.store) { return $null }
+      $k = [string]$st.store + '|' + $ek
+      if (-not $at.ContainsKey($k)) { $o = [string]$st.store + '|' + ([string]$v.item).Trim(); if (-not $off.Contains($o)) { [void]$off.Add($o) }; continue }
       foreach ($id in $at[$k]) { $kk = $id + '|' + [string]$st.store; if (-not $keys.Contains($kk)) { [void]$keys.Add($kk) } }
     }
   }
-  return ,$keys.ToArray()
+  return [pscustomobject]@{ keys = $keys.ToArray(); offboard = $off.ToArray() }
 }
 
 if ($SelfTest) {
@@ -319,12 +338,15 @@ if ($worse.Count -gt 0) {
   # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
   # Every violation of a store that got worse is named as the board cell it priced, found on the newest comparison
   # board by store and the same folded name Get-EvidenceKey uses. It is a VALUE hold: the founding row's $0.99 was a
-  # price the store no longer charged, so the number itself is never re-shown. Only when EVERY such violation is found
-  # on the board is the scope affirmed; one that cannot be placed names nothing, and the board holds as before.
-  $cells = Get-AsOfViolationCells -Stores @($res.stores | Where-Object { $worse -match ('^' + [regex]::Escape([string]$_.store) + ':') }) -Base $root
-  if ($null -ne $cells -and $cells.Count -gt 0) {
-    foreach ($kk in $cells) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
-    Write-Output ('QUARANTINE-SCOPE complete cells=' + $cells.Count + ' stores=0')
+  # price the store no longer charged, so the number itself is never re-shown. A violation NO cell carries is named
+  # OFF-BOARD and holds nothing (2026-09-26, queue 2026-09-26-f73dc7). Only when every violation is placed one way or the
+  # other is the scope affirmed; when the board cannot be read, or a violated row has no name, nothing is affirmed and the
+  # board holds as before.
+  $placed = Get-AsOfViolationCells -Stores @($res.stores | Where-Object { $worse -match ('^' + [regex]::Escape([string]$_.store) + ':') }) -Base $root
+  if ($null -ne $placed -and (@($placed.keys).Count + @($placed.offboard).Count) -gt 0) {
+    foreach ($kk in @($placed.keys)) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
+    foreach ($ob in @($placed.offboard)) { Write-Output ('QUARANTINE-OFFBOARD ' + $ob) }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + @($placed.keys).Count + ' stores=0 offboard=' + @($placed.offboard).Count)
   }
   Write-Output ('asof-evidence FAIL - a store got WORSE than out\asof-evidence-baseline.json: ' + ($worse -join ' | '))
   Write-Output '  A row fresher than any capture that saw it is a date somebody wrote rather than measured, and every freshness check downstream (guard 9, the carry cap, the override window, link sync) reads it as truth.'

@@ -208,6 +208,28 @@ Assert-QCase 'MUST FIRE  a scope whose affirmed count disagrees with its lines s
   $null -eq (Get-TcChildQuarantineScope @('QUARANTINE-CELL a|B|value', 'QUARANTINE-SCOPE complete cells=2 stores=0')) }
 Assert-QCase 'MUST FIRE  a malformed scope line (no store) stays BOARD scoped' {
   $null -eq (Get-TcChildQuarantineScope @('QUARANTINE-CELL onlyanid', 'QUARANTINE-SCOPE complete cells=1')) }
+# OFF-BOARD (2026-09-26, queue 2026-09-26-f73dc7): a finding the child proved is on no board cell. Founding row: audit-asof-evidence's
+# 'Webster City Bacon Ends' (Fareway), which held the whole 2026-09-26 board from no cell.
+Assert-QCase 'MUST NOT FIRE  a complete scope of 0 cells and 1 OFF-BOARD finding is a scope (guards holds nothing and WARNs), the finding kept' {
+  $sc = Get-TcChildQuarantineScope @('asof-evidence FAIL', 'QUARANTINE-OFFBOARD Fareway|Webster City Bacon Ends', 'QUARANTINE-SCOPE complete cells=0 stores=0 offboard=1')
+  $null -ne $sc -and @($sc.cells).Count -eq 0 -and @($sc.stores).Count -eq 0 -and @($sc.offboard).Count -eq 1 -and $sc.offboard[0].store -eq 'Fareway' -and $sc.offboard[0].what -eq 'Webster City Bacon Ends' }
+Assert-QCase 'MUST FIRE  OFF-BOARD lines with no offboard= count on the complete line stay BOARD scoped (holds)' {
+  $null -eq (Get-TcChildQuarantineScope @('QUARANTINE-OFFBOARD Fareway|Webster City Bacon Ends', 'QUARANTINE-SCOPE complete cells=0 stores=0')) }
+Assert-QCase 'MUST FIRE  an offboard= count that disagrees with the OFF-BOARD lines stays BOARD scoped (a line was lost)' {
+  $null -eq (Get-TcChildQuarantineScope @('QUARANTINE-OFFBOARD Fareway|Webster City Bacon Ends', 'QUARANTINE-SCOPE complete cells=0 stores=0 offboard=2')) }
+Assert-QCase 'MUST FIRE  a complete line with nothing named (cells=0 stores=0 offboard=0) stays BOARD scoped' {
+  $null -eq (Get-TcChildQuarantineScope @('QUARANTINE-SCOPE complete cells=0 stores=0 offboard=0')) }
+Assert-QCase 'MUST NOT FIRE  guards holds NOTHING for an off-board-only scope and WARNs naming the row (Get-TcKidScopeOutcome, the call guards makes)' {
+  $sc = Get-TcChildQuarantineScope @('QUARANTINE-OFFBOARD Fareway|Webster City Bacon Ends', 'QUARANTINE-SCOPE complete cells=0 stores=0 offboard=1')
+  $o = Get-TcKidScopeOutcome -Scope $sc -Name 'as_of evidence' -File 'audit-asof-evidence.ps1'
+  (-not $o.hold) -and $o.warn -match 'on NO board cell' -and $o.warn -match 'Fareway / Webster City Bacon Ends' }
+Assert-QCase 'CLEAN TWIN  guards still HOLDS the named cell of an ordinary scope, with no warning (Get-TcKidScopeOutcome)' {
+  $o = Get-TcKidScopeOutcome -Scope (Get-TcChildQuarantineScope $okLines) -Name 'band' -File 'audit-band-censorship.ps1'
+  $o.hold -and -not $o.warn }
+Assert-QCase 'CLEAN TWIN  a scope naming a cell AND an off-board finding keeps the cell, kind and all' {
+  $sc = Get-TcChildQuarantineScope @('QUARANTINE-CELL bacon|Fareway|value', 'QUARANTINE-OFFBOARD Fareway|Webster City Bacon Ends', 'QUARANTINE-SCOPE complete cells=1 stores=0 offboard=1')
+  $o = Get-TcKidScopeOutcome -Scope $sc -Name 'as_of evidence' -File 'audit-asof-evidence.ps1'
+  $null -ne $sc -and @($sc.cells).Count -eq 1 -and $sc.cells[0].id -eq 'bacon' -and $sc.cells[0].kind -eq 'value' -and @($sc.offboard).Count -eq 1 -and $o.hold -and $o.warn -match 'Webster City Bacon Ends' }
 
 # ---- 16: THE FOUNDING CASE, frozen from the real rows of 2026-09-21 ------------------------------------------------
 # comparison-2026-09-21.json (built 08:49:37): vegetable-oil, the 7 priced cells, trimmed to the fields the engine and
