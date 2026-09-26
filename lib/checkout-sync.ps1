@@ -181,6 +181,7 @@ $script:TcCheckoutSyncStartupFiles = @(
   'lib/checkout-sync.ps1',
   'lib/git-blob-lib.ps1',
   'lib/json-io.ps1',
+  'lib/keep-awake.ps1',
   'lib/pipeline-commit.ps1'
 )
 
