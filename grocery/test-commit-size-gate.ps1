@@ -391,7 +391,7 @@ foreach ($crLaneFn in @($crLaneAst.FindAll({ param($a) $a -is [System.Management
     (($sHeldForeign.text -match 'served-held: 1 served path') -and ($sHeldForeign.subject -match 'held a session''s edit on a served file') -and ($sHeldForeign.failed -match 'served-held')) ("failed=$($sHeldForeign.failed) subject=$($sHeldForeign.subject) text=$($sHeldForeign.text)")
   T 'MUST NOT FIRE and a held served path is never reported as a $servedPaths gap (no served-dirty lane, no list-edit prescription)' `
     (($sHeldForeign.failed -notmatch 'served-dirty') -and ($sHeldForeign.body -notmatch 'Add the writer') -and ($sHeldForeign.text -match 'served-dirty: none')) ("failed=$($sHeldForeign.failed) text=$($sHeldForeign.text)")
-  $sHeldVouched = Run-Served $true { param($c) '{"slug":"x","cost_ps":4.56}' | Set-Content (Join-Path $c $fxServedFile); [void](Register-PipelineWrites -Repo $c -Built -Lane 'capture-run-daily-built' -Since (Get-Date).AddHours(-1) -Paths @('meal-prep/db/recipes')) } $true @($fxServedFile)
+  $sHeldVouched = Run-Served $true { param($c) '{"slug":"x","cost_ps":4.56}' | Set-Content (Join-Path $c $fxServedFile); [void](Register-PipelineWrites -Repo $c -Built -Lane 'capture-run-daily-built' -Since (Get-Date).AddHours(-1) -Paths @('meal-prep/db/recipes')) } $true @($fxServedFile)   # reach-fixture-ok: a vouch path inside a temp fixture repo, nothing here opens meal-prep
   T 'MUST NOT FIRE a held served path whose bytes a -Built vouch records is named and pages nobody' `
     (($sHeldVouched.text -match 'served-held: every held served path is pipeline-built') -and ($sHeldVouched.subject -eq '') -and ($sHeldVouched.failed -eq '')) ("failed=$($sHeldVouched.failed) subject=$($sHeldVouched.subject) text=$($sHeldVouched.text)")
 
