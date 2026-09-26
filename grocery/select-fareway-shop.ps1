@@ -293,7 +293,10 @@ function Select-ShopCandidate {
     $slugWord = ''
     $slug = Get-SlugWords ([string]$c.url)
     if ($slug) {
-      $both = $name + ' ' + $slug
+      # ' | ' and never a bare space: the seam between name and slug is not adjacency in the product's name. A slug
+      # repeats the name ('Coconut' + 'coconut each'), so a space let an adjacency exclude (flavour_pair_carrier's
+      # 'coconut coconut', 2026-09-26) demote every plain fruit whose slug starts with its own name.
+      $both = $name + ' | ' + $slug
       foreach ($p in $Exclude) {
         if (-not $p) { continue }
         $sm = [regex]::Match($both, [string]$p, [Text.RegularExpressions.RegexOptions]::IgnoreCase)
@@ -481,6 +484,14 @@ if ($SelfTest) {
   $noUrl = [pscustomobject]@{ id = '1'; name = 'Coconut'; price = '3.99'; size = '1 each'; url = '' }
   $s4 = Select-ShopCandidate -Candidates @($noUrl) -Include $cocoInc -Exclude $cocoExc -Unit 'each'
   T 'MUST NOT FIRE  a candidate with no url is scored on its name alone and never demoted' (([string]$s4.best.name -eq 'Coconut') -and (@($s4.demoted).Count -eq 0)) ('' + @($s4.demoted).Count)
+  # FROZEN: the flavour-pair exclude shape triage f655c7 added to coconut (and 30-odd fruit commodities) on 2026-09-26,
+  # cut to three words. Joined with a bare space, name 'Coconut' + slug 'coconut each' read as the pair 'Coconut coconut'.
+  $pairExc = @('\b(?:coconut|lime|pineapple)(?:\s*[&+/]\s*|\s+and\s+|\s+)(?:coconut|lime|pineapple)\b')
+  $s5 = Select-ShopCandidate -Candidates @($coconut) -Include $cocoInc -Exclude $pairExc -Unit 'each'
+  T 'MUST NOT FIRE  a slug that repeats the name (Coconut + coconut each) is not read as a flavour pair across the seam' (([string]$s5.best.name -eq 'Coconut') -and (@($s5.demoted).Count -eq 0)) (@($s5.demoted) -join ' | ')
+  $limeCoco = [pscustomobject]@{ id = '998'; term = 'whole coconut'; name = 'Dang Coconut'; price = '4.49'; per = ''; orig = ''; unit = ''; size = '1 each'; url = 'https://shop.fareway.com/store/fareway-meat-grocery/products/998-dang-lime-coconut-chips-each' }
+  $s6 = Select-ShopCandidate -Candidates @($limeCoco, $coconut) -Include $cocoInc -Exclude $pairExc -Unit 'each'
+  T 'CLEAN TWIN  a pair INSIDE the slug (lime coconut) still demotes, and the plain Coconut wins' (([string]$s6.best.name -eq 'Coconut') -and (@($s6.demoted).Count -eq 1) -and ([string]@($s6.demoted)[0] -match 'lime coconut')) (([string]$s6.best.name) + ' / ' + (@($s6.demoted) -join ' | '))
   T 'CLEAN TWIN  the slug words are the last path segment, query dropped, id stripped' ((Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1') -eq 'kind bars almond coconut 6 ea') (Get-SlugWords 'https://shop.fareway.com/store/fareway-meat-grocery/products/20002358-kind-bars-almond-coconut-6-ea?x=1')
   # ---- THE SALE COUNTDOWN RIDES THE SELECTED ROW (2026-09-18, backlog I223) -----------------------------------------
   # FROZEN, never regenerated: the first line of out\fareway\fareway-shop-2026-09-11.jsonl, term 'cod fillets', one of
@@ -647,7 +658,7 @@ if ($SelfTest) {
     T 'MUST FIRE  end to end, the waiver does not waive a climbing capture: exit 1, REFUSED, no shop file' ($e9.rc -eq 1 -and -not $e9.made -and (@($e9.lines | Where-Object { $_ -like 'REFUSED:*rise at every step*' }).Count -eq 1)) ('rc=' + $e9.rc + ' | ' + ($e9.lines -join ' / '))
   } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
 
-  $stTotal = 8 + 2 + 10 + $tblS.Count + 3 + 7 + 6 + 3
+  $stTotal = 10 + 2 + 10 + $tblS.Count + 3 + 7 + 6 + 3
   if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
   if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
   Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', scope and climb x7, end to end x9)')
