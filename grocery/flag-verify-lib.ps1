@@ -36,6 +36,8 @@
   test-flag-verification.ps1. NO param() block: a dot-sourced param() runs in the caller.
 #>
 
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile (Read-TcStoreAnswerRows): PS 5.1 decodes a BOM-less file with the ANSI codepage
+
 $script:TcFlagQuietTypes    = @('outlier-verified', 'unit-changed', 'wow-explained')
 $script:TcFlagVerifiedTypes = @('outlier', 'wow', 'native-mismatch')
 $script:TcFlagLedgerName    = 'flag-verification.json'
@@ -584,6 +586,100 @@ function Update-TcFlagLedger {
   }
   $L = [pscustomobject]@{ generated = $Today; entries = $entries; closed = $closed.ToArray() }
   return [pscustomobject]@{ ledger = $L; changes = $changes.ToArray() }
+}
+
+# ---- THE STORE'S ANSWERS AND THE RESOLVER, shared by verify-price-flags.ps1 and audit-flag-verification.ps1 -------------
+# (2026-09-26, queue 2026-09-26-f73dc7). Until today only verify-price-flags judged, and it runs AFTER the board ships
+# (it needs sanity-check's flags), so guards read a verdict judged one chain earlier by whatever verifier code ran then:
+# on 2026-09-26 guards read yellow-bell-pepper / Family Fare at 08:13 and the 17c0da verifier fix re-judged it a match at
+# 08:26. audit-flag-verification now re-judges every open entry with THIS code over the captures on disk before it names a
+# cell, through these same functions, so the delegated audit and the lane can never decide by two copies of the rule.
+# The caller dot-sources pu-lib.ps1, match-lib.ps1 and global-exclude-lib.ps1 (New-TcIdentityJudge and the verdict use them).
+function Read-TcStoreAnswerRows {
+  <# .OUTPUTS { rows = store -> row[]; files = store -> file names read; notes = string[] } - that store's own capture files
+     (stores.json regular_prefix: out\regular\<px>-regular-*.json, out\<px>\<px>-deals-*.json, and the builder's rejects that
+     were refused only for a missing printed unit price), newest first, dated on or before $UpTo. Nothing here calls a store. #>
+  param([string]$OutDir, [string]$GroceryRoot, [string[]]$Stores, [datetime]$UpTo, [int]$MaxFilesPerStore = 8)
+  $storesDoc = Read-JsonFile (Join-Path $GroceryRoot 'stores.json')
+  $prefixOf = @{}
+  foreach ($s in @($storesDoc.stores)) { if ($s.regular_prefix) { $prefixOf[[string]$s.name] = [string]$s.regular_prefix } }
+  $rowsByStore = @{}; $filesRead = @{}; $notes = New-Object System.Collections.ArrayList
+  foreach ($st in @($Stores)) {
+    if (-not $st) { continue }
+    $rowsByStore[$st] = @()
+    if (-not $prefixOf.ContainsKey($st)) { continue }   # a store stores.json does not know has no capture family: its flags stay pending
+    $px = $prefixOf[$st]
+    $cands = @()
+    $cands += @(Get-ChildItem (Join-Path $OutDir ('regular\' + $px + '-regular-*.json')) -ErrorAction SilentlyContinue)
+    $cands += @(Get-ChildItem (Join-Path $OutDir ($px + '\' + $px + '-deals-*.json')) -ErrorAction SilentlyContinue)
+    $dated = @($cands | ForEach-Object {
+        $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+        if ($m.Success) { $d = ConvertTo-TcFvDay $m.Groups[1].Value; if ($null -ne $d -and $d -le $UpTo) { [pscustomobject]@{ f = $_; d = $d } } }
+      } | Sort-Object d -Descending | Select-Object -First $MaxFilesPerStore)
+    $keep = New-Object System.Collections.ArrayList
+    foreach ($x in $dated) {
+      $doc = $null
+      try { $doc = Read-JsonFile $x.f.FullName } catch { [void]$notes.Add('  could not read ' + $x.f.Name + ' - its rows are not an answer this run'); continue }
+      $rows = if ($doc -is [array]) { $doc } elseif ($doc.PSObject.Properties['deals']) { $doc.deals } else { @() }
+      foreach ($r in @($rows)) { if ($null -ne $r) { [void]$keep.Add($r) } }
+      $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ })
+    }
+    # A read the builder refused only for a missing printed unit price is still the store's read (ConvertTo-TcRejectedReadRows).
+    $rej = @(Get-ChildItem (Join-Path $OutDir ($px + '\' + $px + '-rejects-*.json')) -ErrorAction SilentlyContinue | ForEach-Object {
+        $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+        if ($m.Success) { $d = ConvertTo-TcFvDay $m.Groups[1].Value; if ($null -ne $d -and $d -le $UpTo) { [pscustomobject]@{ f = $_; d = $d } } }
+      } | Sort-Object d -Descending | Select-Object -First $MaxFilesPerStore)
+    foreach ($x in $rej) {
+      $doc = $null
+      try { $doc = Read-JsonFile $x.f.FullName } catch { [void]$notes.Add('  could not read ' + $x.f.Name + ' - its rows are not an answer this run'); continue }
+      $rr0 = ConvertTo-TcRejectedReadRows -Rejects $doc -Day ($x.d.ToString('yyyy-MM-dd'))
+      $rrs = @($rr0)
+      foreach ($r in $rrs) { [void]$keep.Add($r) }
+      if ($rrs.Count -gt 0) { $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ }) }
+    }
+    $rowsByStore[$st] = $keep.ToArray()
+  }
+  return [pscustomobject]@{ rows = $rowsByStore; files = $filesRead; notes = $notes.ToArray() }
+}
+
+function New-TcRereadContext {
+  <# Identity through the engine's own matcher: the judge, each commodity's unit, and the store's answer rows. #>
+  param([string]$GroceryRoot, $RowsByStore)
+  $commodities = Read-JsonFile (Join-Path $GroceryRoot 'commodities.json')
+  $gex = Get-TcGlobalExclude
+  $judge = New-TcIdentityJudge -Commodities $commodities -GlobalExclude ([string[]]@($gex))
+  $unitOf = @{}; foreach ($c in @($commodities)) { $unitOf[[string]$c.id] = [string]$c.unit }
+  return [pscustomobject]@{ judge = $judge; unitOf = $unitOf; rows = $RowsByStore }
+}
+
+function Resolve-TcFlagEntry {
+  <# One open ledger entry put to its store's rows: the verdict object Update-TcFlagLedger's -Resolve returns. #>
+  param($Entry, $Context)
+  $e = $Entry
+  $rows = if ($Context.rows.ContainsKey([string]$e.store)) { $Context.rows[[string]$e.store] } else { @() }
+  $rr = Find-TcStoreReread -Claim $e.claim -Rows $rows
+  if ($null -eq $rr.row) { return [pscustomobject]@{ verdict = 'could-not-look'; reason = $rr.why; readings = @(); road = [string]$rr.road } }
+  $a = $rr.row
+  $names = Get-TcStoreNames $a
+  $idv = Test-TcStoreNameIdentity -Judge $Context.judge -Id ([string]$e.id) -Names $names
+  $unit = if ([string]$e.unit) { [string]$e.unit } else { [string]$Context.unitOf[[string]$e.id] }
+  $v = Resolve-TcRereadVerdict -Claim $e.claim -Answer $a -Unit $unit -Identity $idv
+  $ans = [pscustomobject]@{
+    item = [string]$a.item; names = @($names); current_price = [string]$a.current_price; ad_price = [string]$a.ad_price
+    size = [string]$a.size; as_of = [string]$a.as_of; product = (Get-TcRowProductKey $a); identity = [string]$idv.verdict
+  }
+  $v | Add-Member -NotePropertyName answer -NotePropertyValue $ans -Force
+  $v | Add-Member -NotePropertyName road -NotePropertyValue 'product' -Force
+  return $v
+}
+
+function Invoke-TcFlagRejudge {
+  <# Every OPEN entry re-judged NOW, with this code, over the board it is judged against; no new flag is opened and nothing
+     is written. Returns { ledger; changes; notes }. $Resolve is a scriptblock (entry -> verdict), so a fixture can answer
+     for the store. Update-TcFlagLedger's own rules hold: match closes, a disagreement is never downgraded by a later
+     could-not-look, and an entry whose claim the board no longer publishes closes as left-board / claim-changed. #>
+  param($Ledger, $Board, [string]$Today, [scriptblock]$Resolve)
+  return (Update-TcFlagLedger -Ledger $Ledger -Flags @() -Board $Board -Today $Today -Resolve $Resolve)
 }
 
 function Get-TcFlagQuarantineCells($Ledger, $Board) {

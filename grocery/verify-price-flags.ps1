@@ -63,75 +63,19 @@ $withCell = @($paging | Where-Object { $_.PSObject.Properties['store'] -and [str
 $noCell = $paging.Count - $withCell.Count
 
 # ---- the store's answers: that store's own capture files ----------------------------------------------------------
-$storesDoc = Read-JsonFile (Join-Path $root 'stores.json')
-$prefixOf = @{}
-foreach ($s in @($storesDoc.stores)) { if ($s.regular_prefix) { $prefixOf[[string]$s.name] = [string]$s.regular_prefix } }
 $openStores = @{}
 $entriesNow = ConvertTo-TcLedgerEntries $ledger
 foreach ($k in @($entriesNow.Keys)) { $openStores[[string]$entriesNow[$k].store] = $true }
 foreach ($f in $withCell) { $openStores[[string]$f.store] = $true }
 
-$rowsByStore = @{}
-$filesRead = @{}
-foreach ($st in @($openStores.Keys)) {
-  $rowsByStore[$st] = @()
-  if (-not $prefixOf.ContainsKey($st)) { continue }   # a store stores.json does not know has no capture family: its flags stay pending
-  $px = $prefixOf[$st]
-  $cands = @()
-  $cands += @(Get-ChildItem (Join-Path $OutDir ('regular\' + $px + '-regular-*.json')) -ErrorAction SilentlyContinue)
-  $cands += @(Get-ChildItem (Join-Path $OutDir ($px + '\' + $px + '-deals-*.json')) -ErrorAction SilentlyContinue)
-  $dated = @($cands | ForEach-Object {
-      $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
-      if ($m.Success) { $d = ConvertTo-TcFvDay $m.Groups[1].Value; if ($null -ne $d -and $d -le $upTo) { [pscustomobject]@{ f = $_; d = $d } } }
-    } | Sort-Object d -Descending | Select-Object -First $MaxFilesPerStore)
-  $keep = New-Object System.Collections.ArrayList
-  foreach ($x in $dated) {
-    $doc = $null
-    try { $doc = Read-JsonFile $x.f.FullName } catch { Write-Output ('  could not read ' + $x.f.Name + ' - its rows are not an answer this run'); continue }
-    $rows = if ($doc -is [array]) { $doc } elseif ($doc.PSObject.Properties['deals']) { $doc.deals } else { @() }
-    foreach ($r in @($rows)) { if ($null -ne $r) { [void]$keep.Add($r) } }
-    $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ })
-  }
-  # A read the builder refused only for a missing printed unit price is still the store's read (ConvertTo-TcRejectedReadRows).
-  $rej = @(Get-ChildItem (Join-Path $OutDir ($px + '\' + $px + '-rejects-*.json')) -ErrorAction SilentlyContinue | ForEach-Object {
-      $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
-      if ($m.Success) { $d = ConvertTo-TcFvDay $m.Groups[1].Value; if ($null -ne $d -and $d -le $upTo) { [pscustomobject]@{ f = $_; d = $d } } }
-    } | Sort-Object d -Descending | Select-Object -First $MaxFilesPerStore)
-  foreach ($x in $rej) {
-    $doc = $null
-    try { $doc = Read-JsonFile $x.f.FullName } catch { Write-Output ('  could not read ' + $x.f.Name + ' - its rows are not an answer this run'); continue }
-    $rr0 = ConvertTo-TcRejectedReadRows -Rejects $doc -Day ($x.d.ToString('yyyy-MM-dd'))
-    $rrs = @($rr0)
-    foreach ($r in $rrs) { [void]$keep.Add($r) }
-    if ($rrs.Count -gt 0) { $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ }) }
-  }
-  $rowsByStore[$st] = $keep.ToArray()
-}
-
-# ---- identity through the engine's own matcher ------------------------------------------------------------------------
-$commodities = Read-JsonFile (Join-Path $root 'commodities.json')
-$gex = Get-TcGlobalExclude
-$judge = New-TcIdentityJudge -Commodities $commodities -GlobalExclude ([string[]]@($gex))
-$unitOf = @{}; foreach ($c in @($commodities)) { $unitOf[[string]$c.id] = [string]$c.unit }
-
-$resolve = {
-  param($e)
-  $rows = if ($rowsByStore.ContainsKey([string]$e.store)) { $rowsByStore[[string]$e.store] } else { @() }
-  $rr = Find-TcStoreReread -Claim $e.claim -Rows $rows
-  if ($null -eq $rr.row) { return [pscustomobject]@{ verdict = 'could-not-look'; reason = $rr.why; readings = @(); road = [string]$rr.road } }
-  $a = $rr.row
-  $names = Get-TcStoreNames $a
-  $idv = Test-TcStoreNameIdentity -Judge $judge -Id ([string]$e.id) -Names $names
-  $unit = if ([string]$e.unit) { [string]$e.unit } else { [string]$unitOf[[string]$e.id] }
-  $v = Resolve-TcRereadVerdict -Claim $e.claim -Answer $a -Unit $unit -Identity $idv
-  $ans = [pscustomobject]@{
-    item = [string]$a.item; names = @($names); current_price = [string]$a.current_price; ad_price = [string]$a.ad_price
-    size = [string]$a.size; as_of = [string]$a.as_of; product = (Get-TcRowProductKey $a); identity = [string]$idv.verdict
-  }
-  $v | Add-Member -NotePropertyName answer -NotePropertyValue $ans -Force
-  $v | Add-Member -NotePropertyName road -NotePropertyValue 'product' -Force
-  return $v
-}
+# The store's answers and the resolver live in flag-verify-lib.ps1 (Read-TcStoreAnswerRows, Resolve-TcFlagEntry) since
+# 2026-09-26, so audit-flag-verification.ps1 re-judges by exactly this rule before guards names a cell (queue 2026-09-26-f73dc7).
+$ansRead = Read-TcStoreAnswerRows -OutDir $OutDir -GroceryRoot $root -Stores @($openStores.Keys) -UpTo $upTo -MaxFilesPerStore $MaxFilesPerStore
+foreach ($nl in @($ansRead.notes)) { Write-Output $nl }
+$rowsByStore = $ansRead.rows
+$filesRead = $ansRead.files
+$script:fvRereadCtx = New-TcRereadContext -GroceryRoot $root -RowsByStore $rowsByStore
+$resolve = { param($e) Resolve-TcFlagEntry -Entry $e -Context $script:fvRereadCtx }
 
 $prevStatus = @{}
 foreach ($k in @($entriesNow.Keys)) { $prevStatus[$k] = [string]$entriesNow[$k].status }

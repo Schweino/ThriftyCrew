@@ -52,12 +52,12 @@ try {
   $sc = Get-TcChildQuarantineScope $r.out
   $ob = @(); if ($sc) { $ob = @($sc.offboard) }
   Aec 'MUST NOT FIRE  a violation no board cell carries holds nothing: exit 2 + FAIL line kept, scope complete with 0 cells and 1 OFF-BOARD naming Fareway / Fareway Ranch Dressing' (($r.rc -eq 2) -and ($null -ne $sc) -and (@($sc.cells).Count -eq 0) -and (@($sc.stores).Count -eq 0) -and ($ob.Count -eq 1) -and ([string]$ob[0].store -eq 'Fareway') -and ([string]$ob[0].what -eq 'Fareway Ranch Dressing') -and ($r.text -match 'asof-evidence FAIL')) ('rc=' + $r.rc + ' ' + $r.text)
-  # CLEAN TWIN: a cell an applied quarantine WITHHELD is still the row's cell, so the second guards run names it again
+  # MUST FIRE: a cell an applied quarantine WITHHELD is still the row's cell, so the second guards run names it again
   # (the hold stays) rather than calling it off-board and letting the withheld cell back.
   $r = Invoke-Ae 'held' '2026-08-01' 'held'
   $sc = Get-TcChildQuarantineScope $r.out
   $cells = @(); $ob = @(); if ($sc) { $cells = @($sc.cells); $ob = @($sc.offboard) }
-  Aec 'CLEAN TWIN  a violation whose cell a quarantine withheld is named as that cell (ranch-dressing / Fareway), never off-board' (($r.rc -eq 2) -and ($null -ne $sc) -and ($cells.Count -eq 1) -and ([string]$cells[0].id -eq 'ranch-dressing') -and ($ob.Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
+  Aec 'MUST FIRE  a violation whose cell a quarantine withheld is still named as that cell (ranch-dressing / Fareway), never off-board' (($r.rc -eq 2) -and ($null -ne $sc) -and ($cells.Count -eq 1) -and ([string]$cells[0].id -eq 'ranch-dressing') -and ($ob.Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
   # MUST FIRE (fail closed): with no board to look the row up on, the audit cannot prove it is off-board, so it affirms
   # no scope at all and guards holds the board exactly as before.
   $r = Invoke-Ae 'noboard' '2026-08-01' 'none'
