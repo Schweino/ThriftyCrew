@@ -103,7 +103,7 @@
         }
       ],
       "leaves_open_occurrences": "2 over 2026-09-26, summed from leaves_open_detail",
-      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1; watch:ops/audit-hook-installed.ps1",
+      "leaves_open_followup": "2026-09-26-a30920",
       "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1"
     },
     {
@@ -159,7 +159,7 @@
         "names": "Only the hourly push-retry path of capture-run; the full run and the tail sync are unchanged."
       },
       "rollback": "git revert -m 1 the reconciled merge on triage/0926-land2 (and the mid1 merge), restoring id-only answers",
-      "leaves_open": "The 07:00 tail was blocked by uncommitted session files in the production checkout (the design D barrier, W1.1 WARN only) - an existing, owned class. (1 occurrence(s)); Until this lands, the Ad Pulls 0700 task keeps reading rc=1 each hour today; tomorrow's full run resets it. (4 occurrence(s))",
+      "leaves_open": "The 07:00 tail was blocked by uncommitted session files in the production checkout (design D barrier, W1.1 warn only), owned by the set-aside switch-over item. (1 occurrence). The hourly rc=1 reads end when this plan lands; they are not a residual.",
       "close_disposition": "confirmed",
       "resolution_note": "The [ad] task exited 1 because its hourly push retry asked for commit 2a365ec33 by id after the 08:00 sync had replayed it as ef7edb1a3, which landed; no data was lost. The retry now asks by patch-id (git cherry), so a carried replay reads already-landed.",
       "actual_tool_calls": 12,
@@ -185,7 +185,7 @@
         }
       ],
       "leaves_open_occurrences": "5 over 2026-09-26, summed from leaves_open_detail",
-      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "leaves_open_followup": "2026-09-26-86a27b",
       "freshness": "integration round 2, 2026-09-26 ~17:30, worktree triage/0926-land2 off origin/main 5bf7e3bf1",
       "root_fix_as_lane_shipped": {
         "files": [
@@ -222,8 +222,8 @@
       },
       "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
       "freshness": "2026-09-26 ~16:00, origin/main 5bf7e3bf1",
-      "leaves_open": "none for this class; the ad record still reads not-on-head until its next retry or tomorrow's run, which now resolves it to already-landed.",
-      "leaves_open_occurrences": "0",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": null,
       "leaves_open_owner": "none",
       "close_disposition": "confirmed",
       "resolution_note": "Before: 4 ad retries (10:00 to 13:00) read not-on-head for 2a365ec33 and paged the board stale. After: the change is on origin as ef7edb1a3 (range-diff identical), so nothing was ever held; with the fix the same state reads already-landed. The alert's 'STALE' claim was false; the class (a landed twin read as missing) is fixed.",
@@ -236,7 +236,7 @@
       ],
       "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
       "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
-      "leaves_open_followup": "none",
+      "leaves_open_followup": null,
       "classification_detail": {
         "class": "push-retry reads a landed byte-identical copy as not-on-head",
         "evidence": [
@@ -297,7 +297,7 @@
       ],
       "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
       "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
-      "leaves_open_followup": "watch:ops/hooks/claude/production_barrier.py (W1.1 barrier, warn-only; the plan's Stage 2 turns it to block)",
+      "leaves_open_followup": "2026-09-26-86a27b",
       "classification_detail": {
         "class": "push-retry pushes and adopts another owner's unlanded commits",
         "evidence": [
@@ -362,7 +362,7 @@
       ],
       "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
       "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
-      "leaves_open_followup": "watch:ops/hooks/claude/production_barrier.py",
+      "leaves_open_followup": "2026-09-26-86a27b",
       "classification_detail": {
         "class": "session work in the bot's checkout blocks the retry sync (by design) and the retry was pushing a session HEAD",
         "evidence": [
@@ -409,8 +409,8 @@
       },
       "rollback": "git revert -m 1 the reconciled merge of triage/0926-mid2 on triage/0926-land2",
       "freshness": "2026-09-26 ~16:00, origin/main 5bf7e3bf1",
-      "leaves_open": "none beyond 50914e's",
-      "leaves_open_occurrences": "0",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": null,
       "leaves_open_owner": "none",
       "close_disposition": "confirmed",
       "resolution_note": "Before: the 14:00 retry refused stale-code-feed over triage's range (base 984755f57, board-clock producers brought in). After: the live feed (5bf7e3bf1, 15:39) is newer than every producer change on origin (06f6f7f40, 13:52), so it is not stale code; the daily record's sha 06f6f7f40 is on origin, so the next retry reads already-landed. The adoption that produced the bad range is fixed with 50914e.",
@@ -423,7 +423,7 @@
       ],
       "integration_note": "Reconciled at integration round 2 (merge c625eedfd on triage/0926-land2, unlanded; cite blobs grocery/capture-run.ps1 717d06631fe5cee4880c742a91d30de1e8aa9a2a, grocery/test-capture-run-sync.ps1 9c60bdea9095391ae4b7a40011762a1e90f836a8). mid1 (3fdb1d) asked git cherry (patch-id) about $Sha alone; mid2 (03e565) asked Get-TcCsLandedTwins, the checkout sync's own identity test, over every commit of the run. ONE mechanism kept: mid2's, in Get-CaptureRunCopies, asked of origin/main (already-landed) and of HEAD (a replay not yet pushed is what lands, 3fdb1d's intent). Stricter (patch-id ignores whitespace), multi-commit, and the very rule the sync drops by. foreign-commits refusal kept; a HEAD copy of the run's own commit is excluded from it by full sha. test-capture-run-sync 59 of 59, exit 0: 51 shared + 3 mid1 + 4 mid2 + 1 new MUST FIRE (a replay on HEAD with a session commit on top still refuses foreign-commits).",
       "shipped_commit": "c625eedfd (reconciled merge on triage/0926-land2, unlanded)",
-      "leaves_open_followup": "none",
+      "leaves_open_followup": null,
       "classification_detail": {
         "class": "stale-code-feed refusal computed over a range the retry adopted from a session HEAD",
         "evidence": [
