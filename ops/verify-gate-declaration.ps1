@@ -24,6 +24,7 @@ Usage: powershell -File ops\verify-gate-declaration.ps1 -Gate <repo-relative pat
 Exit 0 every named gate verified, 1 at least one refused, 3 could not run. One line per gate, then
 VERIFY-GATE-DECLARATION-COMPLETE gates=N verified=V refused=R.
 #>
+[CmdletBinding()]
 param([string]$Gate = '', [string]$Arg = '', [int]$TimeoutSec = 900, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -45,7 +46,7 @@ function Invoke-VgdArm([string]$Root, [string]$Rel, [string]$GateArg, [int]$Time
   $env:TC_GATE_TIMES_ROOT = 'off'
   $p = Start-Process -FilePath $exe -ArgumentList $argv -WorkingDirectory $Root -NoNewWindow -PassThru -RedirectStandardOutput ($stem + '.out') -RedirectStandardError ($stem + '.err')
   $null = $p.Handle
-  if (-not $p.WaitForExit($TimeoutSec * 1000)) { try { & taskkill /T /F /PID $p.Id *> $null } catch { }; $rc = -2 } else { $rc = $p.ExitCode }
+  if (-not $p.WaitForExit($TimeoutSec * 1000)) { $eapK = $ErrorActionPreference; $ErrorActionPreference = 'Continue'; try { & taskkill /T /F /PID $p.Id *> $null } finally { $ErrorActionPreference = $eapK }; $rc = -2 } else { $rc = $p.ExitCode }
   $out = @(); foreach ($x in @(($stem + '.out'), ($stem + '.err'))) { if ([IO.File]::Exists($x)) { $fs = [IO.File]::Open($x, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete); try { $sr = New-Object IO.StreamReader($fs); $out += @($sr.ReadToEnd() -split "`r?`n" | Where-Object { $_ -ne '' }) } finally { $fs.Dispose() }; Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }  # a grandchild of the self-test may still hold the file open: read shared, never ReadAllLines
   return [pscustomobject]@{ Rc = $rc; Lines = $out }
 }

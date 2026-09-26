@@ -87,6 +87,12 @@
                        "recorded":  "2026-08-25",
                        "recorded_by":  "claude",
                        "reason":  "The savings-goal twin of verify-debt.ps1 above, in .claude\\skills\\lesson\\, and blessed for exactly the same reasons: a manual one-shot that writes sample goals into the live Google Sheets savings tracker and reads the results back, unreachable to a scan that cannot read the skill Markdown that calls it, and dangerous to automate because it writes to a production sheet."
+                   },
+                   {
+                       "name":  "verify-gate-declaration.ps1",
+                       "recorded":  "2026-09-26",
+                       "recorded_by":  "claude",
+                       "reason":  "An author's tool, run by hand once when a gate gains or changes a # gate-inputs: declaration (G1 of design\\PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md): it runs the gate twice, in the checkout and in a sandbox holding only the declared files, so it costs two full self-test runs per gate. Wiring it into run-gates would double every declared gate's cost on every push, which is the opposite of what G1 is for. Its own -SelfTest runs in run-gates."
                    }
                ]
 }
