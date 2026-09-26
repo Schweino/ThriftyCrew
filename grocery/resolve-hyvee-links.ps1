@@ -16,6 +16,8 @@
   price we later fetch would be a real price attached to the wrong quantity, which is the most dangerous kind
   of wrong: internally consistent and completely false.
 #>
+# The self-test is pure in-memory fixtures and runs before any library or data file is loaded.
+# gate-inputs: grocery\resolve-hyvee-links.ps1
 param([switch]$WhatIf, [int]$StoreId = 0, [string[]]$Ids = @(), [switch]$SelfTest)   # 0 = ask hyvee-store-lib; see that file
 $ErrorActionPreference = 'Stop'
 

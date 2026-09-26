@@ -13,6 +13,8 @@
 # watcher, those must say so TODAY, not on the day the watcher mattered.
 #
 # Usage: .\prune-out.ps1 [-Apply] | -SelfTest
+# The self-test is pure name fixtures with a fixed date; the out directory is listed only by the live path.
+# gate-inputs: grocery\prune-out.ps1
 param([switch]$Apply, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }

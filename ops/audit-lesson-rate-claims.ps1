@@ -52,6 +52,8 @@
   Exit: 0 = at or under the baseline. 2 = MORE unqualified rate claims than the baseline, or -Tighten
   refused an implausible fall. 3 = could not evaluate (nothing reached the scan).
 #>
+# The self-test is inline fixtures plus this script run over a temp content tree and temp baselines; no tracked data.
+# gate-inputs: ops\audit-lesson-rate-claims.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

@@ -34,6 +34,9 @@
   THE SWITCH IS -NotCarriedLibSelfTest, NOT -SelfTest: dot-sourcing runs this param() block in the caller's scope,
   and a lib declaring [switch]$SelfTest resets the caller's own (search-verdict-lib.ps1's header has the account).
 #>
+# The self-test runs temp fixtures and reads build-deals-page.ps1 and derive-not-carried.ps1 as text.
+# gate-inputs: lib\json-io.ps1
+# gate-inputs-text: grocery\build-deals-page.ps1, grocery\derive-not-carried.ps1
 param([switch]$NotCarriedLibSelfTest)
 
 $script:NC_OK_OUTCOMES = @('empty', 'success')

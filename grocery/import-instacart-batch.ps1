@@ -6,6 +6,8 @@
   42 / Fareway In-Store) - Pickup/Delivery are marked up. Usage:
     .\import-instacart-batch.ps1 -Store Fareway -Raw out\staples500\fareway-batch1-raw.txt -SourceLabel "Fareway Omaha In-Store shelf price (batch capture)"
 #>
+# The self-test reads the store registry and lifts its merge functions from import-walmart-batch.ps1.
+# gate-inputs: grocery\stores.json, grocery\import-walmart-batch.ps1
 param([string]$Store, [string]$Raw, [string]$SourceLabel = "", [string]$ModeVerified = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a

@@ -33,6 +33,8 @@
   that reads back empty or without an items array).
   Self-test: powershell -File grocery\audit-alert-census.ps1 -SelfTest
 #>
+# The self-test is pure in-memory fixtures; the queue, archive and registry are read only by the live path.
+# gate-inputs: grocery\audit-alert-census.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '', [string]$ArchiveDir = '', [string]$RegistryFile = '', [string]$ClassOutFile = '')
 $ErrorActionPreference = 'Stop'

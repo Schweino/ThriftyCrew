@@ -18,6 +18,8 @@
 # Run:  .\audit-store-integrity.ps1            exit 0 clean, 1 = at least one HARD finding
 #       .\audit-store-integrity.ps1 -SelfTest  frozen fixtures of each founding bug + its clean twin
 #       .\audit-store-integrity.ps1 -ShowAll   no per-category cap
+# The self-test is frozen fixtures plus one case that reads the live exceptions file; it loads lib\guard-contract.ps1.
+# gate-inputs: lib\guard-contract.ps1, meal-prep\db\store-integrity-exceptions.json
 param([switch]$SelfTest,[switch]$ShowAll)
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')

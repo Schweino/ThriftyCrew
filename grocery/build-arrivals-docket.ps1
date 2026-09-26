@@ -101,6 +101,8 @@
     build-arrivals-docket.ps1 -CompareFile out\comparison-2026-07-28.json -N 14
     build-arrivals-docket.ps1 -SelfTest
 #>
+# The self-test is pure string fixtures and touches no board or out file.
+# gate-inputs: grocery\build-arrivals-docket.ps1
 [CmdletBinding()]
 param(
   [string]$CompareFile = '',

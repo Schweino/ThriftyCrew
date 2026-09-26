@@ -29,6 +29,8 @@ runs is not a p95. Rows with too little history say so instead of producing a nu
 
 Exit 0 always: this is an analysis, not a gate.
 """
+# The self-test is frozen in-memory fixtures and reads no file.
+# gate-inputs: grocery\analyse_coverage_tolerances.py
 from __future__ import annotations
 
 import argparse

@@ -24,6 +24,8 @@
   other way or a row arriving by another file. A finding is real: the name spells a non-food word AND
   the engine's own matcher puts it in an edible commodity.
 #>
+# The top of the file reads commodities.json and categories.json even under -SelfTest; the cases run on a temp tree.
+# gate-inputs: grocery\commodities.json, grocery\categories.json, grocery\global-exclude-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

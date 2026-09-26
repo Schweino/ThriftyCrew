@@ -83,6 +83,8 @@
       counted (like for like), and the alert subject says "rubric changed" (or "rubric not recorded") instead of
       "is above the last measured". Every alert body carries the defects by subclass with their denominator.
 #>
+# The self-test drives this script over temp keys, verdict files and histories; the live history is only hashed before and after.
+# gate-inputs: grocery\record-sample-verdict.ps1
 param(
   [string]$VerdictFile = '',
   [string]$SampleFile = '',

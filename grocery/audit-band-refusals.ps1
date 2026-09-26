@@ -38,6 +38,8 @@
 
   Usage: .\audit-band-refusals.ps1 [-OutDir <dir>] [-Date yyyy-MM-dd] | -SelfTest
 #>
+# The self-test is pure in-memory fixtures; it loads derived-band-lib.ps1.
+# gate-inputs: grocery\derived-band-lib.ps1
 [CmdletBinding()]
 param([string]$OutDir = '', [string]$Date = '', [string]$BacklogFile = '', [string]$OpenFile = '', [string]$VerdictFile = '', [switch]$Accept, [switch]$Tighten, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

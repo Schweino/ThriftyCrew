@@ -35,6 +35,8 @@ what a traversal will cost before you run it, and let the forward rule refuse th
     python graph/lib/fanout.py --selftest
 Exit 0 ok, 2 self-test failure.
 """
+# The self-test builds an in-memory sqlite graph and reads no file.
+# gate-inputs: graph\lib\fanout.py
 from __future__ import annotations
 
 import argparse

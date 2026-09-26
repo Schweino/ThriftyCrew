@@ -23,6 +23,9 @@
   a persistent outage is one email). Meant to run INDEPENDENTLY of the pipeline it watches - it is invoked
   from local-watchdog.ps1 (its own WakeToRun task), so a dead main pipeline cannot suppress its own alarm.
 #>
+# The self-test reads the automations registry, two frozen transcripts, and nightly.ps1 as text; the rest is temp fixtures.
+# gate-inputs: grocery\expected-automations.json, grocery\regression-inputs\graph-nightly-2026-09-09.transcript.txt, grocery\regression-inputs\graph-nightly-committed-twin.transcript.txt, lib\pipeline-commit.ps1, grocery\capture-policy-lib.ps1
+# gate-inputs-text: graph\pipeline\nightly.ps1
 param([switch]$Alert, [switch]$SelfTest)
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ErrorActionPreference = 'Continue'

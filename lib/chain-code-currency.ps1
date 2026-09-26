@@ -30,6 +30,8 @@
 # NO param() BLOCK: dot-sourced into capture-run, which runs under EAP=Stop. Git runs through Invoke-GitCaptured
 # (lib\git-blob-lib.ps1), which reads both streams off a Process and never redirects a native child's stderr.
 # Self-test: powershell -File lib\chain-code-currency.ps1 -SelfTest   (reads $args, so the dot-source stays inert)
+# The self-test builds its own repos in temp; it loads git-blob-lib.ps1 and git-repo-env.ps1 and reads no tracked data.
+# gate-inputs: lib\git-blob-lib.ps1, lib\git-repo-env.ps1
 
 if (-not (Get-Command Invoke-GitCaptured -ErrorAction SilentlyContinue)) { . (Join-Path $PSScriptRoot 'git-blob-lib.ps1') }
 

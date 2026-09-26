@@ -44,6 +44,8 @@
 
   Self-test: powershell -File ops\audit-python-pins.ps1 -SelfTest
 #>
+# The self-test is pure fixtures; the requirements file and the venv are read only by the live run.
+# gate-inputs: ops\audit-python-pins.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

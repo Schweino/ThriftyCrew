@@ -12,6 +12,8 @@
   (Written with plain arrays + Where-Object + [ordered] hashtables only - this Windows PowerShell 5.1
    host throws on several generic-List / id-keyed-hashtable constructs.)
 #>
+# The self-test runs this script over a temp board set and history it writes; its fixture weeks are date-proof by design.
+# gate-inputs: grocery\update-history.ps1
 param(
   [string]$CompareFile = "",
   [string]$HistoryFile = "",

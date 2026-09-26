@@ -28,6 +28,8 @@ should accept from one nobody has looked at, and an old packet is a fact about t
 that the review is wrong.
 """
 
+# The self-test builds its own graph tree in temp; status() imports promote_aliases and its graph\lib modules.
+# gate-inputs: graph\learning\promote_aliases.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\durable_write.py
 from __future__ import annotations
 
 import argparse

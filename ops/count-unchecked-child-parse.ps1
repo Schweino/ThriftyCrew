@@ -36,6 +36,8 @@
     powershell -NoProfile -File ops\count-unchecked-child-parse.ps1 -JsonOut <f>    plus one row per site (JSONL)
     powershell -NoProfile -File ops\count-unchecked-child-parse.ps1 -SelfTest       frozen fixtures, both halves
 #>
+# The self-test is inline fixtures plus the Python half's own --selftest.
+# gate-inputs: ops\count_unchecked_child_parse.py
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$ShowSites, [string]$JsonOut = '', [string]$Root = '', [int]$MaxHops = 1)
 $ErrorActionPreference = 'Stop'

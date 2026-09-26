@@ -34,6 +34,8 @@ verified, because the data belongs to the URL rather than to the verification.
 
 Exit 0 = pulled or reported. 2 = the API refused us. 3 = no credential, or nothing to report.
 """
+# The self-test is frozen in-memory fixtures (plus one absent history path) and reads no data file.
+# gate-inputs: ops\seo_search_console.py
 from __future__ import annotations
 
 import argparse

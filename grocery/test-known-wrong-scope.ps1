@@ -4,6 +4,8 @@
   when a cell hold can reach every blocked cell. Each case runs the real audit as a child against a per-run fixture
   tree and reads its output through the same Get-TcChildQuarantineScope guards.ps1 uses.
 #>
+# The self-test runs audit-known-wrong.ps1 over temp roots it builds; it loads cell-quarantine-lib.ps1.
+# gate-inputs: grocery\audit-known-wrong.ps1, grocery\cell-quarantine-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

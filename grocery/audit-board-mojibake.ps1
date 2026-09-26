@@ -38,6 +38,8 @@
 #
 # Run:  .\audit-board-mojibake.ps1 [-Tighten] [-Accept]
 #       .\audit-board-mojibake.ps1 -SelfTest
+# The self-test is frozen rows plus this script run over a temp board and baseline; it loads capture-lib.ps1.
+# gate-inputs: grocery\audit-board-mojibake.ps1, grocery\capture-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet, [switch]$Tighten, [switch]$Accept)
 $ErrorActionPreference = 'Stop'

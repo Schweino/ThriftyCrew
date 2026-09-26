@@ -24,6 +24,8 @@
 #   .\wave-publish.ps1 -RunDir <p> -Wave 1 -DryRun     walk every gate, print what would ship, publish nothing
 #   .\wave-publish.ps1 -RunDir <p> -Wave 1             for real
 #   .\wave-publish.ps1 -SelfTest
+# The self-test runs pure fixtures in temp; it reads its own source and propagate-recipes.ps1 as text.
+# gate-inputs: meal-prep\pipeline\feed-endpoint-lib.ps1, lib\guard-contract.ps1, grocery\native-lib.ps1, meal-prep\pipeline\propagate-recipes.ps1
 param(
   [string]$RunDir = '', [int]$Wave = 0,
   [switch]$DryRun, [switch]$SelfTest, [switch]$SkipGit, [switch]$SkipGhostCheck,

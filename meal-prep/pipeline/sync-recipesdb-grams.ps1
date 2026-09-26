@@ -57,6 +57,8 @@
   Read-only unless -Apply. Exit 0, or 3 when the evidence tables could not be loaded.
   Usage: .\sync-recipesdb-grams.ps1 [-Apply]   |   .\sync-recipesdb-grams.ps1 -SelfTest
 #>
+# The self-test is pure fixtures plus this script run over temp trees; the live db is read only after it exits.
+# gate-inputs: meal-prep\pipeline\sync-recipesdb-grams.ps1
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }

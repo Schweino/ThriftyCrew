@@ -6,6 +6,8 @@ run-gates discovers Python suites by their --selftest flag and never runs a .mjs
 token check (the fix for /alert telling strangers who pays, 2026-09-18) would otherwise go ungated. Node is
 not on PATH on this box (workspace CLAUDE.md); it lives beside the Python runtime. No node is COULD NOT
 EVALUATE (exit 3), never a pass. The child's own verdict line must be its last, and is echoed as ours.
+# The self-test runs the three worker .selftest.mjs suites under node; they import the worker .js modules.
+# gate-inputs: worker\member-token.selftest.mjs, worker\index.selftest.mjs, worker\box-heartbeat.selftest.mjs, worker\member-token.js, worker\index.js, worker\box-heartbeat.js
 """
 import glob
 import os

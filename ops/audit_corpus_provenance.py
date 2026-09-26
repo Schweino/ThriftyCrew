@@ -41,6 +41,8 @@ pays for every gate again. So a repair is SPOKEN and the committed list KEPT; --
 Exit 0 = clean. 2 = a NEW corpus with no provenance. 3 = could not evaluate.
 Read the verdict LINE, not the number (backlog E2).
 """
+# The self-test builds its own corpora and baseline in temp and runs this script over them; no tracked data is read.
+# gate-inputs: ops\audit_corpus_provenance.py
 from __future__ import annotations
 
 import argparse

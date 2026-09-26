@@ -43,6 +43,8 @@
 
   Self-test: powershell -File ops\install-grocery-tasks.ps1 -SelfTest
 #>
+# The self-test reads every committed task definition and the automations registry.
+# gate-inputs: ops\scheduled-tasks\*.xml, grocery\expected-automations.json
 param([switch]$Verify, [switch]$Install, [switch]$FixName, [switch]$VerifyRegistry, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\ops' }

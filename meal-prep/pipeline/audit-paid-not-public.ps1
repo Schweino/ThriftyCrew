@@ -35,6 +35,9 @@
     .\audit-paid-not-public.ps1 -SelfTest
   Exit 0 clean, 1 LEAK found, 2 self-test failure, 3 could-not-evaluate (no key / Ghost unreachable).
 #>
+# The self-test is pure fixtures plus reads of its own source, build-hub-grid.ps1 and check-ad-cycles.ps1 as text.
+# gate-inputs: lib\guard-contract.ps1
+# gate-inputs-text: meal-prep\build-hub-grid.ps1, grocery\check-ad-cycles.ps1
 [CmdletBinding()]
 param(
   [string[]]$Slugs = @(),

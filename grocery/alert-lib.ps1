@@ -58,6 +58,8 @@
   also safe - there is no command line in that form - but this helper is preferred because it is the only
   form that also makes a failed send loud.
 #>
+# The self-test builds its own checkouts and sender stubs in temp and reads no tracked data.
+# gate-inputs: grocery\alert-lib.ps1
 
 # Captured at dot-source time: inside a dot-sourced file $PSScriptRoot is the LIB's directory, not the
 # caller's, and stashing it here keeps it correct for callers that live in another folder entirely

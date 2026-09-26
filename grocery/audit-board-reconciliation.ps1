@@ -35,6 +35,8 @@
     1 = boards are de-duplicated but a price/basis contradiction was still found by another path (advisory)
     3 = could not evaluate (no boards to read, or rows existed and none were examined)
 #>
+# The self-test writes its own boards and map to temp and reads no tracked data.
+# gate-inputs: grocery\audit-board-reconciliation.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

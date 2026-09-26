@@ -38,6 +38,8 @@
   2026-08-23 it was only a sentence in a Write-Output, which is why every hardeval report ever
   written says `mined: 0`.
 #>
+# The self-test is pure in-memory fixtures and reads no sidecar or grocery data.
+# gate-inputs: grocery\export-identity-eval.ps1
 param([int]$TopK = 8, [switch]$SelfTest, [switch]$Label, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage

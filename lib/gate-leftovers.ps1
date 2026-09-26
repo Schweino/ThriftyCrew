@@ -35,6 +35,8 @@
 #
 # Dot-source:  . (Join-Path $repoRoot 'lib\gate-leftovers.ps1')
 # Self-test:   powershell -File lib\gate-leftovers.ps1 -SelfTest
+# The self-test builds its own repo in temp; it loads bot-paths.ps1 and git-repo-env.ps1.
+# gate-inputs: lib\bot-paths.ps1, lib\git-repo-env.ps1
 
 $__gateLeftoversSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 . (Join-Path $PSScriptRoot 'bot-paths.ps1')   # Get-BotInputPaths, Get-BotServedPaths - no param() block either

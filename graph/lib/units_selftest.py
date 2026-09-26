@@ -20,6 +20,8 @@ HERMETIC. Pure function calls; nothing reads or writes a file.
 
 EXIT: 0 all cases pass, 1 at least one failed. Read the verdict LINE, not the number.
 """
+# The self-test imports units.py from this directory and reads no data file.
+# gate-inputs: graph\lib\units.py
 from __future__ import annotations
 
 import os

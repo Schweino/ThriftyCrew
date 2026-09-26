@@ -28,6 +28,8 @@ reported as a verdict.
 
 EXIT CODES follow lib/guard-contract.ps1's vocabulary: 0 clean, 2 hard finding, 3 could-not-evaluate.
 """
+# The self-test is frozen in-memory fixtures and reads no file.
+# gate-inputs: sidecar\backtest_veto.py
 from __future__ import annotations
 
 import argparse

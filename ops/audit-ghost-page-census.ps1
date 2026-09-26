@@ -46,6 +46,8 @@
 
   Usage: .\audit-ghost-page-census.ps1 | -Export | -SelfTest
 #>
+# The self-test stubs Ghost; its last case parses the shipped registry and checks each declared page's export exists.
+# gate-inputs: ops\ghost-page-estate.json, content\ghost-adopted\*.json, content\ghost-adopted\*.html
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$Export, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

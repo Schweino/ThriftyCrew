@@ -16,6 +16,8 @@
   coverage worse than -MaxNoLink. STALE is reported (and alerted) but not a hard fail on its own.
   Reuses the exact LinkPU math from build-deals-page.ps1 so the numbers match what the page actually renders.
 #>
+# The self-test is frozen chip bodies and tags; the board, product-urls and the embed are read only by the live path.
+# gate-inputs: grocery\audit-board-consistency.ps1
 # MaxNoLink = 0 since 2026-07-12 (Brad's invariant: a displayed price ALWAYS has a matching link - ZERO
 # tolerance). Any no-link chip = breach -> check-ad-cycles auto-repairs Family Fare headlessly and alerts ONCE
 # per distinct set (sig-deduped) for browser stores until their next re-pull fixes the stored price. The

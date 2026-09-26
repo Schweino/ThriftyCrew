@@ -37,6 +37,8 @@ the frozen 2026-08-26 legacy list. That list can only ever be worked down; nothi
 it, and a new row that cites nobody is refused. Without the frozen list the gate could only be "all
 376 rows must be sourced", which is a gate that is red on the day it ships and therefore no gate.
 """
+# The self-test's last case reads the tracked food DB through load_db(); everything else is temp fixtures.
+# gate-inputs: meal-prep\food-macros-db.json
 from __future__ import annotations
 
 import glob

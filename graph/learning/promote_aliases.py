@@ -50,6 +50,8 @@ the rebuilt board before deploying: the guard suite is the real gate here, not
 this script's own opinion.
 """
 
+# The self-test is pure fixtures plus a scratch holds file; it imports graphdb, ids and durable_write from graph\lib.
+# gate-inputs: graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\durable_write.py
 from __future__ import annotations
 
 import argparse

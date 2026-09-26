@@ -46,6 +46,8 @@
 
   Usage: .\audit-schema-constraints.ps1 [-ShowAll] | -SelfTest
 #>
+# The self-test is frozen fixtures; it loads lib\guard-contract.ps1 through a nested path the key cannot parse.
+# gate-inputs: lib\guard-contract.ps1
 param([switch]$ShowAll, [switch]$SelfTest, [switch]$Baseline, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')

@@ -56,6 +56,8 @@
       $plan.SaleExpiries       # commodity ids whose sale ended and must be re-priced
       capture-policy.ps1 -Report   # human-readable, all seven stores
 #>
+# The self-test runs every ledger writer in temp roots; it also runs build-sale-windows.ps1 and loads flag-verify-lib.ps1 and lib\ledger-fixture.ps1.
+# gate-inputs: grocery\build-sale-windows.ps1, grocery\flag-verify-lib.ps1, lib\ledger-fixture.ps1
 
 $ErrorActionPreference = 'Stop'
 $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }

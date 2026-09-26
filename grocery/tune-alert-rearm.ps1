@@ -36,6 +36,9 @@
 
   EXIT: 0 report produced (a move or a refusal is content), 3 could not evaluate (no readable queue).
 #>
+# The self-test is pure fixtures plus a read of check-ad-cycles.ps1 as text.
+# gate-inputs: grocery\triage-lib.ps1
+# gate-inputs-text: grocery\check-ad-cycles.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [switch]$DryRun, [string]$QueueFile = '', [string]$TuningFile = '')
 
