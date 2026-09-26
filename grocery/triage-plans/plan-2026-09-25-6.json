@@ -1,0 +1,211 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-25T09:10:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23 (the board flag-verification.json and semantic-findings.json were both built over on 2026-09-25)",
+  "head_at_dispatch": "cbbe61b42",
+  "routing_artifact": "",
+  "queue_ids_seen": ["2026-09-21-4b973e", "2026-09-23-9459a1", "2026-09-23-3ba362"],
+  "scope_note": "Weekly lane run early (Brad lifted the budget on 2026-09-25 and asked for every open alert to be resolved), batch 1 of 9, the prevention batch. Only the three ids above are this batch's; the rest of the open queue belongs to the other eight batches.",
+  "knowledge_consulted": [
+    "searched: 'alert triage root cause recurrence' (dispatch), 'multibuy price flag out of band' (knowledge-search --estate; nothing applicable beyond the rules below)",
+    "reliability-craft/MAP.md s5: do not declare resolved on the alert going quiet, because a silenced symptom and a fixed cause look identical from the alert's side (why 9459a1 is not closed by quieting MULTIBUY in the pager)",
+    "reliability-craft/rca-and-chaos.md s2: corrective actions are Preventive, Detective, Responsive",
+    ".claude/rules/grocery.md: No hard-coded bands (Brad, 2026-09-04) - why the Dove hand wash band refusal is routed to the money lane and not widened here",
+    "memory worktrees-lack-the-boards-the-engines-price-on: seeded with ops/seed-worktree.ps1 -Target . (exit 0, seeds=38)"
+  ],
+  "last_week_target_measured": "plan-2026-09-20.json targeted 'automation silent death issue s' with days_fired 9 (rank 1, 14 days ending 2026-09-20) and shipped its prevention on 2026-09-20. Over the days since (2026-09-21..2026-09-25, 5 of the 14 available) the census shows it on 0 days, against 9 of 14 before. The census does show a sibling type 'automation silent death task failed' on 2026-09-23 and 2026-09-24 (1 alert each); that is a different type key and was not re-read here.",
+  "prevention_target": {
+    "type": "grocery store s dropped from a commodity they carry",
+    "window_days": 14,
+    "days_fired": 8,
+    "rank": 2,
+    "why_not_top": "Rank 1 is 'the knowledge store s nightly pass went red' (12 days): its producer lives outside this repository (C:\\Users\\Owner\\.claude\\skills, no emitter under grocery/, ops/ or lib/ names that subject), so no prevention.source can be a repo path and no fix can ship on this branch. Rank 2 is a four-way tie at 8 days: 'grocery capture watchdog issue s' has prevention:grocery capture watchdog issue s open (needs-more-time) in plan-2026-09-18-3.json; 'grocery new price flag s' has prevention:grocery new price flag s done in plan-2026-09-11-2.json (3e3969ec4) and is worked here as the RETURN 2026-09-23-9459a1; 'grocery guards failed board not published' has no prevention item but last fired 2026-09-23, and that cause (a condemned held value holding the whole board) was fixed the same day; 'grocery store s dropped from a commodity they carry' has no prevention item and fired on 6 consecutive days 2026-09-19..2026-09-24, so it is the one taken."
+  },
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record, not a validation. Since the lane stamp (2026-09-20T07:45): no new store in grocery/stores.json (3 commits, all rule or registry edits: 828d5226b warehouse reference group for derived bands, 8eb56de7f browser literal exemption, 44e9660dd alert types); 12 commits to grocery/commodities.json (rule edits, no new commodity batch was read); capture builders changed in place (Sam's count-first names 9cf5ca974, Walmart density refusal 027f21909, Sam's US units 3e054a87f, Hy-Vee last-ASK e035a9ecc, Baker's ad-term receipts 1d7e802d7). No new store or feed went live.",
+  "ship_sequence": [
+    "seed the worktree (ops/seed-worktree.ps1 -Target ., exit 0)",
+    "audit-alert-census.ps1 -QueueFile <main queue> (exit 0, ALERT-CENSUS-COMPLETE) and the 14-day ranking through Get-AlertCensusTypeDays",
+    "prevention:grocery store s dropped from a commodity they carry - measured, bounced (its fix is grocery/commodities.json)",
+    "2026-09-21-4b973e - R1 measured, R3 routed to 9459a1, R2 and R4 left open",
+    "2026-09-23-9459a1 - measured, bounced (the fix is compare-deals.ps1 or price-bands.json)",
+    "2026-09-23-3ba362 - instance re-measured, bounced (the standing two need grocery/commodities.json)"
+  ],
+  "items": [
+    {
+      "queue_id": "prevention:grocery store s dropped from a commodity they carry",
+      "subject": "Prevention: stores keep dropping from commodities they carry (audit-coverage-gaps, 8 of the 14 days ending 2026-09-25)",
+      "classification": "wrong-product",
+      "evidence": [
+        "census: 'grocery store s dropped from a commodity they carry' fired 2026-09-13, 09-19, 09-20, 09-21, 09-22, 09-23, 09-24 (and one more in the window), 1 to 2 alerts a day; 8 days, rank 2 of the 14 days ending 2026-09-25",
+        "queue 2026-09-23-d493dd (open, count 4, last body): 25 store(s) missing, tagged CLAIMED-BY 17 of the first 24 named (fresh-ginger @ Fareway, pork-tenderloin @ Sam's Club, queso @ Fareway, apple-juice @ Hy-Vee, tater-tots @ Hy-Vee, ...), RULE-INVISIBLE 6 (queso @ Hy-Vee, canned-peaches @ Fareway, apple-juice @ Fareway, oven-cleaner @ Sam's Club, canned-pears @ Fareway, ...), PRICED 1 (yellow-bell-pepper @ Family Fare)",
+        "grocery/audit-coverage-gaps.ps1:344-349: reviewed exceptions already have a home (coverage-gap-allowlist.json, keyed commodity|store) and not-carried.json expires them at 90 days, so the emitter does not re-cry a reviewed gap; what re-fires is gaps nobody has fixed in the rules"
+      ],
+      "surface_fix": {
+        "what": "work the 25 gaps in 2026-09-23-d493dd through explain-coverage-gap.ps1 and apply-coverage-batch.ps1",
+        "files": ["grocery/commodities.json"],
+        "exact_change": "per gap: widen the include (RULE-INVISIBLE) or add a release exclude on the claiming commodity (CLAIMED-BY), one gated batch"
+      },
+      "root_cause": "matching is first-match-wins over hand-written include lists, so every new product name a store starts listing either matches no include (RULE-INVISIBLE) or is taken by an earlier, broader commodity (CLAIMED-BY); the audit sees it the next morning, and the only repair road is a hand edit of the rule file, which runs behind the capture by days",
+      "root_fix": {
+        "what": "the money lane works the CLAIMED-BY majority as releases on the claiming commodities (17 of 24 named are claims, so the broad includes that claim are the lever, not 17 widenings), in one apply-coverage-batch run",
+        "files": ["grocery/commodities.json"],
+        "exact_change": "for each claiming commodity named in d493dd's CLAIMED-BY lines: an exclude releasing the claimed name's distinguishing token; RULE-INVISIBLE: widen the six includes"
+      },
+      "prevention": {
+        "source": "grocery/commodities.json",
+        "what": "the rule schema is the upstream producer of every coverage gap this type pages; it is on THE LINE this lane does not cross",
+        "exact_change": "none from this lane: bounced to the money lane with the measurement above"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "NOT a before/after routing run (this lane does not change the rule): the engine's own verdicts as audit-coverage-gaps tagged them in the 2026-09-23-d493dd body (25 gaps); the money lane's apply-coverage-batch run produces the routing diff",
+        "affected_now": 25,
+        "claimed_by_earlier": "17 of the 24 named gaps ARE claims by an earlier commodity (CLAIMED-BY); which commodity claims each is in audit-coverage-gaps' detail and is the money lane's first read",
+        "cell_effects": [],
+        "cell_effects_note": "empty because this lane moves no cell: it ships no rule. Each of the 25 gaps would go from absent to priced under the money lane's batch, and no before/after per-unit value was measured here, so none is written",
+        "risk": "a release exclude on a claiming commodity can evict a true row from it; apply-coverage-batch gates one batch"
+      },
+      "proof": {
+        "must_fire_case": "audit-coverage-gaps -SelfTest's CLAIMED-BY and RULE-INVISIBLE cases (founding pork-chops hijack) keep firing after the release",
+        "clean_twin": "the claiming commodity still prices its own true rows on the rebuilt board (apply-coverage-batch's own gate)",
+        "guard_or_fixture": "grocery/audit-coverage-gaps.ps1 -SelfTest"
+      },
+      "rollback": "revert the batch commit to grocery/commodities.json",
+      "freshness": "measured 2026-09-25 from the census (grocery/out/alert-census.jsonl, rows through 2026-09-25) and the d493dd body as of its last absorb (count 4)",
+      "leaves_open": "the whole class: 25 standing gaps (2026-09-23-d493dd), owned by that open item and the money lane",
+      "leaves_open_occurrences": 25,
+      "claimed_by_earlier": "17 of the 24 named gaps ARE claims by an earlier commodity (CLAIMED-BY in 2026-09-23-d493dd); the claiming commodity per name is in audit-coverage-gaps' detail and is the money lane's first read",
+      "leaves_open_followup": "2026-09-23-d493dd",
+      "resolution_note": "Bounced to the money lane: every repair for this class is a grocery/commodities.json edit. Last week's target measured: 'automation silent death issue s' 9 days in the 14 ending 2026-09-20, 0 days 2026-09-21..2026-09-25 after plan-2026-09-20's prevention shipped.",
+      "status": "bounced",
+      "premise_verified": "yes: census ranks the type 2 at 8 days over the 14 ending 2026-09-25; no prevention item for it in any plan-*.json; d493dd is open and still absorbing (count 4)",
+      "deviation": "the dispatch named 'grocery new price flag s' as the likely target; its prevention is already done (plan-2026-09-11-2.json), so ruling 6 takes the next type with none. The price-flag type is worked below as the RETURN 9459a1.",
+      "shipped_commit": null,
+      "actual_tool_calls": 9
+    },
+    {
+      "queue_id": "2026-09-21-4b973e",
+      "subject": "Grocery: price-flag verification residuals - pending drain unmeasured, live wrong prices under both bars never flagged, batch alert still carries multibuy (plan-2026-09-21-8)",
+      "classification": "needs-more-time",
+      "evidence": [
+        "grocery/out/flag-verification.json generated 2026-09-25 over comparison-2026-09-23 / guards-2026-09-23: paging_flags 29, with_cell 29, pending 8 (oldest 4 days, overdue 0), new_disagreements 0; by store match/wrong_price/pending: Aldi 9/0/2, Baker's 6/0/1, Family Fare 1/1/1 (left_unverified 1), Fareway 1/0/0, Sam's Club 0/0/1, Walmart 5/0/3 (left_unverified 1); 82 entries closed",
+        "R1 before: 26 of 26 paging flags pending on 2026-09-21. After: 23 verdicts (22 match, 1 wrong_price) and 8 pending over 29 on 2026-09-25, so the drain runs at five of six stores; Sam's Club has reached no verdict yet (0 of 1)",
+        "R3 is the open 2026-09-23-9459a1 (4 MULTIBUY lines paged as NEW price flags), worked below"
+      ],
+      "root_cause": "the 2026-09-21 verifier re-reads only what a later capture of the SAME product can answer, so the classes a later read cannot see (a wrong price under both detector bars, never flagged; an ad-flyer sale with no product-level re-read) stay outside it by design",
+      "root_fix_none_because": "R2 needs a new detector bar over live cells (price bands and sanity bars are the money lane's files) and R4 needs a product-level road for ad-flyer sale claims in grocery/verify-price-flags.ps1; neither fits this item's budget, and R1 needed no fix",
+      "leaves_open": "R2 a live wrong price under both bars is never flagged (1 of the 5 confirmed defects 2026-08-22..2026-09-21); R4 ad-flyer sale cells have no product-level re-read (15 of 21 replayed sale claims); R1 median days to a verdict not computed; Sam's Club 0 of 1 verdicts",
+      "leaves_open_occurrences": 16,
+      "leaves_open_followup": "2026-09-21-4b973e",
+      "resolution_note": "Left open on purpose, with R1 measured (26 of 26 pending on 09-21 to 8 of 29 pending, 23 verdicts, 0 overdue on 09-25) and R3 handed to 9459a1. R2 and R4 are feature work (R2 in the money lane's files), not a leftover this lane can close inside 40 calls.",
+      "status": "needs-more-time",
+      "premise_verified": "yes: the ledger exists, is fresh (2026-09-25 08:27) and names 29 paging flags",
+      "deviation": "none",
+      "shipped_commit": null,
+      "actual_tool_calls": 3
+    },
+    {
+      "queue_id": "2026-09-23-9459a1",
+      "subject": "Grocery: 4 NEW price flag(s) - 2026-09-23",
+      "classification": "real-economics",
+      "evidence": [
+        "grocery/out/flagged-2026-09-23.json multibuy_unpriced (72 rows, 71 Family Fare): hand-soap @ Family Fare 'Dove Hand Wash, Antibacterial 12 Fl Oz' and 'Dove Hand Wash, Shea Butter & Warm Vanilla 12 Fl Oz', 'Buy 1 get 1 40% off', regular $5.99, 12 oz: reason 'priced but OUT-OF-BAND ($0.3993 outside 0.01216-0.304) - likely a bad multibuy size/regular parse'",
+        "arithmetic reproduces: $5.99 x 1.6 / 24 oz = $0.3993/oz, so the parse is right and the price is real; the band ceiling $0.304/oz refuses a real Dove sale",
+        "shampoo @ Family Fare 'Dove Shampoo, Intensive Repair 12 Fl Oz' and 'Daily Moisture 12 Fl Oz', regular $8.99, 12 oz: $8.99 x 1.6 / 24 = $0.5993/oz against a band ceiling of $0.525: the same shape",
+        "the 4 lines are 2 keys (MULTIBUY|Family Fare|hand-soap, MULTIBUY|Family Fare|shampoo): check-ad-cycles.ps1:3298 adds one line per ROW but one key per commodity id",
+        "the alert body says 'these still published; verify they are real' (check-ad-cycles.ps1:3529), which is false for a MULTIBUY line: a multibuy_unpriced row is NOT on the board",
+        "comparison-2026-09-23: Family Fare's hand-soap cell is $0.0998/oz (Top Care 50 Fl Oz) and its shampoo cell $0.0993/oz (Alberto VO5 15 Fl Oz); the Dove sales at $0.3993 and $0.5993 are 4x and 6x those, so no cell would move if they were admitted"
+      ],
+      "root_cause": "compare-deals labels every out-of-band multibuy 'likely a bad multibuy size/regular parse' without checking whether the arithmetic reproduces from the row's own regular price and size, so a real sale the band refuses and a true parse error page identically, as a NEW price flag, and the reader cannot tell a band gap from a capture error",
+      "root_fix": {
+        "what": "in compare-deals' multibuy pricing, split OUT-OF-BAND into 'arithmetic reproduces, band refuses' and 'does not reproduce'; route the first to band review (price-bands.json derivation), not to the price-flag page",
+        "files": ["grocery/compare-deals.ps1", "grocery/price-bands.json"],
+        "exact_change": "money lane: a multibuy_unpriced reason that names which half, and the batch alert pages only the half that does not reproduce"
+      },
+      "prior_closes": ["2026-09-18-61f76c", "2026-09-19-fccb69"],
+      "prevention": {
+        "source": "grocery/compare-deals.ps1",
+        "what": "the multibuy_unpriced reason is written there, and it is the producer of every MULTIBUY price flag",
+        "exact_change": "bounced: compare-deals.ps1 is on THE LINE this lane does not cross"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "grocery/out/flagged-2026-09-23.json multibuy_unpriced, all 72 rows read and grouped by reason",
+        "affected_now": 10,
+        "names": ["10 of 72 multibuy_unpriced rows are OUT-OF-BAND: hand-soap x2, shampoo x2, bar-soap x3 and three more at Family Fare; 61 have no unit basis and 1 no regular price, and a reason split does not touch those"],
+        "cell_effects": [ { "commodity": "hand-soap", "store": "Family Fare", "before": 0.0998, "after": 0.0998 }, { "commodity": "shampoo", "store": "Family Fare", "before": 0.0993, "after": 0.0993 } ],
+        "cell_effects_note": "comparison-2026-09-23: Family Fare already carries hand-soap at $0.0998/oz (Top Care 50 Fl Oz) and shampoo at $0.0993/oz (Alberto VO5 15 Fl Oz); the flagged Dove sales at $0.3993 and $0.5993 are 4x and 6x those, so admitting them moves neither cell. The four paged lines could not change a price a reader sees.",
+        "risk": "a band widened to admit a premium-brand sale also admits a wrong-basis row of the same price; the reproduce test is what separates them"
+      },
+      "proof": {
+        "must_fire_case": "a multibuy row whose regular x discount / size does not reproduce its out-of-band unit price still pages",
+        "clean_twin": "Dove Hand Wash 12 Fl Oz, BOGO 40% off, $5.99: $0.3993/oz reproduces and goes to band review, not the price-flag page",
+        "guard_or_fixture": "grocery/test-auditors.ps1 (the REVIEW-DECISION and SANITY-PAGER regions of check-ad-cycles.ps1 run against frozen state)",
+        "fixture_occurrences": ["2026-09-18-61f76c", "2026-09-19-fccb69", "2026-09-23-9459a1"]
+      },
+      "rollback": "revert the money lane's commit",
+      "freshness": "flagged-2026-09-23.json written 2026-09-25 08:06; the four rows are still in it",
+      "leaves_open": "the fix: 2 keys today (hand-soap, shampoo @ Family Fare) plus bar-soap's per-pack basis ($13.59 x 1.6 / 2 = $10.872 per 6-pack against a per-bar band) in the same file",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "2026-09-23-9459a1",
+      "resolution_note": "Bounced to the money lane: the two Dove prices are real (arithmetic reproduces), refused by the band, and paged under a reason that blames the parse. The fix is in compare-deals.ps1 or price-bands.json.",
+      "status": "bounced",
+      "premise_verified": "yes: the four lines are in flagged-2026-09-23.json today, with the reasons quoted",
+      "deviation": "none",
+      "shipped_commit": null,
+      "actual_tool_calls": 6
+    },
+    {
+      "queue_id": "2026-09-23-3ba362",
+      "subject": "Grocery: semantic sweep found 2 product(s) no rule can see - 2026-09-23",
+      "classification": "wrong-product",
+      "evidence": [
+        "founding findings (grocery/out/semantic-findings.json at a0dd31d99, generated 2026-09-22 21:33): ready-to-serve-long-grain-wild-rice-pouch @ Aldi 'Long Grain Wild Ready TO Serve Rice' (score 0.9895); frozen-waffles @ Family Fare 'Eggo Frozen Pancakes, Buttermilk 14.8 Oz' (score 0.9207)",
+        "after: comparison-2026-09-23.json carries 'Long Grain Wild Ready TO Serve Rice' (the wild-rice pouch is priced), and neither finding is in any sweep since 2026-09-23 10:02 (cec9779a3, e839c8ad2, e90682129, today's 08:22)",
+        "Eggo Frozen Pancakes is not a waffle: a semantic near miss, not a rule gap",
+        "the item's second absorb (count 2) is the 2026-09-23 10:02 sweep, whose 2 findings stand today at 2026-09-25 08:22: laundry-detergent @ Family Fare 'Arm & Hammer Liquid Laundry Clean Burst' (score 0.917; the include has '\\blaundry\\s+detergent\\b' and A&H Oxi/Odor Blasters forms, none matches 'Liquid Laundry'), hot-sauce @ Family Fare 'Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz' (score 0.913; includes 'hot\\s+sauce', 'sriracha', 'tabasco', ...; no 'pepper sauce')"
+      ],
+      "root_cause": "commodity includes are enumerated brand and word forms, so a name that says the same thing in another word order ('Liquid Laundry') or another name for the product ('Pepper Sauce') cannot match; the semantic sweep is the detector that sees it, and the only repair is a rule edit",
+      "root_fix": {
+        "what": "widen laundry-detergent to 'liquid laundry' and hot-sauce to a cayenne or Louisiana 'pepper sauce' form (not a bare 'pepper sauce', which also names sweet chili and stir-fry sauces)",
+        "files": ["grocery/commodities.json"],
+        "exact_change": "money lane: laundry-detergent.include += '\\bliquid\\s+laundry\\b'; hot-sauce.include += a pepper-sauce form bounded to cayenne / red devil / louisiana"
+      },
+      "prior_closes": ["2026-09-18-37ac63", "2026-09-19-4f01f6", "2026-09-21-7d64a6"],
+      "prevention": {
+        "source": "sidecar/sweep.py",
+        "what": "the emitting check: a finding leaves the sweep as a bare alert line, with no diagnosis and no candidate, so every return of this type costs a lane the same derivation (explain-coverage-gap, then read the include) before the rule edit; three prior closes each repaired only the names they were handed",
+        "exact_change": "money lane: the sweep hands each coverage finding to explain-coverage-gap.ps1's verdict (NO-INCLUDE / EXCLUDED / CLAIMED / MATCHES) and records the unmatched distinguishing phrase beside it in semantic-findings.json, so the alert names the fix; the rule edits themselves stay in grocery/commodities.json"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "NOT a before/after routing run (this lane does not change the rule): the sweep's own verdict over its 44,088-name corpus (8,842 rule-invisible) in semantic-findings.json generated 2026-09-25 08:22, plus a read of both commodities' include lists",
+        "affected_now": 2,
+        "names": ["Arm & Hammer Liquid Laundry Clean Burst", "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz"],
+        "claimed_by_earlier": "none today: the sweep records 'no rule matches it' for both names, so no earlier commodity admits either; the money lane re-checks after the widening",
+        "cell_effects": [],
+        "cell_effects_note": "empty because this lane moves no cell: it ships no rule. laundry-detergent @ Family Fare and hot-sauce @ Family Fare each gain a candidate row under the money lane's widening; the finding carries no price, so no before/after is written",
+        "risk": "a bare 'pepper sauce' would also admit sweet chili and stir-fry sauces, which is why the widening is bounded"
+      },
+      "proof": {
+        "must_fire_case": "'Arm & Hammer Liquid Laundry Clean Burst' routes to laundry-detergent and 'Trappey's Pepper Sauce, Cayenne' to hot-sauce",
+        "clean_twin": "a sweet chili 'pepper sauce' still routes nowhere near hot-sauce, and 'Laundry Detergent' names still route to laundry-detergent",
+        "guard_or_fixture": "grocery/apply-coverage-batch.ps1 (applies and gates one batch)",
+        "fixture_occurrences": ["2026-09-18-37ac63", "2026-09-19-4f01f6", "2026-09-21-7d64a6", "2026-09-23-3ba362"]
+      },
+      "rollback": "revert the rule commit",
+      "freshness": "semantic-findings.json generated 2026-09-25 08:22 over comparison-2026-09-23",
+      "leaves_open": "the 2 standing findings (laundry-detergent, hot-sauce @ Family Fare), since 2026-09-23 10:02",
+      "leaves_open_occurrences": 2,
+      "claimed_by_earlier": "none today: semantic-findings.json (2026-09-25 08:22) records 'no rule matches it' for both names, so no earlier commodity admits either; the money lane re-checks routing after the widening",
+      "leaves_open_followup": "2026-09-23-3ba362",
+      "resolution_note": "The two founding findings no longer reproduce (wild-rice pouch priced on the 09-23 board; the Eggo pancakes near miss gone from every sweep since). The two findings the item absorbed on 09-23 stand today and need grocery/commodities.json: bounced to the money lane.",
+      "status": "bounced",
+      "premise_verified": "yes: four sweep versions and the board read; the rule text read for both commodities",
+      "deviation": "none",
+      "shipped_commit": null,
+      "actual_tool_calls": 8
+    }
+  ]
+}
