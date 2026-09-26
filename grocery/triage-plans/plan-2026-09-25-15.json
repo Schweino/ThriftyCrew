@@ -110,10 +110,10 @@
       "do_not_touch": [
         "price-bands.json and the band derivation (Q-derived-ceiling is Brad's)"
       ],
-      "leaves_open": "4 real premium Dove sales (hand wash x2, shampoo x2) plus the deodorant 1.7 oz now on the complete-basis half stay refused by the derived ceiling until Brad rules Q-derived-ceiling; 1 Dove Cleansing Bar 5 oz stays on the unresolved half; 18 'N for $M' each-unit rows stay priced per pack (owned by queue 2026-09-25-633d2b); Hot Pockets pizza sandwiches reach frozen-pizza at 1.0817 unless step 3 adds the exclude (1 row, this run's step 3).",
-      "leaves_open_occurrences": 25,
+      "leaves_open": "4 real premium Dove sales (hand wash x2, shampoo x2) plus the deodorant 1.7 oz on the complete-basis half stay refused by the derived ceiling until Brad rules Q-derived-ceiling; 1 Dove Cleansing Bar 5 oz stays on the unresolved half; 18 'N for $M' each-unit rows stay priced per pack (owned by queue 2026-09-25-633d2b). The Hot Pockets pizza-sandwich residual is closed by step 3's discovered frozen-pizza exclude.",
+      "leaves_open_occurrences": 24,
       "leaves_open_followup": "Q-derived-ceiling",
-      "resolution_note": "A Buy-N-Get-K multibuy on an each commodity now divides the pack count its price text, size and name agree on, and refuses a row whose counts disagree; an out-of-band multibuy says whether the band refused a real price (complete basis, left to band review) or the pack count is unresolved, and only the unresolved half pages as a MULTIBUY price flag, whose mail now says those lines are not published. Dove bar packs price 1.812 and 1.8653 a bar; no bar-soap cell moves. Hot Pockets pizza sandwiches would reach frozen-pizza at 1.0817 and need step 3's exclude before the board chain. N-for-$M deals keep the per-pack defect (2026-09-25-633d2b). The Dove wash and shampoo sales are real and wait on Brad's ceiling ruling.",
+      "resolution_note": "A Buy-N-Get-K multibuy on an each commodity now divides the pack count its price text, size and name agree on, and refuses a row whose counts disagree; an out-of-band multibuy says whether the band refused a real price (complete basis, left to band review) or the pack count is unresolved, and only the unresolved half pages as a MULTIBUY price flag, whose mail now says those lines are not published. Dove bar packs price 1.812 and 1.8653 a bar; no bar-soap cell moves. Candy, protein shakes and flapjacks no longer reach peanut butter, Honeycrisp cider no longer reaches honey, and pizza sandwiches no longer reach frozen pizza (the new per-piece price would have put a Hot Pockets sandwich at 1.08 on the frozen pizza cell). N-for-$M deals keep the per-pack defect (2026-09-25-633d2b). The Dove wash and shampoo sales are real and wait on Brad's ceiling ruling.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 55,
@@ -124,7 +124,19 @@
       "close_disposition": "confirmed",
       "full_suite": "deferred-to-land",
       "proof_run": "compare-deals.ps1 -SelfTest exit 0 'SELF-TEST PASS' (7 new cases: 4 MUST FIRE incl. the 6-vs-4 count conflict, 3 CLEAN TWIN); test-auditors.ps1 selective u070+u146 exit 0, 4 of 4 pass (TEST-AUDITORS-COMPLETE pass=4 failed=0 selective=1); test-pu-lib.ps1 exit 0 PU-LIB PASSED; parse clean on all four edited scripts",
-      "actual_tool_calls": 50
+      "actual_tool_calls": 83,
+      "rules_half": "SHIPPED in step 3's one apply-coverage-batch run (scratch worktree of triage/r2-2026-09-25 at 85831169e, board comparison-2026-09-23 built 2026-09-25 08:14:10, freshness holds): honey.exclude += '\\bhoney\\s+crisp\\b'; peanut-butter.exclude += '\\bcand(?:y|ies)\\b', '\\bpumpkins?\\b', '\\bskeletons?\\b', '\\bprotein\\s+(?:shake|powder)\\b', '\\bflapjacks?\\b'. Batch KEPT: theft check OK, 0 tile faults on batch commodities, honey 6->6 and peanut-butter 7->7 cells (no cell held a leaving name, as cell_effects_note said).",
+      "discovered_rules": [
+        {
+          "rule": "frozen-pizza.exclude += '\\bpizza\\s+sandwich(?:es)?\\b'",
+          "why": "this item's multibuy division prices 'Hot Pockets Crispy Crust Pepperoni Pizza Sandwiches 4 Ea' (Family Fare, Buy 2 get 1 free) at 1.0817 a sandwich, which took the frozen-pizza crown from Sam's Club 2.6367 with the wrong product; min_piece_oz 12 cannot see it (the row states no weight). A product shape, not the Hot Pockets brand.",
+          "measured": "in the batch's own crown diff: frozen-pizza Family Fare @1.082 -> Sam's Club @2.637, 7 -> 7 cells; routing over 47,215 names: exactly 1 corpus name moves (that Hot Pockets row, frozen-pizza -> none); a real frozen pizza (Tombstone, DiGiorno) still routes to frozen-pizza",
+          "fixtures": "grocery/test-commodity-rules.ps1: MUST FIRE the Hot Pockets row excluded; CLEAN TWIN 'Tombstone Original Pepperoni Frozen Pizza 19.3 oz' included"
+        }
+      ],
+      "rules_premise_verified": "TRUE for the rules half: the artifact's 16 moves for this item's commodities (peanut-butter->none 14, honey->none 1; bacon->none 1 is dd290b's) reproduce exactly with 0 unexpected and 0 missing; audit-match-soundness DROPPED lines name exactly the 9 peanut-butter, 1 honey names present in the soundness corpus.",
+      "rules_shipped_commit": "see git log -- grocery/commodities.json on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
+      "rules_half_tool_calls": 33
     },
     {
       "queue_id": "2026-09-22-8d2ad5",
@@ -411,17 +423,63 @@
         "tandoori-seasoning's rule (the gap is capture, not a rule)",
         "bacon's known-wrong entry until the rebuilt board shows the exclude holds (retire_when vocabulary)"
       ],
-      "leaves_open": "sheet-pan-tandoori-chicken-cauliflower stays held (no Omaha tandoori capture in 2026: search-term capture work); Fresh Red Chili still prices the jalapenos cell (1 line)",
-      "leaves_open_occurrences": 2,
+      "leaves_open": "sweet-potato-glass-noodles has 0 priced cells (its only row, O'Food at Baker's, is not on the board's candidates), so the held Korean glass-noodle recipes (3 of f9c8ce's 4 covered lines) cannot be un-held by step 5; lo-mein-noodles and blackened-seasoning have 1 cell each (2 Walmart rows withheld UNPROVEN-CHANNEL); sheet-pan-tandoori-chicken-cauliflower stays held (no Omaha tandoori capture); Fresh Red Chili still prices the jalapenos cell (1 line)",
+      "leaves_open_occurrences": 3,
       "leaves_open_followup": "2026-09-23-dd290b",
       "resolution_note": "Three commodities added ahead of the ones that took their names (lo mein noodles, sweet potato glass noodles, blackened seasoning), bacon ends excluded; 10 of 11 held recipes re-pointed and costed from board cells. Tandoori still has no Omaha capture.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 55,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "TRUE for the routing, checked in step 3 against plan-2026-09-25-15.routing.json: the 12 dd290b moves (bacon->none 1, ->blackened-seasoning 5, ->lo-mein-noodles 5, ->sweet-potato-glass-noodles 1) reproduce exactly over 47,215 names (sidecar corpus-current + candidates-2026-09-23 + the artifact's names), 0 unexpected, 0 missing; placed at index 59/60/61, sweet-potatoes now 62; clean twins hold (Great Value egg noodles -> egg-noodles, Kroger Sweet Potato -> sweet-potatoes, Slap Ya Mama -> cajun-seasoning). Board comparison-2026-09-23 built 08:14:10, not rebuilt since, so freshness holds. PARTLY FALSE for cell_effects: 3 of the 6 estimated cells appear.",
+      "deviation": "RULES HALF SHIPPED (step 3), recipe half (step 5) not started. (1) The three commodities went in as skeletons (id, label, unit oz, empty include, own excludes plus tahini's shared tail) immediately before sweet-potatoes, and apply-coverage-batch -Patterns added all 8 includes, so every include was gated as a widening; bacon.exclude '\\bbacon\\s+ends\\b' in the same run. Batch KEPT: crown changes = the 2 new rows plus the intended frozen-pizza revert, theft OK, 0 tile faults on batch commodities. (2) The batch's rebuilt board has 3 of the 6 cells cell_effects estimated: lo-mein-noodles Family Fare 0.259 and blackened-seasoning Baker's 1.3523 as estimated; lo-mein-noodles Walmart 0.3543 and blackened-seasoning Walmart 0.9077 are WITHHELD UNPROVEN-CHANNEL by the provenance contract (provenance-withheld-2026-09-23: 'nothing on the row proves it is sold in the store or for pickup there', as_of 2026-08-06/08-11); lo-mein-noodles Baker's 0.2369 (Wei Chuan) and sweet-potato-glass-noodles Baker's 0.7114 (O'Food) are not among candidates-2026-09-23's rows at all (their source is bakers-regular-2026-07-24). So sweet-potato-glass-noodles has NO cell and the glass-noodle recipes cannot be costed from the board in step 5.",
+      "shipped_commit": null,
+      "cell_effects_measured": [
+        {
+          "commodity": "lo-mein-noodles",
+          "store": "Family Fare",
+          "after": 0.259,
+          "matches_estimate": true
+        },
+        {
+          "commodity": "blackened-seasoning",
+          "store": "Baker's",
+          "after": 1.3523,
+          "matches_estimate": true
+        },
+        {
+          "commodity": "lo-mein-noodles",
+          "store": "Walmart",
+          "after": null,
+          "matches_estimate": false,
+          "why": "WITHHELD UNPROVEN-CHANNEL"
+        },
+        {
+          "commodity": "blackened-seasoning",
+          "store": "Walmart",
+          "after": null,
+          "matches_estimate": false,
+          "why": "WITHHELD UNPROVEN-CHANNEL"
+        },
+        {
+          "commodity": "lo-mein-noodles",
+          "store": "Baker's",
+          "after": null,
+          "matches_estimate": false,
+          "why": "row not in candidates-2026-09-23"
+        },
+        {
+          "commodity": "sweet-potato-glass-noodles",
+          "store": "Baker's",
+          "after": null,
+          "matches_estimate": false,
+          "why": "row not in candidates-2026-09-23"
+        }
+      ],
+      "proof_run": "apply-coverage-batch (scratch worktree) BATCH ACCEPTED, rc 1 only for 20 pre-existing tile faults outside the batch; routing diff 47,215 names: 27 expected moves for 9459a1+dd290b reproduced, 0 unexpected, 0 missing, plus 1 corpus pizza-sandwich move; audit-match-soundness MOVED=1 (Wel Pac egg-noodles -> lo-mein-noodles) DROPPED=11 (9 peanut-butter, 1 honey, 1 bacon, 1 frozen-pizza Hot Pockets: all intended) new-contested=1 (Wel Pac, intended order), -Accept exit 0, baseline names diff = those 12 plus Cajun's Choice Blackened Seasoning & Rub -> blackened-seasoning, contested + Wel Pac only; test-commodity-rules.ps1 exit 0, 159 of 159 (11 new).",
+      "rules_shipped_commit": "see git log -- grocery/commodities.json on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
+      "full_suite": "deferred-to-land",
+      "rules_half_tool_calls": 33
     },
     {
       "queue_id": "2026-09-25-f9c8ce",

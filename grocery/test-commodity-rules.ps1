@@ -477,6 +477,30 @@ $cases = @(
      why='MUST FIRE the bounded pepper-sauce form: cayenne or Red Devil within 40 chars (3ba362)' }
   @{ id='hot-sauce'; name='Mae Ploy Sweet Chili Sauce'; expect='no-include-match'
      why='MUST NOT FIRE never a bare pepper/chili sauce: the widening stays bounded (3ba362)' }
+  # plan-2026-09-25-15 step 3 (9459a1, dd290b): one batch, names from the plan-2026-09-25-15 routing artifact, plus the
+  # frozen-pizza exclude 9459a1's multibuy fix surfaced (the Family Fare Buy-2-get-1 row priced 1.0817 a sandwich).
+  @{ id='frozen-pizza'; name='Hot Pockets Crispy Crust Pepperoni Pizza Sandwiches 4 Ea'; expect='excluded'
+     why='MUST FIRE a pizza sandwich is not a frozen pizza; divided per piece it took the frozen-pizza crown at 1.0817 (9459a1, discovered)' }
+  @{ id='frozen-pizza'; name='Tombstone Original Pepperoni Frozen Pizza 19.3 oz'; expect='included'
+     why='CLEAN TWIN a real frozen pizza still routes to frozen-pizza past the pizza-sandwich exclude (9459a1)' }
+  @{ id='peanut-butter'; name='Reese''s Mini Pumpkins Chocolate Candy & Peanut Butter Creme 7 Oz'; expect='excluded'
+     why='MUST FIRE Halloween candy is not peanut butter (9459a1)' }
+  @{ id='peanut-butter'; name='Premier Protein 30g High Protein Shake, Chocolate Peanut Butter, 11 fl. oz., 15 pk.'; expect='excluded'
+     why='MUST FIRE a protein shake is not peanut butter (9459a1)' }
+  @{ id='peanut-butter'; name='Reese''s Creamy Peanut Butter 18 Oz'; expect='included'
+     why='CLEAN TWIN a real jar of peanut butter from the candy brand still routes (9459a1)' }
+  @{ id='honey'; name='Nature S Nectar Honey Crisp Apple Cider 64 FL OZ'; expect='excluded'
+     why='MUST FIRE a Honeycrisp apple cider is not honey (9459a1)' }
+  @{ id='bacon'; name='Webster City Bacon Ends'; expect='excluded'
+     why='MUST FIRE bacon ends are trimmings, not the bacon cell (dd290b)' }
+  @{ id='lo-mein-noodles'; name='Wel Pac Egg Noodles, Lo Mein 10 Oz'; expect='included'
+     why='MUST FIRE the Family Fare lo mein pack egg-noodles held; lo-mein-noodles sits ahead of it (dd290b)' }
+  @{ id='sweet-potato-glass-noodles'; name='O''Food Sweet Potato Glass Noodle'; expect='included'
+     why='MUST FIRE the Baker''s glass noodle sweet-potatoes held; the new commodity sits ahead of it (dd290b)' }
+  @{ id='blackened-seasoning'; name='Louisiana Fish Fry Products Blackened Cajun Seasoning'; expect='included'
+     why='MUST FIRE the Fareway blackened seasoning cajun-seasoning held (dd290b)' }
+  @{ id='egg-noodles'; name='Great Value Extra Wide Egg Noodles, 16 oz'; expect='included'
+     why='CLEAN TWIN plain egg noodles stay on egg-noodles (dd290b)' }
 )
 
 $bad = 0
