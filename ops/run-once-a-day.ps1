@@ -55,6 +55,8 @@
         records no exit code. -SelfTest: 0 pass, 1 fail.
 #>
 [CmdletBinding(PositionalBinding = $false)]
+# G1 (PLAN-faster-pushes-no-accuracy-loss-2026-09-25): its self-test reads the scheduled-task XML and the run-log library.
+# gate-inputs: ops\run-once-a-day.ps1, grocery\run-log-lib.ps1, ops\scheduled-tasks\*.xml
 param(
   [string]$Key = '',
   [string]$Exe = '',

@@ -46,7 +46,7 @@ function Invoke-VgdArm([string]$Root, [string]$Rel, [string]$GateArg, [int]$Time
   $p = Start-Process -FilePath $exe -ArgumentList $argv -WorkingDirectory $Root -NoNewWindow -PassThru -RedirectStandardOutput ($stem + '.out') -RedirectStandardError ($stem + '.err')
   $null = $p.Handle
   if (-not $p.WaitForExit($TimeoutSec * 1000)) { try { & taskkill /T /F /PID $p.Id *> $null } catch { }; $rc = -2 } else { $rc = $p.ExitCode }
-  $out = @(); foreach ($x in @(($stem + '.out'), ($stem + '.err'))) { if ([IO.File]::Exists($x)) { $out += @([IO.File]::ReadAllLines($x)); Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }
+  $out = @(); foreach ($x in @(($stem + '.out'), ($stem + '.err'))) { if ([IO.File]::Exists($x)) { $fs = [IO.File]::Open($x, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete); try { $sr = New-Object IO.StreamReader($fs); $out += @($sr.ReadToEnd() -split "`r?`n" | Where-Object { $_ -ne '' }) } finally { $fs.Dispose() }; Remove-Item -LiteralPath $x -Force -ErrorAction SilentlyContinue } }  # a grandchild of the self-test may still hold the file open: read shared, never ReadAllLines
   return [pscustomobject]@{ Rc = $rc; Lines = $out }
 }
 
