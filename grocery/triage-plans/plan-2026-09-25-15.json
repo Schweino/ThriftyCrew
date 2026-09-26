@@ -1,0 +1,580 @@
+{
+ "generated": "2026-09-25T21:45:00",
+ "round": 2,
+ "board_week": "comparison-2026-09-23 (week_of 2026-09-23, built 2026-09-25 08:14:10; the triage-due BOARD line, not mid-build)",
+ "queue_ids_seen": [
+  "2026-09-23-9459a1",
+  "2026-09-22-8d2ad5",
+  "2026-09-22-0c812e",
+  "2026-09-19-dc1b5b",
+  "2026-09-23-dd290b",
+  "2026-09-25-f9c8ce",
+  "2026-09-22-6e6a3b",
+  "2026-09-22-817976"
+ ],
+ "routing_artifact": "plan-2026-09-25-15.routing.json",
+ "note": "Round 2 of today's weekly-lane bounces (plan-2026-09-25-6). Each lane measurement was tested first; four were refuted in part (d493dd: 12 of 18 gaps are decided or quarantined, not rule gaps; 9459a1: the reproduce test is circular; 817976: 9 of 16 are sibling links; 4b973e: the one wrong-price verdict is a false condemnation of an in-window sale). SPLIT 2026-09-25 on send-back: the money lane measured 305 (324 once the RETURN fixtures were sized) against a 200 ceiling, so Brad's \"everything done now\" is met by TWO plans that both ship today, not by deferral. plan-2026-09-25-15 holds the pricing-engine group (9459a1, 8d2ad5, dc1b5b: compare-deals and pricing-math-lib; 9459a1's count-conflict case rests on 8d2ad5), dd290b, the two needs-brad items and the ops lane: money 185, ops 98. plan-2026-09-25-16 holds the matching-worklist group (d493dd, 3ba362: match-worklist-lib), a0c785, 4b973e and the superseded prevention id: money 141. Both share plan-2026-09-25-15.routing.json; its 49 moves split cleanly by owning item (15: 9459a1 15 + dd290b 12 = 27; 16: d493dd 18 + 3ba362 4 = 22) and no moved name crosses the two sets. est_tool_calls raised for the three RETURN items (d493dd 60->65, 3ba362 22->28, 9459a1 45->55) for the prior-close fixtures.",
+ "items": [
+  {
+   "queue_id": "2026-09-23-9459a1",
+   "subject": "Grocery: 4 NEW price flag(s) - 2026-09-23 (Dove multibuys)",
+   "classification": "parse-basis-bug",
+   "evidence": [
+    "LANE MEASUREMENT PARTLY REFUTED: its discriminator 'the arithmetic reproduces from the row's own regular and size' is circular (compare-deals computes the unit price FROM those fields, so it always reproduces). The 10 OUT-OF-BAND multibuy_unpriced rows of flagged-2026-09-23: 4 real-economics (Dove Hand Wash x2 12 fl oz $5.99 BOGO 40% = 0.3993/fl oz, Dove Shampoo x2 12 fl oz $8.99 = 0.5993), 2 parse-basis-bug ('Dove Beauty Bar Soap Sensitive, 6 Ea' $13.59 -> $10.872 and 'Dove Replenish ... Beauty Bar 6 Ea' $13.99 -> $11.192 are PER-PACK prices on a per-bar commodity, 6 bars never divided: true 1.812 and 1.865/bar), 2 wrong-product ('Reese's Mini Pumpkins Chocolate Candy & Peanut Butter Creme 7 Oz', 'Reese's Peanut Butter Skeletons 8.1 Oz' on peanut-butter), 2 undecidable from the row (Dove Cleansing Bar 5 Oz $7.99; Dove deodorant 1.7 Oz $14.99)",
+    "compare-deals.ps1:3033-3037 labels every out-of-band multibuy 'likely a bad multibuy size/regular parse'; check-ad-cycles.ps1:3298 turns each into a MULTIBUY key and :3529 pages them under 'these still published', which is false for a refused row",
+    "peanut-butter admits 22 candy-like candidates today (candidates-2026-09-23), 2 priced (Reese's Pieces 0.3125, Snickers mix 0.4992); none holds a cell (peanut-butter cells 0.0863-0.1556). honey admits Aldi 'Nature S Nectar Honey Crisp Apple Cider 64 FL OZ' (a below-floor backlog key)"
+   ],
+   "surface_fix": {
+    "what": "exclude the candy and cider shapes",
+    "files": [
+     "grocery/commodities.json"
+    ],
+    "exact_change": "peanut-butter.exclude += '\\bcand(?:y|ies)\\b', '\\bpumpkins?\\b', '\\bskeletons?\\b', '\\bprotein\\s+(?:shake|powder)\\b', '\\bflapjacks?\\b'; honey.exclude += '\\bhoney\\s+crisp\\b'"
+   },
+   "root_cause": "the multibuy branch prices an each-unit commodity per PACK when the pack count is in the name ('6 Ea') rather than the size field, and then blames every band refusal on the parse, so a real premium sale and a real basis bug page identically as NEW price flags and neither reaches the right owner",
+   "root_fix": {
+    "what": "resolve the pack count, then say which half a refusal is",
+    "files": [
+     "grocery/compare-deals.ps1",
+     "grocery/check-ad-cycles.ps1",
+     "grocery/test-auditors.ps1"
+    ],
+    "exact_change": "compare-deals multibuy each-basis: when the commodity unit is each and the name states N (ea|ct|count|pk|pack|bars) with N>1 and the size field states no count, divide the multibuy price by N (resolve by proof as the Aldi builder does: refuse, never guess, when name and size disagree). At :3035 the reason names its half: 'OUT-OF-BAND on a complete basis (the band refuses a real price; see band review)' vs 'OUT-OF-BAND with an unresolved pack count (review the capture)'. check-ad-cycles:3298 keys only the unresolved half as MULTIBUY price flags; the complete-basis half goes to audit-band-refusals' open rows. :3529 says 'not published' for MULTIBUY lines"
+   },
+   "prior_closes": [
+    "2026-08-31-8018b5",
+    "2026-09-01-b7da16",
+    "2026-09-02-19e1c3",
+    "2026-09-04-def37c",
+    "2026-09-05-521f1c",
+    "2026-09-06-24ac66",
+    "2026-09-07-05e4c3",
+    "2026-09-09-9b1f92",
+    "2026-09-10-b91a0a",
+    "2026-09-11-3b246c",
+    "2026-09-18-61f76c",
+    "2026-09-19-fccb69"
+   ],
+   "prevention": {
+    "source": [
+     "grocery/compare-deals.ps1",
+     "grocery/check-ad-cycles.ps1"
+    ],
+    "what": "the producer of the multibuy_unpriced reason and the pager that turns it into a price flag",
+    "exact_change": "as root_fix.exact_change"
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "routing: plan-2026-09-25-15.routing.json (the 15 names that leave peanut-butter and honey land on no commodity; a 10-token variant re-landed 5 names on chocolate-chips, honey and rice and evicted SKIPPY Super Chunk, so it was cut to 5 tokens); engine: all 72 multibuy_unpriced rows of flagged-2026-09-23 read one by one",
+    "affected_now": 10,
+    "names": [
+     "Dove Beauty Bar Soap Sensitive, 6 Ea",
+     "Dove Replenish Dragon Fruit & Coconut Cream Scent Beauty Bar 6 Ea",
+     "Reese's Mini Pumpkins Chocolate Candy & Peanut Butter Creme 7 Oz",
+     "Reese's Peanut Butter Skeletons 8.1 Oz",
+     "Nature S Nectar Honey Crisp Apple Cider 64 FL OZ",
+     "M&M's Peanut Butter Chocolate Candies Sharing Size 9.6 Oz",
+     "Premier Protein 30g High Protein Shake, Chocolate Peanut Butter"
+    ],
+    "risk": "the pack-count division applies only to each-unit multibuy rows with a name count and no size count, 2 of 72 multibuy rows today. The two Dove bar packs become 1.812 and 1.865/bar, inside the 0.19976-4.994 band, and could price bar-soap @ Family Fare only if cheaper than its 0.9988 (they are not)",
+    "cell_effects": [],
+    "cell_effects_note": "no cell moves: bar-soap Family Fare stays 0.9988 (Irish Spring 8 ea); hand-soap 0.0998 and shampoo 0.0993 at Family Fare stay (Dove still refused by the ceiling pending Q-derived-ceiling); peanut-butter and honey cells hold none of the leaving names"
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+   "proof": {
+    "guard_or_fixture": "grocery/compare-deals.ps1 -SelfTest (multibuy basis) and grocery/test-auditors.ps1 (REVIEW-DECISION and SANITY-PAGER regions of check-ad-cycles against frozen state)",
+    "must_fire_case": "frozen row 'Dove Beauty Bar Soap Sensitive, 6 Ea', 'Buy 1 get 1 40% off', regular 13.59, bar-soap (each): must price 1.812/bar, not 10.872; a multibuy row whose name says '6 Ea' and whose size field says '4 ct' must be refused as a count conflict and page as unresolved",
+    "clean_twin": "CLEAN TWIN: 'Dove Hand Wash, Antibacterial 12 Fl Oz' BOGO 40% $5.99 still computes 0.3993/fl oz and is filed as a complete-basis band refusal, NOT a MULTIBUY price flag; 'Reese's Creamy Peanut Butter 18 Oz' still routes to peanut-butter",
+    "fixture_occurrences": [
+     "2026-08-31-8018b5: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Achiote Paste|wow; SANITY|Adobo seasoning|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; its 3 MULTIBUY line(s) must now name their half (unresolved pack count vs complete-basis band refusal)",
+     "2026-09-01-b7da16: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|All-Purpose Cleaner|wow; SANITY|Bananas|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-02-19e1c3: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Broccoli (fresh)|wow; SANITY|Cajun / Creole Seasoning|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-04-def37c: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Oats / Oatmeal|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-05-521f1c: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Bouillon (cubes / granules / base)|outlier and |wow) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-06-24ac66: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Aluminum Foil|wow; SANITY|Anaheim Peppers|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-07-05e4c3: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Food Storage Bags (gallon)|wow; SANITY|Laundry Detergent Pods|wow) replayed through the REVIEW-DECISION and SANITY-PAGER regions; its 1 MULTIBUY line(s) must now name their half (unresolved pack count vs complete-basis band refusal)",
+     "2026-09-09-9b1f92: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Baby Potatoes|wow; SANITY|Donuts|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-10-b91a0a: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Donuts|wow; SANITY|Whole Coconut|outlier) replayed through the REVIEW-DECISION and SANITY-PAGER regions; its 4 MULTIBUY line(s) must now name their half (unresolved pack count vs complete-basis band refusal)",
+     "2026-09-11-3b246c: the flag set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (first: SANITY|Shrimp (frozen, raw)|outlier and |wow) replayed through the REVIEW-DECISION and SANITY-PAGER regions; no MULTIBUY line, so a regression row whose dispositions must not move",
+     "2026-09-18-61f76c",
+     "2026-09-19-fccb69",
+     "2026-09-23-9459a1"
+    ],
+    "commands": [
+     "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the compare-deals and check-ad-cycles hunks and the two exclude lines",
+   "do_not_touch": [
+    "price-bands.json and the band derivation (Q-derived-ceiling is Brad's)"
+   ],
+   "leaves_open": "4 real premium Dove sales stay refused by the derived ceiling until Brad rules Q-derived-ceiling; 2 undecidable Dove rows (cleansing bar 5 oz, deodorant 1.7 oz) stay on the unresolved half",
+   "leaves_open_occurrences": 6,
+   "leaves_open_followup": "Q-derived-ceiling",
+   "resolution_note": "The multibuy branch now divides a named pack count and says which half a refusal is; only unresolved parses page as price flags. Candy and cider shapes leave peanut-butter and honey. The Dove wash and shampoo sales are real and wait on Brad's ceiling ruling.",
+   "publish_batch": 1,
+   "lane": "money",
+   "est_tool_calls": 55,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-22-8d2ad5",
+   "subject": "Triage residual: rows the derived bands newly admit that were not read (4 cheap, 1,211 dear)",
+   "classification": "parse-basis-bug",
+   "evidence": [
+    "LANE MEASUREMENT CONFIRMED for its 4 rows (0 hold a cell) and EXTENDED: a count-basis read of all 464 each-unit store cells on comparison-2026-09-23 finds 2 live wrong-basis cells no bar flags: tea-bags @ Aldi 'Benner Black Tea Bags 100 CT' size field '24 ct' -> per-24-pack 0.0621 (the name says 100: 0.0149, which would CROWN tea-bags over Walmart 0.0204); facial-tissues @ Aldi 'Willow Facial Tissue 144 CT' size field '160 ct' -> 0.0087 (144: 0.0097); both as_of 2026-08-05",
+    "the cheap side of the band backlog is this class: 13 of 1,091 keys are BELOW the floor and 10 of those are a sub-unit count read as the unit (Walmart paper-towels x6 at 0.0253-0.0304 per 'each' from sheet counts, e.g. '2 Triple Rolls, 123 Sheets per Roll' 246 ct; bread x3 per slice from '20 Count'; Baker's parchment 'Pre-Cut Sheets 35 ct')",
+    "the same class keeps Walmart off two staples: Walmart paper-towels 133 of 136 rows and toilet-paper 156 of 157 rows carry a SHEET count as their size; neither commodity has a Walmart cell"
+   ],
+   "surface_fix": {
+    "what": "no per-cell fix: the refusal below is the fix",
+    "files": [
+     "grocery/compare-deals.ps1"
+    ],
+    "exact_change": "see root_fix"
+   },
+   "root_cause": "the engine takes an each-commodity's count from the size field without checking it against a count the name states, so a card count that disagrees with its own name (Aldi) or a sub-unit count (sheets, slices) becomes the basis; below the derived floor the band hides it, inside the floor nothing reads it",
+   "root_fix": {
+    "what": "a COUNT-CONFLICT refusal in the one refusal chain",
+    "files": [
+     "grocery/compare-deals.ps1",
+     "grocery/pricing-math-lib.ps1"
+    ],
+    "exact_change": "Get-FirstRefusal gains 'count-conflict' ahead of 'band': for an each-unit commodity, when the name states a pack count N (ct|count|pk|pack|ea|bags|rolls) and the basis count M comes from the size field with M != N and neither is a multiple of the other (the 'N pk., M ct.' total form stays legal), or the only count present is a sub-unit ('sheets per roll', 'N count' on a loaf), refuse with basis 'COUNT-CONFLICT' and flag it (the store falls through to its next row). No band, no threshold"
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "engine change, no routing change: every each-unit store cell on comparison-2026-09-23 (464) re-read for a name count vs basis count; 5 flagged by a crude regex, 3 of them benign totals ('1750 ct., 3 pk.', '6 pk., 3000 ct.', a truncated Clorox name), 2 real",
+    "affected_now": 2,
+    "names": [
+     "Benner Black Tea Bags 100 CT (Aldi, tea-bags)",
+     "Willow Facial Tissue 144 CT (Aldi, facial-tissues)"
+    ],
+    "risk": "the refusal must not fire on count-x-size totals (Q-tips 1750 ct 3 pk, Marathon 6 pk 3000 ct) or on grade counts ('31-40 ct' shrimp is a size grade on a per-lb commodity); the developer runs the implementation over every row of candidates-2026-09-23 and lists each winning row it refuses, bar: exactly the two above",
+    "cell_effects": [
+     {
+      "commodity": "tea-bags",
+      "store": "Aldi",
+      "before": 0.0621,
+      "after": null,
+      "note": "falls to Aldi's next tea-bags row or absent"
+     },
+     {
+      "commodity": "facial-tissues",
+      "store": "Aldi",
+      "before": 0.0087,
+      "after": null,
+      "note": "falls to Aldi's next row (Willow Facial Tissue With Lotion 65 ct is 0.0192) or absent"
+     }
+    ]
+   },
+   "claimed_by_earlier": [],
+   "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+   "proof": {
+    "guard_or_fixture": "grocery/compare-deals.ps1 -SelfTest (Get-FirstRefusal cases)",
+    "must_fire_case": "frozen Aldi row 'Benner Black Tea Bags 100 CT', $1.49, size '24 ct' on tea-bags must refuse COUNT-CONFLICT; frozen Walmart row 'Bounty Paper Towels Select-A-Size White, 2 Triple Rolls, 123 Sheets per Roll', $6.97, 246 ct on paper-towels must refuse COUNT-CONFLICT (not OUT-OF-BAND)",
+    "clean_twin": "CLEAN TWIN: 'Marathon Embossed 1-Ply White Beverage Napkins, 6 pk., 3000 ct.' still prices per-3000-pack; 'Kroger Facial Tissue' 160 ct still prices; 'Member's Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct' 3 lb still prices per lb",
+    "commands": [
+     "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+     "powershell -File grocery\\test-guards.ps1"
+    ]
+   },
+   "rollback": "revert the Get-FirstRefusal hunk; the two Aldi cells return",
+   "do_not_touch": [
+    "band floors and ceilings",
+    "the paper goods' unit (per roll vs per sheet is Q-roll-goods-basis)"
+   ],
+   "leaves_open": "Walmart paper-towels and toilet-paper stay without a cell (289 rows refused, now for the right reason) until Brad rules Q-roll-goods-basis; a wrong price under both bars that is NOT a count conflict still has no detector (4b973e R2 residual)",
+   "leaves_open_occurrences": 289,
+   "leaves_open_followup": "Q-roll-goods-basis",
+   "resolution_note": "A size-field count that disagrees with the name's own count is refused as COUNT-CONFLICT instead of pricing a cell. Two live Aldi cells fell to their next row (tea bags priced as 24 instead of 100, tissues as 160 instead of 144).",
+   "publish_batch": 1,
+   "lane": "money",
+   "est_tool_calls": 45,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-22-0c812e",
+   "subject": "Triage residual: band-refused rows no basis error explains (backlog 1,091 keys + open)",
+   "classification": "needs-brad",
+   "evidence": [
+    "backlog 1,091 keys over 187 commodities, every key re-read in flagged-2026-09-23 with its price and band: 1,077 ABOVE the derived ceiling (98.7%), 13 below the floor, 1 other; top: dog-treats 59, shampoo 54, soda 42, hand-soap 36, toothbrushes 32 (all above). The 13 below are 8d2ad5's count class (10), a wrong product (honey 'Nature S Nectar Honey Crisp Apple Cider', excluded under 9459a1), a K-cup ad line (Hy-Vee 'Keurig coffee, 8 or 10 ct., 12 oz.') and a Walmart taco-seasoning shaker"
+   ],
+   "root_cause": "the derived ceiling refuses real premium prices and dear wrong products alike; which of those the board should admit is a ruling about what a commodity MEANS, not a code fact",
+   "resolution_note": "Needs Brad (Q-derived-ceiling, Q-roll-goods-basis). The cheap side is worked in this plan (8d2ad5 count conflicts, the honey exclude under 9459a1). The dear side (1,077 keys) waits on the ruling; it no longer pages (57b66b).",
+   "status": "needs-brad",
+   "lane": "money"
+  },
+  {
+   "queue_id": "2026-09-19-dc1b5b",
+   "subject": "Grocery: board-verification residuals after 2026-09-19 (641ec6)",
+   "classification": "parse-basis-bug",
+   "evidence": [
+    "LANE MEASUREMENT TESTED: residual (4) Fareway ranges is mostly SHIPPED: pricing-math-lib.ps1:217 takes 'the least favourable reading' since 2026-09-22 (plan-2026-09-22-5), and Fareway marshmallows now prices 10 oz (10-10.5), cereal 19.2 oz (19.2-25.9), butter 13 oz. COUNT ranges escape it: storage-bags @ Fareway 'Bright Essentials Storage Bags' size '25-42 ct' prices per-42-pack 0.095 (least favourable 3.99/25 = 0.1596). 35 ranged cells on the board, 1 count range among them",
+    "residual (6): Test-PieceSize read Sam's '12-pack of 5.8 oz personal pizzas' as 69.60 oz pieces, 1 occurrence, held by a known-wrong ruling; (5) contested routing is now the matching worklist's contested kind (6 undecided today, owned there); (1)-(3) are re-measured at the next verification (the newest run is board 2026-09-17)"
+   ],
+   "surface_fix": {
+    "what": "least favourable count in a count range; a pack total is not a piece",
+    "files": [
+     "grocery/pricing-math-lib.ps1",
+     "grocery/compare-deals.ps1"
+    ],
+    "exact_change": "the each-count path (pricing-math-lib.ps1 near :205) applies the same ascending-range rule as the weight path and takes the SMALLER count; Test-PieceSize divides a Sam's 'N pk., X oz.' total by N before comparing to min_piece_oz"
+   },
+   "root_cause": "the 2026-09-22 least-favourable rule was written in the size path, and the each-count path returns first, so a count range still takes its most favourable end",
+   "root_fix_none_because": "moving the count range onto the same rule IS the class fix for residual 4; residual 6 is one parse with one occurrence",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "engine change, no routing change: every store cell of comparison-2026-09-23 read for a size range (35 cells)",
+    "affected_now": 1,
+    "names": [
+     "Bright Essentials Storage Bags (Fareway, 25-42 ct)"
+    ],
+    "risk": "must not touch '31-40 ct' shrimp (a grade on a per-lb commodity), '10-1 oz' count-x-size (hot cocoa) or '22-37 lbs' diaper sizes; the developer lists every row whose basis changes over candidates-2026-09-23, bar: storage-bags|Fareway plus rows that hold no cell",
+    "cell_effects": [
+     {
+      "commodity": "storage-bags",
+      "store": "Fareway",
+      "before": 0.095,
+      "after": 0.1596
+     }
+    ]
+   },
+   "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+   "proof": {
+    "guard_or_fixture": "grocery/compare-deals.ps1 -SelfTest (pricing-math range cases)",
+    "must_fire_case": "frozen 'Bright Essentials Storage Bags' $3.99 size '25-42 ct' on storage-bags must price 0.1596/bag (25), not 0.095",
+    "clean_twin": "CLEAN TWIN: 'Member's Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct' 3 lb still prices 6.99/lb; 'Fireside Marshmallows' 10-10.5 oz still prices at 10 oz",
+    "commands": [
+     "powershell -File grocery\\compare-deals.ps1 -SelfTest"
+    ]
+   },
+   "rollback": "revert the pricing-math-lib and Test-PieceSize hunks",
+   "leaves_open": "(1) aging 12, (2) channel 7, (3) not-cheapest 7 of 36 defects wait on the next board verification (about 2026-10-03); (5) contested routing lives on the matching worklist",
+   "leaves_open_occurrences": 26,
+   "leaves_open_followup": "2026-09-19-dc1b5b",
+   "resolution_note": "A count range now takes its least favourable end like a weight range (Fareway storage bags 0.095 -> 0.1596/bag), and a Sam's pack total is divided before the piece test. Aging, channel and not-cheapest are re-measured at the next verification.",
+   "publish_batch": 1,
+   "lane": "money",
+   "est_tool_calls": 30,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-23-dd290b",
+   "subject": "Triage residual: sourcing for 11 held recipes plus bacon-ends exclude and red chili",
+   "classification": "capture-gap",
+   "evidence": [
+    "LANE MEASUREMENT CONFIRMED (11 of 11 held, no commodity) and EXTENDED with rows: lo mein at Baker's 'Wei Chuan Organic Chinese Lo Mein' 16 oz $3.79, Family Fare 'Wel Pac Egg Noodles, Lo Mein 10 Oz' $2.59 (today on egg-noodles, index 214), Walmart 'Simply Asia Chinese Style Lo Mein Noodles, 14.0 oz Box' $4.96; glass noodles at Baker's 'O'Food Sweet Potato Glass Noodle' 3.5 oz $2.49 (today routed to sweet-potatoes, index 59); blackened at Walmart 'Tone's Blackened Seasoning, Kosher, 5.2 oz' $4.72, 'Cajun's Choice Blackened Seasoning 6.5oz' $6.96, Zatarain's 3 oz $4.28, Baker's Cajun's Choice 6.5 oz $8.79, Fareway 'Louisiana Fish Fry Products Blackened Cajun Seasoning' 2.5 oz $2.99 (today on cajun-seasoning, 413)",
+    "tandoori-seasoning EXISTS as a commodity with no Omaha capture; bacon ends is already a known-wrong ruling (bacon|Fareway|webster-city-bacon-ends)",
+    "f9c8ce fold-in measured: of its 26 real-substitute lines these edits cover 4 (Korean glass noodles x3, blackened x1); not zucchini (18), pepperoncini (3) or Fresh Red Chili (1)"
+   ],
+   "surface_fix": {
+    "what": "three commodities, one exclude",
+    "files": [
+     "grocery/commodities.json"
+    ],
+    "exact_change": "insert lo-mein-noodles, sweet-potato-glass-noodles and blackened-seasoning IMMEDIATELY BEFORE sweet-potatoes (index 59) with the includes and excludes in the routing artifact; bacon.exclude += '\\bbacon\\s+ends\\b'"
+   },
+   "root_cause": "a recipe food with no commodity cannot reach a board cell, and a new commodity has to sit ahead of the broader commodities that already take its names (egg-noodles, sweet-potatoes, cajun-seasoning)",
+   "root_fix_none_because": "adding the commodity is the class fix for each food; the recipe half (re-point bids, un-hold) is the same change's second step",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "plan-2026-09-25-15.routing.json: 63,687 names, new commodities measured at index 0; their only earlier owners were egg-noodles (214), sweet-potatoes (59) and cajun-seasoning (413), so index 59 routes identically",
+    "affected_now": 12,
+    "names": [
+     "Wei Chuan Organic Chinese Lo Mein",
+     "Wel Pac Egg Noodles, Lo Mein 10 Oz",
+     "Wel-Pac Lo Mein Egg Noodles, 10 Oz",
+     "Simply Asia Chinese Style Lo Mein Noodles (x2)",
+     "O'Food Sweet Potato Glass Noodle",
+     "Tone's Blackened Seasoning, Kosher, 5.2 oz",
+     "Cajun's Choice Blackened Seasoning 6.5oz",
+     "Cajun's Choice Blackened Seasoning & Rub",
+     "Zatarain's New Orleans Style Blackened Seasoning, 3.0 oz Can",
+     "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+     "Webster City Bacon Ends (bacon -> none)"
+    ],
+    "risk": "'Knorr Pasta Sides Teriyaki Lo Mein Noodles' is refused by the \\bsides?\\b exclude (measured in an earlier variant); the Aldi Fusia skillet meal by 'skillet'. No existing cell changes: egg-noodles Family Fare stays 0.1825, sweet-potatoes Baker's 1.33, cajun-seasoning Fareway 0.3113",
+    "cell_effects": [
+     {
+      "commodity": "lo-mein-noodles",
+      "store": "Baker's",
+      "before": "no cell - lo-mein-noodles is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 0.2369
+     },
+     {
+      "commodity": "lo-mein-noodles",
+      "store": "Family Fare",
+      "before": "no cell - lo-mein-noodles is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 0.259
+     },
+     {
+      "commodity": "lo-mein-noodles",
+      "store": "Walmart",
+      "before": "no cell - lo-mein-noodles is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 0.3543
+     },
+     {
+      "commodity": "sweet-potato-glass-noodles",
+      "store": "Baker's",
+      "before": "no cell - sweet-potato-glass-noodles is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 0.7114
+     },
+     {
+      "commodity": "blackened-seasoning",
+      "store": "Walmart",
+      "before": "no cell - blackened-seasoning is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 0.9077
+     },
+     {
+      "commodity": "blackened-seasoning",
+      "store": "Baker's",
+      "before": "no cell - blackened-seasoning is not a commodity on comparison-2026-09-23 (a NEW commodity)",
+      "after": 1.3523
+     }
+    ]
+   },
+   "claimed_by_earlier": [
+    {
+     "name": "Wel Pac Egg Noodles, Lo Mein 10 Oz",
+     "claimed_by": "egg-noodles",
+     "index": 214,
+     "release_needed": "none: lo-mein-noodles placed before index 59 takes it first"
+    },
+    {
+     "name": "O'Food Sweet Potato Glass Noodle",
+     "claimed_by": "sweet-potatoes",
+     "index": 59,
+     "release_needed": "none if placed before 59; placed after 59 it never routes"
+    },
+    {
+     "name": "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+     "claimed_by": "cajun-seasoning",
+     "index": 413,
+     "release_needed": "none: placed before 413"
+    }
+   ],
+   "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+   "proof": {
+    "guard_or_fixture": "apply-coverage-batch.ps1's gate, then the recipe chain's own audits (audit-ingredient-identity, the live-price contract)",
+    "must_fire_case": "after the batch, 'O'Food Sweet Potato Glass Noodle' routes to sweet-potato-glass-noodles and 'Wel Pac Egg Noodles, Lo Mein 10 Oz' to lo-mein-noodles; the 10 held recipes whose food now has a cell cost with no NO PRICE BASIS line",
+    "clean_twin": "CLEAN TWIN: 'Great Value Extra Wide Egg Noodles, 16 oz' still routes to egg-noodles, 'Kroger Sweet Potato' to sweet-potatoes, 'Slap Ya Mama Cajun Seasoning' to cajun-seasoning",
+    "commands": [
+     "powershell -File grocery\\apply-coverage-batch.ps1 (scratch clone)",
+     "powershell -File grocery\\audit-match-soundness.ps1"
+    ]
+   },
+   "rollback": "revert the commodities.json hunk; re-hold the 10 recipes with hold-recipe.ps1",
+   "do_not_touch": [
+    "tandoori-seasoning's rule (the gap is capture, not a rule)",
+    "bacon's known-wrong entry until the rebuilt board shows the exclude holds (retire_when vocabulary)"
+   ],
+   "leaves_open": "sheet-pan-tandoori-chicken-cauliflower stays held (no Omaha tandoori capture in 2026: search-term capture work); Fresh Red Chili still prices the jalapenos cell (1 line)",
+   "leaves_open_occurrences": 2,
+   "leaves_open_followup": "2026-09-23-dd290b",
+   "resolution_note": "Three commodities added ahead of the ones that took their names (lo mein noodles, sweet potato glass noodles, blackened seasoning), bacon ends excluded; 10 of 11 held recipes re-pointed and costed from board cells. Tandoori still has no Omaha capture.",
+   "publish_batch": 1,
+   "lane": "money",
+   "est_tool_calls": 55,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-25-f9c8ce",
+   "subject": "Triage residual: recipe ingredient identity union rows, 80 lines over 14 pairs",
+   "classification": "needs-brad",
+   "evidence": [
+    "zucchini's commodity is labelled 'Zucchini / Yellow Squash' and includes 'yellow\\s+squash' on purpose; its Walmart cell is 'Fresh Yellow Squash, Each' 1.52/lb and Family Fare 'Yellow Zucchini/Yellow Squash' 1.99/lb, so the 18 zucchini lines price yellow squash BY the commodity's design; 4 of the 26 substitute lines are covered by dd290b's new commodities"
+   ],
+   "root_cause": "whether a recipe's zucchini may be priced by the combined zucchini/yellow squash commodity, and whether a pasta shape is the same food, are rulings about what a commodity MEANS",
+   "resolution_note": "Needs Brad (Q-zucchini-pasta-substitutes). 4 of 26 substitute lines are fixed by 2026-09-23-dd290b; the rest wait on the ruling.",
+   "status": "needs-brad",
+   "lane": "money"
+  },
+  {
+   "queue_id": "2026-09-22-6e6a3b",
+   "subject": "Triage residual: 7 delegated guard audits still hold the whole board",
+   "classification": "infra",
+   "evidence": [
+    "LANE MEASUREMENT CONFIRMED: 3fa199419 ('Triage 6e6a3b: audit-known-wrong and audit-pack-basis scope their findings to a cell') is on origin/main 71099a45f; 7 board-scoped delegates remain: asof-evidence, board-mojibake, capture-encoding, coverage-regression, household-in-food, price-mode, tile-integrity"
+   ],
+   "surface_fix": {
+    "what": "one delegate at a time, each with its own fixture",
+    "files": [
+     "grocery/audit-household-in-food.ps1",
+     "grocery/audit-asof-evidence.ps1",
+     "grocery/audit-price-mode.ps1",
+     "grocery/audit-tile-integrity.ps1",
+     "grocery/audit-capture-encoding.ps1",
+     "grocery/test-hold-scope.ps1"
+    ],
+    "exact_change": "each prints QUARANTINE-CELL <id>|<store>|<value|selection> per finding (capture-encoding names its store: one capture file is one store) and 'QUARANTINE-SCOPE complete cells=N stores=M' before its marker only when every finding is named; TcHoldBoardMark 7 -> 2"
+   },
+   "root_cause": "the delegated audits predate the 2026-09-21 quarantine protocol, so a finding in any of them is BOARD scope and one bad cell holds the whole board",
+   "root_fix_none_because": "teaching each guard to scope IS the class fix, and Brad's rule makes it per-guard with its own fixture",
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "not a matching change: guards.ps1's delegate table (13 delegates, 7 board-scoped); only the exit-2 path of each audit changes",
+    "affected_now": 5,
+    "names": [
+     "household-in-food",
+     "asof-evidence",
+     "price-mode",
+     "tile-integrity (link half; its coverage half stays board)",
+     "capture-encoding (store scope)"
+    ],
+    "risk": "a scoped failure now quarantines instead of holding; the breaker (over 2% of priced cells or 10% of one store) still holds the board",
+    "cell_effects": []
+   },
+   "freshness": "measured 2026-09-25 against origin/main 71099a45f (3fa199419 landed)",
+   "proof": {
+    "guard_or_fixture": "a test-<audit>-scope.ps1 per guard, shaped like grocery/test-known-wrong-scope.ps1 and read through Get-TcChildQuarantineScope; grocery/test-hold-scope.ps1 live ratchet",
+    "must_fire_case": "per guard, its founding finding frozen (for household-in-food: a detergent row priced on a food commodity) exits 2 and is named as that id|store with scope complete",
+    "clean_twin": "CLEAN TWIN per guard: a finding the guard cannot pin to a cell still exits 2 and affirms no scope, so guards holds the board",
+    "commands": [
+     "powershell -File grocery\\test-hold-scope.ps1 -SelfTest",
+     "powershell -File grocery\\test-cell-quarantine.ps1"
+    ]
+   },
+   "rollback": "revert per guard; the mark rises by one per revert",
+   "leaves_open": "board-mojibake (a count ratchet, its finding is an aggregate) and coverage-regression (a store floor over the whole board) stay board-scoped",
+   "leaves_open_occurrences": 2,
+   "leaves_open_followup": "2026-09-22-6e6a3b",
+   "resolution_note": "Five more delegated audits name their cells or store (household-in-food, asof-evidence, price-mode, tile-integrity links, capture-encoding); the hold-scope mark fell 7 -> 2. board-mojibake and coverage-regression stay board-scoped by their nature.",
+   "publish_batch": null,
+   "lane": "ops",
+   "est_tool_calls": 68,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  },
+  {
+   "queue_id": "2026-09-22-817976",
+   "subject": "Triage residual: 16 non-Sam's tile links the chain cannot re-price",
+   "classification": "wrong-product",
+   "evidence": [
+    "LANE COUNT CONFIRMED (tile-integrity.json 08:14: 18 PRICE-DRIFT, Aldi 13, Walmart 2, Family Fare 1, Sam's 2) and its ROOT CAUSE REFUTED: 9 of the 16 are links to a SIBLING product, not stale prices: Aldi black-pepper board 'Stonemill Ground Black Pepper' vs link 'Stonemill Black Peppercorn Grinder 1.76 OZ', energy-drinks 'Summit Berry Waves Blue Raspberry' vs 'Summit Ultra Parade Gridlock', pasta-sauce 'Reggano Tomato, Basil And Garlic' vs 'Reggano Meat Pasta Sauce 24 OZ', potato-chips 'Clancy S Hot Chili Lime Ridged' vs 'Clancy S Loaded Bacon Cheddar Wavy', string-cheese 'Happy Farms Mozzarella String Cheese, 12 Count' vs 'Happy Farms Light String Cheese 10 OZ', yogurt 'Friendly Farms Nonfat Plain Yogurt 32 OZ' vs 'Friendly Farms Lowfat Cherry Yogurt 6 OZ', yukon-gold 'Farmer's Promise Yellow Potatoes' vs 'Bite Size Yellow Potatoes Bag 24 OZ', pickles 'Aldi Hamburger Dill Pickle Chips' vs 'Great Hamburger Pickle', Walmart french-bread 'Wheat Bakery French Bread' vs 'French Bakery Bread Loaf'; 7 are the same product at a moved price (Family Fare flour, Aldi asparagus, peanut-butter, pork-chops, strawberries, toaster-pastries, Walmart sweet-corn)",
+    "the same run prints 'ACCURACY OK - all 2298 price-graded links open the product the board names', so the accuracy grade passes siblings and only the drift ratchet sees them"
+   ],
+   "surface_fix": {
+    "what": "re-point or drop the 9 sibling links, refresh the 7 snapshots, record Sam's fall",
+    "files": [
+     "grocery/product-urls.json (through derive-links-from-prices.ps1 / prune-bad-links.ps1)",
+     "grocery/out/tile-integrity-baseline.json (audit-tile-integrity.ps1 -AcceptDrop, MAIN checkout)"
+    ],
+    "exact_change": "derive-links-from-prices scoped to the 16; audit-tile-integrity -AcceptDrop for Sam's 67 -> 2"
+   },
+   "root_cause": "the tile accuracy grade compares commodity and brand, not the product's variant words, so a link to a different flavour or form of the same brand passes as accurate and surfaces only as a price that does not match",
+   "root_fix": {
+    "what": "the accuracy grade refuses a sibling",
+    "files": [
+     "grocery/audit-tile-integrity.ps1",
+     "grocery/derive-links-from-prices.ps1"
+    ],
+    "exact_change": "a link is ACCURATE only when every content word of the board row's name (after brand, size and store-noise words) appears in the link's product name; otherwise it is a SIBLING fault (accuracy, not drift) and derive-links does not keep it"
+   },
+   "blast_radius": {
+    "measured_as": "routing",
+    "measured_by": "not a matching change: the 18 PRICE-DRIFT rows of tile-integrity.json read one by one. The new gate's effect over all 2,298 graded links is NOT measured here and is the developer's first read, against a bar written now: it must flag the 9 named siblings, pass the 7 same-product rows, and every other link it flags is read and listed before shipping",
+    "affected_now": 16,
+    "names": [
+     "the 9 sibling links above",
+     "the 7 same-product drifts above"
+    ],
+    "risk": "a containment test can flag legitimate links whose names are abbreviated on one side (Aldi 'Clancy S'); the developer reports the full flagged list first",
+    "cell_effects": []
+   },
+   "freshness": "tile-integrity.json 2026-09-25 08:14 over comparison-2026-09-23",
+   "proof": {
+    "guard_or_fixture": "grocery/audit-tile-integrity.ps1 -SelfTest",
+    "must_fire_case": "frozen tile black-pepper|Aldi, board 'Stonemill Ground Black Pepper' linked to 'Stonemill Black Peppercorn Grinder 1.76 OZ', must fail as SIBLING",
+    "clean_twin": "CLEAN TWIN: peanut-butter|Aldi 'Peanut Delight Creamy Peanut Butter 40 OZ' linked to 'Peanut Delight Creamy Peanut Butter 40 oz' stays ACCURATE (drift only)",
+    "commands": [
+     "powershell -File grocery\\audit-tile-integrity.ps1 -SelfTest",
+     "powershell -File grocery\\test-auditors.ps1"
+    ]
+   },
+   "rollback": "revert the audit and derive hunks; restore product-urls.json from git",
+   "leaves_open": "the 7 same-product drifts recur whenever a store moves a price between link refreshes (the drift ratchet watches them by design)",
+   "leaves_open_occurrences": 7,
+   "leaves_open_followup": "watch:grocery/audit-tile-integrity.ps1",
+   "resolution_note": "9 of the 16 were links to a sibling product (a grinder for ground pepper, meat sauce for tomato-basil); the accuracy grade now refuses a sibling and those links were re-pointed or dropped. The 7 true drifts were refreshed and Sam's fall to 2 recorded.",
+   "publish_batch": null,
+   "lane": "ops",
+   "est_tool_calls": 30,
+   "status": "planned",
+   "premise_verified": null,
+   "deviation": null,
+   "shipped_commit": null
+  }
+ ],
+ "ship_sequence": [
+  "1. money, BEFORE anything else: confirm plan-2026-09-25-16 step 1 has landed (resolve-match-worklist.ps1 -Decide toasted-sesame-seeds|Fareway|Krinos Tahini Ground Sesame Seeds = confirm; fresh-basil|Baker's = confirm; yellow-bell-pepper|Family Fare = confirm). If it has not, run exactly those three -Decide lines first (idempotent verdicts, owned by d493dd in plan-16): this plan's board chain must not run over the pending tahini RELEASE",
+  "2. money code, one commit per item, in a worktree: 9459a1, 8d2ad5, dc1b5b (compare-deals.ps1, pricing-math-lib.ps1, check-ad-cycles.ps1 :3298/:3529, test-auditors.ps1). Each item's -SelfTest and test-auditors green before the next",
+  "3. money rules, ONE apply-coverage-batch run in a scratch clone: the rule_changes of plan-2026-09-25-15.routing.json owned by 9459a1 and dd290b ONLY (honey, peanut-butter, bacon, the three new commodities before sweet-potatoes); diff its routing against the artifact's 27 moves owned by those items (peanut-butter->none 14, honey->none 1, bacon->none 1, ->blackened-seasoning 5, ->lo-mein-noodles 5, ->sweet-potato-glass-noodles 1); its crown/value report must match those items' cell_effects_estimated or each difference is reported. The d493dd and 3ba362 rule changes are plan-16's and do not ship here",
+  "4. board chain ONCE for this plan's publish batch 1, in a scratch clone, in check-ad-cycles.ps1's order (copy it from the script): repair-multipack-sizes -Apply, stamp-ad-as-of -Apply, compare-deals, update-history -Reconcile, audit-food-category (0 new), audit-name-drift / prune-bad-links / audit-name-drift again if product-urls.json changed, generate-board-overrides, build-deals-page, guards (exit 0 or 4 QUARANTINED, never held), audit-match-soundness read line by line then -Accept, audit-coverage-gaps (6 or fewer actionable), publish-deals-page",
+  "5. dd290b recipe half: re-point the 10 held recipes' bids to lo-mein-noodles / sweet-potato-glass-noodles / blackened-seasoning, cost, sync-recipesdb-cost, propagate -SlugsFile <the 10>, un-hold through hold-recipe.ps1; tandoori stays held",
+  "6. ops lane (no publish): 6e6a3b five guards one at a time (test-hold-scope mark 7 -> 2); 817976 sibling rule in audit-tile-integrity + derive-links, then -AcceptDrop for Sam's in the MAIN checkout",
+  "7. land every commit through ops\\push-main.ps1 (a chain change: never git push origin HEAD:main); verify on the live board with a cache-busting query: storage-bags Fareway 0.1596, tahini Fareway still 0.5619, lo-mein-noodles / sweet-potato-glass-noodles / blackened-seasoning present",
+  "8. close 9459a1, 8d2ad5, dc1b5b, dd290b, 6e6a3b, 817976 with their resolution notes; 0c812e and f9c8ce wait on Brad"
+ ],
+ "knowledge_consulted": [
+  "searched \"multibuy band refuses real price\", \"cheap wrong basis cell detector\", \"delegated audit quarantine scope\", \"first match wins release exclude\" (knowledge-search --estate --multi); searched \"routing simulation coverage gap worklist\", nothing applicable beyond the entries below",
+  "data-quality-craft/applies-here.md ('First-match-wins and freshness ranking let the wrong row take a board cell'): every exclude was measured for re-landings, which cut the peanut-butter set from 10 tokens to 5 and dropped the coconut exclude",
+  "memory:ruling-price-bands-derived (C--Codex store): bands are derived, never hand-typed, so the dear side is Q-derived-ceiling for Brad, not a band edit",
+  ".claude/rules/grocery.md ('A wrong product is a SELLER SHAPE, not a brand'; 'AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL': the count-conflict refusal resolves by proof or refuses, never guesses; 'A BAD CELL QUARANTINES ITSELF')",
+  ".claude/rules/measurement.md ('Write ONE ROW PER CASE PER ARM'; 'Record an INPUT FINGERPRINT'): the routing artifact carries every moved name, the corpus fingerprint and the six variants tried"
+ ],
+ "open_questions_for_brad": [
+  {
+   "id": "Q-derived-ceiling",
+   "item": "2026-09-22-0c812e",
+   "question": "1,077 of the 1,091 band-backlog rows are real-looking products ABOVE the derived price ceiling (shampoo 54, hand-soap 36, toothbrushes 32, the Dove sales that paged on 09-23). A dear row can only show as a store's own cell when that store has nothing cheaper. Should the ceiling keep refusing them?",
+   "options": [
+    "A: keep the ceiling as it is. The dear rows stay off the board, nothing pages, and the backlog is recorded as by-design (a dear wrong product, like candy on peanut-butter, also stays off).",
+    "B: drop the ceiling for rows whose basis is complete (the multibuy split in 9459a1 says which), keep the floor. Real premium prices can show as a store's cell; every dear wrong product then needs an identity exclude first, which is 1,077 decisions of matching work.",
+    "C: keep the ceiling but have it flag instead of refuse for everyday rows. Same board exposure as B, with a review list instead of an exclude backlog."
+   ],
+   "recommendation": "A: the board shows the cheapest real price per store, a premium row almost never changes what a shopper sees, and B or C trade the ceiling's quiet protection against dear wrong products for weeks of exclude work",
+   "consequence_of_no_answer": "nothing moves on the board; 0c812e stays open as a record"
+  },
+  {
+   "id": "Q-roll-goods-basis",
+   "item": "2026-09-22-0c812e",
+   "question": "Walmart lists paper towels and toilet paper by SHEET count, so 289 Walmart rows cannot be priced per roll and Walmart has no cell for either. The other stores are priced per roll, treating a double or mega roll the same as a regular one. How should these two be compared?",
+   "options": [
+    "A: per roll, as today. The engine reads the roll count from Walmart's names ('6 Triple Rolls'), Walmart gets a cell, and roll size is still ignored everywhere.",
+    "B: per 100 sheets. Every store needs a sheet count (Walmart gives it; most names say 'N Sheets per Roll'; rows without one are refused). The honest comparison, but it may drop cells at stores that never state sheets.",
+    "C: leave Walmart out of both commodities."
+   ],
+   "recommendation": "B is the more accurate comparison and A the cheaper change; either needs a count of which stores' rows state sheets before it ships",
+   "consequence_of_no_answer": "Walmart stays off two staples; its rows are refused as COUNT-CONFLICT (8d2ad5) rather than OUT-OF-BAND"
+  },
+  {
+   "id": "Q-zucchini-pasta-substitutes",
+   "item": "2026-09-25-f9c8ce",
+   "question": "Two 'is this the same food' calls hold 71 recipe lines: (1) zucchini's commodity is 'Zucchini / Yellow Squash' by design, so 18 zucchini lines are priced by yellow squash; (2) 37 pasta lines of five shapes (shells, spaghetti, ziti, orzo, fettuccine) are priced by one Great Value Penne. Also pepperoncini priced by banana pepper rings (3).",
+   "options": [
+    "A: accept both: a summer squash prices zucchini and any pasta shape prices pasta by the pound, recorded as reviewed same-food so the audit stops counting them.",
+    "B: split them: zucchini and yellow squash become two commodities, and each pasta shape its own commodity where Omaha stores carry it; recipes whose shape has no cell are held until one does.",
+    "C: split zucchini only, keep pasta shapes as one food."
+   ],
+   "recommendation": "C: a shopper can swap a pasta shape at the same price per pound, while zucchini and yellow squash are sold and priced separately at most stores",
+   "consequence_of_no_answer": "the lines keep pricing by the substitute and f9c8ce stays open"
+  }
+ ]
+}

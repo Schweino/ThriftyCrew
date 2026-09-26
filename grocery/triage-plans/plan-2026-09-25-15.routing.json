@@ -1,0 +1,497 @@
+{
+ "plan": "plan-2026-09-25-15.json",
+ "board_week": "comparison-2026-09-23 (built 2026-09-25 08:14:10; triage-due BOARD line 743 min old at measurement, not mid-build)",
+ "corpus": "ONE corpus: 569 files under C:\\Codex\\ThriftyCrew\\grocery\\out dated on/after 2026-06-25 (regular\\*.json, sams\\*.json, bakers\\*.json, fareway\\*.json and *.jsonl, *-deals-*.json, extra-deals-*.json, ads-*.json, comparison-2026-09-23.json, candidates-2026-09-23.json); every distinct string under a name/item/product/title/description key, 63,687 names, sha256 of the sorted name list starts b06dcbe4c172089c. No file was skipped (0 parse failures). Every section below reads this same list.",
+ "harness": "scratch route6.ps1 in the reviewer session scratchpad (one-off, not committed): dot-sources grocery/global-exclude-lib.ps1 (blob 8b35074860111b928f2cd818b509c929c338f8a2) and grocery/match-lib.ps1 (blob d69a4823d6e6fa906bd0243728f2a08260601736), builds New-CommodityMatcher over grocery/commodities.json at blob 70d66e56706a6baefcfd2d37aab326395a9b8161 (origin/main 71099a45f) BEFORE and over the same file with the rule_changes below applied AFTER, and routes every corpus name through Resolve-Commodity on both. Before and after use differently named variables ($mb, $ma); the positive control proves the after-matcher is the edited one.",
+ "rule_changes": [
+  {
+   "item": "2026-09-23-d493dd",
+   "change": "kalamata-olives.include += '\\bkalamata\\b.{0,25}\\bolives?\\b'"
+  },
+  {
+   "item": "2026-09-23-d493dd",
+   "change": "canned-pears.include += '\\bin\\s+(?:extra\\s+)?(?:light|heavy)\\s+syrup\\s+pears?\\b'"
+  },
+  {
+   "item": "2026-09-23-d493dd",
+   "change": "fruit-cups.include: replace 'mandarin\\s+oranges?\\b.{0,30}juice' with 'mandarin\\s+oranges?\\b.{0,40}\\b(?:cups?|bowls?|\\d+\\s*(?:ea|ct|count|pk|pack))\\b'; add '\\b\\d+\\s*(?:pk|pack|ct|count)\\b.{0,30}\\bmandarin\\s+oranges?\\b.{0,30}\\bjuice\\b' and 'mandarin\\s+oranges?\\b.{0,60}\\b[34](?:\\.\\d+)?\\s*oz\\b'; fruit-cups.exclude += '\\bgel\\s+bowls?\\b'"
+  },
+  {
+   "item": "2026-09-23-3ba362",
+   "change": "laundry-detergent.include += '\\bliquid\\s+laundry\\b'"
+  },
+  {
+   "item": "2026-09-23-3ba362",
+   "change": "hot-sauce.include += '\\b(?:cayenne|red\\s+devil|louisiana)\\b.{0,40}\\bpepper\\s+sauce\\b', '\\bpepper\\s+sauce\\b.{0,40}\\b(?:cayenne|red\\s+devil)\\b'"
+  },
+  {
+   "item": "2026-09-23-dd290b",
+   "change": "bacon.exclude += '\\bbacon\\s+ends\\b'"
+  },
+  {
+   "item": "2026-09-23-dd290b",
+   "change": "NEW lo-mein-noodles (oz): include '\\blo\\s*mein\\b.{0,20}\\bnoodles?\\b', '\\bnoodles?\\b.{0,20}\\blo\\s*mein\\b', '\\bchinese\\s+lo\\s*mein\\b'; exclude skillet, complete, \\bsides?\\b, \\bmeal\\b, \\bkit\\b, \\bbowl\\b, \\bfrozen\\b, \\bsauce\\b, \\bcup\\b plus tahini's shared exclude tail"
+  },
+  {
+   "item": "2026-09-23-dd290b",
+   "change": "NEW sweet-potato-glass-noodles (oz): include '\\bsweet\\s+potato\\s+(?:glass\\s+)?noodles?\\b', '\\bglass\\s+noodles?\\b', '\\bdangmyeon\\b', '\\bjapchae\\s+noodles?\\b'; exclude \\bbowl\\b, \\bcup\\b, \\bmeal\\b, \\bkit\\b, \\bfrozen\\b plus the shared tail"
+  },
+  {
+   "item": "2026-09-23-dd290b",
+   "change": "NEW blackened-seasoning (oz): include '\\bblackened\\b.{0,30}\\b(?:seasoning|rub|spice)\\b'; exclude \\bsalmon\\b, \\bchicken\\b, \\bfillets?\\b, \\bfrozen\\b plus the shared tail"
+  },
+  {
+   "item": "2026-09-23-9459a1",
+   "change": "honey.exclude += '\\bhoney\\s+crisp\\b'"
+  },
+  {
+   "item": "2026-09-23-9459a1",
+   "change": "peanut-butter.exclude += '\\bcand(?:y|ies)\\b', '\\bpumpkins?\\b', '\\bskeletons?\\b', '\\bprotein\\s+(?:shake|powder)\\b', '\\bflapjacks?\\b'"
+  }
+ ],
+ "placement": "The three new commodities were measured INSERTED AT INDEX 0. Their only earlier owners in the BEFORE routing were egg-noodles (214), sweet-potatoes (59) and cajun-seasoning (413), so inserting them immediately before sweet-potatoes (index 59) routes every corpus name identically; anywhere after index 59 would leave O'Food Sweet Potato Glass Noodle on sweet-potatoes.",
+ "names_routed": 63687,
+ "moved_count": 49,
+ "positive_control": {
+  "name": "Krinos Kalamata Pitted Olives, 35.27 oz.",
+  "expected": "kalamata-olives",
+  "observed": "kalamata-olives",
+  "before": "(none)"
+ },
+ "variants_tried": "6 runs: v1 fruit-cups narrowed to cups/bowls only (moved 4 real cup packs to mandarin-oranges), oven-cleaner widened and coconut \\bdal\\b (re-landed the dal on butternut-squash); v2 added pack-count patterns (pulled 5 Walmart multi-CAN packs into fruit-cups); v3 fruit-cups \\bgel\\b / can / jar excludes (evicted 11 Dole Fruit Bowls in Gel); v4 gel-bowls only; v5 added honey and a 10-token peanut-butter exclude (re-landed Quaker Chewy and Reese's baking chips on chocolate-chips, Honey Stinger on honey, bettergoods on rice, and evicted SKIPPY Super Chunk); v6 (this file) the 5-token peanut-butter set. Oven-cleaner widening and the coconut exclude were DROPPED on measurement.",
+ "moved": [
+  {
+   "name": "(2 pack) Pearls - Deli Olives Kalamata Pitted Greek Olives 4oz Tub.  Allergens Not Contained.",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "regular\\walmart-regular-2026-08-31.json"
+  },
+  {
+   "name": "(2 pack) Pearls Specialties Sliced Kalamata Greek Olives 6.7 oz. Jar. Major Allergens Not Contained.",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "regular\\walmart-regular-2026-08-31.json"
+  },
+  {
+   "name": "Arm & Hammer Liquid Laundry Clean Burst",
+   "before": "",
+   "before_ix": -1,
+   "after": "laundry-detergent",
+   "src": "regular\\family-fare-regular-2026-07-12.json"
+  },
+  {
+   "name": "Atkins Protein Shake, High, Chocolate Peanut Butter, Strong 4 Ea",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-13.json"
+  },
+  {
+   "name": "Cajun's Choice Blackened Seasoning & Rub",
+   "before": "",
+   "before_ix": -1,
+   "after": "blackened-seasoning",
+   "src": "regular\\bakers-regular-2026-07-24.json"
+  },
+  {
+   "name": "Cajun's Choice Blackened Seasoning 6.5oz",
+   "before": "",
+   "before_ix": -1,
+   "after": "blackened-seasoning",
+   "src": "regular\\walmart-regular-2026-08-06.json"
+  },
+  {
+   "name": "Dole In 100% Fruit Juice Mandarin Oranges 4 Ea",
+   "before": "mandarin-oranges",
+   "before_ix": 360,
+   "after": "fruit-cups",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges In 100% Fruit Juice",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges In Juice",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges in 100% Fruit Juice From Concentrate**",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges in 100% Fruit Juice From Concentrate**, 15 oz Can",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges in 100% Fruit Juice, 23.5 oz Jar",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges, In 100% Fruit Juice 23.5 Oz",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Dole Mandarin Oranges, in 100% Fruit Juice",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Fareway Halves in Heavy Syrup Pears",
+   "before": "",
+   "before_ix": -1,
+   "after": "canned-pears",
+   "src": "fareway\\fareway-shop-2026-08-30.jsonl"
+  },
+  {
+   "name": "Fareway Mandarin Oranges in 100% Juice",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Fareway Sliced in Extra Light Syrup Pears",
+   "before": "",
+   "before_ix": -1,
+   "after": "canned-pears",
+   "src": "fareway\\fareway-shop-2026-07-23.json"
+  },
+  {
+   "name": "Great Value Pitted Kalamata Greek Olives, 6.35 oz Jar",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "regular\\walmart-regular-2026-08-31.json"
+  },
+  {
+   "name": "Great Value Sliced Kalamata Greek Olives, 6.35 oz Jar",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "regular\\walmart-regular-2026-09-19.json"
+  },
+  {
+   "name": "KOS Organic Superfood Plant Chocolate Peanut Butter Protein Powder 2.4lbs.",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Kodiak Chocolate Peanut Butter Flapjack 2.36 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-20.json"
+  },
+  {
+   "name": "Krinos Kalamata Pitted Olives, 35.27 oz.",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "sams\\sams-deals-2026-09-19.json"
+  },
+  {
+   "name": "Louisiana Fish Fry Products Blackened Cajun Seasoning",
+   "before": "cajun-seasoning",
+   "before_ix": 413,
+   "after": "blackened-seasoning",
+   "src": "fareway\\fareway-shop-2026-08-31.jsonl"
+  },
+  {
+   "name": "M&M's Peanut Butter Chocolate Candies Sharing Size 8.6 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-11.json"
+  },
+  {
+   "name": "M&M's Peanut Butter Chocolate Candies Sharing Size 9.6 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-11.json"
+  },
+  {
+   "name": "M&M's Peanut Butter Minis Chocolate Candies Sharing Size 8.6 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-11.json"
+  },
+  {
+   "name": "Nature S Nectar Honey Crisp Apple Cider 64 FL OZ",
+   "before": "honey",
+   "before_ix": 79,
+   "after": "",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "O'Food Sweet Potato Glass Noodle",
+   "before": "sweet-potatoes",
+   "before_ix": 59,
+   "after": "sweet-potato-glass-noodles",
+   "src": "regular\\bakers-regular-2026-07-24.json"
+  },
+  {
+   "name": "Pearls Specialties Pitted Kalamata Greek Olives",
+   "before": "",
+   "before_ix": -1,
+   "after": "kalamata-olives",
+   "src": "regular\\bakers-regular-2026-08-14.json"
+  },
+  {
+   "name": "Premier Protein 30g High Protein Shake, Chocolate Peanut Butter, 11 fl. oz., 15 pk.",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Private Selection Premium Mandarin Oranges in Fruit Juice from Concentrate",
+   "before": "fruit-cups",
+   "before_ix": 244,
+   "after": "mandarin-oranges",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Reese's Milk Chocolate Peanut Butter Pumpkin, Halloween Candy Pack, 1.2 oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "fareway\\fareway-shop-2026-09-03.jsonl"
+  },
+  {
+   "name": "Reese's Milk Chocolate Peanut Butter Pumpkins Halloween Candy",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "fareway\\fareway-shop-2026-09-03.jsonl"
+  },
+  {
+   "name": "Reese's Mini Pumpkins Chocolate Candy & Peanut Butter Creme 7 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-21.json"
+  },
+  {
+   "name": "Reese's Peanut Butter Pumpkins 6 Ea",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-20.json"
+  },
+  {
+   "name": "Reese's Peanut Butter Skeletons 8.1 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-13.json"
+  },
+  {
+   "name": "Reese's Pieces Peanut Butter Candy 4 Oz",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-13.json"
+  },
+  {
+   "name": "Simply Asia Chinese Style Lo Mein Noodles",
+   "before": "",
+   "before_ix": -1,
+   "after": "lo-mein-noodles",
+   "src": "fareway\\fareway-shop-2026-08-30.jsonl"
+  },
+  {
+   "name": "Simply Asia Chinese Style Lo Mein Noodles, 14.0 oz Box",
+   "before": "",
+   "before_ix": -1,
+   "after": "lo-mein-noodles",
+   "src": "regular\\walmart-regular-2026-08-11.json"
+  },
+  {
+   "name": "Snickers, Snickers Almond, & Snickers Crunchy Peanut Butter Chocolate Halloween Candy, 35 Ct Bag",
+   "before": "peanut-butter",
+   "before_ix": 31,
+   "after": "",
+   "src": "ads-2026-09-23.json"
+  },
+  {
+   "name": "Tone's Blackened Seasoning, Kosher, 5.2 oz",
+   "before": "",
+   "before_ix": -1,
+   "after": "blackened-seasoning",
+   "src": "regular\\walmart-regular-2026-08-11.json"
+  },
+  {
+   "name": "Trappey's Cayenne Pepper Sauce 6 Fl Oz",
+   "before": "",
+   "before_ix": -1,
+   "after": "hot-sauce",
+   "src": "regular\\family-fare-regular-2026-07-30.json"
+  },
+  {
+   "name": "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz",
+   "before": "",
+   "before_ix": -1,
+   "after": "hot-sauce",
+   "src": "regular\\family-fare-regular-2026-07-30.json"
+  },
+  {
+   "name": "Trappey's Red Devil Cayenne Pepper Sauce, 12 oz Bottle",
+   "before": "",
+   "before_ix": -1,
+   "after": "hot-sauce",
+   "src": "regular\\walmart-regular-2026-08-06.json"
+  },
+  {
+   "name": "Webster City Bacon Ends",
+   "before": "bacon",
+   "before_ix": 5,
+   "after": "",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Wei Chuan Organic Chinese Lo Mein",
+   "before": "",
+   "before_ix": -1,
+   "after": "lo-mein-noodles",
+   "src": "regular\\bakers-regular-2026-07-24.json"
+  },
+  {
+   "name": "Wel Pac Egg Noodles, Lo Mein 10 Oz",
+   "before": "egg-noodles",
+   "before_ix": 214,
+   "after": "lo-mein-noodles",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Wel-Pac Lo Mein Egg Noodles, 10 Oz",
+   "before": "egg-noodles",
+   "before_ix": 214,
+   "after": "lo-mein-noodles",
+   "src": "candidates-2026-09-23.json"
+  },
+  {
+   "name": "Zatarain's New Orleans Style Blackened Seasoning, 3.0 oz Can",
+   "before": "",
+   "before_ix": -1,
+   "after": "blackened-seasoning",
+   "src": "regular\\walmart-regular-2026-08-11.json"
+  }
+ ],
+ "blind": {
+  "before": {
+   "timeout_ms": 250,
+   "timeouts": 0,
+   "quarantine_skips": 0,
+   "quarantined": [],
+   "could_not_look": []
+  },
+  "after": {
+   "timeout_ms": 250,
+   "timeouts": 0,
+   "quarantine_skips": 0,
+   "quarantined": [],
+   "could_not_look": []
+  }
+ },
+ "cell_effects_estimated": [
+  {
+   "commodity": "mandarin-oranges",
+   "store": "Hy-Vee",
+   "before": null,
+   "after": 0.2123,
+   "row": "Dole Mandarin Oranges In 100% Fruit Juice, 23.5 oz, $4.99 (candidates-2026-09-23, as_of 2026-08-12)"
+  },
+  {
+   "commodity": "mandarin-oranges",
+   "store": "Family Fare",
+   "before": null,
+   "after": 0.2327,
+   "row": "Dole Mandarin Oranges In Juice, 15 oz, $3.49 (as_of 2026-09-03)"
+  },
+  {
+   "commodity": "kalamata-olives",
+   "store": "Sam's Club",
+   "before": null,
+   "after": null,
+   "row": "Krinos Kalamata Pitted Olives, 35.27 oz, $6.42 ($0.182/oz, Sam's own unit price $0.18/oz): expected WITHHELD-UNPROVEN-CHANNEL (sams_fulfillment NONE, channel ''), as the Mezzetta Sam's row is today; if the contract admits it, it CROWNS kalamata-olives at 0.182 against Baker's 0.4271 and is real-economics"
+  },
+  {
+   "commodity": "canned-pears",
+   "store": "Fareway",
+   "before": null,
+   "after": null,
+   "row": "Fareway Halves in Heavy Syrup Pears 15.25 oz $1.44 (0.0944) and Sliced in Extra Light Syrup 15 oz $1.50: fareway-shop captures of 2026-07-23 and 2026-08-30 carry no per-row store stamp, so expected WITHHELD-UNPROVEN-STORE; if admitted, 0.0944 would crown canned-pears over Walmart 0.0959"
+  },
+  {
+   "commodity": "lo-mein-noodles",
+   "store": "Baker's",
+   "before": null,
+   "after": 0.2369,
+   "row": "Wei Chuan Organic Chinese Lo Mein 16 oz $3.79"
+  },
+  {
+   "commodity": "lo-mein-noodles",
+   "store": "Family Fare",
+   "before": null,
+   "after": 0.259,
+   "row": "Wel Pac Egg Noodles, Lo Mein 10 Oz $2.59"
+  },
+  {
+   "commodity": "lo-mein-noodles",
+   "store": "Walmart",
+   "before": null,
+   "after": 0.3543,
+   "row": "Simply Asia Chinese Style Lo Mein Noodles 14 oz $4.96 (Wel-Pac at Walmart is WITHHELD-UNPROVEN-CHANNEL)"
+  },
+  {
+   "commodity": "sweet-potato-glass-noodles",
+   "store": "Baker's",
+   "before": null,
+   "after": 0.7114,
+   "row": "O'Food Sweet Potato Glass Noodle 3.5 oz $2.49"
+  },
+  {
+   "commodity": "blackened-seasoning",
+   "store": "Walmart",
+   "before": null,
+   "after": 0.9077,
+   "row": "Tone's Blackened Seasoning 5.2 oz $4.72"
+  },
+  {
+   "commodity": "blackened-seasoning",
+   "store": "Baker's",
+   "before": null,
+   "after": 1.3523,
+   "row": "Cajun's Choice Blackened Seasoning & Rub 6.5 oz $8.79"
+  }
+ ],
+ "cells_checked_unchanged": "kalamata-olives Walmart 0.5232 and Baker's 0.4271; mandarin-oranges Aldi 0.0993, Walmart 0.1231, Baker's 0.1327, Fareway 0.1527; fruit-cups all 7 stores (every row that left fruit-cups was UNPRICED there, a weight on an each commodity); hot-sauce Family Fare 0.1658 (Trappey's 12 fl oz is 0.1825) and Walmart 0.0822; laundry-detergent Family Fare 0.1014 (A&H Liquid Laundry 43 oz is 0.144); egg-noodles Family Fare 0.1825; sweet-potatoes Baker's 1.33; cajun-seasoning Fareway 0.3113; bacon all stores (Webster City Bacon Ends is already known-wrong); honey and peanut-butter all stores (none of the 15 names that leave them holds a cell). These are ESTIMATES from the rows' own price and size; apply-coverage-batch's crown/value report is the measurement of record.",
+ "caveat": "cell effects are computed from the captured rows, not from a rebuilt board: capture selection (Select-FreshestCaptureRows) and the provenance contract decide which row survives. The developer's apply-coverage-batch run in a scratch clone is the cell measurement; any cell outside this list that moves is a deviation to report."
+}
