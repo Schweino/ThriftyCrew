@@ -2,6 +2,32 @@
     "note":  "The matching lane\u0027s decision ledger (plan-2026-09-22-9 b96f21). One row per worklist key: confirm (the claim or refusal is right), applied (a release/widen rule shipped through apply-coverage-batch), reverted (a gate refused it; the reason is kept), known-wrong, ad-line. A key here never re-enters the worklist and never pages again. Written by resolve-match-worklist.ps1 and apply-coverage-batch.ps1 -FromWorklist; edit only through resolve-match-worklist.ps1 -Decide.",
     "verdicts":  [
                      {
+                         "key":  "contested|all-purpose-cleaner||Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+                         "kind":  "contested",
+                         "commodity":  "furniture-polish",
+                         "claimer":  "all-purpose-cleaner",
+                         "store":  "",
+                         "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
+                         "date":  "2026-09-25",
+                         "reason":  "A multisurface cleaner, not a wood polish: all-purpose-cleaner is right. Its aerosol oz vs the floz unit is the engine\u0027s withhold (WITHHELD-UNPROVEN-CHANNEL), not a route question."
+                     },
+                     {
+                         "key":  "contested|block-cheese||Kroger Orange Rind Muenster Block Cheese",
+                         "kind":  "contested",
+                         "commodity":  "oranges",
+                         "claimer":  "block-cheese",
+                         "store":  "",
+                         "name":  "Kroger Orange Rind Muenster Block Cheese",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
+                         "date":  "2026-09-25",
+                         "reason":  "A Muenster block with an orange (annatto) rind: block-cheese is right; oranges is a lookalike word."
+                     },
+                     {
                          "key":  "contested|canned-corn||Simple Truth Organic No Salt Added Whole Kernel Super Sweet Corn",
                          "kind":  "contested",
                          "commodity":  "frozen-corn",
@@ -26,6 +52,45 @@
                          "by":  "triage-developer 2026-09-23 (plan-2026-09-22-9 labels)",
                          "date":  "2026-09-23",
                          "reason":  "Kroger 15 oz can: canned-corn is right (plan-2026-09-22-2, re-read 2026-09-23)"
+                     },
+                     {
+                         "key":  "contested|chickpeas||Deutsche Küche Lentil Chickpea or Harvest Potato",
+                         "kind":  "contested",
+                         "commodity":  "brown-lentils",
+                         "claimer":  "chickpeas",
+                         "store":  "",
+                         "name":  "Deutsche Küche Lentil Chickpea or Harvest Potato",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
+                         "date":  "2026-09-25",
+                         "reason":  "One ad line offering two products (lentil-chickpea or harvest potato); split per product at ingest (Q-adline-two-products)."
+                     },
+                     {
+                         "key":  "contested|deli-ham||Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
+                         "kind":  "contested",
+                         "commodity":  "sliced-cheese",
+                         "claimer":  "deli-ham",
+                         "store":  "",
+                         "name":  "Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
+                         "date":  "2026-09-25",
+                         "reason":  "One ad line offering four products (ham, turkey, chicken or cheese) plus a free-buns offer; split per product at ingest (Q-adline-two-products)."
+                     },
+                     {
+                         "key":  "contested|honey||Lay\u0027s Honey Barbecue Potato Chips",
+                         "kind":  "contested",
+                         "commodity":  "potato-chips",
+                         "claimer":  "honey",
+                         "store":  "",
+                         "name":  "Lay\u0027s Honey Barbecue Potato Chips",
+                         "verdict":  "release",
+                         "pattern":  "\\bpotato\\w*\\s+chip",
+                         "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
+                         "date":  "2026-09-25",
+                         "reason":  "Honey barbecue flavoured potato chips are potato chips, never honey (Baker\u0027s regular 2026-09-25, 7.75 oz). The honey rule claims them by array order; the weekly batch applies this exclude through apply-coverage-batch."
                      },
                      {
                          "key":  "coverage|apple-juice|Fareway|Old Orchard 100% Juice, Apple, Value Size",

@@ -62,6 +62,46 @@ try {
   _MT ('BAR (written before the build): 0 wrong decisions over the 24 frozen labels; decided ' + $decided + ' of 24, wrong ' + $wrong.Count + ' of ' + $decided) ($wrong.Count -eq 0) ($wrong -join ' ; ')
   _MT ('COVERAGE is printed with its denominator and is not zero (an all-abstain classifier would pass the bar by deciding nothing): decided ' + $decided + ' of 24') ($decided -gt 0) ([string]$decided)
 
+  # THE CONTESTED BAR (queue 2026-09-23-5aa22a, weekly lane plan-2026-09-25-8). Same bar as above, written before the
+  # labels: 0 wrong decisions among the keys the classifier decides, decided-of-N printed. The set: every NEW-CONTESTED
+  # name ad-cycle-log.txt printed from 2026-09-01 to 2026-09-25 (139 distinct) whose chain the soundness sweep could
+  # recompute on 2026-09-25 from the feeds on disk (41) and whose chain has ONE other commodity, and that the classifier
+  # then DECIDES (11 of the 41; 17 undecided, 12 ad-line, 1 multi, 98 not in today's feeds). Each label is the lane's
+  # reading of the product. 'none' = the food is neither commodity, so any decision is wrong.
+  # contested key: -Claimer is the WINNER (array order picked it), -Target the one other commodity.
+  $K = @{}; foreach ($kv in @(@('rotisserie-chicken', 'Rotisserie Chicken'), @('lemon-pepper-seasoning', 'Lemon Pepper Seasoning'), @('lemons', 'Lemons'), @('tea-bags', 'Tea Bags'), @('cinnamon-stick', 'Cinnamon Sticks'), @('ground-cinnamon', 'Ground Cinnamon'), @('adobo-seasoning', 'Adobo seasoning'), @('saffron', 'Saffron'), @('rice', 'White Rice'), @('bananas', 'Bananas'), @('oatmeal', 'Oats / Oatmeal'), @('block-cheese', 'Block Cheese'), @('oranges', 'Oranges'), @('honey', 'Honey'), @('potato-chips', 'Potato Chips'))) { $K[$kv[0]] = [pscustomobject]@{ id = $kv[0]; label = $kv[1] } }
+  foreach ($kid in 'apples', 'frosting', 'garlic', 'tomato-paste', 'coconut') { $K[$kid] = $C[$kid] }   # never $k: names are case-insensitive, so it IS $K
+  # winner | other | name | LABEL
+  $ccases = @(
+    @('rotisserie-chicken', 'lemon-pepper-seasoning', '(Hot) Freshness Guaranteed Lemon Pepper Rotisserie Whole Chicken, 2.25 lb', 'confirm'),
+    @('lemons', 'frosting', 'Betty Crocker Rich and Creamy Lemon Frosting', 'release'),
+    @('tea-bags', 'cinnamon-stick', 'Bigelow Cinnamon Stick Black Tea', 'confirm'),
+    @('garlic', 'tomato-paste', 'Hunt''s Tomato Paste with Basil Garlic and Oregano', 'release'),
+    @('apples', 'ground-cinnamon', 'Bakers Corner Fried Apples IN Cinnamon 22 OZ', 'none'),
+    @('adobo-seasoning', 'saffron', 'Goya Adobo All Purpose Seasoning with Saffron 16.5 oz', 'confirm'),
+    @('adobo-seasoning', 'saffron', 'Goya Adobo All Purpose Seasoning with Saffron 16.5oz', 'confirm'),
+    @('rice', 'coconut', 'Ben''s Original Rice, Coconut Jasmine 8.5 Oz', 'none'),
+    @('bananas', 'oatmeal', 'Quaker Protein Banana Nut Instant Oatmeal 6 Ea', 'release'),
+    @('block-cheese', 'oranges', 'Kroger Orange Rind Muenster Block Cheese', 'confirm'),
+    @('honey', 'potato-chips', 'Lay''s Honey Barbecue Potato Chips', 'release')
+  )
+  $cDecided = 0; $cWrong = New-Object System.Collections.Generic.List[string]; $cRelOk = 0; $cRelN = 0
+  foreach ($cs in $ccases) {
+    $r = Get-MatchClassification -Kind 'contested' -Name $cs[2] -Target $K[$cs[1]] -Claimer $K[$cs[0]]
+    Write-Output ('    ' + $r.decision.PadRight(9) + ' label=' + $cs[3].PadRight(8) + ' ' + $cs[2])
+    if ($r.decision -ne 'undecided') { $cDecided++; if ($r.decision -ne $cs[3]) { [void]$cWrong.Add($cs[2] + ' -> ' + $r.decision + ' (label ' + $cs[3] + ')') } }
+    if ($cs[3] -eq 'release') { $cRelN++; if ($r.decision -eq 'release') { $cRelOk++ } }
+  }
+  Write-Output ('    contested bar: decided ' + $cDecided + ' of ' + $ccases.Count + ', wrong ' + $cWrong.Count + ' of ' + $cDecided + $(if ($cWrong.Count) { ': ' + ($cWrong -join ' ; ') } else { '' }))
+  # The gate: a kind may DECIDE only when its labelled bar holds. Read the resolver's own list, never a copy of it.
+  function Test-ContestedMayDecide([string[]]$Kinds, [int]$WrongCount) { return (-not ($Kinds -contains 'contested')) -or ($WrongCount -eq 0) }
+  $rsSrc = [IO.File]::ReadAllText((Join-Path $root 'resolve-match-worklist.ps1'))
+  $dkM = [regex]::Match($rsSrc, '(?m)^\$DecidingKinds\s*=\s*@\(([^)]*)\)')
+  $liveKinds = @([regex]::Matches($dkM.Groups[1].Value, "'([a-z-]+)'") | ForEach-Object { $_.Groups[1].Value })
+  _MT ('MUST FIRE  contested added to the deciding kinds is refused while its labelled bar has a wrong decision (Bakers Corner Fried Apples IN Cinnamon confirmed to fresh apples): wrong ' + $cWrong.Count + ' of ' + $cDecided) (-not (Test-ContestedMayDecide @('coverage', 'semantic', 'contested') $cWrong.Count)) ($cWrong -join ' ; ')
+  _MT ('CLEAN TWIN  the resolver as shipped passes the same gate (its deciding kinds read from its source: ' + ($liveKinds -join ',') + ')') ($dkM.Success -and $liveKinds.Count -ge 1 -and (Test-ContestedMayDecide $liveKinds $cWrong.Count)) ($liveKinds -join ',')
+  _MT ('CLEAN TWIN  the contested release reading is right on every labelled release: ' + $cRelOk + ' of ' + $cRelN) ($cRelN -eq 4 -and $cRelOk -eq $cRelN) ([string]$cRelOk)
+
   # MUST FIRE / CLEAN TWIN on single rows
   $r = Get-MatchClassification -Kind 'coverage' -Name 'Mezzetta Sun-Dried Tomatoes' -Target $C['sun-dried-tomatoes'] -Claimer $C['turkey-lunchmeat']
   _MT 'MUST FIRE  Mezzetta Sun-Dried Tomatoes claimed by turkey-lunchmeat is release (never confirm)' ($r.decision -eq 'release' -and $r.pattern) ($r.decision + ' ' + $r.pattern)
