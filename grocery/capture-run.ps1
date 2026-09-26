@@ -2218,6 +2218,38 @@ if ($postDecision -eq 'publish') {
 } elseif ($postDecision -like 'hold:*') {
   Write-Output ('POST HELD (it ships after its data, never before): ' + $postDecision.Substring(5) + '. The deferral stays in out\post-deferred.json and the next run that ships its data publishes it.')
 }
+# ---- DOES EACH LIVE PAGE SAY WHAT ITS SHIPPED DATA SAYS? (2026-09-26, queue 2026-09-23-80f302 and 2026-09-25-22b1e8) ----
+# Everything above judges this run's own publish. None of it sees a page that fell behind by another road: 2026-09-24's
+# held commit landed LATER on another push, nothing publishes a post for a push it did not make, the deferral expired at
+# midnight, and the live post named board.json?v=780837d352 over a served a14a8c805c for two days with no page. The
+# tracker read "week of Sep 2" over a built "week of Sep 22" with its publisher's failure filtered out of this log. So ask
+# the LIVE pages, every run, after the post decision (a same-run publish is read, not raced): grocery\audit-live-page-parity.ps1.
+# Never fatal and never a hold: it reads two public pages and the feed. A divergence this run already paged as a failed
+# deferred publish or a pointer without its object is printed, not paged twice.
+try {
+  $lppOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-live-page-parity.ps1')
+  $lppRc = $LASTEXITCODE
+  $lppLines = @(@($lppOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(LIVE-PAGE-PARITY|live-page-parity)' } | ForEach-Object { ([string]$_).Trim() })
+  foreach ($l in $lppLines) { Write-Output ('  ' + $l) }
+  $lppAlready = @($script:FailedLaneRecs | Where-Object { [string]$_.lane -in @('deferred-post-publish', 'pointer-without-object') -and [string]$_.paged }).Count
+  if ($lppRc -eq 2) {
+    Add-FailedLane 'live-page-parity'
+    if ($lppAlready) { Write-Output '  live page divergence: already paged this run as the failed publish above, so not paged twice' }
+    else {
+      $lppSubj = "Grocery page does not match its shipped data - $today"
+      $lppBody = ("A live page no longer says what the data it was built from says, and nothing in this run published it. " +
+                  "grocery\audit-live-page-parity.ps1 (read after the post decision, up to 3 reads a minute apart) found:`n`n" +
+                  ((@($lppLines | Where-Object { $_ -match '^LIVE-PAGE-PARITY DIVERGED' })) -join "`n`n") +
+                  "`n`nThe board post is repaired only by publishing it from the board feed.thriftycrew.com serves (publish-deals-page re-checks that before writing); the tracker by publish-trend-index.ps1. Re-run the audit afterwards: exit 0 closes it.")
+      try { Send-Alert -Subject $lppSubj -Body $lppBody | Out-Null; Set-FailedLanePaged 'live-page-parity' $lppSubj $LASTEXITCODE } catch { Write-Output ('live-page-parity alert threw: ' + $_.Exception.Message) }
+    }
+  } elseif ($lppRc -ne 0) {
+    # Not a failed lane: a network blip on two page reads must not fail the run. It queues on the first sighting and mails
+    # on the second (hold_observations 2 in alert-registry.json), so a could-not-look is never silent and never a pass.
+    Write-Output ("  live page parity could not be judged (rc=$lppRc): unknown is not a pass")
+    try { Send-Alert -Subject ("Grocery live page parity could not be checked - $today") -Body ("grocery\audit-live-page-parity.ps1 exited $lppRc without finding a divergence, so whether the live board post and tracker match their shipped data is UNKNOWN. Its lines:`n`n" + ($lppLines -join "`n")) | Out-Null } catch { Write-Output ('live-page-parity blind alert threw: ' + $_.Exception.Message) }
+  }
+} catch { Write-Output ('live page parity threw (not fatal): ' + $_.Exception.Message) }
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------
 # `generated` ALONE CANNOT DETECT THE FAILURE THIS EXISTS FOR: export-feed stamps that field itself, at the
 # moment it runs. Every recipe-lane stage upstream is non-fatal try/catch, so if one throws, export-feed
