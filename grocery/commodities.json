@@ -8045,7 +8045,8 @@
                         "\\bwhole\\b",
                         "\\bcase\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bsirloin\\s+tip\\b"
                     ]
     },
     {
@@ -25280,7 +25281,9 @@
                         "\\bwith\\s+mashed\\s+potatoes\\b",
                         "\\bmac(?:aroni)?\\s+(?:\u0026|and|n)\\s+cheese\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bcase\\b(?!\\s*-?\\s*ready)",
+                        "\\bwhole\\b.{0,20}\\bchuck\\s+roll\\b"
                     ]
     },
     {
@@ -51546,7 +51549,10 @@
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bcream(?:y)?\\s+style\\b",
+                        "\\bhorseradish\\s+cream\\b",
+                        "\\bcreamy\\b"
                     ]
     },
     {
@@ -51554,7 +51560,6 @@
         "label":  "Enchilada Sauce",
         "unit":  "oz",
         "include":  [
-                        "\\bred\\s+chile\\s+sauce\\b",
                         "enchilada\\s+sauce"
                     ],
         "exclude":  [
@@ -53743,11 +53748,10 @@
     },
     {
         "id":  "chili-crisp",
-        "label":  "Chili Crisp / Chili Oil",
+        "label":  "Chili Crisp",
         "unit":  "oz",
         "include":  [
                         "chili\\s+crisp",
-                        "chil[il]\\s+oil",
                         "lao\\s+gan\\s+ma",
                         "chili\\s+onion\\s+crunch"
                     ],
@@ -53856,7 +53860,8 @@
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "^(?!.*\\bcrisp).*\\bchil[il]\\s+oil\\b"
                     ],
         "relax_global":  [
                              "\\bsauce\\b"
@@ -54782,7 +54787,7 @@
     },
     {
         "id":  "cajun-seasoning",
-        "label":  "Cajun / Creole Seasoning",
+        "label":  "Cajun Seasoning",
         "unit":  "oz",
         "include":  [
                         "(cajun|creole)\\s+seasoning",
@@ -54896,7 +54901,8 @@
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "^(?!.*\\bcajun\\b).*\\bcreole\\b"
                     ]
     },
     {
@@ -61458,7 +61464,8 @@
                         "horseradish\\s+sauce",
                         "creamy\\s+horseradish",
                         "cream\\s+style\\s+horseradish",
-                        "horseradish\\s+cream"
+                        "horseradish\\s+cream",
+                        "cream(?:y)?\\s+style\\b.{0,25}horseradish"
                     ],
         "exclude":  [
                         "\\bmustard\\b",
@@ -61470,7 +61477,7 @@
                         "\\bpotato\\b",
                         "\\bdressing\\b",
                         "\\bpretzel\\b",
-                        "\\bprepared\\b",
+                        "^(?!.*\\bcream(?:y)?\\s+style\\b).*\\bprepared\\b",
                         "\\broot\\b",
                         "beech\\s*nut",
                         "\\bgerber\\b",

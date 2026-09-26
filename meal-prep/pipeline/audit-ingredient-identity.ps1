@@ -324,6 +324,22 @@ if ($SelfTest) {
   # 8. A store listing two products is asked about both (the store -> product map keeps only the last).
   $k = KeysOf (CellRun @(Rw 'Zucchini' 'zucchini') @(Ln 'Zucchini' 'board:zucchini:walmart') (Ix @(Bd 'zucchini' @('Walmart', 'Fresh Yellow Squash, Each', 'Walmart', 'Fresh Zucchini, Each'))))
   Check 'MUST FIRE  a store that lists yellow squash before zucchini still names the squash row' ($k -contains 'cell|Zucchini|zucchini|walmart|freshyellowsquasheach') ($k -join ',')
+  # 9. Brad 2026-09-26, Q-2026-09-26-form-style B ("shape same, style own"): the FORM records on db\ingredients.json,
+  # frozen here verbatim with the real cell holders from the 2026-09-26 cell mark. A pasta shape is the same food;
+  # whole grain is not a shape, so the Baker's whole grain penne stays a finding.
+  $pastaSame = @{ identity_same_as = @([pscustomobject]@{ product = '^(?!.*\bwhole[\s-]*(?:grain|wheat)\b).*\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\b'; reason = 'a different shape of dry pasta is the same food by weight' }) }
+  $psx = Ix @(Bd 'pasta' @('Hy-Vee', 'Hy-Vee Penne Rigate', "Baker's", 'Kroger 100% Whole Grain Penne Rigate', "Sam's Club", 'Barilla Pasta Variety Pack, 1 lb., 6 pk.'))
+  $psl = @(Ln 'Pasta Shells' 'board:pasta:hyvee')
+  $k = KeysOf (CellRun @(Rw 'Pasta Shells' 'pasta') $psl $psx)
+  Check 'MUST FIRE  with no record, "Hy-Vee Penne Rigate" in the pasta cell is a finding for Pasta Shells' ($k -contains 'cell|Pasta Shells|pasta|hyvee|hyveepennerigate') ($k -join ',')
+  $k = KeysOf (CellRun @(Rw 'Pasta Shells' 'pasta' $pastaSame) $psl $psx)
+  Check 'MUST NOT FIRE  the pasta-shape record silences penne rigate and the variety pack for Pasta Shells' ((-not ($k -contains 'cell|Pasta Shells|pasta|hyvee|hyveepennerigate')) -and (@($k | Where-Object { $_ -like '*|samsclub|*' }).Count -eq 0)) ($k -join ',')
+  Check 'CLEAN TWIN  the same record leaves "Kroger 100% Whole Grain Penne Rigate" a finding (whole grain is not a shape)' (($k.Count -eq 1) -and ($k -contains 'cell|Pasta Shells|pasta|bakers|kroger100wholegrainpennerigate')) ($k -join ',')
+  $pinSame = @{ identity_same_as = @([pscustomobject]@{ product = '\bcrushed\s+pineapple\b'; reason = 'crushed and chunk are two cuts of the same canned pineapple' }) }
+  $pnx = Ix @(Bd 'canned-pineapple' @('Walmart', 'Great Value Canned Crushed Pineapple, 20 oz', 'Aldi', 'Sweet Harvest Pineapple Juice 46 FL OZ'))
+  $k = KeysOf (CellRun @(Rw 'Pineapple Chunks' 'canned-pineapple' $pinSame) @(Ln 'Pineapple Chunks' 'board:canned-pineapple:walmart') $pnx)
+  Check 'MUST NOT FIRE  the crushed-pineapple record silences the Walmart crushed can for Pineapple Chunks' (@($k | Where-Object { $_ -like '*|walmart|*' }).Count -eq 0) ($k -join ',')
+  Check 'CLEAN TWIN  the same record leaves a pineapple JUICE row in the cell a finding' (@($k | Where-Object { $_ -like '*|aldi|*' }).Count -eq 1) ($k -join ',')
 
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
@@ -430,7 +446,7 @@ if ($SelfTest) {
     Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
   } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 52) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 52 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 57) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 57 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)

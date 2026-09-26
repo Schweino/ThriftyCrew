@@ -515,6 +515,7 @@
     },
     {
         "item":  "Cheese Tortellini",
+        "identity_same_as":  [ { "product":  "\\bcheese\\s+tortelloni\\b", "reason":  "tortelloni is a larger shape of the same filled cheese pasta, priced by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own'))", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "cheese-tortellini",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -945,6 +946,7 @@
     },
     {
         "item":  "Fettuccine",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1706,6 +1708,7 @@
     },
     {
         "item":  "Orzo Pasta",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1757,6 +1760,7 @@
     },
     {
         "item":  "Pasta Shells",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1822,6 +1826,7 @@
     },
     {
         "item":  "Pineapple Chunks",
+        "identity_same_as":  [ { "product":  "\\bcrushed\\s+pineapple\\b", "reason":  "crushed and chunk are two cuts of the same canned pineapple, priced by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own'))", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "canned-pineapple",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2110,6 +2115,7 @@
     },
     {
         "item":  "Rotini Pasta",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "rotini-pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2264,6 +2270,7 @@
     },
     {
         "item":  "Spaghetti",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2597,6 +2604,7 @@
     },
     {
         "item":  "Ziti Pasta",
+        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",

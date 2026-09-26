@@ -61,3 +61,8 @@ silent stand-in, and only holds recipes where the stand-in really is a different
   commodity-registrar, then a board rebuild and the recost chain; recipes with no Omaha style capture held through
   `hold-recipe.ps1`; the mark is tightened after the rebuild.
 - **C:** B's style work plus five or six pasta-shape commodities and their captures before 42 recipes return.
+
+## Ruling (2026-09-26, Brad in chat)
+
+Q-2026-09-26-form-style: **"B: shape same, style own"** - a different pasta SHAPE is the same commodity; a different
+STYLE (cajun vs creole, salsa verde vs green chile, sauce styles, chili oil etc.) is its own.

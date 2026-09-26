@@ -3717,20 +3717,20 @@
                                                           "size":  "16 oz",
                                                           "verified":  "2026-09-02 DERIVED from the price row (same record the board priced)"
                                                       },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41470-tony-chachere-s-creole-seasoning-original-8-oz",
-                                                          "name":  "Tony Chachere\u0027s Creole Seasoning, Original",
-                                                          "price":  "$2.49",
-                                                          "size":  "8 oz",
-                                                          "verified":  "2026-09-09 DERIVED from the price row (same record the board priced)"
-                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/4YA42F1XS2EF",
                                                                   "name":  "Member’s Mark Cajun Seasoning, 22 oz.",
                                                                   "price":  "$9.98",
                                                                   "size":  "22 oz",
                                                                   "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                              }
+                                                              },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41470-tony-chachere-s-creole-seasoning-original-8-oz",
+                                                          "name":  "Tony Chachere\u0027s Creole Seasoning, Original",
+                                                          "price":  "$2.49",
+                                                          "size":  "8 oz",
+                                                          "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                      }
                                       },
                   "cake-mix":  {
                                    "commodity":  "cake-mix",
@@ -6080,12 +6080,6 @@
                                   },
                   "chili-crisp":  {
                                       "commodity":  "Chili Crisp / Chili Oil",
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/56132-dynasty-hot-chili-oil-spicy-5-5-oz",
-                                                      "price":  5.99,
-                                                      "size":  "5.5 oz",
-                                                      "name":  "Dynasty Hot Chili Oil, Spicy"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4223512/lee-kum-kee-chili-crisp-hot-honey-sauce",
                                                      "price":  6.49,
@@ -6093,13 +6087,6 @@
                                                      "name":  "Lee Kum Kee Chili Crisp Hot Honey Sauce",
                                                      "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                  },
-                                      "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/210072917",
-                                                      "name":  "Lao Gan Ma Fried Chili Oil, 7.41 oz",
-                                                      "price":  "$4.97",
-                                                      "size":  "7.41 oz",
-                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/lao-gan-ma-spicy-chili-crisp/0088941700004",
                                                            "name":  "Lao Gan Ma Spicy Chili Crisp",
@@ -6113,7 +6100,14 @@
                                                           "price":  "$9.99",
                                                           "size":  "8 oz",
                                                           "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                      },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/210072917",
+                                                      "name":  "Lao Gan Ma Fried Chili Oil, 7.41 oz",
+                                                      "price":  "$4.97",
+                                                      "size":  "7.41 oz",
+                                                      "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "chili-powder":  {
                                        "commodity":  "Chili Powder",
@@ -6401,7 +6395,7 @@
                                                               "name":  "Whole Beef Chuck Roll, Case, priced per pound",
                                                               "price":  "$6.97",
                                                               "size":  "lb",
-                                                              "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
+                                                              "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
                                                           }
                                   },
                   "cilantro":  {
@@ -13885,20 +13879,20 @@
                                                       "size":  "6.5 oz",
                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
                                                   },
-                                      "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/10535273",
-                                                      "name":  "Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Allergen-Free Gourmet Condiment",
-                                                      "price":  "$2.84",
-                                                      "size":  "9.5 oz",
-                                                      "verified":  "2026-09-01 DERIVED from the price row (same record the board priced)"
-                                                  },
                                       "Aldi":  {
                                                    "url":  "https://www.aldi.us/store/aldi/products/2683032-inglehoffer-horseradish-cream-style-9-5-oz",
                                                    "name":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
                                                    "price":  "$2.84",
                                                    "size":  "9.5 oz",
-                                                   "verified":  "2026-09-24 DERIVED from the price row (same record the board priced)"
-                                               }
+                                                   "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                               },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/10535273",
+                                                      "name":  "Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Allergen-Free Gourmet Condiment",
+                                                      "price":  "$2.88",
+                                                      "size":  "9.5 oz",
+                                                      "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                  }
                                   },
                   "horseradish-sauce":  {
                                             "commodity":  "Horseradish Sauce (creamy)",
@@ -21653,12 +21647,6 @@
                              },
                   "sirloin-steak":  {
                                         "commodity":  "sirloin-steak",
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387764-usda-choice-sirloin-tip-steak-1-each",
-                                                        "price":  7.99,
-                                                        "size":  "lb",
-                                                        "name":  "USDA Choice Sirloin Tip Steak"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
                                                        "name":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak",
@@ -21667,27 +21655,34 @@
                                                        "size":  "lb",
                                                        "verified":  "2026-08-10 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
-                                        "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/19115441-thin-sliced-black-angus-beef-sirloin-tip-steak-for-carne-asada-per-lb",
-                                                     "name":  "Thin Sliced Black Angus Beef Sirloin Tip Steak For Carne Asada Per LB",
-                                                     "price":  "$7.99",
-                                                     "size":  "lb",
-                                                     "verified":  "2026-09-12 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                        "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/179426904",
-                                                        "name":  "Beef Choice Angus Thin Sliced Sirloin Tip Steak, 0.85 - 1.6 lb Tray",
-                                                        "price":  "$10.67",
-                                                        "size":  "1.21 lb",
-                                                        "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/61EZCPH9RV60",
                                                                 "name":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks, priced per pound",
                                                                 "price":  "$9.97",
                                                                 "size":  "lb",
                                                                 "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
-                                                            }
+                                                            },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387764-usda-choice-sirloin-tip-steak-1-each",
+                                                        "name":  "USDA Choice Sirloin Tip Steak",
+                                                        "price":  "$7.99",
+                                                        "size":  "lb",
+                                                        "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/179426904",
+                                                        "name":  "Beef Choice Angus Thin Sliced Sirloin Tip Steak, 0.85 - 1.6 lb Tray",
+                                                        "price":  "$10.67",
+                                                        "size":  "1.21 lb",
+                                                        "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/national-beef-choice-top-sirloin-steak/0029258000000",
+                                                             "name":  "National Beef Choice Top Sirloin Steak",
+                                                             "price":  "$13.99",
+                                                             "size":  "lb",
+                                                             "verified":  "2026-09-26 DERIVED from the price row (same record the board priced)"
+                                                         }
                                     },
                   "sliced-cheese":  {
                                         "commodity":  "sliced-cheese",

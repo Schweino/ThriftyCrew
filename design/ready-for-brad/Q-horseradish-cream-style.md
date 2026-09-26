@@ -45,3 +45,8 @@ includes should be removed so the two rules stop disagreeing.
   Spring coarse cut as clean twin, then a board rebuild and the recipe recost chain for horseradish lines.
 - **A:** `resolve-match-worklist -Decide '<contested key>' -Verdict confirm`, and the dead cream-style includes are
   removed from horseradish-sauce.
+
+## Ruling (2026-09-26, Brad in chat)
+
+Q-horseradish-cream-style: **"horseradish=sauce"** - 'Inglehoffer Horseradish Cream Style 9.5 OZ' is
+horseradish-sauce, not horseradish.

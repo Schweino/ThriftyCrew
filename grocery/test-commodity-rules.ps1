@@ -529,6 +529,51 @@ $cases = @(
      why='MUST NOT FIRE banana pepper rings never reach pepperoncini (177835)' }
   @{ id='banana-peppers'; name='(2 pack) Bonnie Plants Green Sweet Banana Pepper Live Plant in Grower Pot'; expect='excluded'
      why='MUST FIRE a live pepper plant is not a jar of banana peppers (177835)' }
+  # Brad's rulings of 2026-09-26 (design/ready-for-brad/Q-2026-09-26-sirloin-tip-and-subprimal-case.md, "B: exclude
+  # both"; Q-horseradish-cream-style.md, "horseradish=sauce"; Q-2026-09-26-form-style.md, "B: shape same, style own").
+  # Names are the real cell holders on comparison-2026-09-23 and the identity cell mark of 2026-09-26.
+  @{ id='sirloin-steak'; name='Fresh Black Angus Sirloin Tip Steak'; expect='excluded'
+     why='MUST FIRE the Aldi sirloin tip (a round cut) held the sirloin-steak cell at $7.99/lb (8deaa4)' }
+  @{ id='sirloin-steak'; name='USDA Choice Sirloin Tip Steak'; expect='excluded'
+     why='MUST FIRE the Fareway sirloin tip held sirloin-steak at $7.99/lb (8deaa4)' }
+  @{ id='sirloin-steak'; name='Beef Choice Angus Thin Sliced Sirloin Tip Steak, 0.85 - 1.6 lb Tray'; expect='excluded'
+     why='MUST FIRE the Walmart sirloin tip held sirloin-steak at $8.82/lb (8deaa4)' }
+  @{ id='sirloin-steak'; name='Sirloin Tip, Case, priced per pound'; expect='excluded'
+     why='MUST FIRE the Sam''s sirloin tip case on the recipe-side mark (8deaa4)' }
+  @{ id='sirloin-steak'; name='National Beef Choice Top Sirloin Steak'; expect='included'
+     why='CLEAN TWIN top sirloin (a loin cut) stays on sirloin-steak past the tip exclude (8deaa4)' }
+  @{ id='sirloin-steak'; name='Fresh Petite Beef Sirloin Sizzle Steak'; expect='included'
+     why='CLEAN TWIN the Family Fare crown (a loin cut) keeps its cell (8deaa4)' }
+  @{ id='chuck-roast'; name='Whole Beef Chuck Roll, Case, priced per pound'; expect='excluded'
+     why='MUST FIRE the Sam''s whole subprimal case held the chuck-roast crown at $6.97/lb (8deaa4)' }
+  @{ id='chuck-roast'; name='Choice Black Angus Chuck Roast Per LB'; expect='included'
+     why='CLEAN TWIN the Aldi per-lb retail roast stays on chuck-roast (8deaa4)' }
+  @{ id='chuck-roast'; name='USDA Choice Boneless Chuck Roast'; expect='included'
+     why='CLEAN TWIN a plain retail chuck roast is untouched by the case exclude (8deaa4)' }
+  @{ id='horseradish'; name='Inglehoffer Horseradish Cream Style 9.5 OZ'; expect='excluded'
+     why='MUST FIRE the Aldi cream-style jar held the horseradish crown at $0.2989/oz (f655c7, a8448d)' }
+  @{ id='horseradish'; name='Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Allergen-Free Gourmet Condiment'; expect='excluded'
+     why='MUST FIRE the Walmart listing of the same creamy jar (a8448d)' }
+  @{ id='horseradish-sauce'; name='Inglehoffer Horseradish Cream Style 9.5 OZ'; expect='included'
+     why='MUST FIRE the cream-style jar lands on horseradish-sauce (a8448d)' }
+  @{ id='horseradish-sauce'; name='Inglehoffer Creamy Style Prepared Horseradish, 9.5 oz - Allergen-Free Gourmet Condiment'; expect='included'
+     why='MUST FIRE the Walmart creamy-style jar lands on horseradish-sauce past the prepared exclude (a8448d)' }
+  @{ id='horseradish'; name='Silver Spring Coarse Cut Prepared Horseradish'; expect='included'
+     why='CLEAN TWIN plain prepared horseradish stays on horseradish (a8448d)' }
+  @{ id='horseradish-sauce'; name='Silver Spring Coarse Cut Prepared Horseradish'; expect='no-include-match'
+     why='MUST NOT FIRE plain prepared horseradish never reaches horseradish-sauce (a8448d)' }
+  @{ id='cajun-seasoning'; name='Tony Chachere''s Creole Seasoning, Original'; expect='excluded'
+     why='MUST FIRE the Fareway creole seasoning priced Cajun Seasoning lines (5a9676, form-style B)' }
+  @{ id='cajun-seasoning'; name='Louisiana Fish Fry Products Original Cajun Seasoning 8 Oz'; expect='included'
+     why='CLEAN TWIN a cajun seasoning stays on cajun-seasoning (5a9676)' }
+  @{ id='chili-crisp'; name='Lao Gan Ma Fried Chili Oil, 7.41 oz'; expect='excluded'
+     why='MUST FIRE the Walmart fried chili oil held the chili-crisp crown at $0.6707/oz (5a9676, form-style B)' }
+  @{ id='chili-crisp'; name='Lao Gan Ma Spicy Chili Crisp'; expect='included'
+     why='CLEAN TWIN the same maker''s chili crisp stays on chili-crisp (5a9676)' }
+  @{ id='enchilada-sauce'; name='Las Palmas Medium Red Chile Sauce, 28 oz'; expect='no-include-match'
+     why='MUST FIRE a red chile sauce is not enchilada sauce; it priced Enchilada Sauce at Walmart (5a9676, form-style B)' }
+  @{ id='enchilada-sauce'; name='Las Palmas Mild Enchilada Sauce, 28 oz'; expect='included'
+     why='CLEAN TWIN the same maker''s enchilada sauce stays on enchilada-sauce (5a9676)' }
 )
 
 $bad = 0

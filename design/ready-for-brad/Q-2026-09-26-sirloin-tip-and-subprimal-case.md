@@ -56,3 +56,8 @@ can look cheaper than what a reader can actually buy. Exclude by shape (the word
   and Aldi's per-lb roast as clean twin; board rebuild; the chuck crown moves to Aldi; the recipe recost chain runs
   for chuck-roast lines.
 - **A for either:** the keys are marked reviewed in the identity mark and 8deaa4's residual closes.
+
+## Ruling (2026-09-26, Brad in chat)
+
+Q-2026-09-26-sirloin-tip and Q-2026-09-26-subprimal-case: **"B: exclude both"** - sirloin tip is not sirloin steak;
+a whole subprimal case (Sam's chuck roll) is not a chuck roast.
