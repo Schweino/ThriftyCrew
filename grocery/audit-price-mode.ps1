@@ -1,5 +1,6 @@
 <#
-  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398); a wrong-mode STORE is the natural unit
+  HOLD SCOPE: store - each failing store is named (QUARANTINE-STORE <store>), because a wrong fulfillment mode is a
+  whole store's prices (queue 2026-09-22-6e6a3b; test-price-mode-scope.ps1)
   audit-price-mode.ps1 - "never again" guard for the Aldi delivery-price bug (2026-07-14).
 
   THE BUG THIS PREVENTS
@@ -44,6 +45,7 @@ $files = Get-ChildItem (Join-Path $RegularDir '*-regular-*.json') |
   Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
   ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
 
+$failStores = New-Object System.Collections.Generic.List[string]   # the store each $fail entry names, for the quarantine protocol
 foreach ($f in $files) {
   $d = Read-JsonFile $f.FullName
   $store = [string]$d.store
@@ -71,9 +73,10 @@ foreach ($f in $files) {
           $msg += ("`n          ^ that file was last written {0} day(s) AFTER its own week_of ({1} vs {2}) - it was rewritten by something other than the puller. Check for an abandoned test-guards mutation BEFORE re-pulling the store." -f $age, $f.LastWriteTime.ToString('yyyy-MM-dd'), $d.week_of)
         }
       } catch { }
-      $fail += $msg
+      $fail += $msg; if (-not $failStores.Contains($store)) { [void]$failStores.Add($store) }
     } elseif (-not $ver) {
       $fail += ("{0}: price_mode='in-store' but mode_verified is missing. Prove when the session mode was confirmed. File: {1}" -f $store, $f.Name)
+      if (-not $failStores.Contains($store)) { [void]$failStores.Add($store) }
     } else {
       $ok += ("{0}: in-store (verified {1})" -f $store, $ver)
     }
@@ -93,6 +96,11 @@ foreach ($x in $fail) { Write-Output ("  FAIL  " + $x) }
 
 if ($fail.Count -gt 0) {
   Write-Output ""
+  # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # A store read in the wrong fulfillment mode is wrong in every cell it prices, so the unit is the STORE: each is
+  # named and drops itself, instead of holding the board. Every $fail entry above adds its store, so the list is whole.
+  foreach ($fs in $failStores) { Write-Output ('QUARANTINE-STORE ' + $fs) }
+  Write-Output ('QUARANTINE-SCOPE complete cells=0 stores=' + $failStores.Count)
   Write-Output ("PRICE-MODE AUDIT FAILED: {0} store(s) are shipping non-shelf prices. Board NOT safe to publish." -f $fail.Count)
   exit 2
 }

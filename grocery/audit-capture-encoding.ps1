@@ -1,5 +1,7 @@
 <#
-  HOLD SCOPE: board - a capture FILE is refused; the file names one store, the next step (queue 2026-09-21-d16398)
+  HOLD SCOPE: store - each ambiguous capture file names its store (QUARANTINE-STORE <store>, from the file's own store
+  field or its lane); a file whose store cannot be named names nothing, so the board holds (queue 2026-09-22-6e6a3b;
+  test-capture-encoding-scope.ps1)
   audit-capture-encoding.ps1 - can EVERY reader agree on what this capture file says?
 
   WHY THIS EXISTS (2026-09-05). Windows PowerShell 5.1's Get-Content decodes a file with NO byte-order
@@ -173,6 +175,17 @@ if ($SelfTest) {
   exit 0
 }
 
+# The store a capture file prices, for the quarantine protocol (2026-09-25, queue 2026-09-22-6e6a3b): its own top-level
+# `store` field, decoded as the UTF-8 the file is, else the one store its lane holds. The regular lane holds every store,
+# so a regular file with no store field names none, and '' makes the caller affirm no scope.
+$script:LANE_STORE = @{ sams = "Sam's Club"; bakers = "Baker's"; fareway = 'Fareway' }
+function Get-CaptureFileStore([byte[]]$Bytes, [string]$Lane) {
+  $s = ''
+  try { $d = [Text.Encoding]::UTF8.GetString($Bytes).TrimStart([char]0xFEFF) | ConvertFrom-Json; if ($d -isnot [array] -and $d.PSObject.Properties['store']) { $s = ([string]$d.store).Trim() } } catch { $s = '' }
+  if (-not $s -and $script:LANE_STORE.ContainsKey($Lane)) { $s = $script:LANE_STORE[$Lane] }
+  return $s
+}
+
 # ---- live path -------------------------------------------------------------------------------------
 $files = @()
 foreach ($lane in $script:CAPTURE_LANES) {
@@ -202,7 +215,7 @@ foreach ($f in $files) {
     $fixed++
     continue
   }
-  [void]$findings.Add([pscustomobject]@{ file = $f.FullName; name = $f.Name; non_ascii_bytes = $n })
+  [void]$findings.Add([pscustomobject]@{ file = $f.FullName; name = $f.Name; non_ascii_bytes = $n; store = (Get-CaptureFileStore -Bytes $bytes -Lane $f.Directory.Name) })
 }
 
 if ($unreadable.Count) {
@@ -221,6 +234,15 @@ foreach ($x in ($findings | Sort-Object name)) {
   Write-Output ("  AMBIGUOUS  {0}  - no byte-order mark and {1} non-ASCII byte(s), so PS 5.1's Get-Content decodes it as cp1252 and a UTF-8 reader does not" -f $x.name, $x.non_ascii_bytes)
 }
 if ($findings.Count) {
+  # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # One capture file is one store's prices, so an ambiguous file drops its store instead of holding the board. Only
+  # when every finding names a store is the scope affirmed.
+  $ceStores = New-Object System.Collections.Generic.List[string]; $ceUnnamed = 0
+  foreach ($x in $findings) { if (-not $x.store) { $ceUnnamed++; continue }; if (-not $ceStores.Contains($x.store)) { [void]$ceStores.Add($x.store) } }
+  if ($ceUnnamed -eq 0 -and $ceStores.Count -gt 0) {
+    foreach ($cs in $ceStores) { Write-Output ('QUARANTINE-STORE ' + $cs) }
+    Write-Output ('QUARANTINE-SCOPE complete cells=0 stores=' + $ceStores.Count)
+  }
   Write-Output ("audit-capture-encoding: the file name identifies the WRITER - fix the producer, then run this with -Fix to normalise what is already on disk. See lib\json-io.ps1 for why the reader side alone is not enough.")
   Exit-Guard -Name 'capture-encoding' -Summary "$($findings.Count) ambiguous file(s) of $($files.Count)" -Code 2
 }

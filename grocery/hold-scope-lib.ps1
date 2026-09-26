@@ -16,7 +16,7 @@
 
 # 9 of 13 delegates were board-scoped on 2026-09-22 (measured over guards.ps1's delegation table at this change). A
 # ratchet mark, not a tuning constant: it may only fall, one taught audit at a time.
-$script:TcHoldBoardMark = 7
+$script:TcHoldBoardMark = 2   # 7 -> 2 on 2026-09-25 (6e6a3b): household-in-food, asof-evidence, price-mode, tile-integrity, capture-encoding taught
 
 function Get-TcGuardDelegates([string]$GuardsText) {
   $out = New-Object System.Collections.ArrayList

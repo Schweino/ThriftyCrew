@@ -1,5 +1,7 @@
 ﻿<#
-  HOLD SCOPE: board - not yet taught; a wrong link is a cell but the coverage ratchet half is a store fact (d16398)
+  HOLD SCOPE: cell - each ACCURACY row is named (QUARANTINE-CELL <id>|<store>|value for a price mismatch, selection
+  for a link fault); the stale-flags HELD exit and -Strict's coverage exit name nothing, so they still hold the board
+  (queue 2026-09-22-6e6a3b; test-tile-integrity-scope.ps1)
   audit-tile-integrity.ps1 - BRAD'S INVARIANT, as one number.
 
     "There should be no tile that has a price and item name and no link, and the price and item name need to
@@ -449,5 +451,16 @@ if ($Tighten) {
 # The verdict is computed, so the marker has to be too: emit it for the 2 and 0 verdicts (both are completed
 # runs) and never for 3, which is this estate's could-not-evaluate code and the opposite of completion.
 $__tiCode = if ($fail2) { 2 } elseif ($linked -le 0 -or $graded -le 0) { 3 } else { 0 }
+# THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+# On this path the only exit 2 is ACCURACY, and every accuracy row is one tile: id|store. A PRICE-MISMATCH condemns a
+# number (a factor error could be the board's), so it is a VALUE hold; a wrong or unreadable LINK leaves the board's
+# number standing, so the rest are SELECTION holds. The HELD path and -Strict's coverage exit above leave before this
+# line and affirm no scope, so they still hold the whole board.
+if ($__tiCode -eq 2) {
+  $tiCells = [ordered]@{}
+  foreach ($x in $accRows) { $kk = [string]$x.id + '|' + [string]$x.store; $kd = if ($x.fault -eq 'PRICE-MISMATCH') { 'value' } else { 'selection' }; if (-not $tiCells.Contains($kk) -or $kd -eq 'value') { $tiCells[$kk] = $kd } }
+  foreach ($kk in $tiCells.Keys) { Write-Output ('QUARANTINE-CELL ' + $kk + '|' + $tiCells[$kk]) }
+  Write-Output ('QUARANTINE-SCOPE complete cells=' + $tiCells.Count + ' stores=0')
+}
 if ($__tiCode -ne 3) { Write-GuardComplete -Name 'tile-integrity' }
 exit $__tiCode

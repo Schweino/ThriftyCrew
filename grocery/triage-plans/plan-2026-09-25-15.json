@@ -551,14 +551,17 @@
       "leaves_open": "board-mojibake (a count ratchet, its finding is an aggregate) and coverage-regression (a store floor over the whole board) stay board-scoped",
       "leaves_open_occurrences": 2,
       "leaves_open_followup": "2026-09-22-6e6a3b",
-      "resolution_note": "Five more delegated audits name their cells or store (household-in-food, asof-evidence, price-mode, tile-integrity links, capture-encoding); the hold-scope mark fell 7 -> 2. board-mojibake and coverage-regression stay board-scoped by their nature.",
+      "resolution_note": "Five more delegated audits name their cells or store (household-in-food and asof-evidence cells, price-mode and capture-encoding stores, tile-integrity accuracy cells); the hold-scope mark fell 7 -> 2 (test-hold-scope live: 13 delegates, 2 board-scoped). Each has its own child-run fixture (test-<audit>-scope.ps1: MUST FIRE, CLEAN TWIN that still holds the board, MUST NOT FIRE), all exit 0; test-cell-quarantine 52 of 52. board-mojibake and coverage-regression stay board-scoped by their nature.",
       "publish_batch": null,
       "lane": "ops",
       "est_tool_calls": 68,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "yes: in the worktree at 637ca499f test-hold-scope's live case read 13 delegates, 7 board-scoped against a mark of 7; each of the five audits declared HOLD SCOPE: board and printed no QUARANTINE line; guards.ps1:627 scopes only an exit 2",
+      "deviation": "(1) audit-asof-evidence exited 1 on a regression, which guards.ps1 never scopes, so its regression exit is now 2 (no caller reads 1: test-auditors u116 runs -SelfTest only). It names each violated row's cell by store and folded name on the newest comparison board, and affirms no scope unless EVERY violation is placed. (2) price-mode and capture-encoding are STORE scope (QUARANTINE-STORE), declared 'HOLD SCOPE: store'; capture-encoding takes a file's own store field, else its lane's one store (sams, bakers, fareway); a regular file with no store names nothing. (3) tile-integrity: PRICE-MISMATCH is a value hold, the link faults (WRONG-PRODUCT, LINK-NO-PRICE, LINK-UNPRICEABLE) selection holds; its HELD exit and -Strict's coverage exit stay board. (4) household-in-food names owner|store as a value hold, like known-wrong.",
+      "shipped_commit": "see the commit titled 'Triage 6e6a3b: five more delegated audits scope their findings' on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 42,
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-22-817976",

@@ -1,5 +1,6 @@
 ﻿<#
-  HOLD SCOPE: board - not yet taught; needs the row-to-cell map guards 5 and 10 use (queue 2026-09-21-d16398)
+  HOLD SCOPE: cell - names each finding's cell (QUARANTINE-CELL <owner>|<store>|value); a finding with no store or no
+  owner names no cell, so no scope is affirmed and the board holds (queue 2026-09-22-6e6a3b; test-household-in-food-scope.ps1)
   audit-household-in-food.ps1
 
   Bug class found 2026-07-14: "Lysol Mango & Hibiscus Bathroom Cleaner" was matching the MANGOES
@@ -208,5 +209,19 @@ if ($scanned -eq 0) {
   exit 3
 }
 if ($bugs -eq 0) { Write-Output 'HOUSEHOLD-IN-FOOD AUDIT OK: no cleaning product is sitting in a food commodity.'; exit 0 }
+# THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+# A cleaning product in an edible commodity is one cell: the commodity it lands in, at the store that sells it. It is
+# named as a VALUE so a hold never re-shows the number the cleaner priced. A finding that cannot name both halves
+# names nothing, and then no scope is affirmed and guards holds the whole board, exactly as before.
+$hifKeys = New-Object System.Collections.Generic.List[string]; $hifUnnamed = 0
+foreach ($b in @($res.findings)) {
+  $ow = ([string]$b.owner).Trim(); $sn = ([string]$b.store).Trim()
+  if (-not $ow -or -not $sn) { $hifUnnamed++; continue }
+  $kk = $ow + '|' + $sn; if (-not $hifKeys.Contains($kk)) { [void]$hifKeys.Add($kk) }
+}
+if ($hifUnnamed -eq 0 -and $hifKeys.Count -gt 0) {
+  foreach ($kk in $hifKeys) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
+  Write-Output ('QUARANTINE-SCOPE complete cells=' + $hifKeys.Count + ' stores=0')
+}
 Write-Output ("HOUSEHOLD-IN-FOOD AUDIT FAILED: $bugs row(s). Board NOT safe to publish."); exit 2
 

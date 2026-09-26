@@ -1,5 +1,6 @@
 ﻿<#
-  HOLD SCOPE: board - not yet taught to name its cells (queue 2026-09-21-d16398)
+  HOLD SCOPE: cell - a regression names each violated row's board cell (QUARANTINE-CELL <id>|<store>|value); a violation
+  no board cell carries names nothing, so the board holds (queue 2026-09-22-6e6a3b; test-asof-evidence-scope.ps1)
   audit-asof-evidence.ps1 - "no published price may claim a date newer than the capture it came from."
 
   WHY THIS EXISTS (2026-08-02, found by the C3 out-of-band sample).
@@ -41,7 +42,8 @@
   own when that file ages past the carry cap). A gate that fails from day one is a gate that gets switched
   off. It fails when a store gets WORSE than out\asof-evidence-baseline.json, so the number can only go down.
 
-  Exit codes: 0 clean/at-or-under baseline | 1 a store regressed | 3 could not evaluate (named, not silent).
+  Exit codes: 0 clean/at-or-under baseline | 2 a store regressed (1 until 2026-09-25: guards scopes only an exit 2)
+  | 3 could not evaluate (named, not silent).
   Usage: .\audit-asof-evidence.ps1 [-Baseline] [-Quiet] [-SelfTest]
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
@@ -145,6 +147,29 @@ function Invoke-AsOfEvidence([string]$base) {
   return $out
 }
 
+# The board cells a set of stores' violations priced: '<id>|<store>' keys, or $null when any violation cannot be
+# placed on the newest comparison board (no board, or a violated row whose store and folded name no cell carries).
+function Get-AsOfViolationCells($Stores, [string]$Base) {
+  $bf = @(Get-ChildItem (Join-Path $Base 'out\comparison-*.json') -ErrorAction SilentlyContinue |
+          Where-Object { $_.Name -match '^comparison-\d{4}-\d{2}-\d{2}\.json$' } | Sort-Object Name -Descending | Select-Object -First 1)
+  if ($bf.Count -eq 0) { return $null }
+  $board = $null; try { $board = Read-JsonFile $bf[0].FullName } catch { return $null }
+  $at = @{}
+  foreach ($r in @($board.comparison)) {
+    if ($null -eq $r) { continue }
+    foreach ($s in @($r.stores)) { if ($null -eq $s) { continue }; $k = [string]$s.store + '|' + (Get-EvidenceKey ([string]$s.item)); if (-not $at.ContainsKey($k)) { $at[$k] = New-Object System.Collections.Generic.List[string] }; [void]$at[$k].Add([string]$r.id) }
+  }
+  $keys = New-Object System.Collections.Generic.List[string]
+  foreach ($st in @($Stores)) {
+    foreach ($v in @($st.detail)) {
+      $k = [string]$st.store + '|' + (Get-EvidenceKey ([string]$v.item))
+      if (-not $at.ContainsKey($k)) { return $null }
+      foreach ($id in $at[$k]) { $kk = $id + '|' + [string]$st.store; if (-not $keys.Contains($kk)) { [void]$keys.Add($kk) } }
+    }
+  }
+  return ,$keys.ToArray()
+}
+
 if ($SelfTest) {
   $fail = 0
   $T = Join-Path $env:TEMP ('asofev-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
@@ -240,9 +265,19 @@ foreach ($s in $res.stores) {
   if ([int]$s.violations -gt $b) { $worse += ("{0}: {1} row(s) claim a date no capture supports, baseline {2}" -f $s.store, $s.violations, $b) }
 }
 if ($worse.Count -gt 0) {
+  # THE QUARANTINE PROTOCOL (2026-09-25, queue 2026-09-22-6e6a3b; cell-quarantine-lib.ps1 Get-TcChildQuarantineScope).
+  # Every violation of a store that got worse is named as the board cell it priced, found on the newest comparison
+  # board by store and the same folded name Get-EvidenceKey uses. It is a VALUE hold: the founding row's $0.99 was a
+  # price the store no longer charged, so the number itself is never re-shown. Only when EVERY such violation is found
+  # on the board is the scope affirmed; one that cannot be placed names nothing, and the board holds as before.
+  $cells = Get-AsOfViolationCells -Stores @($res.stores | Where-Object { $worse -match ('^' + [regex]::Escape([string]$_.store) + ':') }) -Base $root
+  if ($null -ne $cells -and $cells.Count -gt 0) {
+    foreach ($kk in $cells) { Write-Output ('QUARANTINE-CELL ' + $kk + '|value') }
+    Write-Output ('QUARANTINE-SCOPE complete cells=' + $cells.Count + ' stores=0')
+  }
   Write-Output ('asof-evidence FAIL - a store got WORSE than out\asof-evidence-baseline.json: ' + ($worse -join ' | '))
   Write-Output '  A row fresher than any capture that saw it is a date somebody wrote rather than measured, and every freshness check downstream (guard 9, the carry cap, the override window, link sync) reads it as truth.'
-  exit 1
+  exit 2
 }
 if ($res.blind.Count -gt 0) { exit 3 }
 exit 0
