@@ -56,5 +56,8 @@ the batch auditor and post-publish reviewer, both verifiers, are high. Two conse
 - **Raising an implementer's effort is the wrong fix for a wrong plan.** When a medium developer fails because the
   plan was wrong, the repair goes to the plan (the reviewer), not the developer's effort level.
 
-Open for Brad, not changed here: `recipe-sourcer` (web research, which a human reviews downstream) is pinned
-`high`, and by this guide it could run at medium. That is a cost call, and it is Brad's to make.
+Ruled by Brad, 2026-09-26: `recipe-sourcer` moves from `high` to `medium`. Its output is candidates that the
+dedup-selector, extractor, mapper and batch auditor all re-check, so a sourcing miss costs a later stage time,
+never a wrong number on a page. It stays above `low` because it runs with no human in the loop and its catalog
+dedup and fit filters (board-priced ingredients, no seafood) are edge-case work; `low` would need a measured
+paired run first (start medium, lower only on measured evidence).
