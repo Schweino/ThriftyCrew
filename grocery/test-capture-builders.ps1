@@ -207,7 +207,7 @@ T 'E  and the pointer watcher is told the post was deferred, so a held post is n
 # hook refused the commit, and this block fired anyway with an alert whose first sentence was "the bot
 # commit went out". The assertion now demands BOTH flags, so it is strictly stronger than the one it
 # replaces and a future editor cannot drop either half without turning this red.
-T 'E  the served-dirty block is gated on $shipServed AND $botCommitted' ($src -match '(?m)^if \(\$shipServed -and \$botCommitted\) \{\r?\n\s*\$servedDirty')
+T 'E  the served-dirty block is gated on $shipServed AND $botCommitted' ($src -match '(?m)^if \(\$shipServed -and \$botCommitted\) \{\r?\n(?:[ \t]+[^\r\n]*\r?\n){0,6}?[ \t]+\$servedDirty')
 T 'E  and a refused commit takes its own arm rather than the founding watcher''s' ($src -match '(?m)^\} elseif \(\$shipServed -and -not \$botCommitted\) \{')
 # THE 2026-09-09 EDGE DEFECT ITSELF: the skipped line handed the pure function ShipServed=$true with 'n/a'
 # on both sides, so it walked past the skipped arm, compared 'n/a' with 'n/a' and returned **ok**. The daily
