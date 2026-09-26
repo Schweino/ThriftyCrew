@@ -25,6 +25,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:020fc5fc49b1a2fe18a8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"ravioli.*canned\\\\s+pasta\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Annie's Organic Cheesy Ravioli Tomato and Cheese Sauce Canned Pasta' by anchoring on 'ravioli' and 'canned pasta'.",
+    "status": "proposed",
+    "target_id": "canned-pasta-ravioli-spaghettios"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-22T21:41:16",
     "id": "lp:030a8c66c11a41806165",
     "kind": "add_alias",
@@ -538,6 +550,18 @@
     "rationale": "'Power Force Citrus/Original Blue Dishwashing Detergent' is dish soap. The pattern anchors on the brand and 'dishwashing'.",
     "status": "proposed",
     "target_id": "dish-soap-liquid"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:25626742ba61973f679c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun\\\\s+spice\\\\s+rub\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Rib Rack Cajun Spice Rub'. Anchors on the specific food descriptor.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
   },
   {
     "confidence": 0.9,
@@ -1693,6 +1717,18 @@
   },
   {
     "confidence": 0.8,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:6b0001c3237c07d31f52",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"beet\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Organic Gold Grim Beet'. 'Beet' is specific enough to the commodity.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
+  },
+  {
+    "confidence": 0.8,
     "created_at": "2026-08-21T01:00:34",
     "id": "lp:6c04fc395a7dd2e607e1",
     "kind": "add_alias",
@@ -2760,6 +2796,18 @@
     "target_id": "dish-soap-liquid"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:a935aff0ba7abbdafaeb",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun.*seasoning\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Cajun's Choice Cajun Shrimp Seasoning Mix' and 'Tony's Cajun Kick Seasoning'. Anchors on 'cajun' and 'seasoning'.",
+    "status": "proposed",
+    "target_id": "cajun-creole-seasoning"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:55:57",
     "id": "lp:a9b99e3a580b57eb3d0d",
@@ -2902,6 +2950,18 @@
     "rationale": "Matches 'Sour Cream, Light'. Anchors on 'sour cream' and 'light'.",
     "status": "held_for_human",
     "target_id": "light-sour-cream"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:b646feee60daad4b7515",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes\\\\s+hrt?s\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'ARTICHOKES HRTS 8-10 CT...' by anchoring on the food name and abbreviation for hearts.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
   },
   {
     "confidence": 0.9,
@@ -3793,6 +3853,18 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:f2367656449f3969e26e",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cranberry.*juice\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Simply Cranberry Cocktail Juice Drink Bottle'. Anchors on 'cranberry' and 'juice'.",
+    "status": "proposed",
+    "target_id": "cranberry-juice"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-22T21:41:16",
     "id": "lp:f2948717e287640a1ebe",
     "kind": "add_alias",
@@ -3814,6 +3886,18 @@
     "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade' for liquid smoke.",
     "status": "rejected",
     "target_id": "liquid-smoke"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:f464da2aa8e1f954118f",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"diced\\\\s+potatoes\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes'. Anchors on the food form.",
+    "status": "proposed",
+    "target_id": "canned-potatoes"
   },
   {
     "confidence": 0.7,
@@ -3982,6 +4066,18 @@
     "rationale": "the 'Seasoning, <style> Cajun' comma order; fries/snack/batter/boil excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:cajun-seasoning"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-09-26T05:34:24",
+    "id": "lp:fd4ea4255cb26a021a18",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"wax\\\\s+beans\"}",
+    "queue_hash": "d9de594f18ea46c89ce2483035278af189d5379980d29fdec57b20bfb000ae50",
+    "rationale": "Matches 'Kroger Cut Wax Beans'. Wax beans are a type of green bean.",
+    "status": "proposed",
+    "target_id": "canned-green-beans"
   },
   {
     "confidence": 0.9,

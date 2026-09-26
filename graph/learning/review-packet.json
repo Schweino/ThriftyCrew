@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T21:39:27",
+  "generated_at": "2026-09-26T05:34:48",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -765,6 +765,66 @@
       }
     },
     {
+      "proposal_id": "lp:b646feee60daad4b7515",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "artichokes\\s+hrt?s",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'ARTICHOKES HRTS 8-10 CT...' by anchoring on the food name and abbreviation for hearts.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:020fc5fc49b1a2fe18a8",
+      "kind": "add_alias",
+      "target": "canned-pasta-ravioli-spaghettios",
+      "target_label": null,
+      "payload": "ravioli.*canned\\s+pasta",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Annie's Organic Cheesy Ravioli Tomato and Cheese Sauce Canned Pasta' by anchoring on 'ravioli' and 'canned pasta'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f464da2aa8e1f954118f",
+      "kind": "add_alias",
+      "target": "canned-potatoes",
+      "target_label": null,
+      "payload": "diced\\s+potatoes",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Del Monte Cajun Style Diced Potatoes'. Anchors on the food form.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:fd4ea4255cb26a021a18",
+      "kind": "add_alias",
+      "target": "canned-green-beans",
+      "target_label": null,
+      "payload": "wax\\s+beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Kroger Cut Wax Beans'. Wax beans are a type of green bean.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f2367656449f3969e26e",
+      "kind": "add_alias",
+      "target": "cranberry-juice",
+      "target_label": null,
+      "payload": "cranberry.*juice",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Simply Cranberry Cocktail Juice Drink Bottle'. Anchors on 'cranberry' and 'juice'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:c5a0e98911b2e1a0b373",
       "kind": "add_alias",
       "target": "frozen-broccoli-florets",
@@ -906,6 +966,30 @@
       }
     },
     {
+      "proposal_id": "lp:a935aff0ba7abbdafaeb",
+      "kind": "add_alias",
+      "target": "cajun-creole-seasoning",
+      "target_label": null,
+      "payload": "cajun.*seasoning",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Cajun's Choice Cajun Shrimp Seasoning Mix' and 'Tony's Cajun Kick Seasoning'. Anchors on 'cajun' and 'seasoning'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:25626742ba61973f679c",
+      "kind": "add_alias",
+      "target": "cajun-creole-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+spice\\s+rub",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Rib Rack Cajun Spice Rub'. Anchors on the specific food descriptor.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:a5c91ae0c05071d0dcde",
       "kind": "add_alias",
       "target": "frozen-cut-green-beans",
@@ -994,6 +1078,18 @@
       "payload": "\\b(beet|beets)\\b",
       "stage1_confidence": 0.8,
       "rationale": "Matches 'Organic Gold Grim Beet' by anchoring on the food name 'Beet'. The word boundary prevents matching 'beetroot' if it were a distinct commodity, though here it's likely the same.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6b0001c3237c07d31f52",
+      "kind": "add_alias",
+      "target": "beets-fresh",
+      "target_label": null,
+      "payload": "beet",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Organic Gold Grim Beet'. 'Beet' is specific enough to the commodity.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
