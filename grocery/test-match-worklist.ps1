@@ -120,6 +120,47 @@ try {
   _MT 'MECHANISM  a release derives the narrowest exclude the name supports (the head phrase, not the bare word)' ($r.pattern -eq '\btomato\w*\s+paste') $r.pattern
   _MT 'MECHANISM  that pattern matches the product it releases' ([regex]::IsMatch('Hunt''s Tomato Paste with Basil Garlic and Oregano', $r.pattern, 'IgnoreCase')) $r.pattern
 
+  # plan-2026-09-25-16 d493dd: the claimer's own word leading the name blocks a rule release. FROZEN from
+  # match-worklist.json 2026-09-25 08:23: 'Krinos Tahini Ground Sesame Seeds' @ Fareway was decided RELEASE to
+  # toasted-sesame-seeds, which would have taken Fareway's tahini cell (0.5619/oz, that exact row) off tahini.
+  $ts = [pscustomobject]@{ id = 'toasted-sesame-seeds'; label = 'Toasted Sesame Seeds' }; $th = [pscustomobject]@{ id = 'tahini'; label = 'Tahini' }
+  $r = Get-MatchClassification -Kind 'coverage' -Name 'Krinos Tahini Ground Sesame Seeds' -Target $ts -Claimer $th
+  _MT 'MUST FIRE  Krinos Tahini Ground Sesame Seeds (claimer tahini, target toasted-sesame-seeds) is NOT release' ($r.decision -ne 'release' -and [string]$r.why -like '*tahini*') ($r.decision + ' ' + $r.why)
+  $ob = [pscustomobject]@{ id = 'oranges'; label = 'Oranges' }; $bk = [pscustomobject]@{ id = 'block-cheese'; label = 'Block Cheese' }
+  $r = Get-MatchClassification -Kind 'coverage' -Name 'Kroger Orange Rind Muenster Block Cheese' -Target $ob -Claimer $bk
+  _MT 'CLEAN TWIN  Kroger Orange Rind Muenster Block Cheese claimed by block-cheese against oranges keeps its decision: confirm' ($r.decision -eq 'confirm') $r.decision
+  $r = Get-MatchClassification -Kind 'coverage' -Name 'Betty Crocker Rich and Creamy Cherry Frosting' -Target $C['frosting'] -Claimer $C['cherries']
+  _MT 'CLEAN TWIN  a claimer word AS the head''s modifier (Cherry Frosting, claimer cherries) still releases' ($r.decision -eq 'release') $r.decision
+  $r = Get-MatchClassification -Kind 'band' -Name 'Litehouse Herb, Freeze Dried Basil' -Target $null -Claimer ([pscustomobject]@{ id = 'dried-basil'; label = 'Dried Basil' })
+  _MT 'CLEAN TWIN  the band branch keeps its answer for Litehouse Herb, Freeze Dried Basil (undecided, never release)' ($r.decision -eq 'undecided') $r.decision
+
+  # plan-2026-09-25-16 d493dd: one worklist key per ACTIONABLE VERDICT, not one per gap
+  $kd = Join-Path $tmp 'keying'; New-Item -ItemType Directory -Path $kd -Force | Out-Null
+  $kg = @(
+    [pscustomobject]@{ commodity = 'canned-mixed-vegetables'; store = 'Hy-Vee'; candidate = 'Birds Eye Steamfresh Mixed Vegetables'; reason = 'CLAIMED-BY'; detail = "first-match-wins gave this name to 'frozen-vegetables'"; actionable = $true
+      verdicts = @([pscustomobject]@{ candidate = 'Birds Eye Steamfresh Mixed Vegetables'; reason = 'WITHHELD'; detail = "first-match-wins gave this name to 'frozen-vegetables', and the provenance contract withheld that row there"; actionable = $false },
+                   [pscustomobject]@{ candidate = 'That''s Smart! Mixed Vegetables With Carrots, Corn, Peas & Green Beans'; reason = 'CLAIMED-BY'; detail = "first-match-wins gave this name to 'frozen-vegetables'"; actionable = $true }) },
+    [pscustomobject]@{ commodity = 'kalamata-olives'; store = 'Sam''s Club'; candidate = 'Krinos Kalamata Pitted Olives, 35.27 oz.'; reason = 'RULE-INVISIBLE'; detail = 'no include of any commodity matched this name'; actionable = $true
+      verdicts = @([pscustomobject]@{ candidate = 'Krinos Kalamata Pitted Olives, 35.27 oz.'; reason = 'RULE-INVISIBLE'; detail = 'no include of any commodity matched this name'; actionable = $true }) },
+    [pscustomobject]@{ commodity = 'yellow-bell-pepper'; store = 'Family Fare'; candidate = 'Yellow Bell Pepper'; reason = 'PRICED'; detail = 'the engine priced this row'; actionable = $true
+      verdicts = @([pscustomobject]@{ candidate = 'Yellow Bell Pepper'; reason = 'PRICED'; detail = 'the engine priced this row'; actionable = $true }) })
+  [IO.File]::WriteAllText((Join-Path $kd 'coverage-gaps.json'), (([pscustomobject]@{ gaps = $kg }) | ConvertTo-Json -Depth 6))
+  $kf = Read-MatchFindings -OutDir $kd -GroceryDir $kd
+  $kk = @($kf.rows | ForEach-Object { [string]$_.key })
+  _MT 'MUST FIRE  the canned-mixed-vegetables|Hy-Vee gap keys its ACTIONABLE name (That''s Smart!), claimer frozen-vegetables, not its withheld head' (($kk -contains 'coverage|canned-mixed-vegetables|Hy-Vee|That''s Smart! Mixed Vegetables With Carrots, Corn, Peas & Green Beans') -and -not ($kk -contains 'coverage|canned-mixed-vegetables|Hy-Vee|Birds Eye Steamfresh Mixed Vegetables') -and @($kf.rows | Where-Object { $_.claimer -eq 'frozen-vegetables' }).Count -eq 1) ($kk -join ' ; ')
+  _MT 'CLEAN TWIN  an undecided RULE-INVISIBLE name (Krinos Kalamata Pitted Olives) still yields its worklist key' ($kk -contains 'coverage|kalamata-olives|Sam''s Club|Krinos Kalamata Pitted Olives, 35.27 oz.') ($kk -join ' ; ')
+  _MT 'MUST NOT FIRE  a PRICED verdict is not a matching finding and gets no key' (-not ($kk -contains 'coverage|yellow-bell-pepper|Family Fare|Yellow Bell Pepper') -and $kk.Count -eq 2) ($kk -join ' ; ')
+  # the recurrences this item closes (2026-08-31-ad3b81 .. 2026-09-07-0e9482): their queue bodies in
+  # out\archive\triage-queue.archived-2026-09-17.json name only commodity @ store, never the candidate, so the frozen
+  # rows carry that pair and a placeholder candidate, in the pre-verdicts gap shape those days wrote. The assertion is
+  # the property that matters: every actionable gap of that shape is keyed, none silently unkeyed.
+  $old = @('garlic-bread|Hy-Vee','aji-amarillo-paste|Walmart','yukon-gold-potatoes|Fareway','coleslaw-mix|Hy-Vee','pomegranates|Walmart','coleslaw-mix|Walmart','cooked-jasmine-rice|Walmart','block-cheese|Family Fare','coleslaw-mix|Aldi','red-potatoes|Fareway','pecorino-romano|Fareway','cinnamon-stick|Aldi','baked-beans|Hy-Vee','anaheim-peppers|Fareway','quinoa-uncooked|Hy-Vee','couscous|Hy-Vee','sea-salt|Hy-Vee')
+  $og = @($old | ForEach-Object { $p = $_ -split '\|'; [pscustomobject]@{ commodity = $p[0]; store = $p[1]; candidate = ('candidate not recorded in the queue body (' + $_ + ')'); reason = 'RULE-INVISIBLE'; detail = 'no include matched'; actionable = $true } })
+  [IO.File]::WriteAllText((Join-Path $kd 'coverage-gaps.json'), (([pscustomobject]@{ gaps = $og }) | ConvertTo-Json -Depth 6))
+  $of = Read-MatchFindings -OutDir $kd -GroceryDir $kd
+  $miss = @($old | Where-Object { $pp = $_ -split '\|'; -not @($of.rows | Where-Object { $_.commodity -eq $pp[0] -and $_.store -eq $pp[1] }).Count })
+  _MT ('MUST FIRE  the 17 frozen recurrence gaps (ad3b81, 4a481e, 995502, 39933e, 0e9482) in the old gap shape are every one keyed: missing ' + $miss.Count + ' of ' + $old.Count) ($miss.Count -eq 0 -and $old.Count -eq 17) ($miss -join ' ; ')
+
   # the worklist: first_seen, the ledger filter, one page per key
   $f1 = @([pscustomobject]@{ key = 'coverage|queso|Fareway|X'; kind = 'coverage'; commodity = 'queso'; claimer = 'salsa'; store = 'Fareway'; name = 'X' })
   $d1 = Merge-MatchWorklist -Findings $f1 -Previous @() -Verdicts @{} -Today '2026-09-22'

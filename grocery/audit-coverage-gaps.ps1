@@ -29,7 +29,7 @@
 # nothing - the exact way the Lysol negative test stopped testing anything.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$CandidatesFile = "", [string]$ReportDir = "",
-      [string]$CommoditiesFile = "", [string]$AllowFile = "", [string]$LedgerFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
+      [string]$CommoditiesFile = "", [string]$AllowFile = "", [string]$LedgerFile = "", [string]$VerdictFile = "", [int]$MatchTimeoutMs = 250, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'known-wrong-lib.ps1')                    # Test-KnownWrong: a product a reasoner already ruled out is not a coverage gap
@@ -118,6 +118,35 @@ function Get-EngineVerdictReason {
   return [pscustomobject]@{ reason = 'UNKNOWN-VERDICT'; detail = ("the engine refused this row with a verdict this audit does not know ('" + $Basis + "'), so it cannot say whether the absence is a rule gap: teach Get-EngineVerdictReason the verdict. This is not evidence of a too-strict include"); actionable = $true }
 }
 
+# ---- DECIDED AND QUARANTINED ARE READ BACK (2026-09-25, plan-2026-09-25-16, queue 2026-09-23-d493dd) ------------------
+# The gap -> worklist -> verdict loop could not converge: a name the matching lane had already DECIDED in
+# match-verdicts.json, and a cell a guard had QUARANTINED on the board, both stayed actionable here forever, so the
+# alert type kept returning however many names were repaired (4 decided and 1 quarantined of 18 on 2026-09-25).
+# A decision that closes a key: confirm, moot, ad-line, known-wrong. 'applied' and 'reverted' do NOT: an applied
+# rule that still leaves the gap is a new finding, and a reverted one was refused by a gate.
+$script:CgClosingVerdicts = @('confirm', 'moot', 'ad-line', 'known-wrong')
+function Get-CgQuarantineIndex($Board) {
+  $ix = @{}
+  if (-not $Board -or -not $Board.PSObject.Properties['quarantine'] -or -not $Board.quarantine) { return $ix }
+  foreach ($c in @($Board.quarantine.cells | Where-Object { $_ })) { $ix[([string]$c.id + '|' + [string]$c.store)] = $c }
+  return $ix
+}
+function Resolve-CgDecidedVerdict {
+  <# Pure. One candidate verdict against the ledger and the board quarantine; returns it unchanged or rewritten. #>
+  param($Verdict, [string]$Commodity, [string]$Store, [hashtable]$Ledger, [hashtable]$Quarantine)
+  $k = 'coverage|' + $Commodity + '|' + $Store + '|' + ([string]$Verdict.candidate).Trim()   # the key match-worklist-lib's Get-MwlKey builds
+  if ($Verdict.actionable -and $Ledger -and $Ledger.ContainsKey($k) -and ($script:CgClosingVerdicts -contains [string]$Ledger[$k].verdict)) {
+    $e = $Ledger[$k]
+    return [pscustomobject]@{ candidate = $Verdict.candidate; reason = 'DECIDED'; detail = ("the matching lane decided this name '" + [string]$e.verdict + "' in match-verdicts.json (" + [string]$e.by + ', ' + [string]$e.date + '): ' + [string]$e.reason + ' (engine read: ' + [string]$Verdict.reason + ')'); actionable = $false }
+  }
+  $qk = $Commodity + '|' + $Store
+  if ($Verdict.actionable -and [string]$Verdict.reason -eq 'PRICED' -and $Quarantine -and $Quarantine.ContainsKey($qk)) {
+    $q = $Quarantine[$qk]
+    return [pscustomobject]@{ candidate = $Verdict.candidate; reason = 'QUARANTINED'; detail = ("the engine priced it and a guard QUARANTINED the cell (" + [string]$q.action + '): ' + (@($q.reasons) -join '; ') + ' - owned by that guard, not a matching gap'); actionable = $false }
+  }
+  return $Verdict
+}
+
 if ($SelfTest) {
   # Hermetic: reads no board, no capture, no commodities file. The founding bug is FROZEN here as the
   # must-fire fixture - the exact loosened shape of the quinoa-uncooked include that burned 829 CPU-minutes
@@ -181,6 +210,27 @@ if ($SelfTest) {
     $got = Get-EngineVerdictReason $ev.b $ev.p
     if (([string]$got.reason -eq $ev.r) -and ([bool]$got.actionable -eq $ev.a)) { Write-Output ('  ok    ' + $ev.n) }
     else { Write-Output ('  X     ' + $ev.n + '   got: ' + $got.reason + ' actionable=' + $got.actionable); $bad++ }
+  }
+  # ---- DECIDED / QUARANTINED READ BACK (plan-2026-09-25-16, d493dd). FROZEN from comparison-2026-09-23 (built
+  # 2026-09-25 08:14) and match-verdicts.json at 71099a45f: the yellow-bell-pepper / Family Fare cell quarantined by
+  # audit-flag-verification, and the chili-beans / Hy-Vee name 'Hy-Vee Chili With Beans' confirmed for canned-chili.
+  $qBoard = [pscustomobject]@{ quarantine = [pscustomobject]@{ cells = @([pscustomobject]@{ id = 'yellow-bell-pepper'; store = 'Family Fare'; action = 'withheld'; reasons = @('HARD FAIL: no published cell carries a price its own store contradicted on a later read of the same product (see audit-flag-verification.ps1)') }) } }
+  $qIx = Get-CgQuarantineIndex $qBoard
+  $led = @{ 'coverage|chili-beans|Hy-Vee|Hy-Vee Chili With Beans' = [pscustomobject]@{ verdict = 'confirm'; by = 'fixture'; date = '2026-09-23'; reason = 'canned-chili is right' }
+            'coverage|butternut-squash|Hy-Vee|Maya Kaimal Everyday Dal with Red Lentils Butternut Squash and Coconut' = [pscustomobject]@{ verdict = 'confirm'; by = 'fixture'; date = '2026-09-25'; reason = 'a prepared dal' }
+            'coverage|fruit-cups|Fareway|Applied Name' = [pscustomobject]@{ verdict = 'applied'; by = 'fixture'; date = '2026-09-23'; reason = 'rule shipped' } }
+  $dCases = @(
+    @{ n = 'MUST FIRE  a PRICED verdict on a board-QUARANTINED cell (yellow-bell-pepper @ Family Fare) reads QUARANTINED, not actionable'; c = 'yellow-bell-pepper'; s = 'Family Fare'; v = [pscustomobject]@{ candidate = 'Yellow Bell Pepper'; reason = 'PRICED'; detail = 'x'; actionable = $true }; r = 'QUARANTINED'; a = $false },
+    @{ n = 'MUST FIRE  a CLAIMED-BY name the ledger CONFIRMED (Hy-Vee Chili With Beans) reads DECIDED, not actionable'; c = 'chili-beans'; s = 'Hy-Vee'; v = [pscustomobject]@{ candidate = 'Hy-Vee Chili With Beans'; reason = 'CLAIMED-BY'; detail = 'x'; actionable = $true }; r = 'DECIDED'; a = $false },
+    @{ n = 'MUST FIRE  a decided name whose capture ends in CR/LF (Maya Kaimal ... Coconut, 2026-09-25) still reads DECIDED'; c = 'butternut-squash'; s = 'Hy-Vee'; v = [pscustomobject]@{ candidate = ('Maya Kaimal Everyday Dal with Red Lentils Butternut Squash and Coconut ' + "`r`n"); reason = 'CLAIMED-BY'; detail = 'x'; actionable = $true }; r = 'DECIDED'; a = $false },
+    @{ n = 'CLEAN TWIN  an undecided RULE-INVISIBLE name (Krinos Kalamata Pitted Olives, 35.27 oz.) stays actionable'; c = 'kalamata-olives'; s = "Sam's Club"; v = [pscustomobject]@{ candidate = 'Krinos Kalamata Pitted Olives, 35.27 oz.'; reason = 'RULE-INVISIBLE'; detail = 'x'; actionable = $true }; r = 'RULE-INVISIBLE'; a = $true },
+    @{ n = 'MUST NOT FIRE  an APPLIED ledger entry does not close the key (the rule shipped and the gap is still there)'; c = 'fruit-cups'; s = 'Fareway'; v = [pscustomobject]@{ candidate = 'Applied Name'; reason = 'CLAIMED-BY'; detail = 'x'; actionable = $true }; r = 'CLAIMED-BY'; a = $true },
+    @{ n = 'MUST NOT FIRE  a CLAIMED-BY verdict on a quarantined cell is not hidden by the quarantine (only PRICED is)'; c = 'yellow-bell-pepper'; s = 'Family Fare'; v = [pscustomobject]@{ candidate = 'Other Pepper'; reason = 'CLAIMED-BY'; detail = 'x'; actionable = $true }; r = 'CLAIMED-BY'; a = $true }
+  )
+  foreach ($dc in $dCases) {
+    $got = Resolve-CgDecidedVerdict -Verdict $dc.v -Commodity $dc.c -Store $dc.s -Ledger $led -Quarantine $qIx
+    if (([string]$got.reason -eq $dc.r) -and ([bool]$got.actionable -eq $dc.a)) { Write-Output ('  ok    ' + $dc.n) }
+    else { Write-Output ('  X     ' + $dc.n + '   got: ' + $got.reason + ' actionable=' + $got.actionable); $bad++ }
   }
   if ($bad -eq 0) { Write-Output 'audit-coverage-gaps SELF-TEST PASS (founding ReDoS times out at the configured bound, breaker quarantines it, clean twin still decides)'; exit 0 }
   Write-Output ("audit-coverage-gaps SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
@@ -390,7 +440,13 @@ if ($ncFresh -or $ncStale) {
 # ---- which stores are already on the board per commodity ----
 if (-not $CompareFile) { $CompareFile = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName }
 $present = @{}
-foreach ($r in (Read-JsonFile $CompareFile).comparison) { foreach ($s in $r.stores) { $present[([string]$r.id + '|' + [string]$s.store)] = $true } }
+$__cgBoard = Read-JsonFile $CompareFile
+$cgQuarantine = Get-CgQuarantineIndex $__cgBoard   # d493dd: a quarantined cell is a guard's hold, not a missing store
+if (-not $VerdictFile) { $VerdictFile = Join-Path $root 'match-verdicts.json' }
+$cgLedger = @{}
+if (Test-Path -LiteralPath $VerdictFile) { foreach ($lv in @((Read-JsonFile $VerdictFile).verdicts | Where-Object { $_ })) { $cgLedger[[string]$lv.key] = $lv } }
+Write-Output ("decisions read back: {0} ledger key(s) from {1}, {2} quarantined cell(s) from the board" -f $cgLedger.Count, (Split-Path $VerdictFile -Leaf), $cgQuarantine.Count)
+foreach ($r in $__cgBoard.comparison) { foreach ($s in $r.stores) { $present[([string]$r.id + '|' + [string]$s.store)] = $true } }
 
 # ---- for each missing store, look for a loosened-include match in its raw products ----
 $gaps = New-Object System.Collections.Generic.List[object]
@@ -627,7 +683,8 @@ foreach ($gp in $gaps) {
   $verdicts = New-Object System.Collections.Generic.List[object]
   foreach ($nm in @($gp.candidates)) {
     $v = Classify ([string]$gp.commodity) ([string]$gp.store) ([string]$nm)
-    [void]$verdicts.Add([pscustomobject]@{ candidate = $nm; reason = $v.reason; detail = $v.detail; actionable = $v.actionable })
+    $cv = [pscustomobject]@{ candidate = $nm; reason = $v.reason; detail = $v.detail; actionable = $v.actionable }
+    [void]$verdicts.Add((Resolve-CgDecidedVerdict -Verdict $cv -Commodity ([string]$gp.commodity) -Store ([string]$gp.store) -Ledger $cgLedger -Quarantine $cgQuarantine))
   }
   $act = @($verdicts | Where-Object { $_.actionable })
   $pick = $(if ($act.Count) { $act[0] } else { $verdicts[0] })

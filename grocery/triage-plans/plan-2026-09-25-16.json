@@ -1,0 +1,427 @@
+{
+  "generated": "2026-09-25T21:13:19",
+  "round": 2,
+  "board_week": "comparison-2026-09-23 (week_of 2026-09-23, built 2026-09-25 08:14:10; the triage-due BOARD line, not mid-build)",
+  "queue_ids_seen": [
+    "prevention:grocery store s dropped from a commodity they carry",
+    "2026-09-23-d493dd",
+    "2026-09-23-3ba362",
+    "2026-09-18-a0c785",
+    "2026-09-21-4b973e"
+  ],
+  "routing_artifact": "plan-2026-09-25-15.routing.json",
+  "note": "Round 2 of today's weekly-lane bounces (plan-2026-09-25-6). Each lane measurement was tested first; four were refuted in part (d493dd: 12 of 18 gaps are decided or quarantined, not rule gaps; 9459a1: the reproduce test is circular; 817976: 9 of 16 are sibling links; 4b973e: the one wrong-price verdict is a false condemnation of an in-window sale). SPLIT 2026-09-25 on send-back: the money lane measured 305 (324 once the RETURN fixtures were sized) against a 200 ceiling, so Brad's \"everything done now\" is met by TWO plans that both ship today, not by deferral. plan-2026-09-25-15 holds the pricing-engine group (9459a1, 8d2ad5, dc1b5b: compare-deals and pricing-math-lib; 9459a1's count-conflict case rests on 8d2ad5), dd290b, the two needs-brad items and the ops lane: money 185, ops 98. plan-2026-09-25-16 holds the matching-worklist group (d493dd, 3ba362: match-worklist-lib), a0c785, 4b973e and the superseded prevention id: money 141. Both share plan-2026-09-25-15.routing.json; its 49 moves split cleanly by owning item (15: 9459a1 15 + dd290b 12 = 27; 16: d493dd 18 + 3ba362 4 = 22) and no moved name crosses the two sets. est_tool_calls raised for the three RETURN items (d493dd 60->65, 3ba362 22->28, 9459a1 45->55) for the prior-close fixtures.",
+  "items": [
+    {
+      "queue_id": "prevention:grocery store s dropped from a commodity they carry",
+      "subject": "Prevention: stores keep dropping from commodities they carry",
+      "classification": "superseded",
+      "evidence": [
+        "the same condition as 2026-09-23-d493dd (the open instance of this type, count 4); d493dd below carries the prevention at its producer (grocery/match-worklist-lib.ps1, grocery/audit-coverage-gaps.ps1)"
+      ],
+      "root_cause": "the coverage-gap alert re-cries gaps the matching lane already decided, quarantined cells and names it never keyed; measured under d493dd",
+      "resolution_note": "Superseded by 2026-09-23-d493dd: one condition, one investigation. The prevention for this type ships there (the worklist keys every actionable verdict; the audit reads match-verdicts.json and the board quarantine).",
+      "status": "superseded",
+      "superseded_by": "2026-09-23-d493dd"
+    },
+    {
+      "queue_id": "2026-09-23-d493dd",
+      "subject": "Grocery: 25 store(s) dropped from a commodity they carry (x4), 18 actionable on 2026-09-25",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "LANE MEASUREMENT TESTED AND REFUTED: 'every repair is a commodities.json release or widening; yellow-bell-pepper is dropped inside compare-deals.ps1'. Of the 18 actionable gaps in coverage-gaps.json (08:19) only 3 need a rule change (kalamata-olives @ Sam's, canned-pears @ Fareway, mandarin-oranges @ Hy-Vee claimed by fruit-cups)",
+        "already DECIDED in grocery/match-verdicts.json yet still counted actionable, because audit-coverage-gaps.ps1 never reads that file: fresh-ginger 'Ginger Gold Apple' confirm (apples), chili-beans 'Hy-Vee Chili With Beans' confirm (canned-chili), mandarin-oranges 'Hy-Vee Mandarin Oranges in 100% Juice 4-4 oz Bowls' confirm (fruit-cups), jumbo-pasta-shells 'Kroger Wild Caught Jumbo Raw Gulf Shrimp Shell-On' confirm (shrimp)",
+        "NEVER KEYED: match-worklist-lib.ps1:190-192 builds ONE worklist key per gap from $g.candidate (the gap's head candidate, often a WITHHELD row) instead of one per actionable verdict. The ledger decided Birds Eye Steamfresh, Mezzetta Sun-Dried Tomatoes, Pictsweet, Hy-Vee Korean Gochujang Sauce and Old Orchard Value Size while the ACTIONABLE names behind them were on no docket: 'That's Smart! Mixed Vegetables With Carrots, Corn, Peas & Green Beans' (12 oz $0.98, a frozen bag: frozen-vegetables is right), 'Deli Sliced Turkey Breast, sun-dried tomato or cajun' (turkey-lunchmeat right), 'Devour Big Bowl Spicy Gochujang Pork Mac & Cheese' (mac-and-cheese, not gochujang), 'Maya Kaimal Everyday Dal with Red Lentils Butternut Squash and Coconut' (coconut claims it; coconut has NO board cell), 'Musselman's 100% Apple Cider or Juice' (two products at one price: ad-line), 'Fareway Sliced Unsweetened Peaches' (16 oz $4.49, a bag, not a can), 'Fareway Baby Lima Beans' (16 oz, frozen-lima-beans right), 'Fareway Sliced in Extra Light Syrup Pears' (15 oz can: real gap), 'Dole Mandarin Oranges In 100% Fruit Juice' (Hy-Vee 23.5 oz $4.99, a jar, UNPRICED on fruit-cups: real claim error), and Sam's 'Member's Mark Commercial Oven, Grill and Fryer Cleaner, 32 oz., 3 pk.' / 'DCT Professional Grade Oven, Grill, & Fryer Cleaner (32 fl. oz., 4 ct.)' (fluid-ounce liquids against oven-cleaner's weight-ounce aerosols: the kind guard would refuse them; not widened)",
+        "WRONG CLASSIFIER DECISIONS waiting for apply-coverage-batch -FromWorklist: toasted-sesame-seeds @ Fareway 'Krinos Tahini Ground Sesame Seeds' decided RELEASE (match-worklist-lib.ps1:130-131: head noun 'seeds' names the target, and the claimer-word guard the band branch got at :156-161 is missing here). Applied, it takes Fareway's tahini cell ($0.5619/oz, that exact row) off tahini and puts tahini on toasted-sesame-seeds, where it would CROWN (Walmart 0.7789). yellow-bell-pepper @ Family Fare decided WIDEN although its evidence is PRICED (the classifier never reads the reason)",
+        "yellow-bell-pepper @ Family Fare is NOT a compare-deals drop: ad-cycle-log 08:15:35 'QUARANTINED yellow-bell-pepper / Family Fare WITHHELD (no previously published value) - HARD FAIL ... (see audit-flag-verification.ps1)'; the claim is an in-window ad sale '10 for $10.00 with purchase of 10' (ad 2026-09-20..2026-09-26) ruled wrong-price against the everyday $1.99 read. Owned by 2026-09-21-4b973e below; audit-coverage-gaps reports a quarantined cell as PRICED-and-missing because it never reads the board's quarantine block",
+        "fresh-basil @ Baker's 'Simple Truth Organic Basil Leaves' (and '... Shaker') claimed by dried-basil: the jar is dried basil, the claim is right (undecided on the worklist today)"
+      ],
+      "surface_fix": {
+        "what": "decide the undecided and wrongly-decided keys by hand, then ship the three measured rule changes in the batch",
+        "files": [
+          "grocery/match-verdicts.json (through resolve-match-worklist.ps1 -Decide only)",
+          "grocery/commodities.json (through apply-coverage-batch.ps1)"
+        ],
+        "exact_change": "resolve-match-worklist -Decide: toasted-sesame-seeds|Fareway|Krinos Tahini Ground Sesame Seeds = confirm (BEFORE any -FromWorklist run); fresh-basil|Baker's|Simple Truth Organic Basil Leaves = confirm; yellow-bell-pepper|Family Fare|Yellow Bell Pepper = confirm with reason 'quarantined by flag-verification, owned by 4b973e' (never widen); after the root fix re-keys the gaps: oven-cleaner Member's Mark/DCT = confirm (fl oz liquid on an oz commodity), canned-peaches 'Fareway Sliced Unsweetened Peaches' = confirm, the Devour, Deli turkey, That's Smart and Baby Lima claims = confirm, Musselman's = ad-line, Maya Kaimal on coconut = confirm (a coconut exclude on \\bdal\\b was measured and RE-LANDS the dal on butternut-squash, so no coconut edit). Rules: kalamata-olives.include += '\\bkalamata\\b.{0,25}\\bolives?\\b'; canned-pears.include += '\\bin\\s+(?:extra\\s+)?(?:light|heavy)\\s+syrup\\s+pears?\\b'; fruit-cups mandarin include narrowed as in the routing artifact, plus fruit-cups.exclude += '\\bgel\\s+bowls?\\b'"
+      },
+      "root_cause": "The coverage gap -> worklist -> verdict loop cannot converge: (1) Read-MatchFindings keys one name per gap (the head candidate) instead of each actionable verdict, so 10 of today's 18 gaps have an actionable name that was never put in front of the matching lane; (2) audit-coverage-gaps.ps1 does not read match-verdicts.json or the board's quarantine block, so a decided claim or a quarantined cell stays actionable forever and the type keeps returning; (3) Get-MatchClassification's claimer-plus-target branch releases a name that carries the claimer's own word ('Krinos Tahini Ground Sesame Seeds') and widens a PRICED row, so the automatic road would move a correct cell onto the wrong commodity",
+      "root_fix": {
+        "what": "make the loop converge at its producer: key every actionable verdict, read decisions and the quarantine back into the audit, refuse the two wrong classifier shapes",
+        "files": [
+          "grocery/match-worklist-lib.ps1",
+          "grocery/audit-coverage-gaps.ps1",
+          "grocery/test-match-worklist.ps1"
+        ],
+        "exact_change": "match-worklist-lib Read-MatchFindings: foreach gap, foreach verdict with actionable=true, emit a row keyed on the VERDICT's candidate with that verdict's reason and claimer; skip reason PRICED (not a matching finding). Get-MatchClassification claimer+target branch: before 'release', compute claimerWordInName exactly as the aisle/band branch does (lines 156-161) and return undecided with why 'the claimer's own word <w> is in the name' when true. audit-coverage-gaps: load match-verdicts.json; a verdict whose key (coverage|commodity|store|candidate) has verdict confirm, moot, ad-line or known-wrong becomes reason DECIDED, actionable=false, detail naming the verdict; load the board's quarantine.cells and turn a PRICED verdict for a quarantined commodity|store into reason QUARANTINED, actionable=false, detail naming the guard reason"
+      },
+      "prior_closes": [
+        "2026-08-31-ad3b81",
+        "2026-09-01-4a481e",
+        "2026-09-02-995502",
+        "2026-09-06-39933e",
+        "2026-09-07-0e9482",
+        "2026-09-19-2a0748",
+        "2026-09-21-b96f21"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/match-worklist-lib.ps1",
+          "grocery/audit-coverage-gaps.ps1"
+        ],
+        "what": "the emitting check and the worklist producer, not a rule file: the type returned because decided and quarantined gaps stay actionable and actionable names are never keyed, so every close repaired names while the count never fell",
+        "exact_change": "as root_fix.exact_change"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after routing of 63,687 names over one 569-file corpus (plan-2026-09-25-15.routing.json), every rule change of this plan applied together; classifier and audit changes read against today's 18 actionable gaps and 16 non-band worklist rows",
+        "affected_now": 18,
+        "names": [
+          "Krinos Kalamata Pitted Olives, 35.27 oz.",
+          "Great Value Pitted Kalamata Greek Olives, 6.35 oz Jar",
+          "Great Value Sliced Kalamata Greek Olives, 6.35 oz Jar",
+          "Pearls Specialties Pitted Kalamata Greek Olives",
+          "(2 pack) Pearls - Deli Olives Kalamata Pitted Greek Olives 4oz Tub",
+          "(2 pack) Pearls Specialties Sliced Kalamata Greek Olives 6.7 oz",
+          "Fareway Sliced in Extra Light Syrup Pears",
+          "Fareway Halves in Heavy Syrup Pears",
+          "9 mandarin names fruit-cups -> mandarin-oranges (Dole jars and cans, Private Selection 35 oz, Fareway in 100% Juice, Dole In Juice)",
+          "Dole In 100% Fruit Juice Mandarin Oranges 4 Ea: mandarin-oranges -> fruit-cups (a 4-cup pack, now right)"
+        ],
+        "risk": "fruit-cups narrowing: 6 variants measured (routing artifact variants_tried); the kept form moves no real cup pack out of fruit-cups and no multi-can pack in. Audit change: 12 of 18 actionable gaps become DECIDED or QUARANTINED today and 6 stay actionable until decided. Keying verdicts grows the coverage worklist from 8 rows to at most 21 today",
+        "cell_effects": [
+          {
+            "commodity": "mandarin-oranges",
+            "store": "Hy-Vee",
+            "before": "no cell - mandarin-oranges has no Hy-Vee column on comparison-2026-09-23 (its stores: Aldi, Walmart, Baker's, Fareway)",
+            "after": 0.2123
+          },
+          {
+            "commodity": "mandarin-oranges",
+            "store": "Family Fare",
+            "before": "no cell - mandarin-oranges has no Family Fare column on comparison-2026-09-23 (its stores: Aldi, Walmart, Baker's, Fareway)",
+            "after": 0.2327
+          },
+          {
+            "commodity": "kalamata-olives",
+            "store": "Sam's Club",
+            "before": "no cell - kalamata-olives has no Sam's Club column on comparison-2026-09-23 (its stores: Baker's, Walmart, Family Fare)",
+            "after": "no cell expected - WITHHELD-UNPROVEN-CHANNEL (see note; 0.182 only if admitted)",
+            "note": "expected WITHHELD-UNPROVEN-CHANNEL; if admitted 0.182 would crown over Baker's 0.4271 (real-economics: Sam's own unit price $0.18/oz reproduces)"
+          },
+          {
+            "commodity": "canned-pears",
+            "store": "Fareway",
+            "before": "no cell - canned-pears has no Fareway column on comparison-2026-09-23 (its stores: Walmart, Aldi, Baker's, Hy-Vee)",
+            "after": "no cell expected - WITHHELD-UNPROVEN-STORE (see note; 0.0944 only if admitted)",
+            "note": "expected WITHHELD-UNPROVEN-STORE (fareway-shop captures before the 2026-09-18 per-row stamp); if admitted 0.0944 would crown over Walmart 0.0959"
+          },
+          {
+            "commodity": "tahini",
+            "store": "Fareway",
+            "before": 0.5619,
+            "after": 0.5619,
+            "note": "PROTECTED: the classifier's pending release would take it to absent"
+          }
+        ],
+        "cell_effects_note": "estimated from the rows' own price and size (routing artifact cell_effects_estimated); the developer's apply-coverage-batch crown/value report is the measurement of record"
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "Dole Mandarin Oranges In 100% Fruit Juice (Hy-Vee, 23.5 oz)",
+          "claimed_by": "fruit-cups",
+          "index": 244,
+          "release_needed": "fruit-cups include 'mandarin\\s+oranges?\\b.{0,30}juice' replaced by the cup/count forms in the routing artifact (mandarin-oranges is index 360)"
+        },
+        {
+          "name": "Krinos Kalamata Pitted Olives, 35.27 oz.",
+          "claimed_by": "(none)",
+          "index": -1,
+          "release_needed": "none: no include matched it before"
+        },
+        {
+          "name": "Fareway Sliced in Extra Light Syrup Pears",
+          "claimed_by": "(none)",
+          "index": -1,
+          "release_needed": "none: pears (113) does not match it and canned-pears (362) had no word-order form for it"
+        }
+      ],
+      "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-worklist.ps1 (Get-MatchClassification and Read-MatchFindings cases) and grocery/audit-coverage-gaps.ps1 -SelfTest",
+        "must_fire_case": "frozen from today's real gaps: (a) the canned-mixed-vegetables|Hy-Vee gap whose head candidate 'Birds Eye Steamfresh Mixed Vegetables' is WITHHELD and whose second verdict 'That's Smart! Mixed Vegetables With Carrots, Corn, Peas & Green Beans' is CLAIMED-BY must yield a worklist key for the That's Smart name; (b) Get-MatchClassification coverage 'Krinos Tahini Ground Sesame Seeds' target toasted-sesame-seeds claimer tahini must NOT return release; (c) a PRICED verdict on yellow-bell-pepper|Family Fare with that cell in the board's quarantine.cells must read QUARANTINED, actionable=false; (d) the chili-beans|Hy-Vee gap on 'Hy-Vee Chili With Beans' with a confirm verdict in the fixture's match-verdicts must read DECIDED",
+        "clean_twin": "CLEAN TWIN (still works): 'Krinos Kalamata Pitted Olives, 35.27 oz.' RULE-INVISIBLE with no verdict stays actionable and still yields its worklist key; the band-branch case 'Litehouse Herb, Freeze Dried Basil' keeps its existing answer; a claimer+target name with no claimer word ('Kroger Orange Rind Muenster Block Cheese' vs oranges) keeps its current decision",
+        "fixture_occurrences": [
+          "2026-08-31-ad3b81: the gap set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (garlic-bread @ Hy-Vee; aji-amarillo-paste @ Walmart; yukon-gold-potatoes @ Fareway; coleslaw-mix @ Hy-Vee); the fixture asserts every gap is keyed on the worklist or read back as decided or quarantined, none silently unkeyed",
+          "2026-09-01-4a481e: the gap set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (pomegranates @ Walmart; coleslaw-mix @ Walmart; cooked-jasmine-rice @ Walmart); the fixture asserts every gap is keyed on the worklist or read back as decided or quarantined, none silently unkeyed",
+          "2026-09-02-995502: the gap set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (block-cheese @ Family Fare; coleslaw-mix @ Aldi); the fixture asserts every gap is keyed on the worklist or read back as decided or quarantined, none silently unkeyed",
+          "2026-09-06-39933e: the gap set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (red-potatoes @ Fareway; pecorino-romano @ Fareway; cinnamon-stick @ Aldi); the fixture asserts every gap is keyed on the worklist or read back as decided or quarantined, none silently unkeyed",
+          "2026-09-07-0e9482: the gap set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (baked-beans @ Hy-Vee; anaheim-peppers @ Fareway; quinoa-uncooked @ Hy-Vee; couscous @ Hy-Vee; sea-salt @ Hy-Vee); the fixture asserts every gap is keyed on the worklist or read back as decided or quarantined, none silently unkeyed",
+          "2026-09-19-2a0748",
+          "2026-09-21-b96f21",
+          "2026-09-23-d493dd"
+        ],
+        "commands": [
+          "powershell -File grocery\\test-match-worklist.ps1",
+          "powershell -File grocery\\audit-coverage-gaps.ps1 -SelfTest",
+          "powershell -File grocery\\resolve-match-worklist.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the lib/audit commit (the worklist returns to one key per gap, the audit to counting decided gaps); revert the rules hunk of the batch commit",
+      "do_not_touch": [
+        "the provenance contract (every WITHHELD verdict is it working)",
+        "coverage-gap-allowlist.json (commodity|store is too coarse for a per-name decision)",
+        "any apply-coverage-batch -FromWorklist run before the toasted-sesame-seeds confirm is written"
+      ],
+      "leaves_open": "a name that cannot say its form (Hy-Vee 'Dole Mandarin Oranges In 100% Fruit Juice', size only in the size field) is still routed by name alone: 1 occurrence, not counted board-wide. (The 3 rule gaps mandarin-oranges@Hy-Vee, canned-pears@Fareway, kalamata-olives@Sam's Club stay actionable until this plan's ship_sequence step 3 applies the batch; that is the plan's own next step, not a residual.)",
+      "leaves_open_occurrences": 1,
+      "resolution_note": "Fixed at the producer. The worklist now keys every actionable coverage verdict (not the gap's head candidate; PRICED is not keyed), audit-coverage-gaps reads match-verdicts.json (confirm/moot/ad-line/known-wrong -> DECIDED) and the board's quarantine.cells (PRICED on a quarantined cell -> QUARANTINED), and the classifier no longer releases a name whose head phrase leads with the claimer's word (Krinos Tahini). Hand decisions recorded through resolve-match-worklist -Decide: 11 confirms (Krinos tahini, 2 Simple Truth basil, 2 Sam's fl-oz oven cleaners, Fareway unsweetened peaches, Devour, Deli turkey, That's Smart, Baby Lima, Maya Kaimal) and Musselman's ad-line. Measured on today's board: actionable gaps 18 -> 3 (mandarin-oranges@Hy-Vee, canned-pears@Fareway, kalamata-olives@Sam's Club), exactly the three rule gaps step 3's batch owns. Rules are step 3, not this commit.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 65,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "(1) Classifier guard NARROWED from the exact_change: the plan's whole-name claimer-word check (as the band branch does) would have turned 5 correct frozen releases undecided (Cherry Frosting, Queso Salsa Dip, Tissue Plus Lotion, Tomato Paste with Garlic, and the tomato-paste MECHANISM case). Shipped instead: refuse a release only when a claimer word sits in the head phrase AHEAD of the head and its modifier. Krinos -> undecided; the 24 frozen labels still decide 13 of 24 with 0 wrong (same as before). Cost: 'Kroger Orange Rind Muenster Block Cheese' in the role target=block-cheese, claimer=oranges now abstains where it released (undecided is never wrong; the plan's clean twin role, claimer block-cheese, keeps confirm). (2) yellow-bell-pepper|Family Fare NOT confirmed in the ledger: with the root fix the audit reads it QUARANTINED, and a standing confirm would hide a real PRICED gap once the quarantine lifts after the ad ends 2026-09-26. (3) Keys now Trim the name: the Maya Kaimal capture ends in ' \\r\\n' and could not be decided otherwise. (4) The rules hunk (kalamata, canned-pears, fruit-cups/mandarin) is NOT in this commit: ship_sequence step 3 runs it ONCE for d493dd and 3ba362 together in a scratch clone, after 3ba362's code. commodities.json untouched here.",
+      "shipped_commit": null,
+      "premise_note": "Checked 2026-09-25 against comparison-2026-09-23 (still built 08:14:10, no newer board), coverage-gaps.json and match-verdicts.json at 71099a45f: canned-mixed-vegetables|Hy-Vee head candidate Birds Eye is WITHHELD with That's Smart! CLAIMED-BY actionable behind it (one key per gap confirmed, match-worklist-lib Read-MatchFindings); the board's quarantine.cells holds yellow-bell-pepper|Family Fare withheld by audit-flag-verification; the old classifier returns release for 'Krinos Tahini Ground Sesame Seeds' (probe against HEAD's lib); 4 of the 18 actionable gaps had a closing ledger verdict the audit never read.",
+      "close_disposition": "confirmed",
+      "leaves_open_followup": "2026-09-25-b3c8ca",
+      "proof_run": "test-match-worklist.ps1 exit 0 'self-test pass: 34 of 34'; audit-coverage-gaps.ps1 -SelfTest exit 0 'SELF-TEST PASS'; resolve-match-worklist.ps1 -SelfTest exit 0 'pass'; live audit-coverage-gaps -ReportDir temp over comparison-2026-09-23: exit 2, 3 actionable of 435 (DECIDED 6, QUARANTINED 1). full_suite: deferred-to-land",
+      "actual_tool_calls": 40
+    },
+    {
+      "queue_id": "2026-09-23-3ba362",
+      "subject": "Grocery: semantic sweep found 2 product(s) no rule can see (x2)",
+      "classification": "wrong-product",
+      "evidence": [
+        "LANE MEASUREMENT CONFIRMED: both findings stand. laundry-detergent @ Family Fare 'Arm & Hammer Liquid Laundry Clean Burst' 43 oz $6.19 (0.144/fl oz, family-fare-regular-2026-07-12); hot-sauce @ Family Fare 'Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz' $2.19 (0.1825/fl oz, family-fare-regular-2026-07-30, carried forward)",
+        "both sit UNDECIDED on the worklist. 'Arm & Hammer' reads as a noun list ('the name lists several foods (a conjunction between nouns)'): Get-MwlHead (match-worklist-lib.ps1:92-96) marks any '&' between two words not both in MwlAdj as a list, so a brand ampersand blocks every decision on an Arm & Hammer, Johnson & Johnson or Ben & Jerry's name. Trappey's abstains correctly (only one of hot-sauce's words is in the name)"
+      ],
+      "surface_fix": {
+        "what": "widen both includes, bounded",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "laundry-detergent.include += '\\bliquid\\s+laundry\\b'; hot-sauce.include += '\\b(?:cayenne|red\\s+devil|louisiana)\\b.{0,40}\\bpepper\\s+sauce\\b', '\\bpepper\\s+sauce\\b.{0,40}\\b(?:cayenne|red\\s+devil)\\b' (never a bare 'pepper sauce')"
+      },
+      "root_cause": "the classifier that should decide semantic findings automatically abstains on any name with a brand ampersand, so a semantic finding on an '&' brand can only be closed by a hand rule, and each return is worked from scratch",
+      "root_fix": {
+        "what": "a brand ampersand is not a noun list",
+        "files": [
+          "grocery/match-worklist-lib.ps1",
+          "grocery/test-match-worklist.ps1"
+        ],
+        "exact_change": "Get-MwlHead: treat '&'/'and' as a list conjunction only when BOTH neighbours are commodity tokens (pass the token index Get-MwlTokenIndex builds, which Get-MatchClassification already receives as -Index); a neighbour that names no commodity (arm, hammer, johnson, jerry) is a brand joint and does not set list"
+      },
+      "prior_closes": [
+        "2026-08-31-550b2a",
+        "2026-09-01-ff9801",
+        "2026-09-02-fd3f29",
+        "2026-09-03-f2abdb",
+        "2026-09-05-b08e51",
+        "2026-09-06-796030",
+        "2026-09-07-abae06",
+        "2026-09-10-20430e",
+        "2026-09-18-37ac63",
+        "2026-09-19-4f01f6",
+        "2026-09-21-7d64a6"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/match-worklist-lib.ps1"
+        ],
+        "what": "the producer of the decision that should close a semantic finding without a lane: its list test made these two (and every '&' brand) undecidable",
+        "exact_change": "as root_fix.exact_change; the developer re-runs the worklist over today's findings and lists every decision that changed (decision diff over all 1,132 rows)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "plan-2026-09-25-15.routing.json (63,687 names)",
+        "affected_now": 4,
+        "names": [
+          "Arm & Hammer Liquid Laundry Clean Burst -> laundry-detergent (from none)",
+          "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz -> hot-sauce (from none)",
+          "Trappey's Cayenne Pepper Sauce 6 Fl Oz -> hot-sauce (from none)",
+          "Trappey's Red Devil Cayenne Pepper Sauce, 12 oz Bottle (Walmart) -> hot-sauce (from none)"
+        ],
+        "risk": "no name left either commodity and no other commodity lost a name; 'liquid laundry' re-lands nothing because laundry-detergent's pod, sheet and softener excludes still apply",
+        "cell_effects": [],
+        "cell_effects_note": "no cell moves: Family Fare hot-sauce stays Valentina 0.1658 (Trappey's 0.1825 and 0.215), Walmart hot-sauce stays 0.0822 (Trappey's 12 oz 0.1317), Family Fare laundry-detergent stays 0.1014 (A&H 0.144)"
+      },
+      "claimed_by_earlier": [
+        {
+          "name": "Arm & Hammer Liquid Laundry Clean Burst",
+          "claimed_by": "(none)",
+          "index": -1,
+          "release_needed": "none"
+        },
+        {
+          "name": "Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz",
+          "claimed_by": "(none)",
+          "index": -1,
+          "release_needed": "none"
+        }
+      ],
+      "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-worklist.ps1 and apply-coverage-batch.ps1's own gate",
+        "must_fire_case": "Get-MwlHead 'Arm & Hammer Liquid Laundry Clean Burst' must return list=false and head 'laundry'; routing of 'Trappey's Pepper Sauce, Cayenne, Red Devil 12 Fl Oz' must be hot-sauce",
+        "clean_twin": "CLEAN TWIN: 'Pictsweet Farms Vegetables for Roasting Halved Brussels Sprouts, Butternut Squash & Onions' still returns list=true (both neighbours are foods); 'Mae Ploy Sweet Chili Sauce' still routes nowhere near hot-sauce (bounded widening)",
+        "fixture_occurrences": [
+          "2026-08-31-550b2a: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: almond-milk, canned-potatoes, chicken-breast, coconut-oil, deli-ham, dried-parsley, frozen-fruit, pork-tenderloin and more); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-01-ff9801: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: canned-potatoes, cherry-tomatoes, chicken-breast, coconut-milk-canned, coconut-oil, deli-ham, ground-beef-8020 and more); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-02-fd3f29: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: ground-beef-8020); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-03-f2abdb: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: chili-beans); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-05-b08e51: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: shower-cleaner); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-06-796030: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: cod, french-bread, taco-sauce); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-07-abae06: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: frozen-burritos, ground-beef-8020, laundry-pods); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-10-20430e: the finding set frozen from that item's queue body in grocery/out/archive/triage-queue.archived-2026-09-17.json (Commodities: ground-beef-8020, ice-cream, pork-shoulder); replayed through Get-MwlHead, a name the ampersand rule changes is a case and every other name is a regression row that must keep its head",
+          "2026-09-18-37ac63",
+          "2026-09-19-4f01f6",
+          "2026-09-21-7d64a6",
+          "2026-09-23-3ba362"
+        ],
+        "commands": [
+          "powershell -File grocery\\test-match-worklist.ps1"
+        ]
+      },
+      "rollback": "revert the lib hunk and the two include lines",
+      "leaves_open": "a semantic finding whose target shares only one word with the name (the Trappey's shape) still needs a hand rule by design: 1 occurrence today",
+      "leaves_open_occurrences": 1,
+      "resolution_note": "Both standing findings routed (laundry-detergent reads 'Liquid Laundry', hot-sauce reads a cayenne or Red Devil 'pepper sauce'); the classifier no longer reads a brand ampersand as a list of foods. No cell moved.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 28,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-18-a0c785",
+      "subject": "Grocery: beverage class absent on non-drink commodities in five display buckets",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "LANE MEASUREMENT CONFIRMED: adding beverage to the five buckets' apply blocks fires on 0 of 1,152 priced cells (22 token hits, all exempt by id). EXTENDED: exempt.beverage 'juice|soda|drink|water|tea|coffee|lemonade|punch|cider|kombucha|milk' is an unanchored substring over 34 ids; anchored to whole id segments as written it would ALSO drop energy-drinks, sports-drinks and buttermilk (real drinks), so plurals and buttermilk go in the anchored form; that form drops exactly 5: ribeye-steak, shaved-beef-steak, sirloin-steak, steak-sauce, watermelon"
+      ],
+      "surface_fix": {
+        "what": "close the class in the rule library",
+        "files": [
+          "grocery/category-excludes.json"
+        ],
+        "exact_change": "add 'beverage' to the classes of the apply blocks for Baking & Spices, Canned & Soup, Sauces & Condiments, Dairy & Eggs and Coffee, Oils & Spreads; exempt.beverage becomes '(?:^|-)(?:juice|soda|drinks?|water|tea|coffee|lemonade|punch|cider|kombucha|(?:butter)?milk)(?:$|-)'"
+      },
+      "root_cause": "the food-class guard scopes classes by display bucket and the shared buckets carry no beverage class, while its id exemption is an unanchored substring, so a drink on a fluid-ounce sauce, oil or vinegar is seen by nothing and 'steak' is exempt as a 'tea'",
+      "root_fix_none_because": "the surface fix is the class fix: both halves are the rule library the guard reads",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "guard scope, not matching: the lane's 1,152-cell pass for the apply blocks plus this plan's pass over all 593 commodity ids for the exemption",
+        "affected_now": 0,
+        "names": [],
+        "risk": "5 ids lose the exemption; their cells sit in the Fruit/Vegetables and Meat blocks that already apply beverage, whose tokens are word-bounded (\\btea\\b, \\bnectar\\b, \\bdrink\\b), so no steak or watermelon name is expected to fire; the developer runs audit-food-category before and after, bar 0 new findings",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors.ps1 (audit-food-category cases)",
+        "must_fire_case": "frozen row: a 'Summit ... Energy Drink 16 FL OZ' priced on a Sauces & Condiments fluid-ounce commodity (vinegar) must make audit-food-category exit 2 naming the beverage class",
+        "clean_twin": "CLEAN TWIN: 'Arm & Hammer Baking Soda' on baking-soda and an Aldi 'Nature S Nectar' lemon-juice row stay silent (exempt by segment), and energy-drinks keeps its exemption",
+        "commands": [
+          "powershell -File grocery\\audit-food-category.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the category-excludes.json hunk",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "resolution_note": "The five shared buckets now carry the beverage class and the id exemption matches whole id segments, so a drink on a sauce, oil or vinegar is a hard fail. 0 of 1,152 cells fired on the day it shipped.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 18,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-21-4b973e",
+      "subject": "Grocery: price-flag verification residuals (R1 median days, R2 wrong prices under both bars, R4 ad-flyer sales)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "R1 MEASURED (the lane left it uncomputed): flag-verification.json 2026-09-25, 76 of 91 entries carry a verdict, median 1 day from first flag to verdict, max 1; statuses match 75, pending 8, claim-changed 6, left-board 1, wrong-price 1",
+        "R4 LIVE: the ONE wrong-price verdict in the ledger is yellow-bell-pepper|Family Fare, claim row_type sale '10 for $10.00 with purchase of 10', ad_from 2026-09-20, ad_to 2026-09-26, ruled 'no reading of the store's own figures gives our 1.0000/each: size field 1 ea -> 1.9900' against the product page's shelf price. guards quarantined the cell (WITHHELD, ad-cycle-log 08:15:35), which also hid Family Fare's everyday $1.99 row, and made 2026-09-23-d493dd's only PRICED gap",
+        "R2: 8d2ad5 found 2 live wrong-basis cells under both bars (Aldi tea-bags, facial-tissues) and ships their refusal"
+      ],
+      "surface_fix": {
+        "what": "stop condemning an in-window ad sale with a shelf-price read",
+        "files": [
+          "grocery/flag-verify-lib.ps1"
+        ],
+        "exact_change": "a claim with row_type sale whose ad window covers the reading date, and whose reading shows only the claim's own regular price (1.99 here), gets status 'sale-unreadable' (pending, never wrong-price); a wrong-price verdict on a sale needs a reading of the SAME promotion"
+      },
+      "root_cause": "the verifier answers a sale claim from the product page, which shows the shelf price and not the ad's multibuy, so an in-window ad sale reads as a price the store contradicted and the value guard withholds a real cell",
+      "root_fix": {
+        "what": "the verdict vocabulary says what the reading can prove",
+        "files": [
+          "grocery/flag-verify-lib.ps1",
+          "grocery/test-flag-verification.ps1"
+        ],
+        "exact_change": "as surface_fix, plus: a reading after the window ended is 'left-board' (the ad expired), never wrong-price"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no routing change: all 91 entries of flag-verification.json (2026-09-25) read; 1 wrong-price verdict exists and it is the sale shape",
+        "affected_now": 1,
+        "names": [
+          "Yellow Bell Pepper (Family Fare, 10 for $10.00 with purchase of 10, ad 2026-09-20..2026-09-26)"
+        ],
+        "risk": "narrows the only road by which the verifier condemns a sale row; 0 of the 75 match verdicts change",
+        "cell_effects": [
+          {
+            "commodity": "yellow-bell-pepper",
+            "store": "Family Fare",
+            "before": null,
+            "after": 1.0,
+            "note": "the in-window sale returns and CROWNS yellow-bell-pepper (Baker's 1.67) while the ad runs; if the rebuild lands after 2026-09-26 the sale has expired and the everyday 1.99 row shows instead"
+          }
+        ]
+      },
+      "freshness": "measured 2026-09-25 19:40-21:30 against comparison-2026-09-23 (built 2026-09-25 08:14:10, not mid-build), candidates-2026-09-23 and flagged-2026-09-23 (08:06), coverage-gaps.json 08:19, match-worklist.json 08:23, match-verdicts.json and commodities.json at origin/main 71099a45f; if a board has been built since, re-run the routing diff and re-read these files before acting",
+      "proof": {
+        "guard_or_fixture": "grocery/test-flag-verification.ps1",
+        "must_fire_case": "frozen EVERYDAY claim of $1.00 read back at $1.99 must still be wrong-price (the verifier still condemns); frozen ledger entry yellow-bell-pepper|Family Fare (sale, 10 for $10 with purchase of 10, ad 2026-09-20..26, reading 1.99 on 2026-09-22) must be sale-unreadable, never wrong-price",
+        "clean_twin": "CLEAN TWIN: an everyday claim read back at its own price stays 'match'; a sale read after its window reads 'left-board'",
+        "commands": [
+          "powershell -File grocery\\test-flag-verification.ps1",
+          "powershell -File grocery\\test-cell-quarantine.ps1"
+        ]
+      },
+      "rollback": "revert the flag-verify-lib hunk; the verdict returns to wrong-price and the cell is withheld again",
+      "leaves_open": "R2 beyond the count class (a wrong price under both bars that is not a count conflict) still has no detector; R4's other half, a product-level re-read of ad-flyer sale claims, is unbuilt (15 of 21 replayed sale claims in the lane's replay)",
+      "leaves_open_occurrences": 15,
+      "leaves_open_followup": "2026-09-21-4b973e",
+      "resolution_note": "R1 measured: median 1 day to a verdict (76 of 91). The verifier no longer condemns an in-window ad sale from a shelf-price read; its only wrong-price verdict was that shape and had withheld Family Fare's yellow pepper. R2's count class ships in 8d2ad5.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 30,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    }
+  ],
+  "ship_sequence": [
+    "1. money, BEFORE anything else: resolve-match-worklist.ps1 -Decide toasted-sesame-seeds|Fareway|Krinos Tahini Ground Sesame Seeds = confirm (the pending RELEASE would move Fareway's tahini cell); fresh-basil|Baker's = confirm; yellow-bell-pepper|Family Fare = confirm (quarantine, owned by 4b973e). plan-2026-09-25-15 step 1 waits on this",
+    "2. money code, one commit per item, in a worktree: d493dd + 3ba362 (grocery/match-worklist-lib.ps1, audit-coverage-gaps.ps1, test-match-worklist.ps1); 4b973e (flag-verify-lib.ps1, test-flag-verification.ps1); a0c785 (category-excludes.json). Each item's -SelfTest and test-auditors green before the next",
+    "3. money rules, ONE apply-coverage-batch run in a scratch clone: the rule_changes of plan-2026-09-25-15.routing.json owned by d493dd and 3ba362 ONLY (kalamata, canned-pears, fruit-cups, laundry, hot-sauce); diff its routing against the artifact's 22 moves owned by those items (fruit-cups->mandarin-oranges 9, mandarin-oranges->fruit-cups 1, ->kalamata-olives 6, ->canned-pears 2, ->hot-sauce 3, ->laundry-detergent 1); its crown/value report must match those items' cell_effects_estimated or each difference is reported. If plan-15's rules landed first, commodities.json holds three new commodities before sweet-potatoes: no move of this set touches them",
+    "4. board chain ONCE for this plan's publish batch 1, in a scratch clone, after plan-15's publish if that landed first, in check-ad-cycles.ps1's order (copy it from the script): repair-multipack-sizes -Apply, stamp-ad-as-of -Apply, compare-deals, update-history -Reconcile, audit-food-category (0 new), audit-name-drift / prune-bad-links / audit-name-drift again if product-urls.json changed, generate-board-overrides, build-deals-page, guards (exit 0 or 4 QUARANTINED, never held), audit-match-soundness read line by line then -Accept, audit-coverage-gaps (6 or fewer actionable), publish-deals-page",
+    "5. land every commit through ops\\push-main.ps1 (a chain change: never git push origin HEAD:main); verify on the live board with a cache-busting query: mandarin-oranges shows Hy-Vee and Family Fare, tahini Fareway still 0.5619, yellow-bell-pepper Family Fare 1.00 while the ad runs to 2026-09-26",
+    "6. close d493dd, 3ba362, a0c785, 4b973e with their resolution notes; the prevention id closes superseded by d493dd"
+  ],
+  "knowledge_consulted": [
+    "searched \"multibuy band refuses real price\", \"cheap wrong basis cell detector\", \"delegated audit quarantine scope\", \"first match wins release exclude\" (knowledge-search --estate --multi); searched \"routing simulation coverage gap worklist\", nothing applicable beyond the entries below",
+    "data-quality-craft/applies-here.md ('First-match-wins and freshness ranking let the wrong row take a board cell'): every exclude was measured for re-landings, which cut the peanut-butter set from 10 tokens to 5 and dropped the coconut exclude",
+    "memory:ruling-price-bands-derived (C--Codex store): bands are derived, never hand-typed, so the dear side is Q-derived-ceiling for Brad, not a band edit",
+    ".claude/rules/grocery.md ('A wrong product is a SELLER SHAPE, not a brand'; 'AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL': the count-conflict refusal resolves by proof or refuses, never guesses; 'A BAD CELL QUARANTINES ITSELF')",
+    ".claude/rules/measurement.md ('Write ONE ROW PER CASE PER ARM'; 'Record an INPUT FINGERPRINT'): the routing artifact carries every moved name, the corpus fingerprint and the six variants tried"
+  ],
+  "open_questions_for_brad": []
+}

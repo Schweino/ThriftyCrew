@@ -127,6 +127,17 @@ function Get-MatchClassification {
   $preT = Test-MwlIn $h.prehead $T.tokens; $preC = Test-MwlIn $h.prehead $C.tokens
   $stem = Get-MwlStem $h.head
   if ($Claimer -and $Target) {
+    # d493dd (plan-2026-09-25-16): a CLAIMER word inside the head phrase, ahead of the head and its modifier, means the
+    # name LEADS with the claimer's food and the target words only describe it: 'Krinos Tahini Ground Sesame Seeds'
+    # (claimer tahini) was decided release to toasted-sesame-seeds, which would have moved Fareway's tahini cell. The
+    # band branch below checks the whole name; here only the core ahead of the prehead is read, because a claimer word
+    # AS the head's modifier ('Cherry Frosting', 'Queso Salsa Dip') or after a with/plus cut ('Tissue Plus Lotion')
+    # is a flavour or an add-on, and those releases are right (5 of the 24 frozen labels).
+    $coreWords = @((($h.core -replace '[,()/&+]', ' ') -split '\s+') | Where-Object { $_ -and -not $script:MwlStop.ContainsKey($_.ToLowerInvariant().Trim(',', '.')) })
+    $claimerLeads = ''
+    for ($ci = 0; $ci -lt ($coreWords.Count - 2); $ci++) { if (Test-MwlIn $coreWords[$ci] $C.tokens) { $claimerLeads = $coreWords[$ci]; break } }
+    if ($claimerLeads -and (($inT -and -not $inC) -or ($preT -and -not $preC))) {
+      $r.why = ("the claimer's own word '" + $claimerLeads + "' leads the name ahead of the head phrase, so " + $Claimer.id + ' may be what the product IS; a release is not decided by rule'); return $r }
     if ($inT -and -not $inC) {
       $r.decision = 'release'; $r.why = ("the head noun '" + $h.head + "' names " + $Target.id + ', and ' + $Claimer.id + "'s own words do not")
       # the narrowest exclude the name supports: the head phrase when the word before the head also names the target
@@ -175,7 +186,7 @@ function Get-MwlTokenIndex($Commodities) {
   foreach ($c in @($Commodities)) { if (-not $c) { continue }; foreach ($k in (Get-MwlCommodityTokens $c).tokens.Keys) { if (-not $ix.ContainsKey($k)) { $ix[$k] = New-Object System.Collections.Generic.List[string] }; [void]$ix[$k].Add([string]$c.id) } }
   return $ix
 }
-function Get-MwlKey([string]$Kind, [string]$Commodity, [string]$Store, [string]$Name) { return ($Kind + '|' + $Commodity + '|' + $Store + '|' + $Name) }
+function Get-MwlKey([string]$Kind, [string]$Commodity, [string]$Store, [string]$Name) { return ($Kind + '|' + $Commodity + '|' + $Store + '|' + $Name.Trim()) }   # Trim: a captured name can end in a CR/LF ('Maya Kaimal ... Coconut \r\n', 2026-09-25), and a key that carries it cannot be decided
 
 function Read-MatchFindings {
   <# One row per kind|commodity|store|name from every detector file that exists. A missing file is reported in
@@ -188,8 +199,16 @@ function Read-MatchFindings {
   $cg = if (Test-Path -LiteralPath $f) { & $rd $f } else { $null }
   if (-not $cg) { [void]$blind.Add('coverage') } else {
     foreach ($g in @($cg.gaps | Where-Object { $_ -and $_.actionable })) {
-      $cl = ''; $m = [regex]::Match([string]$g.detail, "gave this name to '([^']+)'"); if ($m.Success) { $cl = $m.Groups[1].Value }
-      [void]$rows.Add([pscustomobject]@{ key = (Get-MwlKey 'coverage' ([string]$g.commodity) ([string]$g.store) ([string]$g.candidate)); kind = 'coverage'; commodity = [string]$g.commodity; store = [string]$g.store; name = [string]$g.candidate; claimer = $cl; evidence = ([string]$g.reason + ': ' + [string]$g.detail) })
+      # d493dd (plan-2026-09-25-16): one key per ACTIONABLE VERDICT, never one per gap. The gap's head candidate is
+      # often a WITHHELD row, and keying it left the actionable name behind it on no docket (10 of 18 gaps on
+      # 2026-09-25). PRICED is not a matching finding (the row matched and priced; look downstream), so it is not
+      # keyed. A gap file from before per-candidate verdicts falls back to the head candidate.
+      $vs = @(); if ($g.PSObject.Properties['verdicts']) { $vs = @($g.verdicts | Where-Object { $_ -and $_.actionable -and [string]$_.reason -ne 'PRICED' }) }
+      if (-not $g.PSObject.Properties['verdicts']) { $vs = @([pscustomobject]@{ candidate = $g.candidate; reason = $g.reason; detail = $g.detail }) }
+      foreach ($v in $vs) {
+        $cl = ''; $m = [regex]::Match([string]$v.detail, "gave this name to '([^']+)'"); if ($m.Success) { $cl = $m.Groups[1].Value }
+        [void]$rows.Add([pscustomobject]@{ key = (Get-MwlKey 'coverage' ([string]$g.commodity) ([string]$g.store) ([string]$v.candidate)); kind = 'coverage'; commodity = [string]$g.commodity; store = [string]$g.store; name = [string]$v.candidate; claimer = $cl; evidence = ([string]$v.reason + ': ' + [string]$v.detail) })
+      }
     }
   }
   $f = Join-Path $OutDir 'semantic-findings.json'
