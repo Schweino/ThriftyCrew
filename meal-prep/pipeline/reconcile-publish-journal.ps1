@@ -72,6 +72,39 @@ function Get-TcCandidateOldHeads {
   return ,$c
 }
 
+# ---- PROOF 3: THE LIVE HASH IS AN ENTRY ANOTHER JOURNAL ON THIS BOX RECORDED (2026-09-26) ----------------------
+# The journal is gitignored, so every checkout has its own copy, and until meal-prep\lib\publish-journal.ps1 a publish
+# from a linked worktree recorded its hashes only there. publish.ps1 writes an entry ONLY after the live page verified,
+# and the hash covers body, head, title and excerpt, so a live post whose hash equals an entry in ANY journal on this
+# machine is byte-identical to a build we published and verified; a hand edit in Ghost admin changes the hash and
+# matches nothing. Measured 2026-09-26: 13 recipes refused by the drift guard, each live hash found in exactly one
+# worktree journal (6 in agent-ab034ff7f1b928b54 from 2026-09-22 23:43, 7 in agent-acc4db640d784b57b from 2026-09-23
+# 08:26), and nowhere in the main checkout's.
+function Get-TcSiblingJournalPaths {
+  <# Every publish journal on this box except $Own: the main checkout's and each linked worktree's under it. #>
+  param([string]$Repo, [string]$Own)
+  . (Join-Path $Repo 'lib\main-checkout.ps1')
+  $mc = Get-TcMainCheckout -Dir $Repo
+  $main = if ($mc.ok -and $mc.main) { $mc.main } else { [string]$Repo }
+  $cands = @(Join-Path $main 'meal-prep\db\published-hashes.json')
+  $wtRoot = Join-Path $main '.claude\worktrees'
+  if (Test-Path -LiteralPath $wtRoot) {
+    foreach ($d in @(Get-ChildItem -LiteralPath $wtRoot -Directory -ErrorAction SilentlyContinue)) { $cands += (Join-Path $d.FullName 'meal-prep\db\published-hashes.json') }
+  }
+  $ownFull = if ($Own) { [IO.Path]::GetFullPath($Own) } else { '' }
+  return @($cands | Where-Object { (Test-Path -LiteralPath $_) -and -not [string]::Equals([IO.Path]::GetFullPath($_), $ownFull, [StringComparison]::OrdinalIgnoreCase) })
+}
+function Find-TcHashElsewhere {
+  <# The first journal (a list of @{ path; map }) whose entry for $Slug is EXACTLY $Hash, or ''. PURE. #>
+  param([string]$Slug, [string]$Hash, $Journals)
+  if (-not $Hash) { return '' }
+  foreach ($j in @($Journals)) {
+    if ($null -eq $j -or $null -eq $j.map) { continue }
+    if ($j.map.Contains($Slug) -and [string]::Equals([string]$j.map[$Slug], $Hash, [StringComparison]::Ordinal)) { return [string]$j.path }
+  }
+  return ''
+}
+
 if ($SelfTest) {
   $f = 0
   function T($m, $cond, $got) { if ($cond) { Write-Output ("ok    " + $m) } else { Write-Output ("FAIL  " + $m + "   got: " + $got); $script:f++ } }
@@ -111,8 +144,21 @@ if ($SelfTest) {
   T 'CLEAN TWIN a paid head round-trips through the toggle, so re-running this cannot corrupt a head it already read' `
     ((Set-TcRecipeNodeClaim -Head ((Get-TcCandidateOldHeads -LiveHead $paid -Slug 's' -Title 't')[0]) -Paid $true) -eq $paid) 'the round trip lost bytes'
 
+  # PROOF 3 - journal-elsewhere (2026-09-26). Pure over in-memory journals.
+  $jA = [ordered]@{ 'wt-slug' = 'H-LIVE'; 'other' = 'H-X' }
+  $jB = [ordered]@{ 'wt-slug' = 'H-OLDER' }
+  $js = @(@{ path = 'B'; map = $jB }, @{ path = 'A'; map = $jA })
+  T 'MUST FIRE  a live hash recorded for THIS slug in a worktree journal proves the post is our own verified publish' `
+    ((Find-TcHashElsewhere -Slug 'wt-slug' -Hash 'H-LIVE' -Journals $js) -eq 'A') (Find-TcHashElsewhere -Slug 'wt-slug' -Hash 'H-LIVE' -Journals $js)
+  T 'MUST NOT FIRE  a hand-edited live post hashes to nothing any journal recorded, so it stays unproven' `
+    ((Find-TcHashElsewhere -Slug 'wt-slug' -Hash 'H-HAND-EDIT' -Journals $js) -eq '') 'a hash nobody published was accepted'
+  T 'MUST NOT FIRE  the same hash under a DIFFERENT slug proves nothing about this one' `
+    ((Find-TcHashElsewhere -Slug 'wt-slug' -Hash 'H-X' -Journals $js) -eq '') 'another slug''s entry was accepted'
+  T 'CLEAN TWIN  the comparison is ordinal: a case-changed hash is not a match' `
+    ((Find-TcHashElsewhere -Slug 'wt-slug' -Hash 'h-live' -Journals $js) -eq '') 'case-insensitive match'
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); Write-Output 'RECONCILE-JOURNAL-COMPLETE'; exit 1 }
-  Write-Output 'SELF-TEST PASS: 3 must-fire cases led by the pre-sync head reconstructing byte-exactly, 4 must-not-fire cases led by a hand-edited body being refused rather than overwritten, and 3 clean twins'
+  Write-Output 'SELF-TEST PASS: 4 must-fire cases led by the pre-sync head reconstructing byte-exactly, 6 must-not-fire cases led by a hand-edited body being refused rather than overwritten, and 4 clean twins'
   Write-Output 'RECONCILE-JOURNAL-COMPLETE'
   exit 0
 }
@@ -145,7 +191,13 @@ foreach ($res in @($resps)) {
 Write-Output ("read {0} of {1} journalled post(s) from Ghost" -f $live.Count, $want.Count)
 
 $inSync = 0; $proven = @(); $unproven = @(); $unreadable = @(); $missing = @()
-$byProof = @{ 'head' = 0; 'body-matches-built' = 0 }
+$byProof = @{ 'head' = 0; 'body-matches-built' = 0; 'journal-elsewhere' = 0 }
+. (Join-Path $repo 'meal-prep\lib\publish-journal.ps1')   # Read-TcPublishJournal / Save-TcPublishJournal
+$sibPaths = Get-TcSiblingJournalPaths -Repo ([string]$repo) -Own $JOURNAL_PATH
+$siblings = @()
+foreach ($sp in @($sibPaths)) { try { $siblings += @{ path = $sp; map = (Read-TcPublishJournal -Path $sp) } } catch { Write-Output ('   sibling journal unreadable, skipped: ' + $sp) } }
+Write-Output ("read {0} other publish journal(s) on this box for the journal-elsewhere proof" -f $siblings.Count)
+$restamp = @{}; $elsewhere = @{}
 foreach ($slug in ($want.Keys | Sort-Object)) {
   $p = $live[$slug]
   if (-not $p) { $missing += $slug; continue }
@@ -190,18 +242,26 @@ foreach ($slug in ($want.Keys | Sort-Object)) {
       if ((Get-CanonicalBody $built) -eq (Get-CanonicalBody $body)) { $why = 'body-matches-built' }
     }
   }
-  if ($why) { $proven += $slug; $byProof[$why] = 1 + [int]$byProof[$why]; if ($Apply) { $journal[$slug] = $liveHash } }
+  if (-not $why) {
+    $src = Find-TcHashElsewhere -Slug $slug -Hash $liveHash -Journals $siblings
+    if ($src) { $why = 'journal-elsewhere'; $elsewhere[$slug] = $src }
+  }
+  if ($why) { $proven += $slug; $byProof[$why] = 1 + [int]$byProof[$why]; $restamp[$slug] = $liveHash; if ($Apply) { $journal[$slug] = $liveHash } }
   else { $unproven += $slug }
 }
 
 if ($Apply -and @($proven).Count) {
-  ($journal | ConvertTo-Json) | Set-Content $JOURNAL_PATH -Encoding UTF8
+  # Only the proven keys, under the ledger lock, and mirrored to the main checkout from a worktree.
+  $jr = Save-TcPublishJournal -JournalPath $JOURNAL_PATH -Set $restamp
+  if ($jr.localError) { Write-Output ('JOURNAL WRITE FAILED: ' + $jr.localError); Write-Output 'RECONCILE-JOURNAL-COMPLETE'; exit 1 }
+  if ($jr.mirrorPath) { Write-Output ("   mirrored to the main checkout's journal: {0} key(s) changed{1}" -f $jr.mirror, $(if ($jr.mirrorError) { ' - FAILED: ' + $jr.mirrorError } else { '' })) }
 }
+foreach ($s in ($elsewhere.Keys | Sort-Object)) { Write-Output ('   journal-elsewhere  ' + $s + '  <- ' + $elsewhere[$s]) }
 
 Write-Output ''
 Write-Output ("already in sync    {0}" -f $inSync)
 Write-Output ("PROVEN benign      {0}{1}" -f @($proven).Count, $(if ($Apply) { ' - re-stamped' } else { ' - would re-stamp (re-run with -Apply)' }))
-Write-Output ("   {0} by reconstructing the pre-sync head, {1} because the live body still equals the last built body" -f $byProof['head'], $byProof['body-matches-built'])
+Write-Output ("   {0} by reconstructing the pre-sync head, {1} because the live body still equals the last built body, {2} because another journal on this box recorded the live hash" -f $byProof['head'], $byProof['body-matches-built'], $byProof['journal-elsewhere'])
 Write-Output ("could not prove    {0} - LEFT STALE ON PURPOSE. A stale entry only refuses the publish; a wrong one disables the drift guard." -f @($unproven).Count)
 foreach ($s in ($unproven | Select-Object -Last 25)) { Write-Output ('   ' + $s) }
 if (@($unreadable).Count) { Write-Output ("live body unreadable {0}" -f @($unreadable).Count); foreach ($s in ($unreadable | Select-Object -Last 10)) { Write-Output ('   ' + $s) } }

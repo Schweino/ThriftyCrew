@@ -117,8 +117,12 @@ function Remove-PublishedHash {
   if (-not (Test-Path $p)) { return $false }
   $d = Read-JsonMap $p
   if (-not ($d.PSObject.Properties.Name -contains $S)) { return $false }
-  $d.PSObject.Properties.Remove($S)
-  [IO.File]::WriteAllText($p, ($d | ConvertTo-Json -Depth 6), $UTF8)
+  # Through the one journal writer (2026-09-26): locked, only this key, and from a linked worktree the main checkout's
+  # journal loses the key too - the 2026-09-24 reconcile below exists because a worktree hold removed it only here.
+  . (Join-Path $__jioRoot 'meal-prep\lib\publish-journal.ps1')
+  $r = Save-TcPublishJournal -JournalPath $p -Remove @($S)
+  if ($r.localError) { throw ('published-hashes: ' + $r.localError) }
+  if ($r.mirrorError) { Say ('  published-hashes: WARNING the main checkout journal still keys ' + $S + ' (' + $r.mirrorError + '); run hold-recipe.ps1 -Reconcile -Apply there') }
   return $true
 }
 

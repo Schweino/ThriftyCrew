@@ -93,9 +93,20 @@ if(Test-Path $hashFile){ try { $o=(Get-Content $hashFile -Raw | ConvertFrom-Json
 # only holds if the journal survives the interruption. A crash, a Ctrl-C or a machine sleeping mid-wave
 # all lost it. The file is a few tens of KB, so writing it per slug costs nothing worth measuring, and
 # the write is guarded - a failed journal write must never abort a run that is publishing correctly.
+#
+# ONLY THE SLUGS THIS RUN VERIFIED ARE WRITTEN, UNDER THE LEDGER LOCK, AND INTO THE MAIN CHECKOUT TOO (2026-09-26).
+# This was a Set-Content of the whole in-memory copy read at start: no lock, so a second publisher on the same
+# checkout lost its entries to whichever saved last; and only THIS checkout's file, which is gitignored, so a publish
+# from a linked worktree left the main checkout's journal stale. On 2026-09-26 that refused 13 recipes whose live
+# posts were our own 2026-09-23 worktree publishes. meal-prep\lib\publish-journal.ps1 re-reads each file inside its
+# lock, applies only $pubTouched, and mirrors it to the main checkout when this is a linked worktree.
+. (Join-Path $PSScriptRoot '..\lib\publish-journal.ps1')
+$pubTouched = @{}
 function Save-PubHashes {
-  try { ($pubHashes | ConvertTo-Json) | Set-Content $hashFile -Encoding UTF8 }
-  catch { Write-Output ("  WARNING: could not write the publish journal ($($_.Exception.Message)) - a re-run will re-publish slugs that already succeeded") }
+  if (-not $pubTouched.Count) { return }
+  $r = Save-TcPublishJournal -JournalPath $hashFile -Set $pubTouched
+  if ($r.localError) { Write-Output ("  WARNING: could not write the publish journal ($($r.localError)) - a re-run will re-publish slugs that already succeeded") }
+  if ($r.mirrorError) { Write-Output ("  WARNING: could not write the MAIN checkout's publish journal $($r.mirrorPath) ($($r.mirrorError)) - the entries are in this worktree's journal; meal-prep\pipeline\reconcile-publish-journal.ps1 -Apply recovers them") }
 }
 
 # CARRIAGE, read from db\costed.json where cost-recipes.ps1 recorded it (lib\carriage-lib.ps1 derives it).
@@ -344,7 +355,7 @@ foreach($slug in $Slugs){
     # actually shipped. The `if(-not $VerifyOnly){ Save-PubHashes }` at the bottom of the file was written
     # to prevent exactly this and could not, because the write already happened here, per slug.
     # A watermark may only be written by the code path that did the work.
-    if($titleOk -and $paywalled -and $schemaOk){ $ok++; if(-not $VerifyOnly){ $pubHashes[$slug]=$contentHash; Save-PubHashes }; Write-Output ("OK  $slug") }
+    if($titleOk -and $paywalled -and $schemaOk){ $ok++; if(-not $VerifyOnly){ $pubHashes[$slug]=$contentHash; $pubTouched[$slug]=$contentHash; Save-PubHashes }; Write-Output ("OK  $slug") }
     else { $failed += $slug; Write-Output ("VERIFY FAIL  $slug  (title=$titleOk paywalled=$paywalled schema=$schemaOk)") }
   } catch { $failed += $slug; Write-Output ("FETCH FAIL  $slug :: " + $_.Exception.Message) }
 }

@@ -37,6 +37,7 @@ $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 $repo = Resolve-Path (Join-Path $here '..\..')
 . (Join-Path $repo 'lib\ghost-lib.ps1')
 . (Join-Path $repo 'lib\ghost-drift-lib.ps1')   # Get-PublishedContentHash / Join-GhostLexicalBody
+. (Join-Path $repo 'meal-prep\lib\publish-journal.ps1')   # Save-TcPublishJournal: locked, touched-keys-only, mirrored to main
 
 # ---- THE PUBLISH JOURNAL (2026-09-07) --------------------------------------------------------------
 # This script changes PUBLISHED CONTENT, so it owes the journal an entry. Get-PublishedContentHash is
@@ -261,7 +262,11 @@ foreach ($slug in (@($toRemove) + @($toAdd))) {
         # Per slug, not at the end: a crash mid-run must not lose the entries already earned.
         if (Update-TcJournalEntry -Journal $journal -Slug $slug -Hash $liveHash) {
           $journalWrites++
-          ($journal | ConvertTo-Json) | Set-Content $JOURNAL_PATH -Encoding UTF8
+          # Only this slug, under the ledger lock, and into the main checkout too from a worktree
+          # (meal-prep\lib\publish-journal.ps1, 2026-09-26): a whole-file Set-Content erased other writers' entries.
+          $jr = Save-TcPublishJournal -JournalPath $JOURNAL_PATH -Set @{ $slug = $liveHash }
+          if ($jr.localError) { throw ('publish journal: ' + $jr.localError) }
+          if ($jr.mirrorError) { $errors += ("{0}: journalled here, but the main checkout's journal could not be updated ({1})" -f $slug, $jr.mirrorError) }
         }
       } else {
         $errors += ("{0}: head written, but the live body could not be read so the publish journal is now stale for it" -f $slug)
