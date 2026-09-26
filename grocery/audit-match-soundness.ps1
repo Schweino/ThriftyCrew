@@ -328,6 +328,8 @@ function New-SoundnessAlertBody {
   }
   [void]$L.Add('')
   [void]$L.Add('Review, then accept with: audit-match-soundness.ps1 -Accept')
+  # An accept no longer blesses a contested arrival (queue 2026-09-25-a8448d), so the body names the road that does.
+  if ($nc.Count -gt 0 -or $cbs.Count -gt 0) { [void]$L.Add("A contested arrival is NOT cleared by -Accept: decide each one with resolve-match-worklist.ps1 -Decide '<key>' -Verdict confirm|release -Reason '...'") }
   return ($L -join "`n")
 }
 
@@ -354,23 +356,49 @@ function Merge-BaselineCarryForward {
 
     Pure - the previous baseline arrives as an object and the reference date as a string - so -SelfTest
     drives the shipped rule instead of a copy of it.
+
+    AN ACCEPT BLESSES ONLY THE CONTESTED NAMES SOMEBODY ALREADY REVIEWED (2026-09-26, queue 2026-09-25-a8448d).
+    This used to write every name contested TODAY into the baseline's contested list, so any -Accept, even one made
+    for an unrelated rule change, marked every undecided contested arrival reviewed and it never paged again. On
+    2026-09-25 the laundry-detergent accept blessed 6 undecided arrivals that way, 'Lay's Honey Barbecue Potato
+    Chips' routed to HONEY among them; on 2026-08-06 a tortilla accept blessed a Cerebelly baby-food jar crowning
+    apples. Now a name contested today enters the list only if the previous baseline already held it; an arrival
+    stays out (returned in .unblessed) and the matching lane decides it one name at a time
+    (resolve-match-worklist.ps1 -Decide), whose confirms Get-ReviewedContested reads as reviewed. With NO previous
+    baseline the accept is ESTABLISHING one, and every contested name enters, as before.
+
+    A CARRIED NAME IS RE-ROUTED UNDER THE RULES BEING ACCEPTED (2026-09-26, queue 2026-09-26-f655c7, a RETURN of
+    2026-09-23-f77857). A name absent at the accept kept the route it had when last seen, so a rule change accepted
+    while it was away was reviewed for everyone but it, and it fired as RULE CHANGE UNREVIEWED on the day a store
+    listed it again: the Goya adobo on 2026-09-21, the two ranch trays on 2026-09-23, the Kleenex lotion tissues on
+    2026-09-26, every one a right move nobody had read. The route is a pure function of the name, so when -Route (a
+    scriptblock: name -> first eligible commodity or '<unmatched>') is given, each carried name is routed again and
+    every change is returned in .rerouted for the accept to print. Its last_seen is NOT touched: re-routing a name is
+    not seeing it in a store.
   #>
-  param($TodayNames, $TodayContest, $PrevBaseline, [string]$Today, [int]$MaxAbsentDays = 30)
+  param($TodayNames, $TodayContest, $PrevBaseline, [string]$Today, [int]$MaxAbsentDays = 30, [scriptblock]$Route = $null)
   $outNames = @{}; foreach ($kv in $TodayNames.GetEnumerator()) { $outNames[[string]$kv.Key] = [string]$kv.Value }
-  $outContest = @{}; foreach ($kv in $TodayContest.GetEnumerator()) { $outContest[[string]$kv.Key] = $true }
+  $havePrev = [bool]($PrevBaseline -and $PrevBaseline.names)
+  $prevContest = @{}
+  if ($havePrev) { foreach ($x in @($PrevBaseline.contested)) { if ($x) { $prevContest[[string]$x] = $true } } }
+  $outContest = @{}; $unblessed = New-Object System.Collections.Generic.List[string]
+  foreach ($kv in $TodayContest.GetEnumerator()) {
+    $cn = [string]$kv.Key
+    if ((-not $havePrev) -or $prevContest.ContainsKey($cn)) { $outContest[$cn] = $true } else { $unblessed.Add($cn) }
+  }
+  $rerouted = New-Object System.Collections.Generic.List[object]
   $lastSeen = @{}; foreach ($k in @($outNames.Keys)) { $lastSeen[[string]$k] = $Today }
   $carriedNames = 0; $carriedContest = 0; $expired = 0
   $ref = [datetime]::MinValue
   if (-not [datetime]::TryParse($Today, [ref]$ref)) { $ref = Get-Date }
   $cutoff = $ref.AddDays(-1 * $MaxAbsentDays)
-  if ($PrevBaseline -and $PrevBaseline.names) {
+  if ($havePrev) {
     $prevSeen = @{}
     if ($PrevBaseline.PSObject.Properties.Match('last_seen').Count -and $PrevBaseline.last_seen) {
       foreach ($p in $PrevBaseline.last_seen.PSObject.Properties) { $prevSeen[$p.Name] = [string]$p.Value }
     }
     $prevGen = [string]$PrevBaseline.generated
     if ($prevGen.Length -gt 10) { $prevGen = $prevGen.Substring(0, 10) }
-    $prevContest = @{}; foreach ($x in @($PrevBaseline.contested)) { $prevContest[[string]$x] = $true }
     foreach ($p in $PrevBaseline.names.PSObject.Properties) {
       $nm = [string]$p.Name
       if ($outNames.ContainsKey($nm)) { continue }   # seen today: today's route and today's date win
@@ -378,14 +406,40 @@ function Merge-BaselineCarryForward {
       if ($prevSeen.ContainsKey($nm)) { $ls = [string]$prevSeen[$nm] }
       $dt = [datetime]::MinValue
       if ([datetime]::TryParse($ls, [ref]$dt) -and $dt -lt $cutoff) { $expired++; continue }
-      $outNames[$nm] = [string]$p.Value
+      $was = [string]$p.Value
+      $now = $was
+      if ($Route) { $r = [string](& $Route $nm); if ($r) { $now = $r } }
+      if (-not [string]::Equals($now, $was, [StringComparison]::Ordinal)) { $rerouted.Add([pscustomobject]@{ name = $nm; from = $was; to = $now }) }
+      $outNames[$nm] = $now
       $lastSeen[$nm] = $ls
       $carriedNames++
       if ($prevContest.ContainsKey($nm)) { $outContest[$nm] = $true; $carriedContest++ }
     }
   }
   return [pscustomobject]@{ names = $outNames; contested = $outContest; last_seen = $lastSeen
-                            carried_names = $carriedNames; carried_contested = $carriedContest; expired = $expired }
+                            carried_names = $carriedNames; carried_contested = $carriedContest; expired = $expired
+                            unblessed = $unblessed.ToArray(); rerouted = $rerouted.ToArray() }
+}
+function Test-CarriedRerouteDue {
+  <# Pure. Must the carried names be routed again under the rules here? Yes when the rules hash is known and differs
+     from the one the baseline's carried names were last routed under (carried_rules_hash, written by -Accept since
+     2026-09-26; a baseline from before then has none, so its carried names are routed once). An unknown hash (a copy
+     of this script with no identity-lib beside it) says no: it cannot tell a rule change from nothing. #>
+  param([string]$CurrentHash, [string]$CarriedHash)
+  if (-not $CurrentHash) { return $false }
+  return (-not [string]::Equals($CurrentHash, $CarriedHash, [StringComparison]::Ordinal))
+}
+function ConvertTo-CarriedFindings {
+  <# Pure. Merge-BaselineCarryForward's .rerouted as the report's MOVED and DROPPED rows, tagged carried, by the same
+     rule the live diff applies to a name seen today: to <unmatched> is DROPPED, between two commodities is MOVED, and
+     from <unmatched> into a commodity is a new admission that neither list reports. #>
+  param($Rerouted)
+  $mv = New-Object System.Collections.Generic.List[object]; $dr = New-Object System.Collections.Generic.List[object]
+  foreach ($r in @($Rerouted | Where-Object { $_ })) {
+    if ([string]$r.to -eq '<unmatched>') { $dr.Add([pscustomobject]@{ name = [string]$r.name; from = [string]$r.from; carried = $true }) }
+    elseif ([string]$r.from -ne '<unmatched>') { $mv.Add([pscustomobject]@{ name = [string]$r.name; from = [string]$r.from; to = [string]$r.to; carried = $true }) }
+  }
+  return [pscustomobject]@{ moved = $mv.ToArray(); dropped = $dr.ToArray() }
 }
 if ($SelfTest) {
   $bad = 0
@@ -393,7 +447,7 @@ if ($SelfTest) {
   # these cases sat inside a comment behind a typed backslash-n (8847c9fa5) and the suite printed PASS over 60 of 62. Every call
   # to T counts; the verdict below refuses any total but $script:expectedCases. Add a case, move the number.
   $script:ran = 0
-  $script:expectedCases = 73
+  $script:expectedCases = 84
   function T([string]$n, [bool]$ok, [string]$got) {
     $script:ran++
     if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
@@ -583,6 +637,67 @@ if ($SelfTest) {
   T 'CLEAN TWIN  no previous baseline at all is not a crash and carries nothing' `
     (((Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count -eq 1)) `
     ([string](Merge-BaselineCarryForward @{ 'A'='honey' } @{} $null '2026-09-08' 30).names.Count)
+  # ---- AN ACCEPT BLESSES ONLY REVIEWED CONTESTED NAMES (2026-09-26, queue 2026-09-25-a8448d) -------------------
+  # Occurrences: 2026-09-25 the laundry-detergent accept blessed 'Lay's Honey Barbecue Potato Chips' (honey > potato-chips)
+  # and 'Inglehoffer Horseradish Cream Style 9.5 OZ' undecided; 2026-08-06 a tortilla accept blessed a Cerebelly jar
+  # crowning apples (memory contested-flag-baselined-away). Frozen names and chains from those days.
+  $abPrev = [pscustomobject]@{ generated='2026-09-25 09:00'; rules_hash='abc'
+    names=[pscustomobject]@{ 'Reviewed Pair Product'='carrots'; 'Laundry Liquid 92 oz'='laundry-detergent' }
+    contested=@('Reviewed Pair Product') }
+  $abToday = @{ 'Reviewed Pair Product'='carrots'; "Lay's Honey Barbecue Potato Chips"='honey'; 'Inglehoffer Horseradish Cream Style 9.5 OZ'='horseradish'
+                'Cerebelly Organic Apple Carrot Baby Food Pouch'='apples'; 'Laundry Liquid 92 oz'='laundry-detergent' }
+  $abContest = @{ 'Reviewed Pair Product'='carrots > cucumbers'; "Lay's Honey Barbecue Potato Chips"='honey > potato-chips'
+                  'Inglehoffer Horseradish Cream Style 9.5 OZ'='horseradish > horseradish-sauce'; 'Cerebelly Organic Apple Carrot Baby Food Pouch'='apples > baby-food' }
+  $abCf = Merge-BaselineCarryForward $abToday $abContest $abPrev '2026-09-25' 30
+  $abUb = @($abCf.unblessed)
+  T 'MUST FIRE  an -Accept does NOT bless the undecided contested arrivals of its day (Lay''s to honey and the Inglehoffer crown, 2026-09-25; the Cerebelly jar, 2026-08-06): none is in the written contested list, all 3 come back as unblessed' `
+    (((-not $abCf.contested.ContainsKey("Lay's Honey Barbecue Potato Chips")) -and (-not $abCf.contested.ContainsKey('Inglehoffer Horseradish Cream Style 9.5 OZ')) -and (-not $abCf.contested.ContainsKey('Cerebelly Organic Apple Carrot Baby Food Pouch')) -and ($abUb.Count -eq 3))) `
+    ('contested=' + (($abCf.contested.Keys | Sort-Object) -join ',') + ' unblessed=' + ($abUb -join ','))
+  T 'CLEAN TWIN  a contested name the previous baseline already reviewed stays reviewed through the same accept, and the names map still takes every route seen today' `
+    ((($abCf.contested.ContainsKey('Reviewed Pair Product')) -and ($abCf.contested.Count -eq 1) -and ($abCf.names["Lay's Honey Barbecue Potato Chips"] -eq 'honey') -and ($abCf.names.Count -eq 5))) `
+    ('contested=' + $abCf.contested.Count + ' names=' + $abCf.names.Count)
+  $abEst = Merge-BaselineCarryForward $abToday $abContest $null '2026-09-25' 30
+  T 'CLEAN TWIN  with NO previous baseline the accept is ESTABLISHING one, so all 4 contested names enter and none is unblessed' `
+    ((($abEst.contested.Count -eq 4) -and (@($abEst.unblessed).Count -eq 0))) ('contested=' + $abEst.contested.Count + ' unblessed=' + @($abEst.unblessed).Count)
+  # ---- A CARRIED NAME IS RE-ROUTED UNDER THE RULES BEING ACCEPTED (2026-09-26, queue 2026-09-26-f655c7) ----------------
+  # Occurrences (every RULE CHANGE UNREVIEWED carried-forward fire): 2026-09-21 Goya adobo (oranges -> adobo-seasoning),
+  # 2026-09-23 f77857 the two ranch trays (carrots/cucumbers -> <unmatched>), 2026-09-26 f655c7 Kleenex (lotion -> facial-tissues).
+  $rrPrev = [pscustomobject]@{ generated='2026-09-19 08:00'; rules_hash='old'
+    names=[pscustomobject]@{ 'Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz'='oranges'; 'Fresh Cut In Store Carrot & Cucumber Ranch'='carrots'
+                             'Fresh Cut In Store Cucumber Ranch Bowl'='cucumbers'; 'Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'='lotion'
+                             'Absent Unchanged Honey'='honey' }
+    contested=@('Fresh Cut In Store Carrot & Cucumber Ranch') }
+  $rrPrev | Add-Member -NotePropertyName last_seen -NotePropertyValue ([pscustomobject]@{ 'Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'='2026-09-19' })
+  $rrRoutes = @{ 'Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz'='adobo-seasoning'; 'Fresh Cut In Store Carrot & Cucumber Ranch'='<unmatched>'
+                 'Fresh Cut In Store Cucumber Ranch Bowl'='<unmatched>'; 'Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'='facial-tissues'; 'Absent Unchanged Honey'='honey' }
+  $rrSb = { param($n) [string]$rrRoutes[$n] }
+  $rrCf = Merge-BaselineCarryForward @{ 'Present Jam'='jam' } @{} $rrPrev '2026-09-26' 30 $rrSb
+  $rrList = @($rrCf.rerouted)
+  $rrK = $rrList | Where-Object { $_.name -like 'Kleenex*' }
+  T 'MUST FIRE  an accept re-routes every carried name under the rules it accepts: all 4 founding names (Goya 09-21, both ranch trays 09-23, Kleenex 09-26) are recorded at their new route and listed as rerouted' `
+    ((($rrList.Count -eq 4) -and ($rrCf.names['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'] -eq 'facial-tissues') -and ($rrCf.names['Goya Adobo All Purpose Seasoning, Bitter Orange, 8 Oz'] -eq 'adobo-seasoning') -and ($rrCf.names['Fresh Cut In Store Cucumber Ranch Bowl'] -eq '<unmatched>') -and ($rrK.from -eq 'lotion'))) `
+    ('rerouted=' + $rrList.Count + ' kleenex=' + [string]$rrCf.names['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'])
+  T 'CLEAN TWIN  a carried name whose route did not change is not listed, keeps its last_seen (re-routing is not seeing it), and a carried contested entry stays reviewed' `
+    ((($rrCf.names['Absent Unchanged Honey'] -eq 'honey') -and (-not ($rrList | Where-Object { $_.name -eq 'Absent Unchanged Honey' })) -and ($rrCf.last_seen['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'] -eq '2026-09-19') -and ($rrCf.contested.ContainsKey('Fresh Cut In Store Carrot & Cucumber Ranch')))) `
+    ('lastseen=' + [string]$rrCf.last_seen['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'])
+  $rrNo = Merge-BaselineCarryForward @{ 'Present Jam'='jam' } @{} $rrPrev '2026-09-26' 30
+  T 'CLEAN TWIN  with no -Route the carried names keep their old routes exactly as before and nothing is listed' `
+    ((($rrNo.names['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'] -eq 'lotion') -and (@($rrNo.rerouted).Count -eq 0))) ([string]$rrNo.names['Kleenex Lotion Facial Tissues 12 boxes, 120 tissues/box'])
+  $abBody = New-SoundnessAlertBody ([pscustomobject]@{ moved=@(); dropped=@(); drift_products=@(); drift_vs_engine=0; cell_by_contest=@()
+    new_contested=@([pscustomobject]@{ name="Lay's Honey Barbecue Potato Chips"; chain='honey > potato-chips'; verdict='size 7.75 oz'; form=$false; cell=''; crown=$false }) })
+  T 'MUST FIRE  a new-contested alert body names the per-name road (resolve-match-worklist.ps1 -Decide), since -Accept no longer clears an arrival' `
+    ([string]$abBody -like '*resolve-match-worklist.ps1 -Decide*') ([string]$abBody)
+  T 'MUST FIRE  the report routes carried names again when the baseline records no carried_rules_hash (every baseline before 2026-09-26, the one f655c7 fired from) or a different one' `
+    (((Test-CarriedRerouteDue '5a5d0fc274df' '') -and (Test-CarriedRerouteDue '5a5d0fc274df' '725c4708c23a'))) 'not due'
+  T 'CLEAN TWIN  under the hash its carried names were already routed at, or with no hash to compare (a copied script with no identity-lib), it is NOT due, so an ordinary run pays nothing' `
+    (((-not (Test-CarriedRerouteDue '5a5d0fc274df' '5a5d0fc274df')) -and (-not (Test-CarriedRerouteDue '' '')))) 'due'
+  $crfF = ConvertTo-CarriedFindings $rrCf.rerouted
+  $crfK = @($crfF.moved | Where-Object { $_.name -like 'Kleenex*' })
+  T 'MUST FIRE  the carried re-routes reach the report as the founding rows: Kleenex lotion->facial-tissues and Goya oranges->adobo-seasoning MOVED, both ranch trays DROPPED, every one tagged carried' `
+    (((@($crfF.moved).Count -eq 2) -and (@($crfF.dropped).Count -eq 2) -and ($crfK.Count -eq 1) -and ($crfK[0].to -eq 'facial-tissues') -and ($crfK[0].carried -eq $true))) ('moved=' + @($crfF.moved).Count + ' dropped=' + @($crfF.dropped).Count)
+  $crfN = ConvertTo-CarriedFindings @([pscustomobject]@{ name = 'Tide Plus Boost Liquid Laundry Detergent 117 Fl Oz'; from = '<unmatched>'; to = 'laundry-detergent' })
+  T 'CLEAN TWIN  a carried name moving from <unmatched> into a commodity is a new admission and, as for a name seen today, neither list reports it' `
+    (((@($crfN.moved).Count -eq 0) -and (@($crfN.dropped).Count -eq 0))) ('moved=' + @($crfN.moved).Count)
   # ---- ONE CONDITION PER CAUSE, FROM EVERY OCCURRENCE (2026-09-21, plan-2026-09-21-7.json) -------------------
   # One row per queue item this alert type raised in the 30 days ending 2026-09-21 (the prior closes sit in
   # grocery\out\archive\triage-queue.archived-2026-09-17.json) plus 6f90ee's three observations. Each carries the
@@ -1013,12 +1128,32 @@ if ($Accept -or $ForceAccept) {
   # unaffected; this only ADDS back what was already reviewed.
   $prevBase = $null
   if (Test-Path $baseF) { try { $prevBase = ConvertFrom-Json ([IO.File]::ReadAllText($baseF)) } catch { $prevBase = $null } }
-  $cf = Merge-BaselineCarryForward $names $contest $prevBase (Get-Date -Format 'yyyy-MM-dd') 30
-  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; names = $cf.names
+  # A carried name is routed again under the rules being accepted (see Merge-BaselineCarryForward), so an accept
+  # reviews every name it records, not only the ones a store listed today.
+  # Routing ~15,000 carried names costs about two minutes (measured 2026-09-26: 15,272 in 124 s), so it runs only
+  # when the carried names were last routed under other rules (Test-CarriedRerouteDue); the route is a pure function
+  # of the name and the rule files the hash covers, so under the same hash it would change nothing.
+  $prevCarriedHash = ''
+  if ($prevBase -and $prevBase.PSObject.Properties['carried_rules_hash']) { $prevCarriedHash = [string]$prevBase.carried_rules_hash }
+  $routeSb = $null
+  if (Test-CarriedRerouteDue $rulesHash $prevCarriedHash) { $routeSb = { param($n) $e0 = Get-Eligible $n; $e = @($e0); if ($e.Count) { [string]$e[0] } else { '<unmatched>' } } }
+  $cf = Merge-BaselineCarryForward $names $contest $prevBase (Get-Date -Format 'yyyy-MM-dd') 30 $routeSb
+  $carriedHashOut = $prevCarriedHash
+  if ($routeSb) { $carriedHashOut = $rulesHash }
+  $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; carried_rules_hash = $carriedHashOut; names = $cf.names
                      contested = @($cf.contested.Keys | Sort-Object); last_seen = $cf.last_seen }
   Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
   Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
+  $cfRr = @($cf.rerouted)
+  if ($routeSb) { Write-Output ("  CARRIED RE-ROUTE: $($cfRr.Count) absent name(s) route differently under the rules being accepted and are recorded with the new route (the report run listed them as MOVED/DROPPED [carried]). READ THEM: this accept is their review.") }
+  else { Write-Output ("  CARRIED RE-ROUTE: not due - the carried names were already routed under rules_hash $rulesHash (or the hash is unknown here)") }
+  foreach ($rr in ($cfRr | Sort-Object from, name)) { Write-Output ("    CARRIED RE-ROUTE {0} -> {1}: {2}" -f $rr.from, $rr.to, $rr.name) }
+  $cfUb = @($cf.unblessed)
+  if ($cfUb.Count -gt 0) {
+    Write-Output ("  NOT BLESSED: $($cfUb.Count) contested arrival(s) are undecided and stay OUT of the reviewed list. An accept never reviews a contested arrival; the matching lane decides each one: resolve-match-worklist.ps1 -Decide '<key>' -Verdict confirm|release -Reason '...'")
+    foreach ($ub in ($cfUb | Sort-Object)) { Write-Output ("    UNDECIDED CONTESTED '" + $ub + "'  chain: " + [string]$contest[$ub]) }
+  }
   # AN ACCEPT THAT NEVER REACHES A COMMIT IS NOT AN ACCEPT (2026-09-20, queue 2026-09-20-417020). This
   # baseline is a TRACKED file, so it lives in the working tree until somebody commits it: on 2026-09-20 a
   # triage run reviewed three intended drops, accepted them, published, and then a `git reset --hard` in the
@@ -1074,6 +1209,27 @@ foreach ($nm in $baseNames.Keys) {
   if ($b -eq $a) { continue }
   if ($a -eq '<unmatched>') { $dropped.Add([pscustomobject]@{ name = $nm; from = $b }) }
   elseif ($b -ne '<unmatched>') { $moved.Add([pscustomobject]@{ name = $nm; from = $b; to = $a }) }
+}
+# ---- A NAME ABSENT TODAY IS DIFFED UNDER THE RULES HERE TOO (2026-09-26, queue 2026-09-26-f655c7) ---------------------
+# The loop above skips a name no store listed today, so a rule change reviewed and accepted while a product was away was
+# never reviewed for it, and it fired weeks later as RULE CHANGE UNREVIEWED when it came back (Goya adobo 09-21, the
+# ranch trays 09-23, Kleenex lotion tissues 09-26). When the baseline's carried names were last routed under other
+# rules, route them again here (the SAME Merge-BaselineCarryForward the accept writes with) and report each change as
+# MOVED/DROPPED [carried], so the review of a rule change sees every name it moves. The accept then records them and
+# stamps carried_rules_hash, and later runs under the same rules skip this (about two minutes over 15,000 names).
+$crHash = ''
+$crLib = Join-Path $root 'identity-lib.ps1'
+if (Test-Path -LiteralPath $crLib) { try { . $crLib; $crHash = Get-IdentityRulesHash -GroceryRoot $root } catch { $crHash = '' } }
+$crDone = ''
+if ($base.PSObject.Properties['carried_rules_hash']) { $crDone = [string]$base.carried_rules_hash }
+$carriedFound = 0
+if (Test-CarriedRerouteDue $crHash $crDone) {
+  $crRoute = { param($n) $e0 = Get-Eligible $n; $e = @($e0); if ($e.Count) { [string]$e[0] } else { '<unmatched>' } }
+  $crCf = Merge-BaselineCarryForward $names @{} $base (Get-Date -Format 'yyyy-MM-dd') 30 $crRoute
+  $crF = ConvertTo-CarriedFindings $crCf.rerouted
+  foreach ($x in @($crF.moved)) { $moved.Add($x); $carriedFound++ }
+  foreach ($x in @($crF.dropped)) { $dropped.Add($x); $carriedFound++ }
+  Write-Output ("match-soundness: routed $($crCf.carried_names) carried name(s) under rules_hash $crHash (last routed under '" + $crDone + "'): " + @($crCf.rerouted).Count + " route differently, $carriedFound reported as MOVED/DROPPED [carried]")
 }
 $newContest = @($contest.Keys | Where-Object { -not $baseContest.ContainsKey($_) } | Sort-Object)
 
@@ -1143,8 +1299,8 @@ if ($drift -gt 0) {
   foreach ($dr in ($driftRows | Select-Object -First 25)) { Write-Output ("  DRIFT    engine says $($dr.engine)  /  this matcher says $($dr.matcher)   '$($dr.name)'") }
   if ($driftRows.Count -gt 25) { Write-Output ("  ...and $($driftRows.Count - 25) more, all of them in out\audit\soundness-report.json") }
 }
-foreach ($d in $dropped) { Write-Output ("  DROPPED  $($d.from)  ->  <unmatched>   '$($d.name)'") }
-foreach ($mv in $moved)  { Write-Output ("  MOVED    $($mv.from) -> $($mv.to)   '$($mv.name)'") }
+foreach ($d in $dropped) { $cTag = ''; if ($d.PSObject.Properties['carried'] -and $d.carried) { $cTag = '   [carried, absent today]' }; Write-Output ("  DROPPED  $($d.from)  ->  <unmatched>   '$($d.name)'" + $cTag) }
+foreach ($mv in $moved)  { $cTag = ''; if ($mv.PSObject.Properties['carried'] -and $mv.carried) { $cTag = '   [carried, absent today]' }; Write-Output ("  MOVED    $($mv.from) -> $($mv.to)   '$($mv.name)'" + $cTag) }
 if ($newContest.Count) {
   Write-Output ("  new-contested (order-dependence to review): " + (($newContest | Select-Object -First 25) -join ' | '))
   foreach ($ncr in ($newContestRows | Select-Object -First 25)) {
@@ -1212,7 +1368,7 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   foreach ($k in @($pick.sigs.Keys)) { $keep[[string]$k] = [string]$pick.sigs[$k] }
   if ($pick.send.Count -gt 0) {
     try {
-      $sres = Send-AlertConditions -SubjectPrefix 'Grocery matching soundness' -Conditions $pick.send -ReportPointer ('Full report: grocery\out\audit\soundness-report.json. After review: audit-match-soundness.ps1 -Accept, then commit grocery\out\audit\match-baseline.json WITH the rule change; ops\verify-commodities-gate.ps1 refuses a rule commit whose staged baseline does not cover it.')
+      $sres = Send-AlertConditions -SubjectPrefix 'Grocery matching soundness' -Conditions $pick.send -ReportPointer ('Full report: grocery\out\audit\soundness-report.json. After review: audit-match-soundness.ps1 -Accept, then commit grocery\out\audit\match-baseline.json WITH the rule change; ops\verify-commodities-gate.ps1 refuses a rule commit whose staged baseline does not cover it. A NEW CONTESTED arrival is not cleared by -Accept: decide it with resolve-match-worklist.ps1 -Decide.')
       foreach ($fl in @($sres.failed)) { if ($fl) { [void]$keep.Remove([string]$fl) } }
     } catch {
       Write-Output ('match-soundness: the alert send threw, so no signature is recorded and the next run retries: ' + $_.Exception.Message)
