@@ -37,7 +37,7 @@ $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 49
+$EXPECTED_CASES = 51
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -625,6 +625,24 @@ try {
     $stashLine = 'Created ' + 'autostash'
     $hits = @($script:tailTexts | Where-Object { $_ -match [regex]::Escape($stashLine) }).Count
     T ('no tail fixture run printed "' + $stashLine + '" (' + $script:tailTexts.Count + ' runs read), and capture-run.ps1 no longer names ' + $autoCfg) ($script:tailTexts.Count -ge 6 -and $hits -eq 0 -and $crSrc.IndexOf($autoCfg, [StringComparison]::OrdinalIgnoreCase) -lt 0) ('runs=' + $script:tailTexts.Count + ' hits=' + $hits)
+  }
+
+  # PROMPT SYNC RUNS BEFORE DOWNSTREAM (2026-09-25, queue 2026-09-23-cf85c8). check-ad-cycles runs test-auditors, which
+  # runs audit-prompt-backup; with the -SyncScopes/-SyncMirror block at the tail, every prompt committed the day before
+  # paged "test-auditors hygiene finding(s)" before this same run repaired it (5 of 5 recorded hygiene pages).
+  # Needles are concatenated so this file never matches itself.
+  Invoke-Group 'PROMPT SYNC ORDER - the repair runs before the chain that audits it' {
+    $syncNeedle = 'prompt-sync: ' + 'audit-prompt-backup -SyncScopes'
+    $cacNeedle = '$cac = Join-Path $root ' + "'check-ad-cycles.ps1'"
+    function Test-SyncBeforeDownstream([string]$Src) {
+      $s = $Src.IndexOf($syncNeedle, [StringComparison]::Ordinal); $c = $Src.IndexOf($cacNeedle, [StringComparison]::Ordinal)
+      return [pscustomobject]@{ ok = ($s -ge 0 -and $c -ge 0 -and $s -lt $c); s = $s; c = $c }
+    }
+    $fxTail = "x`n" + $cacNeedle + "`ny`nWrite-Output '" + $syncNeedle + "'`n"
+    $m = Test-SyncBeforeDownstream $fxTail
+    T 'MUST FIRE: a capture-run whose prompt sync sits AFTER check-ad-cycles (the pre-2026-09-25 order) is refused' (-not $m.ok -and $m.s -ge 0 -and $m.c -ge 0) ('sync=' + $m.s + ' cac=' + $m.c)
+    $live = Test-SyncBeforeDownstream $crSrc
+    T 'CLEAN TWIN: the shipped capture-run.ps1 runs its prompt sync before check-ad-cycles, and both needles are found' ($live.ok) ('sync=' + $live.s + ' cac=' + $live.c)
   }
 } finally {
   Remove-Item -LiteralPath $script:fxRoot -Recurse -Force -ErrorAction SilentlyContinue

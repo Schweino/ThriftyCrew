@@ -55,6 +55,7 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\ratchet.ps1')    # Test-RatchetMove: a fall clears a plausibility bar before -Tighten records it
 . (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
+. (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SelfTestSpans: a write inside a self-test body is a fixture (no param block, safe to dot-source)
 
 # The question, as ONE pure function over a file->lines map, so the fixture drives exactly the rule the
 # live scan runs. A detector whose self-test exercises a different code path is the trap this estate
@@ -114,17 +115,26 @@ function Test-ReadVerb { param([string]$Line)
   # and to this detector itself - from a CALL to a function this file neither defines nor
   # dot-sources. The pre-commit hook refused the first version of this commit for exactly that,
   # and it was right to. Same rule as [[selftest-greps-its-own-source]].
-  $rx = '(?i)(Get-Content|Read-' + 'JsonFile|ReadAllText|ReadAllBytes|ReadAllLines|Test-Path|Import-Csv|ConvertFrom-Json|Get-ChildItem|open\()'
+  # A READ HELPER IS A READ (2026-09-25, queue 2026-09-25-110a8f), the mirror of the write-helper rule above: five
+  # ratchet baselines went "read by none" on 2026-09-24 when their audits moved the read into Read-TcRatchetBaseline.
+  # match-worklist went the same way through Read-MatchWorklist. So any Read-<Noun> command counts (Read-JsonFile,
+  # Read-TextFile, Read-TcRatchetBaseline, Read-MatchWorklist) except Read-Host, which names no file. Deliberately
+  # broad: it can only mark MORE families read, so it can hide a write-only family that a Read- command merely sits
+  # beside, and it never invents one.
+  $rx = '(?i)(Get-Content|Read-' + '(?!Host\b)[A-Za-z]\w*|ReadAllText|ReadAllBytes|ReadAllLines|Test-Path|Import-Csv|ConvertFrom-Json|Get-ChildItem|open\()'
   return ($Line -match $rx)
 }
 function Find-WriteOnlyFamilies {
   <# A family written and read by the SAME file still counts as read: a script that writes a checkpoint
      and reads it back next run is a real consumer, and calling that write-only would be an alarm nobody
      could ever close. #>
-  param([hashtable]$Sources)
+  param([hashtable]$Sources, [hashtable]$FixtureLines = @{})
   $writes = @{}; $reads = @{}
   foreach ($f in @($Sources.Keys)) {
     $lines = @($Sources[$f])
+    $fxSet = $null
+    if ($FixtureLines.ContainsKey($f)) { $fxSet = $FixtureLines[$f] }
+    $lineIx = -1
     # PASS 1: which local variable holds which family, within this file.
     $alias = @{}
     foreach ($ln in $lines) {
@@ -148,6 +158,7 @@ function Find-WriteOnlyFamilies {
     }
     # PASS 2: verbs, resolved through the aliases.
     foreach ($ln in $lines) {
+      $lineIx++
       $named = New-Object System.Collections.Generic.List[string]
       if ($ln.IndexOf('.json', [StringComparison]::OrdinalIgnoreCase) -ge 0) {
         foreach ($x in (Get-ReportFamilies $ln)) { [void]$named.Add($x) }
@@ -159,6 +170,12 @@ function Find-WriteOnlyFamilies {
       }
       if (@($named).Count -eq 0) { continue }
       $isW = Test-WriteVerb $ln
+      # A WRITE INSIDE A SELF-TEST BODY IS A FIXTURE, NOT A REPORT (2026-09-25, queue 2026-09-25-110a8f). The ratchet
+      # read 34 -> 52 over two days with no new report: lib\pipeline-commit.ps1's temp-repo fixtures (lane/out/old.json,
+      # written.json, idx-only.json ...) and other suites' planted files each minted a "family". Only WRITES are
+      # dropped there; a read inside a self-test still counts, so this can only ever report fewer families, never hide
+      # a production writer (its line is outside every span).
+      if ($isW -and $null -ne $fxSet -and $fxSet.Contains($lineIx)) { $isW = $false }
       $isR = Test-ReadVerb $ln
       foreach ($fam in $named) {
         if ($isW) { $writes[$fam] = $true }
@@ -168,6 +185,24 @@ function Find-WriteOnlyFamilies {
   }
   $only = @(@($writes.Keys) | Where-Object { -not $reads.ContainsKey($_) } | Sort-Object)
   return [pscustomobject]@{ written = @($writes.Keys).Count; read = @($reads.Keys).Count; write_only = $only }
+}
+function Get-FixtureLineSet {
+  <# The 0-based line indexes of a .ps1 that sit inside a self-test body, by lib\selftest-lib.ps1's Get-SelfTestSpans
+     (the same rule audit-mustfire-census and audit-fixture-inputs read). An empty set for anything it cannot parse. #>
+  param([string]$Text, [string]$Path)
+  $set = New-Object 'System.Collections.Generic.HashSet[int]'
+  $spans = $null
+  try { $spans = Get-SelfTestSpans -Text $Text -Path $Path } catch { return ,$set }
+  $spans = @($spans)
+  if ($spans.Count -eq 0) { return ,$set }
+  $starts = New-Object System.Collections.Generic.List[int]
+  $starts.Add(0)
+  for ($i = 0; $i -lt $Text.Length; $i++) { if ($Text[$i] -eq "`n") { $starts.Add($i + 1) } }
+  for ($li = 0; $li -lt $starts.Count; $li++) {
+    $s = $starts[$li]
+    foreach ($sp in $spans) { if ($s -ge $sp.S -and $s -lt $sp.E) { [void]$set.Add($li); break } }
+  }
+  return ,$set
 }
 if ($SelfTest) {
   $bad = 0
@@ -246,6 +281,30 @@ if ($SelfTest) {
   $r10 = Find-WriteOnlyFamilies @{ 'w.ps1' = @($wLine, $dW2) }
   T 'CLEAN TWIN  an undated family keeps its own name beside a dated one (ff-carry-report, verify-verdicts-<date>)' `
     ((@($r10.write_only) -join ',') -eq 'ff-carry-report,verify-verdicts-<date>') ("write_only=" + ($r10.write_only -join ', '))
+  # FIXTURE WRITES (2026-09-25, queue 2026-09-25-110a8f). The founding shape: lib\pipeline-commit.ps1's self-test
+  # writes lane/out/written.json into a temp repo, and the ratchet counted it as a new report family.
+  $fxW = '    [IO.File]::WriteAllText((Join-Path $tr2 ' + "'lane/out/written.json'" + '), ''{"w":2}'')'
+  $fxSrc = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n" + $fxW + "`n}`n"
+  $fxSet = Get-FixtureLineSet -Text $fxSrc -Path 'lib\fx-lib.ps1'
+  $r11 = Find-WriteOnlyFamilies -Sources @{ 'fx.ps1' = @($fxSrc -split "`n") } -FixtureLines @{ 'fx.ps1' = $fxSet }
+  T 'MUST NOT FIRE  a write inside a self-test body (lib\pipeline-commit''s lane/out/written.json fixture) is not a report family' `
+    ($fxSet.Contains(2) -and $r11.written -eq 0 -and (@($r11.write_only)).Count -eq 0) ("fixtureLines=" + (@($fxSet) -join ',') + " written=$($r11.written)")
+  $prodSrc = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  `$x = 1`n}`n" + $fxW.Trim() + "`n"
+  $prodSet = Get-FixtureLineSet -Text $prodSrc -Path 'lib\fx-lib.ps1'
+  $r12 = Find-WriteOnlyFamilies -Sources @{ 'p.ps1' = @($prodSrc -split "`n") } -FixtureLines @{ 'p.ps1' = $prodSet }
+  T 'MUST FIRE  the same write OUTSIDE the self-test body is still a write-only family (written)' `
+    ((@($r12.write_only) -join ',') -eq 'written') ("write_only=" + ($r12.write_only -join ', '))
+  # READ HELPERS (2026-09-25). audit-arg-binding's baseline is read through Read-TcRatchetBaseline since e4ec2c7e7.
+  $rhW = '  $null = Write-TcLfFile $blF $json'
+  $rhA = '$blF = if ($BaselineFile) { $BaselineFile } else { Join-Path $here ' + "'out\arg-binding-baseline.json'" + ' }'
+  $rhR = '$blRead = ' + 'Read-' + 'TcRatchetBaseline -Path $blF -Field ''unbound'''
+  $r13 = Find-WriteOnlyFamilies @{ 'ab.ps1' = @($rhA, $rhR, $rhW) }
+  T 'MUST NOT FIRE  a ratchet baseline read through Read-TcRatchetBaseline is read (arg-binding-baseline)' `
+    ($r13.written -eq 1 -and (@($r13.write_only)).Count -eq 0) ("written=$($r13.written) write_only=" + ($r13.write_only -join ', '))
+  $rhH = '$ans = ' + 'Read-' + 'Host ''continue?''; $null = Write-TcLfFile $blF $json'
+  $r14 = Find-WriteOnlyFamilies @{ 'ab.ps1' = @($rhA, $rhH) }
+  T 'MUST FIRE  Read-Host beside the write reads nothing, so the baseline family is still write-only' `
+    ((@($r14.write_only) -join ',') -eq 'arg-binding-baseline') ("write_only=" + ($r14.write_only -join ', '))
   # MUST FIRE: an empty corpus must report BLIND-shaped zero, never a confident clean.
   $r3 = Find-WriteOnlyFamilies @{}
   T 'an empty corpus writes zero families, so the live path can tell "nothing scanned" from "nothing found"' `
@@ -328,18 +387,22 @@ while ($stack.Count) {
     }
   } catch { }
 }
+$fxLines = @{}
 foreach ($p in $walked) {
   # THIS FILE MUST NOT SCAN ITSELF. Its own fixture strings name real families, so including it would make
   # every one of them look read - a detector that reads its own source cannot fail.
   if ($p -eq $PSCommandPath) { continue }
   try { $srcs[$p] = @([IO.File]::ReadAllLines($p)) } catch { }
+  if ($srcs.ContainsKey($p) -and $p -match '\.ps1$') {
+    try { $fxLines[$p] = Get-FixtureLineSet -Text ([IO.File]::ReadAllText($p)) -Path $p } catch { }
+  }
 }
 if ($srcs.Count -eq 0) {
   Write-Output 'write-only-reports: BLIND - zero source files reached the scan, so a clean result would prove nothing'
   Exit-Guard -Name 'write-only-reports' -Summary 'blind' -Code 3
 }
-$res = Find-WriteOnlyFamilies $srcs
-$n = @($res.write_only).Count
+$res = Find-WriteOnlyFamilies -Sources $srcs -FixtureLines $fxLines
+$n =@($res.write_only).Count
 Write-Output ("write-only-reports: scanned {0} source file(s); {1} out\*.json family(ies) written, {2} read; {3} written by a script and read by NONE" -f $srcs.Count, $res.written, $res.read, $n)
 foreach ($w in $res.write_only) { Write-Output ('  WRITE-ONLY  out\' + $w + '.json') }
 Write-Output '  (a human-read report is legitimate; what this ratchets is that a NEW one cannot appear unnoticed)'

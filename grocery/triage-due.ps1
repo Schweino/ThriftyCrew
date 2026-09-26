@@ -413,6 +413,26 @@ if ($SelfTest) {
     _T 'CLEAN TWIN a watch: followup is no queue owner, so it still RESUMEs, and it prints ahead of the RESUMED-BY note' `
       ((@((Get-TriageResumeDue $uw))).Count -eq 1 -and $uwL.Count -eq 4 -and $uwL[0] -match '^DUE  RESUME 1 unfinished' -and $uwL[1] -match '^  RESUME: 2026-09-19-d24000 ' -and $uwL[2] -match '^NOTE  1 ' -and $uwL[3] -match '^  RESUMED-BY 2026-09-22-43e8c0: 2026-09-22-a09096') `
       ($uwL -join ' | ')
+    # ---- DEVIATED BUT FINISHED (2026-09-25, queue 2026-09-25-d76f72) ----
+    # Founding: plan-2026-09-25-5.json closed 2026-09-24-a9e8a0 deviated with leaves_open "nothing" at 0 occurrences,
+    # and triage-due still listed it RESUME. A deviated item that says it left nothing open is finished.
+    $dPlans = @([pscustomobject]@{ path = 'grocery/triage-plans/plan-fx-dev.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-24-a9e8a0'; status = 'deviated'; lane = 'money'; leaves_open = 'nothing'; leaves_open_occurrences = 0; leaves_open_followup = 'none' },
+      [pscustomobject]@{ queue_id = '2026-09-24-bbbbb1'; status = 'deviated'; lane = 'ops'; leaves_open = 'nothing'; leaves_open_occurrences = 3 },
+      [pscustomobject]@{ queue_id = '2026-09-24-bbbbb2'; status = 'needs-more-time'; lane = 'ops'; leaves_open = 'nothing'; leaves_open_occurrences = 0 },
+      [pscustomobject]@{ queue_id = '2026-09-24-bbbbb3'; status = 'deviated'; lane = 'ops'; leaves_open = 'the Aldi half of the class'; leaves_open_occurrences = 0; leaves_open_followup = 'watch:grocery/audit-food-category.ps1' }) })
+    $dQ = @(
+      [pscustomobject]@{ id = '2026-09-24-a9e8a0'; status = 'resolved'; subject = 'Daily chain left served files uncommitted' },
+      [pscustomobject]@{ id = '2026-09-24-bbbbb1'; status = 'resolved'; subject = 'fx contradictory nothing' },
+      [pscustomobject]@{ id = '2026-09-24-bbbbb2'; status = 'resolved'; subject = 'fx needs-more-time' },
+      [pscustomobject]@{ id = '2026-09-24-bbbbb3'; status = 'resolved'; subject = 'fx watch residual' })
+    $ud = Get-TriageUnfinished $dQ $dPlans
+    $ud = @($ud)
+    $udIds = @($ud | ForEach-Object { [string]$_.id })
+    _T 'MUST-NOT-FIRE a deviated item with leaves_open "nothing" at 0 occurrences is finished, not RESUME (a9e8a0)' `
+      (-not ($udIds -contains '2026-09-24-a9e8a0')) ($udIds -join ',')
+    _T 'CLEAN TWIN deviated "nothing" with 3 occurrences, needs-more-time "nothing", and a deviated watch-owned residual all still RESUME' `
+      ($ud.Count -eq 3 -and ($udIds -contains '2026-09-24-bbbbb1') -and ($udIds -contains '2026-09-24-bbbbb2') -and ($udIds -contains '2026-09-24-bbbbb3')) ($udIds -join ',')
     # ---- THE ARCHIVE IS PART OF THE RECORD (2026-09-22, queue 2026-09-21-594c27) ----
     $aRet = Join-TriageQueueWithArchive @($rCur) @($rP2)
     $alA = Get-TriageReturnLines @($rCur) $aRet $rNow

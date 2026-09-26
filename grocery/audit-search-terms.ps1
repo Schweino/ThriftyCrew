@@ -134,6 +134,7 @@ if ($SelfTest) {
   . (Join-Path $root 'match-lib.ps1')
   . (Join-Path $root 'global-exclude-lib.ps1')
   . (Join-Path $root 'search-terms-lib.ps1')
+  # LIVE-TWIN (2026-09-25, queue 2026-09-25-110a8f): the live rule file on purpose. A red below reads "the tracked laundry rule or terms changed", never "this watcher went blind"; the frozen cases above carry the must-fires.
   $stDoc = Read-JsonFile (Join-Path $root 'commodities.json')
   $stCl = if ($stDoc.PSObject.Properties['commodities']) { $stDoc.commodities } else { $stDoc }
   $stGex = Get-TcGlobalExclude

@@ -57,6 +57,9 @@
 #                           ops\test-prepush-hook.ps1 declares one only so run-gates finds it. A test-*.ps1 that
 #                           reads its switch is read by its gated body alone: grocery\test-guards.ps1 mutates live
 #                           files outside it. The name is the declaration; a file not so named is never read whole.
+#                           One opt-in: a test-*.ps1 whose ungated body IS its suite carries a comment line
+#                           `# selftest-lib: whole-file-suite <why>` and is read whole although it reads its switch
+#                           (grocery\test-match-lib.ps1, 2026-09-25).
 #
 # SCOPE OF A CLEAN ANSWER: unsound. Still outside every body: a fixtures function with another name
 # (meal-prep\pipeline\selftest-names-lib.ps1 Invoke-NamesFixtures), labels in a production path
@@ -223,7 +226,13 @@ function Get-SelfTestSpans {
           $v.Extent.EndOffset -le $ast.ParamBlock.Extent.EndOffset) { continue }
       $inCode = $true; break
     }
-    if (-not $inCode) {
+    # A DECLARED WHOLE-FILE SUITE (2026-09-25, queue 2026-09-25-110a8f). grocery\test-match-lib.ps1 gained a hermetic
+    # -SelfTest in c2ff876d6, and from then on only that gated body was read: the census logged "LOST 26 -> 4" while the
+    # corpus must-fires below it still existed and still ran under test-auditors. A test-*.ps1 whose ungated body IS
+    # its suite says so on a comment line of its own, `# selftest-lib: whole-file-suite <why>`, and is read whole
+    # again. Opt-in, so test-guards (whose ungated body mutates live files) keeps its gated reading.
+    $declaredWhole = ($Text -match '(?m)^[ \t]*#[ \t]*selftest-lib:[ \t]*whole-file-suite\b')
+    if (-not $inCode -or $declaredWhole) {
       # From the param block, or the first statement when there is none, so the header comment is not read.
       $start = -1
       if ($ast.ParamBlock) { $start = $ast.ParamBlock.Extent.StartOffset }
@@ -370,6 +379,15 @@ if ($__stlSelfTest) {
   $btg = Get-SelfTestBlock -Text $tg -Path 'grocery\test-guards.ps1'
   StT 'MUST NOT FIRE: a test-*.ps1 that READS its switch is read by its gated body alone (grocery\test-guards.ps1 mutates live files outside it)' `
       (($btg -match '\$st = 1') -and ($btg -notmatch 'production'))
+  # The declaration is built by concatenation so this file's own text never carries it at a line start.
+  $wfDecl = '# selftest-lib: ' + 'whole-file-suite the corpus run below is the suite'
+  $tml = "param([switch]`$SelfTest)`n" + $wfDecl + "`nif (`$SelfTest) {`n  `$st = 1`n}`n`$corpus = 'suite'`n"
+  $btml = Get-SelfTestBlock -Text $tml -Path 'grocery\test-match-lib.ps1'
+  StT 'MUST FIRE: a test-*.ps1 that reads its switch AND declares whole-file-suite is read whole (the test-match-lib shape, c2ff876d6)' `
+      (($btml -match '\$st = 1') -and ($btml -match "corpus = 'suite'"))
+  $btmlN = Get-SelfTestBlock -Text $tml -Path 'grocery\match-lib-run.ps1'
+  StT 'CLEAN TWIN: the declaration in a file NOT named test-*.ps1 changes nothing - its gated body is still found and its live code is not' `
+      (($btmlN -match '\$st = 1') -and ($btmlN -notmatch "corpus = 'suite'"))
   $onceSrc = "param([switch]`$SelfTest)`nif (-not `$SelfTest) { exit 0 }`nif (`$SelfTest) {`n  `$once = 1`n}`nfunction Invoke-XSelfTest {`n  `$inner = 1`n}`n"
   $bo = Get-SelfTestBlock -Text $onceSrc
   StT 'CLEAN TWIN: an if body and an Invoke-*SelfTest function inside a guard-return span are each read exactly once' `

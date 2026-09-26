@@ -1,0 +1,264 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-25T20:30:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-23",
+  "head_at_dispatch": "cbbe61b42",
+  "routing_artifact": null,
+  "queue_ids_seen": ["2026-09-23-cf85c8", "2026-09-24-5bce76", "2026-09-24-b606fd", "2026-09-25-110a8f", "2026-09-25-d76f72"],
+  "scope_note": "Weekly lane batch 9 of 9 (Brad's 2026-09-25 resolve-everything run). Prevention for this week is batch 1's (plan-2026-09-25-6); this plan carries leftovers only. No item touches a price, a matching rule or the board; nothing is published.",
+  "knowledge_consulted": [
+    "searched \"alert triage root cause recurrence\" (dispatch) and \"repair runs before audit order\": nothing applicable beyond the dispatch excerpts",
+    "reliability-craft/MAP.md section 5: do not declare resolved on the alert going quiet (each item re-measured before its outcome)",
+    ".claude/rules/ops-and-gates.md og-11 (a plain ratchet run never writes its mark; -Tighten records it): write-only-reports tightened only through -Tighten",
+    ".claude/rules/ops-and-gates.md og-35 (a self-test the census cannot find can lose its must-fires): lib/selftest-lib.ps1 Get-SelfTestBlock shapes, extended by an opt-in declaration",
+    ".claude/rules/ops-and-gates.md og-25 (a replace of a file something else reads uses Write-TcAtomicFile): 5bce76's instances already follow it",
+    ".claude/rules/ops-and-gates.md og-03 (a self-test that greps its own source cannot fail): every new fixture needle is concatenated"
+  ],
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record. Since grocery/triage-weekly-lane-stamp.txt (2026-09-20T07:45:35): no new store (stores.json membership unchanged); commodities.json moved in rule/term batches on EXISTING commodities (81a961a00, fc2b4c6fd laundry-detergent terms; dc4be7174; 87d2109f3 chicken-drumsticks split; 74cc780df/828d5226b derived bands); 18 commits touched grocery/build-*.ps1 or pull-*.ps1 capture builders. Batch 1's plan owns the full record for this week.",
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. d76f72: grocery/triage-return-lib.ps1 Get-TriageUnfinished + grocery/triage-due.ps1 cases; triage-due -SelfTest.",
+    "2. 110a8f: ops/audit-write-only-reports.ps1 (fixture writes, read helpers) + -Tighten of ops/out/write-only-reports-baseline.json; lib/selftest-lib.ps1 whole-file-suite declaration + grocery/test-match-lib.ps1 declaration; grocery/audit-search-terms.ps1 LIVE-TWIN label; the three audits live and -SelfTest.",
+    "3. cf85c8: grocery/capture-run.ps1 moves its prompt-sync block ahead of check-ad-cycles; grocery/test-capture-run-sync.ps1 holds the order. Chain change: land through ops/push-main.ps1 only (triage-land.ps1), never a plain push.",
+    "4. 5bce76 and b606fd: no code; owners recorded.",
+    "5. full_suite deferred-to-land; nothing pushed from this worktree."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-23-cf85c8",
+      "subject": "Grocery: test-auditors hygiene finding(s) - watchers intact",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/test-auditors-hygiene-2026-09-23.txt:648 'HYGIENE  prompt-backup drift (rc=2) ... 7 issue(s): SCOPE DRIFT post-publish-reviewer.md ... triage-reviewer.md'",
+        "All 5 saved hygiene runs (09-05, 09-06, 09-18, 09-19, 09-23) carry exactly one HYGIENE line and every one is 'prompt-backup drift'; alert-log shows the page on 09-05, 09-06, 09-19, 09-23 08:56 and 09-23 10:25",
+        "grocery/capture-run.ps1 at cbbe61b42: check-ad-cycles (which runs test-auditors, which runs audit-prompt-backup) at line 1270; the 'prompt-sync: audit-prompt-backup -SyncScopes -SyncMirror' repair at line 1331, AFTER it",
+        "Re-measured 2026-09-25 ~19:40 from the main checkout: 'PROMPT-BACKUP-COMPLETE mode=push scanned=36 findings=4 ... review=4' - four SCOPE DRIFT, every project copy last committed in c3c08e7c8 (2026-09-25 05:34, the --estate change), user copies dated 09-23 09:30; this morning's 08:32 run synced before that commit, so the next run's test-auditors will page hygiene again before its own sync repairs it"
+      ],
+      "root_cause": "The daily runner audits the prompts (inside check-ad-cycles' test-auditors) BEFORE it runs the repair lane that reconciles them, so any project-scope prompt committed the day before is reported as hygiene drift and repaired minutes later by the same run: an alert whose own run fixes it.",
+      "root_fix": {
+        "what": "run the prompt-sync repair block before the downstream chain",
+        "files": ["grocery/capture-run.ps1", "grocery/test-capture-run-sync.ps1"],
+        "exact_change": "Moved the whole 'THE AGENT PROMPTS GET A REPAIR LANE' block (unchanged condition: daily, not WhatIf, not NoDownstream; still non-fatal) to just above 'if ($runDownstream) {', with a note saying why; test-capture-run-sync gains a PROMPT SYNC ORDER group asserting the sync precedes the check-ad-cycles call."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "prior_closes": ["2026-09-19-064845"],
+      "prevention": {
+        "source": ["grocery/capture-run.ps1"],
+        "what": "the daily runner (the producer of both the audit run and its repair) repairs prompt drift before the chain that audits it",
+        "exact_change": "the 'THE AGENT PROMPTS GET A REPAIR LANE' block moved above 'if ($runDownstream) {', held by test-capture-run-sync's PROMPT SYNC ORDER group"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: one block moved inside grocery/capture-run.ps1's daily path; the sync writes only the user-scope prompt copies and refreshes already-existing mirrors under ops/prompt-backup, which the bot's staging list excludes on purpose, so what the tail commits is unchanged",
+        "affected_now": 4,
+        "names": ["post-publish-reviewer.md", "recipe-batch-auditor.md", "recipe-ingredient-mapper.md", "recipe-sourcer.md"],
+        "risk": "a sync that throws is caught and logged as before; it now runs before prices are built, and it touches no price input",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-25 ~19:40 against the main checkout; if a capture-run has run since, re-run audit-prompt-backup from the main checkout first",
+      "proof": {
+        "guard_or_fixture": "grocery/test-capture-run-sync.ps1 (reads the shipped capture-run.ps1 source)",
+        "must_fire_case": "MUST FIRE: a capture-run whose prompt sync sits AFTER check-ad-cycles (the pre-2026-09-25 order) is refused",
+        "clean_twin": "CLEAN TWIN: the shipped capture-run.ps1 runs its prompt sync before check-ad-cycles, and both needles are found; the other 49 cases (start sync, handoff, tail sync) still pass",
+        "fixture_occurrences": ["2026-09-19-064845", "2026-09-23-cf85c8"],
+        "commands": ["powershell -NoProfile -File grocery\\test-capture-run-sync.ps1 (exit 0, 51 of 51)"]
+      },
+      "rollback": "move the block back below the downstream call; no data format changes",
+      "do_not_touch": ["the -SyncScopes/-SyncMirror split (adopting never-mirrored files stays a human decision)", "the bot staging list"],
+      "live_check": "2026-09-26 capture-run-daily log shows 'prompt-sync:' before 'downstream: check-ad-cycles', and no 'test-auditors hygiene' page that morning",
+      "resolution_note": "Real finding, wrong-time repair. All 5 recorded hygiene pages were prompt-backup scope/mirror drift that the same daily run's prompt-sync then repaired, because the sync ran after check-ad-cycles' test-auditors. The repair now runs first; 4 drifts from today's c3c08e7c8 are live and will be synced before tomorrow's audit reads them. test-capture-run-sync 51/51 exit 0. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 15,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 14
+    },
+    {
+      "queue_id": "2026-09-24-5bce76",
+      "subject": "Triage residual: daily-chain writers still bare WriteAllText",
+      "classification": "infra",
+      "evidence": [
+        "grocery/ad-cycle-log.txt, whole file: 2 lines ever match 'user-mapped section|being used by another process', both [2026-09-23T10:07:05]: hyvee-store-blend and price-capture-reach, each 'Exception calling \"WriteAllText\"'",
+        "grocery/audit-hyvee-store-blend.ps1:84 and grocery/audit-price-capture-reach.ps1:211 already write through Write-TcAtomicFile ('THROUGH Write-TcAtomicFile (2026-09-23)'); export-feed converted 2026-09-24 (a9d1f1691, per the residual's own body)",
+        "0 occurrences after 2026-09-23 10:07 across the 09-24 and 09-25 chain runs (same grep)",
+        "Class size: 556 [IO.File]::WriteAllText sites in 141 files under grocery/ and meal-prep/pipeline/, most inside self-test fixtures; a blanket conversion is not a measured need"
+      ],
+      "root_cause": "A chain lane that replaces a file another process holds or maps with a bare WriteAllText dies with an IOException instead of retrying; every instance that has actually happened (3, all by 2026-09-24) is converted, and the remaining writers have never hit it.",
+      "root_fix_none_because": "the class has 0 occurrences outside the three converted writers; converting 556 sites blind would be a sweep with no measured target, and ops-and-gates og-25 already makes every new replace of a read file use Write-TcAtomicFile (gate ops/audit-bare-replace.ps1 for the tmp-then-move form)",
+      "leaves_open": "unconverted bare WriteAllText writers in chain lanes over files another process may hold; 0 occurrences since the 2026-09-23 conversions",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/fanout-lib.ps1",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no code change in this item: the three writers named were converted by earlier commits; measured over grocery/ad-cycle-log.txt (2 held-file lines ever)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from this item",
+        "cell_effects": []
+      },
+      "rollback": "nothing to roll back: no code changed here",
+      "freshness": "grep of grocery/ad-cycle-log.txt in the main checkout at 2026-09-25 ~20:00",
+      "proof": {
+        "guard_or_fixture": "none shipped: no code change",
+        "must_fire_case": "n/a (no code change); the first occurrence surfaces through Test-FanoutComplete (grocery/fanout-lib.ps1), which check-ad-cycles.ps1:2331 logs as 'BLIND LANE:' and adds to the run summary when a lane exits without its -COMPLETE marker, the 09-23 shape",
+        "clean_twin": "n/a"
+      },
+      "resolution_note": "Re-measured: 2 occurrences ever (both 2026-09-23 10:07), both writers converted that day, export-feed converted 09-24; 0 since. Closed as the instances fixed with the class owned by the fanout completion check: a lane that dies on a held file loses its marker and is named BLIND LANE in the chain summary on its first occurrence. That is a summary line, not a page; if Brad wants a page, it is the fanout check's to send.",
+      "close_disposition": "superseded",
+      "lane": "weekly",
+      "est_tool_calls": 10,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": "no conversion sweep: the residual asked to convert the remaining writers; measurement shows none of them has ever failed, so the owner is the existing completion check",
+      "shipped_commit": null,
+      "actual_tool_calls": 11
+    },
+    {
+      "queue_id": "2026-09-24-b606fd",
+      "subject": "Triage residual: a load-only matcher timeout still pages as a blind guard",
+      "classification": "infra",
+      "evidence": [
+        "grocery/test-match-lib.ps1 (c2ff876d6): every blind look is named and re-looked once at the unchanged 250 ms bound; Get-MatchLibVerdict puts 'blind again on one re-look at the same bound: <names>' ON the MATCH-LIB FAILED line, and 'could-not-look RETRIED (load)' lines for the ones that resolved",
+        "grocery/check-ad-cycles.ps1:4027 pages 'Grocery: a GUARD has gone blind (test-auditors failed)' with the failing lines in the body, so a timeout-only red now names each product and says it was re-looked",
+        "test-match-lib -SelfTest 2026-09-25: exit 0, 'test-match-lib SELF-TEST PASSED (7 of 7 case(s))'",
+        "No load-only red since c2ff876d6 landed (2026-09-24 16:44): alert-log shows no 'GUARD has gone blind' after that time"
+      ],
+      "root_cause": "A load spike and a catastrophic pattern produced the same unnamed could-not-look red; c2ff876d6 made the load case self-resolving (re-look at the same bound) and the still-blind case self-describing (names on the verdict line).",
+      "root_fix_none_because": "the root fix shipped in c2ff876d6; what remains is a subject-line preference (a separate alert type for a timeout-only red) with 0 occurrences since, and a red that survives the re-look is by definition not load-only",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no code change in this item: the fix is c2ff876d6's; measured over grocery/alert-log.txt after 2026-09-24 16:44",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from this item",
+        "cell_effects": []
+      },
+      "rollback": "nothing to roll back: no code changed here",
+      "freshness": "alert-log and test-match-lib as of 2026-09-25 ~20:00",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-lib.ps1 -SelfTest (shipped by c2ff876d6)",
+        "must_fire_case": "n/a here (no code change); c2ff876d6's own must-fire: a name blind again on the re-look stays could-not-look and fails, named on the verdict line",
+        "clean_twin": "n/a here; c2ff876d6's twin: a name that resolves on the re-look and agrees with the reference passes as RETRIED (load)"
+      },
+      "resolution_note": "Superseded by c2ff876d6: a load-only timeout is re-looked and passes, so it no longer pages at all; a red that survives the re-look names its products on the verdict line inside the page body. A distinct alert type would split one page into two for a case that has not recurred (0 since 09-24 16:44).",
+      "close_disposition": "superseded",
+      "lane": "weekly",
+      "est_tool_calls": 5,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 3
+    },
+    {
+      "queue_id": "2026-09-25-110a8f",
+      "subject": "Triage residual: daily ratchets red on write-only-reports, mustfire-census and fixture-inputs",
+      "classification": "infra",
+      "evidence": [
+        "Re-measured in this worktree at cbbe61b42: audit-write-only-reports exit 2 'RATCHET BROKEN - 52 write-only family(ies) now, baseline 34'; audit-mustfire-census exit 1 '! LOST: grocery\\test-match-lib.ps1  26 -> 4'; audit-fixture-inputs exit 1 '! NEW: grocery\\audit-search-terms.ps1|commodities.json'",
+        "write-only-reports' 18 new names split two ways: fixture paths written inside self-test bodies (lib/pipeline-commit.ps1:1081-1185 writes lane/out/old.json, written.json, idx-only.json, back.jsonl, str.json into a temp repo; a, data, new, sess, moved-to, candidates-500 the same shape), and five ratchet baselines plus match-worklist whose readers moved into helpers the read-verb list did not know (ops/audit-arg-binding.ps1:368 'Read-TcRatchetBaseline -Path $blF' since e4ec2c7e7; check-ad-cycles.ps1:2350 'Read-MatchWorklist')",
+        "lib/selftest-lib.ps1:57-58: 'A test-*.ps1 that reads its switch is read by its gated body alone' - c2ff876d6 gave test-match-lib a -SelfTest block, so its 22 corpus must-fires left the census",
+        "grocery/audit-search-terms.ps1:132-137: the self-test reads live commodities.json ON PURPOSE ('The rest reads the TRACKED rule and term files ... so a later edit ... goes red here') but carried no LIVE-TWIN declaration"
+      ],
+      "root_cause": "Two detectors read the tree by rules that lagged the code they read: write-only-reports counted fixture writes as report families and knew write helpers but not read helpers, and the self-test census had no way for a whole-file suite that gained a hermetic -SelfTest to stay whole. The third red was a correct finding: a deliberate live read with no declaration.",
+      "root_fix": {
+        "what": "teach each detector the shape it lagged, never lower a bar",
+        "files": ["ops/audit-write-only-reports.ps1", "ops/out/write-only-reports-baseline.json", "lib/selftest-lib.ps1", "grocery/test-match-lib.ps1", "grocery/audit-search-terms.ps1"],
+        "exact_change": "(1) write-only-reports: Get-FixtureLineSet (lib/selftest-lib.ps1 Get-SelfTestSpans) marks self-test body lines per .ps1, and a WRITE on such a line is not counted (reads still are, so it can only report fewer); Test-ReadVerb counts any Read-<Noun> command except Read-Host, the mirror of the 2026-09-11 write-helper rule. Live: 52 -> 32, no name outside the committed baseline; baseline recorded 34 -> 32 through the script's own -Tighten (Test-RatchetMove), bytes LF, CR 0. (2) selftest-lib: a test-*.ps1 carrying a comment line '# selftest-lib: whole-file-suite <why>' is read whole although it reads its switch; test-match-lib declares it. Census: 0 lost, test-match-lib 26 -> 30. (3) audit-search-terms: a LIVE-TWIN comment above its commodities.json read; fixture-inputs 0 new."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: three static audits over source text, run live in this worktree before and after (write-only-reports 52 -> 32 families, census lost 1 -> 0, fixture-inputs new 1 -> 0) and each -SelfTest",
+        "affected_now": 3,
+        "names": ["ops/audit-write-only-reports.ps1", "ops/audit-mustfire-census.ps1 (via lib/selftest-lib.ps1)", "ops/audit-fixture-inputs.ps1 (via lib/selftest-lib.ps1)"],
+        "risk": "the broader read rule can hide a write-only family whose line merely sits beside a Read- command (stated in the source); the declaration is opt-in, so test-guards' gated reading is unchanged",
+        "cell_effects": []
+      },
+      "freshness": "all three audits run in this worktree at 2026-09-25 ~20:10 over HEAD cbbe61b42 plus this change; other batches' concurrent edits may add families, which the ratchet reports by name",
+      "proof": {
+        "guard_or_fixture": "ops/audit-write-only-reports.ps1 -SelfTest; lib/selftest-lib.ps1 -SelfTest; ops/audit-mustfire-census.ps1 -SelfTest; ops/audit-fixture-inputs.ps1 -SelfTest; grocery/audit-search-terms.ps1 -SelfTest; grocery/test-match-lib.ps1 -SelfTest",
+        "must_fire_case": "MUST FIRE: the lane/out/written.json write OUTSIDE a self-test body is still a write-only family; MUST FIRE: Read-Host beside a baseline write reads nothing, so it stays write-only; MUST FIRE: a test-*.ps1 that reads its switch AND declares whole-file-suite is read whole (the test-match-lib shape)",
+        "clean_twin": "MUST NOT FIRE: the same write inside a self-test body is no family; MUST NOT FIRE: a baseline read through Read-TcRatchetBaseline is read; CLEAN TWIN: the declaration in a file not named test-*.ps1 changes nothing; the existing test-guards MUST NOT FIRE (reads its switch, no declaration) still passes; a count that ROSE still exits 2",
+        "commands": [
+          "powershell -NoProfile -File ops\\audit-write-only-reports.ps1 -SelfTest (exit 0) and live (exit 0, 32 vs 34), -Tighten (exit 0)",
+          "powershell -NoProfile -File lib\\selftest-lib.ps1 -SelfTest (exit 0)",
+          "powershell -NoProfile -File ops\\audit-mustfire-census.ps1 (exit 0, 0 lost) and -SelfTest (exit 0)",
+          "powershell -NoProfile -File ops\\audit-fixture-inputs.ps1 (exit 0, 0 new) and -SelfTest (exit 0)",
+          "powershell -NoProfile -File grocery\\audit-search-terms.ps1 -SelfTest (exit 0); grocery\\test-match-lib.ps1 -SelfTest (exit 0, 7 of 7)"
+        ]
+      },
+      "rollback": "revert the five files; the baseline returns to 34 with it",
+      "do_not_touch": ["the census and fixture-inputs baselines (no -Update was run)", "test-guards' gated-body reading"],
+      "live_check": "TC Daily Ratchets 0315 on 2026-09-26 reads 6 of 6 green (ops/run-once-a-day.ps1 now keeps each child's output)",
+      "resolution_note": "Three reds, three causes, none fixed by moving a mark upward. write-only-reports was counting fixture writes and missing read helpers (52 -> 32; the committed mark tightened 34 -> 32 through -Tighten); the census lost test-match-lib's corpus when it gained a hermetic -SelfTest (now an opt-in whole-file-suite declaration, 26 -> 30, 0 lost); fixture-inputs was right about audit-search-terms, whose live read is deliberate and is now declared LIVE-TWIN. All touched -SelfTests exit 0. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 35,
+      "status": "done",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 30
+    },
+    {
+      "queue_id": "2026-09-25-d76f72",
+      "subject": "Triage finding: plan status deviated is read as unfinished even when the root fix shipped",
+      "classification": "infra",
+      "evidence": [
+        "grocery/triage-return-lib.ps1:373 at cbbe61b42: 'if ($ps -ne ''deviated'' -and $ps -ne ''needs-more-time'') { continue }' - every deviated item is unfinished, whatever its leaves_open says",
+        "plan-2026-09-25-5.json item 2026-09-24-a9e8a0: status deviated, leaves_open 'nothing', leaves_open_occurrences 0, leaves_open_followup 'none'",
+        "Measured over the live queue (main checkout) and this worktree's 40 plans with Get-TriageUnfinished: HEAD lib 'unfinished=9 resume=1' (the 1 is a9e8a0); new lib 'unfinished=8 resume=0'. The three ids the finding named (a09096, c9f0f3, 0c8e6e) no longer surface under either lib today"
+      ],
+      "root_cause": "The plan status 'deviated' is written for two outcomes ('shipped differently' and 'root fix not landed') and the RESUME reader decided on the status alone, never on the residual fields the plan gate already requires beside it.",
+      "root_fix": {
+        "what": "Get-TriageUnfinished reads leaves_open and leaves_open_occurrences for a deviated item",
+        "files": ["grocery/triage-return-lib.ps1", "grocery/triage-due.ps1"],
+        "exact_change": "A newest plan item with status deviated whose leaves_open matches ^nothing\\b (case-insensitive) and whose leaves_open_occurrences is absent or 0 is finished and is not returned; needs-more-time is always returned; a deviated item with any other leaves_open (the d24000 watch-owned case) is returned exactly as before."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "none",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching rule: Get-TriageUnfinished over the live queue and 40 plan files, HEAD lib vs new lib, one row per unfinished id",
+        "affected_now": 1,
+        "names": ["2026-09-24-a9e8a0"],
+        "risk": "a developer who writes leaves_open 'nothing' over a real residual now hides it from RESUME; the -Closing gate already refuses a done/deviated item with a non-nothing leaves_open and no followup, so the word is already load-bearing",
+        "cell_effects": []
+      },
+      "freshness": "live queue read from the main checkout at 2026-09-25 ~19:50",
+      "proof": {
+        "guard_or_fixture": "grocery/triage-due.ps1 -SelfTest (dot-sources grocery/triage-return-lib.ps1)",
+        "must_fire_case": "the a9e8a0 founding shape frozen: a deviated item with leaves_open 'nothing' at 0 occurrences is NOT returned (MUST NOT FIRE on RESUME)",
+        "clean_twin": "CLEAN TWIN: deviated 'nothing' with 3 occurrences, needs-more-time 'nothing', and a deviated watch-owned residual all still RESUME; the existing d240fd, a09096 RESUMED-BY and d24000 cases pass unchanged",
+        "commands": ["powershell -NoProfile -File grocery\\triage-due.ps1 -SelfTest (exit 0, 51 triage-due cases)"]
+      },
+      "rollback": "revert the triage-return-lib.ps1 hunk; no stored data changes",
+      "do_not_touch": ["the queue disposition axis (triage-lib.ps1's header: whether the alert was right)", "the d24000 watch-owned RESUME case"],
+      "resolution_note": "Confirmed and fixed at the reader, not by splitting the status: the plan gate already requires leaves_open and leaves_open_occurrences on every finished item, so the reader now uses them. Live RESUME count 1 -> 0 (a9e8a0 was the only one today). validate-triage-plan -Closing was not changed: with the reader reading the residual fields, 'deviated + nothing' is no longer ambiguous, so there is no combination left to refuse. full_suite: deferred-to-land.",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "lane": "weekly",
+      "est_tool_calls": 15,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "the finding proposed also making validate-triage-plan -Closing refuse the ambiguous combination; not done, because once the reader decides on leaves_open the combination carries one meaning",
+      "shipped_commit": null,
+      "actual_tool_calls": 10
+    }
+  ]
+}

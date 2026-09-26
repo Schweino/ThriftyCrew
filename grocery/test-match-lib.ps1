@@ -34,6 +34,7 @@
   original, or a shard could not be run (then nothing is proven and the caller must treat match-lib as
   unverified - a corpus that quietly got smaller is the failure mode this whole file exists against).
 #>
+# selftest-lib: whole-file-suite - the corpus run below the -SelfTest block IS this suite (22 corpus must-fires, run by test-auditors); the gated block is only the hermetic blind-retry test (queue 2026-09-25-110a8f)
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Quiet, [int]$MaxNames = 0, [int]$Workers = 0,
       # SHARD MODE - set by the parent on its own children, never by a human. The parent hands over the

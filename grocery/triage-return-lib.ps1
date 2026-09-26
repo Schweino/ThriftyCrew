@@ -371,6 +371,20 @@ function Get-TriageUnfinished {
     try { $ps = ([string]$route.status).Trim().ToLowerInvariant() } catch { $ps = '' }
     # done and superseded finished; needs-brad is a ruling and blocked is waiting on something outside triage.
     if ($ps -ne 'deviated' -and $ps -ne 'needs-more-time') { continue }
+    # DEVIATED CARRIES TWO MEANINGS, AND THE ITEM'S OWN RESIDUAL FIELDS SAY WHICH (2026-09-25, queue 2026-09-25-d76f72).
+    # Developers write `deviated` for "shipped, but not as planned" (a false premise, more files than planned) as well as
+    # for "the root fix did not fully land". Measured that day: 3 of 8 RESUME lines were deviated items whose fix
+    # shipped with leaves_open "nothing" at 0 occurrences, each costing the next run a lane spawn to re-measure
+    # finished work. So a deviated item whose leaves_open reads "nothing" and whose leaves_open_occurrences is absent or
+    # 0 finished. needs-more-time never finished whatever it says, and a deviated item with any other leaves_open (a
+    # watch: owner, a prose residual) stays RESUME exactly as before (the d24000 case).
+    if ($ps -eq 'deviated' -and $route.item) {
+      $lo = ''; $loN = $null
+      try { if ($route.item.PSObject.Properties['leaves_open']) { $lo = ([string]$route.item.leaves_open).Trim() } } catch { $lo = '' }
+      try { if ($route.item.PSObject.Properties['leaves_open_occurrences']) { $loN = $route.item.leaves_open_occurrences } } catch { $loN = $null }
+      $loZero = ($null -eq $loN) -or ([string]$loN -match '^\s*0\s*$')
+      if ($lo -match '^(?i)nothing\b' -and $loZero) { continue }
+    }
     $subj = ''
     try { if ($i.PSObject.Properties['subject']) { $subj = ([string]$i.subject).Trim() } } catch { $subj = '' }
     $owners = New-Object System.Collections.Generic.List[string]
