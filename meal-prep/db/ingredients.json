@@ -1793,7 +1793,8 @@
     },
     {
         "item":  "Pepperoncini",
-        "bid":  "banana-peppers",
+        "identity_same_as":  [ { "product":  "\\bpep+eroncini\\b", "reason":  "peperoncini is the Italian spelling (Baker's sells 'Mezzetta Medium-Heat Golden Greek Peperoncini')", "queue_id":  "2026-09-26-177835" } ],
+        "bid":  "pepperoncini",
         "gpu":  28.3495,
         "unit":  "oz",
         "board":  "weekly",

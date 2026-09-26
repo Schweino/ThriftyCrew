@@ -216,3 +216,50 @@ function Test-ReuseIdentity {
   }
   return $null
 }
+
+function Get-IdentityRouteChanges {
+  <# THE PUSH-TIME ROUTE CHECK (-RoutesOnly; queue 2026-09-26-177835, plan-2026-09-26-2). Check (a) only, over the
+     vocabulary and the rules, with no board and no costed lines, compared per (item, bid) PAIR with the proxy| and
+     unrouted| keys of the committed mark. A commodity registration and the vocabulary row naming the same food are
+     two records written by two tools on two days (4880ebc98 registered lo-mein-noodles while 'Lo Mein Noodles' still
+     bid egg-noodles), so the pair comparison is what lets a push that moves a row off its bid carry its rebid.
+       REFUSE  a pair with no mark key now has one (on-bid -> off-bid, or on-bid -> routes nowhere)
+       REFUSE  a pair marked unrouted now routes to another id (unrouted -> proxy)
+       REFUSE  a pair marked proxy now routes to a DIFFERENT other id (a new commodity took the name again)
+       SPEAK   a pair marked proxy now routes nowhere (proxy -> unrouted): weaker, never a refusal
+       silent  a pair whose mark key is unchanged, and every fall
+     Returns objects { verdict; item; bid; route; detail }. $MarkKeys is the mark's key list; keys of other kinds
+     (union|, derived|, substitute|) are ignored here, so the daily RISE semantics are untouched. #>
+  param($Rows, [scriptblock]$Resolve, $WeeklyIds, [string[]]$MarkKeys)
+  $mark = @{}
+  foreach ($k in @($MarkKeys)) {
+    $p = ([string]$k) -split '\|'
+    if ($p[0] -eq 'unrouted' -and $p.Count -ge 3) { $mark[$p[1] + '|' + $p[2]] = [pscustomobject]@{ kind = 'UNROUTED'; hit = '' } }
+    elseif ($p[0] -eq 'proxy' -and $p.Count -ge 4) { $mark[$p[1] + '|' + $p[2]] = [pscustomobject]@{ kind = 'PROXY'; hit = [string]$p[3] } }
+  }
+  $found = Get-IngredientIdentityFindings -Rows $Rows -Resolve $Resolve -WeeklyIds $WeeklyIds
+  $out = New-Object System.Collections.ArrayList
+  foreach ($x in @($found | Where-Object { $null -ne $_ })) {
+    if ($x.kind -ne 'PROXY' -and $x.kind -ne 'UNROUTED') { continue }
+    $p = ([string]$x.key) -split '\|'
+    $item = [string]$p[1]; $bid = [string]$p[2]
+    $route = if ($x.kind -eq 'PROXY') { [string]$p[3] } else { '' }
+    $was = $mark[$item + '|' + $bid]
+    $fix = if ($route) { 'meal-prep/pipeline/rebid-ingredient.ps1 -Item ''' + $item + ''' -ToBid ' + $route + ' (in the same push)' } else { 'give the commodity an include that names it, or rebid the row, in the same push' }
+    $verdict = ''; $why = ''
+    if ($null -eq $was) {
+      $verdict = 'REFUSE'
+      $why = if ($route) { 'was on its bid, now routes to ' + $route } else { 'was on its bid, now routes to no weekly commodity' }
+    } elseif ($was.kind -eq 'UNROUTED' -and $x.kind -eq 'PROXY') {
+      $verdict = 'REFUSE'; $why = 'was unrouted, now routes to ' + $route + ' (a commodity now claims this name)'
+    } elseif ($was.kind -eq 'PROXY' -and $x.kind -eq 'PROXY' -and $was.hit -ne $route) {
+      $verdict = 'REFUSE'; $why = 'routed to ' + $was.hit + ', now routes to ' + $route
+    } elseif ($was.kind -eq 'PROXY' -and $x.kind -eq 'UNROUTED') {
+      $verdict = 'SPEAK'; $why = 'routed to ' + $was.hit + ', now routes nowhere'
+    }
+    if (-not $verdict) { continue }
+    $detail = '"' + $item + '" bid ' + $bid + ': ' + $why + $(if ($verdict -eq 'REFUSE') { '. Repair: ' + $fix } else { '' })
+    [void]$out.Add([pscustomobject]@{ verdict = $verdict; item = $item; bid = $bid; route = $route; detail = $detail })
+  }
+  return $out.ToArray()
+}
