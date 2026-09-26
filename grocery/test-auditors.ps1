@@ -4278,16 +4278,53 @@ else { Ok 'weekly-post-capture never hands the tree back mid-run (the lock expir
 # DO NOT NAME A GROCERY SCRIPT IN THIS COMMENT. The census greps filenames across executable files, so a
 # mention here is indistinguishable from a call and would silently retire that script from the census (it
 # already happened once while this block was being written). Fixtures are synthetic zzz-* trees only.
+# HYGIENE OR BLIND, FOR THE LIVE CASE (2026-09-26, queue 2026-09-26-8163f7; the one-tally-two-verdicts shape). On
+# 2026-09-26 one untracked file pushed the live census over its wide mark, the census exited 2 exactly as designed,
+# every census fixture fired, and this file scored it Bad, so the day paged "a GUARD has gone blind". 'ok' needs exit
+# 0, the clean line and a census that still sees (uncalled > 0). 'hygiene' needs exit 2, the census's own
+# "script-census FAIL: N finding(s)" line and a census that still sees. Everything else is 'blind', so a crash, an
+# exit 3, a timeout (124) or an empty census still lands in the loud arm: the new tier is never where an unknown
+# verdict goes quiet.
+function Get-ScriptCensusLiveTier([int]$Rc, [string]$Text) {
+  $m = [regex]::Match([string]$Text, '(\d+) uncalled, (\d+) recorded as deliberate')
+  if (-not ($m.Success -and [int]$m.Groups[1].Value -gt 0)) { return 'blind' }
+  if ($Rc -eq 0 -and $Text -match 'no unrecorded orphan') { return 'ok' }
+  if ($Rc -eq 2 -and $Text -match 'script-census FAIL: \d+ finding') { return 'hygiene' }
+  return 'blind'
+}
 if (Use-Unit 'u079-n-6-script-census-is-every-file-in' -Always 'audit-script-census scans every file under the repository root for callers') {
+# The tier function's own frozen cases. The MUST FIRE text is the founding run's (2026-09-26 test-auditors-fail, the
+# live census over its wide mark); each blind case is a shape the old single verdict also had to catch.
+$scSees = 'script-census: 714 script(s) + 38 under out\, read against 836 executable file(s); 109 uncalled, 70 recorded as deliberate'
+$scCases = @(
+  @('MUST FIRE: the founding day, an unrecorded script over the wide mark at exit 2, is HYGIENE and not blindness', 2, ($scSees + "`n  FAIL    WIDE RATCHET ROSE: 74 unrecorded orphan(s) outside grocery\, over the high-water mark of 73.`nscript-census FAIL: 1 finding(s)."), 'hygiene'),
+  @('MUST FIRE: a new strict-tier ORPHAN at exit 2 is HYGIENE', 2, ($scSees + "`n  FAIL    ORPHAN grocery\zzz-new.ps1 - no executable file in the repo names it`nscript-census FAIL: 1 finding(s)."), 'hygiene'),
+  @('CLEAN TWIN: a clean census that still sees its recorded set is ok', 0, ($scSees + "`n  ok      no unrecorded orphan; out\ holds 38 one-off(s), at or under baseline"), 'ok'),
+  @('MUST FIRE: an EMPTY census (0 uncalled, the self-exclusion removed) reading clean at exit 0 is BLIND', 0, "script-census: 714 script(s) + 38 under out\, read against 836 executable file(s); 0 uncalled, 70 recorded as deliberate`n  ok      no unrecorded orphan; out\ holds 38 one-off(s), at or under baseline", 'blind'),
+  @('MUST FIRE: an EMPTY census at exit 2 is BLIND, never hygiene', 2, "script-census: 0 script(s) + 0 under out\, read against 836 executable file(s); 0 uncalled, 70 recorded as deliberate`nscript-census FAIL: 1 finding(s).", 'blind'),
+  @('MUST FIRE: exit 3 (the census found nothing to examine) is BLIND', 3, 'script-census: BLIND - nothing to examine', 'blind'),
+  @('MUST FIRE: a timeout (124) after the count line is BLIND, never hygiene', 124, $scSees, 'blind'),
+  @('MUST FIRE: exit 2 with no finding line (a crash after the count) is BLIND', 2, $scSees, 'blind')
+)
+foreach ($c in $scCases) {
+  $got = Get-ScriptCensusLiveTier -Rc $c[1] -Text $c[2]
+  if ($got -eq $c[3]) { Ok ('script-census live tier  ' + $c[0]) } else { Bad ('script-census live tier  ' + $c[0] + ' - got ' + $got + ', want ' + $c[3]) }
+}
 $r = Get-Early 'early:census-live' (Join-Path $root 'audit-script-census.ps1') @()
 # The live twin asserts TWO things, because "clean" alone is exactly what a self-defeated census reports.
 # The census must not count ITSELF as a source: its own KNOWN table quotes every recorded name, so the day
 # that exclusion is dropped the census reports 0 uncalled, prints "no unrecorded orphan", and exits 0
 # forever. The uncalled count is read from the guard's own output, never hard-coded here: it can never
 # legitimately reach 0 while the SKILL-launched and Task-Scheduler-launched entry points exist.
+# THE LIVE CASE ASKS TWO QUESTIONS AND NOW GIVES TWO VERDICTS (2026-09-26, queue 2026-09-26-8163f7). An orphan on
+# the live tree is the census WORKING: it is the estate's housekeeping, and it goes to Hygiene. Only a census that
+# cannot see (an empty census, rc 3, a crash, any exit it does not define) is Bad. The tier is decided by
+# Get-ScriptCensusLiveTier, driven by its own frozen cases just above this line.
 $scM = [regex]::Match($r.text, '(\d+) uncalled, (\d+) recorded as deliberate')
-if ($r.rc -eq 0 -and $r.text -match 'no unrecorded orphan' -and $scM.Success -and [int]$scM.Groups[1].Value -gt 0) { Ok ('script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (' + $scM.Groups[1].Value + ' uncalled)') }
-else { Bad ('script-census fires on the live tree, or reported an EMPTY census (rc=' + $r.rc + ') - either a new orphan landed, or the self-exclusion that stops its own KNOWN table from marking everything "called" was removed: ' + $r.text) }
+$scTier = Get-ScriptCensusLiveTier -Rc $r.rc -Text $r.text
+if ($scTier -eq 'ok') { Ok ('script-census clean twin: no unrecorded orphan, out\ at baseline, and it still SEES its recorded set (' + $scM.Groups[1].Value + ' uncalled)') }
+elseif ($scTier -eq 'hygiene') { Hygiene ('script-census found an unrecorded script on the live tree (rc=' + $r.rc + ') - the census SEES (' + $scM.Groups[1].Value + ' uncalled) and every census fixture below still fires; no watcher is blind. Wire the named script in, archive it, or record it in KNOWN: ' + $r.text) }
+else { Bad ('script-census reported an EMPTY census or an exit it does not define (rc=' + $r.rc + ') - the self-exclusion that stops its own KNOWN table from marking everything "called" was removed, or the census could not run: ' + $r.text) }
 $fxSc = NewFxDir 'sc-orphan'
 Set-Content (Join-Path $fxSc 'zzz-new-thing.ps1') 'Write-Output "new"' -Encoding UTF8
 Set-Content (Join-Path $fxSc 'zzz-caller.ps1') '& (Join-Path $PSScriptRoot "zzz-helper.ps1")' -Encoding UTF8
