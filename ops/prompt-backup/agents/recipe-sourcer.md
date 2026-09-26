@@ -2,7 +2,7 @@
 name: recipe-sourcer
 description: OPUS-pinned sourcing stage of a recipe run. Scours the internet for budget high-protein meal-prep dinner candidates that fit the Thrifty Crew catalog (board-priced ingredients, 14-serving scalable, no seafood), dedupes against the live catalog (read the catalog digest), and returns a structured candidate list with source URLs. Research only; writes nothing to the site.
 model: claude-opus-4-8
-effort: high
+effort: medium
 tools: WebSearch, WebFetch, Read, Grep, Glob, Bash
 ---
 
