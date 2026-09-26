@@ -433,14 +433,29 @@ function Invoke-CaptureRunOwedTailSync {
 # feed built by replaced code, and the next full run rebuilds it. Returns @{ outcome; reason; pushed; rc; why; sync;
 # lines }; outcome is landed | already-landed | blocked | push-failed | fetch-failed | not-on-head | stale-code-feed.
 # $StaleFeed is a seam: a scriptblock (Repo, Base, Tip) returning @{ stale; blind; why }; $null uses lib\chain-code-currency.
-# True when $Upstream holds a commit whose patch equals $Sha's (git cherry prints '- <sha>'). Any git failure, a root
-# commit, or an unequal patch is $false, so a doubtful answer keeps the id-only verdict it replaces.
-function Test-CaptureRunPatchCarried {
-  param([string]$Repo, [string]$Upstream, [string]$Sha)
-  $ch = Invoke-GitCaptured -Repo $Repo -GitArgs @('cherry', $Upstream, $Sha, ($Sha + '~1'))
-  if ($ch.rc -ne 0) { return $false }
-  $rows = @(([string]$ch.stdout) -split "`r?`n" | Where-Object { $_.Trim() })
-  return ($rows.Count -eq 1 -and $rows[0].StartsWith('- '))
+# WHERE THIS RUN'S COMMITS SIT UNDER ANOTHER ID (2026-09-26, queues 2026-09-26-03e565 and -3fdb1d, reconciled). The start
+# or tail sync replays a local bot commit onto a moved origin (lib\checkout-sync.ps1, Invoke-TcCsLocalCommitReplay) or
+# drops it because its twin already landed (W0.2), so the run's own sha leaves HEAD while its change lives on under a new
+# id: 09-26's [ad] 2a365ec33 landed as ef7edb1a3 and four hourly retries paged not-on-head. ONE identity test answers
+# where the copy is, the sync's own (Get-TcCsLandedTwins: the same raw change, blob for blob, per commit), over every
+# non-merge commit the run holds past its merge base with origin/main. Returns @{ all; own; twins (local -> copy) }:
+# all is true only when every one of the run's commits has a copy in $Sha..$Onto. A scan that cannot run, or any commit
+# without a copy, is all=$false, so a doubtful answer keeps the id-only verdict. (Replaces the round-1 patch-id test,
+# git cherry, which ignores whitespace and so is looser than the rule the sync drops by, and saw only $Sha itself.)
+function Get-CaptureRunCopies {
+  param([string]$Repo, [string]$Sha, [string]$Onto)
+  $none = @{ all = $false; own = 0; twins = @{} }
+  if (-not (Get-Command Get-TcCsLandedTwins -ErrorAction SilentlyContinue)) { return $none }
+  $mbT = Invoke-GitCaptured -Repo $Repo -GitArgs @('merge-base', $Sha, 'refs/remotes/origin/main')
+  $mbS = ([string]$mbT.stdout).Trim()
+  if ($mbT.rc -ne 0 -or -not $mbS) { return $none }
+  $ownT = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-list', '--no-merges', '--count', ($mbS + '..' + $Sha))
+  if ($ownT.rc -ne 0) { return $none }
+  $own = [int](([string]$ownT.stdout).Trim())
+  if ($own -le 0) { return $none }
+  $tw = Get-TcCsLandedTwins -Repo $Repo -Upstream $mbS -Tip $Sha -Onto $Onto
+  if (-not $tw.ok) { return $none }
+  return @{ all = ($tw.twins.Count -eq $own); own = $own; twins = $tw.twins }
 }
 
 function Invoke-CaptureRunPushRetry {
@@ -458,27 +473,50 @@ function Invoke-CaptureRunPushRetry {
     $res.why = ('origin/main already contains ' + $Sha + ' (another push carried it); nothing pushed')
     $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
   }
-  # A REPLAY IS THE SAME COMMIT UNDER A NEW ID (2026-09-26, queue 2026-09-26-3fdb1d). The next run's start sync replays a
-  # local bot commit onto origin (lib\checkout-sync.ps1, Invoke-TcCsLocalCommitReplay), so on that day the [ad] run's
-  # 2a365ec33 landed as ef7edb1a3 and every hourly retry after it asked only by id, answered not-on-head, and exited 1
-  # (10:00 to 13:00, four runs), which the watchdog read as FAILED. `git cherry` asks by patch-id instead: an equal
-  # patch upstream is this run's work, carried. A replay that had to resolve a conflict has a different patch-id and
-  # still reads not-on-head, exactly as before.
-  if ($cnt.rc -eq 0 -and (Test-CaptureRunPatchCarried -Repo $Repo -Upstream 'refs/remotes/origin/main' -Sha $Sha)) {
-    $res.outcome = 'already-landed'; $res.reason = 'already-landed'; $res.pushed = $true; $res.rc = 0
-    $res.why = ('origin/main already carries a replay of ' + $Sha + ' (same patch-id, git cherry); nothing pushed')
-    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
-  }
+  # A COPY ON ORIGIN IS LANDED; A COPY ON HEAD IS WHAT LANDS (see Get-CaptureRunCopies). A replay that had to resolve a
+  # conflict is a different change and still reads not-on-head, exactly as before.
   $anc = Invoke-GitCaptured -Repo $Repo -GitArgs @('merge-base', '--is-ancestor', $Sha, 'HEAD')
-  if ($cnt.rc -eq 0 -and $anc.rc -ne 0 -and (Test-CaptureRunPatchCarried -Repo $Repo -Upstream 'HEAD' -Sha $Sha)) {
-    $lines.Add('push-retry: HEAD carries a replay of ' + $Sha + ' (same patch-id, git cherry), so HEAD is what lands')
-    $anc = [pscustomobject]@{ rc = 0; stdout = ''; stderr = '' }
+  $headCopies = @{}
+  if ($cnt.rc -eq 0 -and $anc.rc -ne 0) {
+    $oc = Get-CaptureRunCopies -Repo $Repo -Sha $Sha -Onto 'refs/remotes/origin/main'
+    if ($oc.all) {
+      $res.outcome = 'already-landed'; $res.reason = 'already-landed'; $res.pushed = $true; $res.rc = 0
+      $res.why = ('origin/main already holds a byte-identical copy of each of the ' + $oc.own + ' commit(s) of ' + $Sha + ' (' + (@($oc.twins.Keys | ForEach-Object { $_.Substring(0, 9) + '=' + ([string]$oc.twins[$_]).Substring(0, 9) }) -join ', ') + '); nothing pushed')
+      $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+    }
+    $hc = Get-CaptureRunCopies -Repo $Repo -Sha $Sha -Onto 'HEAD'
+    if ($hc.all) {
+      foreach ($k in @($hc.twins.Keys)) { $headCopies[[string]$hc.twins[$k]] = $k }
+      $lines.Add('push-retry: HEAD carries a byte-identical copy of each of the ' + $hc.own + ' commit(s) of ' + $Sha + ', so HEAD is what lands')
+      $anc = [pscustomobject]@{ rc = 0; stdout = ''; stderr = '' }
+    }
   }
   if ($cnt.rc -ne 0 -or $anc.rc -ne 0) {
     $res.outcome = 'not-on-head'; $res.reason = 'not-on-head'
-    $res.why = ('HEAD no longer holds ' + $Sha + ' (rev-list exited ' + $cnt.rc + ', merge-base exited ' + $anc.rc + '), so there is no commit of this run to push; the next full run commits again')
+    $res.why = ('HEAD no longer holds ' + $Sha + ' (rev-list exited ' + $cnt.rc + ', merge-base exited ' + $anc.rc + '), and neither origin/main nor HEAD holds a copy of every commit of it, so there is no commit of this run to push; the next full run commits again')
     $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
   }
+  # THE RETRY PUSHES ONLY ITS OWN COMMITS (2026-09-26, queues 2026-09-26-50914e, -f691ee, -a62c43). HEAD of the shared
+  # checkout may carry commits a session made AFTER this run's $Sha and has not landed (09-26: the triage integration
+  # merged ten branches there), and `git push origin HEAD:main` sends the whole branch, so the retry would push another
+  # owner's work without its owner's gates, and its record then adopted that HEAD as "this run's commit" and paged
+  # c6783fa8e, 984755f57 and 06f6f7f40, none of them the bot's. So: any commit on HEAD that is neither in $Sha's history
+  # nor on origin/main refuses (outcome foreign-commits), nothing is synced or pushed, and the record keeps $Sha. The
+  # owner's landing sends $Sha with it (unpushed is not private), and the next retry reads it already-landed.
+  # A copy of this run's own commit on HEAD (a replay the sync made) is this run's, never foreign.
+  $frT = Invoke-GitCaptured -Repo $Repo -GitArgs @('log', '--format=%H %s', 'HEAD', ('^' + $Sha), '^refs/remotes/origin/main')
+  if ($frT.rc -ne 0) {
+    $res.outcome = 'blocked'; $res.reason = 'foreign-scan-failed'
+    $res.why = ('could not list the commits HEAD carries past ' + $Sha + ' (git exited ' + $frT.rc + '), so this retry cannot prove it would push only its own commit - NOT pushing')
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
+  $foreign = @(([string]$frT.stdout) -split "`n" | ForEach-Object { $_.TrimEnd("`r").Trim() } | Where-Object { $_ -and -not $headCopies.ContainsKey(($_ -split ' ', 2)[0]) } | ForEach-Object { $_.Substring(0, 9) + $_.Substring(40) })
+  if ($foreign.Count -gt 0) {
+    $res.outcome = 'foreign-commits'; $res.reason = 'foreign-commits'
+    $res.why = ('HEAD carries ' + $foreign.Count + ' commit(s) this run did not make, on top of ' + $Sha + ' and not on origin/main (newest: ' + (@($foreign | Select-Object -First 3) -join ' | ') + '). A push sends the whole branch, so NOT pushing another owner''s work; their landing carries ' + $Sha + ' out with it and the next retry reads it already-landed')
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
+  $res | Add-Member -NotePropertyName head_owned -NotePropertyValue $true -Force
   $res.outcome = 'push-failed'; $res.reason = 'push-failed'
   foreach ($attempt in 1..$Attempts) {
     $ts = Invoke-CaptureRunTailSync -Repo $Repo -Root $Root -Kind $Kind
@@ -598,7 +636,7 @@ if ($script:PushRetry) {
   $prHead = ''
   $prH = Invoke-GitCaptured -Repo $prRepo -GitArgs @('rev-parse', 'HEAD')
   if ($prH.rc -eq 0) { $prHead = ([string]$prH.stdout).Trim() }
-  $prChanged = Update-CaptureRunLanding -StatusFile $script:StatusFile -Kind $Kind -Result $prRes -HeadSha $(if ($prRes.outcome -eq 'not-on-head') { '' } else { $prHead }) -Prev $script:PushRetryPrev
+  $prChanged = Update-CaptureRunLanding -StatusFile $script:StatusFile -Kind $Kind -Result $prRes -HeadSha $(if ($prRes.PSObject.Properties['head_owned'] -and $prRes.head_owned) { $prHead } else { '' }) -Prev $script:PushRetryPrev
   Write-Output ('PUSH-RETRY [' + $Kind + ']: ' + [string]$prRes.outcome + ' pushed=' + [bool]$prRes.pushed + ' - ' + [string]$prRes.why)
   if (-not $prRes.pushed -and $prChanged) {
     try { Send-Alert -Subject ("Grocery bot push retry " + [string]$prRes.outcome + " - $todayS") -Body ("capture-run.ps1 [$Kind] completed today and committed " + $script:PushRetrySha + ", which is still not on origin/main, so the live board and feed are STALE. This hourly occurrence retried the push only (no capture, no chain) and it ended " + [string]$prRes.outcome + ":`n`n" + [string]$prRes.why + "`n`nThe next occurrence inside the task window retries again and pages only if the reason changes. Log: grocery\out\logs\capture-run-$Kind-$todayS.log") | Out-Null } catch { Write-Output ('push-retry: the page could not be sent (' + $_.Exception.Message + ')') }
