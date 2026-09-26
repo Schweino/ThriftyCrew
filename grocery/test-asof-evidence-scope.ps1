@@ -1,7 +1,8 @@
 <#
   test-asof-evidence-scope.ps1 -SelfTest - audit-asof-evidence.ps1 names the board cell of each violated row in the
   QUARANTINE-CELL protocol when a store regresses (queue 2026-09-22-6e6a3b, Brad 2026-09-21: one bad item must not hold
-  the board), and affirms no scope when a violation cannot be placed on the board. Each case runs the real audit as a
+  the board). A violation no cell carries, live or held, is named OFF-BOARD and holds nothing (queue 2026-09-26-f73dc7,
+  founding row 'Webster City Bacon Ends', Fareway, 2026-09-26); with no board to look on, no scope is affirmed. Each case runs the real audit as a
   child with -Root at a per-run fixture tree and reads its output through the same Get-TcChildQuarantineScope
   guards.ps1 uses. The founding shape is 2026-08-02's 'Fareway Ranch Dressing' $0.99, last seen in the 07-23 extract
   and published as_of 08-01.
@@ -18,7 +19,7 @@ function Aec([string]$label, [bool]$ok, [string]$got) { $script:n++; if ($ok) { 
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ('aes-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
 $audit = Join-Path $PSScriptRoot 'audit-asof-evidence.ps1'
 $utf8 = New-Object Text.UTF8Encoding($false)
-function Invoke-Ae([string]$name, [string]$ranchAsOf, [bool]$ranchOnBoard) {
+function Invoke-Ae([string]$name, [string]$ranchAsOf, [string]$boardMode) {
   $r = Join-Path $tmp $name
   foreach ($d in @('out\regular', 'out\fareway')) { New-Item -ItemType Directory -Path (Join-Path $r $d) -Force -ErrorAction Stop | Out-Null }
   [IO.File]::WriteAllText((Join-Path $r 'out\fareway\fareway-shop-2026-07-23.json'), '[{"name":"Fareway Ranch Dressing","price":"0.99"},{"name":"NatureSweet Cherubs Tomatoes","price":"9.99"}]', $utf8)
@@ -26,29 +27,47 @@ function Invoke-Ae([string]$name, [string]$ranchAsOf, [bool]$ranchOnBoard) {
   [IO.File]::WriteAllText((Join-Path $r 'out\regular\fareway-regular-2026-08-01.json'), ('{"store":"Fareway","deals":[' +
     '{"store":"Fareway","item":"Fareway Ranch Dressing","ad_price":"$0.99","as_of":"' + $ranchAsOf + '"},' +
     '{"store":"Fareway","item":"NatureSweet Cherubs Tomatoes","ad_price":"$3.99","as_of":"2026-08-01"}]}'), $utf8)
-  $ranch = ''; if ($ranchOnBoard) { $ranch = '{"id":"ranch-dressing","stores":[{"store":"Fareway","item":"Fareway Ranch Dressing","per_unit":0.0619}]},' }
-  [IO.File]::WriteAllText((Join-Path $r 'out\comparison-2026-08-01.json'), ('{"comparison":[' + $ranch +
-    '{"id":"tomatoes","stores":[{"store":"Fareway","item":"NatureSweet Cherubs Tomatoes","per_unit":0.399}]}]}'), $utf8)
+  # boardMode: on = a live cell carries the row; off = no cell does; held = an applied quarantine withheld the cell that
+  # carried it (the board's quarantine block names it as bad_item); none = no board at all.
+  $ranch = ''; if ($boardMode -eq 'on') { $ranch = '{"id":"ranch-dressing","stores":[{"store":"Fareway","item":"Fareway Ranch Dressing","per_unit":0.0619}]},' }
+  $qb = ''; if ($boardMode -eq 'held') { $qb = ',"quarantine":{"cells":[{"id":"ranch-dressing","store":"Fareway","action":"withheld","bad_item":"Fareway Ranch Dressing","bad_per_unit":0.0619}]}' }
+  if ($boardMode -ne 'none') {
+    [IO.File]::WriteAllText((Join-Path $r 'out\comparison-2026-08-01.json'), ('{"comparison":[' + $ranch +
+      '{"id":"tomatoes","stores":[{"store":"Fareway","item":"NatureSweet Cherubs Tomatoes","per_unit":0.399}]}]' + $qb + '}'), $utf8)
+  }
   $o = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $audit -Root $r -Quiet)
   return [pscustomobject]@{ rc = $LASTEXITCODE; out = $o; text = ($o -join ' / ') }
 }
 try {
   New-Item -ItemType Directory -Path $tmp -ErrorAction Stop | Out-Null
   # MUST FIRE: the founding laundered date holds ONE cell, ranch-dressing / Fareway, as a value.
-  $r = Invoke-Ae 'fire' '2026-08-01' $true
+  $r = Invoke-Ae 'fire' '2026-08-01' 'on'
   $sc = Get-TcChildQuarantineScope $r.out
   $cells = @(); if ($sc) { $cells = @($sc.cells) }
   Aec 'MUST FIRE  a row dated past its newest capture exits 2 and is named for guards as ranch-dressing / Fareway [value], scope complete' (($r.rc -eq 2) -and ($null -ne $sc) -and ($cells.Count -eq 1) -and ([string]$cells[0].id -eq 'ranch-dressing') -and ([string]$cells[0].store -eq 'Fareway') -and ([string]$cells[0].kind -eq 'value')) ('rc=' + $r.rc + ' ' + $r.text)
-  # CLEAN TWIN: the same violation when no board cell carries the row still fails the audit (exit 2, the FAIL line)
-  # and affirms no scope, so guards holds the board exactly as before this change.
-  $r = Invoke-Ae 'offboard' '2026-08-01' $false
+  # MUST NOT FIRE (the hold): the same violation when no board cell carries the row - the 2026-09-26 bacon-ends shape -
+  # still exits 2 and prints the FAIL line (the finding is kept), but it is named OFF-BOARD with a complete scope of
+  # zero cells, so guards holds nothing for it and WARNs instead.
+  $r = Invoke-Ae 'offboard' '2026-08-01' 'off'
   $sc = Get-TcChildQuarantineScope $r.out
-  Aec 'CLEAN TWIN  a violation no board cell carries still exits 2 and prints asof-evidence FAIL, with no scope affirmed' (($r.rc -eq 2) -and ($null -eq $sc) -and ($r.text -match 'asof-evidence FAIL')) ('rc=' + $r.rc + ' ' + $r.text)
+  $ob = @(); if ($sc) { $ob = @($sc.offboard) }
+  Aec 'MUST NOT FIRE  a violation no board cell carries holds nothing: exit 2 + FAIL line kept, scope complete with 0 cells and 1 OFF-BOARD naming Fareway / Fareway Ranch Dressing' (($r.rc -eq 2) -and ($null -ne $sc) -and (@($sc.cells).Count -eq 0) -and (@($sc.stores).Count -eq 0) -and ($ob.Count -eq 1) -and ([string]$ob[0].store -eq 'Fareway') -and ([string]$ob[0].what -eq 'Fareway Ranch Dressing') -and ($r.text -match 'asof-evidence FAIL')) ('rc=' + $r.rc + ' ' + $r.text)
+  # CLEAN TWIN: a cell an applied quarantine WITHHELD is still the row's cell, so the second guards run names it again
+  # (the hold stays) rather than calling it off-board and letting the withheld cell back.
+  $r = Invoke-Ae 'held' '2026-08-01' 'held'
+  $sc = Get-TcChildQuarantineScope $r.out
+  $cells = @(); $ob = @(); if ($sc) { $cells = @($sc.cells); $ob = @($sc.offboard) }
+  Aec 'CLEAN TWIN  a violation whose cell a quarantine withheld is named as that cell (ranch-dressing / Fareway), never off-board' (($r.rc -eq 2) -and ($null -ne $sc) -and ($cells.Count -eq 1) -and ([string]$cells[0].id -eq 'ranch-dressing') -and ($ob.Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
+  # MUST FIRE (fail closed): with no board to look the row up on, the audit cannot prove it is off-board, so it affirms
+  # no scope at all and guards holds the board exactly as before.
+  $r = Invoke-Ae 'noboard' '2026-08-01' 'none'
+  $sc = Get-TcChildQuarantineScope $r.out
+  Aec 'MUST FIRE  with no board to place the violation on, exit 2, FAIL line, and NO scope affirmed (the board holds)' (($r.rc -eq 2) -and ($null -eq $sc) -and ($r.text -match 'asof-evidence FAIL') -and (@($r.out | Where-Object { $_ -match '^QUARANTINE-' }).Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
   # MUST NOT FIRE: the row dated to the extract that holds it is no finding and prints no quarantine line. The fixture
   # carries no Aldi files, so the audit names Aldi BLIND and exits 3, never 0: the assertion is no FAIL and no line.
-  $r = Invoke-Ae 'clean' '2026-07-23' $true
+  $r = Invoke-Ae 'clean' '2026-07-23' 'on'
   Aec 'MUST NOT FIRE  a row dated to its own capture is no finding (exit 3 for the fixture''s blind Aldi, no FAIL) and prints no QUARANTINE line' (($r.rc -eq 3) -and ($r.text -notmatch 'asof-evidence FAIL') -and (@($r.out | Where-Object { $_ -match '^QUARANTINE-' }).Count -eq 0)) ('rc=' + $r.rc + ' ' + $r.text)
 } catch { Write-Output ('FAIL  a case threw: ' + $_.Exception.Message); $script:bad++ }
 finally { if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue } }
-Write-Output ('test-asof-evidence-scope self-test ' + $(if ($script:bad -eq 0 -and $script:n -eq 3) { 'pass' } else { 'FAIL' }) + ': ' + ($script:n - $script:bad) + ' of ' + $script:n + ' case(s) passed (3 expected)')
-exit $(if ($script:bad -eq 0 -and $script:n -eq 3) { 0 } else { 1 })
+Write-Output ('test-asof-evidence-scope self-test ' + $(if ($script:bad -eq 0 -and $script:n -eq 5) { 'pass' } else { 'FAIL' }) + ': ' + ($script:n - $script:bad) + ' of ' + $script:n + ' case(s) passed (5 expected)')
+exit $(if ($script:bad -eq 0 -and $script:n -eq 5) { 0 } else { 1 })
