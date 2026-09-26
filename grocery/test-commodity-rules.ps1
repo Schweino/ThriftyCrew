@@ -458,6 +458,25 @@ $cases = @(
      why='THE SECOND LANDING released from frozen-peas, the meal fell onto frozen-meatballs; the pasta-and-meatballs meal fence, beside the spaghetti one, sends it nowhere' }
   @{ id='frozen-meatballs'; name='Bremer Italian Style Meatballs 32 OZ'; expect='included'
      why='CLEAN TWIN a real bag of frozen meatballs is untouched by the meal fence' }
+  # plan-2026-09-25-16 step 3 (d493dd, 3ba362): one batch, names from the plan-2026-09-25-15 routing artifact.
+  @{ id='kalamata-olives'; name='Krinos Kalamata Pitted Olives, 35.27 oz.'; expect='included'
+     why='MUST FIRE the Sam''s Club jar the word-order rule could not read: kalamata, then olives 25 chars on (d493dd)' }
+  @{ id='canned-pears'; name='Fareway Sliced in Extra Light Syrup Pears'; expect='included'
+     why='MUST FIRE the Fareway can whose syrup comes before the fruit (d493dd)' }
+  @{ id='fruit-cups'; name='Dole Mandarin Oranges In 100% Fruit Juice'; expect='no-include-match'
+     why='MUST FIRE the narrowing: a 23.5 oz jar in juice is canned mandarin oranges, not a fruit cup; the old mandarin...juice include claimed it (d493dd)' }
+  @{ id='mandarin-oranges'; name='Dole Mandarin Oranges In 100% Fruit Juice'; expect='included'
+     why='and it lands on mandarin-oranges once fruit-cups lets go (d493dd)' }
+  @{ id='fruit-cups'; name='Dole In 100% Fruit Juice Mandarin Oranges 4 Ea'; expect='included'
+     why='CLEAN TWIN a 4-cup pack in juice is still a fruit cup under the count form (d493dd)' }
+  @{ id='fruit-cups'; name='Lunch Buddies Mandarin Orange Gel Bowls, 4 Count'; expect='excluded'
+     why='a gel bowl is a gelatin snack, not fruit in juice (d493dd)' }
+  @{ id='laundry-detergent'; name='Arm & Hammer Liquid Laundry Clean Burst'; expect='included'
+     why='MUST FIRE the Family Fare liquid whose name never says detergent (3ba362)' }
+  @{ id='hot-sauce'; name='Trappey''s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz'; expect='included'
+     why='MUST FIRE the bounded pepper-sauce form: cayenne or Red Devil within 40 chars (3ba362)' }
+  @{ id='hot-sauce'; name='Mae Ploy Sweet Chili Sauce'; expect='no-include-match'
+     why='MUST NOT FIRE never a bare pepper/chili sauce: the widening stays bounded (3ba362)' }
 )
 
 $bad = 0

@@ -6075,7 +6075,8 @@
                         "\\blaundry\\s+detergent\\b",
                         "\\bliquid\\s+detergent\\b",
                         "\\bdetergent\\b.{0,60}?\\b\\d+(?:\\.\\d+)?\\s*fl\\.?\\s*oz\\b",
-                        "\\btide\\s+simply\\s+detergent\\b"
+                        "\\btide\\s+simply\\s+detergent\\b",
+                        "\\bliquid\\s+laundry\\b"
                     ],
         "exclude":  [
                         "\\bpods?\\b",
@@ -29900,7 +29901,9 @@
                         "hot\\s+sauce",
                         "sriracha",
                         "tabasco",
-                        "red\\s*hot\\b"
+                        "red\\s*hot\\b",
+                        "\\b(?:cayenne|red\\s+devil|louisiana)\\b.{0,40}\\bpepper\\s+sauce\\b",
+                        "\\bpepper\\s+sauce\\b.{0,40}\\b(?:cayenne|red\\s+devil)\\b"
                     ],
         "exclude":  [
                         "taco\\s+bell",
@@ -36022,10 +36025,12 @@
                         "mandarin\\s+oranges?\\s+cups?",
                         "peach\\s+cups?",
                         "fruit\\s+bowls?",
-                        "mandarin\\s+oranges?\\b.{0,30}juice",
                         "mixed\\s+fruits?\\b.{0,25}(?:cups?|variety)",
                         "\\bcups?\\s+in\\s+100%\\s+juice",
-                        "mandarin\\s+oranges?\\b.{0,25}\\b\\d+(?:\\.\\d+)?\\s*oz\\.?,?\\s*\\d+\\s*(?:ct|pk|count|pack)\\b"
+                        "mandarin\\s+oranges?\\b.{0,25}\\b\\d+(?:\\.\\d+)?\\s*oz\\.?,?\\s*\\d+\\s*(?:ct|pk|count|pack)\\b",
+                        "mandarin\\s+oranges?\\b.{0,40}\\b(?:cups?|bowls?|\\d+\\s*(?:ea|ct|count|pk|pack))\\b",
+                        "\\b\\d+\\s*(?:pk|pack|ct|count)\\b.{0,30}\\bmandarin\\s+oranges?\\b.{0,30}\\bjuice\\b",
+                        "mandarin\\s+oranges?\\b.{0,60}\\b[34](?:\\.\\d+)?\\s*oz\\b"
                     ],
         "exclude":  [
                         "yog",
@@ -36154,7 +36159,8 @@
                         "\\bseltzer\\b",
                         "\\btea\\b",
                         "\\bcoffee\\b",
-                        "\\bv8\\b"
+                        "\\bv8\\b",
+                        "\\bgel\\s+bowls?\\b"
                     ]
     },
     {
@@ -45462,7 +45468,8 @@
                         "diced\\s+pears?",
                         "pears?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)",
                         "pear\\s+slices?",
-                        "irregular\\s+pears?"
+                        "irregular\\s+pears?",
+                        "\\bin\\s+(?:extra\\s+)?(?:light|heavy)\\s+syrup\\s+pears?\\b"
                     ],
         "exclude":  [
                         "\\bfresh\\b",
@@ -76624,7 +76631,8 @@
         "label":  "Kalamata Olives",
         "unit":  "oz",
         "include":  [
-                        "^(?=.*\\bkalamata\\s+olives?\\b).*$"
+                        "^(?=.*\\bkalamata\\s+olives?\\b).*$",
+                        "\\bkalamata\\b.{0,25}\\bolives?\\b"
                     ],
         "exclude":  [
                         "\\b(?:green|black|manzanilla|castelvetrano)\\s+olives?\\b",
