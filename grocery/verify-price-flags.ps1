@@ -92,6 +92,19 @@ foreach ($st in @($openStores.Keys)) {
     foreach ($r in @($rows)) { if ($null -ne $r) { [void]$keep.Add($r) } }
     $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ })
   }
+  # A read the builder refused only for a missing printed unit price is still the store's read (ConvertTo-TcRejectedReadRows).
+  $rej = @(Get-ChildItem (Join-Path $OutDir ($px + '\' + $px + '-rejects-*.json')) -ErrorAction SilentlyContinue | ForEach-Object {
+      $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+      if ($m.Success) { $d = ConvertTo-TcFvDay $m.Groups[1].Value; if ($null -ne $d -and $d -le $upTo) { [pscustomobject]@{ f = $_; d = $d } } }
+    } | Sort-Object d -Descending | Select-Object -First $MaxFilesPerStore)
+  foreach ($x in $rej) {
+    $doc = $null
+    try { $doc = Read-JsonFile $x.f.FullName } catch { Write-Output ('  could not read ' + $x.f.Name + ' - its rows are not an answer this run'); continue }
+    $rr0 = ConvertTo-TcRejectedReadRows -Rejects $doc -Day ($x.d.ToString('yyyy-MM-dd'))
+    $rrs = @($rr0)
+    foreach ($r in $rrs) { [void]$keep.Add($r) }
+    if ($rrs.Count -gt 0) { $filesRead[$st] = @(@($filesRead[$st]) + $x.f.Name | Where-Object { $_ }) }
+  }
   $rowsByStore[$st] = $keep.ToArray()
 }
 
@@ -105,7 +118,7 @@ $resolve = {
   param($e)
   $rows = if ($rowsByStore.ContainsKey([string]$e.store)) { $rowsByStore[[string]$e.store] } else { @() }
   $rr = Find-TcStoreReread -Claim $e.claim -Rows $rows
-  if ($null -eq $rr.row) { return [pscustomobject]@{ verdict = 'could-not-look'; reason = $rr.why; readings = @() } }
+  if ($null -eq $rr.row) { return [pscustomobject]@{ verdict = 'could-not-look'; reason = $rr.why; readings = @(); road = [string]$rr.road } }
   $a = $rr.row
   $names = Get-TcStoreNames $a
   $idv = Test-TcStoreNameIdentity -Judge $judge -Id ([string]$e.id) -Names $names
@@ -116,6 +129,7 @@ $resolve = {
     size = [string]$a.size; as_of = [string]$a.as_of; product = (Get-TcRowProductKey $a); identity = [string]$idv.verdict
   }
   $v | Add-Member -NotePropertyName answer -NotePropertyValue $ans -Force
+  $v | Add-Member -NotePropertyName road -NotePropertyValue 'product' -Force
   return $v
 }
 
@@ -142,6 +156,7 @@ foreach ($st in @(@($open | ForEach-Object { [string]$_.store }) + @($closedToda
     wrong_price = @($o | Where-Object { $_.status -eq 'wrong-price' }).Count
     wrong_product = @($o | Where-Object { $_.status -eq 'wrong-product' }).Count
     pending = @($o | Where-Object { $_.status -eq 'pending' }).Count
+    no_product_road = @($o | Where-Object { $_.status -eq 'pending' -and $_.PSObject.Properties['road'] -and [string]$_.road -eq 'none' }).Count
     left_unverified = @($c | Where-Object { @('left-board', 'claim-changed') -contains [string]$_.status -and $prevStatus[[string]$_.key] -eq 'pending' }).Count
   }
 }
@@ -153,14 +168,18 @@ $L | Add-Member -NotePropertyName summary -NotePropertyValue ([ordered]@{
     board = (Split-Path $BoardFile -Leaf); flags_file = (Split-Path $GuardsFile -Leaf); paging_flags = $paging.Count; with_cell = $withCell.Count
     no_cell = $noCell; open = $open.Count; pending = $pend.Count; pending_oldest_days = $oldest; pending_overdue = $overdue; quarter_days = $quarter
     new_disagreements = $newDis.Count; by_store = $byStore; files_read = $filesRead
+    pending_no_product_road = @($open | Where-Object { $_.status -eq 'pending' -and $_.PSObject.Properties['road'] -and [string]$_.road -eq 'none' }).Count
   }) -Force
 
 Write-Output ('flag verification over ' + (Split-Path $GuardsFile -Leaf) + ' (board ' + (Split-Path $BoardFile -Leaf) + ', answers up to ' + $upTo.ToString('yyyy-MM-dd') + '): ' + $paging.Count + ' paging flag(s), ' + $withCell.Count + ' name a cell, ' + $noCell + ' do not (those keep paging the old way)')
 foreach ($st in @($byStore.Keys)) {
   $b = $byStore[$st]
   $den = [int]$b.match + [int]$b.wrong_price + [int]$b.wrong_product + [int]$b.pending
-  Write-Output ('  {0,-12} {1} of {2} match (closed today), {3} wrong-price, {4} wrong-product, {5} could-not-look/pending; {6} left the board before any re-read' -f $st, $b.match, $den, $b.wrong_price, $b.wrong_product, $b.pending, $b.left_unverified)
+  Write-Output ('  {0,-12} {1} of {2} match (closed today), {3} wrong-price, {4} wrong-product, {5} could-not-look/pending ({7} of them ad-flyer lines no product read can answer); {6} left the board before any re-read' -f $st, $b.match, $den, $b.wrong_price, $b.wrong_product, $b.pending, $b.left_unverified, $b.no_product_road)
 }
+$noRoad = @($open | Where-Object { $_.status -eq 'pending' -and $_.PSObject.Properties['road'] -and [string]$_.road -eq 'none' })
+$pendAll = @($open | Where-Object { $_.status -eq 'pending' }).Count
+Write-Output ('unverifiable by construction: ' + $noRoad.Count + ' of ' + $pendAll + ' pending verification(s) are ad-flyer lines that name no product (queue 2026-09-26-ab11be); they stay pending, owe no re-read, and close when their claim leaves the board')
 foreach ($e in @($open | Where-Object { @('wrong-price', 'wrong-product') -contains [string]$_.status })) {
   Write-Output ('  DISAGREES {0} [{1}] ours {2:0.0000}/{3} "{4}" - {5}' -f $e.key, $e.status, [double]$e.claim.per_unit, $e.unit, $e.claim.item, $e.reason)
 }

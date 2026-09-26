@@ -248,12 +248,59 @@ function Get-TcRowProductKey($Row) {
   return ''
 }
 
+function ConvertTo-TcRejectedReadRows($Rejects, [string]$Day) {
+  <#
+    A STORE READ THE BUILDER REFUSED ONLY FOR A MISSING PRINTED UNIT PRICE IS STILL A READ (residual 'Sam's Club 0 of 1' of
+    queue 2026-09-21-4b973e). build-sams-deals refuses a row with no unitPrice because it prices a cell from Sam's printed
+    unit price, but the row still carries the store's own list price and the name's own size, which is exactly what the
+    verifier reads (Get-TcStoreReadings: shelf over the name's size). Founding case: Sam's hummus|Sam's Club claim,
+    "Member's Mark Classic Hummus Singles 2.5 oz., 16 ct." at $5.58 read 2026-09-22; the lane re-read it on 09-24, 09-25
+    and 09-26 at the same $5.58, every time into sams-rejects-*.json as 'no unitPrice', so the flag sat pending with 0 of 1
+    Sam's verdicts. Only that one reason is taken: every other reject (NAME CONFLICT, DENSITY CONFLICT, unknown unit, no
+    linePrice) is the builder doubting the read itself, and a doubted read is no answer. The row's read day is the file's
+    date, the day the lane read it; nothing here prices a cell, so the board is untouched.
+  #>
+  $out = New-Object System.Collections.ArrayList
+  $rows = if ($Rejects -is [array]) { $Rejects } elseif ($null -ne $Rejects -and $Rejects.PSObject.Properties['rejects']) { $Rejects.rejects } else { @() }
+  foreach ($r in @($rows)) {
+    if ($null -eq $r) { continue }
+    if (-not [string]::Equals(([string]$r.reason).Trim(), 'no unitPrice', [StringComparison]::Ordinal)) { continue }
+    $n = ([string]$r.name).Trim(); $lp = ([string]$r.lp).Trim()
+    if (-not $n -or -not $lp) { continue }
+    [void]$out.Add([pscustomobject]@{ item = $n; current_price = $lp; ad_price = $lp; size = ''; as_of = $Day; read_from = 'rejects: no unitPrice' })
+  }
+  return ,($out.ToArray())
+}
+
+function Test-TcFlyerLineNamesNoProduct($Claim) {
+  <#
+    AN AD-FLYER LINE THAT NAMES NO PRODUCT (queue 2026-09-26-ab11be, residual R4 of plan-2026-09-21-8). Hy-Vee's weekly ad
+    publishes a LINE, not a product: 'Hy-Vee aluminum foil, 50 or 75 sq. ft., $4.49' is a product family, a size range and
+    a price in one string, and the board carries that string as the cell's item. Fareway's multibuy lines do the same
+    ('Fareway Potato Chips (2/$5)'). No capture of the store carries a product under that name, so no product read can
+    answer the claim; and a re-read of the same flyer is the same text through the same parser, so it would reproduce a
+    mis-parse (the 2026-09-07 laundry pods) and can never CONFIRM one. So the claim is unverifiable by construction: it
+    stays pending (a could-not-look never settles a question) with a reason that says so, and it is owed to no worklist.
+    Structural test, no bar and no tuning constant: a SALE claim read from an ad (no as_of of its own) whose item text
+    carries a price. Measured on comparison-2026-09-23: 56 of the 155 ad-read sale cells (Hy-Vee 53 of 53, Fareway 3 of
+    37); the other 99 name a product (Family Fare, Aldi, Fareway) and keep the product-level road.
+  #>
+  if ($null -eq $Claim -or [string]$Claim.row_type -ne 'sale') { return $false }
+  if ([string]$Claim.as_of) { return $false }
+  return ([string]$Claim.item -match '\$\s*\d')
+}
+
 function Find-TcStoreReread($Claim, $Rows) {
   # The store's answer: the NEWEST row of the same product whose as_of is STRICTLY LATER than the claim's read. Same
   # product = the product id the claim's own source row carries, else the same name. A carried row keeps its original
   # as_of, so it can never pass the date test; a Hy-Vee row marked not_reverified is a row nobody re-read today.
+  # road = 'none' for an ad-flyer line that names no product (Test-TcFlyerLineNamesNoProduct): nothing is looked up for it,
+  # not even a later read under the identical text, because that is the flyer re-reading itself.
+  if (Test-TcFlyerLineNamesNoProduct $Claim) {
+    return [pscustomobject]@{ row = $null; road = 'none'; why = ("an ad-flyer line that names no product ('" + ([string]$Claim.item).Trim() + "'): no capture carries a product under that name, and a re-read of the same flyer is its own text through the same parser, so it can never confirm the claim; unverifiable until the store's product read is linked to the line") }
+  }
   $after = Get-TcClaimReadDay $Claim
-  if ($null -eq $after) { return [pscustomobject]@{ row = $null; why = 'the published claim carries no read date (no as_of and no ad window start), so no later read can be recognised' } }
+  if ($null -eq $after) { return [pscustomobject]@{ row = $null; road = 'product'; why = 'the published claim carries no read date (no as_of and no ad window start), so no later read can be recognised' } }
   $name = ([string]$Claim.item).Trim()
   $prodKey = ''
   foreach ($r in @($Rows)) {
@@ -272,8 +319,8 @@ function Find-TcStoreReread($Claim, $Rows) {
     if ($null -eq $d -or $d -le $after) { continue }
     if ($null -eq $best -or $d -gt $bestDay) { $best = $r; $bestDay = $d }
   }
-  if ($null -eq $best) { return [pscustomobject]@{ row = $null; why = ('no read of this product later than ' + $after.ToString('yyyy-MM-dd') + ' has landed yet') } }
-  return [pscustomobject]@{ row = $best; why = '' }
+  if ($null -eq $best) { return [pscustomobject]@{ row = $null; road = 'product'; why = ('no read of this product later than ' + $after.ToString('yyyy-MM-dd') + ' has landed yet') } }
+  return [pscustomobject]@{ row = $best; road = 'product'; why = '' }
 }
 
 # ---- THE VERDICT ------------------------------------------------------------------------------------------------------
@@ -522,6 +569,9 @@ function Update-TcFlagLedger {
     $v = & $Resolve $e
     $e.attempts = 1 + [int]$e.attempts; $e.last_attempt = $Today
     if ($null -eq $v) { continue }
+    # WHETHER A PRODUCT READ CAN EVER ANSWER IT (2026-09-26-ab11be): 'none' marks an ad-flyer line that names no product, so
+    # the owed list skips it and the report counts it apart from the pending re-reads a capture can still settle.
+    if ($v.PSObject.Properties['road'] -and [string]$v.road) { $e | Add-Member -NotePropertyName road -NotePropertyValue ([string]$v.road) -Force }
     $e.readings = @($v.readings)
     if ($v.PSObject.Properties['answer']) { $e.answer = $v.answer }
     switch ([string]$v.verdict) {
@@ -577,6 +627,9 @@ function Get-TcFlagVerifyOwed {
   foreach ($k in @($entries.Keys)) {
     $e = $entries[$k]
     if ([string]$e.status -ne 'pending' -or [string]$e.store -ne $Store) { continue }
+    # An ad-flyer line that names no product is owed no re-read: no capture can answer it (Test-TcFlyerLineNamesNoProduct),
+    # so leading a worklist with it would spend a lane's budget on a question nothing can settle.
+    if ($e.PSObject.Properties['road'] -and [string]$e.road -eq 'none') { continue }
     if (-not ($ids -contains [string]$e.id)) { [void]$ids.Add([string]$e.id) }
     $it = ''; if ($null -ne $e.claim) { $it = ([string]$e.claim.item).Trim() }
     if ($it -and -not ($items -contains $it)) { [void]$items.Add($it) }
