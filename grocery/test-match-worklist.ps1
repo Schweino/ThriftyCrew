@@ -136,6 +136,14 @@ try {
   _MT 'MUST FIRE  an arrival the lane does not know still pages; a known one does not; a CONTESTED CROWN line is never filtered' (@($sel).Count -eq 2 -and @($sel | Where-Object { $_.Text -like '*Brand New Arrival*' }).Count -eq 1 -and @($sel | Where-Object { $_.Label -eq 'CONTESTED CROWN' }).Count -eq 1) ([string]@($sel).Count)
   $o4 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $rs -OutDir (Join-Path $tmp 'nothing-here') -GroceryDir (Join-Path $tmp 'nothing-here') -VerdictFile $vf -CommoditiesFile $comF -Today '2026-09-23'); $rc4 = $LASTEXITCODE
   _MT 'MUST FIRE  with every detector file missing the resolver exits 3 (could not evaluate), never 0' ($rc4 -eq 3) ([string]$rc4)
+  # band rows outside the backlog (plan-2026-09-25-7, queue 2026-09-23-57b66b): the open file joins the docket
+  $bdir = Join-Path $tmp 'band'; $bod = Join-Path $bdir 'out'; New-Item -ItemType Directory -Path $bod -Force | Out-Null
+  [IO.File]::WriteAllText((Join-Path $bdir 'band-refusals-backlog.json'), '{ "recorded": "2026-09-22", "keys": [ "bay-leaves|Sam''s Club|Member''s Mark Whole Bay Leaves, 2 oz." ] }')
+  [IO.File]::WriteAllText((Join-Path $bod 'band-refusals-open.json'), '{ "rows": [ { "key": "apple-juice|Baker''s|Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz", "first_seen": "2026-09-23", "unit_price": 0.1998, "band_ref": 0.0387 } ] }')
+  $bf = Read-MatchFindings -OutDir $bod -GroceryDir $bdir
+  $bj = @($bf.rows | Where-Object { $_.key -eq 'band|apple-juice|Baker''s|Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz' })
+  _MT 'MUST FIRE  a band row outside the backlog (the Evolution Fresh juice paged 2026-09-23..25) joins the worklist as kind band from band-refusals-open.json' ($bj.Count -eq 1 -and [string]$bj[0].claimer -eq 'apple-juice' -and [string]$bj[0].evidence -like '*first seen 2026-09-23*') ([string]$bj.Count)
+  _MT 'CLEAN TWIN  the backlog''s own band row is still read beside it, and band is not blind' (@($bf.rows | Where-Object { $_.kind -eq 'band' }).Count -eq 2 -and -not (@($bf.blind) -contains 'band')) ([string]@($bf.rows).Count)
 } catch {
   _MT ('the suite threw: ' + $_.Exception.Message) $false
 } finally {

@@ -29,7 +29,8 @@
 
   A RATCHET, not a gate red on day one: the unexplained rows on the first measured board are the backlog
   (band-refusals-backlog.json, keyed by row, may only shrink; see the note above Get-TcRefusalKey). Exit 0 = no
-  unexplained row outside the backlog, 2 = at least one NEW one (each printed by name), 3 = BLIND (no flagged file, none
+  unexplained row outside the backlog first seen today, 2 = at least one such row (each printed by name; since 2026-09-25 a
+  row pages on its first day only and then waits on the worklist via out/band-refusals-open.json), 3 = BLIND (no flagged file, none
   carrying band_ref, or no backlog recorded). What it does when the producer STOPS: no flagged file, or one built with
   no derived bands, is exit 3 and pages as could-not-evaluate, never as clean.
   SCOPE OF A CLEAN REPORT: UNSOUND - a wrong product whose price happens to reproduce a unit conversion is read as a
@@ -38,7 +39,7 @@
   Usage: .\audit-band-refusals.ps1 [-OutDir <dir>] [-Date yyyy-MM-dd] | -SelfTest
 #>
 [CmdletBinding()]
-param([string]$OutDir = '', [string]$Date = '', [string]$BacklogFile = '', [switch]$Accept, [switch]$Tighten, [switch]$SelfTest)
+param([string]$OutDir = '', [string]$Date = '', [string]$BacklogFile = '', [string]$OpenFile = '', [string]$VerdictFile = '', [switch]$Accept, [switch]$Tighten, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $repo = Split-Path $root -Parent
@@ -57,6 +58,24 @@ function Get-TcNewRefusals($Unexplained, [hashtable]$Backlog) {
   $new = New-Object System.Collections.ArrayList
   foreach ($u in @($Unexplained)) { if ($null -ne $u -and -not $Backlog.ContainsKey((Get-TcRefusalKey $u))) { [void]$new.Add($u) } }
   return ,($new.ToArray())
+}
+# A NEW ROW PAGES ONCE, ON ITS FIRST DAY, AND THEN WAITS ON THE WORKLIST (2026-09-25, plan-2026-09-25-7, queue 2026-09-23-57b66b).
+# Until this, a row outside the founding backlog paged EVERY run until someone ran -Accept: the backlog grows only by a
+# reviewed reset, and the matching worklist read only the backlog, so a new row was on no docket at all and -Decide could
+# not silence it. Measured on flagged-2026-09-23 (built 2026-09-25 08:06): 38 NEW rows, the same rows paged on 2026-09-23,
+# 09-24 (twice) and 09-25. The other matching detectors page this way since plan-2026-09-22-9 (Get-MatchPageRows).
+# The open set is written to out/band-refusals-open.json with first_seen per key; resolve-match-worklist reads it as kind
+# 'band' beside the backlog, and a key with a match-verdicts.json verdict ('band|' + key) leaves the open set for good.
+function Get-TcBandOpenRows($Rows, [hashtable]$Prev, [hashtable]$Verdicts, [string]$Today) {
+  $out = New-Object System.Collections.ArrayList
+  foreach ($u in @($Rows)) {
+    if ($null -eq $u) { continue }
+    $k = Get-TcRefusalKey $u
+    if ($Verdicts.ContainsKey('band|' + $k)) { continue }
+    $fs = if ($Prev.ContainsKey($k) -and [string]$Prev[$k]) { [string]$Prev[$k] } else { $Today }
+    [void]$out.Add([pscustomobject]@{ key = $k; first_seen = $fs; new = ($fs -eq $Today); row = $u })
+  }
+  return ,($out.ToArray())
 }
 $BasisTol = 0.25
 # Unit conversions a basis error can produce, BY THE COMMODITY'S UNIT: a 12x ratio on an ounce commodity is not a dozen.
@@ -127,8 +146,18 @@ if ($SelfTest) {
   $nw = Get-TcNewRefusals @($popcorn, $bulk) $bl
   Bc 'MUST FIRE  an unexplained row NOT in the backlog (the popcorn) is NEW and pages by name' (@($nw).Count -eq 1 -and $nw[0].name -eq $popcorn.name)
   Bc 'MUST NOT FIRE  an unexplained row already in the backlog (the bay leaves) is the worklist, not a new page' (-not (@($nw) | Where-Object { $_.name -eq $bulk.name }))
-  Write-Output ('band-refusals self-test ' + $(if ($bad -eq 0 -and $cases -eq 11) { 'pass' } else { 'FAIL' }) + ': ' + ($cases - $bad) + ' of ' + $cases + ' case(s) (11 expected)')
-  exit $(if ($bad -eq 0 -and $cases -eq 11) { 0 } else { 1 })
+  # frozen from the 2026-09-23 page (queue 2026-09-23-57b66b), which re-paged the same rows on 09-24 twice and 09-25
+  $juice = [pscustomobject]@{ id = 'apple-juice'; store = "Baker's"; name = 'Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz'; unit_price = 0.1998; band_ref = 0.0387; size_text = '50 fl oz' }
+  $jk = Get-TcRefusalKey $juice
+  $o1 = Get-TcBandOpenRows @($juice) @{} @{} '2026-09-23'
+  Bc 'MUST FIRE  a new unexplained row with no open record (the Evolution Fresh juice on 2026-09-23) is first seen today and pages' (@($o1).Count -eq 1 -and $o1[0].new -and $o1[0].first_seen -eq '2026-09-23')
+  $o2 = Get-TcBandOpenRows @($juice) @{ $jk = '2026-09-23' } @{} '2026-09-24'
+  Bc 'MUST NOT FIRE  the same row the next day (first seen 2026-09-23) does not page again: it waits on the worklist' (@($o2).Count -eq 1 -and -not $o2[0].new)
+  Bc 'CLEAN TWIN  the next day''s open row still carries its first_seen and its row, so the worklist and the OPEN line can name it' ($o2[0].first_seen -eq '2026-09-23' -and $o2[0].row.name -eq $juice.name)
+  $o3 = Get-TcBandOpenRows @($juice, $popcorn) @{} @{ ('band|' + $jk) = $true } '2026-09-25'
+  Bc 'MUST NOT FIRE  a key decided in match-verdicts.json (band|id|store|name) leaves the open set; an undecided sibling stays and pages' (@($o3).Count -eq 1 -and $o3[0].row.name -eq $popcorn.name -and $o3[0].new)
+  Write-Output ('band-refusals self-test ' + $(if ($bad -eq 0 -and $cases -eq 15) { 'pass' } else { 'FAIL' }) + ': ' + ($cases - $bad) + ' of ' + $cases + ' case(s) (15 expected)')
+  exit $(if ($bad -eq 0 -and $cases -eq 15) { 0 } else { 1 })
 }
 
 . (Join-Path $repo 'lib\guard-contract.ps1')
@@ -155,7 +184,21 @@ if ($Accept -or $Tighten) {
 }
 $new = Get-TcNewRefusals $un $backlog
 $gone = @($backlog.Keys | Where-Object { -not $curKeys.ContainsKey($_) }).Count
-Write-Output ('band-refusals: ' + $res.examined + ' band-refused row(s) in ' + $ff.Name + ': ' + $res.explained + ' explained as a basis error, ' + $un.Count + ' unexplained, of which ' + $new.Count + ' NEW (not in the backlog of ' + $backlog.Count + '); ' + $gone + ' backlog key(s) no longer occur' + $(if ($gone -gt 0) { ' (ratchet CAN tighten: -Tighten)' } else { '' }))
-foreach ($u in ($new | Sort-Object id)) { Write-Output ('  UNEXPLAINED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' against reference ' + $u.band_ref + ' | ' + $u.name + '   resolver: lane:grocery/resolve-match-worklist.ps1 (a wrong product -> an exclude via apply-coverage-batch -FromWorklist) or the band derivation (a real price)') }
-Write-GuardComplete -Name 'band-refusals' -Summary ('scanned=' + $res.examined + ' explained=' + $res.explained + ' unexplained=' + $un.Count + ' findings=' + $new.Count + ' backlog=' + $backlog.Count)
-exit $(if ($new.Count -gt 0) { 2 } else { 0 })
+# The open set outside the backlog: first_seen kept per key, decided keys dropped, only first-day keys page.
+if (-not $OpenFile) { $OpenFile = Join-Path $OutDir 'band-refusals-open.json' }
+if (-not $VerdictFile) { $VerdictFile = Join-Path $root 'match-verdicts.json' }
+$today = (Get-Date).ToString('yyyy-MM-dd')
+$prevOpen = @{}
+if (Test-Path -LiteralPath $OpenFile) { foreach ($o in @((Read-JsonFile $OpenFile).rows)) { if ($o -and $o.key) { $prevOpen[[string]$o.key] = [string]$o.first_seen } } }
+$verd = @{}
+if (Test-Path -LiteralPath $VerdictFile) { foreach ($v in @((Read-JsonFile $VerdictFile).verdicts)) { if ($v -and $v.key) { $verd[[string]$v.key] = $true } } }
+$open = Get-TcBandOpenRows $new $prevOpen $verd $today
+$page = @($open | Where-Object { $_.new })
+$odoc = [ordered]@{ note = 'Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages on its first day only; a match-verdicts.json verdict (band|key) removes it.'; from = $ff.Name; written = $today; count = @($open).Count
+  rows = @($open | Sort-Object key | ForEach-Object { [ordered]@{ key = $_.key; first_seen = $_.first_seen; id = [string]$_.row.id; store = [string]$_.row.store; name = [string]$_.row.name; unit_price = $_.row.unit_price; band_ref = $_.row.band_ref } }) }
+$null = Write-TcLfFile -Path $OpenFile -Text ($odoc | ConvertTo-Json -Depth 5) -NoBom
+Write-Output ('band-refusals: ' + $res.examined + ' band-refused row(s) in ' + $ff.Name + ': ' + $res.explained + ' explained as a basis error, ' + $un.Count + ' unexplained, of which ' + $new.Count + ' NEW (not in the backlog of ' + $backlog.Count + '): ' + $page.Count + ' first seen today, ' + (@($open).Count - $page.Count) + ' still open from earlier days, ' + ($new.Count - @($open).Count) + ' decided in match-verdicts.json; ' + $gone + ' backlog key(s) no longer occur' + $(if ($gone -gt 0) { ' (ratchet CAN tighten: -Tighten)' } else { '' }))
+foreach ($o in ($page | Sort-Object { $_.row.id })) { $u = $o.row; Write-Output ('  UNEXPLAINED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' against reference ' + $u.band_ref + ' | ' + $u.name + '   resolver: lane:grocery/resolve-match-worklist.ps1 (a wrong product -> an exclude via apply-coverage-batch -FromWorklist) or the band derivation (a real price)') }
+foreach ($o in (@($open | Where-Object { -not $_.new }) | Sort-Object { $_.row.id })) { $u = $o.row; Write-Output ('  OPEN since ' + $o.first_seen + '  ' + $u.id + ' | ' + $u.store + ' | ' + $u.name) }
+Write-GuardComplete -Name 'band-refusals' -Summary ('scanned=' + $res.examined + ' explained=' + $res.explained + ' unexplained=' + $un.Count + ' findings=' + $page.Count + ' open=' + @($open).Count + ' backlog=' + $backlog.Count)
+exit $(if ($page.Count -gt 0) { 2 } else { 0 })

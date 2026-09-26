@@ -224,6 +224,19 @@ function Read-MatchFindings {
       [void]$rows.Add([pscustomobject]@{ key = (Get-MwlKey 'band' $p[0] $p[1] $p[2]); kind = 'band'; commodity = ''; store = $p[1]; name = $p[2]; claimer = $p[0]; evidence = 'refused by the derived band with no basis error to explain it (backlog ' + [string]$bb.recorded + ')' })
     }
   }
+  # Band rows OUTSIDE the backlog (plan-2026-09-25-7, queue 2026-09-23-57b66b): audit-band-refusals writes them with
+  # first_seen to out/band-refusals-open.json and pages each on its first day only, so they wait HERE to be decided.
+  # Until this the worklist read the backlog alone, and a new row was on no docket while it re-paged every day. A
+  # missing open file is not blind: the backlog is still read, and the audit's own exit 3 names a run that never looked.
+  $f = Join-Path $OutDir 'band-refusals-open.json'
+  $bo = if (Test-Path -LiteralPath $f) { & $rd $f } else { $null }
+  if ($bo) {
+    foreach ($o in @($bo.rows | Where-Object { $_ -and $_.key })) {
+      $p = ([string]$o.key) -split '\|', 3
+      if ($p.Count -lt 3) { continue }
+      [void]$rows.Add([pscustomobject]@{ key = (Get-MwlKey 'band' $p[0] $p[1] $p[2]); kind = 'band'; commodity = ''; store = $p[1]; name = $p[2]; claimer = $p[0]; evidence = 'refused by the derived band with no basis error to explain it (' + [string]$o.unit_price + ' against reference ' + [string]$o.band_ref + '; first seen ' + [string]$o.first_seen + ', not in the backlog)' })
+    }
+  }
   return [pscustomobject]@{ rows = $rows.ToArray(); blind = $blind.ToArray() }
 }
 
