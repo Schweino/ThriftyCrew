@@ -291,6 +291,8 @@ if (-not $isShard) {
   _RT 'MUST FIRE  W4 an AE Dairy Yolite yogurt is not raspberries (dairy_carrier)' 'AE Dairy Raspberry Yolite' '<none>'
   _RT 'MUST FIRE  W5 Wheat Thins are not sun-dried tomatoes (snack_carrier by id)' 'Wheat Thins Sundried Tomato & Basil Snacks 8.5 Oz' '<none>'
   _RT 'MUST FIRE  W6 a sun-dried tomato bruschetta topping is not sun-dried tomatoes' 'California Sun Dry Sun-Dried Tomatoes Bruschetta Jar' '<none>'
+  _RT 'MUST FIRE  W6 a garlic jar (garlic is its first ingredient) is not sun-dried tomatoes: the bruschetta cell''s next fallback' 'California Sun Dry Garlic with Sun Dried Tomatoes' '<none>'
+  _RT 'MUST FIRE  W6 a sun-dried tomato spread is not sun-dried tomatoes: the fallback after that' 'California Sun Dry Sun-Dried Tomato Spread' '<none>'
   _RT 'MUST FIRE  W7 a Kevin''s heat-and-eat entree is not sirloin steak (frozen_entree_carrier)' 'Kevin''s Natural Foods Ranchero Sirloin Steak' '<none>'
   _RT 'MUST FIRE  W8 a whole sirloin tip subprimal is not a steak (whole_cut_carrier)' 'Fresh Usda Choice Whole Sirloin Tip' '<none>'
   _RT 'MUST FIRE  W8 a case of sirloin tip is not a steak (whole_cut_carrier)' 'Sirloin Tip, Case  priced per pound' '<none>'
@@ -423,7 +425,7 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
   _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
   _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
-  $rtWant = 77   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins)
+  $rtWant = 79   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)
