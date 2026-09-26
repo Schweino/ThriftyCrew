@@ -21,6 +21,9 @@ read would add a paced fetch per blank row for too few admitted rows, and the ru
   The builder the rest of this document counts with is `grocery/build-sams-deals.ps1`, blob
   88f9ba6fcc0ac69bfb8f916dd80ed74ac768f8dc.
 
+**Harness and commit.** Page probe: the one-off console script above, run 2026-09-26. Counts: `grocery/build-sams-deals.ps1`
+at blob 88f9ba6fcc0ac69bfb8f916dd80ed74ac768f8dc, run 2026-09-26.
+
 ## Result
 
 **0 of 30 pages carry a unit price.** 30 of 30 answered HTTP 200 with the product and a current price; 0 walled, 0
