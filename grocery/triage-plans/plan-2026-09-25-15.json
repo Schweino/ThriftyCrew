@@ -136,7 +136,10 @@
       ],
       "rules_premise_verified": "TRUE for the rules half: the artifact's 16 moves for this item's commodities (peanut-butter->none 14, honey->none 1; bacon->none 1 is dd290b's) reproduce exactly with 0 unexpected and 0 missing; audit-match-soundness DROPPED lines name exactly the 9 peanut-butter, 1 honey names present in the soundness corpus.",
       "rules_shipped_commit": "see git log -- grocery/commodities.json on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
-      "rules_half_tool_calls": 33
+      "rules_half_tool_calls": 33,
+      "batch_chain": "Step 4 (plan-15) covering plan-16 publish_batch 1, run ONCE on 2026-09-25 23:05-23:20 in a scratch worktree of triage/r2-2026-09-25 (seeded from main) via check-ad-cycles -Force -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (its own order): repair-multipack-sizes -Apply 0 repairs, stamp-ad-as-of, compare-deals (identity staple), update-history -Reconcile COMPLETE unreadable=0, name-drift/prune-bad-links (0 dropped)/name-drift, generate-board-overrides (0 corrections), guards 2 QUARANTINE-REQUIRED 1 cell -> apply-cell-quarantine (yellow-bell-pepper|Family Fare withheld) -> guards 4 \"GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.\", export-feed exit 0 twice (week 2026-09-23, parity PASSED). Then by hand: audit-match-soundness MOVED=0 DROPPED=0 (nothing to -Accept), audit-coverage-gaps 2 actionable (Walmart paper-towels, toilet-paper UNKNOWN-VERDICT; bar 6), build-deals-page 0 (all-3 rule 2976 chips, 0 bare). publish-deals-page NOT run (orchestrator publishes after landing). Cells vs the 08:14 main board: 2782 -> 2785 priced, exactly 9 cells moved, every one expected.",
+      "live_check": "frozen-pizza cheapest Sam's Club 2.6367 (no Hot Pockets 1.0817 cell); bar-soap Family Fare 0.9988; Dove multibuy candidate rows price 1.812 and 1.8653 per bar (per-6-pack multibuy, count from size+name), neither wins a cell",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-22-8d2ad5",
@@ -235,9 +238,10 @@
       ],
       "proof_run": "compare-deals.ps1 -SelfTest exit 0, 'SELF-TEST PASS', 12 count-conflict cases (4 MUST FIRE incl. frozen Benner through the real Get-UnitPrice, Willow, Bounty 246 ct read COUNT-CONFLICT with a refusing band, 100 CT sized 201 ct step past the multiple bar; 7 CLEAN TWIN incl. Marathon 6 pk 3000 ct, Q-tips 1750 ct 3 pk, Kroger 160 ct, 100 CT sized 200 ct at the bar, Suavitel 70 Sheets, shrimp 31-40 ct per lb; 1 MUST NOT FIRE). test-guards.ps1 refuses a live tree (exit 3, points to run-test-guards-weekly.ps1); no guard was touched, so full_suite: deferred-to-land.",
       "full_suite": "deferred-to-land",
-      "live_check": "tea-bags Aldi: not 0.0621 (expected 0.0645 Benner Chai, or absent); facial-tissues Aldi: not 0.0087 (expected 0.0149)",
+      "live_check": "tea-bags Aldi 0.0645 (was 0.0621); facial-tissues Aldi 0.0149 (was 0.0087), cheapest Sam's 0.008 (membership), no-membership crown Fareway 0.012",
       "close_disposition": "confirmed",
-      "actual_tool_calls": 34
+      "actual_tool_calls": 34,
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-22-0c812e",
@@ -309,9 +313,12 @@
       "shipped_commit": "see git log -- grocery/pricing-math-lib.ps1 on triage/r2-2026-09-25 (dc1b5b); cite the landed hash after triage-land",
       "premise_note": "Checked 2026-09-25 against comparison-2026-09-23 (08:14:10, the plan's board): Fareway 'Bright Essentials Storage Bags' $3.99 size '25-42 ct' basis per-42-pack, as the evidence says. The live path is NOT Get-SizeAmount :205 (it needs a trailing weight) but Get-UnitPrice's each branch, which reads Get-PackCount ('25-42 ct' -> 42). Residual 6's premise is false as written: the row is 'Red Baron ... Personal Pizza Combo, 69.60 oz., 12 PK', WEIGHT-first, and the COUNT-first 'N pk X oz' shape the exact_change names is already read as a per-piece weight by Test-PieceSize :242.",
       "close_disposition": "fixed-partial",
-      "live_check": "storage-bags | Fareway | 0.1596 (after the step-4 board chain)",
+      "live_check": "storage-bags Fareway 0.124 (Bright Essentials Double Zipper 20 Gallon, 20 ct, $2.48 sale 09-21..09-26); the 25-42 ct range row itself now prices 0.1596 per-25-pack in candidates-2026-09-23 and loses the cell to that cheaper sale row",
       "proof_run": "compare-deals -SelfTest exit 0 'SELF-TEST PASS' (5 new cases: MUST FIRE storage bags 0.1596; MUST NOT FIRE descending '24-12 ct'; CLEAN TWIN '42 ct', marshmallows 10-10.5 oz -> 10, shrimp 31-40 ct 3 lb bag 6.99/lb; Hy-Vee 75-100 ct twin moved to 0.0399); test-pu-lib exit 0 PU-LIB PASSED; full_suite: deferred-to-land",
-      "actual_tool_calls": 27
+      "actual_tool_calls": 27,
+      "full_suite": "deferred-to-land",
+      "board_effects_observed": "storage-bags|Fareway 0.095 -> 0.124, not 0.1596 as estimated: the range fix priced Bright Essentials 25-42 ct at 0.1596 (verified in candidates-2026-09-23), so the cheapest Fareway row is now a different real sale product at 0.124. A new detail, not a new class.",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-23-dd290b",
@@ -479,7 +486,9 @@
       "proof_run": "apply-coverage-batch (scratch worktree) BATCH ACCEPTED, rc 1 only for 20 pre-existing tile faults outside the batch; routing diff 47,215 names: 27 expected moves for 9459a1+dd290b reproduced, 0 unexpected, 0 missing, plus 1 corpus pizza-sandwich move; audit-match-soundness MOVED=1 (Wel Pac egg-noodles -> lo-mein-noodles) DROPPED=11 (9 peanut-butter, 1 honey, 1 bacon, 1 frozen-pizza Hot Pockets: all intended) new-contested=1 (Wel Pac, intended order), -Accept exit 0, baseline names diff = those 12 plus Cajun's Choice Blackened Seasoning & Rub -> blackened-seasoning, contested + Wel Pac only; test-commodity-rules.ps1 exit 0, 159 of 159 (11 new).",
       "rules_shipped_commit": "see git log -- grocery/commodities.json on triage/r2-2026-09-25 (unlanded; cite by blob after landing)",
       "full_suite": "deferred-to-land",
-      "rules_half_tool_calls": 33
+      "rules_half_tool_calls": 33,
+      "live_check": "lo-mein-noodles Family Fare 0.259 (new cell); blackened-seasoning Baker's 1.3523 (new cell); sweet-potato-glass-noodles has no cell",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-25-f9c8ce",

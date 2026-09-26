@@ -187,8 +187,9 @@
       "leaves_open_followup": "2026-09-25-b3c8ca",
       "proof_run": "test-match-worklist.ps1 exit 0 'self-test pass: 34 of 34'; audit-coverage-gaps.ps1 -SelfTest exit 0 'SELF-TEST PASS'; resolve-match-worklist.ps1 -SelfTest exit 0 'pass'; live audit-coverage-gaps -ReportDir temp over comparison-2026-09-23: exit 2, 3 actionable of 435 (DECIDED 6, QUARANTINED 1). full_suite: deferred-to-land",
       "actual_tool_calls": 61,
-      "live_check": "mandarin-oranges, Family Fare, 0.2327 (Dole Mandarin Oranges In Juice); tahini, Fareway, 0.5619 unchanged; mandarin-oranges shows NO Hy-Vee cell (withheld WRONG-STORE), which is correct",
-      "full_suite": "deferred-to-land"
+      "live_check": "mandarin-oranges Family Fare 0.2327 (new); tahini Fareway 0.5619 unchanged; no Hy-Vee mandarin-oranges cell (rebuilt board of plan-15 step 4)",
+      "full_suite": "deferred-to-land",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-23-3ba362",
@@ -301,7 +302,9 @@
       "close_disposition": "confirmed",
       "proof_run": "powershell -File grocery\\test-match-worklist.ps1: exit 0, 'test-match-worklist self-test pass: 43 of 43 case(s)' (9 new: A&H not a list with index, classifier why no longer 'lists several foods', old reading without index, Pictsweet and Broccoli & Onions still lists, Rich and Creamy still not, hot-sauce include admits Trappey's and refuses Mae Ploy and a bare Black Pepper Sauce). full_suite: deferred-to-land",
       "actual_tool_calls": 42,
-      "full_suite": "deferred-to-land"
+      "full_suite": "deferred-to-land",
+      "live_check": "laundry-detergent Family Fare 0.0999 (was 0.1014)",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-18-a0c785",
@@ -352,7 +355,9 @@
       "proof_run": "test-auditors unit u145-d2b-beverage-on-the-five-non-drink-buckets (selective): MUST FIRE energy drink on white-vinegar exit 2 naming beverage PASS; CLEAN TWIN baking-soda / Nature S Nectar lemon-juice / ribeye-steak silent PASS; exit 0. Mutant (category-excludes.json at HEAD, restored md5-identical after): MUST FIRE went red (1 failed), exit 2. Full suite: deferred-to-land.",
       "full_suite": "deferred-to-land",
       "close_disposition": "fixed",
-      "actual_tool_calls": 17
+      "actual_tool_calls": 17,
+      "live_check": "energy-drinks Family Fare 0.0625 (was held 0.1353) and lotion Walmart 0.1244 (was held 0.2175) pass every guard (92e552 bare-oz fix)",
+      "republished": "pending-land"
     },
     {
       "queue_id": "2026-09-21-4b973e",
@@ -422,14 +427,14 @@
       "premise_check": "Row verified: grocery/out/flag-verification.json (generated 2026-09-25 08:27) holds yellow-bell-pepper|Family Fare status wrong-price, claim '10 for $10.00 with purchase of 10' with NO deal_qty, reason 'size field 1 ea -> 1.9900', and comparison-2026-09-23 quarantine withholds the cell with no bad_deal_qty. The MECHANISM premise is false against origin/main: a2af45 (88c0b05dd) reads a quantity deal off the engine's row, and 17c0da (03e294dc5, on origin/main since 20:01, not yet in local main) copies the held cell's condition off the quarantine record so this exact entry is re-judged and closes as match (its own frozen fixture 'MUST FIRE founding 2026-09-25').",
       "close_disposition": "confirmed",
       "full_suite": "not-run (no code change)",
-      "republished": true,
-      "batch_chain": "publish_batch 1 chain run ONCE in a scratch worktree of local HEAD 5d50b9b69 (a rebase onto origin/main stopped on a grocery/match-verdicts.json conflict, both sides appending verdicts, so it was aborted; the landing must resolve it). Order from check-ad-cycles: repair-multipack-sizes -Apply 0, stamp-ad-as-of -Apply 0, compare-deals (Baker's 2026-09-09, Fareway 2026-09-20 pinned) 0, update-history -Reconcile 0, audit-food-category 0, name-drift/prune-bad-links/name-drift 0, generate-board-overrides 0, build-deals-page 0, guards 2 QUARANTINE-REQUIRED (1 cell) -> apply-cell-quarantine 0 -> guards 4 'GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.', audit-match-soundness MOVED=0 DROPPED=0, audit-coverage-gaps 'no ACTIONABLE gap', basis-reconcile 0, pack-basis 0, export-feed 0 (week 2026-09-23, shrink 0.0%). publish-deals-page exited 2 HELD by design: 'the post names board.json?v=87d08ab2a2 but feed.thriftycrew.com serves v=a14a8c805c. NOT publishing: land the push ... then publish (nothing was written to Ghost)'. The orchestrator runs grocery\\publish-deals-page.ps1 after the landing is served.",
+      "republished": "pending-land",
+      "batch_chain": "SUPERSEDED the stale-checkout rebuild recorded before (not landed). Step 4 (plan-15) covering plan-16 publish_batch 1, run ONCE on 2026-09-25 23:05-23:20 in a scratch worktree of triage/r2-2026-09-25 (seeded from main) via check-ad-cycles -Force -NoPull -NoCommit -NoPublish -NoAlert -ShipOnly (its own order): repair-multipack-sizes -Apply 0 repairs, stamp-ad-as-of, compare-deals (identity staple), update-history -Reconcile COMPLETE unreadable=0, name-drift/prune-bad-links (0 dropped)/name-drift, generate-board-overrides (0 corrections), guards 2 QUARANTINE-REQUIRED 1 cell -> apply-cell-quarantine (yellow-bell-pepper|Family Fare withheld) -> guards 4 \"GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld, 0 store(s) dropped ... Safe to publish.\", export-feed exit 0 twice (week 2026-09-23, parity PASSED). Then by hand: audit-match-soundness MOVED=0 DROPPED=0 (nothing to -Accept), audit-coverage-gaps 2 actionable (Walmart paper-towels, toilet-paper UNKNOWN-VERDICT; bar 6), build-deals-page 0 (all-3 rule 2976 chips, 0 bare). publish-deals-page NOT run (orchestrator publishes after landing). Cells vs the 08:14 main board: 2782 -> 2785 priced, exactly 9 cells moved, every one expected.",
       "board_effects_observed": "comparison-2026-09-23 rebuilt 22:05 vs the 08:06 board, 2782 -> 2783 priced cells, 4 cells differ: mandarin-oranges|Family Fare new 0.2327 (Dole Mandarin Oranges In Juice, as planned); toasted-sesame-seeds/tahini Fareway 0.5619 unchanged; no Hy-Vee mandarin cell; yellow-bell-pepper|Family Fare still WITHHELD (local code lacks 17c0da). NOT in the plan's estimate: laundry-detergent|Family Fare 0.1014 -> 0.0999 (Arm & Hammer Sensitive Skin Free & Clear 140 fl oz, admitted by 3ba362's liquid-laundry include); energy-drinks|Family Fare 0.1353 held -> 0.0625 (Venom 16 oz, 2 for $2.00 sale) and lotion|Walmart 0.2175 held -> 0.1244 (Queen Helene 32 oz $3.98, read 2026-09-25): both were held this morning by the unit-basis guard (volume among weights) and pass every guard on this rebuild.",
       "live_check": {
+        "also": "tahini Fareway 0.5619; laundry-detergent Family Fare 0.0999; energy-drinks Family Fare 0.0625; lotion Walmart 0.1244; yellow-bell-pepper Family Fare still withheld on this build",
         "commodity": "mandarin-oranges",
-        "store": "Family Fare",
         "expect": 0.2327,
-        "also": "tahini Fareway 0.5619; yellow-bell-pepper Family Fare withheld until 17c0da's build"
+        "store": "Family Fare"
       },
       "actual_tool_calls": 50
     }

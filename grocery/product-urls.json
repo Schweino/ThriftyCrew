@@ -9907,13 +9907,6 @@
                                                              "verified":  "2026-07-31 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.0143
                                                          },
-                                         "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/21351861-willow-facial-tissue-144-ct",
-                                                      "name":  "Willow Facial Tissue 144 CT",
-                                                      "price":  "$1.39",
-                                                      "size":  "160 ct",
-                                                      "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
-                                                  },
                                          "Fareway":  {
                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21297412-puffs-lotion-facial-tissue-496-0-ct",
                                                          "name":  "Puffs Facial Tissue Plus Lotion",
@@ -9934,7 +9927,14 @@
                                                                  "price":  "$14.98",
                                                                  "size":  "1872 ct",
                                                                  "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                             },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/79613029-willow-ultra-soft-facial-tissue-1pk-1-each",
+                                                      "name":  "Willow Ultra Soft Facial Tissue 1pk 1 Each",
+                                                      "price":  "$1.79",
+                                                      "size":  "120 ct",
+                                                      "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                  }
                                      },
                   "fajita-seasoning":  {
                                            "commodity":  "Fajita Seasoning Packet",
@@ -15889,11 +15889,11 @@
                                                          "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                      },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/362639086",
-                                                 "name":  "Equate Ultra Moisturizing Extra Dry Skin Lotion, 32 fl oz",
-                                                 "price":  "$6.96",
-                                                 "size":  "32 fl oz",
-                                                 "verified":  "2026-09-19 DERIVED from the price row (same record the board priced)"
+                                                 "url":  "https://www.walmart.com/ip/13333106",
+                                                 "name":  "Queen Helene Cocoa Butter Hand \u0026 Body Lotion for Dry Skin, 32 oz",
+                                                 "price":  "$3.98",
+                                                 "size":  "32 oz",
+                                                 "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
                                              }
                              },
                   "mac-and-cheese":  {
@@ -15964,7 +15964,13 @@
                                                            "price":  "$2.29",
                                                            "size":  "15 oz",
                                                            "verified":  "2026-09-20 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                           "Family Fare":  {
+                                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/fruit_single_serve/dole_mandarin_oranges_in_juice/p/1764405684715494152",
+                                                               "name":  "Dole Mandarin Oranges In Juice",
+                                                               "price":  "$3.49",
+                                                               "size":  "15 oz"
+                                                           }
                                        },
                   "mangoes":  {
                                   "commodity":  "mangoes",
@@ -26061,6 +26067,24 @@
                                                             "size":  "2 oz",
                                                             "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
                                                         }
-                                   }
+                                   },
+                  "blackened-seasoning":  {
+                                              "Baker\u0027s":  {
+                                                                   "url":  "https://www.bakersplus.com/p/cajun-s-choice-blackened-seasoning-rub/0008449303186",
+                                                                   "name":  "Cajun\u0027s Choice Blackened Seasoning \u0026 Rub",
+                                                                   "price":  "$8.79",
+                                                                   "size":  "6.5 oz",
+                                                                   "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                               }
+                                          },
+                  "lo-mein-noodles":  {
+                                          "Family Fare":  {
+                                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/noodles/wel_pac_egg_noodles_lo_mein_10_oz/p/3077207",
+                                                              "name":  "Wel Pac Egg Noodles, Lo Mein 10 Oz",
+                                                              "price":  "$2.59",
+                                                              "size":  "10 oz",
+                                                              "verified":  "2026-09-25 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                      }
               }
 }
