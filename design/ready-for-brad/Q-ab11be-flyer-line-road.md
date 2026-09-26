@@ -51,3 +51,9 @@ away real sales readers use. Keep A in force until B is live and measured.
 
 Option B, with A kept in force meanwhile (the lines stay published and the verifier keeps naming them unverifiable).
 The plan is `design/PLAN-flyer-line-product-link-2026-09-26.md`; nothing is implemented until Brad reads it.
+
+## Ruling on the plan (Brad, in chat, 2026-09-26)
+
+"Yes, build to that bar"
+
+The linker is built in SHADOW mode (no board effect). The orchestrator labels the 53-line answer set and Brad reviews the labels. The bar is unchanged: `wrong_links == 0 and links_made >= 20`, and 0 false wrong-price verdicts on replay.

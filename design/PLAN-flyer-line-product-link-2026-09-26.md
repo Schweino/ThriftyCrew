@@ -142,3 +142,9 @@ candidate's read, so the fixture set grows from real failures.
 
 1. Is 0 wrong links over at least 20 the right bar, or do you want a larger minimum before going live?
 2. Who labels the 53: you, or a session reading each Hy-Vee product page in window with the evidence recorded?
+
+## Ruling (Brad, in chat, 2026-09-26)
+
+"Yes, build to that bar"
+
+Build in SHADOW mode. Open question 1 answered: the bar stands as written. Open question 2 answered: the orchestrator labels the 53-line answer set (`labels: proposed`) and Brad reviews the labels.

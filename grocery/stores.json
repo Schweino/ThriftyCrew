@@ -7,6 +7,8 @@
       "color": "#c4342c",
       "regular_prefix": "hyvee",
       "urlkey": "hyvee",
+      "flyer_link": "shadow",
+      "flyer_link_readme": "Off switch for the flyer-line to product linker (hyvee-flyer-link.ps1, design/PLAN-flyer-line-product-link-2026-09-26.md): shadow = writes its own out/hyvee/flyer-links file and changes no verdict or cell; off = asks nothing; live is refused until Brad rules on the measured result.",
       "ad_cycle": "weekly",
       "capture": "server (Flipp SFML digital-flyers API) + browser price verification",
       "price_mode": "in-store",

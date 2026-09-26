@@ -71,3 +71,9 @@ So the page read the ruling asks for would admit nothing, and it is NOT built: i
 row (about 8 minutes a sweep, more exposure to the wall) for zero rows. Name-only rows stay refused, as the ruling
 says, "until that is live". Rows and method: `design/MEASURE-sams-page-unit-price-2026-09-26.md`. This needs a
 new ruling: keep refusing (B), or another Sam's-own source of the size.
+
+## Ruling (Brad, in chat, 2026-09-26, after the page measure)
+
+"Keep refusing"
+
+Option B. Name-only Sam's rows stay refused; no page read is built. **Status: CLOSED 2026-09-26.**
