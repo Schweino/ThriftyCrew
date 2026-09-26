@@ -92,7 +92,7 @@ function Get-StampedExitCode {
 function Invoke-RunOnce {
   <# The decision and the run. Returns [pscustomobject]@{ ran; rc; stamp; message }. Separated from the
      script body so -SelfTest drives the code a task runs rather than a paraphrase of it. #>
-  param([string]$Key, [string]$Exe, [string]$ArgLine, [string]$StampDir, [string]$Day)
+  param([string]$Key, [string]$Exe, [string]$ArgLine, [string]$StampDir, [string]$Day, [int]$ReadWaitMs = 120000)
   if (-not (Test-RunOnceKey $Key)) {
     return [pscustomobject]@{ ran = $false; rc = 2; stamp = ''; message = ("run-once-a-day: REFUSED - '" + $Key + "' is not a usable key (letters, digits, dot, dash or underscore, at most 64)") }
   }
@@ -113,21 +113,46 @@ function Invoke-RunOnce {
   $psi.FileName = $Exe
   $psi.Arguments = $ArgLine
   $psi.UseShellExecute = $false
+  # THE CHILD'S OWN VERDICT IS KEPT (2026-09-25, queue 2026-09-23-4f9842). Until this, the child wrote to a headless
+  # console nobody reads, and the transcript records only this script's host output, so 'child exit 1' was all that
+  # survived: TC Daily Ratchets 0315 went red on 5 of 6 days (09-20..09-25) and not one log said WHICH ratchet. Both
+  # streams are now captured, written whole to <key>-<day>.out.log beside the stamp, and the child's last stdout line
+  # (its verdict or -COMPLETE marker, by this estate's contract) rides in the message. Kept apart, never merged: an
+  # error must not travel on the channel read as the verdict (software-craft/applies-here.md 69).
+  # The reads are BOUNDED after the child exits: a descendant that inherited the pipe keeps it open, and an unbounded
+  # read would turn a daily task into a hang. A read cut off by the bound says so (output_complete = $false).
+  $psi.RedirectStandardOutput = $true
+  $psi.RedirectStandardError = $true
   $p = $null
   try { $p = [System.Diagnostics.Process]::Start($psi) }
   catch {
     return [pscustomobject]@{ ran = $false; rc = 2; stamp = ''; message = ('run-once-a-day: ' + $Key + " could NOT start '" + $Exe + "' (" + $_.Exception.Message + ') - no stamp written, so the next occurrence retries') }
   }
+  $tOut = $p.StandardOutput.ReadToEndAsync()
+  $tErr = $p.StandardError.ReadToEndAsync()
   $p.WaitForExit()
   $rc = $p.ExitCode
+  $complete = $tOut.Wait($ReadWaitMs) -and $tErr.Wait([Math]::Max(1, [int]($ReadWaitMs / 10)))
+  $outText = if ($tOut.IsCompleted) { [string]$tOut.Result } else { '' }
+  $errText = if ($tErr.IsCompleted) { [string]$tErr.Result } else { '' }
   $p.Dispose()
+  $outLines = @(($outText -split "`r?`n") | Where-Object { $_.Trim() })
+  $lastLine = if ($outLines.Count) { $outLines[$outLines.Count - 1].Trim() } else { '' }
+  $verdict = if (-not $complete) { 'UNKNOWN - the output read was cut off after the child exited (a descendant still held the pipe)' } elseif ($lastLine) { $lastLine } else { 'none - the child printed nothing on stdout' }
+  $outLog = Join-Path $StampDir ($Key + '-' + $Day + '.out.log')
+  try {
+    if (-not (Test-Path -LiteralPath $StampDir)) { New-Item -ItemType Directory -Path $StampDir -Force | Out-Null }
+    $body = '--- ' + $Key + ' ' + (Get-Date).ToString('s') + ' rc=' + $rc + ' output_complete=' + $complete + "`n--- stdout`n" + $outText + "`n--- stderr`n" + $errText + "`n"
+    [IO.File]::WriteAllText($outLog, $body, (New-Object Text.UTF8Encoding($false)))
+  } catch { $outLog = '' }
+  $tail = @($outLines | Select-Object -Last 40)
   try {
     if (-not (Test-Path -LiteralPath $StampDir)) { New-Item -ItemType Directory -Path $StampDir -Force | Out-Null }
     [IO.File]::WriteAllText($stamp, ((Get-Date).ToString('s') + ' rc=' + $rc + ' exe=' + $Exe), (New-Object Text.UTF8Encoding($false)))
   } catch {
-    return [pscustomobject]@{ ran = $true; rc = $rc; stamp = ''; message = ('run-once-a-day: ' + $Key + ' ran (child exit ' + $rc + ') but the stamp could NOT be written (' + $_.Exception.Message + ') - the next occurrence will run it again') }
+    return [pscustomobject]@{ ran = $true; rc = $rc; stamp = ''; verdict = $verdict; output_complete = $complete; out_log = $outLog; tail = $tail; message = ('run-once-a-day: ' + $Key + ' ran (child exit ' + $rc + ') but the stamp could NOT be written (' + $_.Exception.Message + ') - the next occurrence will run it again; child verdict: ' + $verdict) }
   }
-  return [pscustomobject]@{ ran = $true; rc = $rc; stamp = $stamp; message = ('run-once-a-day: ' + $Key + ' ran, child exit ' + $rc + '; stamped ' + $stamp) }
+  return [pscustomobject]@{ ran = $true; rc = $rc; stamp = $stamp; verdict = $verdict; output_complete = $complete; out_log = $outLog; tail = $tail; message = ('run-once-a-day: ' + $Key + ' ran, child exit ' + $rc + '; stamped ' + $stamp + '; child verdict: ' + $verdict + $(if ($outLog) { '; output ' + $outLog } else { '; output log could NOT be written' })) }
 }
 
 if ($SelfTest) {
@@ -177,6 +202,21 @@ if ($SelfTest) {
     $r4 = Invoke-RunOnce -Key 'nostart' -Exe (Join-Path $tmp 'no-such-program.exe') -ArgLine '' -StampDir $tmp -Day '2026-09-10'
     T 'MUST FIRE  a child that could not be started writes NO stamp, so the next occurrence retries' ((-not $r4.ran) -and ($r4.rc -eq 2) -and -not (Test-Path -LiteralPath (Get-RunOnceStampPath -Dir $tmp -Key 'nostart' -Day '2026-09-10'))) $r4.message
 
+    # WHICH STEP WENT RED (2026-09-25, queue 2026-09-23-4f9842): the founding bug is TC Daily Ratchets 0315 at rc=1
+    # on 09-24 and 09-25 with a run log reading only 'child exit 1'. A child that names its failed step must have
+    # that line in the message and in the kept output log.
+    $r5 = Invoke-RunOnce -Key 'redstep' -Exe $cmdExe -ArgLine '/c echo   ok    step-a&echo   FAIL  step-b&echo STEPS-COMPLETE failed=1&exit 1' -StampDir $tmp -Day '2026-09-10'
+    $r5log = Join-Path $tmp 'redstep-2026-09-10.out.log'
+    $r5text = if (Test-Path -LiteralPath $r5log) { [IO.File]::ReadAllText($r5log) } else { '' }
+    T 'MUST FIRE  a red child''s own verdict line rides in the message, and its output log keeps the step that failed' (($r5.rc -eq 1) -and ($r5.message -match 'child verdict: STEPS-COMPLETE failed=1') -and ($r5text -match 'FAIL  step-b') -and $r5.output_complete) ('rc=' + $r5.rc + ' msg=' + $r5.message + ' log=' + $r5text)
+    $r6 = Invoke-RunOnce -Key 'greenstep' -Exe $cmdExe -ArgLine '/c echo X-COMPLETE ok=1&echo noise on stderr 1>&2&exit 0' -StampDir $tmp -Day '2026-09-10'
+    $r6text = if ($r6.out_log -and (Test-Path -LiteralPath $r6.out_log)) { [IO.File]::ReadAllText($r6.out_log) } else { '' }
+    T 'CLEAN TWIN  a green child still returns 0 and its verdict is its last STDOUT line, with stderr kept apart in the log and never read as the verdict' (($r6.rc -eq 0) -and ($r6.verdict -eq 'X-COMPLETE ok=1') -and ($r6text -match '(?s)--- stderr\s+noise on stderr')) ('rc=' + $r6.rc + ' verdict=' + $r6.verdict + ' log=' + $r6text)
+    # A descendant that inherited the pipe keeps it open after the child exits. The read is bounded, the child's
+    # exit code still comes back, and the verdict says the output was cut off rather than inventing one.
+    $r7 = Invoke-RunOnce -Key 'heldpipe' -Exe $cmdExe -ArgLine '/c start /b "" powershell -NoProfile -Command Start-Sleep 25& exit 3' -StampDir $tmp -Day '2026-09-10' -ReadWaitMs 1500
+    T 'MUST FIRE  a descendant still holding the pipe does not hang the wrapper: rc 3 comes back and the verdict reads UNKNOWN, output_complete=false' (($r7.rc -eq 3) -and (-not $r7.output_complete) -and ($r7.verdict -match '^UNKNOWN')) ('rc=' + $r7.rc + ' complete=' + $r7.output_complete + ' verdict=' + $r7.verdict)
+
     # END TO END IN THE TASK ACTION'S OWN SHAPE: a fresh powershell.exe -File, -ArgLine quoted, and a child
     # argument string that BEGINS WITH A DASH. This is the half a direct call cannot prove - the '--' form this
     # replaced passed every in-process test and failed binding the moment it went through powershell -File.
@@ -191,10 +231,11 @@ if ($SelfTest) {
     $childDir = Join-Path $tmp 'child dir'
     New-Item -ItemType Directory -Path $childDir -Force | Out-Null
     $childPs1 = Join-Path $childDir 'child.ps1'
-    [IO.File]::WriteAllText($childPs1, ('param([int]$Code = 0)' + "`r`n" + 'exit $Code' + "`r`n"), $utf8)
+    [IO.File]::WriteAllText($childPs1, ('param([int]$Code = 0)' + "`r`n" + 'Write-Output ("CHILD-VERDICT code=" + $Code)' + "`r`n" + 'exit $Code' + "`r`n"), $utf8)
     $nestedArgs = '-NoProfile -ExecutionPolicy Bypass -File "' + $PSCommandPath + '" -Key nested -StampDir "' + $tmp + '" -Today 2026-09-10 -Exe "' + $psExe + '" -ArgLine "-NoProfile -ExecutionPolicy Bypass -File \"' + $childPs1 + '\" -Code 6"'
     $rn = Invoke-Hidden $psExe $nestedArgs
     T 'MUST FIRE  a child -File path written \"...\" inside -ArgLine, with a space in it, reaches the child whole: its exit 6 comes back' (($rn.rc -eq 6) -and (Test-Path -LiteralPath (Get-RunOnceStampPath -Dir $tmp -Key 'nested' -Day '2026-09-10'))) ('rc=' + $rn.rc + ' out=' + $rn.out + ' err=' + $rn.err)
+    T 'MUST FIRE  in the task-action shape the wrapper''s own output (what the transcript records) carries the child''s verdict line' (($rn.out -match '\|\s+CHILD-VERDICT code=6') -and ($rn.out -match 'child verdict: CHILD-VERDICT code=6')) ('out=' + $rn.out)
 
     # EACH COMMITTED DEFINITION HANDS ITS CHILD EXACTLY WHAT THE TASK RAN BEFORE IT WAS WRAPPED. The Arguments of
     # every ops\scheduled-tasks\*.xml that names this script go through a real powershell.exe -File with this
@@ -276,6 +317,11 @@ if (-not $StampDir) { $StampDir = Join-Path $repo 'ops\out\logs\run-once' }
 $logName = 'run-once-' + $(if (Test-RunOnceKey $Key) { $Key } else { 'invalid-key' })
 $runLog = Start-RunLog -Name $logName -OutDir (Join-Path $repo 'ops\out') -Today $day
 $res = Invoke-RunOnce -Key $Key -Exe $Exe -ArgLine $ArgLine -StampDir $StampDir -Day $day
+# The child's last 40 stdout lines go into this transcript too, so the run log a reader opens first names the step.
+if ($res.PSObject.Properties['tail'] -and @($res.tail).Count) {
+  Write-Output '--- child stdout, last lines ---'
+  foreach ($l in @($res.tail)) { Write-Output ('  | ' + $l) }
+}
 Write-Output $res.message
 Stop-RunLog -ExitCode ([int]$res.rc) -Path $runLog
 exit ([int]$res.rc)
