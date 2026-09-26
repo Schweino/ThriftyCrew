@@ -370,6 +370,24 @@ if ($SelfTest) {
     # MUST NOT FIRE: a plan item that closed `done` shipped its root fix. Nothing to resume.
     $u3 = Get-TriageUnfinished @($qDone) $uPlans
     _T 'MUST-NOT-FIRE a plan item with status done produces no RESUME line' ((@($u3)).Count -eq 0) 'a record was returned'
+    # ---- A LATER RE-MEASURE CLOSES A DEVIATED ITEM (2026-09-26, queue 2026-09-20-cb8f30) ----
+    # Founding: plan-2026-09-22-5.json closed 2026-09-20-cb8f30 deviated (leaves_open 312 id-less Hy-Vee rows), and
+    # plan-2026-09-26.json re-measured it and wrote it done. The orchestrator read a RESUME line for it before that
+    # plan item was on disk; once it was, triage-due printed none. Nothing pinned that the NEWER plan's status wins
+    # over an older deviated one for the SAME id, so a reorder of the route lookup could bring finished work back.
+    $uCbOld = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-22-5.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-20-cb8f30'; lane = 'ops'; status = 'deviated'; leaves_open = '312 Hy-Vee rows with no product id'; leaves_open_occurrences = 312 }) }
+    $uCbNew = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-26.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-20-cb8f30'; lane = 'ops'; status = 'done' }) }
+    $qCb = [pscustomobject]@{ id = '2026-09-20-cb8f30'; status = 'resolved'; subject = 'Grocery pipeline alert' }
+    $uCb1 = Get-TriageUnfinished @($qCb) @($uCbNew, $uCbOld)
+    _T 'MUST-NOT-FIRE an item deviated in an older plan and done in a newer one is not RESUME work (2026-09-20-cb8f30: plan-2026-09-22-5 deviated, plan-2026-09-26 done)' `
+      ((@($uCb1)).Count -eq 0) 'a record was returned'
+    # CLEAN TWIN: before the newer plan exists the same item IS RESUME work, named from the older plan.
+    $uCb2 = Get-TriageUnfinished @($qCb) @($uCbOld)
+    $uCb2 = @($uCb2)
+    _T 'CLEAN TWIN with only the older deviated plan on disk, 2026-09-20-cb8f30 is RESUME work from plan-2026-09-22-5' `
+      ($uCb2.Count -eq 1 -and $uCb2[0].plan -eq 'grocery/triage-plans/plan-2026-09-22-5.json' -and $uCb2[0].status -eq 'deviated') ("count=$($uCb2.Count)")
     # MUST NOT FIRE: `needs-brad` is a RULING, parked on Brad. Never re-triaged, from either side.
     $u4 = Get-TriageUnfinished @($qPark, $qHeld) $uPlans
     _T 'MUST-NOT-FIRE a needs-brad item is PARKED, never RESUME - neither the plan status nor the queue status' `
