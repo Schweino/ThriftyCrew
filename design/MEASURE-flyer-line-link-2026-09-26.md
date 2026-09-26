@@ -3,6 +3,10 @@
 Spec: `design/PLAN-flyer-line-product-link-2026-09-26.md` (ruled 2026-09-26, "Yes, build to that bar", shadow mode).
 Rule variants tried: **1** (linker-v1, the plan's section 2 as written). No rule was changed after seeing the result.
 
+## Knowledge consulted
+
+Searched "flyer line product link Hy-Vee" (skills, memory, rules, machinery). Used: `grocery/pu-lib.ps1` ("THE single per-unit implementation. Dot-source it; never re-type it.", so the cell-size check is Get-LinkPerUnit); memory `hyvee-store-identity` (storeId and locationId select different halves of the response and move together, so both come from hyvee-store-lib); `grocery/link-sibling-lib.ps1` ("the ad-range rule reads the first word of the first alternative", the precedent for the brand an 'or' alternative inherits); `.claude/rules/measurement.md` (one row per case per arm, a matcher that abstains is scored on what it skipped, cite blobs).
+
 ## The bar (quoted from the plan, written before any run, not changed)
 
 > **Precision bar: 0 wrong links out of the links made, with at least 20 links made.** ... Written as:
@@ -57,6 +61,8 @@ honest. Rule 4 is the next largest (a set of equally priced flavours all prove t
 exactly what the bottled-water finding says to be careful with.
 
 ## How it ran (harness, blobs, inputs)
+
+Harness: grocery/hyvee-flyer-link.ps1 then grocery/score-hyvee-flyer-link.ps1, run 2026-09-26 on a branch based at origin/main commit 763c001e2 (blobs below; cite blobs, since the landing rebases).
 
 - Harness: `grocery/hyvee-flyer-link.ps1` (collect, then decide with `-EvidenceIn`), `grocery/hyvee-flyer-link-lib.ps1`
   (the rule), `grocery/score-hyvee-flyer-link.ps1` (the scorer and replay), on branch base origin/main 763c001e2.
