@@ -73,9 +73,13 @@ function Test-MwlAdLine([string]$Name) {
   # 'or' between two WORDS; sizes of one product ('3 or 4 ct', '56 or 67.5 oz') are one product and do not count.
   return [bool]([regex]::IsMatch($Name, '(?i)(?<![\d.])\b[a-z][a-z''.]*\s+or\s+(?!\d)[a-z]'))
 }
-function Get-MwlHead([string]$Name) {
+function Get-MwlHead([string]$Name, [hashtable]$Index = $null) {
   <# The noun the product name is ABOUT. Returns head, prehead, list (a noun list: abstain), pack (a pack/cup
-     shape: abstain) and core. Hyphenated words stay whole ('Shell-On' is not 'shell'). #>
+     shape: abstain) and core. Hyphenated words stay whole ('Shell-On' is not 'shell').
+     -Index (Get-MwlTokenIndex: token -> commodity ids), when given, decides what a conjunction joins: '&'/'and' is a
+     noun list only when BOTH neighbours name a commodity. A neighbour that names none ('Arm & Hammer', 'Johnson &
+     Johnson', 'Ben & Jerry's') is a brand joint (3ba362, plan-2026-09-25-16). Without -Index the old reading stands:
+     any conjunction not between two MwlAdj adjectives is a list, which abstains. #>
   $n = [string]$Name
   $pack = [bool]([regex]::IsMatch($n, '(?i)\b\d+\s*(?:pack|pk|ct|count)\b|\b\d+\s*-\s*\d+(?:\.\d+)?\s*oz\b|\bcups?\b|\bbowls?\b|\bsnack\s+packs?\b'))
   # cut the name at the first comma when what precedes it is a phrase, not a lone brand word
@@ -92,7 +96,10 @@ function Get-MwlHead([string]$Name) {
   for ($i = 0; $i -lt $words.Count; $i++) {
     if ($words[$i] -match '^(?i)(&|and)$' -and $i -gt 0 -and $i -lt ($words.Count - 1)) {
       $l = $words[$i - 1].ToLowerInvariant().Trim(','); $r = $words[$i + 1].ToLowerInvariant().Trim(',')
-      if (-not ($script:MwlAdj.ContainsKey($l) -and $script:MwlAdj.ContainsKey($r))) { $list = $true }
+      if (-not ($script:MwlAdj.ContainsKey($l) -and $script:MwlAdj.ContainsKey($r))) {
+        if ($null -eq $Index) { $list = $true }
+        elseif ((Test-MwlIndexed $l $Index) -and (Test-MwlIndexed $r $Index)) { $list = $true }
+      }
     }
   }
   if ([regex]::IsMatch($n, ',[^,]*(?:&|\band\b)')) { $list = $true }   # 'Brussels Sprouts, Butternut Squash & Onions'
@@ -101,6 +108,13 @@ function Get-MwlHead([string]$Name) {
   if ($content.Count -gt 0) { $head = $content[$content.Count - 1].ToLowerInvariant().Trim(',', '.') }
   if ($content.Count -gt 1) { $pre = $content[$content.Count - 2].ToLowerInvariant().Trim(',', '.') }
   return [pscustomobject]@{ head = $head; prehead = $pre; list = $list; pack = $pack; core = $core.Trim() }
+}
+function Test-MwlIndexed([string]$w, [hashtable]$Index) {
+  # does this word (any singular/plural variant, a possessive and punctuation trimmed) name a commodity in -Index
+  $t = ($w -replace "'s$", '').Trim(',', '.', '(', ')')
+  if (-not $t -or $script:MwlStop.ContainsKey($t)) { return $false }
+  foreach ($v in (Get-MwlVariants $t)) { if ($Index.ContainsKey($v)) { return $true } }
+  return $false
 }
 function Get-MwlStem([string]$w) {
   # the shortest singular variant, a trailing y dropped so cherry/cherries share one stem (a pattern prefix)
@@ -116,7 +130,7 @@ function Get-MatchClassification {
   param([string]$Kind, [string]$Name, $Target, $Claimer, [hashtable]$Index = $null)
   $r = [pscustomobject]@{ decision = 'undecided'; why = ''; head = ''; pattern = '' }
   if (Test-MwlAdLine $Name) { $r.decision = 'ad-line'; $r.why = 'the line offers two or more products at one price (Q-adline-two-products: split per product at ingest)'; return $r }
-  $h = Get-MwlHead $Name
+  $h = Get-MwlHead $Name $Index
   $r.head = $h.head
   if (-not $h.head) { $r.why = 'no head noun could be read'; return $r }
   if ($h.list) { $r.why = 'the name lists several foods (a conjunction between nouns); one head noun cannot speak for it'; return $r }

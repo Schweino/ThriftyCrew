@@ -134,6 +134,30 @@ try {
   $r = Get-MatchClassification -Kind 'band' -Name 'Litehouse Herb, Freeze Dried Basil' -Target $null -Claimer ([pscustomobject]@{ id = 'dried-basil'; label = 'Dried Basil' })
   _MT 'CLEAN TWIN  the band branch keeps its answer for Litehouse Herb, Freeze Dried Basil (undecided, never release)' ($r.decision -eq 'undecided') $r.decision
 
+  # plan-2026-09-25-16 3ba362: a brand ampersand is not a noun list. FROZEN from match-worklist.json 2026-09-25 08:23:
+  # the semantic finding 'Arm & Hammer Liquid Laundry Clean Burst' (laundry-detergent @ Family Fare) abstained as 'the
+  # name lists several foods'. With the token index a conjunction is a list only when BOTH neighbours name a commodity.
+  $ixComs = @($C.Values) + @([pscustomobject]@{ id = 'laundry-detergent'; label = 'Laundry Detergent' }, [pscustomobject]@{ id = 'onions'; label = 'Onions' }, [pscustomobject]@{ id = 'broccoli'; label = 'Broccoli' })
+  $ix = Get-MwlTokenIndex $ixComs
+  $h = Get-MwlHead 'Arm & Hammer Liquid Laundry Clean Burst' $ix
+  _MT 'MUST FIRE  Arm & Hammer Liquid Laundry Clean Burst with the token index is NOT a noun list (arm, hammer name no commodity)' (-not $h.list) ([string]$h.list)
+  $r = Get-MatchClassification -Kind 'semantic' -Name 'Arm & Hammer Liquid Laundry Clean Burst' -Target ([pscustomobject]@{ id = 'laundry-detergent'; label = 'Laundry Detergent' }) -Claimer $null -Index $ix
+  _MT 'MUST FIRE  the classifier no longer abstains on Arm & Hammer as a list of foods' ([string]$r.why -notlike '*lists several foods*') $r.why
+  $h = Get-MwlHead 'Arm & Hammer Liquid Laundry Clean Burst'
+  _MT 'MECHANISM  without -Index the old reading stands (list, abstain), so a caller that passes no index is unchanged' ($h.list) ([string]$h.list)
+  $h = Get-MwlHead 'Pictsweet Farms Vegetables for Roasting Halved Brussels Sprouts, Butternut Squash & Onions - 18 oz' $ix
+  _MT 'CLEAN TWIN  Pictsweet Brussels Sprouts, Butternut Squash & Onions is still a list with the index' ($h.list) ([string]$h.list)
+  $h = Get-MwlHead 'Hy-Vee Broccoli & Onions' $ix
+  _MT 'CLEAN TWIN  Broccoli & Onions (both neighbours name a commodity, no comma) is still a list with the index' ($h.list) ([string]$h.list)
+  $h = Get-MwlHead 'Betty Crocker Rich and Creamy Cherry Frosting' $ix
+  _MT 'MUST NOT FIRE  Rich and Creamy (two adjectives) is still not a list with the index' (-not $h.list) ([string]$h.list)
+  # the surface rule 3ba362 adds to hot-sauce, frozen: bounded, never a bare 'pepper sauce'
+  $hs = @('\b(?:cayenne|red\s+devil|louisiana)\b.{0,40}\bpepper\s+sauce\b', '\bpepper\s+sauce\b.{0,40}\b(?:cayenne|red\s+devil)\b')
+  $hsHit = { param($nm) @($hs | Where-Object { [regex]::IsMatch($nm, $_, 'IgnoreCase') }).Count -gt 0 }
+  _MT 'MUST FIRE  the hot-sauce include admits Trappey''s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz' (& $hsHit 'Trappey''s Pepper Sauce, Cayenne, Red Devil 12 Fl Oz') ''
+  _MT 'MUST NOT FIRE  the hot-sauce include does not admit Mae Ploy Sweet Chili Sauce' (-not (& $hsHit 'Mae Ploy Sweet Chili Sauce')) ''
+  _MT 'MUST NOT FIRE  the hot-sauce include does not admit a bare Black Pepper Sauce' (-not (& $hsHit 'Kroger Black Pepper Sauce')) ''
+
   # plan-2026-09-25-16 d493dd: one worklist key per ACTIONABLE VERDICT, not one per gap
   $kd = Join-Path $tmp 'keying'; New-Item -ItemType Directory -Path $kd -Force | Out-Null
   $kg = @(

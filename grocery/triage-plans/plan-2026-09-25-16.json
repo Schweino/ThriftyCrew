@@ -284,16 +284,21 @@
         ]
       },
       "rollback": "revert the lib hunk and the two include lines",
-      "leaves_open": "a semantic finding whose target shares only one word with the name (the Trappey's shape) still needs a hand rule by design: 1 occurrence today",
-      "leaves_open_occurrences": 1,
-      "resolution_note": "Both standing findings routed (laundry-detergent reads 'Liquid Laundry', hot-sauce reads a cayenne or Red Devil 'pepper sauce'); the classifier no longer reads a brand ampersand as a list of foods. No cell moved.",
+      "leaves_open": "the rule half: the two standing semantic findings (Arm & Hammer Liquid Laundry @ Family Fare, Trappey's Cayenne/Red Devil pepper sauce, 4 names in the routing artifact) stay rule-invisible until plan step 3 applies the includes together with d493dd's rules; plus by design a semantic finding whose target shares one word with the name (the Trappey's shape): 1 occurrence today",
+      "leaves_open_occurrences": "2 standing findings (this item's), 1 of them the one-word shape, counted over match-worklist.json 2026-09-25",
+      "resolution_note": "Partial, not closable yet: the classifier no longer reads a brand ampersand (Arm & Hammer, Ben & Jerry's) as a list of foods (58 of 1,132 worklist rows lose the list flag, 1 band suggestion changes, to a correct release). The two include widenings (laundry-detergent 'liquid laundry', hot-sauce cayenne/Red Devil 'pepper sauce') are NOT yet applied; they ship in step 3's single batch with d493dd's rules. No cell moved.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 28,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "needs-more-time",
+      "premise_verified": true,
+      "deviation": "ROOT HALF SHIPPED, RULE HALF NOT RUN. Shipped: Get-MwlHead takes -Index (Get-MatchClassification passes its own); '&'/'and' is a noun list only when BOTH neighbours name a commodity (new Test-MwlIndexed), and with no index the old reading stands. Decision diff over all 1,132 worklist rows (old head vs indexed head, then the full classification with the live commodities.json index): 58 rows lose the list flag (57 band, 1 semantic), and exactly 1 decision changes: band 'Tetra Goldfish and Koi Pond Sticks' (claimer cheese-crackers) goes undecided -> release suggestion (head 'sticks' names cinnamon-stick/fish-sticks), which is the right direction (fish food is not cheese crackers) and a band suggestion is decided by a person, never auto-applied. Kettle & Fire, Ben & Jerry's, Arm & Hammer cat litter, Fresh & Finest all stay undecided for their own reasons. NOT RUN inside this spawn's 28-call ceiling: step 3, the ONE apply-coverage-batch run in a scratch clone for d493dd's and 3ba362's rule_changes (laundry-detergent '\\bliquid\\s+laundry\\b', the two bounded hot-sauce includes, plus d493dd's kalamata, canned-pears and fruit-cups/mandarin changes) with its routing diffed against the artifact's 22 moves. commodities.json is untouched.",
+      "shipped_commit": null,
+      "premise_note": "Checked 2026-09-25 against out/match-worklist.json (08:23, 1,132 rows) and commodities.json at HEAD 6f66094f1: 'Arm & Hammer Liquid Laundry Clean Burst' (semantic, laundry-detergent) sits undecided and Get-MwlHead read it as a list, as the plan says. One detail of the plan is wrong: its head noun is 'burst', not 'laundry' (the name's last content word), so even without the list abstention the classifier leaves it undecided ('head noun burst does not name laundry-detergent'); the hand rule is what routes it, which the plan already prescribes.",
+      "leaves_open_followup": "this queue id stays open: plan-2026-09-25-16 ship_sequence step 3 carries the rule half for d493dd and 3ba362 together",
+      "close_disposition": "do-not-close: rule half pending step 3",
+      "proof_run": "powershell -File grocery\\test-match-worklist.ps1: exit 0, 'test-match-worklist self-test pass: 43 of 43 case(s)' (9 new: A&H not a list with index, classifier why no longer 'lists several foods', old reading without index, Pictsweet and Broccoli & Onions still lists, Rich and Creamy still not, hot-sauce include admits Trappey's and refuses Mae Ploy and a bare Black Pepper Sauce). full_suite: deferred-to-land",
+      "actual_tool_calls": 21
     },
     {
       "queue_id": "2026-09-18-a0c785",
