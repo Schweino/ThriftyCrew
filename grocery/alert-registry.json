@@ -76,6 +76,28 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "live-page-diverged",
+   "match": "exact",
+   "key": "grocery page does not match its shipped data",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1 (runs grocery/audit-live-page-parity.ps1)",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "queue 2026-09-23-80f302 / 2026-09-25-22b1e8 (2026-09-26): the LIVE board post names a board.json?v= the feed no longer serves, or the live /omaha-price-tracker/ quotes a different week from the built out/trend/index.html, after the run's own post decision. Founding case: the post named 780837d352 over a served a14a8c805c from 2026-09-24 to 2026-09-26 with no page."
+  },
+  {
+   "id": "live-page-parity-blind",
+   "match": "exact",
+   "key": "grocery live page parity could not be checked",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/capture-run.ps1 (runs grocery/audit-live-page-parity.ps1)",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "hold_observations": 2,
+   "note": "audit-live-page-parity exited 3 (a live page or the feed could not be read, or a page named no version or week) and found no divergence",
+   "hold_note": "two public page reads and one feed read: a single network blip queues but does not mail; a second sighting of the open item mails"
+  },
+  {
    "id": "compare-failed",
    "match": "exact",
    "key": "grocery compare failed",

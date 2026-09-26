@@ -197,6 +197,34 @@ T 'E  CLEAN TWIN (deferred post): landed and both files byte-identical at the ed
   ((Get-DeferredPostDecision -Deferred $true -ObjectLanded $true -EdgeBoard 'ok' -EdgeFeed 'ok') -eq 'publish')
 T 'E  MUST-NOT-FIRE (deferred post): nothing deferred today -> none, so a run with no post owed publishes nothing' `
   ((Get-DeferredPostDecision -Deferred $false -ObjectLanded $true -EdgeBoard 'ok' -EdgeFeed 'ok') -eq 'none')
+# A HELD POST REPUBLISHES ONCE ITS DATA IS LIVE, WHOEVER LANDED IT (2026-09-26, queue 2026-09-26-518fff). Frozen from the
+# 2026-09-24 case: that run held its post (sync blocked, push did not land), the commit landed later on another push, and
+# the deferral was ignored the next day because it was not dated today. The hashes are stand-ins of the real form (64 hex).
+$hpX = ('A' * 64); $hpW = ('B' * 64)
+T 'E  MUST FIRE (held post): 2026-09-24 held, landed on a LATER push, next run: board on origin/main, in the checkout and at the edge -> publish' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha $hpX) -eq 'publish')
+T 'E  CLEAN TWIN (held post): held and STILL UNLANDED (origin/main carries the older board) -> hold, never publish' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha $hpW -TreeBoardSha $hpX -EdgeBoardSha $hpW) -like 'hold:*origin/main*')
+T 'E  MUST NOT FIRE (held post): landed on origin/main but the edge still serves the old board -> hold' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha $hpW) -like 'hold:*serve*')
+T 'E  MUST NOT FIRE (held post): the edge could not be read -> hold (a could-not-look is never a match)' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha '') -like 'hold:*could not read*')
+T 'E  MUST NOT FIRE (held post): origin/main could not be read -> hold' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha '' -TreeBoardSha $hpX -EdgeBoardSha $hpX) -like 'hold:*origin/main*')
+T 'E  MUST NOT FIRE (held post): a newer blocked board sits in the checkout -> hold, a rebuild here would name another board' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S24' -PublishedSig 'S23' -OriginBoardSha $hpX -TreeBoardSha $hpW -EdgeBoardSha $hpX) -like 'hold:*checkout*')
+T 'E  MUST NOT FIRE (held post): a record from before board_sha256 existed (the live 2026-09-25 file) -> hold, it cannot prove its board' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-25' -Today '2026-09-26' -DocBoardSha '' -DocSig '1AF7E40A0F9ECCC4FE0786E78940504F' -PublishedSig '32AD002A9099A9F3902115AC50C3F361' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha $hpX) -like 'hold:*board_sha256*')
+T 'E  CLEAN TWIN (held post): the published signature already equals the deferral''s -> clear, nothing owed' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-24' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 's24' -PublishedSig 'S24' -OriginBoardSha $hpW -TreeBoardSha $hpW -EdgeBoardSha $hpW) -like 'clear:*')
+T 'E  MUST NOT FIRE (held post): today''s own deferral -> none, Get-DeferredPostDecision owns it' `
+  ((Get-HeldPostDecision -Pending $true -DocDate '2026-09-25' -Today '2026-09-25' -DocBoardSha $hpX -DocSig 'S25' -PublishedSig 'S24' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha $hpX) -eq 'none')
+T 'E  MUST NOT FIRE (held post): nothing pending -> none' `
+  ((Get-HeldPostDecision -Pending $false -DocDate '' -Today '2026-09-25' -DocBoardSha '' -DocSig '' -PublishedSig '' -OriginBoardSha $hpX -TreeBoardSha $hpX -EdgeBoardSha $hpX) -eq 'none')
+T 'E  the held-post check is wired after the same-run decision and before the live-page parity audit' `
+  (($src.IndexOf('$heldDecision = Get-HeldPostDecision') -gt $src.IndexOf('$postDecision = Get-DeferredPostDecision')) -and ($src.IndexOf('$heldDecision = Get-HeldPostDecision') -lt $src.IndexOf('(Join-Path $root ''audit-live-page-' + 'parity.ps1'')')) -and ($src.IndexOf('$postDecision = Get-DeferredPostDecision') -gt 0))
+$cacSrc = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'check-ad-cycles.ps1'))
+T 'E  and check-ad-cycles records WHICH board the held post would name (board_sha256), so the check has something to prove' ($cacSrc.IndexOf('board_sha256 = $pdBoardSha') -gt 0)
 T 'E  the daily chain is called WITH -DeferPost, so the post is never upserted ahead of the commit' ($src -match '-File \$cac -NoPull -NoCommit -DeferPost')
 T 'E  and the pointer watcher is told the post was deferred, so a held post is not paged as pointer-without-object' ($src -match 'Test-PointerShippedWithoutObject -ShipServed \(\[bool\]\(\$shipServed -and -not \$postDeferred\)\)')
 # THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is

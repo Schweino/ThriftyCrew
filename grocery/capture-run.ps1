@@ -2070,6 +2070,42 @@ function Get-DeferredPostDecision {
   if ($EdgeFeed -ne 'ok') { return ('hold:the edge does not serve the committed smp-feed.json (' + $(if ($EdgeFeed) { $EdgeFeed } else { 'not read' }) + ')') }
   return 'publish'
 }
+function Get-HeldPostDecision {
+  <#
+    A HELD POST REPUBLISHES ITSELF ONCE ITS DATA IS LIVE, WHOEVER LANDED IT (2026-09-26, queue 2026-09-26-518fff, the
+    leftover of 2026-09-23-80f302). Get-DeferredPostDecision above only asks "did THIS run push?", and it only honours a
+    deferral dated today. On 2026-09-24 and again on 2026-09-25 the run held its post because its own push did not land;
+    each commit landed LATER on somebody else's push, nothing publishes a post for a push it did not make, and the deferral
+    expired at midnight, so the live post named a board the edge no longer served. This decides a deferral CARRIED from an
+    earlier day on what is TRUE NOW, not on what this run did:
+      publish  only when the board the deferral recorded (board_sha256, SHA-256 of public\board.json as written) is the
+               board on origin/main, is the board in this checkout, AND is the board feed.thriftycrew.com serves. Every
+               comparison is ordinal on the hex; a blank on any side is a could-not-look, which is a hold, never a match.
+      clear    the deferral's signature is already the published one (another road published this board), so nothing
+               is owed and the record goes.
+      hold     anything else, including a record written before board_sha256 existed (it cannot prove which board it
+               names). The record stays, so the next run asks again: it never expires by the clock.
+      none     nothing pending, or the deferral is today's, which Get-DeferredPostDecision owns.
+    publish-deals-page re-checks the edge against the board it names before its first Ghost write, so this can only
+    make a publish LESS likely than that gate, never more.
+  #>
+  param([bool]$Pending, [string]$DocDate, [string]$Today, [string]$DocBoardSha, [string]$DocSig, [string]$PublishedSig,
+        [string]$OriginBoardSha, [string]$TreeBoardSha, [string]$EdgeBoardSha)
+  if (-not $Pending) { return 'none' }
+  if ([string]::Equals([string]$DocDate, [string]$Today, [StringComparison]::Ordinal)) { return 'none' }
+  if ($DocSig -and $PublishedSig -and [string]::Equals($DocSig.Trim(), $PublishedSig.Trim(), [StringComparison]::OrdinalIgnoreCase)) {
+    return 'clear:published-board.sig already records this deferral''s board, so another road published it'
+  }
+  if (-not $DocBoardSha) { return 'hold:the deferral carries no board_sha256 (written before 2026-09-26), so it cannot prove which board the post would name' }
+  $want = $DocBoardSha.Trim().ToUpperInvariant()
+  if (-not $OriginBoardSha) { return 'hold:could not read public/board.json on origin/main, so the landing is unproven' }
+  if (-not [string]::Equals($OriginBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:origin/main does not carry the board this deferral names (its push has not landed, or a newer board replaced it)' }
+  if (-not $TreeBoardSha) { return 'hold:could not read public\board.json in this checkout' }
+  if (-not [string]::Equals($TreeBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:this checkout holds a different public\board.json than the deferral names, so a rebuild here would name another board' }
+  if (-not $EdgeBoardSha) { return 'hold:could not read board.json from feed.thriftycrew.com' }
+  if (-not [string]::Equals($EdgeBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:feed.thriftycrew.com does not serve the board this deferral names yet' }
+  return 'publish'
+}
 # <<< EDGE-DECISION <<<
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
 # A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps
@@ -2218,6 +2254,82 @@ if ($postDecision -eq 'publish') {
 } elseif ($postDecision -like 'hold:*') {
   Write-Output ('POST HELD (it ships after its data, never before): ' + $postDecision.Substring(5) + '. The deferral stays in out\post-deferred.json and the next run that ships its data publishes it.')
 }
+# ---- A HELD POST FROM AN EARLIER DAY (2026-09-26, queue 2026-09-26-518fff): republish once its data is live, whoever landed it
+# Get-HeldPostDecision (EDGE-DECISION above) reads what is true NOW: the deferred board on origin/main, in this checkout,
+# and at the edge. No Send-Alert here on purpose: a post still behind its board is paged by audit-live-page-parity below.
+$heldDecision = 'none'
+try {
+  if (($postDecision -ne 'publish') -and (Test-Path -LiteralPath $postDeferredF)) {
+    $hpDoc = Read-JsonFile $postDeferredF
+    $hpDate = [string]$hpDoc.date
+    $hpSha = if ($hpDoc.PSObject.Properties['board_sha256']) { [string]$hpDoc.board_sha256 } else { '' }
+    $hpPub = ''; try { if ([string]$hpDoc.sig_file -and (Test-Path -LiteralPath ([string]$hpDoc.sig_file))) { $hpPub = ([IO.File]::ReadAllText([string]$hpDoc.sig_file)).Trim() } } catch {}
+    $hpOrigin = ''; $hpTree = ''; $hpEdge = ''
+    if ($hpSha -and -not [string]::Equals($hpDate, [string]$today, [StringComparison]::Ordinal)) {
+      . (Join-Path $repo 'lib\git-blob-lib.ps1')
+      $hpOrigin = Get-Sha256Hex (Get-CommittedBlobBytes -Repo $repo -Spec 'origin/main:public/board.json')
+      $hpBoardF = Join-Path $repo 'public\board.json'
+      $hpTreeBytes = $null
+      if (Test-Path -LiteralPath $hpBoardF) { $hpTreeBytes = [IO.File]::ReadAllBytes($hpBoardF); $hpTree = Get-Sha256Hex $hpTreeBytes }
+      try { $hpEdge = Get-Sha256Hex (Get-ResponseBytes (Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/board.json?heldcheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45)) } catch { $hpEdge = '' }
+    }
+    $heldDecision = Get-HeldPostDecision -Pending $true -DocDate $hpDate -Today ([string]$today) -DocBoardSha $hpSha -DocSig ([string]$hpDoc.sig) -PublishedSig $hpPub -OriginBoardSha $hpOrigin -TreeBoardSha $hpTree -EdgeBoardSha $hpEdge
+    if ($heldDecision -eq 'publish') {
+      $hpArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $root 'publish-deals-page.ps1'))
+      if ([string]$hpDoc.compare_file -and (Test-Path -LiteralPath ([string]$hpDoc.compare_file))) { $hpArgs += @('-CompareFile', [string]$hpDoc.compare_file) }
+      $hpOut = & powershell @hpArgs
+      $hpRc = $LASTEXITCODE
+      foreach ($l in @(@($hpOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED|feed-served)' })) { Write-Output ('  held-publish-verdict: ' + ([string]$l).Trim()) }
+      # The page build rewrites public\board.json. Put the served file back exactly as it was, so this step never leaves a
+      # tracked path dirty (its served gate already proved the bytes it named are the ones the edge serves).
+      try { if ($hpTreeBytes -and ((Get-Sha256Hex ([IO.File]::ReadAllBytes($hpBoardF))) -ne $hpTree)) { [IO.File]::WriteAllBytes($hpBoardF, $hpTreeBytes) } } catch {}
+      if ($hpRc -eq 0) {
+        Write-Output ('HELD POST PUBLISHED: the ' + $hpDate + ' deferral''s board is on origin/main, in this checkout and byte-identical at the edge (SHA256 ' + $hpSha + ')')
+        try { if ([string]$hpDoc.sig_file -and [string]$hpDoc.sig) { Set-Content -Path ([string]$hpDoc.sig_file) -Value ([string]$hpDoc.sig) -Encoding ASCII } } catch {}
+        try { Remove-Item -LiteralPath $postDeferredF -Force } catch {}
+      } else {
+        Write-Output ("HELD POST NOT PUBLISHED: publish-deals-page rc=$hpRc; the deferral stays in out\post-deferred.json and the next run asks again")
+      }
+    } elseif ($heldDecision -like 'clear:*') {
+      Write-Output ('HELD POST CLEARED: ' + $heldDecision.Substring(6))
+      try { Remove-Item -LiteralPath $postDeferredF -Force } catch {}
+    } elseif ($heldDecision -like 'hold:*') {
+      Write-Output ('HELD POST STILL HELD (' + $hpDate + ' deferral, it never expires by the clock): ' + $heldDecision.Substring(5))
+    }
+  }
+} catch { Write-Output ('held-post check threw (not fatal, the deferral is kept): ' + $_.Exception.Message) }
+# ---- DOES EACH LIVE PAGE SAY WHAT ITS SHIPPED DATA SAYS? (2026-09-26, queue 2026-09-23-80f302 and 2026-09-25-22b1e8) ----
+# Everything above judges this run's own publish. None of it sees a page that fell behind by another road: 2026-09-24's
+# held commit landed LATER on another push, nothing publishes a post for a push it did not make, the deferral expired at
+# midnight, and the live post named board.json?v=780837d352 over a served a14a8c805c for two days with no page. The
+# tracker read "week of Sep 2" over a built "week of Sep 22" with its publisher's failure filtered out of this log. So ask
+# the LIVE pages, every run, after the post decision (a same-run publish is read, not raced): grocery\audit-live-page-parity.ps1.
+# Never fatal and never a hold: it reads two public pages and the feed. A divergence this run already paged as a failed
+# deferred publish or a pointer without its object is printed, not paged twice.
+try {
+  $lppOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'audit-live-page-parity.ps1')
+  $lppRc = $LASTEXITCODE
+  $lppLines = @(@($lppOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(LIVE-PAGE-PARITY|live-page-parity)' } | ForEach-Object { ([string]$_).Trim() })
+  foreach ($l in $lppLines) { Write-Output ('  ' + $l) }
+  $lppAlready = @($script:FailedLaneRecs | Where-Object { [string]$_.lane -in @('deferred-post-publish', 'pointer-without-object') -and [string]$_.paged }).Count
+  if ($lppRc -eq 2) {
+    Add-FailedLane 'live-page-parity'
+    if ($lppAlready) { Write-Output '  live page divergence: already paged this run as the failed publish above, so not paged twice' }
+    else {
+      $lppSubj = "Grocery page does not match its shipped data - $today"
+      $lppBody = ("A live page no longer says what the data it was built from says, and nothing in this run published it. " +
+                  "grocery\audit-live-page-parity.ps1 (read after the post decision, up to 3 reads a minute apart) found:`n`n" +
+                  ((@($lppLines | Where-Object { $_ -match '^LIVE-PAGE-PARITY DIVERGED' })) -join "`n`n") +
+                  "`n`nThe board post is repaired only by publishing it from the board feed.thriftycrew.com serves (publish-deals-page re-checks that before writing); the tracker by publish-trend-index.ps1. Re-run the audit afterwards: exit 0 closes it.")
+      try { Send-Alert -Subject $lppSubj -Body $lppBody | Out-Null; Set-FailedLanePaged 'live-page-parity' $lppSubj $LASTEXITCODE } catch { Write-Output ('live-page-parity alert threw: ' + $_.Exception.Message) }
+    }
+  } elseif ($lppRc -ne 0) {
+    # Not a failed lane: a network blip on two page reads must not fail the run. It queues on the first sighting and mails
+    # on the second (hold_observations 2 in alert-registry.json), so a could-not-look is never silent and never a pass.
+    Write-Output ("  live page parity could not be judged (rc=$lppRc): unknown is not a pass")
+    try { Send-Alert -Subject ("Grocery live page parity could not be checked - $today") -Body ("grocery\audit-live-page-parity.ps1 exited $lppRc without finding a divergence, so whether the live board post and tracker match their shipped data is UNKNOWN. Its lines:`n`n" + ($lppLines -join "`n")) | Out-Null } catch { Write-Output ('live-page-parity blind alert threw: ' + $_.Exception.Message) }
+  }
+} catch { Write-Output ('live page parity threw (not fatal): ' + $_.Exception.Message) }
 # ---- ASSERT THE FEED TRULY REFRESHED (was run-daily-local's assert) ------------------------------------
 # `generated` ALONE CANNOT DETECT THE FAILURE THIS EXISTS FOR: export-feed stamps that field itself, at the
 # moment it runs. Every recipe-lane stage upstream is non-fatal try/catch, so if one throws, export-feed
