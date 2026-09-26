@@ -42,7 +42,11 @@ if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $cmpFile = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 if (-not $cmpFile) { Write-Output 'sale-without-ad: no comparison board found'; Write-GuardComplete -Name 'sale-without-ad' -Summary 'BLIND: no board'; exit 3 }
 $cmp = Read-JsonFile $cmpFile.FullName
-$today = [string]$cmp.week_of
+# TWO DATES (2026-09-26, design\PLAN-board-clock-2026-09-26.md W5). week_of names the ad set the board is for and lags the
+# real date whenever no weekly ad is due, so it is a LABEL here. The ages below (first_seen, days_unexplained) are
+# measured to the date the board was JUDGED at - judged_on, or today for a board built before that field existed.
+$weekOf = [string]$cmp.week_of
+$today = if ($cmp.PSObject.Properties['judged_on'] -and [string]$cmp.judged_on -match '^\d{4}-\d{2}-\d{2}$') { [string]$cmp.judged_on } else { (Get-Date).ToString('yyyy-MM-dd') }
 
 # ---- every ad row we hold, from every source, via the SHARED matcher -------------------------
 # THE MATCH RULE LIVES IN ad-match-lib.ps1, not here. compare-deals needs the identical decision in
@@ -116,7 +120,7 @@ foreach ($c in $cmp.comparison) {
 }
 
 $doc = [ordered]@{
-  updated = (Get-Date).ToString('s'); board = $cmpFile.Name; week_of = $today
+  updated = (Get-Date).ToString('s'); board = $cmpFile.Name; week_of = $weekOf; judged_on = $today
   note = 'Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway''s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.'
   sale_cells = $saleCells; dated_by_the_store = $datedAlready; traced_to_an_ad = $traced; untraceable = $found.Count
   ad_rows_available = (@($adIndex.Keys | Sort-Object | ForEach-Object { "$_=$($adIndex[$_].Count)" }) -join ' ')
@@ -127,7 +131,7 @@ $tmp = "$ledgerFile.tmp"
 Move-Item -LiteralPath $tmp -Destination $ledgerFile -Force
 
 if (-not $Quiet) {
-  Write-Output ("sale-without-ad  -  " + $today)
+  Write-Output ("sale-without-ad  -  week of " + $weekOf + ", judged " + $today)
   Write-Output ("  sale cells " + $saleCells + " | dated by the store " + $datedAlready + " | traced to an ad " + $traced + " | UNTRACEABLE " + $found.Count)
   Write-Output ("  ad rows held: " + $doc.ad_rows_available)
   foreach ($g in ($found | Group-Object store | Sort-Object Count -Descending)) {

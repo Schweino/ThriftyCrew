@@ -72,10 +72,38 @@ function ParseFlashWindow([string]$text, $from, $to) {
   return $null
 }
 
+# ---------------------------------------------------------------- WHERE A SALE CELL'S WINDOW COMES FROM
+# (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8 - see the loop below for why.) Pure, so the self-test drives the
+# decision the loop makes. Returns $null when the cell has no window of any kind (it is not logged), else
+#   from / to    the window the loop starts from: the cell's own when it carries one, else the store's schedule
+#   cell_from / cell_to   the cell's own window, or $null
+#   end_basis    who stated the end: the cell's ad_basis ('store', 'ad', 'ttl', or '' when unrecorded) for a cell
+#                window, 'ad-schedule' for the store's schedule. 'ttl' is OUR window and is never shown to a reader.
+function Get-SaleCellWindowSource($Cell, $StoreWin) {
+  $cf = $null; $ct = $null
+  if ($Cell.PSObject.Properties['ad_from'] -and [string]$Cell.ad_from -match '^\d{4}-\d{2}-\d{2}$') { try { $cf = [datetime]$Cell.ad_from } catch {} }
+  if ($Cell.PSObject.Properties['ad_to']   -and [string]$Cell.ad_to   -match '^\d{4}-\d{2}-\d{2}$') { try { $ct = [datetime]$Cell.ad_to } catch {} }
+  $own = [bool]($cf -and $ct)
+  if (-not $StoreWin -and -not $own) { return $null }
+  $w = if ($own) { @{ from = $cf; to = $ct } } else { $StoreWin }
+  $basis = if ($own) { [string]$Cell.ad_basis } else { 'ad-schedule' }
+  return @{ from = $w.from; to = $w.to; cell_from = $cf; cell_to = $ct; end_basis = $basis }
+}
+
 # ---------------------------------------------------------------- SELF-TEST (-SelfTest exits here)
 if ($SelfTest) {
   $fail = 0
   function _Eq($label,$got,$want) { if ("$got" -eq "$want") { Write-Output "ok    $label = $got" } else { Write-Output "FAIL  $label got '$got' want '$want'"; $script:fail++ } }
+  # ---- W8 (2026-09-26): a store with no weekly ad schedule is still logged when its cell carries its own window ----
+  $sched = @{ from = [datetime]'2026-09-20'; to = [datetime]'2026-09-26' }
+  $wm = Get-SaleCellWindowSource ([pscustomobject]@{ store = 'Walmart'; ad_from = '2026-08-27'; ad_to = '2026-09-26'; ad_basis = 'ttl' }) $null
+  _Eq 'MUST FIRE  a Walmart rollback (no store schedule) with its own window is logged: end' $(if ($wm) { $wm.to.ToString('yyyy-MM-dd') } else { 'SKIPPED' }) '2026-09-26'
+  _Eq 'MUST FIRE  ...and its end is marked ttl, so export-feed shows no "sale ends" badge' $(if ($wm) { $wm.end_basis } else { 'SKIPPED' }) 'ttl'
+  _Eq 'MUST NOT FIRE  a sale at a no-schedule store that carries no window is still skipped (absent evidence is not a date)' ($null -eq (Get-SaleCellWindowSource ([pscustomobject]@{ store = "Sam's Club" }) $null)) 'True'
+  $hv = Get-SaleCellWindowSource ([pscustomobject]@{ store = 'Hy-Vee'; ad_from = '2026-09-03'; ad_to = '2026-09-30'; ad_basis = 'ad' }) $sched
+  _Eq 'CLEAN TWIN  a cell''s own window still beats its store''s schedule (the 2026-08-21 monthly-ad rule)' ($hv.to.ToString('yyyy-MM-dd') + '/' + $hv.end_basis) '2026-09-30/ad'
+  $un = Get-SaleCellWindowSource ([pscustomobject]@{ store = 'Hy-Vee' }) $sched
+  _Eq 'CLEAN TWIN  an undated cell at a scheduled store takes the schedule, marked ad-schedule' ($un.to.ToString('yyyy-MM-dd') + '/' + $un.end_basis) '2026-09-26/ad-schedule'
   $wf = [datetime]'2026-07-08'; $wt = [datetime]'2026-07-14'
   # plain weekly sale text -> no flash -> null (caller uses the full weekly window)
   _Eq 'weekly->null'      (ParseFlashWindow '$2.99' $wf $wt) $null
@@ -131,9 +159,18 @@ foreach ($c in $board.comparison) {
   foreach ($s in $c.stores) {
     if ([string]$s.type -ne 'sale') { continue }              # everyday chips have no window / never expire
     $store = [string]$s.store
-    $win = $adWin[$store]
-    if (-not $win) { continue }                               # a sale with no known store window (EDLP store) - skip
-    $wf = $win.from; $wt = $win.to
+    # THE CELL'S OWN WINDOW COUNTS AT ANY STORE (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8, Brad's D2: "it
+    # should be part of the automated job to detect that and fix the price on the day after the sale"). This used to
+    # skip every sale at a store with no weekly ad schedule, which is Walmart and Sam's Club - the two stores whose
+    # rollbacks carry a 30-day window from first detection (Brad's rule, 2026-08-21). So no refresh_on was ever
+    # written for them, capture-policy never owed a re-price, and on 2026-09-26 18 Walmart sale cells were untracked
+    # and Sam's markdowns (typed everyday until the same day) priced the board past their windows. A cell that carries
+    # its own ad_from/ad_to is now logged whatever its store; a cell with neither falls back to the store's schedule,
+    # and a cell with no window of either kind is still skipped (absent evidence is not a date).
+    $src = Get-SaleCellWindowSource $s $adWin[$store]
+    if (-not $src) { continue }                               # no window of any kind - nothing to date
+    $cellFrom = $src.cell_from; $cellTo = $src.cell_to
+    $wf = $src.from; $wt = $src.to
 
     # A MONTHLY-AD PRICE DOES NOT EXPIRE ON THE WEEKLY BOUNDARY.
     # ad-schedule.json only knows each store's WEEKLY cycle, so every sale used to
@@ -171,10 +208,12 @@ foreach ($c in $board.comparison) {
     # reverting those cells to everyday and re-queueing them for a capture they did not need.
     # compare-deals now carries ad_from/ad_to from the deal that actually WON the cell, so prefer it.
     # The monthly-ad manifest lookup below stays as the fallback for rows that still arrive undated.
-    $cellFrom = $null; $cellTo = $null
-    if ($s.PSObject.Properties['ad_from'] -and [string]$s.ad_from -match '^\d{4}-\d{2}-\d{2}$') { try { $cellFrom = [datetime]$s.ad_from } catch {} }
-    if ($s.PSObject.Properties['ad_to']   -and [string]$s.ad_to   -match '^\d{4}-\d{2}-\d{2}$') { try { $cellTo   = [datetime]$s.ad_to } catch {} }
     if ($cellFrom -and $cellTo) { $wf = $cellFrom; $wt = $cellTo; $note = 'window from the deal itself' }
+    # WHO STATED THE END DATE (2026-09-26, W8). compare-deals records it as ad_basis: 'store' (the store's own
+    # countdown), 'ad' (a flyer's window), 'ttl' (a window WE chose: 30 days from first detection, because Walmart,
+    # Sam's and Fareway publish no rollback end). A ttl end is a date for re-pricing, never a date to show a reader:
+    # export-feed badges "sale ends" only when end_basis is not 'ttl'. A cell with no basis used the store's schedule.
+    $endBasis = $src.end_basis
 
     $flash = ParseFlashWindow ((([string]$s.ad) + ' ' + ([string]$s.note))) $wf $wt
     if ($flash -and $flash.suppress) { $note = 'undated short sale (window unknown, using weekly)'; $flash = $null }
@@ -195,6 +234,7 @@ foreach ($c in $board.comparison) {
       sale_start  = $sFrom.ToString('yyyy-MM-dd')
       sale_end    = $sTo.ToString('yyyy-MM-dd')
       refresh_on  = $sTo.AddDays(1).ToString('yyyy-MM-dd')
+      end_basis   = $(if ($flash) { 'flash' } else { $endBasis })
       status      = 'active'
       first_seen  = $fseen
       last_seen   = $today.ToString('yyyy-MM-dd')

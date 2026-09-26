@@ -36,7 +36,7 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -ExtraDir $fz `
     -CommoditiesFile (Join-Path $fz 'commodities.json') `
     -BandsFile (Join-Path $fz 'price-bands.json') `
-    -OutDir $scratch -MinStores 2 | Out-Null
+    -OutDir $scratch -MinStores 2 -JudgeDate '2026-07-05' | Out-Null   # the frozen inputs' date, SAID (PLAN-board-clock W1)
 if ($LASTEXITCODE -ne 0) { Write-Output "engine FAILED on the frozen inputs - no baseline written"; exit 1 }
 
 $cmpF = Get-ChildItem (Join-Path $scratch 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1

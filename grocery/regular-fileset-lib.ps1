@@ -95,6 +95,20 @@ function Resolve-BoardAsOf($boardFileObjs, [datetime]$wallClock) {
     Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } |
     Sort-Object Name -Descending | Select-Object -First 1
   if (-not $b) { return $wallClock }
+  # THE ENGINE'S JUDGE DATE, WHEN THE BOARD RECORDS IT (2026-09-26, design\PLAN-board-clock-2026-09-26.md W1). Since
+  # then compare-deals resolves the union against -JudgeDate (the real date of the build), not $ads.today, and writes
+  # it on the board as judged_on - the name stayed the ad set, which lags whenever no weekly ad is due. Mirroring the
+  # NAME from then on would re-open exactly the one-window-wide hole the header above measured, in the other
+  # direction. It sits in the board's first few hundred bytes (built_at, week_of, judged_on are written first), so
+  # only the head is read. A board built before judged_on existed falls back to its name, which is what the engine
+  # of that day really used - that fallback is a faithful mirror, not a clock.
+  $head = ''
+  try {
+    $fs = [IO.File]::Open($b.FullName, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::ReadWrite)
+    try { $buf = New-Object byte[] 4096; $n = $fs.Read($buf, 0, $buf.Length); $head = [Text.Encoding]::UTF8.GetString($buf, 0, $n) } finally { $fs.Dispose() }
+  } catch { $head = '' }
+  $jm = [regex]::Match($head, '"judged_on"\s*:\s*"(\d{4}-\d{2}-\d{2})"')
+  if ($jm.Success) { return [datetime]$jm.Groups[1].Value }
   # [regex]::Match into a local, never -match: $Matches is global and the next -match anywhere clobbers it.
   $m = [regex]::Match($b.BaseName, '(\d{4}-\d{2}-\d{2})$')
   if (-not $m.Success) { return $wallClock }

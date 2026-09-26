@@ -166,6 +166,15 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "board-freshness-reprice-owed",
+   "match": "exact",
+   "key": "board freshness ended sales not re-priced",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
    "id": "feed-edge-stale",
    "match": "exact",
    "key": "smp feed edge did not pick up today s push",

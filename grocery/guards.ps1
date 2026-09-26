@@ -340,6 +340,7 @@ $null = Register-Kid 'band-censorship'      'audit-band-censorship.ps1'      @('
 $null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-Quiet', '-Tighten')
 $null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
 $null = Register-Kid 'flag-verification'   'audit-flag-verification.ps1'    @()
+$null = Register-Kid 'ended-window'        'audit-ended-window.ps1'         @()
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -589,7 +590,13 @@ foreach ($g in @(
     #                    flag is put to the store's own later read of the same product by verify-price-flags.ps1; a
     #                    wrong-price or wrong-product verdict names its cell here through the QUARANTINE-CELL protocol,
     #                    so it quarantines that ONE cell. No ledger yet is exit 3, a WARN, never a pass.
-    @{ f='audit-flag-verification.ps1'; n='no published cell carries a price its own store contradicted on a later read of the same product'; k='flag-verification' })) {
+    @{ f='audit-flag-verification.ps1'; n='no published cell carries a price its own store contradicted on a later read of the same product'; k='flag-verification' },
+    #   ended-window = a cell priced from a sale or rollback window that ENDED before today (2026-09-26, design\
+    #                    PLAN-board-clock-2026-09-26.md W8, Brad's D2). That day 9 did, 5 of them crowned: the engine judged
+    #                    expiry at the ad set's date, and a Sam's markdown was typed everyday so its window could not retire
+    #                    it. Both fixed in compare-deals; this is the backstop, CELL scoped through QUARANTINE-CELL, so an
+    #                    ended window quarantines its one cell and never holds the board.
+    @{ f='audit-ended-window.ps1';      n='no published cell is priced from a sale or rollback window that ended before today'; k='ended-window' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,

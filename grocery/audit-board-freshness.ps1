@@ -17,8 +17,19 @@
   out\provenance-withheld-<board date>.json (every row the contract withheld, with its reason and as_of).
 
   FINDINGS start with '!' (the chain's convention, see audit-row-age):
-    ! PRODUCER STOPPED   a store's newest read is more than ProducerStopDays before the board date.
+    ! PRODUCER STOPPED   a store's newest read is more than ProducerStopDays before TODAY (never the board's week_of).
     ! AGING              more than StaleShareMax of the store's judged captured rows were withheld STALE/UNDATED.
+    ! REPRICE OWED       a sale or rollback ended and the store's re-read of that item is owed more than RepriceOwedDays
+                         (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8, Brad's D2: "it should be part of the
+                         automated job to detect that and fix the price on the day after the sale"). build-sale-windows
+                         writes refresh_on = end + 1, capture-policy puts the item at the head of that store's next
+                         capture, and a landed capture marks repriced_for. An entry still owed days later means that
+                         loop did not close - the throttle ate it, or the store's capture is not landing - and until it
+                         does the item's cell falls back to the store's everyday price or to nothing. Input: the
+                         grocery root's sale-windows.json (-SaleWindowsFile in fixtures).
+                         RepriceOwedDays = 3, on ProducerStopDays' reasoning: every store is captured daily and
+                         expiries lead its worklist, so 3 tolerates one missed run and a weekend-sized gap. On
+                         2026-09-26 0 of 423 windows were owed, so it is not red on its first run.
     ! BLIND              the board carries no provenance record, so freshness cannot be judged at all.
 
   THE CONSTANTS, AND WHAT ELSE WAS TRIED (ops-and-gates.md I94): both are the FIRST PLAUSIBLE numbers, not the
@@ -39,12 +50,37 @@
 # gate-inputs: grocery\audit-board-freshness.ps1, lib\board-clock.ps1, lib\json-io.ps1
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
-param([string]$OutDir = '', [switch]$SelfTest)
+param([string]$OutDir = '', [string]$SaleWindowsFile = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\board-clock.ps1')   # Get-TcBoardNewestReads, Get-TcDaysSince: the one walk, measured to a real date
 $script:ProducerStopDays = 3
 $script:StaleShareMax = 0.10
+$script:RepriceOwedDays = 3
+
+# The re-prices a store still owes more than $OwedDays after its sale or rollback ended. An entry is owed while
+# refresh_on <= today and repriced_for <> refresh_on - the SAME test capture-policy-lib's SaleExpiries uses, so this
+# can never call "owed" what the worklist calls done. Returns lines ('! REPRICE OWED ...') and a finding count.
+function Get-RepriceOwed($SaleWindows, [int]$OwedDays, [datetime]$Now) {
+  $lines = New-Object System.Collections.Generic.List[string]
+  $by = @{}
+  foreach ($w in @($SaleWindows.windows)) {
+    if ($null -eq $w) { continue }
+    $ro = [string]$w.refresh_on
+    if ($ro -notmatch '^\d{4}-\d{2}-\d{2}$') { continue }
+    if ([string]::Equals([string]$w.repriced_for, $ro, [StringComparison]::Ordinal)) { continue }   # done for THIS window
+    $age = Get-TcDaysSince $ro $Now
+    if ($null -eq $age -or $age -le $OwedDays) { continue }   # not yet due, or due and still inside the bar
+    $st = [string]$w.store
+    if (-not $by.ContainsKey($st)) { $by[$st] = New-Object System.Collections.Generic.List[object] }
+    $by[$st].Add([pscustomobject]@{ id = [string]$w.id; refresh_on = $ro; age = $age })
+  }
+  foreach ($st in @($by.Keys | Sort-Object)) {
+    $g = @($by[$st].ToArray() | Sort-Object refresh_on, id)
+    [void]$lines.Add(("! REPRICE OWED  {0}: {1} ended sale(s) not re-read more than {2} day(s) after they ended (oldest refresh_on {3}, {4} d): {5}" -f $st, $g.Count, $OwedDays, $g[0].refresh_on, $g[0].age, ((@($g | Select-Object -First 12) | ForEach-Object { $_.id }) -join ', ')))
+  }
+  return [pscustomobject]@{ lines = $lines.ToArray(); findings = $by.Count }
+}
 
 # One pure function over the two documents, so the self-test drives exactly what production runs.
 # $Now IS THE REAL DATE, NEVER THE BOARD'S week_of (2026-09-26, design\PLAN-board-clock-2026-09-26.md). week_of is the
@@ -128,6 +164,17 @@ if ($SelfTest) {
     # week_of, a store last read 09-22 was 1 day old; it is 4 days old on 09-26, one past the 3-day bar.
     $lag = Get-BoardFreshness (_Board '2026-09-23' @(,@('milk', 'Aldi', '2026-09-22'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]'2026-09-26')
     _T 'MUST FIRE  a store last read 09-22 is PRODUCER STOPPED on 09-26 though the board is for the 09-23 ad set (the lag read it 1 day old)' (@($lag.lines | Where-Object { $_ -match '^! PRODUCER STOPPED  Aldi: newest price read 2026-09-22 \(4 d\), more than 3 day\(s\) before today \(2026-09-26; the board is for the 2026-09-23 ad set\)' }).Count -eq 1) (($lag.lines) -join ' | ')
+    # ---- REPRICE OWED (W8). refresh_on = end + 1; the bar is 3 days past it. Fixture day 2026-09-26.
+    function _Sw([object[]]$rows) { [pscustomobject]@{ windows = @(foreach ($r in $rows) { [pscustomobject]@{ id = $r[0]; store = $r[1]; refresh_on = $r[2]; repriced_for = $r[3] } }) } }
+    $swNow = [datetime]'2026-09-26'
+    $roAt = Get-RepriceOwed (_Sw @(,@('butter', 'Walmart', '2026-09-23', ''))) 3 $swNow
+    _T 'MUST NOT FIRE at the bar  a re-price owed exactly 3 days (refresh_on 09-23 on 09-26) is inside the bar' ($roAt.findings -eq 0) (($roAt.lines) -join ' | ')
+    $roPast = Get-RepriceOwed (_Sw @(@('butter', 'Walmart', '2026-09-22', ''), @('eggs', 'Walmart', '2026-09-20', ''))) 3 $swNow
+    _T 'MUST FIRE one step past the bar  owed 4 days (refresh_on 09-22) is REPRICE OWED, one line per store, oldest named first' (@($roPast.lines | Where-Object { $_ -match "^! REPRICE OWED  Walmart: 2 ended sale\(s\) not re-read more than 3 day\(s\) after they ended \(oldest refresh_on 2026-09-20, 6 d\): eggs, butter" }).Count -eq 1 -and $roPast.findings -eq 1) (($roPast.lines) -join ' | ')
+    $roDone = Get-RepriceOwed (_Sw @(,@('butter', "Sam's Club", '2026-09-20', '2026-09-20'))) 3 $swNow
+    _T 'CLEAN TWIN  a re-price a landed capture recorded (repriced_for = refresh_on) is never owed, however old' ($roDone.findings -eq 0) (($roDone.lines) -join ' | ')
+    $roStale = Get-RepriceOwed (_Sw @(,@('butter', "Sam's Club", '2026-09-20', '2026-08-01'))) 3 $swNow
+    _T 'MUST FIRE  a re-price recorded for an EARLIER window does not discharge this one' ($roStale.findings -eq 1) (($roStale.lines) -join ' | ')
     $lagOk = Get-BoardFreshness (_Board '2026-09-23' @(,@('milk', 'Aldi', '2026-09-26'))) (_Wh @{ Aldi = 50 } @()) 3 0.10 ([datetime]'2026-09-26')
     _T 'CLEAN TWIN  a store read today under the same lagging ad set raises nothing, and its line says 0 d before today' ($lagOk.findings -eq 0 -and @($lagOk.lines | Where-Object { $_ -match 'newest read 2026-09-26 \(0 d before 2026-09-26\)' }).Count -eq 1) (($lagOk.lines) -join ' | ')
   } catch { _T 'the self-test ran to its end with no unexpected error' $false ($_.Exception.Message + ' line ' + $_.InvocationInfo.ScriptLineNumber) }
@@ -147,5 +194,18 @@ if ($board) {
 $res = Get-BoardFreshness $board $wh $script:ProducerStopDays $script:StaleShareMax (Get-Date)
 Write-Output ("board freshness: " + $(if ($bf) { $bf.Name } else { 'no board' }) + " (producer-stop floor " + $script:ProducerStopDays + " d, age-withheld ceiling " + ('{0:P0}' -f $script:StaleShareMax) + ")")
 foreach ($l in $res.lines) { Write-Output $l }
-Write-Output ('BOARD-FRESHNESS-COMPLETE stores=' + $res.stores + ' findings=' + $res.findings)
+# THE RE-PRICE LOOP (W8). sale-windows.json is regenerated by the daily chain and gitignored, so a clean checkout has
+# none: that is said plainly and is never a finding, and never a clean report either.
+if (-not $SaleWindowsFile) { $SaleWindowsFile = Join-Path $root 'sale-windows.json' }
+$owedFindings = 0
+if (Test-Path -LiteralPath $SaleWindowsFile) {
+  $swDoc = [IO.File]::ReadAllText($SaleWindowsFile) | ConvertFrom-Json
+  $ro = Get-RepriceOwed $swDoc $script:RepriceOwedDays (Get-Date)
+  $owedFindings = $ro.findings
+  Write-Output ('reprice loop: ' + @($swDoc.windows).Count + ' sale window(s) tracked; ' + $ro.findings + ' store(s) owe a re-price more than ' + $script:RepriceOwedDays + ' day(s) after the sale ended')
+  foreach ($l in $ro.lines) { Write-Output $l }
+} else {
+  Write-Output ('reprice loop: NOT JUDGED - no ' + (Split-Path $SaleWindowsFile -Leaf) + ' here (the daily chain writes it), so whether ended sales were re-read is unknown')
+}
+Write-Output ('BOARD-FRESHNESS-COMPLETE stores=' + $res.stores + ' findings=' + ($res.findings + $owedFindings))
 exit 0

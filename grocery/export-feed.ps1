@@ -350,6 +350,11 @@ try {
   foreach ($w in $sw.windows) {
     if (-not $w.sale_end) { continue }
     if ([string]$w.sale_end -lt $todayS) { continue }   # expired window: no badge
+    # A DATE WE CHOSE IS NOT A DATE THE STORE STATED (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8). Walmart,
+    # Sam's and Fareway publish no rollback end, so compare-deals dates a markdown 30 days from first detection
+    # (ad_basis 'ttl'). That end drives the next-day re-price; printed as "sale ends <date>" it would be a date no
+    # store ever gave a reader - on 2026-09-26 37 Fareway sale cells carried one. Such a window gets no badge.
+    if ($w.PSObject.Properties['end_basis'] -and [string]$w.end_basis -eq 'ttl') { continue }
     $saleEnd[([string]$w.id + '|' + [string]$w.store)] = [string]$w.sale_end
   }
 } catch {}

@@ -72,6 +72,12 @@ param(
   # only (what the board would be without it); the board it writes says so in `provenance_contract`, and
   # guards.ps1 refuses to publish one.
   [int]$MaxPublishAgeDays = 0,
+  # THE DATE THIS BOARD JUDGES VALIDITY AT, yyyy-MM-dd (2026-09-26, design\PLAN-board-clock-2026-09-26.md, Brad's D1):
+  # which sales have ended, the 90-day publish window, the Sam's / Walmart / BOGO file ages, the rollback anchor.
+  # Default: the real date of the run. A PINNED run (regression-test, build-regression-baseline, a fixture) passes
+  # its frozen date here - reproducibility is kept by SAYING the date, never by borrowing the ad set's. week_of and
+  # the file name stay the ad set (the newest ads-<D>.json's today), which ~60 readers pick files by.
+  [string]$JudgeDate = '',
   [switch]$NoProvenanceContract
 )
 $ErrorActionPreference = 'Stop'
@@ -1398,6 +1404,17 @@ if ($SelfTest) {
     $g2 = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
     if ($g2 -notcontains $edgeW) { Write-Output 'ok    a capture outside the BOARD''s own window stays excluded' }
     else { Write-Output ('FAIL  the guards file set widened unconditionally - ' + $edgeW + ' is one day past the window and is being guarded as live'); $script:fail++ }
+    # 17b. MUST FIRE (2026-09-26, PLAN-board-clock W1): a board NAMED for the 07-29 ad set but JUDGED on 07-30 records
+    #     judged_on, and the guards' file set must follow what the engine judged at - the edge capture is out, exactly
+    #     as for a board named 07-30. Mirroring the name here would guard a file the engine did not price from.
+    Remove-Item (Join-Path $sd 'comparison-*.json') -Force
+    '{"built_at":"2026-07-30T08:00:00","week_of":"2026-07-29","judged_on":"2026-07-30","comparison":[]}' | Set-Content (Join-Path $sd 'comparison-2026-07-29.json') -Encoding UTF8
+    $g17b = @(Select-EngineRegularFiles $sd ([datetime]'2026-07-30') | ForEach-Object { $_.BaseName })
+    if ($g17b -notcontains $edgeW) { Write-Output 'ok    guards follow the board''s recorded judged_on, not its ad-set name' }
+    else { Write-Output ('FAIL  a board named 07-29 but judged 07-30 still guards ' + $edgeW + ' - the mirror read the NAME, not what the engine judged at'); $script:fail++ }
+    Remove-Item (Join-Path $sd 'comparison-*.json') -Force
+    '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-29.json') -Encoding UTF8
+    '{}' | Set-Content (Join-Path $sd 'comparison-2026-07-30.json') -Encoding UTF8
     # 18. an ad-cycling store is still newest-only whatever the as-of (unioning one would guard expired sales)
     if ($g1 -notcontains 'hyvee-regular-2026-07-15') { Write-Output 'ok    ad-cycling store stays newest-only under the board as-of' }
     else { Write-Output 'FAIL  a non-everyday store started unioning - expired sale prices would be guarded as live'; $script:fail++ }
@@ -2410,8 +2427,8 @@ function Add-Norm {
   # three flyers at once inside ONE ads file, and Baker's per-item promos in one capture legitimately
   # end 7, 14, 28 and 32 days apart. Without this check the dates would be decorative - captured,
   # carried, displayed, and never acted on - which is the shape this whole session keeps finding.
-  # Judged against the BOARD's date ($today from the ads file), never the wall clock, so a pinned
-  # regression run stays reproducible - the same rule Test-AdWindowClosed follows.
+  # Judged against the JUDGE date ($script:BoardToday = -JudgeDate, default the real date; a pinned regression run
+  # passes its frozen date), never the ad set's date, which lags whenever no weekly ad is due (2026-09-26).
   # A row with no ad_to is NOT expired: absent evidence is not evidence, and an undated markdown is
   # handled by its own TTL rather than by being silently dropped here.
   if ($PriceType -eq 'sale' -and $AdTo -match '^\d{4}-\d{2}-\d{2}$' -and $script:BoardToday) {
@@ -2446,12 +2463,21 @@ function Add-Norm {
   $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
 }
 $ads = Read-JsonFile $AdsFile
+# TWO DATES, EACH NAMED FOR WHAT IT IS (2026-09-26, design\PLAN-board-clock-2026-09-26.md).
+#   $today = the AD SET this board is for: week_of, and the D in comparison-<D>.json and its siblings. A NAME only.
+#   $judge = the date validity is JUDGED at (-JudgeDate, default the real date). Every age and expiry reads it.
+# Until 2026-09-26 $today did both jobs, and ads-<D>.json is written only on a day a weekly ad is pulled. With no ad
+# due 09-24..09-26 it lagged 3 days, and the board priced 9 cells from windows that had ended 09-23..09-25 (5 of
+# them crowned "Cheapest"), counted 90 + 3 days as inside the 90-day window, and admitted 93-day-old union files.
 $today = $ads.today
-# The board's own date, visible to Add-Norm so it can refuse an expired sale row. Script-scoped
-# because Add-Norm is a function and cannot see this scope otherwise; set from the ads file rather
-# than the clock so a pinned regression run stays reproducible.
-$script:BoardToday = [string]$today
+$judge = if ($JudgeDate) { $JudgeDate } else { (Get-Date).ToString('yyyy-MM-dd') }
+if ($judge -notmatch '^\d{4}-\d{2}-\d{2}$') { throw ("compare-deals: -JudgeDate must be yyyy-MM-dd, got '" + $judge + "'") }
+# Visible to Add-Norm so it can refuse an expired sale row. Script-scoped because Add-Norm is a function and cannot
+# see this scope otherwise.
+$script:BoardToday = [string]$judge
 $script:ExpiredSaleRows = 0
+$script:RollbackSplit = 0      # W1b: marked-down EVERYDAY-file rows with a window, emitted as a sale half
+$script:RollbackRevert = 0     # W1b: of those, how many also emitted the store's own was-price as the everyday half
 $script:NamelessRows = 0
 $script:NamelessRowsByStore = @{}
 foreach ($d in $ads.deals) {                                                                # weekly ads = 'sale'
@@ -2536,7 +2562,7 @@ if ($SamsFile) { $samsFiles = @($SamsFile) }
 else {
   foreach ($f in (Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending)) {
     if ($f.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { continue }
-    $age = [math]::Abs(([datetime]$Matches[1] - [datetime]$today).TotalDays)
+    $age = [math]::Abs(([datetime]$Matches[1] - [datetime]$judge).TotalDays)
     if ($age -gt $SamsMaxAgeDays) { Write-Warning ("compare-deals: skipping " + $f.Name + " (" + [int]$age + "d old > -SamsMaxAgeDays $SamsMaxAgeDays)"); continue }
     $samsFiles += $f.FullName
   }
@@ -2556,8 +2582,8 @@ foreach ($sfu in $samsFiles) { Add-InputUsed -Tracker $inputUsage -Path $sfu -Ro
 # still the store's honest price, and dropping it would be a silent cell drop, which is strictly worse.
 # An expired SALE price is not old, it is FALSE - the sale is over and the store will not honour it.
 #
-# Judged against $today (the board date from the ads file), never the wall clock, so a pinned regression
-# run stays reproducible. A file with no ad_to is never expired: absent evidence is not evidence of expiry,
+# Judged against $judge (-JudgeDate, default the real date; a pinned regression run passes its frozen date), never
+# the ad set's date, which lags whenever no weekly ad is due (2026-09-26, design\PLAN-board-clock-2026-09-26.md). A file with no ad_to is never expired: absent evidence is not evidence of expiry,
 # and the frozen bakers-deals-2026-07-05 fixture declares no window at all.
 foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
@@ -2567,7 +2593,7 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
     # it will not honour any more. Found the day Fareway's flyer was downloaded on 08-09 and printed "Prices
     # good August 10-15" - capturing it that morning would have published tomorrow's sale prices today, and
     # ad-schedule.json's own current.from said 08-09, so nothing else would have caught it either.
-    $why = Test-AdWindowClosed $ex ([datetime]$today)
+    $why = Test-AdWindowClosed $ex ([datetime]$judge)
     if ($why) {
       Write-Warning ("compare-deals: SKIPPING " + (Split-Path $extra -Leaf) + " - " + $why + ". " + @($ex.deals).Count + " sale row(s) not priced.")
       continue
@@ -2609,9 +2635,33 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
         # 9c44c3a37 to 2026-09-19 the call passed $pid - the build process's id - as every one of these rows'
         # product id, and every Sam's and Fareway ad row for a commodity read as ONE product (backlog I191).
         $partProdId = if ($adParts.Count -gt 1) { '' } else { (Get-RowProductId $d) }
+        # A ROLLBACK IS A SALE AND THE PRICE IT REVERTS TO (2026-09-26, design\PLAN-board-clock-2026-09-26.md W1b, Brad's
+        # D2). build-sams-deals writes a Sam's markdown into this EVERYDAY file with marked_down=true, the store's own
+        # strikethrough in base_price, and the 30-day TTL from first detection in ad_from/ad_to (Brad's rule of
+        # 2026-08-21). Typed everyday it could never expire - Add-Norm retires only 'sale' rows - so on 2026-09-26 seven
+        # Sam's cells priced the board from windows that ended 09-23..09-25, five of them crowned. It is now the same
+        # two rows the out\regular path emits ("AND THE PRICE IT REVERTS TO"): the cut price as a 'sale' with its window,
+        # so it retires the day the window ends, and the was-price as 'everyday', so the cell falls back to the store's
+        # own regular price, read in the same capture, with no gap. A row with no window or no was-price is unchanged.
+        $rowPt = $pt
+        $revertTo = $null
+        if ($pt -eq 'everyday' -and $adParts.Count -eq 1 -and $d.PSObject.Properties['marked_down'] -and $d.marked_down -eq $true -and [string]$rTo -match '^\d{4}-\d{2}-\d{2}$') {
+          $rowPt = 'sale'
+          $cutV = 0.0; [void][double]::TryParse(((([string]$d.ad_price) -replace '[^0-9.]', '')), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$cutV)
+          $wasV = 0.0; if ($d.PSObject.Properties['base_price'] -and $null -ne $d.base_price) { [void][double]::TryParse(([string]$d.base_price), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$wasV) }
+          if ($wasV -gt $cutV -and $cutV -gt 0) { $revertTo = $wasV }
+          $script:RollbackSplit++
+        }
         # -SrcRow: the capture row itself, so Add-Norm can read the store's own published unit price off it
-        # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here.
-        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $pt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -ProductId $partProdId -SrcRow $d -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
+        # (out\sams\sams-deals-*.json carries sams_unit_price on every row). Passed, never re-parsed here. THE CUT HALF
+        # ONLY: that unit price describes what the store charges today, and pairing it with the was-price below would
+        # manufacture a disagreement out of a discount.
+        $rowBasis = if ($rowPt -ne $pt) { 'ttl' } else { '' }
+        Add-Norm -Store $d.store -Name $pn -PriceText $d.ad_price -SizeText $pSize -Regular $d.regular -SourceAd $d.source_ad -PriceType $rowPt -SrcDate $sd -AdFrom $rFrom -AdTo $rTo -AdBasis $rowBasis -ProductId $partProdId -SrcRow $d -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
+        if ($null -ne $revertTo) {
+          Add-Norm -Store $d.store -Name $pn -PriceText ('$' + $revertTo.ToString('0.00', [Globalization.CultureInfo]::InvariantCulture)) -SizeText $pSize -Regular $null -SourceAd $d.source_ad -PriceType 'everyday' -SrcDate $sd -ProductId $partProdId -SplitFrom $sf -ProvRow $d -ProvKind $extraKind -FileSource $extraFileSource
+          $script:RollbackRevert++
+        }
       }
     }
   }
@@ -2625,7 +2675,7 @@ foreach ($extra in (@($BakersFile,$FarewayFile) + $farewayExtra + $samsFiles)) {
 $exDir = if ($ExtraDir) { $ExtraDir } else { $OutDir }   # -ExtraDir: pinnable for the regression harness
 $extraF = Get-ChildItem (Join-Path $exDir 'extra-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
 $exDate = ''
-if ($extraF -and $extraF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1]; try { if ([math]::Abs(([datetime]$exDate - [datetime]$today).TotalDays) -gt 7) { $extraF = $null } } catch {} }
+if ($extraF -and $extraF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1]; try { if ([math]::Abs(([datetime]$exDate - [datetime]$judge).TotalDays) -gt 7) { $extraF = $null } } catch {} }
 if ($extraF) {
   $ex = Read-JsonFile $extraF.FullName
   $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
@@ -2676,7 +2726,7 @@ if ($extraF) {
 . (Join-Path $root 'ad-match-lib.ps1')
 . (Join-Path $root 'rollback-ttl-lib.ps1')   # the LAST-RESORT window: see the TTL block in the split below
 $script:AdIndex = $null
-try { $script:AdIndex = Import-AdRows -OutDir $OutDir -BoardDate ([string]$today) } catch { Write-Warning ("ad-match index unavailable (" + $_.Exception.Message + ") - undated sales stay undated") }
+try { $script:AdIndex = Import-AdRows -OutDir $OutDir -BoardDate ([string]$judge) } catch { Write-Warning ("ad-match index unavailable (" + $_.Exception.Message + ") - undated sales stay undated") }
 $script:AdInherited = 0
 $script:TtlDated = 0
 # Sales dated by the STORE's own stated countdown (Fareway saleDisclaimerString). Counted separately
@@ -2699,7 +2749,7 @@ if (Test-Path $regDir) {
   # exists and the last full capture everywhere else - no stale-low, no coverage loss. This is the same
   # multi-capture pattern Sam's already uses. Every OTHER store here can run weekly sales, so unioning old files
   # would resurrect expired prices; they stay newest-only.
-  $regFiles = Select-RegularFileSet (Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue) ([datetime]$today) $WalmartMaxAgeDays
+  $regFiles = Select-RegularFileSet (Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue) ([datetime]$judge) $WalmartMaxAgeDays
   # Recorded on the SELECTED set, not on everything in the directory. Which captures the union actually
   # ADMITTED is the whole question a cleanup has to answer; what is merely present on disk is not.
   foreach ($rfu in $regFiles) { Add-InputUsed -Tracker $inputUsage -Path $rfu.FullName -Role 'everyday' }
@@ -2790,7 +2840,7 @@ if (Test-Path $regDir) {
             # the row. Passing only -Today handed a five-week-old Fareway markdown a fresh 30 days on
             # the day the ledger was created. Row as_of first, the file's date as the fallback.
             $ttlAsOf = if ([string]$d.as_of -match '^\d{4}-\d{2}-\d{2}$') { [string]$d.as_of } else { [string]$rsd }
-            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$today) -AsOf $ttlAsOf -Root $root
+            $rw = Get-RollbackWindow -Store ([string]$ex.store) -ItemId $ttlKey -Price ([double]$spl.sale_price) -Today ([string]$judge) -AsOf $ttlAsOf -Root $root
             if ($rw) { $spl.sale_from = $rw.ad_from; $spl.sale_to = $rw.ad_to; $script:TtlDated++; $script:LastBasis = 'ttl' }
           }
         }
@@ -3071,7 +3121,7 @@ foreach ($pp in $prePass) {
     if (-not $NoProvenanceContract) {
       $provV = Test-CellProvenance -Store ([string]$d.store) -Row $d.prov_row -Kind $(if ($d.prov_kind) { [string]$d.prov_kind } else { 'ad' }) `
         -FileDate ([string]$d.src_date) -SrcFile ([string]$d.src_file) -FileSource ([string]$d.file_source) -Commodity $c `
-        -BoardDate ([string]$today) -MaxAgeDays $MaxPublishAgeDays -Pins $PROV_PINS
+        -BoardDate ([string]$judge) -MaxAgeDays $MaxPublishAgeDays -Pins $PROV_PINS
       if ([string]$d.prov_kind -eq 'capture') { $ProvJudged[[string]$d.store] = 1 + $(if ($ProvJudged.ContainsKey([string]$d.store)) { $ProvJudged[[string]$d.store] } else { 0 }) }
     }
     if ($provV -and -not $provV.ok) {
@@ -3399,12 +3449,12 @@ $matchBlind = Get-CommodityMatcherBlind -Matcher $fastMatcher
 $matchBlindRows = @($matchBlind.could_not_look | ForEach-Object { [pscustomobject]@{ name = $_.name; commodity = $_.commodity; kind = $_.kind; looks = $_.looks } })
 (@{ week_of=$today; flagged_count=$flagged.Count; flagged=$flagged.ToArray(); multibuy_unpriced=$mbUnpriced.ToArray(); match_could_not_look=$matchBlindRows } | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir ("$flagPfx-"+$today+".json")) -Encoding UTF8
 $storesWithData = @($matched | Where-Object { $_.unit_price -ne $null } | ForEach-Object { $_.store } | Select-Object -Unique | Sort-Object)
-$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; match_could_not_look=$matchBlindRows.Count; match_timeouts=$matchBlind.timeouts; match_timeout_ms=$matchBlind.timeout_ms; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown }
+$health = [ordered]@{ stores_with_data=$storesWithData; store_count=$storesWithData.Count; commodities_compared=$report.Count; flagged_out_of_band=$flagged.Count; multibuy_unpriced=$mbUnpriced.Count; match_could_not_look=$matchBlindRows.Count; match_timeouts=$matchBlind.timeouts; match_timeout_ms=$matchBlind.timeout_ms; expired_sale_rows_dropped=$script:ExpiredSaleRows; nameless_rows_dropped=$script:NamelessRows; nameless_rows_by_store=(Format-TcNamelessByStore $script:NamelessRowsByStore); sale_windows_inherited_from_ads=$script:AdInherited; sale_windows_from_ttl=$script:TtlDated; sale_windows_from_store_countdown=$script:StoreCountdown; rollbacks_split=$script:RollbackSplit; rollbacks_with_revert=$script:RollbackRevert; judged_on=$judge }
 
 # ---------------------------------------------------------------- output
 # provenance_contract / max_publish_age_days: whether this board was built under the provenance contract, and at what
 # age limit. guards.ps1 refuses to publish a board that says OFF (the -NoProvenanceContract measurement arm).
-$out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; source=$AdsFile; commodities_compared=$report.Count; provenance_contract=$(if ($NoProvenanceContract) { 'OFF' } else { 'on' }); max_publish_age_days=$MaxPublishAgeDays; health=$health; comparison=$report }
+$out = [ordered]@{ built_at=(Get-Date).ToString('s'); week_of=$today; judged_on=$judge; source=$AdsFile; commodities_compared=$report.Count; provenance_contract=$(if ($NoProvenanceContract) { 'OFF' } else { 'on' }); max_publish_age_days=$MaxPublishAgeDays; health=$health; comparison=$report }
 $file = Join-Path $OutDir ($OutName + "-" + $today + ".json")
 ($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
 
@@ -3463,7 +3513,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
   $f0 = $g.Group[0]
   # -Pick is the board's OWN per-store rule, so a price-tie inside one store resolves to the product the board
   # shows rather than to whatever 5.1's unstable sort yields (backlog I175).
-  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $today -Pick ${function:Select-StoreWinner}))
+  [void]$ptRows.Add((Build-PriceTableRow -Id $g.Name -Commodity ([string]$f0.label) -Unit ([string]$f0.unit) -Rows $g.Group -Today $judge -Pick ${function:Select-StoreWinner}))
 }
 $ptTable = @($ptRows | Sort-Object id)
 $ptStoreOrder = @('Hy-Vee', 'Aldi', 'Family Fare', 'Fareway', "Baker's", "Sam's Club", 'Walmart')
@@ -3582,7 +3632,7 @@ if ($IDENT_ON) {
       $seenByStore[$store][$kk.key] = $true
 
       $prev = $prevByStore[$store][$kk.key]
-      $firstSeen = $(if ($prev -and $prev.first_seen) { [string]$prev.first_seen } else { [string]$today })
+      $firstSeen = $(if ($prev -and $prev.first_seen) { [string]$prev.first_seen } else { [string]$judge })
       if ($prev -and [string]$prev.rules_hash -eq $rulesHash -and [string]$prev.name_key -eq $nameKey) {
         # REUSE. This is what makes daily work proportional to NEW products rather than to the catalog.
         $reused++
@@ -3670,7 +3720,7 @@ if ($IDENT_ON) {
 # worse than no record, because it reads as evidence. $OutName is the honest test: every pinned harness
 # passes its own name so its artifacts do not collide with the real ones.
 $liveBuild = ($OutName -eq 'comparison') -and (-not $RegularDir) -and (-not $ExtraDir)
-$iuCount = Save-InputUsage -Tracker $inputUsage -OutDir $OutDir -Today $today -IsLiveBuild:$liveBuild
+$iuCount = Save-InputUsage -Tracker $inputUsage -OutDir $OutDir -Today $judge -IsLiveBuild:$liveBuild
 if ($iuCount -ge 0) {
   Write-Output ("input-usage: recorded {0} file(s) this build -> {1}" -f $iuCount, (Join-Path $OutDir 'input-usage.json'))
 } else {

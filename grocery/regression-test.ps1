@@ -45,7 +45,7 @@ New-Item -ItemType Directory -Force -Path $scratch | Out-Null
     -ExtraDir $fz `
     -CommoditiesFile (Join-Path $fz 'commodities.json') `
     -BandsFile (Join-Path $fz 'price-bands.json') `
-    -OutDir $scratch -MinStores 2 -NoProvenanceContract | Out-Null
+    -OutDir $scratch -MinStores 2 -NoProvenanceContract -JudgeDate '2026-07-05' | Out-Null   # the frozen inputs' date, SAID (PLAN-board-clock W1)
 # -NoProvenanceContract (2026-09-19): the contract is a PUBLISHING policy over where and when a row was read, and
 # these rows were frozen in July, before captures stamped a store id or a channel. With it on they are refused as
 # UNPROVEN-STORE and UNPROVEN-CHANNEL - 17 commodities moved and 6 vanished - which is the 2026-07-29 in-store

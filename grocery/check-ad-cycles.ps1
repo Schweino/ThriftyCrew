@@ -3158,6 +3158,15 @@ The chain re-derives every store''s link prices from the rows the board priced, 
             $summary += "REVIEW    $($bfAge.Count) store(s) had more than the allowed share of rows withheld for age (grocery\audit-board-freshness.ps1)"
             if (-not $NoAlert) { try { Send-Alert -Subject "Board freshness: prices aging past the publish limit" -Body ("audit-board-freshness.ps1: the rotation is not re-reading these stores inside the publish limit, so the provenance contract is withholding their cells for age.`n`n" + ($bfAge -join "`n")) | Out-Null } catch {} }
           } else { Log 'board-freshness: every store re-read inside the floor, age withholding under the ceiling' }
+          # AN ENDED SALE NOBODY RE-READ (2026-09-26, design\PLAN-board-clock-2026-09-26.md W8, Brad's D2). Independent of
+          # the two above: a store can be read daily and still never get to an item whose sale ended, when the throttle
+          # defers its expiry slice. Until that re-read lands the cell rests on the store's everyday price or nothing.
+          $bfOwed = @($bfOut | Where-Object { $_ -match '^! REPRICE OWED' })
+          foreach ($l in @($bfOut | Where-Object { $_ -match '^reprice loop:' })) { Log ('board-freshness: ' + $l) }
+          if ($bfOwed.Count) {
+            $summary += "REVIEW    $($bfOwed.Count) store(s) owe a re-read of items whose sale ended more than 3 days ago (grocery\audit-board-freshness.ps1)"
+            if (-not $NoAlert) { try { Send-Alert -Subject "Board freshness: ended sales not re-priced" -Body ("audit-board-freshness.ps1: these items' sales or rollbacks ended, and the store's next capture was owed a re-read of each (sale-windows.json refresh_on). It has not landed inside the bar, so the automated re-price did not close - check that store's capture lane and its expiry allowance.`n`n" + ($bfOwed -join "`n")) | Out-Null } catch {} }
+          }
         }
       } catch { Log ('audit-board-freshness threw: ' + $_.Exception.Message) }
       # ---- THE ZERO-ALERT-DAYS SCOREBOARD (2026-09-10, plan Phase 0) -------------------------------------------

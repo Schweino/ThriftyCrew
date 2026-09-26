@@ -394,26 +394,24 @@ try {
   else { Write-Output ("store guide HELD/skipped (rc=$sgRc) - board publish unaffected") }
 } catch { Write-Output ("store guide publish threw: " + $_.Exception.Message + " - board publish unaffected") }
 
-# ---- trend pages: WEEKLY. 2026-07-26 efficiency fix: only the PUBLISHER was stamp-gated, so the two
+# ---- trend pages: ON A PRICE CHANGE (weekly until 2026-09-26). 2026-07-26 efficiency fix: only the PUBLISHER was stamp-gated, so the two
 # builders regenerated 425 tracked HTML files on EVERY price-change day for a publish that then no-oped.
 # Check the stamp HERE and skip the builds too until a new board week lands.
 try {
   $tpStamp = Join-Path $root 'out\trend-pages.stamp'
-  $curWk = ''
-  try {
-    # EXACT same week derivation as publish-trend-pages' stamp logic (newest week_of across histories).
-    # 2026-07-28: this read 'out\price-history.json' - A PATH THAT DOES NOT EXIST. The real file is
-    # grocery\price-history.json (which is what publish-trend-pages itself uses). The bare catch below
-    # swallowed the error, $curWk stayed empty, `if($curWk -and ...)` was always false, and this gate has
-    # therefore never fired once since it was added. A silent catch around a path is how a whole feature
-    # stays dead for weeks. It now logs instead of swallowing.
-    $phd = Read-JsonFile (Join-Path $root 'price-history.json')
-    $wks=@(); foreach($c in $phd.commodities){ foreach($e in $c.history){ $wks += [string]$e.week_of } }
-    if($wks.Count){ $curWk = (@($wks | Sort-Object))[-1] }
-  } catch { Write-Output ("trend gate: could not derive the current week (" + $_.Exception.Message + ") - falling through to a full rebuild") }
-  $stampWk = if(Test-Path $tpStamp){ ((Get-Content $tpStamp -Raw) + '').Trim() } else { '' }
-  if($curWk -and $stampWk -eq $curWk){
-    Write-Output "trend pages up to date for week $curWk - builds skipped"
+  # THE GATE IS THE CONTENT, NOT THE WEEK (2026-09-26, Brad's D3, design\PLAN-board-clock-2026-09-26.md). It compared the
+  # newest week_of in price-history.json, which is the AD SET's date and does not move while no weekly ad is due, so a
+  # price that moved mid-week never rebuilt the trend pages or the tracker index (/omaha-price-tracker/ read updated
+  # 2026-09-05 on 2026-09-25, plan-2026-09-25-6.json item 30). It now compares price-history.json's content key, the
+  # SAME function publish-trend-pages writes the stamp with (lib\trend-publish-key.ps1), so the two cannot drift - this
+  # spot once read a path that did not exist and never fired for a month. The publisher then upserts only the pages
+  # whose own content changed. An empty key (no history) never matches a stamp, so it falls through to a rebuild.
+  . (Join-Path (Split-Path $root -Parent) 'lib\trend-publish-key.ps1')
+  $curKey = Get-TcTrendInputKey (Join-Path $root 'price-history.json')
+  if (-not $curKey) { Write-Output 'trend gate: price-history.json is missing - falling through to a full rebuild' }
+  $stampKey = if(Test-Path $tpStamp){ ((Get-Content $tpStamp -Raw) + '').Trim() } else { '' }
+  if($curKey -and [string]::Equals($stampKey, $curKey, [StringComparison]::Ordinal)){
+    Write-Output "trend pages up to date - no tracked price moved since the last clean publish ($curKey) - builds skipped"
   } else {
     Invoke-Timed 'build-trend-pages' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null }
     Invoke-Timed 'build-trend-index' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null }
@@ -422,11 +420,11 @@ try {
     # Report it; do NOT make it fatal - a trend-page problem must never hold the board publish.
     Invoke-Timed 'publish-trend-pages' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null }
     $tprc = $LASTEXITCODE
-    if ($tprc -ne 0) { Write-Output ("trend pages: publisher exited $tprc - it could NOT write its weekly stamp, so the next publish will redo all of them (see publish-trend-pages output)") }
-    else { Write-Output "trend pages built + published (weekly stamp armed)" }
+    if ($tprc -ne 0) { Write-Output ("trend pages: publisher exited $tprc - it could NOT write its stamp, so the next publish rebuilds and re-checks every page (only changed pages are upserted) (see publish-trend-pages output)") }
+    else { Write-Output "trend pages built + published (changed pages only; stamp armed at the current price-history key)" }
     # THE TRACKER INDEX RIDES THE SAME ROAD (2026-09-22, RCA F1): build-trend-index rewrote out\trend\index.html every run and
     # nothing published it, so /omaha-price-tracker/ read 'the week of Sep 2' on 2026-09-22 while its 20 trend pages moved on.
-    # Published only when the trend pages were (same weekly cadence); a failure reports and never holds the board.
+    # Published whenever the trend pages were (the same price-change cadence since 2026-09-26); a failure reports and never holds the board.
     if ($tprc -eq 0) {
       Invoke-Timed 'publish-trend-index' { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-index.ps1') | Out-Null }
       if ($LASTEXITCODE -ne 0) { Write-Output ("tracker index: publisher exited $LASTEXITCODE - /omaha-price-tracker/ keeps its last copy") } else { Write-Output 'tracker index published' }
