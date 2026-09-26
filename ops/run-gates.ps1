@@ -213,6 +213,11 @@ $static = @(
   # instead of holding a board with no bad cell (it held the 2026-09-20 board that way). Its baseline is tracked, so a
   # clean checkout can read it; its report is rewritten only when its findings change.
   @{ f = 'grocery\audit-json-readers.ps1';     n = 'no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)' }
+  # MOVED UP FROM PUBLISH TIME on 2026-09-26 (queue 2026-09-26-f73dc7): 4880ebc98 pushed three commodities filed in no
+  # category and the first thing to notice was publish-deals-page holding that day's republish. commodities.json and
+  # categories.json are tracked, so -Source judges them on a bare checkout and writes nothing; the daily chain and
+  # publish keep their own runs as the second line.
+  @{ f = 'grocery\audit-category-coverage.ps1'; a = @('-Source'); n = 'every commodity is filed in exactly one category, and no category names a missing commodity' }
   @{ f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
   # BOTH HALVES, for the reason spelled out under audit-twin-drift below: the discovery pass proves the
   # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,
