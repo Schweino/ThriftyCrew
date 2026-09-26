@@ -46,6 +46,8 @@ is untouched by it.
 
 Exit 0 = read. 3 = no credential, or nothing inspected, and 3 is NEVER a pass.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: ops\seo_reach_diagnosis.py
 from __future__ import annotations
 
 import argparse

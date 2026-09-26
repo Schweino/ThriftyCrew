@@ -7,6 +7,8 @@
   used for triage-created residuals) is always listed but makes the run DUE only when the weekly lane is.
   -SelfTest runs the RE-MEASURE FIRST fixtures against a temp git repo and exits, touching no live file.
 #>
+# The self-test builds its fixtures in temp (a temp git repo included) and reads only its libraries:
+# gate-inputs: grocery\triage-return-lib.ps1, lib\json-io.ps1, lib\git-repo-env.ps1
 # [CmdletBinding()] so -SelfTest cannot fall into $args and run the LIVE report instead ([[arg-silently-ignored]]).
 [CmdletBinding()]
 param([switch]$SelfTest)

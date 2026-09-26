@@ -45,6 +45,8 @@
 # only, so every worktree carrying the new board refused unrelated pushes against a committed report naming the
 # old one. The report was NOT simply untracked, because the daily bot rewrites and commits it every morning and
 # an untrack commit conflicts with that (measured in design\PLAN-capture-eviction-stamp-2026-09-11.md).
+# The self-test builds its boards and candidates in memory and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1, grocery\known-wrong-lib.ps1, grocery\capture-depth-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CandidatesFile = '', [string]$CompareFile = '', [double]$Ratio = 1.25, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

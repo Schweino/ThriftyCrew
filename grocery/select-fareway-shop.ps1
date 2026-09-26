@@ -31,6 +31,9 @@
     .\select-fareway-shop.ps1 -In <capture.jsonl> -Today 2026-09-10
     .\select-fareway-shop.ps1 -SelfTest          frozen coconut fixture + clean twins, no data read
 #>
+# The self-test reads stores.json and (as text) the instore driver, and runs this script over a temp capture, which reads commodities.json and stores.json:
+# gate-inputs: lib\json-io.ps1, grocery\native-lib.ps1, grocery\commodities.json, grocery\stores.json
+# gate-inputs-text: grocery\pull-fareway-instore.js
 param(
   [string]$In = "",
   [string]$Out = "",

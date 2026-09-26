@@ -40,6 +40,8 @@
     .\audit-semantic-identity.ps1 -SelfTest    frozen fixtures, no GPU, no data files
   Exit: 0 = ran (findings are advisory, never a failure)  2 = self-test regression  3 = BLIND
 #>
+# The self-test reads the frozen known-wrong fixture and the shipped known-wrong.json (its LIVE-TWIN), never the GPU:
+# gate-inputs: grocery\known-wrong-lib.ps1, grocery\coverage-explain-lib.ps1, grocery\native-lib.ps1, lib\json-io.ps1, lib\guard-contract.ps1, grocery\regression-inputs\guard-fixtures\known-wrong-fixture.json, grocery\known-wrong.json
 # -Python exists so the BLIND path is TESTABLE. A failure mode nobody can exercise on demand is a
 # failure mode nobody has actually verified, and "it degrades gracefully" is the easiest claim in
 # software to believe and never check.

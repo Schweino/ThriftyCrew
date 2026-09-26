@@ -24,6 +24,8 @@
 
   EXIT CODES (lib\guard-contract.ps1): 0 clean, 2 hard finding, 3 could-not-evaluate.
 #>
+# The self-test reads the watch registry and the committed definition of every owned task, never the scheduler:
+# gate-inputs: lib\guard-contract.ps1, grocery\expected-automations.json, ops\scheduled-tasks\tc-sidecar-watchdog.xml, ops\scheduled-tasks\tc-process-reaper.xml, ops\scheduled-tasks\tc-recall-sleep-0435.xml, ops\scheduled-tasks\tc-brain-digest-0645.xml, ops\scheduled-tasks\tc-daemon-battery-0230.xml, ops\scheduled-tasks\tc-daily-ratchets-0315.xml, ops\scheduled-tasks\tc-boot-watch.xml
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Verify, [switch]$Install, [string]$Only = '')
 

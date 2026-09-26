@@ -47,6 +47,8 @@
   Exit: 0 = at or under the baseline. 2 = MORE write-only families than the baseline, or -Tighten refused an
   implausible fall. 3 = could not evaluate.
 #>
+# The self-test uses literal fixtures and runs this script against a temp tree and baseline, so it reads only its libraries:
+# gate-inputs: lib\guard-contract.ps1, lib\ratchet.ps1, lib\lf-write.ps1, lib\selftest-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

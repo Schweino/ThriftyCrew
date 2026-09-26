@@ -45,6 +45,8 @@
 
   Self-test: powershell -File meal-prep\pipeline\audit-price-claims.ps1 -SelfTest
 #>
+# The self-test drives the claim reader with in-memory specs and boards and reads only its library:
+# gate-inputs: lib\guard-contract.ps1
 param(
   [switch]$SelfTest,
   [string]$BoardFile = '',

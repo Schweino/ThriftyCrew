@@ -33,6 +33,8 @@ SCOPE OF A CLEAN REPORT: it replays the MESSAGE rule only. It cannot replay whet
 search log is not in git), and it judges each commit's tracked set as git holds it, not the index a pathspec
 commit actually used, which differs only for files staged beside the commit and never committed.
 """
+# The self-test builds its own temp repo and copies in the resolver it loads:
+# gate-inputs: ops\store_citation.py
 import importlib.util
 import os
 import re

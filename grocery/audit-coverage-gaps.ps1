@@ -22,6 +22,8 @@
   This is what makes "a store that carries an item
   never silently disappears" a checkable invariant for ALL stores, not a thing we notice by eyeballing.
 #>
+# The self-test is hermetic (no board, no capture, no commodities file) and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, grocery\known-wrong-lib.ps1, grocery\regular-fileset-lib.ps1, lib\guard-contract.ps1
 # -CommoditiesFile / -AllowFile / -CandidatesFile / -ReportDir exist so a FROZEN FIXTURE can drive this
 # audit end to end without touching live state. They all default to the live paths, so daily behaviour is
 # unchanged. -AllowFile matters more than it looks: the live allowlist is keyed commodity|store, so a real

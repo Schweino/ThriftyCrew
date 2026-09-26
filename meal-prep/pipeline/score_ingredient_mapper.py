@@ -37,6 +37,8 @@ description of a decision already taken.
 
 Exit 0 = scored. 3 = could not build a set or could not run the matcher.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: meal-prep\pipeline\score_ingredient_mapper.py
 from __future__ import annotations
 
 import argparse

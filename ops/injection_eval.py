@@ -49,6 +49,8 @@ is about to clear teaches people to ignore red, which is this estate's own stand
 Exit 0 = no rate fell. Exit 1 = one did. Exit 2 = could not evaluate. Last line is the
 completion marker lib/guard-contract.ps1 requires.
 """
+# The self-test reads its corpus and baseline and imports the transcription validator and its modules:
+# gate-inputs: ops\injection-payloads.json, ops\injection-eval-baseline.json, graph\lib\ids.py, graph\lib\llm.py, graph\lib\service_time.py, meal-prep\pipeline\local_extract.py, meal-prep\pipeline\harvest.py, meal-prep\pipeline\band_precheck.py, meal-prep\pipeline\hunt_lib.py, meal-prep\pipeline\coverage_check.py
 
 from __future__ import annotations
 

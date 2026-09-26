@@ -6,6 +6,8 @@
   its output through the same Get-TcChildQuarantineScope guards.ps1 uses. The founding shape is the 2026-07-14
   "Lysol Mango & Hibiscus Bathroom Cleaner" landing in mangoes.
 #>
+# The self-test copies the audit, its exclude library and lib\json-io.ps1 into a temp tree and runs the audit there:
+# gate-inputs: grocery\cell-quarantine-lib.ps1, lib\json-io.ps1, grocery\audit-household-in-food.ps1, grocery\global-exclude-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

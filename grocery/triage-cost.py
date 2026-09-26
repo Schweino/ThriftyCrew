@@ -35,6 +35,8 @@ Exit: 0 ok / under budget, 2 over budget or drift, 3 could not evaluate. Last li
 SCOPE OF A CLEAN REPORT: it covers the transcript files it found and names how many; a spawn whose transcript
 was deleted, or a session run on another machine, is outside it.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: grocery\triage-cost.py
 import argparse
 import glob
 import json

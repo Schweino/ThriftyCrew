@@ -28,6 +28,8 @@
 
   Self-test: powershell -File meal-prep\pipeline\audit-recost-freshness.ps1 -SelfTest
 #>
+# The self-test drives the freshness rule with in-memory stamps and reads only its library:
+# gate-inputs: lib\guard-contract.ps1
 param([switch]$SelfTest, [string]$DbRoot = '', [string]$GroceryOut = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\meal-prep\pipeline' }

@@ -39,6 +39,8 @@
   powershell -NoProfile -File grocery\audit-ingest-shape.ps1 -Date 2026-09-21
   powershell -NoProfile -File grocery\audit-ingest-shape.ps1 -SelfTest
 #>
+# The self-test lists and reads the frozen Sam's and Walmart rejects fixtures and writes its alias files in temp:
+# gate-inputs: grocery\ingest-shape-lib.ps1, grocery\pricing-math-lib.ps1, grocery\walmart-row-lib.ps1, lib\lf-write.ps1, grocery\regression-inputs\guard-fixtures\ingest-shape\walmart-rejects-*.json, grocery\regression-inputs\guard-fixtures\ingest-shape\sams\sams-rejects-*.json
 [CmdletBinding()]
 param(
   [string]$Date = '',

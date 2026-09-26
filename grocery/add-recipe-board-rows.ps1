@@ -53,6 +53,8 @@
 
   Exit 0 = written (or dry run clean). Exit 1 = refused, nothing written.
 #>
+# The self-test runs this script on a temp board and out dir; the child still reads categories.json beside it:
+# gate-inputs: lib\json-io.ps1, grocery\categories.json
 param(
   [string]$RowsFile = '',
   [string]$BoardFile = '',

@@ -34,6 +34,8 @@
 #   .\audit-measurement-provenance.ps1 -SelfTest
 # Exit 0 at or under the mark, 2 the ratchet rose, 3 could not evaluate.
 # ---------------------------------------------------------------------------------------------------
+# The self-test lists the EVAL-* and MEASURE-* documents under design (its population picker) and reads no other file:
+# gate-inputs: lib\guard-contract.ps1, design\EVAL-*.md, design\MEASURE-*.md
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param(
   [switch]$UpdateBaseline,

@@ -55,6 +55,8 @@
 # dot-sourced two grocery libraries, which ops\audit-cross-module-reach.ps1 correctly refused on the push
 # that carried it (base=118 now=119, one new reach, mine). A check about grocery's pricing rules belongs
 # beside them.
+# The self-test runs a frozen corpus through both size readers and reads only its libraries:
+# gate-inputs: lib\guard-contract.ps1, lib\json-io.ps1, grocery\pu-lib.ps1, grocery\pricing-math-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Board)
 $ErrorActionPreference = 'Stop'

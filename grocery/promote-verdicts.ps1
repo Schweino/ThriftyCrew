@@ -34,6 +34,8 @@
          .\promote-verdicts.ps1 -Apply
          .\promote-verdicts.ps1 -SelfTest
 #>
+# The self-test uses in-memory fixtures and reads only its library:
+# gate-inputs: lib\json-io.ps1
 param(
   [switch]$Apply,
   [switch]$SelfTest,

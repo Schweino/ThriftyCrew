@@ -29,6 +29,8 @@ header records what an unbounded report does: the first full sweep returned 1,40
 nobody reads, and a guard nobody reads is worse than no guard". So this writes a floor AND a maximum
 candidate count, and the consumer honours both.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: sidecar\derive_coverage_floor.py
 from __future__ import annotations
 
 import argparse

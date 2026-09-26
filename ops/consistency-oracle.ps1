@@ -94,6 +94,8 @@
   subject absent at that revision, or a sandbox git could not build). A non-zero difference count
   is NOT a failure - read the report.
 #>
+# The self-test builds a fixture repo and a temp git repo under its own run root, copying in lib\json-io.ps1:
+# gate-inputs: lib\guard-contract.ps1, lib\git-repo-env.ps1, lib\json-io.ps1
 [CmdletBinding()]
 param(
   [string]$Script = '',

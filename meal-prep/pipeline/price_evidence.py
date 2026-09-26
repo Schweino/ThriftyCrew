@@ -42,6 +42,9 @@ hardcoded fallback would be the forked-taxonomy defect this estate has a scar fr
 
 EXIT CODES 0 clean / 1 findings / 2 could-not-run. Marker PRICE-EVIDENCE-COMPLETE.
 """
+# The self-test reads the ingredient queue script as text for its store roster:
+# gate-inputs: meal-prep\pipeline\price_evidence.py
+# gate-inputs-text: grocery\ingredient-queue.ps1
 from __future__ import annotations
 
 import json

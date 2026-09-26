@@ -35,6 +35,8 @@
 
   Self-test: powershell -File ops\audit-capture-ingest-reporting.ps1 -SelfTest
 #>
+# The self-test runs over literal fixture files, never the grocery tree, and reads only its libraries:
+# gate-inputs: lib\guard-contract.ps1, lib\ps-source.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

@@ -40,6 +40,9 @@
     meal-prep\pipeline\audit-forbidden-prose.ps1             scan the committed catalogue
     meal-prep\pipeline\audit-forbidden-prose.ps1 -SelfTest   the two founding titles, the carve-out, the walk
 #>
+# The self-test reads the global list, the two production doors as text, and lists the committed spec catalogue:
+# gate-inputs: meal-prep\pipeline\forbidden-prose-lib.ps1, meal-prep\pipeline\forbidden-prose-global.json, meal-prep\db\recipes\*.json
+# gate-inputs-text: meal-prep\pipeline\build-v2-spec.ps1, meal-prep\pipeline\spec-guards.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$RecipeDir = '')
 $ErrorActionPreference = 'Stop'

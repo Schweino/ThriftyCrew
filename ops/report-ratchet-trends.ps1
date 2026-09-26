@@ -28,6 +28,9 @@
 
   EXIT 0 always - a report. With no readings yet it says NO EVIDENCE rather than "all moving".
 #>
+# The self-test builds its readings in memory and reads run-gates as text to prove it records them:
+# gate-inputs: lib\guard-contract.ps1, lib\ratchet.ps1
+# gate-inputs-text: ops\run-gates.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Json, [int]$StoppedRuns = 30, [string]$ReadingsFile = '')
 

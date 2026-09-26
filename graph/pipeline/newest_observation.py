@@ -31,6 +31,8 @@ SCOPE OF A CLEAN REPORT: UNSOUND by lane. The newest date is the newest across e
 that stopped while another kept flowing still reads current; the per-lane lines say which, and nothing
 here turns them into a verdict. It says how RECENT the rows are, never whether they are right.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: graph\pipeline\newest_observation.py
 
 from __future__ import annotations
 

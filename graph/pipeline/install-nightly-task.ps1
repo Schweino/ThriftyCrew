@@ -68,6 +68,8 @@
   powershell -File graph\pipeline\install-nightly-task.ps1 -Show
   powershell -File graph\pipeline\install-nightly-task.ps1 -Uninstall
 #>
+# The self-test is pure (no scheduler) and reads only the watch registry and its own source:
+# gate-inputs: grocery\expected-automations.json
 param(
   [string]$At = '21:30',
   [string]$HardStop = '06:30',

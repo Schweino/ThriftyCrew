@@ -11,6 +11,8 @@
   Usage:  powershell -ExecutionPolicy Bypass -File pull-grocery-ads.ps1
   Output: .\out\ads-YYYY-MM-DD.json + a verification table.
 #>
+# The self-test reads the Hy-Vee identity from stores.json and runs mirrors holding every grocery\*-lib.ps1 and stores.json, network stubbed:
+# gate-inputs: grocery\*-lib.ps1, grocery\stores.json
 param([string]$OutDir = "$PSScriptRoot\out", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }

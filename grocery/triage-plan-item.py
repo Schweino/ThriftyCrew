@@ -16,6 +16,8 @@ else.
 
 Exit 0 ok, 1 refused (no such id, two items with the id, a bad fields file), 3 could not read the plan.
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: grocery\triage-plan-item.py
 import argparse
 import json
 import os

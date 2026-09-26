@@ -27,6 +27,8 @@
   Exit 0 = every page matches or was reconciled, 1 = a conflict remains (alerted), 3 = could not evaluate.
   Last line: GHOST-RECONCILE-COMPLETE.   Self-test: -SelfTest (hermetic).
 #>
+# The self-test is pure over literal page bodies (no git, no Ghost) and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1, lib\lf-write.ps1, lib\ghost-drift-lib.ps1, lib\ghost-lib.ps1
 [CmdletBinding()]
 param([switch]$Apply, [string]$Slug = '', [switch]$NoAlert, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

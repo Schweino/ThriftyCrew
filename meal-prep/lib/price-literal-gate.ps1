@@ -35,6 +35,8 @@
 # The corpus parameters carry a Corpus prefix ON PURPOSE: engine\publish.ps1 and build-card2 DOT-SOURCE this
 # file, and a dot-sourced param block rebinds its names in the caller's scope - a plain -Slugs here would
 # silently reset publish.ps1's own $Slugs to ''.
+# The self-test runs literal card fixtures (its built-card count is a note, never a case) and reads only its libraries:
+# gate-inputs: meal-prep\lib\render-tokens.ps1, lib\guard-contract.ps1
 param([switch]$SelfTest, [switch]$Corpus, [string]$CorpusSlugs = '', [string]$CorpusBuiltDir = '', [switch]$CorpusRequireAsOf)
 
 # CAPTURE THE SWITCHES BEFORE THE DOT-SOURCE: render-tokens.ps1 has its own param([switch]$SelfTest), and

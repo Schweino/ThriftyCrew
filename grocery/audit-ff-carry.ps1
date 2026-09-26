@@ -24,6 +24,8 @@
   Advisory (does NOT hard-gate publish - a transient throttle should not take the board down; the pull's recovery
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
+# Above its self-test this reads commodities.json and commodity-search.json, and the fixtures look commodities up in them:
+# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\search-terms-lib.ps1, grocery\commodities.json, grocery\commodity-search.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'

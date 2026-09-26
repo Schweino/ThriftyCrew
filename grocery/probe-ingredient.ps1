@@ -35,6 +35,8 @@
     .\probe-ingredient.ps1 saffron -Store bakers
     .\probe-ingredient.ps1 -SelfTest
 #>
+# The self-test is hermetic (no network, no credentials, no capture files) and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, grocery\ff-price-lib.ps1, grocery\search-verdict-lib.ps1
 param(
   [Parameter(Position = 0, ValueFromRemainingArguments = $true)][string[]]$Term = @(),
   [ValidateSet('all', 'bakers', 'family-fare')][string]$Store = 'all',

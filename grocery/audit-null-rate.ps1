@@ -34,6 +34,8 @@
 
   Self-test: powershell -File grocery\audit-null-rate.ps1 -SelfTest
 #>
+# The self-test builds its rows in memory and reads only its library:
+# gate-inputs: lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Update, [string]$OutDir = '')
 $ErrorActionPreference = 'Stop'

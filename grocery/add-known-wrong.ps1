@@ -30,6 +30,8 @@
   After writing, this runs audit-known-wrong.ps1 and prints the verdict. A NEW finding is EXPECTED to turn
   the gate red: that is the point. Fix the commodity rule, re-run, and it goes green - and stays green.
 #>
+# The self-test runs this script against a per-run temp -Root holding its own ledger, so it reads only its library:
+# gate-inputs: lib\json-io.ps1
 param(
   [string]$Commodity,
   [string]$Store,

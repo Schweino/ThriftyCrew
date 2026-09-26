@@ -25,6 +25,9 @@ DROP, which costs a human ten seconds; a wrong pairing hides a real invention,
 which is how a recipe nobody found gets sold. Normalise, singularise, ignore
 preparation words — then require the food words to actually correspond.
 """
+# The self-test reads the ingredient vocabulary, the food DB and (as text) the spec-contradiction patterns:
+# gate-inputs: meal-prep\db\ingredients.json, meal-prep\food-macros-db.json
+# gate-inputs-text: meal-prep\pipeline\spec-contradiction-lib.ps1
 
 from __future__ import annotations
 

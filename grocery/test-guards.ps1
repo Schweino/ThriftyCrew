@@ -3,6 +3,8 @@
   purpose, assert guards.ps1 exits 2, then restore and assert it exits 0 again.
   Every mutation is made on a COPY-then-restore basis; nothing is left changed.
 #>
+# The self-test works only on byte fixtures under its own temp directory and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1, lib\ps-source.ps1, lib\production-text.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$AllowLiveTree)
 $ErrorActionPreference = 'Stop'

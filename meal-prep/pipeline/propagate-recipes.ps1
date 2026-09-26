@@ -45,6 +45,9 @@
 # -SlugsFile or -AllowCreateFile, both newline files for the -File reason above) is "unnamed", and a live
 # run with more than -MaxUnnamed of them is REFUSED before any stage runs, printing every one, unless the
 # caller passes -AllowCatalogue. See Test-PropagateScope below for why.
+# The self-test copies lib\*.ps1 into a sandbox, runs the allergen gate on a temp card against allergens.json, reads the reanchor patterns as text, and its -DryRun child reads the stamps:
+# gate-inputs: lib\*.ps1, meal-prep\lib\allergen-lib.ps1, meal-prep\db\allergens.json, meal-prep\pipeline\audit-allergen-line.ps1, meal-prep\pipeline\propagate-stamps.json
+# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1
 param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
       [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue)
 $ErrorActionPreference = 'Stop'

@@ -44,6 +44,8 @@
 
   Self-test: powershell -File ops\audit-stray-root-artifacts.ps1 -SelfTest
 #>
+# The self-test runs over a frozen root listing, never the live disk or git, and reads only its library:
+# gate-inputs: lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

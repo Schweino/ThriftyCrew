@@ -36,6 +36,8 @@
 # turns `-File build-card2.ps1 -SelfTest` into an interactive PROMPT, and ops\run-gates.ps1 runs every
 # discovered self-test non-interactively, so the gate would hang instead of gating. They are still
 # required for a render and still refused by name below.
+# The self-test runs frozen scaler, image and visibility fixtures (plus this file's own AST) and reads only its libraries:
+# gate-inputs: lib\json-io.ps1, meal-prep\lib\package-cost-lib.ps1
 param(
   [string]$SpecFile,
   [string]$CostedFile,

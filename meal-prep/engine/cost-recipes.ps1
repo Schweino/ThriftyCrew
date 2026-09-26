@@ -17,6 +17,8 @@
 #     to a temp dir; see grocery\test-auditors.ps1 for the same lesson learned the hard way);
 #   - the -Slugs splice reads the file it is about to WRITE ($OutFile), not a hardcoded db\costed.json,
 #     so a targeted recost against a fixture splices the fixture's own baseline.
+# Even under -SelfTest the top of this file loads the live specs, item rows and boards; the self-test then runs this engine over the golden fixture tree:
+# gate-inputs: meal-prep\db\recipes\*.json, meal-prep\db\ingredients.json, meal-prep\db\label-prices.json, meal-prep\db\label-folds.json, meal-prep\db\densities.json, grocery\out\comparison-*.json, grocery\out\recipe-board.json, grocery\out\smp-feed.json, lib\carriage-lib.ps1, meal-prep\lib\ingredient-identity-lib.ps1, meal-prep\lib\held-state.ps1, meal-prep\engine\regression-inputs\golden\inputs\db\*, meal-prep\engine\regression-inputs\golden\inputs\db\recipes\*, meal-prep\engine\regression-inputs\golden\inputs\grocery-out\*, meal-prep\engine\regression-inputs\golden\expected\*
 param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile,[switch]$SelfTest,[int]$LedgerMaxAgeDays = 0)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path

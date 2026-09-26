@@ -28,6 +28,8 @@ report says only that none of these five shapes of rot is present.
 Run:  C:\\Codex\\Python312\\python.exe ops\\probe_cold_corpus_scrub.py [--rows out.jsonl] [--rev HEAD]
       C:\\Codex\\Python312\\python.exe ops\\probe_cold_corpus_scrub.py --selftest
 """
+# The self-test is hermetic (temp dirs and literals only), so it reads nothing but this file:
+# gate-inputs: ops\probe_cold_corpus_scrub.py
 from __future__ import annotations
 
 import argparse
