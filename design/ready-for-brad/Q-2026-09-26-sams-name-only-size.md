@@ -54,3 +54,20 @@ the product name the only evidence of pack size, which is exactly where Aldi's p
 - **A:** a builder change in `grocery/build-sams-deals.ps1` (and the same decision for `walmart-row-lib`), fixtures
   for one-measure, one-count and a two-size must-not-admit, then a board rebuild.
 - **B:** nothing; the question closes.
+
+## Ruling (Brad, in chat, 2026-09-26)
+
+"C: read unit price from page"
+
+## After the ruling (2026-09-26): the premise of C did not hold
+
+Before building the page read, the product pages it would read were measured: 30 of the 181 distinct item ids the
+09-26 capture carried with a blank unit price (every 4th id in sorted order), fetched same-origin from the signed-in
+Omaha club at Sam's own pacing (2.6 s + up to 1.4 s). **0 of 30 pages carry a unit price** (`product.priceInfo.unitPrice`
+null, and null in every `channelLevelPriceInfo` entry); 30 of 30 answered HTTP 200 with the product and its price, 0
+walled. The control, an item whose listing does print one (4Z2IZ92W3ADE, 20.8 c/oz), carries it on its page too, so
+the read works where Sam's has the number. The rendered page shows no per-unit text and no size specification either.
+So the page read the ruling asks for would admit nothing, and it is NOT built: it would add a paced fetch per blank
+row (about 8 minutes a sweep, more exposure to the wall) for zero rows. Name-only rows stay refused, as the ruling
+says, "until that is live". Rows and method: `design/MEASURE-sams-page-unit-price-2026-09-26.md`. This needs a
+new ruling: keep refusing (B), or another Sam's-own source of the size.

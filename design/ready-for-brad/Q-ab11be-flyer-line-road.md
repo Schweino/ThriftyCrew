@@ -44,3 +44,10 @@ away real sales readers use. Keep A in force until B is live and measured.
   linked lines; unlinked lines stay under A.
 - **A:** nothing more; the question closes and the verifier keeps naming them.
 - **C:** a publish-side refusal for the flyer-line shape, with fixtures, and a board rebuild.
+
+## Ruling (Brad, in chat, 2026-09-26)
+
+"Build link"
+
+Option B, with A kept in force meanwhile (the lines stay published and the verifier keeps naming them unverifiable).
+The plan is `design/PLAN-flyer-line-product-link-2026-09-26.md`; nothing is implemented until Brad reads it.
