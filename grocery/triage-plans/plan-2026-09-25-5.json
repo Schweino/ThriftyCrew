@@ -118,9 +118,12 @@
       ],
       "root_cause": "The bot shares a checkout and a branch with sessions, so a session landing the bot's commits from that checkout can leave local copies the bot later replays onto their own twins. The instance cause (replaying a landed copy) is fixed by 91680deee; the class (a shared production checkout) is design D in design/PLAN-bot-dedicated-checkout-2026-09-25.md, ruled by Brad 2026-09-25 and being built in stage order.",
       "prevention_none_because": "not a RETURN; the prevention already shipped (91680deee) and the structural fix is a ruled plan with its own stages",
-      "resolution_note": "Fixed upstream of this triage: 91680deee (W0.2) makes the sync drop a local commit already on origin before replaying, which is exactly the 447b42efe/7e70f5fae clash; local main is level with origin. Verify on the 09-26 07:00 ad run: sync[start] must not read degraded/replay. The shared-checkout class is design D (PLAN-bot-dedicated-checkout-2026-09-25).",
+      "resolution_note": "Confirmed and already fixed upstream of this triage: 91680deee (W0.2) makes checkout-sync drop a local commit whose diff is already on origin before replaying, which is the 447b42efe/7e70f5fae rename/delete clash in capture-run-ad-2026-09-25.log:20,92 and capture-run-daily-2026-09-25.log:20,177. 447b42efe is gone from local main. Live check on the 09-26 07:00 ad run: sync[start] must not read degraded/replay. The shared-checkout class is design D (design/PLAN-bot-dedicated-checkout-2026-09-25.md).",
       "publish_batch": 1,
-      "status": "planned"
+      "status": "done",
+      "premise_verified": "2026-09-25 ops lane: 91680deee is an ancestor of origin/main (merge-base --is-ancestor exit 0); 447b42efe is no longer an ancestor of local main; origin/main..main holds only this run's 7 unlanded triage commits plus one bot commit (81a961a00), none a copy of a landed commit. The degraded/replay lines are all from the 09-25 07:01 ad and 08:32 daily runs, before 91680deee landed at 10:34.",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 3
     },
     {
       "queue_id": "2026-09-24-a211ad",
@@ -287,13 +290,31 @@
     {
       "queue_id": "2026-09-23-4f9842",
       "subject": "Automation silent-death: TASK FAILED",
-      "classification": "needs-more-time",
+      "classification": "confirmed",
       "evidence": [
-        "Get-ScheduledTaskInfo: 'TC Recall Sleep 0435' last 09-25 12:35 result 1 (a run-once repeat reporting the 04:35 run's rc=1); ops/out/recall-sleep-stamp.json 09-25 04:41 ok=false, failed = brain commit hook, gate (BROKEN, exit 1 each) plus forgetting and memory clusters (judgement waiting). 'TC Daily Ratchets 0315' child exit 1 on 09-24 and 09-25, green on 09-23 (ops/out/logs/run-once/daily-ratchets-2026-09-2[345].stamp). The silent-death check that owns both DID run: it is what paged. The ratchets run log (run-once-daily-ratchets-2026-09-25.log) carries only 'child exit 1', so WHICH ratchet rose is recorded nowhere I found."
+        "Get-ScheduledTaskInfo 'TC Daily Ratchets 0315': LastTaskResult 1 at 2026-09-25 03:15. ops/out/logs/run-once/daily-ratchets-2026-09-2*.stamp: rc=1 on 09-20, 09-21, 09-22, 09-24, 09-25; rc=0 only on 09-23. run-once-daily-ratchets-2026-09-25.log holds only 'run-once-a-day: daily-ratchets ran, child exit 1': ops/run-once-a-day.ps1 started the child with UseShellExecute=false and NO redirect, so its per-ratchet 'FAIL <name>' lines went to a headless console and the transcript kept none.",
+        "Hand run at d54417a55 (origin/main at 2026-09-24 03:15, clean scratch worktree): 'FAIL  ops\\audit-write-only-reports.ps1 (exit 2)' 'RATCHET BROKEN - 47 write-only family(ies) now, baseline 34'; the other five ok. Hand run at eda40ed3c (main checkout, 09-25 evening): 3 failed - audit-fixture-inputs ('NEW: grocery\\audit-search-terms.ps1|commodities.json', fc2b4c6fd 09-25 15:50), audit-mustfire-census ('LOST: grocery\\test-match-lib.ps1 26 -> 4', c2ff876d6 09-24 16:44 added a read -SelfTest block), audit-write-only-reports (52 vs 34).",
+        "Recall Sleep half: ~/.claude commit 23bbacb (queue a83841, plan-2026-09-25-4) found 'brain commit hook' red on 'install-brain-hooks: MISSING - no commit-msg' (reinstalled 09-25 04:50) and the 09-25 'gate' red on its one hard reason 'C--Codex-ThriftyCrew: 2 memory file(s) uncommitted, 1 past the 48 h bar' (a real finding, correctly red). recall-sleep-stamp.json 09-25 04:41 failed = brain commit hook, forgetting, memory clusters, gate."
       ],
-      "root_cause": "Unfinished at the 12-call ceiling. Two separate reds: the knowledge store's own recall-sleep pass (its 'brain commit hook' and 'gate' steps, outside this repo), and a daily-ratchets red whose cause is not recorded because ops/run-once-a-day.ps1's run log keeps only its own summary line (UNPROVEN: I did not confirm that its live path drops the child's stdout; only its self-test path was read).",
-      "resolution_note": "Deferred with findings: recall-sleep is red on its brain-commit-hook and gate steps (store-side, see C:\\Users\\Owner\\.claude\\recall-sleep-latest.md); daily ratchets exit 1 on 09-24 and 09-25 with no recorded cause. Next pass: run ops/run-daily-ratchets.ps1 by hand in a scratch clone to name the red ratchet, and check whether run-once-a-day keeps child output.",
-      "status": "needs-more-time"
+      "root_cause": "A scheduled child's own verdict was not kept anywhere: ops/run-once-a-day.ps1 (the wrapper for daily-ratchets, daemon-battery, brain-digest, recall-sleep, capture-watchdog and browser-slot-close) recorded only the child's exit code, so every red it wrapped reached triage as 'child exit 1' and each triage had to re-run the child by hand to learn which step failed. The reds themselves are three separate tree defects (write-only-reports rise since 09-23/24, mustfire-census losing test-match-lib's corpus must-fires to a detector-scope rule, fixture-inputs on a new live-rulings self-test).",
+      "resolution_note": "Class fixed: ops/run-once-a-day.ps1 now keeps each wrapped task's output and names its verdict in the run log, so a 'TASK FAILED' page for daily-ratchets (or any of the six wrapped tasks) says which step went red. Instance: 09-24 red was audit-write-only-reports (47 vs 34); 09-25 adds mustfire-census and later fixture-inputs; residual 2026-09-25-110a8f. Recall Sleep: superseded by a83841 / store 23bbacb.",
+      "status": "done",
+      "premise_verified": "yes: the task fired and exited 1 on 09-24 and 09-25 (stamps and LastTaskResult), and no file recorded which ratchet; confirmed by reading run-once-a-day.ps1's live path (Invoke-RunOnce, no redirect) and by naming the reds with two hand runs.",
+      "root_fix": "ops/run-once-a-day.ps1 Invoke-RunOnce now redirects the child's stdout and stderr, writes both whole to ops/out/logs/run-once/<key>-<day>.out.log, puts the child's last stdout line (its verdict or -COMPLETE marker) in the message as 'child verdict: ...', and echoes the last 40 stdout lines into the run-log transcript. Reads are bounded after the child exits (-ReadWaitMs, default 120 s) so a descendant holding the pipe cannot hang a daily task; a cut-off read says 'UNKNOWN' with output_complete=false. Exit-code behaviour and stamps are unchanged. Covers all six wrapped tasks.",
+      "blast_radius": "ops/run-once-a-day.ps1 only; the six scheduled tasks that run through it gain an output log and a longer message line. No task definition, stamp format, or exit code changes; nothing reads the message text (grep 'child exit' outside the file: no consumer).",
+      "proof": {
+        "must_fire_case": "run-once-a-day.ps1 -SelfTest 'MUST FIRE  a red child''s own verdict line rides in the message, and its output log keeps the step that failed' (a child printing 'FAIL  step-b' then 'STEPS-COMPLETE failed=1', exit 1, the 09-24/09-25 shape); 'MUST FIRE  in the task-action shape the wrapper''s own output (what the transcript records) carries the child''s verdict line'; 'MUST FIRE  a descendant still holding the pipe does not hang the wrapper: rc 3 comes back and the verdict reads UNKNOWN'.",
+        "clean_twin": "'CLEAN TWIN  a green child still returns 0 and its verdict is its last STDOUT line, with stderr kept apart in the log and never read as the verdict', plus every existing exit-code/stamp case unchanged. Ran: powershell -File ops\\run-once-a-day.ps1 -SelfTest -> exit 0, 'run-once-a-day SELF-TEST PASS (28 of 28 ...)'.",
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "git revert of the ops/run-once-a-day.ps1 commit; the stamp and exit-code contract is untouched, so the tasks run exactly as before.",
+      "freshness": "Measured 2026-09-25 19:00 at eda40ed3c and d54417a55; the 2026-09-26 03:15 run is the first whose log will name its reds.",
+      "leaves_open": "The three red ratchets themselves (write-only-reports 52 vs 34, mustfire-census LOST test-match-lib 26->4, fixture-inputs NEW audit-search-terms|commodities.json) are separate source defects not fixed here, owner queue 2026-09-25-110a8f (review, measurement in its body). The Recall Sleep half is owned by a83841 (store commit 23bbacb); its 09-25 gate red is a real uncommitted-memory finding in the store, which this lane may not write.",
+      "leaves_open_occurrences": "daily-ratchets red on 5 of the 6 days 09-20..09-25; recall-sleep gate red 09-25.",
+      "deviation": "Did not fix the three ratchet reds: each is a separate defect at its own source (two from commits on 09-24/09-25 by other lanes), past this item's 50-call ceiling; minted 2026-09-25-110a8f with the measurement instead.",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 47,
+      "shipped_commit": "b9b7d85ab"
     }
   ],
   "ship_sequence": [
