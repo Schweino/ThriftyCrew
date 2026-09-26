@@ -49,7 +49,11 @@
        touched; OWN-MERGE and
        OWN-SETASIDE (the pipeline's own output, owned AND vouched by -OwnBlobs) are merged, or set aside with upstream
        winning; OWN-DELETED comes back as upstream's version; FOREIGN (a staged change, anyone else's edit, a deletion
-       nobody vouches for, and every other status code) is NEVER WRITTEN.
+       nobody vouches for, and every other status code) is NEVER WRITTEN. Under -IntruderPolicy set-aside (W2.2 of
+       design\PLAN-bot-dedicated-checkout-2026-09-25.md) a FOREIGN path that no registered writer owns, in one of four
+       single-content shapes (Get-TcCsIntruderShape), is INTRUDER instead: its bytes go to <tree>\intruder\ verified by
+       SHA-256, the path is restored to H0, the move proceeds, and a clean outcome pages naming it. 'wait' (the
+       default) is this step exactly as it was.
     8. FOREIGN present: PARTIAL. The target falls back to the newest OBSERVED push tip (a value the remote-tracking
        ref's reflog has held) before the first upstream commit touching a FOREIGN path. None: `blocked` class
        `foreign`. The page names each path, its status and that commit.
@@ -182,7 +186,8 @@ $script:TcCheckoutSyncStartupFiles = @(
   'lib/git-blob-lib.ps1',
   'lib/json-io.ps1',
   'lib/keep-awake.ps1',
-  'lib/pipeline-commit.ps1'
+  'lib/pipeline-commit.ps1',
+  'lib/production-writers.ps1'
 )
 
 # The seven operations 1c waits on, each resolved through `git rev-parse --git-path`.
@@ -642,13 +647,25 @@ function Invoke-TcCheckoutSync {
     [scriptblock]$AfterReadTree = $null,
     [scriptblock]$BeforeRef = $null,
     # A throw from here stands for a landed-twin scan that failed: the sync must then replay every commit as before.
-    [scriptblock]$TwinScanFault = $null
+    [scriptblock]$TwinScanFault = $null,
+    # W2.2 of design\PLAN-bot-dedicated-checkout-2026-09-25.md (D4, ruled (b) by Brad on 2026-09-25). 'wait' is today's
+    # rule exactly: a FOREIGN path on a moved path makes the sync partial or blocked. 'set-aside' moves an UNREGISTERED
+    # intruder (a FOREIGN path no scheduled writer owns) into <tree>\intruder\, verified by bytes, restores HEAD's
+    # version, proceeds, and pages naming every path. Only four shapes are set aside: '??' where upstream adds, ' M',
+    # and single-content staged 'M ' / 'A ' (index blob = working bytes, so one copy is lossless). Every other shape, a
+    # bot-owned path, and a path -IsRegisteredPath vouches for stay FOREIGN. The caller reads the switch from
+    # ops\production-writers.json (intruder_policy) through lib\production-writers.ps1; the ruling switches it on only
+    # after 7 clean census days.
+    [ValidateSet('wait', 'set-aside')][string]$IntruderPolicy = 'wait',
+    # repo path -> $true when a registered writer owns it. NULL under 'set-aside' means nobody can tell, so nothing is
+    # moved; a classifier that THROWS vouches for the path (it stays FOREIGN). Both fail toward today's rule.
+    [scriptblock]$IsRegisteredPath = $null
   )
   $clock = [Diagnostics.Stopwatch]::StartNew()
   $rec = [ordered]@{
     ts = $Now.ToString('o'); pid = $PID; kind = $Kind; phase = $Phase; outcome = ''; class = ''; why = ''; page = $false
     H0 = ''; O = ''; NEW = ''; behind = 0; behind_after = 0; ahead = 0; replayed = 0; dropped = 0; changed = 0
-    quarantined = @(); set_aside = @(); merged = @(); already_upstream = @(); own_deleted = @(); foreign = @()
+    quarantined = @(); set_aside = @(); intruders = @(); merged = @(); already_upstream = @(); own_deleted = @(); foreign = @()
     partial_target = ''; partial_blocker = ''; held = ''; unscanned = @(); startup_changed = $false; startup_files = @()
     index_resynced = @(); cas_recovered = ''; notes = @(); landed = @(); twin_scan = ''; tree = ''; sec = 0; lib_blob = ''; logged = $false
   }
@@ -675,6 +692,12 @@ function Invoke-TcCheckoutSync {
     if ($ctx.preSetAside.Count -and $resolved) {
       $rec.page = $true
       $rec.why = $rec.why + '; before the move the sync set aside and restored from HEAD the pipeline''s own conflicted path(s): ' + ($ctx.preSetAside -join ', ')
+    }
+    # W2.2: an unregistered intruder set aside is a write into someone's work, so a clean outcome that made one pages,
+    # naming each path and where its bytes are kept.
+    if (@($rec.intruders | Where-Object { $_ }).Count -and $resolved) {
+      $rec.page = $true
+      $rec.why = $rec.why + '; set aside ' + @($rec.intruders).Count + ' unregistered intruder(s) on path(s) upstream changed (intruder_policy set-aside), bytes verified and kept in ' + $rec.tree + '\intruder: ' + (@($rec.intruders) -join ', ')
     }
     # Every local commit dropped as already on origin is named with its twin, on every outcome (W0.2), and so is a
     # twin scan that could not run and dropped nothing.
@@ -936,7 +959,7 @@ function Invoke-TcCheckoutSync {
     $doc = Read-TcCsState $stateFile
     $doc.intent = [ordered]@{ pid = $PID; phase = $Phase; started = $Now.ToString('o'); H0 = $rec.H0; O = $fullO; NEW = $plan.new; plan = @($plan.entries | Where-Object { $_.cls -ne 'clean' } | ForEach-Object { $_.cls + ' ' + $_.path }) }
     [void](Write-TcAtomicFile -Path $stateFile -Text ($doc | ConvertTo-Json -Depth 6) -NoBom)
-    $byCls = @{}; foreach ($c in 'clean', 'in-the-way', 'already-upstream', 'own-merge', 'own-setaside', 'own-deleted') { $byCls[$c] = @($plan.entries | Where-Object { $_.cls -eq $c }) }
+    $byCls = @{}; foreach ($c in 'clean', 'in-the-way', 'already-upstream', 'own-merge', 'own-setaside', 'own-deleted', 'intruder') { $byCls[$c] = @($plan.entries | Where-Object { $_.cls -eq $c }) }
     $stage = 'displacing'
     foreach ($e in $byCls['in-the-way']) {
       # A reader holding the file open without delete sharing refuses the move (review finding 11): ONE retry after
@@ -958,6 +981,12 @@ function Invoke-TcCheckoutSync {
         return (Complete-TcCsSync 'blocked' 'held-file' ('a reader held ' + $e.path + ' open (untracked, where upstream adds it), so it could not be moved out of the way; every byte already displaced was put back, nothing moved, and HEAD stays at ' + $rec.H0))
       }
       $rec.quarantined = @($rec.quarantined) + @($e.path)
+    }
+    # W2.2: each unregistered intruder's bytes go to <tree>\intruder\ FIRST and are verified there, and only then is
+    # the path restored to HEAD (pointed-to first). A throw lands in the 'displacing' catch, which puts every copy back.
+    foreach ($e in $byCls['intruder']) {
+      Move-TcCsIntruder -Entry $e
+      $rec.intruders = @($rec.intruders | Where-Object { $_ }) + @($e.path + ' (' + $e.code + ')')
     }
     foreach ($e in @($byCls['own-merge']) + @($byCls['own-setaside'])) {
       $src = Get-TcCsFullPath $Repo $e.path
@@ -1141,7 +1170,7 @@ function Get-TcCsTree {
 # Copy (or -Move) one path's bytes into <tree>\<Kind>\<path>, keeping its LastWriteTime, and add its manifest row.
 # The copy is written BEFORE the manifest row that names it (pointed-to first).
 function Save-TcCsDisplaced {
-  param([string]$Kind, [string]$Path, [string]$Source, [string]$Reason, [switch]$Move)
+  param([string]$Kind, [string]$Path, [string]$Source, [string]$Reason, [switch]$Move, [switch]$Restage)
   $tree = Get-TcCsTree
   $dst = Join-Path (Join-Path $tree $Kind) ($Path -replace '/', '\')
   [void](New-Item -ItemType Directory -Force -Path (Split-Path -Parent $dst) -ErrorAction Stop)
@@ -1155,8 +1184,48 @@ function Save-TcCsDisplaced {
   if (-not $ctx.ContainsKey('manifest')) { $ctx.manifest = [System.Collections.Generic.List[object]]::new() }
   $ctx.manifest.Add([ordered]@{ path = $Path; class = $Kind; reason = $Reason; blob = $blob; index_blob = $idx; at = ($Kind + '\' + ($Path -replace '/', '\')) })
   if (-not $ctx.ContainsKey('saved')) { $ctx.saved = [System.Collections.Generic.List[object]]::new() }
-  $ctx.saved.Add([pscustomobject]@{ kind = $Kind; path = $Path; copy = $dst; moved = [bool]$Move })
+  $ctx.saved.Add([pscustomobject]@{ kind = $Kind; path = $Path; copy = $dst; moved = [bool]$Move; restage = [bool]$Restage })
   [void](Write-TcAtomicFile -Path (Join-Path $tree 'manifest.json') -Text (ConvertTo-Json -InputObject @($ctx.manifest.ToArray()) -Depth 4) -NoBom)
+}
+
+# W2.2. The shape of a FOREIGN entry one copy can carry losslessly, or '' (it stays FOREIGN). '??' only where upstream
+# adds (an untracked file at a path upstream deletes is not in the way of anything it writes); ' M' at any upstream
+# change; 'M ' and 'A ', whose index blob equals the working bytes, so the one copy IS the staged version. 'MM', 'AM',
+# ' D' and every other code are two contents or no content, and stay FOREIGN.
+function Get-TcCsIntruderShape([string]$Code, [string]$St) {
+  switch ($Code) {
+    '??' { if ($St -eq 'D') { return '' }; return 'untracked' }
+    ' M' { return 'edit' }
+    'M ' { return 'staged' }
+    'A ' { if ($St -ne 'A') { return '' }; return 'staged-add' }
+    default { return '' }   # every other status code is not a shape a single copy carries: FOREIGN, today's rule
+  }
+}
+
+# W2.2. Set one unregistered intruder aside: its bytes into <tree>\intruder\<path> (moved when untracked, copied
+# otherwise), the copy's SHA-256 checked against the source's, and only then the path restored to H0 (an 'A ' leaves
+# the index and the disk, since H0 has no version). A staged shape is marked -Restage, so a put-back re-stages it.
+function Move-TcCsIntruder {
+  param($Entry)
+  $src = Get-TcCsFullPath $Repo $Entry.path
+  if (-not [IO.File]::Exists($src)) { throw ('intruder ' + $Entry.path + ' (' + $Entry.code + ') is not on disk to set aside') }
+  $h0 = (Get-FileHash -LiteralPath $src -Algorithm SHA256).Hash
+  $isStaged = ($Entry.ishape -eq 'staged') -or ($Entry.ishape -eq 'staged-add')
+  Save-TcCsDisplaced -Kind 'intruder' -Path $Entry.path -Source $src -Reason $Entry.why -Move:($Entry.ishape -eq 'untracked') -Restage:$isStaged
+  $copy = $ctx.saved[$ctx.saved.Count - 1].copy
+  $h1 = if ([IO.File]::Exists($copy)) { (Get-FileHash -LiteralPath $copy -Algorithm SHA256).Hash } else { 'absent' }
+  if (-not [string]::Equals($h0, $h1, [StringComparison]::Ordinal)) { throw ('the set-aside copy of intruder ' + $Entry.path + ' does not hash to its source (' + $h1 + ' <> ' + $h0 + ')') }
+  switch ($Entry.ishape) {
+    'untracked' { }   # already moved out of upstream's way, and verified
+    'edit' { $co = Invoke-TcCsGit -Repo $Repo -GitArgs @('checkout', $rec.H0, '--', $Entry.path); if ($co.rc -ne 0) { throw ('git checkout H0 -- ' + $Entry.path + ' exited ' + $co.rc + ': ' + $co.err) } }
+    'staged' { $co = Invoke-TcCsGit -Repo $Repo -GitArgs @('checkout', $rec.H0, '--', $Entry.path); if ($co.rc -ne 0) { throw ('git checkout H0 -- ' + $Entry.path + ' exited ' + $co.rc + ': ' + $co.err) } }
+    'staged-add' {
+      $rm = Invoke-TcCsGit -Repo $Repo -GitArgs @('rm', '-q', '--cached', '--', $Entry.path)
+      if ($rm.rc -ne 0) { throw ('git rm --cached ' + $Entry.path + ' exited ' + $rm.rc + ': ' + $rm.err) }
+      [IO.File]::Delete($src)
+    }
+    default { throw ('unknown intruder shape: ' + $Entry.ishape) }
+  }
 }
 
 # Deleted only after step 10 passed: the undo copies are the one record of the bytes a failed move displaced.
@@ -1229,7 +1298,7 @@ function Get-TcCsPlanFor {
       $p = $x.path
       $st = if ($statusNow.map.ContainsKey($p)) { $statusNow.map[$p] } else { $null }
       $code = if ($null -eq $st) { '' } elseif ($st.codes.Count -eq 1) { $st.codes[0] } else { ($st.codes -join '+') }
-      $e = [pscustomobject]@{ path = $p; st = $x.st; code = $code; cls = ''; why = ''; oldBlob = $x.oldBlob; newBlob = $x.newBlob; merged = $null; fp = (Get-TcCsFingerprint $Repo $p $statusNow.map) }
+      $e = [pscustomobject]@{ path = $p; st = $x.st; code = $code; cls = ''; why = ''; ishape = ''; oldBlob = $x.oldBlob; newBlob = $x.newBlob; merged = $null; fp = (Get-TcCsFingerprint $Repo $p $statusNow.map) }
       $onDisk = [IO.File]::Exists((Get-TcCsFullPath $Repo $p))
       $owned = Test-TcCsOwnedPath $p $OwnedPaths
       if ($code -eq '' -or $code -eq '!!') {
@@ -1270,6 +1339,15 @@ function Get-TcCsPlanFor {
           }
           '^ D$' { if ($owned) { $e.cls = 'own-deleted' } else { $e.cls = 'foreign'; $e.why = 'an uncommitted deletion nobody vouches for, on a path upstream changed' } }
           default { $e.cls = 'foreign'; $e.why = ('status ' + $code + ' is not a shape the sync carries; it is never written') }
+        }
+      }
+      # W2.2: an UNREGISTERED intruder in a shape one copy can carry is set aside under intruder_policy set-aside.
+      if ($e.cls -eq 'foreign' -and $IntruderPolicy -eq 'set-aside' -and $IsRegisteredPath -and -not $owned) {
+        $ishape = Get-TcCsIntruderShape -Code $code -St $x.st
+        if ($ishape) {
+          $vouchedBy = $true
+          try { $vouchedBy = [bool](& $IsRegisteredPath $p) } catch { $vouchedBy = $true }
+          if (-not $vouchedBy) { $e.cls = 'intruder'; $e.ishape = $ishape; $e.why = ('unregistered, ' + $ishape + ': ' + $e.why) }
         }
       }
       $entries.Add($e)
@@ -1394,6 +1472,10 @@ function Restore-TcCsPreSync {
         } else { [IO.File]::Copy($s.copy, $dst, $true) }
       } catch { $bad.Add($s.path + ' (' + $_.Exception.Message + ')') }
     }
+    # W2.2: a staged intruder's index entry was reset above with every non-foreign path; its bytes are back, so stage
+    # them again (for 'M ' and 'A ' the index blob was the working bytes).
+    $restage = @($ctx.saved.ToArray() | Where-Object { $_.restage } | ForEach-Object { $_.path })
+    if ($restage.Count) { $ra = Invoke-TcCsGitPaths -Repo $Repo -Pre @('add') -Paths $restage; if ($ra.rc -ne 0) { $bad.Add('re-staging ' + ($restage -join ', ') + ' exited ' + $ra.rc) } }
   }
   $after = Get-TcCsStatus $Repo
   $cleanBlobs = Get-TcCsDiskBlobs -Repo $Repo -Paths @($Plan.entries | Where-Object { $_.cls -eq 'clean' } | ForEach-Object { $_.path })
