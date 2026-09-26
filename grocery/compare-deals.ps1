@@ -1876,7 +1876,9 @@ if ($SelfTest) {
     # ONE product and that product was dried fruit - every real bag row is caught by the storage/freezer/
     # slider tokens. A food package described by its packaging is not a storage bag.
     _Route 'R15 dried fruit in a zipper bag is not a bag' 'Sun-Maid Dried Mangos 15oz Resealable Stand-Up Zipper Bag' '<unmatched>'
-    _Route 'R15 a mylar food pouch is not a quart bag'  'Dehydrated Zucchini, 1 Full Quart Mylar Bag' 'zucchini'
+    # 2026-09-26 (queue 2026-09-26-177835): zucchini now excludes 'dehydrated', a ruled move frozen in
+    # plan-2026-09-26-2.routing.json (before zucchini, after none). The case still proves the pouch is not a bag.
+    _Route 'R15 a mylar food pouch is not a quart bag'  'Dehydrated Zucchini, 1 Full Quart Mylar Bag' '<unmatched>'
 
     # --- R16, 2026-08-06: WOOD POLISH IS NOT CITRUS -----------------------------------------------------
     # audit-household-in-food HARD-FAILED the publish on the full Walmart re-pull: Pledge "Orange Enhancing"

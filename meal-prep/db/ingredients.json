@@ -3201,7 +3201,8 @@
         "pantry_pkg_g":  850,
         "pantry_pkg_label":  "30oz jar",
         "bulk":  true,
-        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Mayonnaise', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Light mayo is the same jar on the same shelf at the same price class, per the 'Light Cream Cheese' and 'avocado oil mayonnaise' precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity."
+        "note":  "Reuse row written by the map lane: the mapper ruled this name onto an id that already exists and is already priced, so nothing is minted. The unit and gpu are COPIED from 'Mayonnaise', which carries the same bid - the priced basis belongs to the commodity, not to the name. The mapper's reason: Light mayo is the same jar on the same shelf at the same price class, per the 'Light Cream Cheese' and 'avocado oil mayonnaise' precedents; same gram weight per cup. Only the macros differ, so it gets its own DB row rather than its own commodity.",
+        "identity_reviewed":  "bid mayonnaise is the purchase by the map lane's reuse ruling in note; since 2026-09-26 (queue 2026-09-26-8deaa4) the weekly mayonnaise rule excludes light/lite/reduced-fat jars, so the name routes to no weekly commodity. 8deaa4 measured the light jars at the same per-oz price as the regular jar at Aldi, Walmart, Baker's and Family Fare (integration 2026-09-26)"
     },
     {
         "item":  "Cooked White Rice",
