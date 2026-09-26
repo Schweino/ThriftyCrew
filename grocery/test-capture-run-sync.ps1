@@ -37,7 +37,7 @@ $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 51
+$EXPECTED_CASES = 54
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -56,7 +56,7 @@ $crAst = [System.Management.Automation.Language.Parser]::ParseInput($crSrc, [ref
 $fnNames = @('Write-RunStatus', 'Add-FailedLane', 'Set-FailedLanePaged', 'Release-RunMutex', 'Test-CaptureRunPidAlive', 'Get-CaptureRunInheritedLock',
   'Enter-CaptureRunMutex', 'Register-CaptureRunMergedWrites', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
   'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync',
-  'Invoke-CaptureRunPushRetry', 'Update-CaptureRunLanding')
+  'Invoke-CaptureRunPushRetry', 'Test-CaptureRunPatchCarried', 'Update-CaptureRunLanding')
 $fnAsts = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $fnNames -contains $a.Name }, $true))
 $fnFound = @($fnAsts | ForEach-Object { $_.Name } | Sort-Object -Unique)
 if ($fnFound.Count -ne $fnNames.Count) { Write-Output ('BLIND: capture-run.ps1 defines ' + $fnFound.Count + ' of the ' + $fnNames.Count + ' functions this fixture lifts (' + ($fnFound -join ', ') + ') - nothing was proven'); Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
@@ -618,6 +618,52 @@ try {
     $fin = (Read-JsonFile $E.status).daily
     T 'already-landed: pushed, rc 0, no sync ran and origin did not move' ($r.outcome -eq 'already-landed' -and $r.pushed -and $r.rc -eq 0 -and $null -eq $r.sync -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore) ('outcome=' + $r.outcome + ' sync=' + [string]$r.sync)
     T 'the record pages on a CHANGED reason only, keeps stage complete, and reads pushed=true after the landing' ($c1 -and -not $c2 -and $c3 -and [string]$fin.stage -eq 'complete' -and $fin.pushed -eq $true -and [string]$fin.committed_sha -eq $sha -and [int]$fin.push_retry.tries -eq 3) ('c1=' + $c1 + ' c2=' + $c2 + ' c3=' + $c3 + ' stage=' + [string]$fin.stage + ' pushed=' + [string]$fin.pushed + ' tries=' + [string]$fin.push_retry.tries)
+  }
+
+  Invoke-Group 'PUSH-RETRY MUST FIRE - a commit the next run REPLAYED under a new id reads landed, not not-on-head (2026-09-26-3fdb1d)' {
+    # The 2026-09-26 shape: the [ad] run committed 2a365ec33 and stayed local; the [daily] start sync replayed it onto a
+    # moved origin as ef7edb1a3 and that landed; the checkout's HEAD no longer held 2a365ec33, and every hourly retry
+    # answered not-on-head and exited 1.
+    $E = New-Estate 'pushretry-replayed'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nad-run`n"
+    $sha = New-BotCommit $E @('grocery')
+    Push-Up $E 'lib/other.ps1' "moved`n" 'up: origin moves under the local commit'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $null = GitOk $E.bot @('reset', '-q', '--hard', 'refs/remotes/origin/main')
+    $null = GitOk $E.bot @('cherry-pick', $sha)
+    $replay = GitOk $E.bot @('rev-parse', 'HEAD')
+    $null = GitOk $E.bot @('push', '-q', 'origin', 'HEAD:main')
+    $tipBefore = (GitR $E.remote @('rev-parse', 'refs/heads/main')).out
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'ad' -Sha $sha
+    T 'replayed and landed: already-landed, pushed, rc 0, nothing synced, origin unmoved, the replay is a new id' ($r.outcome -eq 'already-landed' -and $r.pushed -and $r.rc -eq 0 -and $null -eq $r.sync -and (GitR $E.remote @('rev-parse', 'refs/heads/main')).out -eq $tipBefore -and $replay -ne $sha) ('outcome=' + $r.outcome + ' why=' + $r.why)
+  }
+
+  Invoke-Group 'PUSH-RETRY MUST FIRE - a replay on HEAD that origin does not hold yet is pushed, not dropped' {
+    # The 10:00 hour of the same day: the replay sat on HEAD, not yet on origin.
+    $E = New-Estate 'pushretry-replay-head'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nad-run-head`n"
+    $sha = New-BotCommit $E @('grocery')
+    Push-Up $E 'lib/other.ps1' "moved`n" 'up: origin moves under the local commit'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $null = GitOk $E.bot @('reset', '-q', '--hard', 'refs/remotes/origin/main')
+    $null = GitOk $E.bot @('cherry-pick', $sha)
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'ad' -Sha $sha
+    $onRemote = (GitR $E.remote @('show', 'refs/heads/main:grocery/ledger.json')).raw
+    T 'replay on HEAD only: landed, rc 0, and origin now carries the run''s ledger' ($r.outcome -eq 'landed' -and $r.pushed -and $r.rc -eq 0 -and $onRemote -eq "a`nb`nc`nad-run-head`n") ('outcome=' + $r.outcome + ' why=' + $r.why + ' ledger=' + $onRemote)
+  }
+
+  Invoke-Group 'PUSH-RETRY CLEAN TWIN - a commit nobody carried, under any id, still reads not-on-head and exits 1' {
+    $E = New-Estate 'pushretry-gone'
+    W $E.bot 'grocery/ledger.json' "a`nb`nc`nlost`n"
+    $sha = New-BotCommit $E @('grocery')
+    Push-Up $E 'lib/other.ps1' "moved`n" 'up: origin moves'
+    $null = GitOk $E.bot @('fetch', '-q', 'origin')
+    $null = GitOk $E.bot @('reset', '-q', '--hard', 'refs/remotes/origin/main')
+    $NoSync = $false; $script:TailRetrySec = 0; $script:CaptureRunSyncSeams = $script:fxSeams; $script:TailSyncStatus = $null
+    $r = Invoke-CaptureRunPushRetry -Repo $E.bot -Root (Join-Path $E.bot 'grocery') -Kind 'ad' -Sha $sha
+    T 'dropped, not replayed: not-on-head, not pushed, rc 1' ($r.outcome -eq 'not-on-head' -and -not $r.pushed -and $r.rc -eq 1) ('outcome=' + $r.outcome + ' why=' + $r.why)
   }
 
   Invoke-Group 'NO AUTOSTASH MUST NOT FIRE - bar B3 on its mechanism' {

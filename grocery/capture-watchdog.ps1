@@ -1576,7 +1576,9 @@ if ((Test-Path $rhs) -and (Test-Path $pyExe3)) {
 # happening for a month.
 $hookAudit = Join-Path (Split-Path $root -Parent) 'ops\audit-hook-installed.ps1'
 if (Test-Path $hookAudit) {
-  $haOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $hookAudit
+  # -Repair (2026-09-26, queue 2026-09-26-4b6616): a hook left stale by a landed ops\hooks change is re-installed and
+  # re-checked here, on the main checkout only, and reads as a healthy REPAIRED line; a refused or failed repair pages.
+  $haOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $hookAudit -Repair
   $haRc = $LASTEXITCODE
   $haLine = ($haOut | Where-Object { $_ -match '^hook-installed:' } | Select-Object -Last 1)
   if ($haRc -eq 2) { [void]$findings.Add("GIT HOOKS NOT LIVE - pushes are ungated: $haLine") }

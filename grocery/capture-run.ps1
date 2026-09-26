@@ -433,6 +433,16 @@ function Invoke-CaptureRunOwedTailSync {
 # feed built by replaced code, and the next full run rebuilds it. Returns @{ outcome; reason; pushed; rc; why; sync;
 # lines }; outcome is landed | already-landed | blocked | push-failed | fetch-failed | not-on-head | stale-code-feed.
 # $StaleFeed is a seam: a scriptblock (Repo, Base, Tip) returning @{ stale; blind; why }; $null uses lib\chain-code-currency.
+# True when $Upstream holds a commit whose patch equals $Sha's (git cherry prints '- <sha>'). Any git failure, a root
+# commit, or an unequal patch is $false, so a doubtful answer keeps the id-only verdict it replaces.
+function Test-CaptureRunPatchCarried {
+  param([string]$Repo, [string]$Upstream, [string]$Sha)
+  $ch = Invoke-GitCaptured -Repo $Repo -GitArgs @('cherry', $Upstream, $Sha, ($Sha + '~1'))
+  if ($ch.rc -ne 0) { return $false }
+  $rows = @(([string]$ch.stdout) -split "`r?`n" | Where-Object { $_.Trim() })
+  return ($rows.Count -eq 1 -and $rows[0].StartsWith('- '))
+}
+
 function Invoke-CaptureRunPushRetry {
   param([string]$Repo, [string]$Root, [string]$Kind, [string]$Sha, [int]$Attempts = 4, [scriptblock]$StaleFeed = $null)
   $lines = New-Object System.Collections.Generic.List[string]
@@ -448,7 +458,22 @@ function Invoke-CaptureRunPushRetry {
     $res.why = ('origin/main already contains ' + $Sha + ' (another push carried it); nothing pushed')
     $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
   }
+  # A REPLAY IS THE SAME COMMIT UNDER A NEW ID (2026-09-26, queue 2026-09-26-3fdb1d). The next run's start sync replays a
+  # local bot commit onto origin (lib\checkout-sync.ps1, Invoke-TcCsLocalCommitReplay), so on that day the [ad] run's
+  # 2a365ec33 landed as ef7edb1a3 and every hourly retry after it asked only by id, answered not-on-head, and exited 1
+  # (10:00 to 13:00, four runs), which the watchdog read as FAILED. `git cherry` asks by patch-id instead: an equal
+  # patch upstream is this run's work, carried. A replay that had to resolve a conflict has a different patch-id and
+  # still reads not-on-head, exactly as before.
+  if ($cnt.rc -eq 0 -and (Test-CaptureRunPatchCarried -Repo $Repo -Upstream 'refs/remotes/origin/main' -Sha $Sha)) {
+    $res.outcome = 'already-landed'; $res.reason = 'already-landed'; $res.pushed = $true; $res.rc = 0
+    $res.why = ('origin/main already carries a replay of ' + $Sha + ' (same patch-id, git cherry); nothing pushed')
+    $lines.Add('push-retry: ' + $res.why); $res.lines = $lines.ToArray(); return $res
+  }
   $anc = Invoke-GitCaptured -Repo $Repo -GitArgs @('merge-base', '--is-ancestor', $Sha, 'HEAD')
+  if ($cnt.rc -eq 0 -and $anc.rc -ne 0 -and (Test-CaptureRunPatchCarried -Repo $Repo -Upstream 'HEAD' -Sha $Sha)) {
+    $lines.Add('push-retry: HEAD carries a replay of ' + $Sha + ' (same patch-id, git cherry), so HEAD is what lands')
+    $anc = [pscustomobject]@{ rc = 0; stdout = ''; stderr = '' }
+  }
   if ($cnt.rc -ne 0 -or $anc.rc -ne 0) {
     $res.outcome = 'not-on-head'; $res.reason = 'not-on-head'
     $res.why = ('HEAD no longer holds ' + $Sha + ' (rev-list exited ' + $cnt.rc + ', merge-base exited ' + $anc.rc + '), so there is no commit of this run to push; the next full run commits again')
