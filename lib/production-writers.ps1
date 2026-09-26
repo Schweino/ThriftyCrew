@@ -134,6 +134,20 @@ function Add-TcProductionCensusRow {
   return 'written'
 }
 
+function Get-TcSyncIntruderArgs {
+  <# W2.2 (D4): what the capture bot passes lib\checkout-sync.ps1: -IntruderPolicy from the registry's intruder_policy,
+     and -IsRegisteredPath, true when the bot or a registry writer owns the path. A registry that cannot be read gives
+     'wait' (today's rule) and no classifier, never set-aside over an empty writer list, which would read every
+     producer's file as an intruder. The classifier reads the registry through $script: variables, so it resolves in
+     the script scope that dot-sourced this file (capture-run's), not in the library that calls it. #>
+  param([Parameter(Mandatory)][string]$RegistryPath)
+  try { $reg = Read-TcProductionRegistry -Path $RegistryPath }
+  catch { return [pscustomobject]@{ policy = 'wait'; test = $null; note = ('intruder policy: wait, because the registry could not be read (' + $_.Exception.Message + ')') } }
+  $script:TcSyncIntruderRegistry = $reg
+  $test = { param($p) return ((Get-TcProductionWriter -Path $p -Registry $script:TcSyncIntruderRegistry) -ne '') }
+  return [pscustomobject]@{ policy = [string]$reg.intruder_policy; test = $test; note = ('intruder policy: ' + [string]$reg.intruder_policy + ' (ops/production-writers.json, ' + @($reg.writers).Count + ' writers)') }
+}
+
 function Invoke-TcProductionCensusCheck {
   <# The whole check, as the capture watchdog and ops\report-production-intruders.ps1 both run it: read the registry,
      classify, record today's row when -Record. A REPORT: it returns one line and never a finding. A throw is BLIND. #>
@@ -235,12 +249,18 @@ if ($__pwSelfTest) {
     PwT 'CLEAN TWIN: the check records its day and reports one line' ((-not $chk2.blind) -and ($chk2.line -match 'day row written') -and ($chk2.line -match 'UNREGISTERED')) $chk2.line
     $n0 = @(Get-ChildItem -LiteralPath $repo -Recurse -Force -File | Where-Object { $_.FullName -notmatch '\\\.git\\' }).Count
     PwT 'MUST NOT FIRE: the census wrote nothing into the checkout it read (7 files before and after)' ($n0 -eq 7) ([string]$n0)
+    # W2.2: the sync's two arguments. The founding session file is unregistered; a registered writer's stamp is not.
+    $sa = Get-TcSyncIntruderArgs -RegistryPath $regPath
+    PwT 'MUST FIRE: the classifier calls a session''s code file unregistered (lib/chain-queue.ps1 -> false)' (($sa.policy -eq 'wait') -and $sa.test -and (-not (& $sa.test 'lib/chain-queue.ps1'))) ($sa.note)
+    PwT 'CLEAN TWIN: the classifier vouches for a registered writer''s stamp (grocery/x-weekly-stamp.txt -> true)' ([bool](& $sa.test 'grocery/x-weekly-stamp.txt')) ($sa.note)
+    $sb = Get-TcSyncIntruderArgs -RegistryPath $bad
+    PwT 'MUST NOT FIRE: an unreadable registry gives wait and no classifier, never set-aside' (($sb.policy -eq 'wait') -and ($null -eq $sb.test) -and ($sb.note -match 'could not be read')) ($sb.note)
   } catch {
     $script:pwFail++; Write-Output ('  FAIL  the fixture threw: ' + $_.Exception.Message)
   } finally {
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 14
+  $want = 17
   if ($script:pwCases -ne $want) { Write-Output ("PRODUCTION-WRITERS SELF-TEST FAIL: ran $script:pwCases cases, the literal list holds $want"); exit 1 }
   if ($script:pwFail) { Write-Output "PRODUCTION-WRITERS SELF-TEST FAIL ($script:pwFail of $script:pwCases)"; exit 1 }
   Write-Output "PRODUCTION-WRITERS SELF-TEST PASS ($script:pwCases of $script:pwCases cases)"

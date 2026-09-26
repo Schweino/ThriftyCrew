@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'checkout-sync.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 183
+$EXPECTED_CASES = 199
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -966,6 +966,91 @@ try {
     try { $s = Sync $E } finally { $hold.Dispose() }
     $rows1 = @([IO.File]::ReadAllLines($logFile) | Where-Object { $_ }).Count
     T 'the row count rose by one and the record says it logged' (($rows1 -eq $rows0 + 1) -and $s.logged -and ($s.outcome -eq 'current')) ('rows ' + $rows0 + '->' + $rows1 + ' logged=' + $s.logged + ' ' + $s.outcome)
+  }
+
+  # ---- W2.2 INTRUDER SET-ASIDE (design\PLAN-bot-dedicated-checkout-2026-09-25.md, D4 ruled (b) 2026-09-25) ----------
+  # The founding case is the 07:00 run of 2026-09-26 (triage 2026-09-26-2a80fa and a988a8): three files of another
+  # session in the main checkout, two untracked where upstream added them (grocery/test-asof-evidence-scope.ps1,
+  # grocery/triage-plans/plan-2026-09-25-15.json) and one ' M' that upstream changed (ops/report-ratchet-trends.ps1),
+  # blocked the start sync and the push sync. The fixture's owned paths are grocery/ and public/, so the stand-ins sit
+  # outside them: lib/test-asof-evidence-scope.ps1, design/plan-2026-09-25-15.json and the tracked tools/verifier.txt.
+  function New-IntruderEstate([string]$Name) {
+    $E = New-Estate $Name
+    Push-Up $E 'lib/test-asof-evidence-scope.ps1' "upstream scope test`n" 'up: add the scope test'
+    Push-Up $E 'design/plan-2026-09-25-15.json' "{ ""up"": 1 }`n" 'up: add the plan'
+    Push-Up $E 'tools/verifier.txt' "strict-UP`n" 'up: change the verifier'
+    W $E.bot 'lib/test-asof-evidence-scope.ps1' "SESSION draft of the scope test`n"
+    W $E.bot 'design/plan-2026-09-25-15.json' "{ ""session"": 1 }`n"
+    W $E.bot 'tools/verifier.txt' "strict SESSION edit`n"
+    foreach ($r in 'lib\test-asof-evidence-scope.ps1', 'design\plan-2026-09-25-15.json', 'tools\verifier.txt') { (Get-Item (Join-Path $E.bot $r)).LastWriteTime = [datetime]'2020-01-01T00:00:00' }
+    return $E
+  }
+  $script:fxIntrPaths = @('lib/test-asof-evidence-scope.ps1', 'design/plan-2026-09-25-15.json', 'tools/verifier.txt')
+
+  Invoke-Group 'W2.2 MUST FIRE - the 2026-09-26 07:00 shape under intruder_policy set-aside: set aside, verified, synced, paged' {
+    $E = New-IntruderEstate 'intr-fire'
+    $md = @{}; foreach ($r in $script:fxIntrPaths) { $md[$r] = Md5 (Join-Path $E.bot $r) }
+    $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = { param($p) $false } }
+    T 'MUST FIRE: outcome synced, it pages, and all three intruders are named' (($s.outcome -eq 'synced') -and $s.page -and (@($s.intruders).Count -eq 3) -and ($s.why -match 'unregistered intruder')) ($s.outcome + '/' + $s.class + ' page=' + $s.page + ' ' + (@($s.intruders) -join ', ') + ' :: ' + $s.why)
+    T 'MUST FIRE: HEAD equals origin/main and each path holds upstream''s bytes' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq (GitR $E.bot @('rev-parse', 'origin/main')).out) -and ((ReadOr (Join-Path $E.bot 'tools\verifier.txt')) -eq "strict-UP`n") -and ((ReadOr (Join-Path $E.bot 'lib\test-asof-evidence-scope.ps1')) -eq "upstream scope test`n")) (ReadOr (Join-Path $E.bot 'tools\verifier.txt'))
+    $copiesOk = $true; foreach ($r in $script:fxIntrPaths) { if ((Md5 (InTree $s ('intruder\' + ($r -replace '/', '\')))) -ne $md[$r]) { $copiesOk = $false } }
+    T 'MUST FIRE: each set-aside copy is byte-identical to the session''s file' $copiesOk ($s.tree)
+    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { @([IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json) } else { @() }
+    T 'MUST FIRE: the manifest carries one intruder row per path' (@($man | Where-Object { $_.class -eq 'intruder' }).Count -eq 3) ('' + @($man).Count + ' rows')
+    T 'CLEAN TWIN: the checkout is clean afterwards (nothing half-restored)' ((Status $E.bot) -eq '') (Status $E.bot)
+  }
+
+  Invoke-Group 'W2.2 MUST NOT FIRE - the switch position wait, and set-aside with no classifier, block exactly as today' {
+    $E = New-IntruderEstate 'intr-wait'; $b4 = Snap $E.bot
+    $s = Sync $E
+    T 'MUST NOT FIRE (default wait): blocked class foreign naming all three, and nothing set aside' (($s.outcome -eq 'blocked') -and ($s.class -eq 'foreign') -and (@($s.foreign).Count -eq 3) -and (@($s.intruders | Where-Object { $_ }).Count -eq 0)) ($s.outcome + '/' + $s.class + ' ' + ($s.foreign -join ', '))
+    T 'MUST NOT FIRE (default wait): tree, index and HEAD byte-identical' ((Snap $E.bot) -eq $b4)
+    $E2 = New-IntruderEstate 'intr-nocls'; $b42 = Snap $E2.bot
+    $s2 = Sync $E2 @{ IntruderPolicy = 'set-aside' }
+    T 'MUST NOT FIRE (set-aside, no classifier: nobody can tell): blocked foreign, byte-identical' (($s2.outcome -eq 'blocked') -and ($s2.class -eq 'foreign') -and ((Snap $E2.bot) -eq $b42)) ($s2.outcome + '/' + $s2.class)
+  }
+
+  Invoke-Group 'W2.2 CLEAN TWIN - a registered writer''s file, or a classifier that throws, is never moved' {
+    foreach ($arm in 'registered', 'throws') {
+      $E = New-Estate ('intr-' + $arm)
+      Push-Up $E 'tools/verifier.txt' "strict-UP`n" 'up: change the verifier'
+      W $E.bot 'tools/verifier.txt' "a weekly stamp its registered audit wrote`n"
+      $vf = Join-Path $E.bot 'tools\verifier.txt'; $vmd = Md5 $vf
+      $cls = if ($arm -eq 'registered') { { param($p) $p -eq 'tools/verifier.txt' } } else { { param($p) throw 'registry unreadable' } }
+      $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = $cls }
+      T ('CLEAN TWIN (' + $arm + '): not synced, the file untouched, nothing set aside') (($s.outcome -ne 'synced') -and ($s.class -eq 'foreign') -and ((Md5 $vf) -eq $vmd) -and (@($s.intruders | Where-Object { $_ }).Count -eq 0)) ($s.outcome + '/' + $s.class + ' ' + (ReadOr $vf))
+    }
+  }
+
+  Invoke-Group 'W2.2 MUST FIRE - a staged edit (09-24 16:38 shape) is set aside with its index entry recorded; MM stays FOREIGN' {
+    $E = New-Estate 'intr-staged'
+    Push-Up $E 'lib/code.ps1' "line1-UP`nline2`nline3`nline4`nline5`n" 'up: code'
+    W $E.bot 'lib/code.ps1' "line1-STAGED`nline2`nline3`nline4`nline5`n"; $null = GitOk $E.bot @('add', 'lib/code.ps1')
+    $stagedBlob = (GitR $E.bot @('rev-parse', ':lib/code.ps1')).out; $cmd = Md5 (Join-Path $E.bot 'lib\code.ps1')
+    $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = { param($p) $false } }
+    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { @([IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json) } else { @() }
+    T 'MUST FIRE: synced, the copy holds the staged bytes, and the manifest records the staged blob' (($s.outcome -eq 'synced') -and ((Md5 (InTree $s 'intruder\lib\code.ps1')) -eq $cmd) -and (@($man | Where-Object { $_.class -eq 'intruder' -and $_.index_blob -eq $stagedBlob }).Count -eq 1)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
+    T 'MUST FIRE: lib/code.ps1 holds upstream''s bytes and the checkout is clean' (((ReadOr (Join-Path $E.bot 'lib\code.ps1')) -eq "line1-UP`nline2`nline3`nline4`nline5`n") -and ((Status $E.bot) -eq '')) (Status $E.bot)
+    $E2 = New-Estate 'intr-mm'
+    Push-Up $E2 'lib/code.ps1' "line1-UP`nline2`nline3`nline4`nline5`n" 'up: code'
+    W $E2.bot 'lib/code.ps1' "S`n"; $null = GitOk $E2.bot @('add', 'lib/code.ps1'); W $E2.bot 'lib/code.ps1' "W`n"
+    $b4 = Snap $E2.bot
+    $s2 = Sync $E2 @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = { param($p) $false } }
+    T 'MUST NOT FIRE: an MM path (two contents) stays FOREIGN: blocked, byte-identical' (($s2.outcome -eq 'blocked') -and ($s2.class -eq 'foreign') -and ((Snap $E2.bot) -eq $b4)) ($s2.outcome + '/' + $s2.class)
+  }
+
+  Invoke-Group 'W2.2 MUST FIRE - a throw after the set-aside puts every intruder back, bytes, mtime, status and staging' {
+    $E = New-IntruderEstate 'intr-putback'
+    Push-Up $E 'lib/added.ps1' "upstream add`n" 'up: add a file'
+    W $E.bot 'lib/added.ps1' "SESSION staged add`n"; $null = GitOk $E.bot @('add', 'lib/added.ps1')
+    (Get-Item (Join-Path $E.bot 'lib\added.ps1')).LastWriteTime = [datetime]'2020-01-01T00:00:00'
+    $all = @($script:fxIntrPaths) + @('lib/added.ps1')
+    $st0 = Status $E.bot
+    $fp0 = @($all | ForEach-Object { $f = Join-Path $E.bot $_; (Md5 $f) + '@' + (Mtime $f) }) -join ','
+    $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = { param($p) $false }; BeforeMove = { throw 'injected after the set-aside' } }
+    T 'MUST FIRE: failed class exception naming the throw, after all four were set aside' (($s.outcome -eq 'failed') -and ($s.class -eq 'exception') -and ($s.why -match 'injected after the set-aside') -and (@($s.intruders).Count -eq 4)) ($s.outcome + '/' + $s.class + ' ' + (@($s.intruders) -join ', ') + ' :: ' + $s.why)
+    T 'MUST FIRE: every intruder is back byte- and mtime-identical' ((@($all | ForEach-Object { $f = Join-Path $E.bot $_; (Md5 $f) + '@' + (Mtime $f) }) -join ',') -eq $fp0)
+    T 'MUST FIRE: every status line is back, the staged add re-staged' ((Status $E.bot) -eq $st0) ((Status $E.bot) + ' VS ' + $st0)
   }
 } finally {
   if ($script:fxHold) { try { $script:fxHold.Dispose() } catch { } }

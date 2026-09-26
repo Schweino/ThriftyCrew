@@ -88,6 +88,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path $root 'commit-size-lib.ps1')   # Test-CarriedCommitSize/Add-TcCommitCarry: the size gate judges per RUN (plan W2.2)
 . (Join-Path (Split-Path $root -Parent) 'lib\pipeline-commit.ps1')   # Get-PipelineOwnBlobs for the start sync, and the dirty-at-start snapshot
 . (Join-Path (Split-Path $root -Parent) 'lib\checkout-sync.ps1')     # Invoke-TcCheckoutSync: the ONE mover of the shared checkout, at the start and the tail (plan W4.1, W4.2)
+. (Join-Path (Split-Path $root -Parent) 'lib\production-writers.ps1')   # Get-TcSyncIntruderArgs: the sync's intruder policy and classifier (W2.2)
 . (Join-Path $root 'capture-run-lock-lib.ps1')   # Get-CaptureRunOrphanHolder: an abandoned lock is not free while a capture-run is alive (plan W4.1 step 7), shared with chain-idle
 
 # ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
@@ -365,6 +366,8 @@ function Invoke-CaptureRunTailSync {
       $tSv = Get-BotServedPaths
       $tBlobs = Get-PipelineOwnBlobs -Repo $Repo
       $tArgs = @{ Repo = $Repo; Phase = 'tail'; Kind = $Kind; OwnedPaths = (@($tIn) + @($tSv)); OwnBlobs = $tBlobs; QuarantineRoot = (Join-Path $Root 'out\untracked-quarantine') }
+      $tIntr = if (Get-Command Get-TcSyncIntruderArgs -ErrorAction SilentlyContinue) { Get-TcSyncIntruderArgs -RegistryPath (Join-Path (Split-Path $Root -Parent) 'ops\production-writers.json') } else { [pscustomobject]@{ policy = 'wait'; test = $null } }   # W2.2, as the start sync, failing toward wait
+      $tArgs['IntruderPolicy'] = $tIntr.policy; if ($tIntr.test) { $tArgs['IsRegisteredPath'] = $tIntr.test }
       if ($BotCommit) { $tArgs['BotCommit'] = $BotCommit }
       if ($script:CaptureRunSyncSeams) { foreach ($tK in @($script:CaptureRunSyncSeams.Keys)) { $tArgs[$tK] = $script:CaptureRunSyncSeams[$tK] } }
       $r = Invoke-TcCheckoutSync @tArgs
@@ -624,6 +627,11 @@ if ($script:HandedOffBy) {
     $ssBlobs = Get-PipelineOwnBlobs -Repo $ssRepo
     if ($ssBlobs.note) { Write-Output $ssBlobs.note }
     $ssArgs = @{ Repo = $ssRepo; Phase = 'start'; Kind = $Kind; OwnedPaths = (@($ssInputs) + @($ssServed)); OwnBlobs = $ssBlobs; QuarantineRoot = (Join-Path $root 'out\untracked-quarantine') }
+    # W2.2 (design\PLAN-bot-dedicated-checkout-2026-09-25.md, D4): the intruder policy and its classifier, from ops\production-writers.json.
+    # Fails toward 'wait' (today's rule): no loaded library, or an unreadable registry, never sets anything aside.
+    $ssIntr = if (Get-Command Get-TcSyncIntruderArgs -ErrorAction SilentlyContinue) { Get-TcSyncIntruderArgs -RegistryPath (Join-Path (Split-Path $root -Parent) 'ops\production-writers.json') } else { [pscustomobject]@{ policy = 'wait'; test = $null; note = 'intruder policy: wait (lib\production-writers.ps1 is not loaded)' } }
+    $ssArgs['IntruderPolicy'] = $ssIntr.policy; if ($ssIntr.test) { $ssArgs['IsRegisteredPath'] = $ssIntr.test }
+    Write-Output ('sync[start]: ' + $ssIntr.note)
     if ($script:CaptureRunSyncSeams) { foreach ($ssK in @($script:CaptureRunSyncSeams.Keys)) { $ssArgs[$ssK] = $script:CaptureRunSyncSeams[$ssK] } }
     $ss = Invoke-TcCheckoutSync @ssArgs
   } catch {
