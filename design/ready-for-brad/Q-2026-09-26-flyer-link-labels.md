@@ -1,6 +1,6 @@
 # Q-2026-09-26-flyer-link-labels: review the proposed labels for the 53 Hy-Vee flyer lines
 
-**Items 1 (set shape) and 2 RULED 2026-09-26; two label questions below are still open.** Your ruling on the plan (2026-09-26, "Yes, build to that bar") said the orchestrator labels the
+**All items RULED 2026-09-26, including the two label questions ("Fix both").** Your ruling on the plan (2026-09-26, "Yes, build to that bar") said the orchestrator labels the
 53-line answer set and you review the labels. The labels are in `grocery/hyvee/flyer-link-gold.jsonl`. Each row
 gives the line, the proposed product id (or a SET of equally priced flavours, or NO-MATCH), why, and the store read it
 rests on. Every row is marked `labels: proposed, awaiting Brad review`.
@@ -31,7 +31,16 @@ built from the same store reads it was scored on, so the 18 is a best case until
 lines still unlinked are mostly names that DROP a word (no "Hy-Vee", no "soap", no "Entenmann's") rather than
 abbreviate it, which your ruling did not cover. Full account: `design/MEASURE-flyer-line-link-2026-09-26.md`.
 
-## Still open: two labels that look questionable (not changed)
+## RULED 2026-09-26 (Brad, in chat): "Fix both"
+
+- Peanuts: the two Cocktail Peanuts products come out of the label.
+- Bagels: set to NO-MATCH.
+
+Done the same day. Re-scored on the same store reads: v1 8 links of 53, 0 wrong; v2 18 links of 53, 0 wrong. Nothing
+changed except bagels now counts as a correct abstain. Still under the floor of 20, still shadow. These labels were
+changed after the scores were seen, and the measure doc says so. Nothing in this file is still open.
+
+## The two labels as they were asked (answered above)
 
 1. **Peanuts.** The set label includes two Cocktail Peanuts products that the peanuts commodity's own rule refuses, so
    nothing can ever link them. Should that rule admit cocktail peanuts, or should they come out of the label?

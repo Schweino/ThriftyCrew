@@ -142,6 +142,38 @@ survive of it.
 gitignored so capture-run's staging of `grocery/out` cannot commit it. The network half of the runner is unchanged
 from v1 and was not run live in this change; its first chain run is the first live look.
 
+## Re-score after two labels changed (Brad, 2026-09-26: "Fix both")
+
+**These labels changed AFTER the v1 and v2 scores were seen, so the numbers below are NOT independent of the ones
+above.** The two rows changed are exactly the two this document flagged as questionable once v2 had run. Nothing else
+moved: same frozen evidence (blob 662ea867...), same decision files (v1 868a70d2..., v2 9f35f7e3...), same committed
+scorer (blob 23bc685d2a8fa5fce6472f25168ee38553721069), same bar. No linker variant was added (variants tried: still 2).
+
+- `peanuts`: 8020 and 7726 (Planters Cocktail Peanuts) removed from the SET, leaving 8024, 8032 and 43828. The peanuts
+  identity rule refuses cocktail peanuts, so they could never link.
+- `bagels`: SET of four 12 and 12.4 oz Sola bagels set to NO-MATCH, since the line states "14 or 22 oz".
+
+Each changed gold row carries a `label_change` field (date, the old ids, and "Brad ruling 2026-09-26, labels changed
+AFTER scoring v1 and v2"). Gold blob after the change: a2afae4537c9107b41b2847e4200059813960a1d. The new arms were
+appended to `grocery/hyvee/flyer-link-cases.jsonl` as `linker-v1-relabel-2026-09-26` and `linker-v2-relabel-2026-09-26`,
+53 rows each; the old v1 and v2 rows are kept (265 rows, blob e9418d173d254c86be0e93d24493bf59a10d4f6b). The scorer's
+A-no-link baseline under the new labels was printed, not appended (its -Append mode writes only the named arm).
+
+| Arm (labels after the ruling) | Lines | Links made | Wrong links | False wrong-price | Abstain on a labelled product | Correct abstain | Bar |
+|---|---|---|---|---|---|---|---|
+| A-no-link | 53 | 0 of 53 | 0 of 0 | 0 | 38 | 15 | missed (coverage) |
+| linker-v1-relabel | 53 | 8 of 53 (15%) | 0 of 8 | 0 of 8 | 30 | 15 | MISSED: 8 is under 20 |
+| linker-v2-relabel | 53 | 18 of 53 (34%) | 0 of 18 | 0 of 18 | 20 | 15 | MISSED: 18 is under 20 |
+
+What moved, over 53 lines: one cell per linker arm. `bagels` went from abstain on a labelled product to correct abstain
+in both v1 and v2 (the linker abstained there all along). `peanuts` did not move: v1 still abstains, and v2's set (8024,
+8032, 43828) was already inside the old label and is inside the new one. Links made and wrong links are unchanged in
+both arms, so the relabel changes no conclusion: **the bar is still missed on coverage and the linker stays in shadow.**
+
+Harness: `grocery/score-hyvee-flyer-link.ps1 -Links <decided file> -Gold grocery/hyvee/flyer-link-gold.jsonl -CasesOut
+grocery/hyvee/flyer-link-cases.jsonl -Arm <arm> -Append`, both runs exit 0 with `FLYER-LINK-SCORE-COMPLETE`, on a branch
+based at origin/main 9a1ef50c6.
+
 ## How it ran (harness, blobs, inputs)
 
 Harness: grocery/hyvee-flyer-link.ps1 then grocery/score-hyvee-flyer-link.ps1, run 2026-09-26 on a branch based at origin/main commit 763c001e2 (blobs below; cite blobs, since the landing rebases).
