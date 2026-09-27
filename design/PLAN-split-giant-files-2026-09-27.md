@@ -103,6 +103,26 @@ The census is UNSOUND, so before step 1 also grep `compare-deals` with `IndexOf|
 **Order:** refusals and ranking libs; identity lib; self-test last (four readers care about its text).
 **Proof:** function hashes; `-SelfTest` same lines, pass count and exit; a golden run on a frozen copy of `grocery\out` in scratch with byte-identical `comparison-*.json` and identity/link sidecars, same post-steps both times (never revert-to-isolate; diff); `test-match-lib.ps1` green and not BLIND; `test-precedence-ladders.ps1` green; test-auditors `$cd*` units green.
 **Traps:** the lifted region; lifted `$script:` constants do not travel; the self-test sits mid-file and depends on dot-sources before 572 but not those after (match-lib loads after it), so its dot-source goes at 572 exactly; the local `Read-JsonFile` at 113 shadows `lib\json-io` and stays.
+**Traps found while doing it (2026-09-27):**
+- **The self-test reads its OWN source**: the lift-closure check (`$engineText`) and the Add-Norm case (parses the file's
+  AST). Read raw after a move, the first silently saw 14 of 21 engine functions and still printed ok; the second fails.
+  Both read host-plus-pieces through `Expand-SelfTestPointers`, repointed in the commit that moved the text.
+- **Cut only where no `$PSScriptRoot` dot-source sits inside the range**: in a piece it names the subfolder. That is why
+  ranking is 37 lines, not ~250, and why `Get-RowProductId` stays in the host.
+- **`exit` inside a dot-sourced piece ends only the PIECE**, and the host falls through into the code after the block
+  (measured in a scratch host); the piece's code does reach `$LASTEXITCODE`. The moved self-test's host therefore ends
+  its block with its own `exit $LASTEXITCODE`, and the body's only exits must be its last lines, or a split into two
+  pieces would skip cases.
+- **Inside a piece, `$PSScriptRoot` and `$PSCommandPath` name the piece.** D7 (option b) below is how the self-test reads
+  the host's instead.
+- **A .NET replacement string reads `$_` as "the whole input"**: `-replace 'x', '$__cdHostDir'` pasted each line into
+  itself. Write `'$$__cdHostDir'`. The expansion check caught it; a sed-like cut without that check would have landed it.
+- **Piping `git show` through PowerShell decodes non-ASCII with the console codepage**, so a proof comparing against a
+  committed blob reads the blob through `cmd /c ... > file` and `ReadAllText`, never a PowerShell pipe.
+- **The golden bar is D8's, not strict bytes**: two runs of one unchanged commit differ in `built_at`/`updated` stamps and
+  the clone path. Tools: `ops\golden-board-run.ps1` and `ops\golden-board-compare.ps1`.
+- `ops\prove-split.ps1 -Snapshot` prints `files=1` for a comma-joined `-Paths` under `-File` (og-10) although it parses
+  every file; read the snapshot's `file` column, not that count.
 
 ## 5. grocery\check-ad-cycles.ps1
 **Today:** 55-63 params; 63-~328 the self-test runs FIRST and walks its own AST (checks ship calls sit under `-NoCommit`/`-NoPublish`, the `$ShipOnly` ifs, first `top5-weekly` inspect, `Out-Null` pipelines; fakes `Log`/`Send-Alert` at 256); 330-460 bootstrap and 10 dot-sources; 461-712 cadence gate, bounded children, guards gate; 747-1057 server pull and schedule rebuild; 1058-~3780 one `if` with the whole downstream chain (flat scope, nested local functions at 1899 and 2371); 3780-4577 ~20 independent DAILY/WEEKLY try-blocks.
@@ -154,6 +174,16 @@ Steps 3 and 5 are worth one small script, `ops\prove-split.ps1`, used ~20 times 
 - **D4: only check-ad-cycles' runner helpers and watchers tail.** Not in phase 1.
 - **D5: build `ops/prove-split.ps1`** (function-body hash diff plus golden-output diff), self-tested.
 - **D6: yes**, compare-deals' lifted `$GLOBAL_EXCLUDE ... -Explain` region stays frozen in the host.
+- **D7 (2026-09-27): compare-deals' self-test moves with option (b).** The host keeps `if ($SelfTest) {`, one hand-off
+  line `$__cdHostPath = $PSCommandPath; $__cdHostDir = $PSScriptRoot`, the pointers to
+  `grocery/compare-deals/selftest-*.ps1` (split under 1,000 lines each), `exit $LASTEXITCODE` and `}`. The body moves
+  unchanged except that every `$PSScriptRoot`/`$PSCommandPath` in it reads the passed-in host folder and path. Proven as
+  the other steps: host-plus-pieces expands back to the original (with exactly those edits), function hashes, the 463
+  self-test lines and exit code, the five named suites, the census, the golden board under D8, the budget's `-Tighten`.
+- **D8 (2026-09-27): the golden board bar is "byte-identical except the masked build-time stamps and scratch path"**:
+  a `built_at`/`updated` ISO timestamp value and the run's own root, nothing else, proven sensitive by a one-cent price
+  change at equal length. `ops\golden-board-run.ps1` and `ops\golden-board-compare.ps1` carry it, each self-tested
+  (MUST FIRE the one-cent change, MUST NOT FIRE a stamp-only difference).
 
 **Phase 1, in order, one landed commit each:** (1) step 0 subfolder globs; (2) `ops/prove-split.ps1`; (3) the
 `Get-SelfTestBlock` pointer-follow; (4) `grocery/test-auditors.ps1` split into `grocery/test-auditors/` per section 2,
