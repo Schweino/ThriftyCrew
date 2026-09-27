@@ -440,7 +440,20 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
   _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
   _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
-  $rtWant = 89   # +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
+  # 2026-09-27-c989c6: Brad's form/style ruling (design/ready-for-brad/Q-2026-09-26-form-style.md) landed as a creole WORD
+  # exclude, and a brand include admitted the Fareway Creole row whose name says neither word. Founding row frozen verbatim
+  # from fareway-shop-2026-09-27.json; konjac and Abuelita names from walmart-regular captures 08-11..09-19.
+  _RT 'MUST FIRE  c989c6 the ruled Fareway Tony Chachere''s Creole row leaves cajun-seasoning (Q-2026-09-26-form-style line 28)' 'Tony Chachere''s It''s Spicy! More Spice Seasoning' '<none>'
+  _RT 'MUST FIRE  c989c6 a konjac angel hair is not wheat pasta' 'Miracle Noodle Angel Hair Konjac Noodles, Naturally Low Carb, Gluten Free, 7 oz' '<none>'
+  _RT 'MUST FIRE  c989c6 a konjac spaghetti is not wheat pasta' 'Miracle Noodle Spaghetti, Ready-to-Eat, Konjac Noodles, 7 oz Pack, Naturally Low Carb, Gluten Free, Free from Allergens' '<none>'
+  _RT 'MUST FIRE  c989c6 a shirataki fettuccine is not wheat pasta' 'Miracle Noodle Ready to Eat Fettuccine Pasta, 7 Oz, Plant Based Shirataki Konjac Noodles, 5 Calories, 1g Net Carbs Per Serving, Gluten-Free' '<none>'
+  _RT 'MUST FIRE  c989c6 a konjac "Pasta Spaghetti" is not wheat pasta' 'It''s That Simple Pasta Spaghetti Healthy, Low Calorie, Low-Carb Konjac Pasta' '<none>'
+  _RT 'MUST FIRE  c989c6 a Cinco de Mayo hot chocolate leaves mayonnaise for hot-cocoa' 'Nestle Abuelita Mexican Style Instant Hot Chocolate Cinco de Mayo Food Drink Mix, 8 oz, 8 Packets Per Box' 'hot-cocoa'
+  _RT 'CLEAN TWIN  c989c6 a Tony Chachere''s name that says Cajun stays cajun-seasoning (the ruling admits it)' 'Tony Chacheres, Seasoning, Cajun, More Spice, 30 oz' 'cajun-seasoning'
+  _RT 'CLEAN TWIN  c989c6 the Walmart Tony Chachere''s Original Cajun stays cajun-seasoning' 'Tony Chachere''s, Seasoning, Original, Cajun, 32 oz' 'cajun-seasoning'
+  _RT 'CLEAN TWIN  c989c6 a wheat angel hair still prices pasta' 'Great Value Angel Hair, 16 oz, Shelf Stable' 'pasta'
+  _RT 'CLEAN TWIN  c989c6 a plain mayo still prices mayonnaise' 'Kraft Mayo' 'mayonnaise'
+  $rtWant = 99   # +10 for c989c6 (6 must-fire, 4 clean twins: Tony Creole, konjac, Cinco de Mayo); +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)

@@ -93,6 +93,19 @@
                          "reason":  "Honey barbecue flavoured potato chips are potato chips, never honey (Baker\u0027s regular 2026-09-25, 7.75 oz). The honey rule claims them by array order; the weekly batch applies this exclude through apply-coverage-batch."
                      },
                      {
+                         "key":  "contested|oatmeal||Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
+                         "kind":  "contested",
+                         "commodity":  "walnuts",
+                         "claimer":  "oatmeal",
+                         "store":  "",
+                         "name":  "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-27",
+                         "reason":  "Quaker Instant Oatmeal packets are oatmeal; Raisin, Date \u0026 Walnut is the flavour, not a bag of walnuts. Reviewed in triage 2026-09-27-c989c6 when the late Fareway capture put it on the oatmeal cell."
+                     },
+                     {
                          "key":  "coverage|apple-juice|Fareway|Musselman\u0027s 100% Apple Cider or Juice",
                          "kind":  "coverage",
                          "commodity":  "apple-juice",

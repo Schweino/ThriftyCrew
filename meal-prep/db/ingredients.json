@@ -946,7 +946,7 @@
     },
     {
         "item":  "Fettuccine",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1588,6 +1588,7 @@
     },
     {
         "item":  "Mayonnaise",
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:olive\\s+oil|spicy|cinco\\s+de\\s+mayo)\\b).*\\bmayo\\b", "reason":  "mayo is the package short name for mayonnaise; olive oil and spicy mayos stay findings until a capture proves they are not a reduced-fat dressing or a flavoured sauce", "queue_id":  "2026-09-27-c989c6" } ],
         "bid":  "mayonnaise",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1708,7 +1709,7 @@
     },
     {
         "item":  "Orzo Pasta",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -1760,7 +1761,7 @@
     },
     {
         "item":  "Pasta Shells",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2115,7 +2116,7 @@
     },
     {
         "item":  "Rotini Pasta",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "rotini-pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2270,7 +2271,7 @@
     },
     {
         "item":  "Spaghetti",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2604,7 +2605,7 @@
     },
     {
         "item":  "Ziti Pasta",
-        "identity_same_as":  [ { "product":  "^(?!.*\\bwhole[\\s-]*(?:grain|wheat)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b", "reason":  "a different shape of dry pasta is the same food by weight (Brad 2026-09-26, Q-2026-09-26-form-style B ('shape same, style own')); whole grain is not a shape, so it stays a finding", "queue_id":  "2026-09-22-5a9676" } ],
         "bid":  "pasta",
         "gpu":  28.3495,
         "unit":  "oz",
@@ -2785,7 +2786,7 @@
     },
     {
         "item":  "Sun-Dried Tomatoes (Oil-Packed)",
-        "identity_same_as":  [ { "product":  "\\bsun[\\s-]dried\\s+tomatoes\\s+in\\s+(olive\\s+)?oil\\b", "reason":  "sun dried tomatoes in olive oil are the oil-packed food; the hyphen split the head word (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" }, { "product":  "\\bsun\\s*-?\\s*dried\\s+tomatoes\\s+in\\s+(?:olive\\s+)?oil\\b", "reason":  "sundried tomatoes in oil is the oil-packed form the recipe names, spelled as one word.", "queue_id":  "2026-09-22-5a9676" } ],
+        "identity_same_as":  [ { "product":  "\\bsun[\\s-]dried\\s+tomatoes\\s+in\\s+(olive\\s+)?oil\\b", "reason":  "sun dried tomatoes in olive oil are the oil-packed food; the hyphen split the head word (1 costed line, 2026-09-25)", "queue_id":  "2026-09-23-9999c0" }, { "product":  "\\bsun\\s*-?\\s*dried\\s+tomatoes\\s+in\\s+(?:olive\\s+)?oil\\b", "reason":  "sundried tomatoes in oil is the oil-packed form the recipe names, spelled as one word.", "queue_id":  "2026-09-22-5a9676" }, { "product":  "\\b(?:in|with)\\s+(?:(?:extra\\s+virgin\\s+)?olive\\s+)?oil\\b|\\boil[\\s-]*packed\\b", "reason":  "a jar in oil is oil-packed", "queue_id":  "2026-09-27-c989c6" } ],
         "bid":  "sun-dried-tomatoes",
         "gpu":  28.3495,
         "unit":  "oz",

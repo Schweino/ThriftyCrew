@@ -340,6 +340,46 @@ if ($SelfTest) {
   $k = KeysOf (CellRun @(Rw 'Pineapple Chunks' 'canned-pineapple' $pinSame) @(Ln 'Pineapple Chunks' 'board:canned-pineapple:walmart') $pnx)
   Check 'MUST NOT FIRE  the crushed-pineapple record silences the Walmart crushed can for Pineapple Chunks' (@($k | Where-Object { $_ -like '*|walmart|*' }).Count -eq 0) ($k -join ',')
   Check 'CLEAN TWIN  the same record leaves a pineapple JUICE row in the cell a finding' (@($k | Where-Object { $_ -like '*|aldi|*' }).Count -eq 1) ($k -join ',')
+  # 10. 2026-09-27-c989c6: the FORM vocabulary drifted from the commodity it describes (angel hair admitted by the pasta
+  # include, missing from the shape list) and Mayonnaise lacked its own "mayo" spelling. These cases read the LIVE
+  # rows in db\ingredients.json and the LIVE pasta include, so a later edit of either copy goes red here by name.
+  function PastaShapeGaps([object[]]$includes, [string]$sameAs) {
+    $gaps = New-Object 'System.Collections.Generic.List[string]'
+    foreach ($inc in $includes) {
+      foreach ($alt in ([string]$inc -split '\|')) {
+        $w = (($alt -replace '\\b', '') -replace '\\s[+*]?', ' ').Trim()
+        if ($w -match '[\\\[\](){}?*+^$.]') { $gaps.Add('underivable:' + $alt); continue }
+        if (-not ('Store Brand ' + $w + ' 16 oz' -match $sameAs)) { $gaps.Add($w) }
+      }
+    }
+    return ,$gaps.ToArray()
+  }
+  $liveRowsRaw = Read-JsonFile $RowsFile
+  $liveRows = @($liveRowsRaw | ForEach-Object { $_ })
+  $liveComs = Read-JsonFile $CommoditiesFile
+  $liveComArr = @($(if ($liveComs.PSObject.Properties['commodities']) { $liveComs.commodities } else { $liveComs }))
+  $livePasta = @($liveComArr | Where-Object { [string]$_.id -eq 'pasta' })
+  $pastaForms = @('Fettuccine', 'Orzo Pasta', 'Pasta Shells', 'Rotini Pasta', 'Spaghetti', 'Ziti Pasta')
+  function LiveSame([string]$item) { $r = @($liveRows | Where-Object { [string]$_.item -eq $item }); if ($r.Count -ne 1) { return @() }; return @($r[0].identity_same_as) }
+  $g = PastaShapeGaps @($livePasta[0].include) ([string]$pastaSame.identity_same_as[0].product)
+  Check 'MUST FIRE  the shape check names "angel hair" against the 2026-09-26 pasta FORM record (the include admits it, the shape list did not)' ($g -contains 'angel hair') ($g -join ',')
+  $gl = @(); foreach ($f in $pastaForms) { $s = @(LiveSame $f); if ($s.Count -eq 0) { $gl += ($f + ':no-record'); continue }; foreach ($x in (PastaShapeGaps @($livePasta[0].include) ([string]$s[0].product))) { $gl += ($f + ':' + $x) } }
+  Check 'MUST NOT FIRE  LIVE: every shape word the live pasta include admits is admitted by all 6 live pasta FORM records' (($livePasta.Count -eq 1) -and ($gl.Count -eq 0)) ($gl -join ',')
+  $ahx = Ix @(Bd 'pasta' @('Family Fare', 'Our Family Angel Hair 16 Oz', 'Walmart', 'Miracle Noodle Angel Hair Konjac Noodles, Naturally Low Carb, Gluten Free, 7 oz'))
+  $ahl = @(Ln 'Spaghetti' 'board:pasta:aldi')
+  $k = KeysOf (CellRun @(Rw 'Spaghetti' 'pasta' $pastaSame) $ahl $ahx)
+  Check 'MUST FIRE  the 2026-09-26 record leaves "Our Family Angel Hair 16 Oz" a finding for Spaghetti (the founding key)' (@($k | Where-Object { $_ -like '*angelhair16oz' }).Count -eq 1) ($k -join ',')
+  $k = KeysOf (CellRun @(Rw 'Spaghetti' 'pasta' @{ identity_same_as = @(LiveSame 'Spaghetti') }) $ahl $ahx)
+  Check 'MUST NOT FIRE  LIVE: the Spaghetti record silences "Our Family Angel Hair 16 Oz"' (@($k | Where-Object { $_ -like '*angelhair16oz' }).Count -eq 0) ($k -join ',')
+  Check 'MUST FIRE  LIVE: a konjac angel hair in the pasta cell still fires on Spaghetti (second defence behind the pasta exclude)' (@($k | Where-Object { $_ -like '*konjac*' }).Count -eq 1) ($k -join ',')
+  $myx = Ix @(Bd 'mayonnaise' @('Family Fare', 'Our Family Mayo, Real 30 Fl Oz', "Baker's", 'Kroger Olive Oil Mayo'))
+  $k = KeysOf (CellRun @(Rw 'Mayonnaise' 'mayonnaise' @{ identity_same_as = @(LiveSame 'Mayonnaise') }) @(Ln 'Mayonnaise' 'board:mayonnaise:aldi') $myx)
+  Check 'MUST NOT FIRE  LIVE: the Mayonnaise record silences "Our Family Mayo, Real 30 Fl Oz"' (@($k | Where-Object { $_ -like '*ourfamilymayo*' }).Count -eq 0) ($k -join ',')
+  Check 'MUST FIRE  LIVE: "Kroger Olive Oil Mayo" stays a finding on Mayonnaise (olive oil mayo is unproven)' (@($k | Where-Object { $_ -like '*krogeroliveoilmayo*' }).Count -eq 1) ($k -join ',')
+  $sdx = Ix @(Bd 'sun-dried-tomatoes' @("Baker's", 'California Sun Dry Sun-Dried Julienne Cut Tomatoes in Oil with Herbs', 'Family Fare', 'California Sun Dry Sun Dried Tomatoes Julienne Ct'))
+  $k = KeysOf (CellRun @(Rw 'Sun-Dried Tomatoes (Oil-Packed)' 'sun-dried-tomatoes' @{ identity_same_as = @(LiveSame 'Sun-Dried Tomatoes (Oil-Packed)') }) @(Ln 'Sun-Dried Tomatoes (Oil-Packed)' 'board:sun-dried-tomatoes:bakers') $sdx)
+  Check 'MUST NOT FIRE  LIVE: the oil-packed record silences the Baker''s jar "in Oil with Herbs"' (@($k | Where-Object { $_ -like '*inoilwithherbs*' }).Count -eq 0) ($k -join ',')
+  Check 'CLEAN TWIN  LIVE: the Family Fare "Julienne Ct" jar that never says oil stays a finding' (@($k | Where-Object { $_ -like '*juliennect*' }).Count -eq 1) ($k -join ',')
 
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
@@ -446,7 +486,7 @@ if ($SelfTest) {
     Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
   } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 57) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 57 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 66) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 66 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
