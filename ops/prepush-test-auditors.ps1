@@ -166,6 +166,9 @@ try {
   $libRel = 'lib\git-repo-env.ps1'
   . (Join-Path $RepoRoot $libRel)
   Clear-TcGitRepoEnv
+  # Expand-SelfTestPointers: test-auditors' units live in grocery\test-auditors\ pieces (Read-TaHostText below).
+  $libRel = 'lib\selftest-lib.ps1'
+  . (Join-Path $RepoRoot $libRel)
 } catch {
   $ErrorActionPreference = 'Continue'
   "prepush-test-auditors: COULD NOT EVALUATE - $libRel did not load ($($_.Exception.Message)). Not a pass."
@@ -230,6 +233,13 @@ function Get-AuditorInputs([string]$Text, [string]$SelfRel) {
 # THE HOST'S OWN FOLDER IS THE HOST (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 0). test-auditors.ps1 is split
 # into grocery\test-auditors\*.ps1, each dot-sourced from the entry at the exact spot its text came from, so an edit to any
 # piece is an edit to test-auditors itself: an input always, and a FULL run, never a selective one.
+# The host AS IT READS (step 4 of that plan): the entry with every `. (Join-Path $PSScriptRoot 'test-auditors\<piece>.ps1')`
+# line replaced by the piece's text (lib\selftest-lib.ps1's Expand-SelfTestPointers), so the unit model, the board
+# patterns and the case call sites see every unit wherever its text now lives. A host with no pointers reads unchanged.
+function Read-TaHostText([string]$Path) {
+  return (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($Path)) -Path $Path)
+}
+
 function Test-TaHostPiece([string]$Path, [string]$SelfRel) {
   if (-not $SelfRel -or -not $SelfRel.EndsWith('.ps1', [StringComparison]::OrdinalIgnoreCase)) { return $false }
   $p = $Path.Replace('\', '/')
@@ -1740,7 +1750,7 @@ function Resolve-PreexistingReds($V, $Known, [string]$TaText, $TipModel, [string
       if (-not $fail) {
         $bTa = Join-Path $co $AuditorsRel.Replace('/', '\')
         if (-not (Test-Path -LiteralPath $bTa)) { $fail = ('the base ' + $b9 + ' has no ' + $AuditorsRel) }
-        else { $bText = [IO.File]::ReadAllText($bTa) }
+        else { $bText = Read-TaHostText $bTa }
       }
       $stamps = @{}
       if (-not $fail) {
@@ -2035,9 +2045,24 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
   $bc = Get-UnitsForPath 'modx/beta-child.ps1' $um $uxIn $uxReader $uc
   Case 'MUST FIRE' 'a script that a run script invokes reaches the unit (one child hop)' (@($bc) -contains 'u002-beta') "units=$(@($bc) -join ',')"
 
+  # A UNIT MOVED INTO A PIECE STILL REACHES THE MODEL (split step 4, 2026-09-27): the host is read through
+  # Read-TaHostText, which puts each piece's text back where its pointer line stands.
+  $ptDir = Join-Path $env:TEMP ('pta-ptr-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory -Path (Join-Path $ptDir 'test-auditors') -Force -ErrorAction Stop
+    $ptHost = Join-Path $ptDir 'test-auditors.ps1'
+    $ptPiece = "if (Use-Unit 'u002-moved') {`nOk 'moved'`n} # u002-moved`n"
+    $ptText = "try {`nif (Use-Unit 'u001-stays') {`nOk 'stays'`n} # u001-stays`n. (Join-Path `$PSScriptRoot 'test-auditors\units-a.ps1')`n} finally { }`n"
+    [IO.File]::WriteAllText($ptHost, $ptText, (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText((Join-Path $ptDir 'test-auditors\units-a.ps1'), $ptPiece, (New-Object Text.UTF8Encoding($false)))
+    $ptModel = Get-UnitModel (Read-TaHostText $ptHost) 'modp/test-auditors.ps1'
+    Case 'MUST FIRE' 'a unit moved into the host''s own folder (test-auditors\units-a.ps1) is in the unit model' ($ptModel.ok -and @($ptModel.ids) -contains 'u002-moved') "ok=$($ptModel.ok) ids=$(@($ptModel.ids) -join ',')"
+    Case 'CLEAN TWIN' 'the unit that stayed in the entry is still in the unit model beside it' (@($ptModel.ids) -contains 'u001-stays') "ids=$(@($ptModel.ids) -join ',')"
+  } finally { Remove-Item -LiteralPath $ptDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   # LIVE: the derivation reaches the real harness, and the harness still prints what this reads.
   $taPath = Join-Path $RepoRoot $script:AuditorsRel.Replace('/', '\')
-  $taText = if (Test-Path -LiteralPath $taPath) { [IO.File]::ReadAllText($taPath) } else { '' }
+  $taText = if (Test-Path -LiteralPath $taPath) { Read-TaHostText $taPath } else { '' }
   $live = Get-AuditorInputs $taText $script:AuditorsRel
   "  live derivation resolved: $($live.code.Count) code name(s), $($live.data.Count) file name(s), $($live.globs.Count) glob(s), fixture root '$($live.fixRoot)'"
   Case 'MUST FIRE' 'live: test-auditors.ps1 is its own input' ((Test-GuardInput $script:AuditorsRel $live) -ne '')
@@ -2635,7 +2660,7 @@ exit 0
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 127
+  $expectedCases = 129
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
@@ -2654,7 +2679,7 @@ if (-not (Test-Path -LiteralPath $taPath)) {
   "prepush-test-auditors: COULD NOT EVALUATE - $($script:AuditorsRel) is missing, so no guard input can be derived. Not a pass."
   Exit-Guard -Name $script:GuardName -Code 3 -Summary 'blind=no-test-auditors'
 }
-$taText = [IO.File]::ReadAllText($taPath)
+$taText = Read-TaHostText $taPath
 $inputs = Get-AuditorInputs $taText $script:AuditorsRel
 
 # ============================================================================================ RECORD

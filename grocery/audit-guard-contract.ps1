@@ -108,7 +108,19 @@ $script:TESTER_FILES = @(
   'audit-script-census.ps1',      # asks who calls what; naming a script is its whole job
   'audit-guard-contract.ps1'      # this file
 )
-function Test-IsTesterFile { param([string]$Name) return ($script:TESTER_FILES -contains $Name) }
+# A PIECE OF A TESTER IS A TESTER (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 4). test-auditors.ps1's
+# units now live in grocery\test-auditors\*.ps1, dot-sourced by the entry; judged by leaf name alone a piece would count
+# as a PRODUCTION caller of every guard it tests, and a guard whose only caller is its test would stop reading DEAD.
+# So a file whose parent folder is named for a tester (test-auditors\ for test-auditors.ps1) is that tester.
+function Test-IsTesterFile {
+  param([string]$Name, [string]$FullName = '')
+  if ($script:TESTER_FILES -contains $Name) { return $true }
+  if ($FullName) {
+    $parent = Split-Path -Leaf (Split-Path -Parent $FullName)
+    if ($parent -and ($script:TESTER_FILES -contains ($parent + '.ps1'))) { return $true }
+  }
+  return $false
+}
 
 # Detectors that legitimately have no production caller, each with the reason. Keyed by NAME alone, unlike
 # the drift allowlists: what is being blessed here is a permanent property of the script ("this is a manual
@@ -201,6 +213,8 @@ if ($SelfTest) {
   # test-auditors.ps1, it was absent from the census's KNOWN list, and the census was green. It ran never.
   T 'MUST FIRE  test-auditors is a TESTER, so naming a guard there is not a production call' (Test-IsTesterFile 'test-auditors.ps1') 'counted as production'
   T 'MUST FIRE  test-guards is a TESTER too' (Test-IsTesterFile 'test-guards.ps1') 'counted as production'
+T 'MUST FIRE  a piece in test-auditors\ is a TESTER, so naming a guard there is not a production call' (Test-IsTesterFile 'units-01.ps1' 'C:\r\grocery\test-auditors\units-01.ps1') 'counted as production'
+T 'MUST NOT FIRE a script in some other folder is NOT a tester by its folder' (-not (Test-IsTesterFile 'units-01.ps1' 'C:\r\grocery\check-ad-cycles\units-01.ps1')) 'treated as a test'
   T 'the census is a TESTER - naming scripts is its whole job' (Test-IsTesterFile 'audit-script-census.ps1') 'counted as production'
   T 'MUST NOT FIRE the daily chain is NOT a tester - a call from it is a real one' (-not (Test-IsTesterFile 'check-ad-cycles.ps1')) 'chain treated as a test'
   T 'MUST NOT FIRE guards.ps1 is NOT a tester - it delegates for real' (-not (Test-IsTesterFile 'guards.ps1')) 'guards treated as a test'
@@ -313,13 +327,13 @@ if (Test-Path $script:MANUAL_OK) {
   try { foreach ($m in (Read-JsonFile $script:MANUAL_OK).manual) { $manualOk[[string]$m.name] = [string]$m.reason } } catch { }
 }
 
-$onDisk = @($execFiles | Where-Object { $_.Extension -eq '.ps1' -and (Test-IsDetector $_.Name) -and -not (Test-IsTesterFile $_.Name) })
+$onDisk = @($execFiles | Where-Object { $_.Extension -eq '.ps1' -and (Test-IsDetector $_.Name) -and -not (Test-IsTesterFile $_.Name $_.FullName) })
 $dead = @()
 foreach ($d in $onDisk) {
   $prod = @()
   foreach ($f in $execFiles) {
     if ($f.FullName -eq $d.FullName) { continue }
-    if (Test-IsTesterFile $f.Name) { continue }              # tested is not the same as run
+    if (Test-IsTesterFile $f.Name $f.FullName) { continue }  # tested is not the same as run
     if ($execText[$f.FullName] -and $execText[$f.FullName].Contains($d.Name)) { $prod += $f.Name }
   }
   if (-not $prod.Count -and -not $manualOk.ContainsKey($d.Name)) { $dead += $d.Name }
