@@ -422,7 +422,7 @@ $r = RunPS 'audit-capture-eviction.ps1' @('-SelfTest')
 if ($r.rc -eq 0 -and $r.text -match 'SELF-TEST PASS') { Ok 'audit-capture-eviction: thin-capture eviction still fires on the frozen Sams formula case and stays silent on the onions ranker fix' }
 else { Bad ('audit-capture-eviction -SelfTest failed (rc=' + $r.rc + ') - the capture-eviction class is unguarded: ' + ($r.text -replace "`n", ' ')) }
 $aceSrc = Get-Content (Join-Path $root 'audit-capture-eviction.ps1') -Raw
-$cdSrc2 = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+$cdSrc2 = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'compare-deals.ps1'))) -Path (Join-Path $root 'compare-deals.ps1'))
 # LOCKSTEP, NOW BY SHARED CODE RATHER THAN BY MATCHING TEXT (2026-08-21).
 # The audit asks whether the BOARD agrees with the engine's eligibility rule, so it has to know that rule.
 # It used to carry a hand-restated copy, and this check kept the two honest by grepping both files for the

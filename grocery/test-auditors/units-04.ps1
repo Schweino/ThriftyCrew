@@ -278,7 +278,7 @@ $clSrc = Get-Content (Join-Path $root 'capture-lib.ps1') -Raw
 if ($clSrc -match '\$i -lt 8') { Ok 'Repair-Mojibake still peels deep enough for the 5-generation founding row' }
 else { Bad 'Repair-Mojibake''s peel cap has been lowered - the 117-character Campbell row needs five passes and the cap was 4 when it shipped mangled' }
 # THE READER THAT MANUFACTURED IT. compare-deals must not go back to reading store JSON without an encoding.
-$cdEnc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+$cdEnc = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'compare-deals.ps1'))) -Path (Join-Path $root 'compare-deals.ps1'))
 if ($cdEnc -match 'function Read-JsonFile' -and $cdEnc -notmatch 'Get-Content \$extra -Raw \| ConvertFrom-Json') { Ok 'compare-deals reads its store inputs through Read-JsonFile (BOM-tolerant), not a codepage-dependent Get-Content' }   # json-readers:allow the frozen literal names the shape compare-deals must NOT contain; converting it would blind the check
 else { Bad 'compare-deals is reading store JSON with a bare Get-Content again - a BOM-less input will be decoded as the ANSI codepage and the mangled name will be written onto the board' }
 if ($mpuSrc -match "size field corrupted") { Ok 'the size-field clean twin is armed (a URL-only diff cannot see a basis overwrite)' }

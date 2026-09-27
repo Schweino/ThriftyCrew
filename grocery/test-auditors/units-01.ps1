@@ -364,7 +364,7 @@ if (Test-Path $gexLib) {
   else { Bad 'global-exclude-lib no longer exports a function - a bare $script: constant does not travel to a lifting caller' }
 } else { Bad 'global-exclude-lib.ps1 is missing - every auditor that shares the engine exclusions is now blind' }
 # and the engine must not have grown a second copy back
-$cdtxt = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+$cdtxt = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'compare-deals.ps1'))) -Path (Join-Path $root 'compare-deals.ps1'))
 if ($cdtxt -match '(?m)^\s*\$GLOBAL_EXCLUDE\s*=\s*@\(') { Bad 'compare-deals.ps1 has an array literal for $GLOBAL_EXCLUDE again - there are two copies of the list and they will drift' }
 else { Ok 'compare-deals.ps1 holds no second copy of the exclude list' }
 } # u012-6-coverage-gaps-must-share-the
@@ -423,7 +423,7 @@ $rt = PSChild (Join-Path $root 'regression-test.ps1') | ForEach-Object { [string
 if ($LASTEXITCODE -eq 0) { Ok 'golden regression guard is GREEN on the hermetic frozen inputs' }
 else { Bad ('golden regression guard is RED - the engine changed a known-good number: ' + (($rt | Select-Object -Last 3) -join ' | ')) }
 
-$cdSrc = Get-Content (Join-Path $root 'compare-deals.ps1') -Raw
+$cdSrc = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'compare-deals.ps1'))) -Path (Join-Path $root 'compare-deals.ps1'))
 if ($cdSrc -match 'must NOT divide') { Ok "the weight-package divisor's founding-bug fixture is still in -SelfTest" }
 else { Bad 'the "(3 lb bag) in NAME must NOT divide" fixture has been removed from compare-deals -SelfTest - that is the bug the regression guard was written for ($0.33/lb onions), and without it a green run cannot be distinguished from a blind one' }
 
