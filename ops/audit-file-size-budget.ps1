@@ -179,7 +179,7 @@ if ($SelfTest) {
     $prevE = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try {
       $null = & git -C $fx init -q 2>$null
-      $null = & git -C $fx add -A 2>$null
+      $null = & git -C $fx add -- ops/big.ps1 ops/small.py notes.md 2>$null
     } finally { $ErrorActionPreference = $prevE }
     $noMark = Join-Path $wt 'no-mark.json'
     $null = & powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $fx -BaselineFile $noMark
