@@ -197,6 +197,12 @@ A miss stops the stage that depends on it; L6 never starts until L1 to L5 hold f
   and its bar (0 wrong of at least 20); the page reads its output once it goes live. `resolve-flyer-links.ps1` stays parked
   on `feat/link-rides-flyer-resolver` as a donor (its Freshop adapter), never landed. Flyer prices keep the weekly-ad
   button until the matcher is live.
+  PROGRESS 2026-09-27: the Family Fare labelled set is started, the same shape as Hy-Vee's. `grocery/familyfare/collect-flyer-link-evidence.ps1`
+  collects every Freshop candidate per flyer line (30 lines a run inside the daily budget; 30 searched, 20 answered, 141
+  candidate rows), and `label_flyer_gold.py` proposes a label per line BEFORE any linker runs. A Family Fare flyer line is
+  Freshop's own offer, so it carries the product's exact store name: the proposal is the one product whose name equals
+  the line and whose sale text equals the flyer text. Of 20 lines: 19 labelled with one product, 1 UNSURE (two ground
+  beef products share the name but for a comma), all `proposed, awaiting Brad review`. 41 lines remain to collect.
 - **D6. Schedule the 7-build check.** **RULED by Brad 2026-09-27: yes.** A scheduled session on about 2026-10-04
   re-measures the L1 to L5 bars on the real daily boards and starts L3/L6/L7 only if they hold.
 
