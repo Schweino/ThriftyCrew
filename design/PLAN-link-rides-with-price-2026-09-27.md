@@ -1,6 +1,8 @@
 # PLAN: the "See item" link rides with the price, so a priced tile always knows its product
 
-Status: DRAFT for Brad, 2026-09-27. Nothing is built. Decisions D1 to D4 at the bottom need a ruling first.
+Status: D1 to D4 RULED by Brad 2026-09-27 (see Decisions). Nothing is built. The work items below predate the rulings
+and must be revised to match them (flyer prices linked or not published, no hand-made link file, Aldi re-read, engines
+merged) before any build.
 
 ## In one paragraph, for Brad
 Every price on the board is read from a real product page, and in most cases that page's product id or link is
@@ -129,12 +131,24 @@ A miss on any bar stops the next stage; L6 never starts until L1 to L4 hold for 
 ## Decisions (need Brad)
 - **D1. Flyer-only sale tiles** (83 today): link to the store's weekly ad page (the pill that exists today), or show
   no link. Recommendation: the weekly-ad link, labelled as the ad, never presented as the product.
+  **RULED by Brad 2026-09-27: neither.** Verbatim: *"We should NOT be storing products without links. Full stop. The
+  ad flyer may show the product and price, but its the systems job to find the link."* So `link_source=ad` is not a
+  resting state: a flyer-sourced price must be matched to the store's real product page before it is stored, and a
+  flyer price the system cannot link is not published. L1, L4 and the L1 bar need rework to match (a new item: resolve
+  each flyer line to a product page at capture time).
 - **D2. Hand-made exceptions:** keep `product-urls.json` as a small exceptions file for tiles with no row link, or drop
   it entirely and accept store search for those. Recommendation: keep it, capped by a ratchet whose mark only falls.
+  **RULED by Brad 2026-09-27: drop it entirely.** Every link comes from the system's own fetch; a tile with no fetched
+  link is a defect, never covered by hand. L6 retires `product-urls.json` outright, and L3 has no exception set left
+  for `pu-lib` to check.
 - **D3. Old Aldi rows with no link** (19 on the backlog): let them age out by mid-October, or re-read them now in the
   06:15 browser run. Recommendation: let them age out; the capture already keeps links.
+  **RULED by Brad 2026-09-27: re-read them now** in the next 06:15 browser run, so they carry links instead of
+  waiting to age out. L5 gains this re-read.
 - **D4. The two unit-price engines** (`pricing-math-lib` for the board, `pu-lib` for links): out of scope here, and L3
   makes `pu-lib` matter far less. Recommendation: a separate plan after L6, if exceptions still show disagreements.
+  **RULED by Brad 2026-09-27: fold it into this plan.** Merging the two per-unit engines into one becomes a work item
+  here (to be written as L7), not a follow-up plan.
 
 ## Open measurement
 25 of the 134 entries pass every check reproduced here and are still unlinked. The L4 classifier will name them per
