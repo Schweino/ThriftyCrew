@@ -1223,6 +1223,16 @@ $leftVerdict = Get-TcLeftoverVerdict -Changes $leftStage.Changes -Kind (Get-TcCh
 if ($leftVerdict.Fail) { $fail += 'gate-leftovers'; Write-Output '  FAIL  gate-leftovers  (the pool changed files where the daily bot stages)' } else { $pass++ }
 foreach ($l in $leftVerdict.Lines) { Write-Output $l }
 if ($leftBlind.Count) { $blindGates += ('gate-leftovers ({0} directory listing(s) failed)' -f $leftBlind.Count) }
+# THE PUSH-COST BUDGET (B1 of design\PLAN-efficiency-budgets-2026-09-27.md; lib\push-cost-budget.ps1 has the account). The
+# class comes from this run's own replays of the code-keyed static detectors; report-only until its class has a mark.
+$pcb = $null; $pcbRows = $(if ($gtRoot -and $gtRoot -ne 'off') { Join-Path $gtRoot 'push-cost.jsonl' } else { '' })
+try {
+  . (Join-Path $repo 'lib\push-cost-budget.ps1')
+  $pcbCk = @(for ($i = 0; $i -lt $staticEntries.Count; $i++) { if ($cacheDir -and (@($staticEntries[$i].Scan) -contains '*.ps1')) { $offStatic + $i } })
+  $pcb = Invoke-TcPushCostCheck -RowsPath $pcbRows -MarkPath (Join-Path $repo 'ops\out\push-cost-budget.json') -AllRes $allRes -CacheHit $cacheHit -UnkeyWhy $unkeyWhy -CodeKeyedIdx $pcbCk -NoReuse ([bool]$NoReuse) -OtherFailed ([bool]($fail.Count -or $noVerdict.Count -or $staticBlind.Count)) -Run ([string]$PID)
+  foreach ($l in $pcb.Lines) { Write-Output $l }
+  if ($pcb.Verdict -and $pcb.Verdict.Code -eq 2) { $fail += 'push-cost-budget' }
+} catch { Write-Output ('push-cost budget: not judged, report-only (' + $_.Exception.Message + ')') }
 
 Write-Output ''
 Write-Output ("run-gates: {0} passed, {1} failed, {2} could not evaluate (exit 0 with no self-test verdict)" -f $pass, $fail.Count, $noVerdict.Count)
@@ -1323,6 +1333,7 @@ if ($fail.Count -or $noVerdict.Count -or $staticBlind.Count) {
 # content. A suite nobody evaluated must never stand in for one that passed. A static gate that read nothing is the same
 # 3 (W6.9), and a red gate still outranks both.
 $gateCode = $(if ($fail.Count) { 1 } elseif ($noVerdict.Count -or $staticBlind.Count) { 3 } else { 0 })
+if ($pcb -and $pcbRows) { try { $pcb.Row.rc = $gateCode; . (Join-Path $repo 'lib\append-line.ps1'); $null = Add-TcLine -Path $pcbRows -Text ($pcb.Row | ConvertTo-Json -Compress) } catch { } }
 try {
   if (-not $fpBefore.Fingerprint) {
     Write-Output ("run-gates: this run's verdict is NOT recorded for reuse - {0}" -f $fpBefore.Reason)

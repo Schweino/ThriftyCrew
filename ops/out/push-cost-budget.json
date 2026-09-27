@@ -1,0 +1,13 @@
+﻿{
+    "note":  "Marks for the push-cost budget (B1 of design/PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27): whole seconds of executed gate time, the median of the last min_runs full green run-gates runs of each class, read from the push-cost rows run-gates writes. null is no mark yet (report-only). A mark may only go DOWN; a deliberate rise is recorded with -Accept and its reason in the commit.",
+    "generated":  "2026-09-27T13:58:50",
+    "min_runs":  9,
+    "classes":  {
+                    "data":  {
+                                 "mark_s":  null
+                             },
+                    "code":  {
+                                 "mark_s":  null
+                             }
+                }
+}
