@@ -68,12 +68,7 @@ $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Par
 # A pending price-flag verification is an owed re-read (2026-09-21, plan-2026-09-21-8.json; Get-CaptureWorklist below).
 # Loaded only when present: this lib's own self-tests re-load it from a copied root that need not carry it, and there a
 # worklist says VerifyBlind rather than the whole lib failing to load.
-$script:FlagVerifyLib = Join-Path $script:PolicyRoot 'flag-verify-lib.ps1'
-if (Test-Path -LiteralPath $script:FlagVerifyLib) { . $script:FlagVerifyLib }
-# A priced tile with no link is an owed re-read too (PLAN-link-rides-with-price L5; Get-TcLinkOwed). Loaded only when present,
-# for the same reason: a copied self-test root need not carry it, and there the worklist says LinkOwedBlind.
-$script:LinkIdentityLib = Join-Path $script:PolicyRoot 'link-identity-lib.ps1'
-if (Test-Path -LiteralPath $script:LinkIdentityLib) { . $script:LinkIdentityLib }
+foreach ($__lib in 'flag-verify-lib.ps1', 'link-identity-lib.ps1') { $__p = Join-Path $script:PolicyRoot $__lib; if (Test-Path -LiteralPath $__p) { . $__p } }   # link-identity-lib: PLAN-link-rides-with-price L5
 # -SelfTest drives both ledgers from concurrent processes (the block at the end of this file). Read from $args,
 # because this file declares no parameters - see the header.
 $__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
@@ -952,25 +947,7 @@ function Get-CaptureWorklist {
     if (($verifyTerms.Count + $hits.Count) -gt $vRoom) { $verifyDeferred++; continue }
     foreach ($hit in $hits) { [void]$verifyTerms.Add($hit) }
   }
-  # A PRICED TILE WITH NO LINK LEADS NEXT (PLAN-link-rides-with-price L5, Brad 2026-09-27: no price without its product
-  # link). Same allowance, same list, after the price-flag verifications: a fresh read carries the URL the old row lacked.
-  # Empties itself as the next board stamps the re-read tile 'row' (Get-TcLinkOwed).
-  $lo = $null
-  if (Get-Command Get-TcLinkOwed -ErrorAction SilentlyContinue) { $lo = Get-TcLinkOwed -OutDir $OutDir -Store $Store }
-  else { $lo = [pscustomobject]@{ Ids = @(); Blind = $true; Why = 'link-identity-lib.ps1 is not beside capture-policy-lib.ps1, so the tiles owed a link are unknown' } }
-  $linkOwedTerms = 0
-  $linkOwedDeferred = 0
-  # HALF THE ROOM LEFT AFTER THE VERIFICATIONS, never all of it: an ended sale still on the board is a wrong price, a
-  # missing link is not, so sale expiries keep at least half. Uncapped, 2026-09-27's board gave link terms 28 of Family
-  # Fare's 37 lead slots and 35 of Aldi's. First plausible value, 1 variant tried; the backlog clears in days either way.
-  $linkRoom = [math]::Floor(([math]::Max(0, $vRoom - $verifyTerms.Count)) / 2)
-  foreach ($lid in @($lo.Ids)) {
-    if (@($vo.Ids) -contains [string]$lid) { continue }   # already leading as a verification
-    $hits = @($all | Where-Object { [string]$_.id -eq [string]$lid })
-    if ($hits.Count -eq 0) { continue }
-    if (($linkOwedTerms + $hits.Count) -gt $linkRoom) { $linkOwedDeferred++; continue }
-    foreach ($hit in $hits) { [void]$verifyTerms.Add($hit); $linkOwedTerms++ }
-  }
+  if (Get-Command Select-TcLinkOwedTerms -ErrorAction SilentlyContinue) { $lot = Select-TcLinkOwedTerms -Store $Store -OutDir $OutDir -All $all -SkipIds @($vo.Ids) -Room ($vRoom - $verifyTerms.Count); foreach ($hit in $lot) { [void]$verifyTerms.Add($hit) } }   # priced tiles with no link lead next (L5)
   if ($verifyTerms.Count -gt 0) {
     $saleRoomV = $vRoom - $verifyTerms.Count
     if ($saleRoomV -lt 0) { $saleRoomV = 0 }
@@ -1052,12 +1029,6 @@ function Get-CaptureWorklist {
     VerifyBlind   = [bool]$vo.Blind
     VerifyWhy     = [string]$vo.Why
     SaleDeferredByVerify = $saleDeferredByVerify
-    # Tiles priced with no product link, owed a re-read (PLAN-link-rides-with-price L5). Their terms ride in VerifyTerms.
-    LinkOwed      = @($lo.Ids)
-    LinkOwedTerms = $linkOwedTerms
-    LinkOwedDeferred = $linkOwedDeferred
-    LinkOwedBlind = [bool]$lo.Blind
-    LinkOwedWhy   = [string]$lo.Why
     # Baker's weekly ad terms owed an ask (2026-09-18). Empty for every other store, and empty for Baker's
     # once every routed term of the current ad list has a receipt inside the ad window.
     AdTerms       = $adTerms.ToArray()

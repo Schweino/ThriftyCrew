@@ -101,3 +101,22 @@ function Get-TcLinkOwed {
   if ($ids.Count -eq 0) { return $none }
   return [pscustomobject]@{ Ids = $ids.ToArray(); Blind = $false; Why = '' }
 }
+
+# The terms Get-CaptureWorklist leads with for tiles owed a link: after the price-flag verifications ($SkipIds), capped
+# at HALF the room left ($Room is what remains after the verifications), never all of it: an ended sale still on the
+# board is a wrong price and a missing link is not, so sale expiries keep at least half. Uncapped, 2026-09-27's board
+# gave link terms 28 of Family Fare's 37 lead slots and 35 of Aldi's. First plausible value, 1 variant tried.
+# Lives here, not in capture-policy-lib, which is over its file-size mark.
+function Select-TcLinkOwedTerms {
+  param([Parameter(Mandatory)][string]$Store, [string]$OutDir, $All, $SkipIds, [int]$Room)
+  $out = New-Object System.Collections.Generic.List[object]
+  $lo = Get-TcLinkOwed -OutDir $OutDir -Store $Store
+  $cap = [math]::Floor([math]::Max(0, $Room) / 2)
+  foreach ($lid in @($lo.Ids)) {
+    if (@($SkipIds) -contains [string]$lid) { continue }
+    $hits = @($All | Where-Object { [string]$_.id -eq [string]$lid })
+    if ($hits.Count -eq 0 -or ($out.Count + $hits.Count) -gt $cap) { continue }
+    foreach ($hit in $hits) { $out.Add($hit) }
+  }
+  return ,$out.ToArray()
+}

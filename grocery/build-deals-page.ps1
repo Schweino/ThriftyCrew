@@ -277,12 +277,8 @@ function SearchLink([string]$store, [string]$query) {
 }
 
 function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType, [string]$tileLink = '') {
-  $url = $null
-  # THE TILE'S OWN LINK FIRST (design/PLAN-link-rides-with-price-2026-09-27.md L2). compare-deals stamps link only when
-  # link_source=row: the URL of the capture row that SET this price, so it is the priced product by construction and
-  # needs none of the per-unit and name re-checks below, which exist to catch a SEPARATE record drifting from it.
-  if ($tileLink -and $tileLink -match '^https?://') { return "<a class='pg-see' href='" + (HtmlEnc $tileLink) + "' target='_blank' rel='nofollow noopener'>See item &rarr;</a>" }
-  if (($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
+  $url = if ($tileLink -match '^https?://') { $tileLink } else { $null }   # PLAN-link-rides-with-price L2: the priced row's own link wins
+  if ((-not $url) -and ($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
     $lnk = $purls[$id][$store]
     if ($lnk.url) {
       $ok = $true
