@@ -220,11 +220,15 @@ foreach ($s in $withSelfTest) {
 $scanCode     = @('*.ps1', '*.psm1', '*.psd1', '*.py', '*.sh', 'ops/hooks/*')
 $scanCodeWide = @($scanCode) + @('*.js', '*.yml', '*.yaml', '*.vbs', '*.bat', '*.cmd')   # walks that also read scripts of other kinds
 $scanLessons     = @('content/*.md')
+# ROUND 3 SCAN SETS (design\PLAN-push-gate-diet-2026-09-27.md): audit-ruling-drift's set is today's registry rows; a new
+# ruling-implementations.json row naming a non-code file must join it. audit-rule-format's set holds the channel-tagged rules
+# files; a tag naming a non-code gate path must join it. Unkeyed on purpose: audit-rule-currency (its file set is chosen by
+# the rules files' paths: entries through git ls-files) and audit-secrets (reads git log origin/main..HEAD).
 $static = @(
   @{ scan = $scanCodeWide; f = 'grocery\audit-guard-contract.ps1';   n = 'every chain detector can prove it ran, none are dead or half-covered' }
   @{ f = 'grocery\audit-cloud-readiness.ps1';  n = 'every credential consumer in the chain can run on a runner' }
   @{ scan = $scanCodeWide; f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
-  @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
+  @{ scan = @(':(glob)grocery/*.json'); f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
   # MOVED HERE FROM guards.ps1 on 2026-09-21: a bare JSON reader is a SOURCE defect, so it stops the push that adds it
   # instead of holding a board with no bad cell (it held the 2026-09-20 board that way). Its baseline is tracked, so a
   # clean checkout can read it; its report is rewritten only when its findings change.
@@ -233,8 +237,8 @@ $static = @(
   # category and the first thing to notice was publish-deals-page holding that day's republish. commodities.json and
   # categories.json are tracked, so -Source judges them on a bare checkout and writes nothing; the daily chain and
   # publish keep their own runs as the second line.
-  @{ f = 'grocery\audit-category-coverage.ps1'; a = @('-Source'); n = 'every commodity is filed in exactly one category, and no category names a missing commodity' }
-  @{ f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
+  @{ scan = @('grocery/commodities.json', 'grocery/categories.json'); f = 'grocery\audit-category-coverage.ps1'; a = @('-Source'); n = 'every commodity is filed in exactly one category, and no category names a missing commodity' }
+  @{ scan = @(':(glob)grocery/out/regular/*-regular-*.json'); f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
   # BOTH HALVES, for the reason spelled out under audit-twin-drift below: the discovery pass proves the
   # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,
   # which is what catches the next script to be written with a bare `git add`. Four incidents in seven
@@ -291,11 +295,11 @@ $static = @(
   # THE FACT CHECK LIST, and the live half is the point: it reads the 584 real cards, which is where the
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
-  @{ f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
+  @{ scan = @(':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/fact-claims-baseline.json'); f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
   # 2026-09-26 (queue 2026-09-26-177835, plan-2026-09-26-2): a commodity registration and the vocabulary row naming the
   # same food are two records by two tools; 4880ebc98 landed three commodities that claimed three rows while the rows
   # kept their old bids. Board-free and hermetic (rows + rules + the tracked mark), so it runs at push.
-  @{ f = 'meal-prep\pipeline\audit-ingredient-routes.ps1'; n = 'no push moves a recipe vocabulary row off its bid (a commodity claiming its name, or a rule change) unless the rebid rides in the same push' }
+  @{ scan = @('meal-prep/db/ingredients.json', 'grocery/commodities.json', 'ops/out/ingredient-identity-baseline.json'); f = 'meal-prep\pipeline\audit-ingredient-routes.ps1'; n = 'no push moves a recipe vocabulary row off its bid (a commodity claiming its name, or a rule change) unless the rebid rides in the same push' }
   # Every agent declares its tools, and what a definition SAYS about them matches what it HAS. Four of
   # twelve declared none until today and inherited Write and Edit, two of them on agents whose job is a
   # verdict. An absent tools: line does not look wrong in a diff (2026-09-06, backlog E3).
@@ -307,7 +311,7 @@ $static = @(
   # twin-drift covers CODE-to-CODE. This covers DOCUMENT-to-CODE: a ruling changes without a deploy and
   # the script enforcing it does not notice. Founding case was already live and already written down -
   # Brad's 2026-09-04 no-hardcoded-bands ruling, unimplemented and gated by nothing (backlog E12).
-  @{ f = 'ops\audit-ruling-drift.ps1';         n = 'no NEW ratified ruling goes unimplemented by the code' }
+  @{ scan = (@($scanCode) + @('ops/ruling-implementations.json', 'ops/ruling-drift-baseline.json', 'grocery/commodities.json', 'design/BRIEF-no-hardcoded-bands-2026-09-04.md', 'grocery/triage-plans/plan-2026-09-07-3.json')); f = 'ops\audit-ruling-drift.ps1';         n = 'no NEW ratified ruling goes unimplemented by the code' }
   # Import-CaptureCsv dropped vendor TEST rows at ingest - the right place - and recorded the count in
   # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
   # bill (2026-09-06, backlog E5).
@@ -324,7 +328,7 @@ $static = @(
   # build this". Seventeen items read as a to-do list and five of them were never tasks (2026-09-07).
   # Five states with a precedence now, and this fails a heading that invents a sixth or declares none.
   # -Summary prints the board, so "what is open for me" is a command rather than a reading exercise.
-  @{ f = 'ops\audit-backlog-status.ps1'; n = 'every backlog item declares exactly one state from the closed vocabulary' }
+  @{ scan = @('design/BACKLOG-course-findings.md'); f = 'ops\audit-backlog-status.ps1'; n = 'every backlog item declares exactly one state from the closed vocabulary' }
   # THREE non-comparable score spaces run here at once - bi-encoder cosine, cross-encoder
   # sigmoid probability, and BM25 - and the two most confusable numbers sit TEN LINES APART in
   # sweep.py: COVERAGE_COS_FLOOR 0.55 and COVERAGE_RERANK_FLOOR 0.90. They read like a loose bar
@@ -332,7 +336,7 @@ $static = @(
   # admitting or refusing rows rather than by erroring, so nothing else would ever report it
   # (2026-09-06, backlog E25). Static analysis cannot check that a recorded space is CORRECT;
   # it can check that a new threshold cannot appear without someone writing the space down.
-  @{ f = 'ops\audit-threshold-register.ps1'; n = 'no similarity threshold ships without recording which space it was tuned in' }
+  @{ scan = @('sidecar/THRESHOLDS.md', ':(glob)sidecar/*.py', 'meal-prep/pipeline/harvest_embed.py', 'meal-prep/pipeline/bm25_dedup_probe.py'); f = 'ops\audit-threshold-register.ps1'; n = 'no similarity threshold ships without recording which space it was tuned in' }
   # run-log-lib.ps1 opened with 'ONE copy of the write this run down rule' and it was one of
   # THREE: five hidden scheduled tasks, three conventions, and only the TC Grocery ones use the
   # library (2026-09-06, backlog E29). Nothing is unlogged, so the defect is the CLAIM - a file
@@ -367,7 +371,7 @@ $static = @(
   # see it, and it was in no static list either - the identical hole coverage_check.py was sitting in.
   # It is hermetic (frozen inputs, its own -OutFile) so it runs anywhere, and it is the only check that
   # compares the engine's ACTUAL output against an accepted baseline rather than re-deriving from it.
-  @{ f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }
+  @{ scan = (@($scanCode) + @('meal-prep/db/costed.json', ':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/ingredients.json', 'meal-prep/db/densities.json', 'meal-prep/db/label-prices.json', 'meal-prep/engine/regression-inputs/golden/*')); f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }
   # A SCHEDULED TASK'S NAME IS A FOREIGN KEY IN TWO HAND-MAINTAINED TABLES (2026-09-07, queue
   # 2026-09-07-dc7460): the $OWNED list in ops\install-grocery-tasks.ps1 and windows_tasks in
   # grocery\expected-automations.json, which health-heartbeat reads. Nothing compared them at the moment
@@ -398,7 +402,7 @@ $static = @(
   @{ scan = $scanCode; f = 'ops\audit-lift-completeness.ps1';   n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
   @{ scan = $scanCode; f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
-  @{ f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }
+  @{ scan = (@($scanCode) + @('CLAUDE.md', ':(glob).claude/rules/*.md', ':(glob).claude/agents/*.md', ':(glob)docs/*.md', ':(glob)design/RULINGS-*.md')); f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }
   @{ f = 'ops\audit-conclusion-currency.ps1'; n = 'a recorded conclusion that was current does not name a harness changed after it (WS 7d ratchet)' }
   # 2026-09-23 (W4.1 of design\PLAN-push-derived-conflicts-2026-09-23.md): git merges design\reread-ledger.tsv by union, which would keep an edited row beside its original and undo a deletion, so this is the append-only half.
   @{ f = 'ops\audit-reread-ledger.ps1';        n = 'no push deletes or edits a row of design\reread-ledger.tsv that the merge base with origin/main holds, and every row there has seven fields, a 40-hex blob and a closed action - union merge keeps both sides'' rows, and this keeps the file append-only' }
@@ -409,7 +413,7 @@ $static = @(
   @{ f = 'ops\audit-always-loaded-bytes.ps1';  n = 'the bytes every ThriftyCrew session loads at start (CLAUDE.md plus every unconditional .claude\rules file, as git stores them) have not grown past their mark - a ratchet that fails only on a rise; a fall is "can tighten" and keeps the mark' }
   # design\PLAN-rules-trim-2026-09-25.md (Brad, 2026-09-25): the size above is held by the ratchet; this holds the SHAPE, so a
   # new rule arrives as operative text plus a channel tag and its history goes to docs\rules-history. Hermetic, reads source only.
-  @{ f = 'ops\audit-rule-format.ps1';          n = 'every rule in a channel-tagged rules file (ops-and-gates.md) ends with a channel tag naming a gate that exists or judgement, points at its own history anchor, and stays under the per-rule bar; no history anchor is orphaned' }
+  @{ scan = (@($scanCode) + @('.claude/rules/ops-and-gates.md', '.claude/rules/grocery.md', '.claude/rules/measurement.md', '.claude/rules/meal-prep.md', 'docs/rules-history/ops-and-gates.md', 'docs/rules-history/grocery.md', 'docs/rules-history/measurement.md', 'docs/rules-history/meal-prep.md')); f = 'ops\audit-rule-format.ps1';          n = 'every rule in a channel-tagged rules file (ops-and-gates.md) ends with a channel tag naming a gate that exists or judgement, points at its own history anchor, and stays under the per-rule bar; no history anchor is orphaned' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
   @{ scan = $scanCode; f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
