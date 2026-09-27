@@ -64,6 +64,17 @@ $cases = @(
   @{ size='1 qt 4 pk';     unit='floz';   price=8.00; name='';                  want=0.0625   }  # 128 fl oz
   @{ size='4 pk 1 qt';     unit='floz';   price=8.00; name='';                  want=0.0625   }
   @{ size='2 ltr 6 pk';    unit='floz';   price=6.00; name='';                  want=0.014787 }
+  # source: 2026-09-26 bottled-water flyer-link finding (design/MEASURE-flyer-line-link-2026-09-26.md). The finding
+  # read the Hy-Vee cell's $0.1662 as PER FL OZ and called it 17x too high. It is not: bottled-water is an `each`
+  # commodity (commodities.json unit "each", label "Bottled Water (24-pack)"), the board shows "$0.17 each", and
+  # 3.99 / 24 bottles = 0.16625 a bottle is right. These pin the correct reading so nobody "fixes" it into a bug.
+  # CLEAN TWIN: the linker hands the product NAME in as the size (hyvee-flyer-link-lib 'name' road); glued "24Pk" = 24 items.
+  @{ size='Hy-Vee 24Pk Spring Water'; unit='each'; price=3.99; name='';       want=0.16625  }
+  # CLEAN TWIN: the flyer line itself, on the commodity's real unit, prices per bottle.
+  @{ size='Hy-Vee spring water, 24 pk. bottles 16.9 fl. oz., $3.99'; unit='each'; price=3.99; name=''; want=0.16625 }
+  # CLEAN TWIN: the same pack on a VOLUME commodity multiplies the per-bottle volume in (24 x 16.9 = 405.6 fl oz).
+  @{ size='24 pk 16.9 fl oz'; unit='floz';   price=3.99; name='';                  want=0.009837 }
+  @{ size='16.9 fl oz 24 pk'; unit='floz';   price=3.99; name='';                  want=0.009837 }
 )
 $afail = 0
 foreach ($c in $cases) {

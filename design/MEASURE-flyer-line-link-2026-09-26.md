@@ -40,6 +40,21 @@ escapes scrutiny" shape: the check and the thing it checks share one parser. Bef
 needs a size check that does not go through the same reader, or this shape needs its own must-fire fixture. Recorded
 as a finding. The linker was not changed.
 
+**CORRECTION, same day: the premise of this finding is FALSE. The bottled-water cell is right.** `bottled-water` is an
+`each` commodity (`grocery/commodities.json`: unit `each`, label "Bottled Water (24-pack)"), so $0.1662 is PER BOTTLE,
+not per fl oz: 3.99 / 24 bottles = $0.16625 a bottle. The published row (`public/board.json` `__rows`) reads
+"$0.17 each" for Hy-Vee, beside Walmart $0.10, Sam's $0.11, Baker's $0.14, Fareway $0.17, Family Fare $0.17 and Aldi
+$0.20 each, all price / bottle count. The linker's 24 is the bottle count on that basis, so its `match` confirms a
+correct price. Checked over the board read here (`grocery/out/comparison-2026-09-23.json`, 2,810 priced cells): 250
+cells name both a count and an ounce figure. 97 are `each` cells priced per item by design and 2 are `dozen`. None of
+the 151 volume or weight cells (35 fl oz, 103 oz, 13 lb) prices one item's volume as the pack (every size the store states is the pack total, and each per-unit
+reproduces price / total). Over `grocery/product-urls.json`, 114 of 2,964 volume-unit links carry a count in the name
+and one measure in the size field. Every one of those sizes is the pack total, and the link per-unit matches the
+cell's wherever the cell exists. The two that differ (Walmart canned-green-beans, Hy-Vee fish-sticks) differ on
+PRICE, not size. No code was changed. `grocery/test-pu-lib.ps1` now pins the four incident shapes (per bottle on
+`each`, 24 x 16.9 = 405.6 fl oz on a volume unit). The design point above still stands in general: a linked verdict
+that shares one parser with the cell it confirms cannot catch that parser's error.
+
 ## Why 31 labelled lines were not linked (from `grocery/hyvee/flyer-link-cases.jsonl` plus the decided file)
 
 - **A family word is missing from Hy-Vee's name: 19 lines.** Hy-Vee abbreviates and drops brands: "Hy-Vee Ckn Thighs
