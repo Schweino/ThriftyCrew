@@ -276,6 +276,47 @@ network probe (22 s), audit-secrets -SelfTest (19 s). Even with every declarable
 (network, history, gitignored data) is roughly 150 to 200 s on its own, so the bar is likely unreachable without D3's
 tier question or narrowing those suites' live cases.
 
+## Round 3 (Brad, 2026-09-27: items 1 and 2, then re-measure; the 150 s bar stands; D2 no, D3 wait, D4 no)
+
+### Round 3 design, item 1: a runner's own output is keyed by who last wrote it
+
+**The defect, measured in this worktree before any change.** With `ops\out\gate-verdict.json` and
+`ops\out\gate-readings.jsonl` absent, `Get-TcGateInputKey` for `ops\test-prepush-hook.ps1 -SelfTest` holds 787 files
+and neither output (each is a `cand ... absent` row); with both present it holds 789, both outputs included, and
+`grocery\capture-watchdog.ps1 -SelfTest` goes from 119 to 120 (the readings file). They get in because the walk reaches
+files that NAME them: `ops\run-gates.ps1` (the writer), `lib\gate-verdict.ps1`, `ops\report-ratchet-trends.ps1` (a
+reader: its live default `out\gate-readings.jsonl`) and `ops\observe-gate-queue.ps1` (a reader of every checkout's
+file). run-gates rewrites both files at the end of every run, so every run changes the next run's key.
+
+**Why the suites' verdicts do not depend on those bytes.** test-prepush-hook drives the hook in a sandbox repo with a
+stub `ops\run-gates.ps1` written into it (its line ~375) and copies `lib\*.ps1` there, so every path it resolves is
+under the sandbox root. capture-watchdog reaches `report-ratchet-trends.ps1` only in its live section 5a3a3, which its
+`-SelfTest` does not run. So the key is wide, not wrong, and the og-45 remedies do not fit: `# gate-output:` was tried
+and correctly refused, because real readers of the file are in the same walk.
+
+**Options considered.**
+- (a) Make the suites stop walking run-gates' live path. Each suite would need its declaration narrowed below code it
+  really loads (test-prepush-hook declares `lib\*.ps1` on purpose, and `lib\gate-verdict.ps1` is one of them), which is
+  the unsafe direction.
+- (b) Drop a runner's own outputs from every key. Unsafe: a person editing the file by hand would then replay a pass
+  over content no gate saw.
+- (c) **Chosen: key a runner's own output by WHO LAST WROTE IT.** run-gates declares the files it writes with a new
+  line `# gate-runner-output: <path>`. Right after each write, run-gates records the file's SHA-256 in a stamp under
+  its gate cache directory (the common git directory's `tc-gate-inputs`, outside the tree, so no walked file names it).
+  When a key's walk reaches a declared runner output, the row is `runnerout <path> as-written` if the file is absent or
+  its bytes equal the stamp, and `ref <path> <sha256>` (today's row) otherwise. So run-gates rewriting its own file
+  moves no key, and a person's edit (or anything else's write) moves every key that reaches it exactly as today.
+  Absent counts as as-written because a fresh checkout is a state only the runner ever leaves; a key reached while the
+  stamp is missing or unreadable falls back to the real SHA, the conservative direction.
+
+**Fixtures** (in `lib\gate-input-key.ps1`'s self-test, which already builds temp repos):
+- MUST FIRE: a person edits a declared runner output after the runner stamped it, and the key moves.
+- MUST NOT FIRE: the runner rewrites its output with new bytes and re-stamps, and the key does not move.
+- CLEAN TWIN: a file the runner does NOT declare, rewritten the same way, still moves the key (the exemption is by
+  declaration only), and a missing stamp falls back to the real SHA (the key moves on a rewrite).
+
+**Cost:** one SHA-256 of two small files per stamp write and per key that reaches them; no new process, no new gate.
+
 ## Open items
 
 - W0 (the catch column is unverified).

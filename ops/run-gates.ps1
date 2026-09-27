@@ -787,6 +787,13 @@ try {
   }
 } catch { $cacheDir = '' } finally { $ErrorActionPreference = $eapKey }
 $runnerFiles = @($PSCommandPath, (Join-Path $repo 'lib\parallel-run.ps1'), (Join-Path $repo 'lib\gate-input-key.ps1'))
+# THIS RUNNER'S OWN OUTPUTS ARE KEYED BY WHO LAST WROTE THEM (round 3 of design\PLAN-push-gate-diet-2026-09-27.md). The
+# two files below are rewritten at the end of every run and named by files some keys walk, so until this every run moved
+# the next run's key for test-prepush-hook (129 s) and capture-watchdog. Each is stamped right after it is written; a key
+# that reaches one hashes 'as-written' while its bytes are this runner's, and its real bytes after anyone else's edit.
+# gate-runner-output: ops\out\gate-verdict.json
+# gate-runner-output: ops\out\gate-readings.jsonl
+$runnerOutStates = Get-TcGateRunnerOutputStates -Repo $repo -CacheDir $cacheDir -RunnerFiles @($PSCommandPath)
 $gateKey = New-Object string[] $allJobs.Count
 $gateCachePath = New-Object string[] $allJobs.Count
 $cacheHit = New-Object bool[] $allJobs.Count
@@ -804,7 +811,7 @@ if ($cacheDir) {
     $swName = '-' + [string]$selfSwitch[$fullPath]
     $os = Get-TcGateOwnScanRows -Repo $repo -GateFile $fullPath -Cache $ownScanCache
     if (-not $os.Ok) { $unkeyable++; $unkeyWhy[$offSelf + $i] = [string]$os.Why; continue }
-    $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles -ScanRows $os.Rows
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles -ScanRows $os.Rows -RunnerOutputs $runnerOutStates
     if (-not $k.Ok) { $unkeyable++; $unkeyWhy[$offSelf + $i] = [string]$k.Why; continue }
     $idx = $offSelf + $i
     $gateKey[$idx] = $k.Key
@@ -837,7 +844,7 @@ if ($cacheDir -and $pyRunner.Count) {
     $pyFull = Join-Path $repo $pyParts[0]
     $os = Get-TcGateOwnScanRows -Repo $repo -GateFile $pyFull -Cache $ownScanCache
     if (-not $os.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$os.Why; $pyUnkeyed++; continue }
-    $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner -ScanRows $os.Rows
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner -ScanRows $os.Rows -RunnerOutputs $runnerOutStates
     if (-not $k.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$k.Why; $pyUnkeyed++; continue }
     $idx = $offPySuite + $i
     $gateKey[$idx] = $k.Key
@@ -862,7 +869,7 @@ if ($cacheDir) {
     if (-not $scanRowCache.ContainsKey($sid)) { $scanRowCache[$sid] = Get-TcGateScanRows -Repo $repo -Scan @($se.Scan) }
     $sr = $scanRowCache[$sid]
     if (-not $sr.Ok) { $unkeyWhy[$idx] = ('scan set: ' + $sr.Why); $stUnkeyed++; continue }
-    $k = Get-TcGateInputKey -Repo $repo -GateFile $se.Full -GateArg $se.Arg -RunnerFiles $runnerFiles -ScanRows $sr.Rows
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $se.Full -GateArg $se.Arg -RunnerFiles $runnerFiles -ScanRows $sr.Rows -RunnerOutputs $runnerOutStates
     if (-not $k.Ok) { $unkeyWhy[$idx] = [string]$k.Why; $stUnkeyed++; continue }
     $stKeyed++
     $gateKey[$idx] = $k.Key
@@ -1118,6 +1125,7 @@ try {
       ([ordered]@{ t = $grNow.ToUnixTimeSeconds(); date = $grNow.ToString('yyyy-MM-dd'); gate = $x.gate; rc = $x.rc; marker = $x.marker } | ConvertTo-Json -Compress)
     }
     [IO.File]::AppendAllText($grF, ((@($grLines) -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $cacheDir -Repo $repo -Rel 'ops\out\gate-readings.jsonl'
   }
 } catch { }   # a reading that cannot be kept must never fail the gate
 
@@ -1319,6 +1327,7 @@ try {
     $prevEapV = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
     try { $vc = @(& git -C $repo rev-parse --short HEAD 2>$null); if ($vc.Count) { $vCommit = "$($vc[0])" } } catch { } finally { $ErrorActionPreference = $prevEapV }
     $kept = Save-TcGateVerdict -Path $verdictPath -ExitCode $gateCode -Before $fpBefore.Fingerprint -After $fpAfter.Fingerprint -Repo $repo -Passed $pass -Commit $vCommit
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $cacheDir -Repo $repo -Rel 'ops\out\gate-verdict.json'
     if ($kept -eq 'recorded') { Write-Output 'run-gates: this pass is recorded for reuse - the next run in this checkout over the same content prints it instead of running the gates again' }
     elseif ($kept -eq 'content-moved') { Write-Output 'run-gates: this pass is NOT recorded for reuse - the checkout changed while the gates ran, so it describes neither version' }
     elseif ($kept -eq 'withdrawn') { Write-Output 'run-gates: the recorded pass for this content is WITHDRAWN - the same content has now failed here' }

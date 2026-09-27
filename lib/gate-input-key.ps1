@@ -666,6 +666,84 @@ function Get-TcGateOwnScanRows {
   return [pscustomobject]@{ Ok = $true; Why = ''; Rows = @($sr.Rows) }
 }
 
+# ---- A RUNNER'S OWN OUTPUT IS KEYED BY WHO LAST WROTE IT (round 3, design\PLAN-push-gate-diet-2026-09-27.md) ----
+# WHY. ops\run-gates.ps1 rewrites ops\out\gate-verdict.json and appends ops\out\gate-readings.jsonl at the end of every
+# run, and files a key walks NAME them (run-gates itself, ops\report-ratchet-trends.ps1, ops\observe-gate-queue.ps1), so
+# every run moved the next run's key for ops\test-prepush-hook.ps1 (129 s) and grocery\capture-watchdog.ps1: a pass was
+# never reused on identical content. # gate-output: cannot help, because real readers are in those walks.
+# THE RULE. A runner declares the files it writes with `# gate-runner-output: <repo-relative path>` and stamps each
+# file's SHA-256 under its cache directory right after writing it (Save-TcGateRunnerOutputStamp). A key reaching one then
+# hashes the constant 'as-written' when the file is absent or its bytes equal the stamp, and its real SHA otherwise. So
+# the runner rewriting its own file moves no key, and a person's edit (or any other writer) moves every key that reaches
+# it, exactly as before. No stamp, or an unreadable one, is the real SHA: the conservative direction.
+$script:TcGateRunnerOutRx = '(?im)^[ \t]*#[ \t]*gate-runner-output:[ \t]*(\S.*?)[ \t]*$'
+
+function Get-TcGateRunnerOutputs {
+  <# The repo-relative paths every runner file declares with # gate-runner-output:. Pure over the files' text. #>
+  param([string[]]$RunnerFiles = @())
+  $out = [Collections.Generic.List[string]]::new()
+  foreach ($rf in @($RunnerFiles)) {
+    if (-not $rf -or -not [IO.File]::Exists($rf)) { continue }
+    $t = ''
+    try { $t = [IO.File]::ReadAllText($rf) } catch { continue }
+    foreach ($m in [regex]::Matches($t, $script:TcGateRunnerOutRx)) {
+      foreach ($p in ($m.Groups[1].Value -split ',')) {
+        $q = ($p.Trim() -replace '/', '\')
+        if ($q -and -not $out.Contains($q)) { $out.Add($q) }
+      }
+    }
+  }
+  return , $out.ToArray()
+}
+
+function Get-TcGateRunnerStampPath {
+  <# One stamp per (checkout, file): the file's FULL path names it, because each checkout's copy has its own bytes. #>
+  param([string]$CacheDir, [string]$Repo, [string]$Rel)
+  $full = [IO.Path]::GetFullPath([IO.Path]::Combine($Repo, $Rel)).ToLowerInvariant()
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try { $h = ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($full))) -replace '-', '').ToLowerInvariant() }
+  finally { $sha.Dispose() }
+  return (Join-Path $CacheDir ('runner-out-' + $h.Substring(0, 32) + '.sha'))
+}
+
+function Save-TcGateRunnerOutputStamp {
+  <# Called by the runner right after it writes $Rel. Records the bytes it left there. Never throws: a stamp that cannot
+     be kept only means the next key hashes the real SHA and the gate runs, which is today's behaviour. Idempotent: it
+     replaces the whole stamp. A person's edit made BEFORE a run that then leaves the file unwritten is stamped too; the
+     keys of that run already held its real SHA, so every gate reaching it judged those bytes. #>
+  param([string]$CacheDir, [string]$Repo, [string]$Rel)
+  if (-not $CacheDir -or -not [IO.Directory]::Exists($CacheDir)) { return $false }
+  try {
+    $full = [IO.Path]::Combine($Repo, $Rel)
+    $s = Get-TcFileSha256 $full
+    if ($s -eq 'absent' -or $s -eq 'unreadable') { return $false }
+    [IO.File]::WriteAllText((Get-TcGateRunnerStampPath -CacheDir $CacheDir -Repo $Repo -Rel $Rel), $s, (New-Object Text.UTF8Encoding($false)))   # atomic-replace:allow a torn stamp reads as a mismatch, which runs the gate
+    return $true
+  } catch { return $false }
+}
+
+function Get-TcGateRunnerOutputStates {
+  <# rel -> 'as-written' or the file's real SHA-256, for every output the runner files declare. Handed to
+     Get-TcGateInputKey -RunnerOutputs. With no cache directory every state is the real SHA. #>
+  param([string]$Repo, [string]$CacheDir, [string[]]$RunnerFiles = @())
+  $st = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+  $decl = Get-TcGateRunnerOutputs -RunnerFiles $RunnerFiles
+  foreach ($rel in @($decl)) {
+    $full = [IO.Path]::Combine($Repo, $rel)
+    $now = Get-TcFileSha256 $full
+    $state = $now
+    if ($now -eq 'absent') { $state = 'as-written' }
+    elseif ($CacheDir -and $now -ne 'unreadable') {
+      $sp = Get-TcGateRunnerStampPath -CacheDir $CacheDir -Repo $Repo -Rel $rel
+      $was = ''
+      try { if ([IO.File]::Exists($sp)) { $was = ([IO.File]::ReadAllText($sp)).Trim() } } catch { $was = '' }
+      if ($was -and [string]::Equals($was, $now, [StringComparison]::Ordinal)) { $state = 'as-written' }
+    }
+    $st[$rel] = $state
+  }
+  return $st
+}
+
 function Get-TcGateInputKey {
   <# The key for ONE gate. $Repo is the checkout, $GateFile its full path, $GateArg the argument it runs with
      (so `-SelfTest` and a renamed switch are different entries), $RunnerFiles the bytes of whatever dispatches
@@ -681,7 +759,9 @@ function Get-TcGateInputKey {
     [Parameter(Mandatory = $true)][string]$GateFile,
     [string]$GateArg = '',
     [string[]]$RunnerFiles = @(),
-    [string[]]$ScanRows = @()
+    [string[]]$ScanRows = @(),
+    # rel -> 'as-written' | sha, from Get-TcGateRunnerOutputStates. A walked path found here hashes that state.
+    [hashtable]$RunnerOutputs = $null
   )
   if (-not [IO.File]::Exists($GateFile)) {
     return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'the gate file does not exist'; Files = @() }
@@ -789,6 +869,13 @@ function Get-TcGateInputKey {
       if ($seen.ContainsKey($rel)) { continue }
       $seen[$rel] = $true
       $full = [IO.Path]::Combine($repoFull, $rel)
+      # A RUNNER'S OWN OUTPUT hashes who last wrote it: 'as-written' when the runner did, its real bytes otherwise. Data,
+      # so never walked into.
+      if ($RunnerOutputs -and $RunnerOutputs.ContainsKey($rel)) {
+        $rows.Add('runnerout ' + $rel + ' ' + [string]$RunnerOutputs[$rel])
+        $files.Add($full)
+        continue
+      }
       # A text-only input is hashed and NOT walked into, whichever road reached it.
       if ($textSet.ContainsKey($rel)) {
         $rows.Add('text ' + $rel + ' ' + (Get-TcFileSha256 $full))
@@ -888,7 +975,12 @@ function Get-TcGateInputKey {
     else { $rows.Add('cand ' + $o.Path + ' absent') }
   }
   # A CANDIDATE THAT IS NOT THERE STILL GOES INTO THE KEY, so a file appearing where a base could point moves it.
-  foreach ($p in @($absentSeen.Keys)) { if (-not $seen.ContainsKey($p)) { $rows.Add('cand ' + $p + ' absent') } }
+  foreach ($p in @($absentSeen.Keys)) {
+    if ($seen.ContainsKey($p)) { continue }
+    # A runner's own output that is absent is a state only the runner leaves (a fresh checkout), so it keys as-written.
+    if ($RunnerOutputs -and $RunnerOutputs.ContainsKey($p)) { $rows.Add('runnerout ' + $p + ' ' + [string]$RunnerOutputs[$p]); continue }
+    $rows.Add('cand ' + $p + ' absent')
+  }
   foreach ($sr in $ScanRows) { $rows.Add([string]$sr) }
   foreach ($rf in @($RunnerFiles)) {
     if (-not $rf) { continue }
@@ -1686,6 +1778,55 @@ if ($SelfTest) { }
     $leafs = Get-TcGateLoadedLeafSet -Code (". (Join-Path `$root 'lib\x.ps1')`n& (Join-Path `$a 'y.ps1')`npowershell -File (Join-Path `$b 'z.ps1')`n`$p = Join-Path `$root 'w.ps1'`n")
     T 'CLEAN TWIN  the loaded-leaf set reads a dot-source, an & call and a -File start, and not a path that is only built' ($leafs.ContainsKey('x.ps1') -and $leafs.ContainsKey('y.ps1') -and $leafs.ContainsKey('z.ps1') -and -not $leafs.ContainsKey('w.ps1')) ((@($leafs.Keys) | Sort-Object) -join ',')
 
+    # ---- A RUNNER'S OWN OUTPUT (# gate-runner-output:, round 3) ----
+    # The founding shape: run-gates rewrote ops\out\gate-verdict.json every run, the file was in test-prepush-hook's key,
+    # so its 129 s ran again on identical content every time.
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sb 'ops\out')
+    $roRunner = Join-Path $sb 'ops\zz-runner.ps1'
+    [IO.File]::WriteAllText($roRunner, "# gate-runner-output: ops\out\zz-verdict.json`n# the runner`n", $utf8)
+    $roGate = Join-Path $sb 'ops\zz-reads-runner-out.ps1'
+    [IO.File]::WriteAllText($roGate, "# gate-inputs: lib\helper.ps1`n`$v = Join-Path `$repo 'ops\out\zz-verdict.json'`n`$o = Join-Path `$repo 'ops\out\zz-other.json'`nif (`$SelfTest) { }`n", $utf8)
+    $roOut = Join-Path $sb 'ops\out\zz-verdict.json'; $roOther = Join-Path $sb 'ops\out\zz-other.json'
+    $roCache = Join-Path $sb 'zz-cache'; $null = New-Item -ItemType Directory -Force -Path $roCache
+    $roDecl = Get-TcGateRunnerOutputs -RunnerFiles @($roRunner)
+    T 'CLEAN TWIN  a runner''s gate-runner-output line is read as one repo-relative path' ((@($roDecl).Count -eq 1) -and ($roDecl[0] -eq 'ops\out\zz-verdict.json')) ((@($roDecl)) -join '|')
+    function Get-RoKey { $st = Get-TcGateRunnerOutputStates -Repo $sb -CacheDir $roCache -RunnerFiles @($roRunner); Get-TcGateInputKey -Repo $sb -GateFile $roGate -GateArg '-SelfTest' -RunnerFiles @($roRunner) -RunnerOutputs $st }
+    [IO.File]::WriteAllText($roOut, "{`"run`":1}`n", $utf8); [IO.File]::WriteAllText($roOther, "{`"o`":1}`n", $utf8)
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $roCache -Repo $sb -Rel 'ops\out\zz-verdict.json'
+    $ro0 = Get-RoKey
+    [IO.File]::WriteAllText($roOut, "{`"run`":2}`n", $utf8)
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $roCache -Repo $sb -Rel 'ops\out\zz-verdict.json'
+    $ro1 = Get-RoKey
+    T 'MUST NOT FIRE  the runner rewriting its own declared output with new bytes, and stamping it, leaves a reader''s key where it was' `
+      ($ro0.Ok -and $ro1.Ok -and $ro0.Key -eq $ro1.Key) ("ok={0}/{1} why={2}" -f $ro0.Ok, $ro1.Ok, $ro0.Why)
+    [IO.File]::WriteAllText($roOut, "{`"run`":2,`"edited`":true}`n", $utf8)
+    $ro2 = Get-RoKey
+    T 'MUST FIRE  a PERSON editing the runner''s output after the stamp moves the key, so a hand edit is never replayed as a pass' `
+      ($ro2.Ok -and $ro2.Key -ne $ro1.Key) ("ok={0} why={1}" -f $ro2.Ok, $ro2.Why)
+    [IO.File]::WriteAllText($roOut, "{`"run`":3}`n", $utf8)
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $roCache -Repo $sb -Rel 'ops\out\zz-verdict.json'
+    $ro3 = Get-RoKey
+    T 'MUST NOT FIRE  once the runner writes and stamps again, the key comes back to the as-written key' ($ro3.Ok -and $ro3.Key -eq $ro1.Key) ("ok={0}" -f $ro3.Ok)
+    [IO.File]::WriteAllText($roOther, "{`"o`":2}`n", $utf8)
+    $ro4 = Get-RoKey
+    T 'CLEAN TWIN  a file the runner does NOT declare still moves the key when it is rewritten: the exemption is by declaration only' `
+      ($ro4.Ok -and $ro4.Key -ne $ro3.Key) ("ok={0}" -f $ro4.Ok)
+    Remove-Item -LiteralPath (Get-TcGateRunnerStampPath -CacheDir $roCache -Repo $sb -Rel 'ops\out\zz-verdict.json') -Force
+    $ro5 = Get-RoKey
+    T 'CLEAN TWIN  with its stamp missing the output is hashed by its real bytes, so the key moves (the conservative direction)' `
+      ($ro5.Ok -and $ro5.Key -ne $ro4.Key) ("ok={0}" -f $ro5.Ok)
+    Remove-Item -LiteralPath $roOut -Force
+    $ro6 = Get-RoKey
+    [IO.File]::WriteAllText($roOut, "{`"run`":4}`n", $utf8)
+    $null = Save-TcGateRunnerOutputStamp -CacheDir $roCache -Repo $sb -Rel 'ops\out\zz-verdict.json'
+    $ro7 = Get-RoKey
+    T 'MUST NOT FIRE  an ABSENT runner output (a fresh checkout) keys the same as one the runner wrote, so the first run does not void the second' `
+      ($ro6.Ok -and $ro7.Ok -and $ro6.Key -eq $ro7.Key -and $ro7.Key -eq $ro4.Key) ("ok={0}/{1}" -f $ro6.Ok, $ro7.Ok)
+    $roNo = Get-TcGateInputKey -Repo $sb -GateFile $roGate -GateArg '-SelfTest' -RunnerFiles @($roRunner)
+    [IO.File]::WriteAllText($roOut, "{`"run`":5}`n", $utf8)
+    $roNo2 = Get-TcGateInputKey -Repo $sb -GateFile $roGate -GateArg '-SelfTest' -RunnerFiles @($roRunner)
+    T 'CLEAN TWIN  a caller that passes no runner-output states keys the file by its bytes exactly as before' ($roNo.Ok -and $roNo2.Ok -and $roNo.Key -ne $roNo2.Key) ("ok={0}/{1}" -f $roNo.Ok, $roNo2.Ok)
+
     # ---- PRUNING, which is only safe because it agrees with the hit rule ----
     $pc = Join-Path $sb 'cache'
     $null = New-Item -ItemType Directory -Force -Path $pc
@@ -1714,7 +1855,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 115) { $f++; Write-Output ("FAIL  only {0} of 115 cases ran" -f $cases) }
+  if ($cases -lt 123) { $f++; Write-Output ("FAIL  only {0} of 123 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0
