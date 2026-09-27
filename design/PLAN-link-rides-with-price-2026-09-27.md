@@ -97,6 +97,18 @@ exclude, cheapest), Aldi by its product search. The resolved row's id is stamped
 resolved product is withheld (cell falls back to that store's everyday price or shows no price), never published
 without a link. Bar before the switch: at least 90% of flyer tiles resolved, and a sampled 20 checked by eye for
 same product, same size.
+PROBED 2026-09-27 (Hy-Vee only; one-off scratch probe `probe-hv-flyer.ps1`, one row per tile, 70 rows): for each
+Hy-Vee flyer tile on the L1 board, Hy-Vee's own headless search (the endpoint `resolve-hyvee-links` already uses,
+store 1466) was asked for the flyer line, and a result counted as a price match when its current `tagPriceValue`
+equals the flyer price to the cent. 70 of 70 searches answered; 51 had at least one price match, 12 exactly one, 39
+two or more; 19 none, an overstatement, because the probe read a multi-buy line ("5/ $5.00") as $5. **A flyer line
+is usually a FAMILY, not a product** ("Hormel Black Label bacon, 9.3 to 16 oz., $4.99" matched 11 products at $4.99).
+So the resolver's rule is: the link is the one product that is (a) at the flyer price today, (b) at the SIZE the
+tile's per-unit was divided by, which the tile already records in `basis` (bacon: `size 0.581 lb`, the 9.3 oz end
+of the flyer's range), and (c) inside the commodity's own include/exclude; more than one survivor, or none,
+leaves the tile unresolved (`ad`), never a guess. Multi-buy lines resolve on the unit price the deal implies
+(`deal_qty`). Family Fare (61) goes through the Freshop search `resolve-ff-boardmatch` already runs, and is not yet
+probed. Bar for the withhold switch unchanged: at least 90% of flyer tiles resolved, and 20 sampled by eye.
 
 **L2. The page and the feed read the tile's link first.** `build-deals-page.ps1` `SeeLink` uses `tile.link` when
 `link_source=row`; otherwise store search, never `product-urls.json` (D2). `export-feed.ps1` ships the tile link
