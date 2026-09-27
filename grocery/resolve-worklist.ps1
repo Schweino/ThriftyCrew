@@ -84,6 +84,21 @@ function LinkPerUnit([string]$size, [string]$unit, [double]$price, [string]$name
   Get-LinkPerUnit -size $size -unit $unit -price $price -name $name
 }
 
+# THE TILE'S OWN LINK DECIDES WHETHER A CHIP IS WORK (design/PLAN-link-rides-with-price-2026-09-27.md L4). compare-deals
+# stamps link_source on every store tile: 'row' means the tile carries the URL of the row that set its price, so there
+# is nothing to resolve and the chip is never listed. 'none' is a storefront row with no identity (a capture defect,
+# fixed at the capture, not by a link search). 'ad' is a flyer line not yet resolved to a product, which Brad's D1
+# ruling (2026-09-27) makes the system's job, never a resting state. A board built before the field existed returns
+# 'untagged' and keeps today's behaviour exactly.
+function Get-WorklistLinkClass([string]$LinkSource) {
+  switch ($LinkSource) {
+    'row'  { return $null }
+    'none' { return 'none' }
+    'ad'   { return 'ad' }
+    ''     { return 'untagged' }
+    default { throw "unknown link_source: $LinkSource" }
+  }
+}
 if ($SelfTest) {
   <#
     Frozen fixtures for the two per-unit parsers. Every expected value below is arithmetic done by
@@ -157,6 +172,13 @@ if ($SelfTest) {
      ((Test-CellComparableToEverydayLink '') -or (Test-CellComparableToEverydayLink $null) -or `
       (Test-CellComparableToEverydayLink 'clearance')) $false
 
+  # L4 of PLAN-link-rides-with-price: the tile's link_source decides whether a chip is backlog work.
+  TB 'MUST NOT FIRE  a tile carrying its own row link is never listed' ($null -eq (Get-WorklistLinkClass 'row')) $true
+  TB 'MUST FIRE  a storefront row with no identity is listed as a capture defect' ((Get-WorklistLinkClass 'none') -eq 'none') $true
+  TB 'MUST FIRE  an unresolved flyer line is listed as ad (D1: the system must find its link)' ((Get-WorklistLinkClass 'ad') -eq 'ad') $true
+  TB 'CLEAN TWIN  a board built before the field existed keeps today''s behaviour' ((Get-WorklistLinkClass '') -eq 'untagged') $true
+  $thrown = $false; try { $null = Get-WorklistLinkClass 'flyer' } catch { $thrown = $true }
+  TB 'MUST FIRE  an unknown link_source refuses loudly' $thrown $true
   if ($fail) { Write-Output "SELF-TEST FAIL ($fail)"; exit 1 }
   Write-Output 'SELF-TEST PASS'
   exit 0
@@ -164,8 +186,10 @@ if ($SelfTest) {
 
 $work = [ordered]@{}
 $seenChips = @{}   # id|store dedup: weekly + recipe occurrences of the same chip must not double-list it
-function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $cellType) {
+function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $cellType, $linkSource = '') {
   if ($seenChips.ContainsKey($id + '|' + $store)) { return }
+  $linkClass = Get-WorklistLinkClass ([string]$linkSource)
+  if ($null -eq $linkClass) { return }   # the tile carries the priced row's own link: nothing to resolve
   # Prefer the board's exact source product name as the search term - that's the item whose price is shown,
   # so searching for it links the RIGHT product (e.g. "That's Smart! Large Eggs" not just "eggs"). Falls back
   # to the generic commodity search term only when the board did not record a source item.
@@ -227,15 +251,15 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, 
   if ($reason) {
     $seenChips[$id + '|' + $store] = $true
     if (-not $work.Contains($store)) { $work[$store] = @() }
-    $work[$store] += [pscustomobject]@{ id=$id; commodity=$commodity; term=$term; board_item=([string]$boardItem); unit=$unit; price_per_unit=$curPU; reason=$reason }
+    $work[$store] += [pscustomobject]@{ id=$id; commodity=$commodity; term=$term; board_item=([string]$boardItem); unit=$unit; price_per_unit=$curPU; reason=$reason; link_class=$linkClass }
   }
 }
 
 foreach ($it in $cmp) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' ([string]$s.type) }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'weekly' ([string]$s.type) ([string]$s.link_source) }
 }
 foreach ($it in $ri) {
-  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' ([string]$s.type) }
+  foreach ($s in $it.stores) { AddChip ([string]$it.id) ([string]$it.commodity) ([string]$it.unit) ([string]$s.store) ([double]$s.per_unit) ([string]$s.item) 'recipe' ([string]$s.type) ([string]$s.link_source) }
 }
 
 $out = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd'); tolerance = $Tolerance; stores = $work }

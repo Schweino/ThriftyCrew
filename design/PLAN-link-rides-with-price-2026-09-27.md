@@ -101,6 +101,15 @@ same product, same size.
 **L2. The page and the feed read the tile's link first.** `build-deals-page.ps1` `SeeLink` uses `tile.link` when
 `link_source=row`; otherwise store search, never `product-urls.json` (D2). `export-feed.ps1` ships the tile link
 beside the price. A row link needs no per-unit re-check: it is the product that set the price.
+PAGE HALF BUILT 2026-09-27 (`SeeLink` takes the tile link first; the `product-urls.json` fallback stays until L6, so
+no chip loses a link before its replacement exists). Measured on the 2026-09-27 board built by L1, origin/main
+`build-deals-page` vs this one, same board: 4,232 chips, 4,148 unchanged, 75 store-search to exact product, 4
+weekly-ad pill to exact product (Fareway and Hy-Vee storefront sale rows), 5 change product. Of the 5, 1 was a WRONG
+live link: Sam's eggs priced a 2-dozen pack at $4.82 while the link file opened a 15-dozen case at $29.56; the other 4
+are the same product under a newer id. Search-fallback chips 197 to 122. **The L2 bar (a fall of at least 200) is
+MISSED and was unreachable**: the page carried only 197 search-fallback chips in all; it was written before that count
+was taken. Recorded as a miss, not rewritten. The feed half (`export-feed.ps1`, recipe widgets) is still owed: it
+reads `product-urls.json` through its own store-ownership checks and moves in its own change.
 
 **L3. The link checks judge identity, not arithmetic.** `audit-tile-integrity.ps1` and the link checks in `guards.ps1`
 assert the tile's link equals the URL built from the row the tile names. With no exception file (D2) nothing is left
@@ -110,11 +119,26 @@ for `pu-lib`'s link re-pricing, which is what makes removing `derive-links`' wri
 **L4. The backlog lists only what the system must fix.** `resolve-worklist.ps1` reads `link_source`: `row` is never
 listed; `none` is listed with store and capture file (capture defect); `ad` is listed as an unresolved flyer line
 (L1b's work, not a resting state, per D1).
+BUILT 2026-09-27 (`Get-WorklistLinkClass`, 5 self-test cases; each entry carries `link_class`). Measured on the L1
+board of 2026-09-27, main board only (recipe board not rebuilt in the scratch run), origin/main resolve-worklist vs
+this one, same inputs: 238 entries to 144. The 94 dropped are tiles carrying their own row link (Walmart 39, Baker's
+15, Sam's 11, Family Fare 13, Aldi 9, Hy-Vee 6, Fareway 1). The 144 left: `ad` 92 (83 missing, 9 stale), `none` 52
+(48 missing, 4 stale). Half the L4 bar holds (every entry is `none` or `ad`); naming the capture file per entry is
+still owed.
 
 **L5. Fix the captures that drop identity.** `build-walmart-deals` writes `link_url` from `item_id`; Hy-Vee's
 `everyday shelf price` rows keep `product_id`; Family Fare's carried-forward rows (1,907 with no `canonical_url`) get
 re-read or carry the URL forward from the capture that had it; Aldi's 940 unlinked rows, including the 19 on the
 backlog, are re-read in the next 06:15 browser run (D3).
+BUILT 2026-09-27, measured first: Walmart and Hy-Vee need nothing (100% of their tiles are `row` after L1, because the
+lib builds their URL from the id). Family Fare's 1,907 unlinked rows all carry `as_of` 2026-09-05 or earlier and every
+row since 2026-09-06 has `canonical_url`, so the capture is already fixed and only the OLD rows need a re-read; Aldi's
+940 date 2026-08-15 to 09-09. Rather than wait up to 90 days for the rotation, `Get-TcLinkOwed` (link-identity-lib)
+lists the commodities whose tile is `none` on the newest board and `Get-CaptureWorklist` leads with their terms right
+after the price-flag verifications, capped at HALF the room left so ended sales keep theirs. It empties itself as each
+re-read lands. On the 2026-09-27 board: Family Fare 134 owed, 14 terms per run; Aldi 64 owed, 17 per run (this also
+covers D3's 19); sale expiries displaced 0. Uncapped it took 28 of 37 and 35 of 37 lead slots, so the cap is the
+first plausible value of 1 tried.
 
 **L6. Retire the link file and the bridge (D2).** After L1 to L5 hold for 7 daily builds: `product-urls.json` is
 retired outright, not shrunk. Retire, one commit each with `audit-script-census` evidence of no remaining caller:

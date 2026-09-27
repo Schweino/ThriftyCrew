@@ -49,10 +49,32 @@ try {
   # Hy-Vee product_id builds the aisles-online URL.
   $u = Get-TcRowUrl 'Hy-Vee' ([pscustomobject]@{ item = 'Hy-Vee 2% Milk, 1 gal'; product_id = '42' })
   Assert-Case 'MUST FIRE Hy-Vee product_id builds the aisles-online URL' ($u -eq 'https://www.hy-vee.com/aisles-online/p/42/hy-vee-2-milk-1-gal') ([string]$u)
+
+  # Get-TcLinkOwed (L5): a priced tile with no link is an owed re-read, read off the newest board.
+  $script:scratch = Join-Path ([IO.Path]::GetTempPath()) ('tlil-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Path $script:scratch -ErrorAction Stop | Out-Null
+  $board = '{"comparison":[' +
+    '{"id":"eggs","stores":[{"store":"Aldi","per_unit":0.2,"link_source":"none"},{"store":"Walmart","per_unit":0.2,"link_source":"row","link":"https://www.walmart.com/ip/1"}]},' +
+    '{"id":"milk","stores":[{"store":"Aldi","per_unit":3.1,"link_source":"row","link":"https://www.aldi.us/x"}]},' +
+    '{"id":"bread","stores":[{"store":"Aldi","per_unit":null,"link_source":"none"},{"store":"Family Fare","per_unit":1.5,"link_source":"none"}]}]}'
+  [IO.File]::WriteAllText((Join-Path $script:scratch 'comparison-2026-09-27.json'), $board)
+  [IO.File]::WriteAllText((Join-Path $script:scratch 'comparison-2026-09-20.json'), '{"comparison":[{"id":"milk","stores":[{"store":"Aldi","per_unit":3,"link_source":"none"}]}]}')
+  $lo = Get-TcLinkOwed -OutDir $script:scratch -Store 'Aldi'
+  $ids = @($lo.Ids)
+  Assert-Case 'MUST FIRE a priced Aldi tile with link_source=none is owed a re-read (newest board only)' (($ids.Count -eq 1) -and ($ids[0] -eq 'eggs') -and (-not $lo.Blind)) ($ids -join ',')
+  Assert-Case 'MUST NOT FIRE an unpriced tile is owed nothing, and another store''s none tile is not Aldi''s' (-not ($ids -contains 'bread')) ($ids -join ',')
+  $lo = Get-TcLinkOwed -OutDir $script:scratch -Store 'Walmart'
+  Assert-Case 'MUST NOT FIRE a store whose tiles all carry row links owes nothing and is not blind' ((@($lo.Ids).Count -eq 0) -and (-not $lo.Blind)) ([string]$lo.Why)
+  Remove-Item -LiteralPath (Join-Path $script:scratch 'comparison-2026-09-27.json'), (Join-Path $script:scratch 'comparison-2026-09-20.json') -ErrorAction Stop
+  [IO.File]::WriteAllText((Join-Path $script:scratch 'comparison-2026-09-27.json'), '{"comparison":[{"id":"eggs","stores":[{"store":"Aldi","per_unit":0.2}]}]}')
+  $lo = Get-TcLinkOwed -OutDir $script:scratch -Store 'Aldi'
+  Assert-Case 'MUST FIRE a board built before link_source existed is BLIND, never a clean zero' ([bool]$lo.Blind) ([string]$lo.Why)
 } catch {
   Write-Output ('  FAIL  unexpected error: ' + $_.Exception.Message); $script:fail++
+} finally {
+  if ($script:scratch -and (Test-Path -LiteralPath $script:scratch)) { Remove-Item -LiteralPath $script:scratch -Recurse -Force }
 }
-$want = 11
+$want = 15
 if ($script:ran -ne $want) { Write-Output ('  FAIL  ran ' + $script:ran + ' case(s), expected ' + $want); $script:fail++ }
 if ($script:fail -eq 0) { Write-Output ('test-link-identity-lib self-test pass (' + $script:ran + ' cases)'); exit 0 }
 Write-Output ('test-link-identity-lib self-test FAIL (' + $script:fail + ' of ' + $script:ran + ')'); exit 1

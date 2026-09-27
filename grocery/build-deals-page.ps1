@@ -276,8 +276,12 @@ function SearchLink([string]$store, [string]$query) {
   return "<a class='pg-see pg-see-search' href='" + (HtmlEnc $u) + "' target='_blank' rel='nofollow noopener' title='No exact product page for this one - opens " + (HtmlEnc $store) + "&#39;s own search for it.'>Find at store &rarr;</a>"
 }
 
-function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType) {
+function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType, [string]$tileLink = '') {
   $url = $null
+  # THE TILE'S OWN LINK FIRST (design/PLAN-link-rides-with-price-2026-09-27.md L2). compare-deals stamps link only when
+  # link_source=row: the URL of the capture row that SET this price, so it is the priced product by construction and
+  # needs none of the per-unit and name re-checks below, which exist to catch a SEPARATE record drifting from it.
+  if ($tileLink -and $tileLink -match '^https?://') { return "<a class='pg-see' href='" + (HtmlEnc $tileLink) + "' target='_blank' rel='nofollow noopener'>See item &rarr;</a>" }
   if (($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
     $lnk = $purls[$id][$store]
     if ($lnk.url) {
@@ -870,7 +874,7 @@ foreach ($c in $cats) {
       # that vouches for no particular product's price. (The first build without it refused itself, correctly:
       # "ALL-3 VIOLATION: 1 priced chip(s) rendered without any link", 2026-09-21.)
       if ($isHeld) { [void]$cb.Append((SearchLink ([string]$s.store) (([string]$r.id) -replace '-', ' '))) }
-      else { [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type))) }
+      else { [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type) $(if ([string]$s.link_source -eq 'row') { [string]$s.link } else { '' }))) }
       [void]$cb.Append("</div>")
       $i++
     }
@@ -917,7 +921,7 @@ foreach ($c in $cats) {
       $riTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
       [void]$cb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
       [void]$cb.Append((SaleBadge $s ([string]$s.store)))
-      [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
+      [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type) $(if ([string]$s.link_source -eq 'row') { [string]$s.link } else { '' })))
       [void]$cb.Append("</div>")
       $i++
     }

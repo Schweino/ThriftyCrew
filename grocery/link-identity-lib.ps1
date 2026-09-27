@@ -69,3 +69,35 @@ function Get-TcLinkSource([string]$Url, [bool]$HasCaptureRow) {
   if ($HasCaptureRow) { return 'none' }
   return 'ad'
 }
+
+# A PRICED TILE WITH NO LINK IS AN OWED RE-READ (PLAN-link-rides-with-price L5). The commodities whose tile at $Store is
+# link_source=none on the newest board: a storefront row priced it but carried no URL, which on 2026-09-27 was every
+# Family Fare row captured before 2026-09-06 and every Aldi row before its href capture. Get-CaptureWorklist leads with
+# their terms, so a fresh read (which does carry the URL) replaces the row instead of waiting up to 90 days for the
+# rotation. EMPTIES ITSELF: once the re-read lands, the next board stamps that tile 'row' and the id leaves this list;
+# nothing here is ever edited by hand. A board with no link_source at all (built before L1) is BLIND and owes nothing.
+# Cost: one parse of the newest comparison file per worklist call.
+function Get-TcLinkOwed {
+  param([string]$OutDir, [Parameter(Mandatory)][string]$Store)
+  $none = [pscustomobject]@{ Ids = @(); Blind = $false; Why = '' }
+  $f = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  if (-not $f) { return [pscustomobject]@{ Ids = @(); Blind = $true; Why = 'no comparison board in ' + $OutDir } }
+  $doc = $null
+  try { $doc = ConvertFrom-Json ([IO.File]::ReadAllText($f.FullName)) } catch { $doc = $null }
+  if ($null -eq $doc) { return [pscustomobject]@{ Ids = @(); Blind = $true; Why = ($f.Name + ' is unparseable, so the tiles owed a link are unknown') } }
+  $ids = New-Object System.Collections.ArrayList
+  $tagged = 0
+  foreach ($c in @($doc.comparison)) {
+    foreach ($s in @($c.stores)) {
+      if ($null -eq $s -or -not $s.PSObject.Properties['link_source']) { continue }
+      $tagged++
+      if ([string]$s.store -ne $Store -or [string]$s.link_source -ne 'none') { continue }
+      if ($null -eq $s.per_unit) { continue }
+      if (-not ($ids -contains [string]$c.id)) { [void]$ids.Add([string]$c.id) }
+    }
+  }
+  if ($tagged -eq 0) { return [pscustomobject]@{ Ids = @(); Blind = $true; Why = ($f.Name + ' carries no link_source (built before the tile carried its link)') } }
+  if ($ids.Count -eq 0) { return $none }
+  return [pscustomobject]@{ Ids = $ids.ToArray(); Blind = $false; Why = '' }
+}
