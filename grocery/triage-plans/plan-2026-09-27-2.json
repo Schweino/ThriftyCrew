@@ -29,7 +29,7 @@
       "queue_id": "2026-09-27-06cd9b",
       "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
       "classification": "infra",
-      "status": "planned",
+      "status": "done",
       "lane": "ops",
       "est_tool_calls": 55,
       "verdict_for_the_day": "NOT a blind watcher. 804 of 805 cases passed; the one red is test-match-lib under peak load. Re-run at rest by this reviewer (main checkout, HEAD d94d53a07, 44 s): 45,759 names, 0 divergences, 0 could-not-look, MATCH-LIB PASSED, exit 0. Today's other green results stand.",
@@ -128,12 +128,19 @@
         "grocery/commodities.json",
         "any ack or known-wrong file"
       ],
-      "leaves_open": "Part of the class stays open. (a) This item does not prove the mechanism of the 1,641 non-blind divergences (the class its root cause names); it makes the next loaded run name them, and step (4) tries to reproduce them. If they are real unrecorded answers in match-lib, the engine is exposed under load, and that fix is a separate money-lane item. (b) test-auditors still runs the census beside the chain at peak, so load reds still page, now labelled.",
-      "leaves_open_occurrences": "load-induced test-match-lib red: 2 in the 30 days to 2026-09-27 (2026-09-24-3ca22f, 2026-09-27-06cd9b); non-blind divergences: 1,641 on 2026-09-27, not recorded on 2026-09-24",
-      "leaves_open_owner": "watch:grocery/test-match-lib.ps1 for (b); (a) becomes a money-lane queue item only if step (4) finds an unrecorded path",
-      "resolution_note": "Not blind. The one red of 805 was test-match-lib at 09:11, under peak chain load: 3,915 divergences (2,274 blind looks, 1,641 non-blind). A re-run at rest over the same 45,759 names gave 0 and 0. The harness now re-looks and names every divergence and splits load, drift and unrecorded answers in the alert itself. The 50-look cap, whose premise today refuted, is gone. A reproduction under ops/cpu-load.ps1 decides whether match-lib can answer differently with no recorded timeout.",
+      "leaves_open": "Part of the class stays open. (a) The mechanism of the 1,641 non-blind divergences of 2026-09-27 09:11 is unproven: controlled CPU load (cpu-load -Cores 20) gave 0 of either, so the cause is something CPU oversubscription alone does not make (memory pressure, the chain's own processes, or a path only the 09:11 inputs reach). The next loaded red now names its rows by class in its own FAILED line and list file; UNRECORDED rows there are a money-lane item. (b) test-auditors still runs early:match-lib beside the chain at peak, so a load storm still pages, now labelled still-blind.",
+      "leaves_open_occurrences": "(a) non-blind divergences: 1 day, 1,641 rows (2026-09-27); 2026-09-24 not recorded; 0 of 45,762 at rest and 0 of 45,762 under cpu-load -Cores 20. (b) load-induced test-match-lib red: 2 in the 30 days to 2026-09-27 (2026-09-24-3ca22f, 2026-09-27-06cd9b).",
+      "leaves_open_owner": "2026-09-27-ae8b7a",
+      "resolution_note": "Not blind. The one red of 805 was test-match-lib at 09:11 under peak chain load: 3,915 divergences (2,274 blind, 1,641 non-blind); at rest 0 and 0. Shipped 2e83fb11f: the 50-look cap is gone, every blind look and every divergence is re-looked, and the FAILED line classes the red (DRIFT, UNRECORDED, still-blind) with names and a per-run list file. -SelfTest 12 of 12, exit 0; corpus at rest exit 0; under ops/cpu-load.ps1 -Cores 20 exit 0 with 0 blind and 0 divergences, so the loaded red did not reproduce and no matcher gap was found. Residuals owned by weekly item 2026-09-27-ae8b7a.",
       "publish_batch": 0,
-      "premise_verified": "reproduced the clean result at rest (exit 0, 0/0); did not reproduce the loaded red"
+      "premise_verified": "Verified in grocery/test-match-lib.ps1 at d94d53a07+: BlindRetryCap = 50 short-circuited every blind look past 50 to still-blind, and $diff rows (non-blind divergences) were counted and 15 printed but never re-looked or classed. Re-run at rest 2026-09-27: 45,762 names, 0 divergences, exit 0. Reproduction under ops/cpu-load.ps1 -Cores 20 -StopFile (20 of 24 slots, 36 busy processes on 32 cores, 16 shards): 45,762 names, 0 could-not-look, 0 divergences, re-look 0 DRIFT 0 UNRECORDED, MATCH-LIB PASSED, exit 0. Controlled CPU load alone did NOT reproduce the 09:11 red, so no match-lib path was found and no money-lane item is owed from this item.",
+      "deviation": "(1) One fresh matcher serves every re-look and is replaced whenever a look goes blind, instead of one fresh matcher per name: the plan's ~40 s budget for 3,915 names is not reachable building a matcher per name, and the breaker records every quarantined look as could-not-look (match-lib.ps1:105, 580), so a replaced-on-blind matcher can never answer for a later name. (2) The reproduction ran the committed harness itself under load, not a scratch copy: the change adds no instrumentation beyond the committed classing, and the harness writes only %TEMP%. (3) Printed re-look lines capped at 40, the rest in the per-run list file, so a 3,915-row red does not flood test-auditors' log.",
+      "shipped_commit": "2e83fb11f",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 31,
+      "close_disposition": "confirmed",
+      "fixture_occurrences_note": "2026-08-30-b9d48f and 2026-08-31-4b2f47: NOT LOCATED by the developer either. They appear only in prior_closes and fixture_occurrences lists (plan-2026-09-26.json, plan-2026-09-27-2.json), in no item body and not in triage-queue.json; no fixture in test-match-lib covers them and none is claimed.",
+      "leaves_open_followup": "2026-09-27-ae8b7a"
     },
     {
       "queue_id": "2026-09-27-c989c6",
