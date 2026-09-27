@@ -69,19 +69,24 @@ report only; a number that could not be read is unknown, never 0. `ops/report-ef
 ## Decisions (ruled)
 - D1 Budgets over new gates: YES.
 - D2 Build after round 4 so the baseline is current: YES.
+- D3 (Brad, 2026-09-27, at the build): B1 measures the COUNT of unkeyed gate jobs, not seconds. The mark is the number of
+  gates that run unkeyed (so run on every push, a data-only one included); a rise is refused. The count does not move with
+  load, so its mark is taken from the current tree at once. Seconds stay in the weekly report as a trend only.
+- D4 (Brad, 2026-09-27, at the build): B4 emails Brad EVERY Monday, even when every budget is green: one short mail
+  holding the efficiency section, sent by the existing 06:45 digest task (no new scheduled task).
 
 ## Build record (2026-09-27)
 Each item landed as its own commit under `Plan: design/PLAN-efficiency-budgets-2026-09-27.md B<n>`; find them with
 `git log origin/main --grep "PLAN-efficiency-budgets"`.
-- **B1** `lib/push-cost-budget.ps1`, `ops/push-cost-budget.ps1`, 11 lines in `ops/run-gates.ps1`. Starting mark: NONE,
-  report-only. After cc40a2820 the gate-times rows held one full run, and it was cold, so there was no median to take.
-  Each class arms once it has 9 full green runs: `ops\push-cost-budget.ps1 -Accept -Class data` (and `code`), committed
-  with the reason. Added cost per run: 135 ms measured at 540 jobs against a 2,000-row file.
+- **B1** `lib/push-cost-budget.ps1`, `ops/push-cost-budget.ps1`, a few lines in `ops/run-gates.ps1`. Per D3 the judged
+  number is the count of unkeyed gate jobs, marked from the current tree (the value is in the B1 commit and `ops/out/push-cost-budget.json`).
+  Executed seconds are still recorded per run (push-cost.jsonl) as the report's trend. Added cost per run: about 0.15 s.
 - **B2** `ops/audit-file-size-budget.ps1`, keyed on the code scan set. Starting marks: 54 files over 1,000 lines, each
   at its size (`ops/out/file-size-budget-baseline.json`). 0 s on a data-only push; about 0.9 s on a code push.
 - **B3** `ops/clean-worktrees.ps1`, called by `ops/run-daily-ratchets.ps1`. First dry run: 160 worktrees, 0 removable.
 - **B4** `ops/report-efficiency-budgets.ps1`, printed by `ops/brain-digest.ps1` on Mondays (or `-Weekly`). The 4-week
-  trend starts from its own history rows, so the first real trend is on 2026-10-26 or later. The digest MAILS only
-  under ruling 8b (a red stage), so on a green Monday the section is in the page and the run log, not the inbox.
+  trend starts from its own history rows, so the first real trend is on 2026-10-26 or later.
+  Per D4 the section is also mailed on its own every Monday, green or not (subject "Weekly efficiency budgets", a digest-class
+  registry entry), while the full digest still mails only under ruling 8b.
 
-Open: B1's marks (after 9 runs of each class); whether the B4 section should itself make a Monday digest send.
+Open: none from the build; D3 and D4 closed the two it raised.

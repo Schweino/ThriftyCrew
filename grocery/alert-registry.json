@@ -1427,6 +1427,15 @@
    "resolver": "digest"
   },
   {
+   "id": "weekly-efficiency-budgets",
+   "match": "exact",
+   "key": "weekly efficiency budgets",
+   "class": "digest",
+   "condition": "information: the Monday efficiency-budgets section, mailed EVERY Monday even when every budget is green (Brad, 2026-09-27, B4 of design/PLAN-efficiency-budgets-2026-09-27.md); never triage work",
+   "emitter": "ops/brain-digest.ps1",
+   "resolver": "digest"
+  },
+  {
    "id": "live-recipe-prices",
    "match": "prefix",
    "key": "live recipe prices",

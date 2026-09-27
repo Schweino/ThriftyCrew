@@ -312,6 +312,12 @@ function Format-Digest {
 }
 
 # ---------------------------------------------------------------------------
+function Test-EfficiencyMailDue {
+  <# B4 (Brad, 2026-09-27): the weekly section mails whenever it was built, which is every Monday, whatever the budgets
+     say. Deliberately NOT gated on a red state: a green Monday sends too. Pure. #>
+  param([string[]]$Lines)
+  return [bool](@($Lines | Where-Object { "$_" -like 'EFFICIENCY BUDGETS*' }).Count)
+}
 function Test-DigestShouldSend {
   <# RULING 8b (Brad, 2026-09-10). Every digest mail also opens a triage item, so on 2026-09-10 the digest
      made triage work every morning whatever it said. It now sends only when a stage floor is RED or the
@@ -515,7 +521,11 @@ if ($SelfTest) {
   Case 'CLEAN TWIN' 'a Monday page carries the efficiency budgets section, above the rulings table' `
     (($effTxt -match 'EFFICIENCY BUDGETS \(weekly\)[\s\S]*OVER - cleanup before new feature work[\s\S]*WAITING FOR A RULING')) $effTxt
   Case 'MUST NOT FIRE' 'a page given no efficiency lines prints no efficiency section' (-not ($agedTxt -match 'EFFICIENCY BUDGETS')) $agedTxt
-  $expected = 45
+  $greenEff = @('EFFICIENCY BUDGETS (weekly)', '  always-loaded bytes   HEALTHY - carry on')
+  Case 'MUST FIRE' 'a GREEN Monday section is due to mail (Brad: every Monday, even all green)' (Test-EfficiencyMailDue -Lines $greenEff) ''
+  Case 'MUST NOT FIRE' 'a day with no section (not Monday) mails nothing' (-not (Test-EfficiencyMailDue -Lines @())) ''
+  Case 'MUST NOT FIRE' 'the red-only digest gate still holds a green night back (ruling 8b untouched)' (-not (Test-DigestShouldSend -RedStages 0 -EstateRead $true)) ''
+  $expected = 48
   if ($ran.Count -ne $expected) { $script:fails += "CASE COUNT ran $($ran.Count) cases, expected $expected" }
 
   ''
@@ -763,6 +773,18 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
     } catch { }
   }
 
+  # B4, Brad's ruling 2026-09-27: the efficiency section is MAILED EVERY MONDAY, green or not, as its own short mail,
+  # outside ruling 8b's red-only gate. Only in the scheduled -Alert run; a hand run with -Weekly prints and sends nothing.
+  if ($Alert -and (Test-EfficiencyMailDue -Lines $efficiency)) {
+    try {
+      $alert = Join-Path $repo 'grocery\send-alert.ps1'
+      $effFile = Join-Path $repo 'ops\out\efficiency-budgets-body.txt'
+      $dir = Split-Path -Parent $effFile
+      if (-not (Test-Path -LiteralPath $dir)) { $null = New-Item -ItemType Directory -Force $dir }
+      [IO.File]::WriteAllText($effFile, (@($efficiency) -join "`n"), (New-Object Text.UTF8Encoding($false)))
+      & $alert -Subject 'Weekly efficiency budgets' -BodyFile $effFile -Emitter 'ops\brain-digest.ps1' -Force
+    } catch { }
+  }
   $overdue = @($queues | Where-Object { $_.Known -and $_.Count -gt 0 -and $_.AgeDays -gt $_.Floor })
   $unknown = @($queues | Where-Object { -not $_.Known })
   Exit-Guard -Name 'BRAIN-DIGEST' -Code 0 `
