@@ -67,7 +67,8 @@ $ScanRoot = $ScanRoot.TrimEnd('\')
 # per-store CSVs sitting BESIDE it, writing to the parent. Moving it to archive\one-off\ would break it,
 # so the choice was a permanently-red gate or an honest ceiling. If a 39th appears, that one is new debris -
 # archive it rather than raising this again.
-if ($OutBaseline -lt 0) { $OutBaseline = 38 }
+# LOWERED to 10 on 2026-09-27: 28 one-offs under out\ deleted on Brad's ruling (design\RETIRE-dead-scripts-2026-09-27.md).
+if ($OutBaseline -lt 0) { $OutBaseline = 10 }
 
 # FROZEN 2026-07-30, appended to since - the scripts nothing in the repo calls, each with the reason it
 # stays. An entry that stops being uncalled (wired in, or archived) prints a note telling you to delete the

@@ -68,3 +68,100 @@ their questions can recur.
 Delete the 80 ONE-OFF and 3 DEAD in one commit (git history keeps them), after re-running step 2 on the day, since a
 sibling may add a reference. Leave UNSURE until each is answered. Script-census's KNOWN list and wide baseline then need
 their `-WideBaseline` re-mark in the same change.
+
+## Brad's ruling 2026-09-27
+
+Deleted 83 of 83 approved: every ONE-OFF and DEAD row except the two kept harnesses, plus the protein leaderboard rebuild and the bulk reel builder. The reference census was re-run on origin/main that day (exact basename, and stem with prefix collisions checked by hand): no candidate had gained a reference, so none was dropped.
+
+Kept:
+- `meal-prep/pipeline/dedup_prompt_drill_ask.py` and `sidecar/audit_rejections.py`: committed harnesses for recorded measurements.
+- The workbook builders `site/build/build-budget-tracker.ps1`, `build-compound-calculator.ps1`, `build-savings-tracker.ps1` and their Google Sheets upload scripts `.claude/skills/lesson/update-tracker-sheet.ps1`, `update-sheet-from-xlsx.ps1` and `thriftycrew-oauth-authorize.ps1` (the OAuth step those uploads need when the token is re-issued).
+- `.claude/skills/lesson/build-item-request-page.ps1` (the /suggest-an-item/ page).
+- `graph/eval/plausibility_report.py` (LIVE-BY-HAND).
+
+The script census's out-baseline fell from 38 to 10 and its wide mark from 71 to 50 (recorded with `-WideBaseline`). No deleted path had a KNOWN line.
+
+Deleted:
+- `.claude/skills/lesson/create-sheet-from-xlsx.ps1`
+- `.claude/skills/lesson/diag-buffer.ps1`
+- `.claude/skills/lesson/dump-page-lexical.ps1`
+- `.claude/skills/lesson/fetch-onboarding.ps1`
+- `.claude/skills/lesson/find-welcome-email.ps1`
+- `.claude/skills/lesson/get-nav.ps1`
+- `.claude/skills/lesson/polish-budget-cf.ps1`
+- `.claude/skills/lesson/polish-compound.ps1`
+- `.claude/skills/lesson/polish-debt.ps1`
+- `.claude/skills/lesson/polish-savings-cf.ps1`
+- `.claude/skills/lesson/snapshot-tab.ps1`
+- `.claude/skills/lesson/store-buffer.ps1`
+- `.claude/skills/meal-macro/batch-publish.ps1`
+- `.claude/skills/meal-macro/build-recipe-index.ps1`
+- `archive/ghost-config/voice-rewrite/publish-recipes.ps1`
+- `archive/handoffs/hardening-handoff/build_handoff.py`
+- `graph/eval/adjudicate_parity.py`
+- `grocery/archive/one-off/add-coverage-allowlist-2026-07-31.ps1`
+- `grocery/archive/one-off/add-excludes-2026-07-31.ps1`
+- `grocery/archive/one-off/add-review-acks-2026-07-31.ps1`
+- `grocery/archive/one-off/assemble-batch10.ps1`
+- `grocery/archive/one-off/assemble-batch11.ps1`
+- `grocery/archive/one-off/assemble-batch12.ps1`
+- `grocery/archive/one-off/assemble-batch13.ps1`
+- `grocery/archive/one-off/assemble-batch3.ps1`
+- `grocery/archive/one-off/assemble-batch4.ps1`
+- `grocery/archive/one-off/assemble-batch5.ps1`
+- `grocery/archive/one-off/assemble-batch6.ps1`
+- `grocery/archive/one-off/assemble-batch7.ps1`
+- `grocery/archive/one-off/assemble-batch8.ps1`
+- `grocery/archive/one-off/assemble-batch9.ps1`
+- `grocery/archive/one-off/backfill-verdict-suppressions-2026-07-30.ps1`
+- `grocery/archive/one-off/fix-crowns-2026-07-29.ps1`
+- `grocery/out/audit/apply-patch.ps1`
+- `grocery/out/audit/diff-assignments.ps1`
+- `grocery/out/audit/ff-pulldrop-scan.ps1`
+- `grocery/out/audit/gen-artifacts.ps1`
+- `grocery/out/audit/gen-audit-data.ps1`
+- `grocery/out/audit/parse-findings.ps1`
+- `grocery/out/audit/parse-journal.ps1`
+- `grocery/out/audit/split-pantry.ps1`
+- `grocery/out/build-aldi-0715.ps1`
+- `grocery/out/r100/add-berbere.ps1`
+- `grocery/out/r100/add-relax.ps1`
+- `grocery/out/r100/dedup-green-chiles.ps1`
+- `grocery/out/r100/fence-rice.ps1`
+- `grocery/out/r100/fix-guards.ps1`
+- `grocery/out/r100/fix-pin2.ps1`
+- `grocery/out/r100/fix-pins.ps1`
+- `grocery/out/r100/import-aldi-r100.ps1`
+- `grocery/out/r100/import-bakers-r100.ps1`
+- `grocery/out/r100/merge-fareway.ps1`
+- `grocery/out/r100/who-claims.ps1`
+- `grocery/out/r300/add-reciprocal-excludes.ps1`
+- `grocery/out/r300/add-relax-r300.ps1`
+- `grocery/out/r300/purge-offtarget-primer-rows.ps1`
+- `grocery/out/staples100/fix-fareway.ps1`
+- `grocery/out/staples100/process-agents.ps1`
+- `grocery/out/staples100/process-walmart.ps1`
+- `grocery/out/staples300/fix-rules-r1.ps1`
+- `grocery/out/staples300/fix-rules-r2.ps1`
+- `meal-prep/archive/one-off/apply-full-audit.ps1`
+- `meal-prep/archive/one-off/fix-bare-recipes.ps1`
+- `meal-prep/archive/one-off/fix-missing-seasonings.ps1`
+- `meal-prep/archive/one-off/integrate-expansion.ps1`
+- `meal-prep/archive/orig/build-specs-orig.ps1`
+- `meal-prep/archive/orig/harvest-originals.ps1`
+- `meal-prep/archive/orig/publish-orig.ps1`
+- `meal-prep/archive/r100/patch-display-itemize.ps1`
+- `meal-prep/archive/r100/update-recipes-db2.ps1`
+- `meal-prep/archive/r100/update-recipes-db3.ps1`
+- `meal-prep/archive/r100/update-recipes-db4.ps1`
+- `meal-prep/archive/r300/port-planner-packages.ps1`
+- `meal-prep/archive/root-artifacts/extend-ingredient-map.ps1`
+- `meal-prep/build-protein-data.ps1`
+- `meal-prep/inspect-live-card.ps1`
+- `meal-prep/pipeline/build-run-final.ps1`
+- `media/reels/build-all-recipe-videos.ps1`
+- `ops/probe-agent-prose-duplication.py`
+- `sidecar/merge_adjudications.py`
+- `sidecar/probe_aisle.py`
+- `site/build/build-new-foot.ps1`
+- `site/build/get-foot.ps1`
