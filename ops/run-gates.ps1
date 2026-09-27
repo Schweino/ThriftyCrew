@@ -238,7 +238,7 @@ $static = @(
   # categories.json are tracked, so -Source judges them on a bare checkout and writes nothing; the daily chain and
   # publish keep their own runs as the second line.
   @{ scan = @('grocery/commodities.json', 'grocery/categories.json'); f = 'grocery\audit-category-coverage.ps1'; a = @('-Source'); n = 'every commodity is filed in exactly one category, and no category names a missing commodity' }
-  @{ scan = @(':(glob)grocery/out/regular/*-regular-*.json'); f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }
+  @{ scan = @(':(glob)grocery/out/regular/*-regular-*.json'); f = 'grocery\audit-instore-shutout.ps1';  n = 'no NEW commodity has quietly lost every shelf row at a store' }   # reach-fixture-ok: a gate-key scan pathspec, hashed from git's index; run-gates opens none of these files
   # BOTH HALVES, for the reason spelled out under audit-twin-drift below: the discovery pass proves the
   # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,
   # which is what catches the next script to be written with a bare `git add`. Four incidents in seven
@@ -295,11 +295,11 @@ $static = @(
   # THE FACT CHECK LIST, and the live half is the point: it reads the 584 real cards, which is where the
   # undeclared claims actually are. Hermetic - specs are tracked, so it works on a bare checkout. A
   # ratchet, because 340 assertions predate the field (2026-09-06, backlog E6).
-  @{ scan = @(':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/fact-claims-baseline.json'); f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }
+  @{ scan = @(':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/fact-claims-baseline.json'); f = 'meal-prep\pipeline\audit-fact-claims.ps1'; n = 'no NEW prose claim ships that the writer did not declare' }   # reach-fixture-ok: a gate-key scan pathspec, hashed from git's index; run-gates opens none of these files
   # 2026-09-26 (queue 2026-09-26-177835, plan-2026-09-26-2): a commodity registration and the vocabulary row naming the
   # same food are two records by two tools; 4880ebc98 landed three commodities that claimed three rows while the rows
   # kept their old bids. Board-free and hermetic (rows + rules + the tracked mark), so it runs at push.
-  @{ scan = @('meal-prep/db/ingredients.json', 'grocery/commodities.json', 'ops/out/ingredient-identity-baseline.json'); f = 'meal-prep\pipeline\audit-ingredient-routes.ps1'; n = 'no push moves a recipe vocabulary row off its bid (a commodity claiming its name, or a rule change) unless the rebid rides in the same push' }
+  @{ scan = @('meal-prep/db/ingredients.json', 'grocery/commodities.json', 'ops/out/ingredient-identity-baseline.json'); f = 'meal-prep\pipeline\audit-ingredient-routes.ps1'; n = 'no push moves a recipe vocabulary row off its bid (a commodity claiming its name, or a rule change) unless the rebid rides in the same push' }   # reach-fixture-ok: a gate-key scan pathspec, hashed from git's index; run-gates opens none of these files
   # Every agent declares its tools, and what a definition SAYS about them matches what it HAS. Four of
   # twelve declared none until today and inherited Write and Edit, two of them on agents whose job is a
   # verdict. An absent tools: line does not look wrong in a diff (2026-09-06, backlog E3).
@@ -371,7 +371,7 @@ $static = @(
   # see it, and it was in no static list either - the identical hole coverage_check.py was sitting in.
   # It is hermetic (frozen inputs, its own -OutFile) so it runs anywhere, and it is the only check that
   # compares the engine's ACTUAL output against an accepted baseline rather than re-deriving from it.
-  @{ scan = (@($scanCode) + @('meal-prep/db/costed.json', ':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/ingredients.json', 'meal-prep/db/densities.json', 'meal-prep/db/label-prices.json', 'meal-prep/engine/regression-inputs/golden/*')); f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }
+  @{ scan = (@($scanCode) + @('meal-prep/db/costed.json', ':(glob)meal-prep/db/recipes/*.json', 'meal-prep/db/ingredients.json', 'meal-prep/db/densities.json', 'meal-prep/db/label-prices.json', 'meal-prep/engine/regression-inputs/golden/*')); f = 'meal-prep\engine\golden-test.ps1';   n = 'the cost engine still produces its accepted output from frozen inputs' }   # reach-fixture-ok: a gate-key scan pathspec, hashed from git's index; run-gates opens none of these files
   # A SCHEDULED TASK'S NAME IS A FOREIGN KEY IN TWO HAND-MAINTAINED TABLES (2026-09-07, queue
   # 2026-09-07-dc7460): the $OWNED list in ops\install-grocery-tasks.ps1 and windows_tasks in
   # grocery\expected-automations.json, which health-heartbeat reads. Nothing compared them at the moment
