@@ -17,6 +17,9 @@
 # drift by definition, with no legitimate reading. Run sync-recipesdb-cost.ps1 to repair it.
 #
 # Usage: audit-db-agreement.ps1 [-SelfTest] [-ShowAll]
+# The -SelfTest reads only these two libraries and a held-recipes fixture it writes under %TEMP%; every live read starts after its exit (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# held-state.ps1 loads lib\json-io.ps1 through its own $heldStateRepoRoot, which the key cannot resolve, so it is named here.
+# gate-inputs: lib\guard-contract.ps1, meal-prep\lib\held-state.ps1, lib\json-io.ps1
 param([switch]$SelfTest,[switch]$ShowAll)
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')

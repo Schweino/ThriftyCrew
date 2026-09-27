@@ -24,6 +24,8 @@ Usage: powershell -File ops\verify-gate-declaration.ps1 -Gate <repo-relative pat
 Exit 0 every named gate verified, 1 at least one refused, 3 could not run. One line per gate, then
 VERIFY-GATE-DECLARATION-COMPLETE gates=N verified=V refused=R.
 #>
+# The -SelfTest copies these two libraries into a %TEMP% fixture and runs every case there (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\gate-input-key.ps1, lib\selftest-verdict.ps1
 [CmdletBinding()]
 param([string]$Gate = '', [string]$Arg = '', [int]$TimeoutSec = 900, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

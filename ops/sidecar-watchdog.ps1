@@ -40,6 +40,9 @@
   VRAM free, or that /recall-search will answer. Those cost a real request and this must stay
   cheap enough to run every 15 minutes.
 #>
+# The -SelfTest loads two libraries and reads nightly.ps1, start-sidecar.ps1 and its own source as text; its stamp goes to %TEMP%, and its one probe is a port expected to be closed (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\guard-contract.ps1, grocery\run-log-lib.ps1
+# gate-inputs-text: graph\pipeline\nightly.ps1, sidecar\start-sidecar.ps1
 [CmdletBinding()]
 param(
   [switch]$SelfTest,

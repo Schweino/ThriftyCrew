@@ -19,6 +19,9 @@
 #         build-live-price-script.ps1 -Check     exit 1 when the committed file differs from its template
 #         build-live-price-script.ps1 -SelfTest
 # Exit 0 ok, 1 drift or a failed case, 3 could not evaluate. Last line: LIVE-PRICE-SCRIPT-COMPLETE.
+# The -SelfTest loads guard-contract, runs live-price-fill.js under node, and reads the template and the committed public\tc-live-price.js as text. Node and jsdom live outside the repo and are not in the key (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\guard-contract.ps1, meal-prep\pipeline\live-price-fill.js
+# gate-inputs-text: meal-prep\pipeline\tpl2-scaler-prefix.html, public\tc-live-price.js
 [CmdletBinding()]
 param([switch]$Check, [switch]$SelfTest, [string]$Template = '', [string]$OutFile = '')
 $ErrorActionPreference = 'Stop'

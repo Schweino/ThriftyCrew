@@ -794,11 +794,17 @@ $cacheVerdict = New-Object string[] $allJobs.Count
 $unkeyWhy = New-Object string[] $allJobs.Count
 $reusedCount = 0; $unkeyable = 0
 $nowUtcKey = [DateTime]::UtcNow
+# A SUITE MAY DECLARE A SCAN SET IN ITS OWN SOURCE (`# gate-scan:`, M3 of design\PLAN-push-gate-diet-2026-09-27.md): the
+# rows are git's listing of the tracked tree under its pathspecs (the same Get-TcGateScanRows D1's static entries use),
+# computed once per distinct set. A set git cannot list leaves the suite unkeyed, so it runs.
+$ownScanCache = @{}
 if ($cacheDir) {
   for ($i = 0; $i -lt $selfJobs.Count; $i++) {
     $fullPath = [string]$selfKeys[$i]
     $swName = '-' + [string]$selfSwitch[$fullPath]
-    $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles
+    $os = Get-TcGateOwnScanRows -Repo $repo -GateFile $fullPath -Cache $ownScanCache
+    if (-not $os.Ok) { $unkeyable++; $unkeyWhy[$offSelf + $i] = [string]$os.Why; continue }
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $fullPath -GateArg $swName -RunnerFiles $runnerFiles -ScanRows $os.Rows
     if (-not $k.Ok) { $unkeyable++; $unkeyWhy[$offSelf + $i] = [string]$k.Why; continue }
     $idx = $offSelf + $i
     $gateKey[$idx] = $k.Key
@@ -829,7 +835,9 @@ if ($cacheDir -and $pyRunner.Count) {
   for ($i = 0; $i -lt $pySuiteJobs.Count; $i++) {
     $pyParts = ([string]$pySuiteKeys[$i]) -split '\|', 2
     $pyFull = Join-Path $repo $pyParts[0]
-    $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner
+    $os = Get-TcGateOwnScanRows -Repo $repo -GateFile $pyFull -Cache $ownScanCache
+    if (-not $os.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$os.Why; $pyUnkeyed++; continue }
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $pyFull -GateArg $pyParts[1] -RunnerFiles $pyRunner -ScanRows $os.Rows
     if (-not $k.Ok) { $unkeyWhy[$offPySuite + $i] = [string]$k.Why; $pyUnkeyed++; continue }
     $idx = $offPySuite + $i
     $gateKey[$idx] = $k.Key

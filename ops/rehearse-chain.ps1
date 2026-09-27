@@ -157,6 +157,12 @@ param(
   [switch]$SelfTest
 )
 
+# WHAT THE -SelfTest READS OF THIS REPO (M3, design\PLAN-push-gate-diet-2026-09-27.md): the chain manifest set at HEAD
+# (ops\chain-manifest.json plus every .ps1 under its derive_dirs and each member's dot-source closure, anywhere), the whole
+# lib\*.ps1 its sandboxes copy, ops\verify-bulk-edit.ps1 and ops\hooks\pre-commit, and two blobs by fixed id, which cannot
+# change. Every one is a tracked .ps1, the manifest or a hook, so this scan set is a superset; everything else is a
+# fixture under %TEMP%.
+# gate-scan: *.ps1 *.psm1 ops/chain-manifest.json ops/hooks/*
 $script:RhRoot = Split-Path -Parent $PSScriptRoot
 . (Join-Path $script:RhRoot 'lib\git-blob-lib.ps1')    # Invoke-GitCaptured, Get-CommittedBlobBytes
 . (Join-Path $script:RhRoot 'lib\git-repo-env.ps1')    # Clear-TcGitRepoEnv

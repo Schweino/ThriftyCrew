@@ -27,6 +27,10 @@
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 findings, 3 could-not-evaluate.
   Read the verdict LINE, not the number (backlog E2).
 #>
+# The -SelfTest reads every tracked .ps1 (git ls-files, for the literal it forbids) and worker\index.js as text, loads two libraries, and stubs every Ghost call; queues are %TEMP% fixtures (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\guard-contract.ps1, lib\ghost-lib.ps1
+# gate-inputs-text: worker\index.js
+# gate-scan: *.ps1
 param(
   [string]$Queue = '',
   [switch]$Apply,

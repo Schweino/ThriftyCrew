@@ -19,6 +19,8 @@
           1 a stage threw, or (without -NoCommit only, since 2026-09-11) that commit did not land; the EXIT line says which.
           3 it refused to pull, because neither -NoPull nor -ForcePull was passed.
 #>
+# The -SelfTest (lines after this header, to its exit 0) parses its own source and loads these five libraries; every verdict and export case runs against a %TEMP% fixture as its -Repo or -OutDir (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\pipeline-commit.ps1, grocery\ad-schedule-backing-lib.ps1, grocery\native-lib.ps1, grocery\feed-export-lib.ps1, lib\chain-verdict-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Today = "",

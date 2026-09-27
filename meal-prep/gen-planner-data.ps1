@@ -13,6 +13,8 @@
 # takes an uncostable recipe down, so leaving it out of the planner is the correct state, and exiting 1 on it
 # halted every live propagate at this stage. Any other drop (a manifest that silently lost a priced recipe)
 # still exits 1. Both kinds are named on their own line; neither is ever silent.
+# The -SelfTest is pure over its own functions and reads only its own source; it exits before any library or data read (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: meal-prep\gen-planner-data.ps1
 param([switch]$SelfTest)
 $ErrorActionPreference='Stop'
 

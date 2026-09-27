@@ -468,6 +468,24 @@ function Test-TcGateLoadsLeaf {
   return [regex]::IsMatch($Code, $rx)
 }
 
+function Get-TcGateLoadedLeafSet {
+  <# Pure over comment-stripped TEXT. Every file name that Test-TcGateLoadsLeaf could match in this code, read ONCE: for
+     each line that dot-sources, calls with & or starts with -File, the last path segment of every run of text between
+     quote marks after the load. A SUPERSET of the per-leaf rule (it also takes quoted runs that were not a path), so a
+     lookup here walks as much or more, never less. Why it exists: under a scan set a detector can hold a few hundred text
+     inputs, and one regex per input per walked file per restart cost 69 s for one key (audit-store-registry, M3). #>
+  param([string]$Code)
+  $set = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+  $rx = '(?im)(?:(?:^|[;{(|]|\s)[.&]\s*\(?\s*Join-Path\b|-File\s+\(?\s*(?:Join-Path\b)?)([^\r\n]*)'
+  foreach ($m in [regex]::Matches($Code, $rx)) {
+    foreach ($piece in ($m.Groups[1].Value -split '[''"]')) {
+      $leaf = ($piece -split '[\\/]')[-1].Trim()
+      if ($leaf) { $set[$leaf] = $true }
+    }
+  }
+  return $set
+}
+
 function Resolve-TcGateDeclaredInputs {
   <# Expand declared patterns against the repo root. Returns Ok and either Paths (relative, sorted ordinally) or
      Why. A pattern matching nothing refuses the whole gate; so does one that escapes the repo. #>
@@ -604,6 +622,50 @@ function Get-TcGateScanRows {
   return [pscustomobject]@{ Ok = $true; Why = ''; Rows = $rows.ToArray(); Tracked = $idx.Count }
 }
 
+# A SELF-TEST OR PYTHON SUITE MAY DECLARE A SCAN SET IN ITS OWN SOURCE (M3 of design\PLAN-push-gate-diet-2026-09-27.md):
+#
+#     # gate-scan: *.ps1 ops/chain-manifest.json
+#
+# WHY. Some suites read THE TRACKED TREE itself: ops\rehearse-chain.ps1's self-test computes the chain manifest set at HEAD
+# over every .ps1 under six folders plus each member's dot-source closure, and copies the whole lib\ into its sandboxes.
+# No list of single files is that set, and a one-folder glob is narrower than it, so the suite was refused on every push.
+# The scan set D1 gave the static detectors is exactly that set, so a suite names it here, as whitespace-separated git
+# pathspecs, and run-gates hands the rows to Get-TcGateInputKey the way it does for a static entry.
+# It is a DECLARATION like the other two forms: it lifts the inference's refusal, and the gate's own walk still runs.
+# A pathspec set that matches no tracked file refuses (Get-TcGateScanRows), never an empty set.
+$script:TcGateScanDeclRx = '(?im)^[ \t]*#[ \t]*gate-scan:[ \t]*(.+?)[ \t]*$'
+
+function Get-TcGateDeclaredScan {
+  <# The declared scan pathspecs, in source order, de-duplicated, or an empty array. Pure over text. #>
+  param([string]$Text)
+  $out = [Collections.Generic.List[string]]::new()
+  foreach ($m in [regex]::Matches($Text, $script:TcGateScanDeclRx)) {
+    foreach ($p in ($m.Groups[1].Value -split '\s+')) {
+      $t = $p.Trim()
+      if ($t -and -not $out.Contains($t)) { [void]$out.Add($t) }
+    }
+  }
+  return @($out)
+}
+
+function Get-TcGateOwnScanRows {
+  <# The scan rows a gate's OWN `# gate-scan:` line names, for run-gates' self-test and Python loops. Ok with empty Rows
+     when the gate declares none (it keys exactly as before). Ok=$false when it declares a set git cannot list or that
+     matches no tracked file: the caller must then run the gate. $Cache (a hashtable keyed by the joined specs) spares a
+     second git listing for a set another gate already declared in this run. #>
+  param([Parameter(Mandatory = $true)][string]$Repo, [Parameter(Mandatory = $true)][string]$GateFile, [hashtable]$Cache)
+  $text = ''
+  try { $text = [IO.File]::ReadAllText($GateFile) } catch { return [pscustomobject]@{ Ok = $true; Why = ''; Rows = @() } }
+  $specs = Get-TcGateDeclaredScan -Text $text
+  $specs = @($specs)
+  if (-not $specs.Count) { return [pscustomobject]@{ Ok = $true; Why = ''; Rows = @() } }
+  $sid = (@($specs | Sort-Object -Unique) -join '|')
+  if ($null -ne $Cache -and $Cache.ContainsKey($sid)) { $sr = $Cache[$sid] }
+  else { $sr = Get-TcGateScanRows -Repo $Repo -Scan $specs; if ($null -ne $Cache) { $Cache[$sid] = $sr } }
+  if (-not $sr.Ok) { return [pscustomobject]@{ Ok = $false; Why = ('scan set: ' + $sr.Why); Rows = @() } }
+  return [pscustomobject]@{ Ok = $true; Why = ''; Rows = @($sr.Rows) }
+}
+
 function Get-TcGateInputKey {
   <# The key for ONE gate. $Repo is the checkout, $GateFile its full path, $GateArg the argument it runs with
      (so `-SelfTest` and a renamed switch are different entries), $RunnerFiles the bytes of whatever dispatches
@@ -673,6 +735,8 @@ function Get-TcGateInputKey {
   foreach ($p in @($textSet.Keys)) { $gateTextSet[$p] = $true }
   $forceWalk = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
   $walkDone = $false
+  # Each walked file's loaded leaf names, read once and kept across restarts (a file's text does not change mid-key).
+  $leafSets = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
   for ($attempt = 0; $attempt -lt 64; $attempt++) {
     $textSet = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
     foreach ($p in @($gateTextSet.Keys)) { $textSet[$p] = $true }
@@ -694,6 +758,23 @@ function Get-TcGateInputKey {
     $absentSeen = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
     $gateRefs = Resolve-TcGateFileRefs -Repo $Repo -FileRel $gateRel -GateRel $gateRel -Text $text -Strict:(-not $declResolved) -KeepDataGlobs
     if (-not $gateRefs.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $gateRefs.Why; Files = @() } }
+    # UNDER A SCAN SET, WHAT THE GATE LISTS IS TEXT (M3, design\PLAN-push-gate-diet-2026-09-27.md). A detector that names
+    # `Join-Path $here '*.ps1'` walks every grocery script as TEXT; walking INTO each one put its data literals and its own
+    # self-test's declared inputs in the detector's key (1,777 files, 1,218 of them data, for audit-json-readers at
+    # 4d3cc1212), so a bot's data commit re-ran it. Those files are already hashed by blob in the scan rows, so here they
+    # are hashed and not walked, exactly as a # gate-inputs-text: file is. One the gate or anything walked LOADS is walked
+    # after all (the restart below), so a library the detector really runs keeps everything it reads in the key.
+    if ($ScanRows.Count) {
+      $scanned = New-Object Collections.Hashtable ([StringComparer]::OrdinalIgnoreCase)
+      foreach ($sr0 in $ScanRows) {
+        $s0 = [string]$sr0
+        # 'scan <mode> <blob> <stage>\t<path>' for an index entry; 'scanwt <path> <sha256>' for a modified or untracked one
+        $tab = $s0.IndexOf("`t")
+        if ($s0.StartsWith('scan ') -and $tab -gt 0) { $scanned[($s0.Substring($tab + 1) -replace '/', '\')] = $true }
+        elseif ($s0.StartsWith('scanwt ')) { $sp = $s0.LastIndexOf(' '); if ($sp -gt 7) { $scanned[($s0.Substring(7, $sp - 7) -replace '/', '\')] = $true } }
+      }
+      foreach ($p in $gateRefs.Paths) { if ($scanned.ContainsKey($p) -and -not $forceWalk.ContainsKey($p) -and -not $gateTextSet.ContainsKey($p)) { $textSet[$p] = $true } }
+    }
     foreach ($p in $gateRefs.Paths) { $queue.Enqueue($p) }
     foreach ($p in $gateRefs.Absent) { $absentSeen[$p] = $true }
     # The declared set joins the same queue, so a declared .ps1 is walked into exactly like an inferred one.
@@ -772,10 +853,11 @@ function Get-TcGateInputKey {
       }
     }
     $conflict = $false
+    foreach ($wc in $walkedCode) { if (-not $leafSets.ContainsKey($wc.Rel)) { $leafSets[$wc.Rel] = Get-TcGateLoadedLeafSet -Code $wc.Code } }
     foreach ($tp in @($textSet.Keys)) {
       $tl = [IO.Path]::GetFileName($tp)
       foreach ($wc in $walkedCode) {
-        if (Test-TcGateLoadsLeaf -Code $wc.Code -Leaf $tl) {
+        if ($leafSets[$wc.Rel].ContainsKey($tl)) {
           # The GATE's own text declaration is an assertion the author got wrong: refuse. A LIBRARY's is only true of
           # that library, so here the file is walked as code on the next attempt - the key widens, never narrows.
           if ($gateTextSet.ContainsKey($tp)) {
@@ -1560,6 +1642,50 @@ if ($SelfTest) { }
     $sBad = Get-TcGateScanRows -Repo (Join-Path $sb 'not-a-repo') -Scan $scanSpec
     T 'MUST FIRE  a scan set git cannot list REFUSES, so the detector runs' (-not $sBad.Ok) ("ok={0}" -f $sBad.Ok)
 
+    # ---- A SUITE'S OWN `# gate-scan:` LINE (M3, design\PLAN-push-gate-diet-2026-09-27.md) ----
+    # A self-test that reads the tracked tree through a variable declares the set in its source; run-gates reads it with
+    # Get-TcGateOwnScanRows and keys it exactly like a static entry.
+    $sSuite = Join-Path $sr 'ops\suite-walks-tree.ps1'
+    $sSuiteText = "# gate-scan: *.ps1 *.psm1`n`$files = Get-ChildItem -Recurse `$repo -Filter *.ps1`nforeach (`$x in `$files) { `$p = Join-Path `$repo `$x.Name }`nif (`$SelfTest) { }`n"
+    [IO.File]::WriteAllText($sSuite, $sSuiteText, $utf8)
+    $ownCache = @{}
+    function Get-OwnScanKeyForFixture { $o = Get-TcGateOwnScanRows -Repo $sr -GateFile $sSuite -Cache $ownCache; if (-not $o.Ok) { return [pscustomobject]@{ Ok = $false; Key = ''; Why = $o.Why } }; Get-TcGateInputKey -Repo $sr -GateFile $sSuite -GateArg '-SelfTest' -RunnerFiles @($runner) -ScanRows $o.Rows }
+    $sOwnPlain = Get-TcGateInputKey -Repo $sr -GateFile $sSuite -GateArg '-SelfTest' -RunnerFiles @($runner)
+    $sOwn0 = Get-OwnScanKeyForFixture
+    T 'CLEAN TWIN  a self-test that walks the tree through a variable is keyed by its own gate-scan line (and refused without the rows, as before)' `
+      ($sOwn0.Ok -and -not $sOwnPlain.Ok) ("withRows={0} {1} plain={2}" -f $sOwn0.Ok, $sOwn0.Why, $sOwnPlain.Ok)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\board.json'), "{`"price`": 3}`n", $utf8)
+    $ownCache = @{}
+    $sOwnData = Get-OwnScanKeyForFixture
+    T 'MUST NOT FIRE  a data-only change leaves a gate-scan self-test''s key alone' ($sOwnData.Ok -and $sOwnData.Key -eq $sOwn0.Key) 'the key moved on data outside the declared set'
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\scanned.ps1'), "# a scanned script, edited for the suite`n", $utf8)
+    $ownCache = @{}
+    $sOwnEdit = Get-OwnScanKeyForFixture
+    T 'MUST FIRE  editing a .ps1 inside a self-test''s declared scan set moves its key, so the suite runs' ($sOwnEdit.Ok -and $sOwnEdit.Key -ne $sOwn0.Key) 'key survived an edit inside the declared set'
+    [IO.File]::WriteAllText($sSuite, ($sSuiteText -replace '\*\.ps1 \*\.psm1', '*.nothing-matches'), $utf8)
+    $sOwnStale = Get-TcGateOwnScanRows -Repo $sr -GateFile $sSuite -Cache @{}
+    T 'MUST FIRE  a self-test gate-scan line that matches no tracked file refuses the suite, never keys an empty set' ((-not $sOwnStale.Ok) -and $sOwnStale.Why -match 'matches no tracked file') ("ok={0} why={1}" -f $sOwnStale.Ok, $sOwnStale.Why)
+    $sOwnNone = Get-TcGateOwnScanRows -Repo $sr -GateFile $sDet -Cache @{}
+    T 'CLEAN TWIN  a gate with no gate-scan line gets no rows and keys exactly as before' ($sOwnNone.Ok -and @($sOwnNone.Rows).Count -eq 0) ("ok={0} rows={1}" -f $sOwnNone.Ok, @($sOwnNone.Rows).Count)
+
+    # ---- UNDER A SCAN SET, A LISTED SCRIPT IS TEXT (M3) ----
+    # The founding shape: a detector lists grocery\*.ps1 and one listed script names a bot log. The log is not the
+    # detector's input, so a data commit to it must not re-run the detector; a detector that LOADS that script must.
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\names-log.ps1'), "`$log = Join-Path `$PSScriptRoot 'bot-log.txt'`n", $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\bot-log.txt'), "day 1`n", $utf8)
+    $sLister = Join-Path $sr 'ops\audit-lists.ps1'
+    [IO.File]::WriteAllText($sLister, "`$all = Get-ChildItem (Join-Path `$repo 'grocery\*.ps1')`nforeach (`$x in `$all) { `$t = [IO.File]::ReadAllText(`$x.FullName) }`n", $utf8)
+    $sLoader = Join-Path $sr 'ops\audit-lists-and-loads.ps1'
+    [IO.File]::WriteAllText($sLoader, ". (Join-Path `$repo 'grocery\names-log.ps1')`n`$all = Get-ChildItem (Join-Path `$repo 'grocery\*.ps1')`n", $utf8)
+    function Get-ListKey([string]$G) { $rr = Get-TcGateScanRows -Repo $sr -Scan $scanSpec; Get-TcGateInputKey -Repo $sr -GateFile $G -GateArg 'static' -RunnerFiles @($runner) -ScanRows $rr.Rows }
+    $lA0 = Get-ListKey $sLister; $lB0 = Get-ListKey $sLoader
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\bot-log.txt'), "day 2`n", $utf8)
+    $lA1 = Get-ListKey $sLister; $lB1 = Get-ListKey $sLoader
+    T 'MUST NOT FIRE  a data file named only inside a script the detector LISTS does not move a scan-keyed detector''s key' ($lA0.Ok -and $lA1.Ok -and $lA0.Key -eq $lA1.Key) ("ok={0}/{1} files={2}" -f $lA0.Ok, $lA1.Ok, (@($lA1.Files | ForEach-Object { [IO.Path]::GetFileName($_) }) -join ','))
+    T 'CLEAN TWIN  the same data file DOES move the key of a detector that dot-sources that script, because it runs it' ($lB0.Ok -and $lB1.Ok -and $lB0.Key -ne $lB1.Key) ("ok={0}/{1} why={2}" -f $lB0.Ok, $lB1.Ok, $lB1.Why)
+    $leafs = Get-TcGateLoadedLeafSet -Code (". (Join-Path `$root 'lib\x.ps1')`n& (Join-Path `$a 'y.ps1')`npowershell -File (Join-Path `$b 'z.ps1')`n`$p = Join-Path `$root 'w.ps1'`n")
+    T 'CLEAN TWIN  the loaded-leaf set reads a dot-source, an & call and a -File start, and not a path that is only built' ($leafs.ContainsKey('x.ps1') -and $leafs.ContainsKey('y.ps1') -and $leafs.ContainsKey('z.ps1') -and -not $leafs.ContainsKey('w.ps1')) ((@($leafs.Keys) | Sort-Object) -join ',')
+
     # ---- PRUNING, which is only safe because it agrees with the hit rule ----
     $pc = Join-Path $sb 'cache'
     $null = New-Item -ItemType Directory -Force -Path $pc
@@ -1588,7 +1714,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 107) { $f++; Write-Output ("FAIL  only {0} of 107 cases ran" -f $cases) }
+  if ($cases -lt 115) { $f++; Write-Output ("FAIL  only {0} of 115 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

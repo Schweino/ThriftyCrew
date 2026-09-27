@@ -22,6 +22,8 @@
   SCOPE OF A CLEAN REPORT: SOUND and COMPLETE over the two files it reads - every commodity id is counted against every
   category list, so a clean report means each id is in exactly one category, and a finding is the defect itself.
 #>
+# The -SelfTest re-runs this script over fixtures it writes under %TEMP% (-SourceDir, -OutDir, -Source); the child loads alert-lib, so it is declared (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Alert, [string]$OutDir = "", [switch]$Source, [string]$SourceDir = "", [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

@@ -57,6 +57,9 @@
   baseline: the MOVED/DROPPED report is still read and accepted by whoever commits the rule change, as
   ops\verify-commodities-gate.ps1 requires.
 #>
+# The -SelfTest loads these libraries and reads HEAD:grocery/commodities.json; the working-tree file stands in for that blob (push-main refuses a dirty tree), and every out\ read is in functions it never calls (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\json-io.ps1, grocery\native-lib.ps1, lib\lf-write.ps1, grocery\commodity-rule-text-lib.ps1, grocery\match-lib.ps1, grocery\global-exclude-lib.ps1, lib\git-blob-lib.ps1
+# gate-inputs-text: grocery\commodities.json
 param(
   [hashtable]$Patterns = @{},
   [hashtable]$Excludes = @{},
