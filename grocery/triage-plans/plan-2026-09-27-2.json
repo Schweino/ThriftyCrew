@@ -1,0 +1,271 @@
+{
+  "generated": "2026-09-27T12:15:00",
+  "round": 1,
+  "reviewer_note": "Both ids were printed as RETURN with a ROUTE line ('no fresh reviewer diagnosis'); the dispatch sent them here as Class A, and both seeds were a DIFFERENT failing case from today's (1f95a4 was the script census; 177835 was checks (a)+(b) route changes), so each was re-measured against today's board from scratch.",
+  "board_week": "comparison-2026-09-27",
+  "board_note": "triage-due printed 'BOARD comparison-2026-09-27 built 08:08:46 (103 min ago)'; published by the daily commit d94d53a07 at 09:51. Not mid-build while measured. Re-check before acting: the Family Fare sweep lands every 3 hours.",
+  "queue_ids_seen": [
+    "2026-09-27-06cd9b",
+    "2026-09-27-c989c6"
+  ],
+  "routing_artifact": "plan-2026-09-27-2.routing.json",
+  "knowledge_consulted": {
+    "searched": [
+      "\"brand include bypasses exclude\"",
+      "\"regex timeout under load\"",
+      "\"identity same_as vocabulary\"",
+      "\"divergence not named harness\""
+    ],
+    "used": [
+      "memory C--Codex/fence-vocabulary-vs-brand-name.md: a type-word exclusion cannot see a product whose retail name is brand + flavour only (Blue Bunny on pistachios). The Tony Chachere's row is the same shape: the creole exclude is a word test and the Fareway name carries only the brand.",
+      "memory C--Codex/board-match-collisions.md: first-match-wins, so an added exclude can re-land a name elsewhere; measured (Abuelita re-lands on hot-cocoa).",
+      "memory C--Codex/admit-can-evict.md: a row joining or leaving a capture can move a cell through capture selection; checked per cell (every changed Walmart row shares walmart-regular-2026-09-19.json with the current cell product).",
+      "skills algorithms-craft/applies-here.md sections 6 and 11: the regex bound belongs to the engine and match-lib records its timeouts; the reference Match-Category (compare-deals.ps1:2902) is unbounded -match, so it is deterministic and any non-blind divergence is match-lib's.",
+      ".claude/rules/ops-and-gates.md og-36: no stopwatch decides a case and the 250 ms bound is never raised; og-18: two defences over one rule get a case each."
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-27-06cd9b",
+      "subject": "Grocery: a GUARD has gone blind (test-auditors failed)",
+      "classification": "infra",
+      "status": "planned",
+      "lane": "ops",
+      "est_tool_calls": 55,
+      "verdict_for_the_day": "NOT a blind watcher. 804 of 805 cases passed; the one red is test-match-lib under peak load. Re-run at rest by this reviewer (main checkout, HEAD d94d53a07, 44 s): 45,759 names, 0 divergences, 0 could-not-look, MATCH-LIB PASSED, exit 0. Today's other green results stand.",
+      "evidence": [
+        "grocery/out/test-auditors-fail-2026-09-27.txt (09:11:32): 'test-auditors FAIL (1 failed, 804 passed)'; the only FAIL: 'test-match-lib FAILED (rc=1) ... MATCH-LIB FAILED (3915 divergence(s): 1641 fast-path, 0 detail-winner, 0 detail-no-include-hit, 2274 could-not-look, 0 Get-MatchTexts) ... MATCH-LIB-COMPLETE names=45759 divergences=3915'",
+        "re-run 2026-09-27 ~11:45 (powershell -File grocery/test-match-lib.ps1, exit 0): 'match-lib identity: 45759 distinct names', 'divergences : 0', 'could-not-look : 0 name look(s) hit the regex bound', 'MATCH-LIB PASSED'",
+        "load at 09:11: the 08:49 check-ad-cycles chain was still running ('run complete; ... ship=1002s; total=6510s' at 09:52:20), and test-auditors starts test-match-lib in its early pool (test-auditors.ps1:98) with up to 16 shard processes beside the other early lanes",
+        "the saved copy keeps ONLY the FAILED line: the 15 names it carries are blind looks; none of the 1,641 non-blind divergences is named anywhere, so they cannot be re-examined after the fact",
+        "reference side is deterministic: Match-Category (compare-deals.ps1:2902) tests with plain -match and no match timeout is set anywhere in the tree (grep REGEX_DEFAULT_MATCH_TIMEOUT|SetData: 0 hits). So every non-blind divergence is match-lib (compiled or PowerShell fallback) answering differently with no could-not-look recorded",
+        "same case, prior close: 2026-09-24-3ca22f (plan-2026-09-24.json): one 250 ms timeout during an 1117 s test-auditors run; fixed by naming blind looks and re-looking them once, capped at BlindRetryCap = 50 (test-match-lib.ps1:62, 'more blind looks than this in one run is not load noise'). Today's 2,274 blind at 09:11 and 0 at rest refutes that premise."
+      ],
+      "surface_fix": "none for the board: at rest the matcher decides identically on all 45,759 names.",
+      "root_cause": "test-match-lib's verdict depends on wall-clock load and cannot say which kind of red it is. It runs as a census in test-auditors' early pool while the daily chain is at peak. The 3ca22f fix re-looks blind looks only up to 50 and names only blind looks. Non-blind divergences are counted but never named or re-looked. So a load storm (2,274 blind) always reads as a blind guard. Worse, the 1,641 non-blind divergences are unexplained. The reference is deterministic, so each one is match-lib giving a different answer with no recorded timeout. The engine uses match-lib, so if that is real, a loaded board build could mis-assign products with no could-not-look row. The harness throws away the names that would decide it. Class: every non-blind divergence the harness reports under load (1,641 today, unknown on 09-24 because it was not kept).",
+      "root_fix": {
+        "what": "Make the red self-diagnosing. Step 1: name and re-look every divergence, not only blind looks. A still-disagreeing name fails as DRIFT. A non-blind divergence that agrees on re-look fails as a distinct class UNRECORDED (a pure function answered twice differently with no recorded timeout), never as load. Blind looks that resolve on re-look pass as RETRIED (load). Step 2: reproduce under controlled load and find the path that produces UNRECORDED answers.",
+        "files": [
+          "grocery/test-match-lib.ps1",
+          "grocery/test-auditors.ps1 (only if the Bad message filter drops the new lines)"
+        ],
+        "exact_change": "(1) test-match-lib.ps1: drop the BlindRetryCap = 50 short-circuit. Re-look every still-blind name AND every row of $diff once in the parent after the pool drains, at the unchanged 250 ms bound (sequential, about 10 ms a name for 4 passes, so about 40 s for today's 3,915). (2) Get-MatchLibVerdict takes the re-look results and prints three counts: DRIFT (disagrees again), UNRECORDED (a non-blind divergence that agreed on re-look) and still-blind. The FAILED line carries the first 15 of DRIFT and UNRECORDED as 'name [path] reference -> fast', each cut to 80 chars, ahead of the blind names. rc stays 1 for any of the three. (3) Write the full lists to one per-run file under $env:TEMP (og-38 naming) and print its path on the FAILED line, so the saved fail copy points at them. (4) Reproduce in a scratch copy of the harness under ops/cpu-load.ps1 (the sanctioned load tool; never hand-rolled burners), with -Workers at the default. Record which path (compiled or powershell-fallback) and which pass produce UNRECORDED rows, and read that path in match-lib.ps1. If a real unrecorded-bound path is found in match-lib.ps1, do NOT fix it in this item: open a money-lane queue item naming the path and the rows (it changes the engine's matcher)."
+      },
+      "prior_closes": [
+        "2026-08-30-b9d48f",
+        "2026-08-31-4b2f47",
+        "2026-09-04-0b63d3",
+        "2026-09-07-76ec7f",
+        "2026-09-11-220094",
+        "2026-09-19-ae9df2",
+        "2026-09-24-3ca22f",
+        "2026-09-26-1f95a4"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/test-match-lib.ps1"
+        ],
+        "what": "The emitting check says in its own alert whether its red is load, drift or an unrecorded matcher answer, and names the rows. Six of the eight prior closes were 'not a blind watcher' reds that each fixer had to re-derive. For this case (3ca22f, today) the harness now carries the proof.",
+        "exact_change": "as root_fix.exact_change (1)-(3)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "test-match-lib.ps1 re-run at rest over its own 45,759-name corpus (comparison + regular union + ads + sams + bakers + fareway), exit 0, 0 divergences; plus grep of every Match-Category and match-lib regex call site for a timeout (compare-deals.ps1:2902-2960, match-lib.ps1:95-160 and 462-560)",
+        "corpus": "test-match-lib's own corpus, 45,759 distinct names (comparison + regular union + ads + sams + bakers + fareway, test-match-lib.ps1:462-480), re-run at rest: 0 divergences",
+        "affected_now": 0,
+        "names": [],
+        "risk": "No matching rule, include, exclude or engine branch changes. Routing is unchanged by construction. The change is to the harness verdict only. Its cost is up to about 40 s of sequential re-look on a loaded day and 0 s at rest.",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-27 ~11:40 against HEAD d94d53a07, board comparison-2026-09-27 (built 08:08:46); the fail copy is from the 09:11 run of the same day",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-lib.ps1 -SelfTest (the hermetic Invoke-MatchLibBlindRetry cases) and test-auditors.ps1 early:match-lib",
+        "must_fire_case": "MUST FIRE a frozen two-row catalogue whose fast-path look is stubbed to return 'fixture-other' once for a name the reference routes to 'fixture-breast', with no recorded timeout. It is re-looked, agrees, and still FAILS rc 1 as UNRECORDED, naming 'name [compiled] fixture-breast -> fixture-other' on the FAILED line. MUST FIRE a divergence that disagrees again fails as DRIFT and is named.",
+        "clean_twin": "CLEAN TWIN the 3ca22f founding shape: a first look forced blind (load) that resolves and agrees on re-look passes rc 0 and prints RETRIED (load). The existing MUST FIRE still-blind case still fails and names the blind name at the unchanged 250 ms bound.",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-09-24-3ca22f",
+            "covered_by": "test-match-lib -SelfTest blind re-look cases (shipped c2ff876d6), kept as CLEAN TWIN and MUST FIRE above"
+          },
+          {
+            "queue_id": "2026-09-27-06cd9b",
+            "covered_by": "the new UNRECORDED and DRIFT MUST FIRE cases, plus the removed-cap case: 51 blind looks that all resolve pass rc 0"
+          },
+          {
+            "queue_id": "2026-09-26-1f95a4",
+            "covered_by": "audit-script-census vendored-dir prune cases (a different case of test-auditors)"
+          },
+          {
+            "queue_id": "2026-09-19-ae9df2",
+            "covered_by": "test-auditors LIVE-TWIN tier cases (a different case)"
+          },
+          {
+            "queue_id": "2026-09-11-220094",
+            "covered_by": "lib/production-text.ps1 fixture cases (a different case)"
+          },
+          {
+            "queue_id": "2026-09-07-76ec7f",
+            "covered_by": "test-capture-builders LF end-marker cases (a different case)"
+          },
+          {
+            "queue_id": "2026-09-04-0b63d3",
+            "covered_by": "test-auditors HYGIENE tier cases (a different case)"
+          },
+          {
+            "queue_id": "2026-08-30-b9d48f",
+            "covered_by": "NOT LOCATED by this reviewer: absent from grocery/triage-plans/*.json and triage-queue.json. The developer reads triage-due's close ledger and names the case, or says none exists."
+          },
+          {
+            "queue_id": "2026-08-31-4b2f47",
+            "covered_by": "NOT LOCATED by this reviewer (as b9d48f)"
+          }
+        ]
+      },
+      "rollback": "git revert the single commit; the harness returns to the c2ff876d6 behaviour (blind-only naming, re-look capped at 50).",
+      "do_not_touch": [
+        "the 250 ms MatchTimeout (og-36: never raised)",
+        "grocery/match-lib.ps1 in this item (an engine-matcher fix is its own money-lane item)",
+        "grocery/commodities.json",
+        "any ack or known-wrong file"
+      ],
+      "leaves_open": "Part of the class stays open. (a) This item does not prove the mechanism of the 1,641 non-blind divergences (the class its root cause names); it makes the next loaded run name them, and step (4) tries to reproduce them. If they are real unrecorded answers in match-lib, the engine is exposed under load, and that fix is a separate money-lane item. (b) test-auditors still runs the census beside the chain at peak, so load reds still page, now labelled.",
+      "leaves_open_occurrences": "load-induced test-match-lib red: 2 in the 30 days to 2026-09-27 (2026-09-24-3ca22f, 2026-09-27-06cd9b); non-blind divergences: 1,641 on 2026-09-27, not recorded on 2026-09-24",
+      "leaves_open_owner": "watch:grocery/test-match-lib.ps1 for (b); (a) becomes a money-lane queue item only if step (4) finds an unrecorded path",
+      "resolution_note": "Not blind. The one red of 805 was test-match-lib at 09:11, under peak chain load: 3,915 divergences (2,274 blind looks, 1,641 non-blind). A re-run at rest over the same 45,759 names gave 0 and 0. The harness now re-looks and names every divergence and splits load, drift and unrecorded answers in the alert itself. The 50-look cap, whose premise today refuted, is gone. A reproduction under ops/cpu-load.ps1 decides whether match-lib can answer differently with no recorded timeout.",
+      "publish_batch": 0,
+      "premise_verified": "reproduced the clean result at rest (exit 0, 0/0); did not reproduce the loaded red"
+    },
+    {
+      "queue_id": "2026-09-27-c989c6",
+      "subject": "Recipe ingredient priced as a different food",
+      "classification": "wrong-product",
+      "status": "deviated",
+      "lane": "money",
+      "est_tool_calls": 70,
+      "verdict_for_the_day": "11 NEW keys, all reproduced (audit-ingredient-identity with the chain's three inputs: exit 2, 'RISE: 11 cell finding(s) not in the mark of 2026-09-26 (mark 86)'). 1 is a real wrong product at a non-crown store cell, the exact row Brad ruled out on 2026-09-26. 10 are the auditor's vocabulary missing words Brad already ruled the same food. Measuring the fix found 2 more latent wrong products (konjac noodles on pasta, a Cinco de Mayo hot chocolate on mayonnaise), neither in a cell today. No recipe cost moves today: every flagged row loses to a cheaper store's row for the same cell.",
+      "evidence": [
+        "WRONG (ruled): cajun-seasoning | Fareway | 'Tony Chachere's It's Spicy! More Spice Seasoning' | $2.49 | 7 oz | $0.3557/oz sale 2026-09-27..10-27. design/ready-for-brad/Q-2026-09-26-form-style.md:28 lists 'Cajun Seasoning (Tony Chachere's Creole, Fareway) | 1 | style' under Brad's 'B: shape same, style own'. The rule landed as exclude '^(?!.*\\bcajun\\b).*\\bcreole\\b' (commodities.json, cajun-seasoning, index 419), but include 'tony\\s+chachere' admits the Fareway name, which says neither creole nor cajun. Crown: Walmart $0.3088/oz (Slap Ya Mama 16 oz), unchanged.",
+        "VOCABULARY (6 keys): pasta | Family Fare | 'Our Family Angel Hair 16 Oz' | 5 for $5.00 | 16 oz | $0.0625/oz (ad 2026-09-27..10-03) flagged against Ziti Pasta, Pasta Shells, Fettuccine, Spaghetti, Orzo Pasta, Rotini Pasta. Brad ruled shapes the same food (763c001e2). The rows' identity_same_as regex lists 12 shape words without 'angel hair', while the pasta include names '\\bangel\\s+hair\\b|\\blinguine\\b'. Pasta crown: Aldi $0.0591/oz.",
+        "VOCABULARY (2 keys): mayonnaise | Baker's | 'Kroger Olive Oil Mayo' | $3.99 | 30 fl oz | $0.133/oz and mayonnaise | Family Fare | 'Our Family Mayo, Real 30 Fl Oz' | $3.99 | 30 fl oz | $0.133/oz. The mayonnaise include is ['mayonnaise','\\bmayo\\b'], but the Mayonnaise vocabulary row has no 'mayo' spelling. Crown: Aldi $0.0963/oz.",
+        "VOCABULARY (2 keys): sun-dried-tomatoes | Baker's | 'California Sun Dry Sun-Dried Julienne Cut Tomatoes in Oil with Herbs' | $9.99 | 16 oz | $0.6244/oz (plainly oil-packed) and | Family Fare | 'California Sun Dry Sun Dried Tomatoes Julienne Ct' | $5.99 | 8 oz | $0.7488/oz (name does not say oil: unproven). The row 'Sun-Dried Tomatoes (Oil-Packed)' is asked for head word 'packed'.",
+        "LATENT (measured, routing artifact): 4 konjac/shirataki names route to pasta today, e.g. 'Miracle Noodle Angel Hair Konjac Noodles, Naturally Low Carb, Gluten Free, 7 oz' (walmart-regular 08-11, 09-06, 09-19). 'Nestle Abuelita Mexican Hot Chocolate Tablets Cinco de Mayo Food, 19 oz' routes to mayonnaise (walmart-regular 08-11, 08-31, 09-19). Neither holds a cell on comparison-2026-09-27.",
+        "why NEW today: the keys carry store + product, and today's ad week brought new products into these cells (Family Fare angel hair and Fareway Tony's both start 2026-09-27; Baker's Kroger read 2026-09-25)."
+      ],
+      "surface_fix": "Rules: three excludes. Vocabulary: identity_same_as on 8 rows. Then tighten the cell mark on the next published board.",
+      "root_cause": "Brad's 2026-09-26 form/style ruling was carried out as WORD lists on two sides, and each list is closed, so the next retail name falls outside it. On the matching side, the creole exclude is a word test, and a brand include admits a Creole product whose name carries only the brand. The ruling shipped with no routing fixture for its own founding row, so nothing asserted that the Fareway row actually left. That is the RETURN: 177835's fix and 763c001e2 both landed and this row still prices Cajun. On the identity side, the pasta FORM rows enumerate 12 shape words while the pasta commodity admits more shapes, and the Mayonnaise row lacks the commodity's own 'mayo' spelling. These are two copies of one fact that drifted, and the keyed ratchet pages every new product that lands in the gap. Class measured over 52,660 names: pasta-routed names failing the shape list 3 (2 real angel hair, 1 konjac); mayonnaise-routed names without the word 25; sun-dried-routed names without an oil spelling 24 of 42.",
+      "root_fix": {
+        "what": "Carry out the ruling on the name shape that defeated it, and make the identity vocabulary consistent with the commodity's own admitted shapes by a check, not by hand.",
+        "files": [
+          "grocery/commodities.json (via grocery/add-commodity-rule.ps1)",
+          "meal-prep/db/ingredients.json",
+          "grocery/test-match-lib.ps1",
+          "meal-prep/pipeline/audit-ingredient-identity.ps1"
+        ],
+        "exact_change": "RULES, each through add-commodity-rule.ps1: (1) cajun-seasoning exclude += '^(?!.*\\bcajun\\b).*\\bchachere', the ruling's own test applied to the brand include: a Tony Chachere's product that does not say cajun is the Creole style. (2) pasta exclude += '\\b(?:konjac|shirataki)\\b'. (3) mayonnaise exclude += '\\bcinco\\s+de\\s+mayo\\b'. VOCABULARY, meal-prep/db/ingredients.json: (4) the six pasta FORM rows (Fettuccine, Orzo Pasta, Pasta Shells, Rotini Pasta, Spaghetti, Ziti Pasta) identity_same_as product becomes '^(?!.*\\b(?:whole[\\s-]*(?:grain|wheat)|konjac|shirataki)\\b).*\\b(?:pasta|spaghetti|penne|rigate|rotini|ziti|shells?|fettuccine|orzo|linguine|elbows?|macaroni|angel\\s+hair)\\b'. The konjac lookahead is the second defence behind rule (2), with its own case (og-18). (5) Mayonnaise row identity_same_as += {product '^(?!.*\\b(?:olive\\s+oil|spicy|cinco\\s+de\\s+mayo)\\b).*\\bmayo\\b', reason 'mayo is the package short name for mayonnaise; olive oil and spicy mayos stay findings until a capture proves they are not a reduced-fat dressing or a flavoured sauce', queue_id 2026-09-27-c989c6}. (6) 'Sun-Dried Tomatoes (Oil-Packed)' row identity_same_as += {product '\\b(?:in|with)\\s+(?:(?:extra\\s+virgin\\s+)?olive\\s+)?oil\\b|\\boil[\\s-]*packed\\b', reason 'a jar in oil is oil-packed', queue_id}. FIXTURES: (7) test-match-lib _RT rows: MUST FIRE the Fareway Tony name -> <none>, the 4 konjac names -> <none>, Abuelita -> hot-cocoa. CLEAN TWIN 'Tony Chacheres, Seasoning, Cajun, More Spice, 30 oz' stays cajun-seasoning, 'Great Value Angel Hair, 16 oz, Shelf Stable' stays pasta, 'Kraft Mayo' stays mayonnaise. (8) audit-ingredient-identity -SelfTest: MUST NOT FIRE 'Our Family Angel Hair 16 Oz' on Spaghetti. MUST FIRE 'Miracle Noodle Angel Hair Konjac Noodles' in a pasta cell still fires on Spaghetti (second defence). MUST FIRE 'Kroger Olive Oil Mayo' still fires on Mayonnaise. MUST NOT FIRE the Baker's in-oil jar on the oil-packed row."
+      },
+      "prior_closes": [
+        "2026-09-26-177835"
+      ],
+      "prevention": {
+        "source": [
+          "meal-prep/pipeline/audit-ingredient-identity.ps1",
+          "grocery/test-match-lib.ps1"
+        ],
+        "what": "Two upstream checks, one per list that drifted. (a) The identity auditor's -SelfTest derives, from commodities.json's pasta include, every shape word the commodity admits by itself, and asserts each is admitted by the pasta FORM rows' identity_same_as. Then the two copies cannot drift silently again. (b) A ruling's founding rows become routing fixtures the day the ruling lands: every product named in a ruled table in design/ready-for-brad/Q-*.md gets a test-match-lib _RT row asserting its ruled destination.",
+        "exact_change": "(a) audit-ingredient-identity.ps1 -SelfTest: a LIVE-TWIN case reading grocery/commodities.json (the auditor already defaults to it, line 82) that splits the pasta include's alternations into literal shape words and matches each against the Spaghetti row's same_as. It fails naming a shape the vocabulary lacks. It must fire on HEAD's regex (angel hair missing) before (4) lands. (b) test-match-lib: the _RT rows in (7) include every row of Q-2026-09-26-form-style.md's table (the Fareway Tony row is line 28), each with its ruled destination."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "scratch route-sim over 52,660 distinct names from 537 capture and board files, first-match-wins by grocery/match-lib.ps1 under HEAD rules and under the 3 excludes, positive control asserted first; audit-ingredient-identity.ps1 re-run with the chain's three inputs for the identity keys; per-cell capture-file lookup for cell_effects. Artifact plan-2026-09-27-2.routing.json",
+        "corpus": "52,660 distinct product names from 537 files (comparison-2026-09-27.json, every json under grocery/out/regular, sams, bakers, fareway, and the newest ads file), routed first-match-wins by grocery/match-lib.ps1 under commodities.json at HEAD d94d53a07 and under the 3 excludes; 0 could-not-look. Positive control: the Fareway Tony name routes cajun-seasoning before and <none> after. Artifact: plan-2026-09-27-2.routing.json",
+        "affected_now": 6,
+        "names": [
+          "Tony Chachere's It's Spicy! More Spice Seasoning: cajun-seasoning -> <none>",
+          "Miracle Noodle Angel Hair Konjac Noodles ... 7 oz: pasta -> <none>",
+          "Miracle Noodle Spaghetti, Ready-to-Eat, Konjac Noodles ...: pasta -> <none>",
+          "Miracle Noodle Ready to Eat Fettuccine Pasta ... Shirataki Konjac Noodles ...: pasta -> <none>",
+          "It's That Simple Pasta Spaghetti ... Konjac Pasta: pasta -> <none>",
+          "Nestle Abuelita Mexican Hot Chocolate Tablets Cinco de Mayo Food, 19 oz: mayonnaise -> hot-cocoa"
+        ],
+        "legitimate_products_eaten": "none. Of 14 Tony Chachere's names, the 5 routed cajun-seasoning that say Cajun stay (e.g. 'Tony Chacheres, Seasoning, Cajun, More Spice, 30 oz'). Dropping the brand include instead was measured and REJECTED: it also removed 2 Walmart names that say Cajun ('Tony Chachere's, Seasoning, Original, Cajun, 32 oz' and its 6-pack), which the ruling admits.",
+        "commodities_losing_a_cell": "none lose the commodity; cajun-seasoning loses its Fareway store cell (6 stores remain)",
+        "identity_effect": "pasta-routed names failing the shape list 3 -> 0; mayonnaise-routed names without a spelling 25 -> 3 (Hellmann's Olive Oil Mayo, Kewpie Spicy Mayo, Kroger Olive Oil Mayo, on purpose); sun-dried rows silenced 18 of 42. Of today's 11 NEW keys, 9 clear, 1 clears by leaving the cell (Tony), and 2 stay on purpose (Kroger Olive Oil Mayo at Baker's, Family Fare Julienne Ct).",
+        "cell_effects": [
+          {
+            "commodity": "cajun-seasoning",
+            "store": "Fareway",
+            "before": "$0.3557/oz (Tony's More Spice 7 oz, sale)",
+            "after": "no cell (only Fareway row in fareway-shop/deals-2026-09-27)",
+            "crown": "Walmart $0.3088/oz unchanged"
+          },
+          {
+            "commodity": "hot-cocoa",
+            "store": "Walmart",
+            "before": "$0.299 each (Swiss Miss 30-Count)",
+            "after": "expected unchanged, same capture file holds both; VERIFY on the paired rebuild"
+          },
+          {
+            "commodity": "pasta",
+            "store": "Walmart",
+            "before": "$0.0619/oz (GV Penne 32 oz)",
+            "after": "unchanged"
+          },
+          {
+            "commodity": "mayonnaise",
+            "store": "Walmart",
+            "before": "$0.099/oz (GV Mayonnaise 30 fl oz)",
+            "after": "unchanged"
+          }
+        ],
+        "recipe_effect": "Cajun Seasoning (13 recipes) prices from the cheapest store cell, Walmart $0.3088/oz, before and after: 0 recipe costs move. The 6 pasta rows and Mayonnaise price from Aldi before and after."
+      },
+      "claimed_by_earlier": [],
+      "freshness": "routing and cell reads taken 2026-09-27 about 11:40-12:10 against comparison-2026-09-27 (built 08:08:46, published d94d53a07) and HEAD rules; the Fareway row is from fareway-shop/deals-2026-09-27; the developer re-checks the four cells on the board it rebuilds",
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-lib.ps1 routing fixtures (_RT), meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest, compare-deals.ps1 -SelfTest (engine arithmetic unchanged)",
+        "must_fire_case": "_RT MUST FIRE 'Tony Chachere's It's Spicy! More Spice Seasoning' -> <none> (the ruled row, frozen verbatim from fareway-shop-2026-09-27.json); identity MUST FIRE the pasta shape-consistency case fails on HEAD's same_as naming 'angel hair'; identity MUST FIRE a konjac angel hair in a pasta cell still fires on Spaghetti",
+        "clean_twin": "_RT CLEAN TWIN 'Tony Chacheres, Seasoning, Cajun, More Spice, 30 oz' stays cajun-seasoning; identity MUST NOT FIRE 'Our Family Angel Hair 16 Oz' on Spaghetti; 'Kroger Olive Oil Mayo' still fires on Mayonnaise (the narrowing held)",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-09-26-177835",
+            "covered_by": "audit-ingredient-identity -SelfTest -RoutesOnly cases (shipped with 177835), plus the new shape-consistency case"
+          },
+          {
+            "queue_id": "2026-09-27-c989c6",
+            "covered_by": "the _RT rows in root_fix (7) and the identity cases in (8)"
+          }
+        ]
+      },
+      "rollback": "git revert the commit (rules, vocabulary and fixtures in one), rebuild; the Fareway cajun cell returns.",
+      "do_not_touch": [
+        "the identity marks by hand (only -Tighten on a published board)",
+        "known-wrong.json",
+        "the pasta include",
+        "the Walmart Tony names that say Cajun"
+      ],
+      "leaves_open": "Part of the class stays open. (a) 3 mayonnaise names stay findings on purpose: whether an olive oil mayo is a reduced-fat dressing (8deaa4 excluded light jars) is in no capture field; Baker's row carries only name, size 30 fl oz and product_id 0001111001968. (b) 24 of 42 sun-dried rows do not say oil and stay findings on the oil-packed row, including Family Fare 'Julienne Ct' 8 oz and Aldi 'Tuscan Garden Sundried Tomatoes 8 OZ'. (c) The ruling is name-based, so one product is split: Walmart names Tony's More Spice 'Seasoning, Cajun, More Spice' and it stays in, while Fareway's name leaves. Not a cell product today.",
+      "leaves_open_occurrences": "3",
+      "leaves_open_owner": "2026-09-27-8161ce (weekly lane): (a) 1 key + (b) 1 new and 1 standing key on 2026-09-27, counted from the identity ratchet; (c) 0",
+      "resolution_note": "One real wrong product: Fareway priced Cajun Seasoning with Tony Chachere's More Spice, the Creole row Brad ruled out on 09-26. The creole exclude could not see it because the name says neither creole nor cajun and the brand include let it in. A narrow exclude (a Tony Chachere's name without 'cajun') removed it: the rebuilt board changed exactly one cell, cajun-seasoning at Fareway, and the Walmart $0.3088/oz crown stands. The other 10 keys were the identity check missing words Brad already ruled the same food (angel hair, mayo, in oil), now spelled out on 8 rows, with a live self-test case that keeps the pasta shape list consistent with the pasta include (proved: 4 LIVE cases fail on the pre-edit vocabulary, pass after). Konjac noodles and a Cinco de Mayo hot chocolate are excluded from pasta and mayonnaise. No recipe cost moved. AFTER LANDING the orchestrator owes two steps: run grocery\\publish-deals-page.ps1 once the edge serves board.json?v=a1889647e3 (it refused only because the push had not landed), then meal-prep\\pipeline\\audit-ingredient-identity.ps1 -Tighten on the published board so the 2 on-purpose findings (Kroger Olive Oil Mayo at Baker's, Family Fare Julienne Ct) become standing keys.",
+      "publish_batch": 1,
+      "premise_verified": "true. Checked 2026-09-27 ~12:40 in the main checkout at HEAD 641b0ad12: out/comparison-2026-09-27.json holds 'Tony Chachere's It's Spicy! More Spice Seasoning' on cajun-seasoning|Fareway; commodities.json cajun-seasoning (index 419) carries include 'tony\\s+chachere' and only the creole word exclude; the 6 pasta FORM rows carried the 12-word shape list without angel hair; Mayonnaise had no identity_same_as. Verified against the routing artifact by a full cell diff (576 commodities x every store) of the rebuilt comparison vs the pre-change copy: exactly 1 change, cajun-seasoning|Fareway leaves, 0 crown moves; hot-cocoa, pasta and mayonnaise Walmart cells unchanged.",
+      "deviation": "(1) Worked in the main checkout on main, not a triage/0927-c989c6 worktree: the dispatch made this the last item of publish_batch 1 and the board chain needs main's gitignored boards. (2) Prevention (b) narrowed: of the 11 rows of Q-2026-09-26-form-style.md's table only line 28 (the Fareway Tony row) is a routing ruling with a product and a destination; the others are ingredient-line identity rulings, covered by audit-ingredient-identity cases, so _RT got the Tony row plus 4 konjac, 1 Abuelita and 4 clean twins (99 of 99 pass). (3) The rebuild met a hold the plan did not measure: the late Fareway capture (fareway-deals-2026-09-27, 09:51) put 'Quaker Instant Oatmeal, Raisin, Date & Walnut' on oatmeal|Fareway as a NEW contested name (oatmeal > walnuts). The oatmeal winner is right (walnut is the flavour), so I confirmed that one key with resolve-match-worklist.ps1 -Decide ... -Verdict confirm (grocery/match-verdicts.json), never -Force. The other 16 new-contested names hold no cell and are not from these rules (an exclude cannot create a contest). (4) publish-deals-page is then HELD by design: 'the post names board.json?v=a1889647e3 but feed.thriftycrew.com serves v=a786679133', so the post publishes only after the landing; board.json, price-history.json, smp-feed.json and free-dinners.json are committed from this build.",
+      "shipped_commit": "see git log: triage 2026-09-27 c989c6 (this commit)",
+      "leaves_open_followup": "2026-09-27-8161ce",
+      "live_check": "cajun-seasoning | Fareway | no price chip (cell absent); cajun-seasoning crown stays Walmart $0.3088/oz; board.json?v=a1889647e3",
+      "full_suite": "deferred-to-land",
+      "proof_run": "test-match-lib (plain): 99 of 99 routing fixtures, MATCH-LIB PASSED; audit-ingredient-identity -SelfTest: SELF-TEST PASS (66 cases), mutant run with the pre-edit ingredients.json: FAIL 4 of 66 (the 4 LIVE cases); compare-deals -SelfTest: SELF-TEST PASS; guards: GUARDS OK hard=0 warn=20; audit-basis-reconcile findings=0; audit-pack-basis ok; audit-match-soundness MOVED=1 DROPPED=1 both planned, -Accept exit 0",
+      "actual_tool_calls": 50
+    }
+  ],
+  "ship_sequence": [
+    "1. (money, c989c6) branch triage/0927-c989c6 in a worktree. Apply the 3 excludes with grocery/add-commodity-rule.ps1, the ingredients.json identity_same_as edits, and the fixtures. Run test-match-lib.ps1 -SelfTest, audit-ingredient-identity.ps1 -SelfTest and compare-deals.ps1 -SelfTest, then read exit codes and verdict lines.",
+    "2. (money) Paired scratch rebuild in a scratch clone (compare-deals -NoIdentity, same inputs, old vs new rules): diff crowns and the 4 cell_effects against plan-2026-09-27-2.routing.json. Only cajun-seasoning|Fareway may move. Run guards.ps1 in the scratch clone.",
+    "3. (money) Land through ops\\push-main.ps1 (never git push origin HEAD:main). The next daily build publishes. Then audit-ingredient-identity -Tighten on the published board, and confirm the RISE lines for the 9 cleared keys are gone.",
+    "4. (ops, 06cd9b) branch triage/0927-06cd9b: the test-match-lib change and -SelfTest (exit code AND verdict line). Run test-auditors.ps1 once at rest and confirm MATCH-LIB PASSED.",
+    "5. (ops) Reproduce in a scratch copy under ops/cpu-load.ps1. Record the UNRECORDED/DRIFT rows. If any is a real unrecorded match-lib path, open a money-lane queue item with the rows; do not fix match-lib here. Land through ops\\push-main.ps1.",
+    "6. Live verification: the next check-ad-cycles run shows no RISE for these keys and a test-auditors pass, or a FAILED line that names its rows."
+  ],
+  "open_questions_for_brad": [],
+  "discovered_during_review": "Two latent wrong products found by measurement, both handled in c989c6: konjac/shirataki noodles route to pasta (4 names), and an Abuelita hot chocolate routes to mayonnaise via 'Cinco de Mayo'. Also standing in the cell mark, not NEW: 'S&B Golden Curry Medium Hot Sauce Mix' on Japanese Curry Roux at Baker's (Golden Curry sauce mix is the roux block, so likely a vocabulary gap; not diagnosed here). No fetched content addressed the reviewer; nothing to quote."
+}

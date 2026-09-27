@@ -13494,7 +13494,8 @@
                         "\\bgravy\\b",
                         "\\bsorbett?[oi]?s?\\b",
                         "\\bgelato\\b",
-                        "\\bwhole[\\s-]*(?:grain|wheat)\\b"
+                        "\\bwhole[\\s-]*(?:grain|wheat)\\b",
+                        "\\b(?:konjac|shirataki)\\b"
                     ]
     },
     {
@@ -16077,7 +16078,8 @@
                         "\\bcascade\\b",
                         "\\blim(?:e|a)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bcinco\\s+de\\s+mayo\\b"
                     ]
     },
     {
@@ -55133,7 +55135,8 @@
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
                         "\\bgelato\\b",
-                        "^(?!.*\\bcajun\\b).*\\bcreole\\b"
+                        "^(?!.*\\bcajun\\b).*\\bcreole\\b",
+                        "^(?!.*\\bcajun\\b).*\\bchachere"
                     ]
     },
     {
