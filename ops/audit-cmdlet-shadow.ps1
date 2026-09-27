@@ -64,7 +64,8 @@ $script:CS_ANCHOR_FILE = 'ops/run-gates.ps1'
 
 # THE ALLOWLIST. One entry per FILE AND NAME, each with the reason the shadow is the point.
 $script:CS_ALLOW = @(
-  [pscustomobject]@{ File = 'grocery/test-auditors.ps1'; Name = 'Get-Date'
+  # The file is the piece that holds unit u067 since the test-auditors split (design\PLAN-split-giant-files-2026-09-27.md step 4).
+  [pscustomobject]@{ File = 'grocery/test-auditors/units-04.ps1'; Name = 'Get-Date'
     Reason = 'a deliberate clock mock scoped inside RfRunDay: the sentinelled production regions it runs call Get-Date and must read $script:RF_NOW' }
 )
 

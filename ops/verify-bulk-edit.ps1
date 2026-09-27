@@ -48,6 +48,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\ps-source.ps1')   # Get-PsBlockCommentsBlanked; no param() block
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\production-text.ps1')   # Get-TcProductionText; no param() block
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\selftest-lib.ps1')   # Expand-SelfTestPointers; no param() block
 $repo = Split-Path $PSScriptRoot -Parent
 
 # ---- THE EMPTY-STAMP THROWING IDIOM, AT COMMIT TIME (2026-09-19, queue 2026-09-19-a1c25d) -----------------
@@ -157,6 +158,24 @@ function Get-FrozenLiteralBreaks {
     if (-not $afterLines.ContainsKey($b.TrimEnd())) { [void]$breaks.Add("line $n : " + $b.Trim()) }
   }
   return ,@($breaks.ToArray())
+}
+
+function Get-PieceHostPath {
+  <# The host a split PIECE belongs to, or '' when the file is not one (2026-09-27,
+     design\PLAN-split-giant-files-2026-09-27.md step 4). A giant script is cut into a folder named for it and
+     each piece is dot-sourced from the host at the exact line its text left: grocery\test-auditors\units-02.ps1
+     runs INSIDE grocery\test-auditors.ps1, after the libraries the host loads. So a piece is judged as the host
+     READS (Expand-SelfTestPointers): judged alone it "calls Read-JsonFile but never loads json-io", and a marked
+     frozen literal that moved into it reads as deleted from the host. A piece is a file whose folder has a
+     sibling <folder>.ps1 that carries the pointer '<folder>\<file>'; a folder with no such host is no piece. #>
+  param([string]$FullPath)
+  $dir = Split-Path -Parent $FullPath
+  if (-not $dir) { return '' }
+  $hostPath = $dir + '.ps1'
+  if (-not (Test-Path -LiteralPath $hostPath -PathType Leaf)) { return '' }
+  $ptr = "'" + (Split-Path -Leaf $dir) + '\' + (Split-Path -Leaf $FullPath) + "'"
+  if (-not ([IO.File]::ReadAllText($hostPath)).Contains($ptr)) { return '' }
+  return $hostPath
 }
 
 function Get-DependencyGaps {
@@ -403,6 +422,35 @@ $rc = Read-JsonFile $p
     if (-not (Test-HasThrowingIdiom -Path $idFx)) { Write-Output '  PASS  MUST NOT FIRE: the idiom inside a -SelfTest fixture body is not a production statement' } else { Write-Output '  FAIL  a -SelfTest fixture body was refused as a live call site'; $fail++ }
   } finally { Remove-Item -LiteralPath $idiomDir -Recurse -Force -ErrorAction SilentlyContinue }
 
+  # ---- A SPLIT PIECE IS JUDGED AS ITS HOST READS IT (2026-09-27, split step 4) ------------------------------
+  $pcDir = Join-Path $env:TEMP ('vbe-piece-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    $null = New-Item -ItemType Directory -Path (Join-Path $pcDir 'h') -Force -ErrorAction Stop
+    $pcU8 = New-Object Text.UTF8Encoding($false)
+    $pcHost = Join-Path $pcDir 'h.ps1'; $pcPiece = Join-Path $pcDir 'h\p.ps1'
+    $pcPtr = ". (Join-Path `$PSScriptRoot 'h\p.ps1')"
+    $pcMark = '# json-readers' + ':allow a frozen fixture'
+    [IO.File]::WriteAllText($pcPiece, ("`$x = Read-JsonFile `$f`n`$needle = 'shape' " + $pcMark + "`n"), $pcU8)
+    [IO.File]::WriteAllText($pcHost, (". (Join-Path `$root 'lib\json-io.ps1')`n" + $pcPtr + "`n"), $pcU8)
+    $hp = Get-PieceHostPath $pcPiece
+    if ($hp -eq $pcHost) { Write-Output '  PASS  MUST FIRE: a file its folder''s sibling host points at (h\p.ps1 from h.ps1) is a piece of that host' } else { Write-Output "  FAIL  a pointed-at piece was not recognised (host='$hp')"; $fail++ }
+    $g = Get-DependencyGaps -Text (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($hp)) -Path $hp) -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+    if (-not $g) { Write-Output '  PASS  CLEAN TWIN: a piece calling Read-JsonFile resolves it through the host that loads json-io above the pointer' } else { Write-Output "  FAIL  a piece was refused though its host loads json-io: $g"; $fail++ }
+    [IO.File]::WriteAllText($pcHost, ($pcPtr + "`n"), $pcU8)
+    $g = Get-DependencyGaps -Text (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($pcHost)) -Path $pcHost) -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
+    if ($g) { Write-Output '  PASS  MUST FIRE: a piece calling Read-JsonFile under a host that never loads json-io is still refused' } else { Write-Output '  FAIL  a piece whose host cannot resolve Read-JsonFile went unreported'; $fail++ }
+    $null = New-Item -ItemType Directory -Path (Join-Path $pcDir 'k') -Force -ErrorAction Stop
+    [IO.File]::WriteAllText((Join-Path $pcDir 'k.ps1'), "'no pointer here'`n", $pcU8)
+    [IO.File]::WriteAllText((Join-Path $pcDir 'k\q.ps1'), "'x'`n", $pcU8)
+    if (-not (Get-PieceHostPath (Join-Path $pcDir 'k\q.ps1'))) { Write-Output '  PASS  MUST NOT FIRE: a file whose sibling .ps1 carries no pointer to it is not a piece' } else { Write-Output '  FAIL  an unpointed file was taken for a piece'; $fail++ }
+    $pcBefore = "`$needle = 'shape' " + $pcMark + "`n"
+    $fbMoved = Get-FrozenLiteralBreaks -BeforeText $pcBefore -AfterText (Expand-SelfTestPointers -Text ($pcPtr + "`n") -Path $pcHost)
+    if ($fbMoved.Count -eq 0) { Write-Output '  PASS  MUST NOT FIRE: a marked frozen literal that MOVED into the host''s own piece is kept, not deleted' } else { Write-Output "  FAIL  a moved frozen literal was reported ($($fbMoved.Count))"; $fail++ }
+    [IO.File]::WriteAllText($pcPiece, ("`$needle = 'fixed' " + $pcMark + "`n"), $pcU8)
+    $fbChanged = Get-FrozenLiteralBreaks -BeforeText $pcBefore -AfterText (Expand-SelfTestPointers -Text ($pcPtr + "`n") -Path $pcHost)
+    if ($fbChanged.Count -eq 1) { Write-Output '  PASS  MUST FIRE: a marked frozen literal moved into a piece AND converted is still reported' } else { Write-Output "  FAIL  a moved-and-converted frozen literal went unreported ($($fbChanged.Count))"; $fail++ }
+  } finally { Remove-Item -LiteralPath $pcDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($fail) { Write-Output "SELF-TEST FAILED ($fail)"; exit 2 }
   Write-Output 'SELF-TEST PASS - every founding defect armed (BOM, EOL, unresolvable call, converted frozen literal, dot-source below its callers, undeclared parameter refused, throwing stamp idiom) and every clean twin holds'
   exit 0
@@ -462,6 +510,8 @@ try {
       $beforeText = [Text.Encoding]::UTF8.GetString($beforeBytes, $bStart, $beforeBytes.Length - $bStart)
       $aStart = if ($after.Length -ge 3 -and $after[0] -eq 0xEF -and $after[1] -eq 0xBB -and $after[2] -eq 0xBF) { 3 } else { 0 }
       $afterText = [Text.Encoding]::UTF8.GetString($after, $aStart, $after.Length - $aStart)
+      # A host split into pieces is compared as it READS: a marked line that MOVED into its own piece is kept.
+      if ($n -like '*.ps1') { $afterText = Expand-SelfTestPointers -Text $afterText -Path $full }
       foreach ($fbk in (Get-FrozenLiteralBreaks -BeforeText $beforeText -AfterText $afterText)) {
         [void]$findings.Add("FROZEN LITERAL $n - $fbk")
       }
@@ -472,7 +522,10 @@ try {
       if ($err -and $err.Count) { [void]$findings.Add("PARSE FAIL    $n line $($err[0].Extent.StartLineNumber): $($err[0].Message)") }
       else { $parsed++ }
       $txt = [IO.File]::ReadAllText($full)
-      $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1' -FilePath $full
+      $depPath = $full
+      $pieceHost = Get-PieceHostPath $full
+      if ($pieceHost) { $depPath = $pieceHost; $txt = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($pieceHost)) -Path $pieceHost }
+      $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1' -FilePath $depPath
       if ($gap) { [void]$findings.Add("DEPENDENCY    $n - $gap") }
       if ($n -ne 'grocery/test-guards.ps1' -and (Test-HasThrowingIdiom -Path $full)) {
         # the idiom is named in two halves, or this line would be a live call site of the scan above
