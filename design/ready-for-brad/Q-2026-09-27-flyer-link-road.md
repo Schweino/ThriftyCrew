@@ -23,3 +23,7 @@ The alternative is to make the new resolver the road, fix its two misses and re-
 faster to show links on the page, but it builds a second copy of rules that already exist.
 
 Detail: `design/PLAN-link-rides-with-price-2026-09-27.md`, item L1b.
+
+## Ruling (Brad, in chat, 2026-09-27)
+
+"Extend the existing" (the recommendation): one matcher, Family Fare added to the shadow linker, live on its own bar.

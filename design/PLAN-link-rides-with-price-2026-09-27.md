@@ -192,6 +192,14 @@ Measured on the daily board, main comparison plus recipe board, counted per stor
 A miss stops the stage that depends on it; L6 never starts until L1 to L5 hold for 7 builds.
 
 ## Decisions (ruled)
+- **D5. Which flyer matcher is the road** (Q-2026-09-27-flyer-link-road). **RULED by Brad 2026-09-27: extend the existing
+  one.** One matcher: Family Fare is added to `grocery/hyvee-flyer-link.ps1` under `design/PLAN-flyer-line-product-link-2026-09-26.md`
+  and its bar (0 wrong of at least 20); the page reads its output once it goes live. `resolve-flyer-links.ps1` stays parked
+  on `feat/link-rides-flyer-resolver` as a donor (its Freshop adapter), never landed. Flyer prices keep the weekly-ad
+  button until the matcher is live.
+- **D6. Schedule the 7-build check.** **RULED by Brad 2026-09-27: yes.** A scheduled session on about 2026-10-04
+  re-measures the L1 to L5 bars on the real daily boards and starts L3/L6/L7 only if they hold.
+
 - **D1. Flyer-only sale tiles** (83 today): link to the store's weekly ad page (the pill that exists today), or show
   no link. Recommendation: the weekly-ad link, labelled as the ad, never presented as the product.
   **RULED by Brad 2026-09-27: neither.** Verbatim: *"We should NOT be storing products without links. Full stop. The
