@@ -1,0 +1,66 @@
+{
+  "generated": "2026-09-27T10:30:00",
+  "round": 1,
+  "board_week": "not re-read: the item is a push refusal; the bot's daily commit a9d9ae46b (prices + feed 2026-09-27 [ad]) sat 2 commits ahead of origin/main at re-measure",
+  "routing_artifact": null,
+  "queue_ids_seen": ["2026-09-27-b1efed"],
+  "knowledge_consulted": [
+    "orchestrator searched \"grocery pipeline could not push\": nothing applicable beyond plan-2026-09-26.json item 2026-09-26-e3566b",
+    "ops lane: no code change in this plan, so searched \"stray root file push refused\": concurrency-craft/applies-here.md (Landing a push on the shared ThriftyCrew main: the main checkout is one working tree shared by sessions and the bot) applied as the class statement, nothing to reuse as code; prior plan items read: plan-2026-09-19.json 2026-09-19-c7c57d, plan-2026-09-24.json 2026-09-21-5ac200 and 2026-09-24-924782, plan-2026-09-26.json 2026-09-26-e3566b"
+  ],
+  "ship_sequence": [
+    "1. ops (cheap lane): 2026-09-27-b1efed. Quarantined the 0-byte untracked C:\\Codex\\ThriftyCrew\\recall-sleep.py to grocery/out/untracked-quarantine/2026-09-27/ (gitignored, so no commit). ops/audit-stray-root-artifacts.ps1 re-run exit 0 (stray=0). No code change; full_suite: deferred-to-land.",
+    "2. orchestrator: land with grocery\\triage-land.ps1, then close b1efed with triage-close.ps1 from its resolution_note and close_disposition. Check that the next hourly capture-run push-retry lands a9d9ae46b."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-27-b1efed",
+      "subject": "Grocery pipeline could not push - 2026-09-27",
+      "classification": "confirmed",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "evidence": [
+        "push ledger C:\\Users\\Owner\\AppData\\Local\\ThriftyCrew\\push-ledger\\pushes-2026-09-27.jsonl: four 'hook-refused' rows 12:17:56Z, 12:29:05Z, 12:40:57Z, 12:49:26Z, each \"cause\":\"run-gates\",\"gate\":\"ops\\\\audit-stray-root-artifacts.ps1\",\"rc\":1 (local_sha c48df5ad3 then a9d9ae46b)",
+        "re-measure 2026-09-27 ops/audit-stray-root-artifacts.ps1 exit 2: 'STRAY  recall-sleep.py  file, 0 bytes' / 'STRAY-ROOT-COMPLETE stray=1'",
+        "C:\\Codex\\ThriftyCrew\\recall-sleep.py Length 0, CreationTime 2026-09-25 18:52:13; the knowledge-store repo commit 23bbacb 'recall-sleep: a BROKEN step says why in the report' edited skills/recall-sleep.py at 18:52:37 the same evening, so the writer was the interactive session editing that script from a ThriftyCrew cwd (the exact command could not be verified)",
+        "the scheduled recall-sleep invocations (TC Recall Sleep 0435 and scheduled-tasks/recall-sleep/SKILL.md) both run the script by absolute path and redirect only to $env:TEMP; recall-sleep.py writes no file named after itself, so neither producer is the writer",
+        "git rev-list --count origin/main..a9d9ae46b = 2 at re-measure: the bot's daily commit was still unlanded"
+      ],
+      "root_cause": "The shared main checkout's pre-push gates refuse the bot's push for any condition in the tree, including leftovers the pipeline did not create: an untracked collision (c7c57d), a stranded unmerged checkout (924782), the script census over its mark (e3566b) and now a 0-byte stray file an interactive session left at the repo root while editing a same-named script in another repository. The 'could not push' page is the symptom channel for every such foreign leftover, which is why the type returns with a different cause each time.",
+      "root_fix_none_because": "the pipeline-side root fix for this class already shipped with 2026-09-24-924782 (capture-run push-retry: an hourly occurrence that finds today's run committed and not landed retries only the push), and the gate that refused today is correct: it must keep refusing strays; the instance was a foreign session's leftover, removed here, and no producer in this repo writes it",
+      "prior_closes": ["2026-09-19-c7c57d", "2026-09-21-5ac200", "2026-09-24-924782", "2026-09-26-e3566b"],
+      "prevention": {
+        "source": "grocery/capture-run.ps1",
+        "what": "already shipped under 2026-09-24-924782: a committed-but-unlanded daily run gets a same-day push-only retry, so once a foreign blocker is cleared the refresh lands within the hour instead of waiting for the next morning",
+        "exact_change": "none in this plan: re-measured that the retry lane exists and that today's four refusals stopped at 12:49Z with the blocker in place; with the stray quarantined the next hourly push-retry has nothing to refuse"
+      },
+      "prevention_none_because": "no new code: the four prior closes and this one are five different foreign leftovers each caught by its own correct gate, and the upstream pipeline fix (push-retry, 924782) is live; the writer of today's instance is an interactive session outside this repo's producers",
+      "proof": {
+        "fixture_occurrences": [
+          "2026-09-19-c7c57d",
+          "2026-09-21-5ac200",
+          "2026-09-24-924782",
+          "2026-09-26-e3566b",
+          "2026-09-27-b1efed"
+        ],
+        "must_fire_case": "before the quarantine: ops/audit-stray-root-artifacts.ps1 exit 2, stray=1 (recall-sleep.py, 0 bytes), observed 2026-09-27",
+        "clean_twin": "after the quarantine: ops/audit-stray-root-artifacts.ps1 exit 0, 'STRAY-ROOT-COMPLETE entries=28 stray=0', observed 2026-09-27",
+        "guard_or_fixture": "ops/audit-stray-root-artifacts.ps1 (existing gate; run live before and after)",
+        "full_suite": "deferred-to-land"
+      },
+      "blast_radius": { "measured_as": "rows", "measured_by": "ops/audit-stray-root-artifacts.ps1 over all 29 repo-root entries before and 28 after; push-ledger hook-refused rows for 2026-09-27", "affected_now": 1, "note": "one untracked 0-byte file moved into gitignored grocery/out/untracked-quarantine/2026-09-27/; no tracked file, price or board changed" },
+      "rollback": "move grocery/out/untracked-quarantine/2026-09-27/recall-sleep.py.root-stray-0byte back to the repo root as recall-sleep.py",
+      "freshness": "re-measured 2026-09-27 against HEAD d94d53a07 and the live push ledger",
+      "leaves_open": "a future stray file left at the repo root by an interactive session would again refuse the bot's push until someone removes it",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:ops/audit-stray-root-artifacts.ps1",
+      "resolution_note": "Confirmed and fixed: the bot's 2026-09-27 push was refused four times (12:17Z-12:49Z) by ops/audit-stray-root-artifacts.ps1 over a 0-byte recall-sleep.py at the repo root, left 2026-09-25 18:52 by the interactive session editing skills/recall-sleep.py (knowledge-store commit 23bbacb). Quarantined to grocery/out/untracked-quarantine/2026-09-27/; the gate re-ran exit 0 stray=0. The pipeline-side prevention for this RETURN class is 924782's same-day push-retry, already live.",
+      "close_disposition": "confirmed",
+      "status": "done",
+      "premise_verified": "true: the ledger names the stray-root gate, and the gate reproduced exit 2 on the same file at re-measure",
+      "deviation": "the seed item e3566b was the script census; today's blocker is a different gate, so this is not a re-run of e3566b's condition",
+      "shipped_commit": null,
+      "actual_tool_calls": 17
+    }
+  ]
+}
