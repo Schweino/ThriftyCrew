@@ -411,6 +411,9 @@ $static = @(
   # size"): every rules file loads in full, so their bytes are paid by every session. ON EVERY PUSH, because the value is the
   # edit in THIS push that grows them, and it reads seven files. Hermetic, reads tracked source only.
   @{ f = 'ops\audit-always-loaded-bytes.ps1';  n = 'the bytes every ThriftyCrew session loads at start (CLAUDE.md plus every unconditional .claude\rules file, as git stores them) have not grown past their mark - a ratchet that fails only on a rise; a fall is "can tighten" and keeps the mark' }
+  # B2 of design\PLAN-efficiency-budgets-2026-09-27.md (Brad, 2026-09-27): no tracked .ps1/.py grows past 1,000 lines unnoticed.
+  # Keyed on the code scan set plus its own mark, so a data-only push replays its pass; a code push pays about 1 s.
+  @{ scan = (@($scanCode) + @('ops/out/file-size-budget-baseline.json')); f = 'ops\audit-file-size-budget.ps1'; n = 'no NEW tracked .ps1/.py file is over 1,000 lines, and each file already over it is at or under its own mark (a split counts each piece) - a ratchet that fails only on a rise; a fall is "can tighten" and keeps the mark' }
   # design\PLAN-rules-trim-2026-09-25.md (Brad, 2026-09-25): the size above is held by the ratchet; this holds the SHAPE, so a
   # new rule arrives as operative text plus a channel tag and its history goes to docs\rules-history. Hermetic, reads source only.
   @{ scan = (@($scanCode) + @('.claude/rules/ops-and-gates.md', '.claude/rules/grocery.md', '.claude/rules/measurement.md', '.claude/rules/meal-prep.md', 'docs/rules-history/ops-and-gates.md', 'docs/rules-history/grocery.md', 'docs/rules-history/measurement.md', 'docs/rules-history/meal-prep.md')); f = 'ops\audit-rule-format.ps1';          n = 'every rule in a channel-tagged rules file (ops-and-gates.md) ends with a channel tag naming a gate that exists or judgement, points at its own history anchor, and stays under the per-rule bar; no history anchor is orphaned' }
