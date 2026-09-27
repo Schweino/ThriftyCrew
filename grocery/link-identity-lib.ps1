@@ -120,3 +120,10 @@ function Select-TcLinkOwedTerms {
   }
   return ,$out.ToArray()
 }
+
+# THE LINK A READER IS SHOWN for a store tile (PLAN-link-rides-with-price L2): the tile's own link when it carries one
+# proven from the priced row, otherwise $Fallback (product-urls.json until L6 retires it). One rule for the page and the feed.
+function Get-TcTileLink($Tile, [string]$Fallback = '') {
+  if ($null -ne $Tile -and @('row', 'flyer') -contains [string]$Tile.link_source -and ([string]$Tile.link) -match '^https?://') { return [string]$Tile.link }
+  return $Fallback
+}

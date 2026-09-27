@@ -109,6 +109,16 @@ of the flyer's range), and (c) inside the commodity's own include/exclude; more 
 leaves the tile unresolved (`ad`), never a guess. Multi-buy lines resolve on the unit price the deal implies
 (`deal_qty`). Family Fare (61) goes through the Freshop search `resolve-ff-boardmatch` already runs, and is not yet
 probed. Bar for the withhold switch unchanged: at least 90% of flyer tiles resolved, and 20 sampled by eye.
+**BUILT, THEN PARKED 2026-09-27 (branch `feat/link-rides-flyer-resolver`, not on main).** `resolve-flyer-links.ps1` resolved
+Hy-Vee 32 of 70 and Family Fare 15 of 20 searched (Freshop's daily budget cut the rest), every match read by eye. Then
+the sibling was found: `design/PLAN-flyer-line-product-link-2026-09-26.md` (Brad-ruled, `grocery/hyvee-flyer-link.ps1`, in
+SHADOW) links the same Hy-Vee lines for the price verifier, with a labelled set (`grocery/hyvee/flyer-link-gold.jsonl`, 53
+lines) and a bar of 0 wrong of at least 20. Scored on that set, one row per line: this resolver made 23 links, 21
+correct, **2 WRONG** (Hy-Vee frosting at its everyday price, not on sale; Planters Cocktail peanuts, which the peanuts
+identity rule refuses), 27 abstained, 3 lines not on today's board. The sibling's linker: 18 links, 0 wrong. By the
+same-hour rule, the tie goes to the run over one case list, so this resolver does NOT land as a rival; the road is
+Brad's (ready-for-brad). The branch also predates `Split compare-deals 3/4` (Add-Norm moved to`compare-deals\identity.ps1`),
+so it rebases before any landing.
 
 **L2. The page and the feed read the tile's link first.** `build-deals-page.ps1` `SeeLink` uses `tile.link` when
 `link_source=row`; otherwise store search, never `product-urls.json` (D2). `export-feed.ps1` ships the tile link
@@ -122,6 +132,10 @@ are the same product under a newer id. Search-fallback chips 197 to 122. **The L
 MISSED and was unreachable**: the page carried only 197 search-fallback chips in all; it was written before that count
 was taken. Recorded as a miss, not rewritten. The feed half (`export-feed.ps1`, recipe widgets) is still owed: it
 reads `product-urls.json` through its own store-ownership checks and moves in its own change.
+FEED HALF BUILT 2026-09-27: `export-feed.ps1` takes the link through `Get-TcTileLink` (link-identity-lib, one rule with the page),
+the tile's own link first and the link file as fallback. Same L1 board, origin/main vs this: 672 ingredients, 654 unchanged,
+15 gain a product link, 3 re-point to the same product under a newer id (the Sam's floor cleaner and ranch, Walmart
+English muffins, seen on the page too).
 
 **L3. The link checks judge identity, not arithmetic.** `audit-tile-integrity.ps1` and the link checks in `guards.ps1`
 assert the tile's link equals the URL built from the row the tile names. With no exception file (D2) nothing is left
@@ -135,8 +149,9 @@ BUILT 2026-09-27 (`Get-WorklistLinkClass`, 5 self-test cases; each entry carries
 board of 2026-09-27, main board only (recipe board not rebuilt in the scratch run), origin/main resolve-worklist vs
 this one, same inputs: 238 entries to 144. The 94 dropped are tiles carrying their own row link (Walmart 39, Baker's
 15, Sam's 11, Family Fare 13, Aldi 9, Hy-Vee 6, Fareway 1). The 144 left: `ad` 92 (83 missing, 9 stale), `none` 52
-(48 missing, 4 stale). Half the L4 bar holds (every entry is `none` or `ad`); naming the capture file per entry is
-still owed.
+(48 missing, 4 stale). Every entry is `none` or `ad`. CAPTURE FILE NAMED 2026-09-27 (`Find-WorklistCaptureFile`, prefix from stores.json):
+all 52 `none` entries name the file a re-read must replace (Family Fare 26, Aldi 26, both today's captures), so the L4
+bar holds. An `ad` entry's `board_item` is the flyer line itself.
 
 **L5. Fix the captures that drop identity.** `build-walmart-deals` writes `link_url` from `item_id`; Hy-Vee's
 `everyday shelf price` rows keep `product_id`; Family Fare's carried-forward rows (1,907 with no `canonical_url`) get

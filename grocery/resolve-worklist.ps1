@@ -184,6 +184,26 @@ if ($SelfTest) {
   exit 0
 }
 
+# WHICH CAPTURE FILE HOLDS THE UNLINKED ROW (PLAN-link-rides-with-price L4). A link_source=none entry is a capture defect,
+# so it names the file a re-read has to replace: the newest <prefix>-regular-*.json (prefix from stores.json, never a
+# private store list) whose rows hold this item. Each store's files are read once.
+$script:CapRows = @{}
+$script:CapPrefix = @{}
+foreach ($so in @((Read-JsonFile (Join-Path $root 'stores.json')).stores)) { $script:CapPrefix[[string]$so.name] = [string]$so.regular_prefix }
+function Find-WorklistCaptureFile([string]$Store, [string]$Item) {
+  if (-not $Item -or -not $script:CapPrefix.ContainsKey($Store)) { return '' }
+  if (-not $script:CapRows.ContainsKey($Store)) {
+    $list = New-Object System.Collections.Generic.List[object]
+    foreach ($cf in @(Get-ChildItem (Join-Path $OutDir ('regular\' + $script:CapPrefix[$Store] + '-regular-*.json')) -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 12)) {
+      $names = @{}
+      try { $d = Read-JsonFile $cf.FullName; $rs = if ($d -is [array]) { $d } elseif ($d.deals) { $d.deals } else { $d.rows }; foreach ($r in @($rs)) { $names[[string]$r.item] = $true } } catch { }
+      $list.Add([pscustomobject]@{ name = $cf.Name; items = $names })
+    }
+    $script:CapRows[$Store] = $list
+  }
+  foreach ($cf in $script:CapRows[$Store]) { if ($cf.items.ContainsKey($Item)) { return [string]$cf.name } }
+  return ''
+}
 $work = [ordered]@{}
 $seenChips = @{}   # id|store dedup: weekly + recipe occurrences of the same chip must not double-list it
 function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, $cellType, $linkSource = '') {
@@ -251,7 +271,7 @@ function AddChip($id, $commodity, $unit, $store, $curPU, $boardItem, $srcBoard, 
   if ($reason) {
     $seenChips[$id + '|' + $store] = $true
     if (-not $work.Contains($store)) { $work[$store] = @() }
-    $work[$store] += [pscustomobject]@{ id=$id; commodity=$commodity; term=$term; board_item=([string]$boardItem); unit=$unit; price_per_unit=$curPU; reason=$reason; link_class=$linkClass }
+    $work[$store] += [pscustomobject]@{ id=$id; commodity=$commodity; term=$term; board_item=([string]$boardItem); unit=$unit; price_per_unit=$curPU; reason=$reason; link_class=$linkClass; capture=$(if ($linkClass -eq 'none') { Find-WorklistCaptureFile $store ([string]$boardItem) } else { '' }) }
   }
 }
 

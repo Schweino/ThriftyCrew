@@ -353,6 +353,7 @@ if ($missing.Count) {
 
 # ---- ingredients: cheapest verified price per board commodity id (both boards) ----
 # durable product links: id -> store -> url (so the feed can point at the exact cheapest item)
+. (Join-Path $PSScriptRoot 'link-identity-lib.ps1')   # Get-TcTileLink
 $purl = @{}
 try {
   $pd = (Read-JsonFile (Join-Path $dataRoot 'product-urls.json')).items
@@ -494,7 +495,7 @@ function New-PricingEntry($s, [double]$perUnit, [string]$rowUnit, [string]$id, [
     if ($adMinor -gt 0 -and $derived -gt 0 -and ([math]::Abs($adMinor - $derived) / [double]$derived) -le 0.02) { $e['purchasePriceMinor'] = $adMinor }
     else { $e['purchasePriceMinor'] = $derived; if ($adMinor -gt 0) { $script:pinDiverged++ } }
   } else { $script:pinNoBasis++ }
-  if (($Full -or $PER_STORE_URLS) -and -not (Test-TcCellQuarantined $s) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $e['url'] = $purl[$id][[string]$s.store] }
+  if (($Full -or $PER_STORE_URLS) -and -not (Test-TcCellQuarantined $s)) { $fb = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey([string]$s.store)) { $purl[$id][[string]$s.store] } else { '' }; $lk = Get-TcTileLink $s $fb; if ($lk) { $e['url'] = $lk } }
   return $e
 }
 
@@ -521,7 +522,8 @@ function AddBoard($rows) {
       if ((([string]$s.type) -eq 'everyday') -and ($null -eq $evLo -or $p -lt $evLo)) { $evLo = $p; $evStore = [string]$s.store; $evCell = $s }
     }
     if ($null -eq $lo) { continue }
-    $u = if (-not (Test-TcCellQuarantined $loCell) -and $purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
+    # the tile's own link first (PLAN-link-rides-with-price L2): the product that set the price, so the widget and the page agree
+    $u = if (-not (Test-TcCellQuarantined $loCell)) { Get-TcTileLink $loCell $(if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }) } else { '' }
     # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
     # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
     # stores simply don't carry).

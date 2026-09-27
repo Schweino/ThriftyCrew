@@ -69,12 +69,17 @@ try {
   [IO.File]::WriteAllText((Join-Path $script:scratch 'comparison-2026-09-27.json'), '{"comparison":[{"id":"eggs","stores":[{"store":"Aldi","per_unit":0.2}]}]}')
   $lo = Get-TcLinkOwed -OutDir $script:scratch -Store 'Aldi'
   Assert-Case 'MUST FIRE a board built before link_source existed is BLIND, never a clean zero' ([bool]$lo.Blind) ([string]$lo.Why)
-} catch {
+
+  # Get-TcTileLink (L2): the page and the feed show the tile's own proven link first.
+  $tl = Get-TcTileLink ([pscustomobject]@{ link_source = 'row'; link = 'https://www.walmart.com/ip/1' }) 'https://old.example/x'
+  Assert-Case 'MUST FIRE a row-linked tile shows its own link, not the link file''s' ($tl -eq 'https://www.walmart.com/ip/1') $tl
+  $tl = Get-TcTileLink ([pscustomobject]@{ link_source = 'none' }) 'https://old.example/x'
+  Assert-Case 'CLEAN TWIN a tile with no proven link keeps the link file''s entry until L6' ($tl -eq 'https://old.example/x') $tl} catch {
   Write-Output ('  FAIL  unexpected error: ' + $_.Exception.Message); $script:fail++
 } finally {
   if ($script:scratch -and (Test-Path -LiteralPath $script:scratch)) { Remove-Item -LiteralPath $script:scratch -Recurse -Force }
 }
-$want = 15
+$want = 17
 if ($script:ran -ne $want) { Write-Output ('  FAIL  ran ' + $script:ran + ' case(s), expected ' + $want); $script:fail++ }
 if ($script:fail -eq 0) { Write-Output ('test-link-identity-lib self-test pass (' + $script:ran + ' cases)'); exit 0 }
 Write-Output ('test-link-identity-lib self-test FAIL (' + $script:fail + ' of ' + $script:ran + ')'); exit 1
