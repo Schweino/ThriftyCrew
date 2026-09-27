@@ -360,6 +360,57 @@ audit-conclusion-currency 22 s and audit-secrets (static 20 s, self-test 19 s) (
 nature, so without D3 the bar stays out of reach; the remaining keyable items are fdc_lookup and rule-currency, a few
 seconds each.
 
+## Round 4 as built (Brad's D3 ruling, 2026-09-27)
+
+**D3, ruled 2026-09-27: MOVE NO CHECK TO NIGHTLY.** Key the always-run checks so they skip data-only pushes and still
+run in full on code pushes; a check that cannot stop reading live data stays on push and is listed for Brad.
+audit-secrets' static run stays on push, unkeyed. Evidence: `design/W0-gate-catches-2026-09-27.md`.
+
+**Round 4's keying is NOT landed.** It is on branch `gate-diet-round4` (19 of the 49 run-C jobs keyed, every
+declaration VERIFIED; its own "Round 4 as built" account is on that branch). Brad's land rule after round 4: land it
+only if run C, with the safety fix below, is at or below round 3's 292 s. It was not (538.5 s), so only the safety fix
+lands, and Brad has paused further push-diet work. Unlanded, and not to be narrowed now: the wide keys of
+test-prepush-hook, prepush-test-auditors, test-flag-verification, audit-guard-contract and check-ad-cycles.
+
+**The safety fix, landed** (`lib/gate-input-key.ps1`, `Get-TcGateUnpinnedBase`, Brad's ruling). Found in round 4:
+monitor-live-recipe-prices read a built card through `Join-Path $mp ...`, and the key silently dropped any path built on
+a variable outside `$repo`, `$root`, `$RepoRoot`, `$here` and `$PSScriptRoot`. Now such a base must be PINNED as a sandbox
+(every assignment is a temp folder, or a Join-Path/Split-Path on a pinned variable), or the key is refused and the
+suite runs. Scope: the inference road (gates and libraries that declare nothing); a `# gate-inputs:` declaration still
+answers for what its gate reads. Fixtures (self-test 123 -> 126 cases, exit 0): MUST FIRE a read via `Join-Path $mp`
+is refused a key; MUST NOT FIRE a read via `$repo` still keys; CLEAN TWIN a temp-pinned sandbox variable is unchanged.
+
+**Gates at risk, newly refused: 76 of the 397 self-tests keyed on origin/main** (448 tracked). Each was being skipped
+on a matching key while reading through a base the key could not see. Many read real repo data this way (`$mp`,
+`$__jioroot`: the meal-prep pipeline); others are libraries whose base is a function parameter, which cannot be pinned
+by construction and so now always run. The list: graph\pipeline\scorecard.ps1; grocery: audit-json-encoding,
+browser-feeds-lib, feed-served-lib, merge-product-urls, provenance-contract-lib, refresh-sams-verified,
+regular-fileset-lib, rollback-ttl-lib; lib: atomic-write, bot-paths, gate-verdict, git-blob-lib, main-checkout;
+meal-prep\archive\retired-by-templating\repair-unreachable-prose-money; meal-prep\pipeline: annotate-writer-note,
+audit-buy-label-plurals, audit-cost-line-coverage, audit-cost-plausibility, audit-fact-claims, audit-ghost-field-limits,
+audit-ingredient-identity, audit-live-price-contract, audit-vocab-integrity, audit-wave-blocker-headings,
+build-intake-skeleton, build-v2-spec, compute-v2-perserving, considered-dishes, db-build, feed-freshness, fetch-recipe,
+ingredient-resolutions, ingredient-vocab, migrate-prose-tokens, nutrient-claim-lib, rebase-spec-ingredient,
+recost-spec-cost-block, repair-absurd-units, repair-basis-relabel, repair-bulk-buy-line, repair-cook-measures,
+repair-head-ingredients, repair-measure-vs-grams, repair-plural-unit, repair-range-buy, repair-scaled-notes,
+repair-spec-contradictions, repair-to-taste-labels, repair-unitless-buy, repair-unmeasurable-qty, retire-recipe,
+retrofit-source-credit, source-domains, stamp-live-price-fallback, sync-prose-from-spec, sync-recipesdb-buy,
+sync-recipesdb-cost, sync-recipesdb-macros; ops: add-reread, audit-cpu-load, audit-fixed-temp-names,
+audit-readjson-inline-wrap, audit-ruling-drift, audit-selftest-fallthrough, audit-typed-param-shadow, audit-write-seam,
+count-tracked-writers, drill-push-main-runner, hold-push-lock, observe-gate-queue, probe-gate-slot-fairness,
+verify-bot-commit-scope, verify-commodities-gate; sidecar: start-sidecar, stop-sidecar.
+
+**Measurement** (harness: the gate-times rows `ops/run-gates.ps1` writes; one seeded worktree, 2026-09-27, the safety
+fix plus round 4; whole-run verdict file deleted first; ONE run per arm):
+
+| Run | Exit | Jobs executed of 540 | Gate CPU executed | unkeyable | keyed that re-ran |
+|---|---|---|---|---|---|
+| A (records) | 0, pass=541 fail=0 | 540 | 3,759 s | 100 jobs | - |
+| C (`grocery\notify-known-ids.json` edited, restored) | 0, pass=541 fail=0 | 117 | **538.5 s** | 100 jobs, 330.8 s | 207.7 s |
+
+Against the 292 s land bar: over by 246.5 s. Round 4 alone measured 332 s. The safety fix's cost on a data-only push is
+therefore about 205 s of now-unkeyable jobs, the price of never replaying a pass over a read the key cannot see.
+The safety-fix-only tree was not measured separately.
 ## Open items
 
 - W0 (the catch column is unverified).

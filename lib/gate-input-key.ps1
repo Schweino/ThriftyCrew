@@ -319,6 +319,52 @@ function Remove-TcGateComments {
   return ($out -join "`n")
 }
 
+function Get-TcGateUnpinnedBase {
+  <# Pure over comment-stripped TEXT (Brad's ruling after round 4, design\PLAN-push-gate-diet-2026-09-27.md). A path built
+     with `Join-Path $v '<literal>'` on a variable outside the five the key resolves was silently DROPPED from the key:
+     monitor-live-recipe-prices read a built card through $mp and was keyed without it. Now such a base must be PINNED as
+     a sandbox, or the gate is refused and runs. A variable is pinned when EVERY assignment of it in this file is a temp
+     folder (GetTempPath, $env:TEMP/TMP, mkdtemp, New-TemporaryFile) or a Join-Path/Split-Path on another pinned variable.
+     A parameter, a loop variable, or any assignment the reader cannot place is unpinned. Returns the first unpinned
+     name, or ''. An escaped `$v inside a fixture string is text, never a read. #>
+  param([string]$Code)
+  $known = @('repo', 'root', 'reporoot', 'here', 'psscriptroot')
+  $names = New-Object Collections.Generic.List[string]
+  foreach ($m in [regex]::Matches($Code, '(?i)(?<!`)Join-Path\s+(?:-Path\s+)?\$(?:script:)?(\w+)\s+[''"]')) {
+    $n = $m.Groups[1].Value.ToLowerInvariant()
+    if ($known -contains $n -or $names.Contains($n)) { continue }
+    $names.Add($n)
+  }
+  $pinned = @{}
+  $tempRx = '(?i)GetTempPath|\$env:(?:TEMP|TMP)\b|New-TemporaryFile|GetTempFileName'
+  # Resolve in rounds, so `$a = Join-Path $b 'x'` pins once $b is pinned.
+  for ($round = 0; $round -lt 6; $round++) {
+    $grew = $false
+    foreach ($n in $names) {
+      if ($pinned.ContainsKey($n)) { continue }
+      $rx = '(?im)^[ \t]*(?:\$script:|\$)' + [regex]::Escape($n) + '[ \t]*=(?!=)[ \t]*(.+?)[ \t]*$'
+      $as = [regex]::Matches($Code, $rx)
+      if (-not $as.Count) { continue }
+      $all = $true
+      foreach ($a in $as) {
+        $rhs = $a.Groups[1].Value
+        if ([regex]::IsMatch($rhs, $tempRx)) { continue }
+        $ref = [regex]::Match($rhs, '(?i)(?:Join-Path|Split-Path)\s+(?:-Path\s+|-Parent\s+)?\(?\$(?:script:)?(\w+)')
+        if ($ref.Success -and $pinned.ContainsKey($ref.Groups[1].Value.ToLowerInvariant())) { continue }
+        $all = $false; break
+      }
+      if ($all) { $pinned[$n] = $true; $grew = $true }
+    }
+    if (-not $grew) { break }
+  }
+  foreach ($n in $names) {
+    if ($pinned.ContainsKey($n)) { continue }
+    # A typed parameter or a loop variable is decided by a caller or a listing, never pinned here.
+    return $n
+  }
+  return ''
+}
+
 function Test-TcGateCacheable {
   <# Pure over TEXT. Why is returned even on success, so a run can print WHY a gate was refused rather than
      leaving a reader to guess which of the two rules bit.
@@ -342,6 +388,10 @@ function Test-TcGateCacheable {
   }
   if ([regex]::IsMatch($Text, $script:TcGateComputedRx)) {
     return [pscustomobject]@{ Ok = $false; Why = 'builds a repo path from a variable, which a source key cannot watch' }
+  }
+  $unpinned = Get-TcGateUnpinnedBase -Code $code
+  if ($unpinned) {
+    return [pscustomobject]@{ Ok = $false; Why = ('builds a path on $' + $unpinned + ', a folder the key cannot pin to a sandbox or resolve in this repo, so the file it reads cannot be hashed') }
   }
   $unparsed = Test-TcGateUnparsed -Code $code
   if ($unparsed) {
@@ -1603,7 +1653,7 @@ if ($SelfTest) { }
     T 'MUST FIRE  REPLAY: the key now SEES the file the failing case reads - grocery\capture-run.ps1 is among the watchdog''s resolved inputs, where the old resolution looked for it at the root' `
       (@($wdRefs.Paths) -contains 'grocery\capture-run.ps1') (@($wdRefs.Paths) -join ', ')
     T 'MUST FIRE  REPLAY: the watchdog is refused for a named reason the rules give (data, a missing input or an unparsed spelling), not for a missing gate file' `
-      ((-not $kWdA.Ok) -and $kWdA.Why -match 'data directory|exists nowhere|does not parse') ("why={0}" -f $kWdA.Why)
+      ((-not $kWdA.Ok) -and $kWdA.Why -match 'data directory|exists nowhere|does not parse|cannot pin') ("why={0}" -f $kWdA.Why)
 
     # ---- the stored entry ----
     $now = [DateTime]::UtcNow
@@ -1848,6 +1898,17 @@ if ($SelfTest) { }
     $p1 = Get-TcGateCachePath -CacheDir 'C:\c' -GateId 'ops\a.ps1|-SelfTest'
     $p2 = Get-TcGateCachePath -CacheDir 'C:\c' -GateId 'ops\a.ps1|-Other'
     T 'MUST FIRE  two arguments of one file are two cache entries, never one' ($p1 -ne $p2) "$p1 / $p2"
+
+    # ---- A BASE THE KEY CANNOT PIN REFUSES THE KEY (Brad's ruling after round 4) ----
+    $ubOther = "`$mp = Split-Path -Parent `$here`n`$card = Join-Path `$mp 'db\built\x.body.html'`n"
+    $ubRepo  = "`$card = Join-Path `$repo 'ops\caller.ps1'`n"
+    $ubTemp  = "`$t = Join-Path ([IO.Path]::GetTempPath()) 'zz-sb'`n`$f = Join-Path `$t 'fixture.json'`n"
+    $cu1 = Test-TcGateCacheable -Text $ubOther
+    T 'MUST FIRE  a read via Join-Path on an unrecognised variable ($mp) refuses the key, so the suite runs' ((-not $cu1.Ok) -and $cu1.Why -match '\$mp') ('ok=' + $cu1.Ok + ' why=' + $cu1.Why)
+    $cu2 = Test-TcGateCacheable -Text $ubRepo
+    T 'MUST NOT FIRE  a read via $repo still keys' ($cu2.Ok) ('why=' + $cu2.Why)
+    $cu3 = Test-TcGateCacheable -Text $ubTemp
+    T 'CLEAN TWIN  a sandbox variable pinned to the temp folder is unchanged: keyable' ($cu3.Ok) ('why=' + $cu3.Why)
   } catch {
     $script:f++
     Write-Output ('FAIL  the self-test threw: ' + $_.Exception.Message)
@@ -1855,7 +1916,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 123) { $f++; Write-Output ("FAIL  only {0} of 123 cases ran" -f $cases) }
+  if ($cases -lt 126) { $f++; Write-Output ("FAIL  only {0} of 126 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0
