@@ -38,6 +38,7 @@ param([switch]$Alert, [switch]$SelfTest, [switch]$CodeOnly)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\selftest-lib.ps1')   # Expand-SelfTestPointers: a split host is read with its pieces in place
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\production-text.ps1')   # Test-TcInsideSelfTestClause: the one copy of "a frozen -SelfTest fixture is not a live pin"; no param() block, so it cannot reset ours
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
@@ -210,8 +211,15 @@ function Get-StoreListDrift {
   # script) is not, and widening to it would excuse real drift.
   $tk = $null; $pe = $null
   $units = @()
+  # A SPLIT HOST IS READ AS IT RUNS (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 4): grocery\test-auditors.ps1
+  # dot-sources its units from grocery\test-auditors\, which this top-level walk never reaches, so its text is read with
+  # every piece back in place (lib\selftest-lib.ps1). A file with no pointers is parsed and read exactly as before.
+  $rawText = [IO.File]::ReadAllText($Path)
+  $hostText = Expand-SelfTestPointers -Text $rawText -Path $Path
+  $isSplitHost = -not [string]::Equals($hostText, $rawText, [StringComparison]::Ordinal)
   try {
-    $ast = [System.Management.Automation.Language.Parser]::ParseFile($Path, [ref]$tk, [ref]$pe)
+    $ast = if ($isSplitHost) { [System.Management.Automation.Language.Parser]::ParseInput($hostText, [ref]$tk, [ref]$pe) }
+           else { [System.Management.Automation.Language.Parser]::ParseFile($Path, [ref]$tk, [ref]$pe) }
     if ($ast) {
       $units = @($ast.FindAll({ param($n)
           ($n -is [System.Management.Automation.Language.HashtableAst]) -or
@@ -225,7 +233,7 @@ function Get-StoreListDrift {
   $ln = 0; $inBlock = $false
   # HELD, not re-read: the inline-marker check has to look at the lines ABOVE a finding, and re-reading
   # the file per finding would also let it see a different file than the one the AST was parsed from.
-  $allLines = [IO.File]::ReadAllLines($Path)
+  $allLines = if ($isSplitHost) { @(($hostText -replace '\r?\n$', '') -split '\r?\n') } else { [IO.File]::ReadAllLines($Path) }
   foreach ($line in $allLines) {
     $ln++
     $t = $line.TrimStart()
@@ -333,7 +341,8 @@ function Get-OrphanedExemptions {
     # An EMPTY needle is worse than a dead one: IndexOf('') is 0, so the entry would silence every subset in
     # that file forever. Refuse to treat it as a documented subset.
     if (-not $needle) { [void]$found.Add("ORPHANED EXEMPTION (empty needle): the entry for '$file' has no 'contains', so it would silence EVERY store-list subset in that file"); continue }
-    if ([IO.File]::ReadAllText($p).IndexOf($needle, [StringComparison]::Ordinal) -lt 0) {
+    # A split host's exemption may now stand in one of its pieces: read it as it runs (Get-StoreListDrift above).
+    if ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($p)) -Path $p).IndexOf($needle, [StringComparison]::Ordinal) -lt 0) {
       [void]$found.Add("ORPHANED EXEMPTION (needle absent): the allowed_subsets entry for '$file' matches nothing there any more - its 'contains' is: " + $needle)
     }
   }

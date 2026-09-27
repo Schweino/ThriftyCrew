@@ -302,6 +302,24 @@ function Expand-SelfTestPointers {
   })
 }
 
+function Get-SplitPieceHost {
+  <# The host a split PIECE belongs to, or '' when the file is not one (2026-09-27, split step 4). A piece is a file
+     whose folder has a sibling <folder>.ps1 carrying the pointer Expand-SelfTestPointers follows, '<folder>\<file>',
+     so grocery\test-auditors\units-02.ps1 belongs to grocery\test-auditors.ps1. A piece runs only INSIDE its host,
+     after whatever the host loaded, so a per-file reader judges the host as it reads (Expand-SelfTestPointers) and
+     never the piece alone: alone, a piece has no param block, calls libraries it never loads, and can carry a
+     self-test switch in a fixture string. A folder whose sibling .ps1 carries no pointer to the file is no host. #>
+  param([string]$FullPath)
+  if (-not $FullPath) { return '' }
+  $dir = Split-Path -Parent $FullPath
+  if (-not $dir) { return '' }
+  $hostPath = $dir + '.ps1'
+  if (-not (Test-Path -LiteralPath $hostPath -PathType Leaf)) { return '' }
+  $ptr = "'" + (Split-Path -Leaf $dir) + '\' + (Split-Path -Leaf $FullPath) + "'"
+  if (([IO.File]::ReadAllText($hostPath)).IndexOf($ptr, [StringComparison]::OrdinalIgnoreCase) -lt 0) { return '' }
+  return $hostPath
+}
+
 function Get-SelfTestBlock {
   <# Every outermost self-test body, joined in source order: the TEXT answer, and the only thing this lib
      returned before the spans were split out above. Same bytes for the same input, which is what
@@ -493,6 +511,13 @@ if ($__stlSelfTest) {
         ((Get-SelfTestBlock -Text $missHost -Path (Join-Path $ptDir 'test-host.ps1')) -match 'test-host\\gone\.ps1')
     StT 'MUST NOT FIRE: without -Path no pointer is followed (a caller passing text alone gets the old answer)' `
         ([string]::Equals((Expand-SelfTestPointers -Text $wholeHost), $wholeHost, [StringComparison]::Ordinal))
+    StT 'MUST FIRE: a file its host points at (test-host\units-a.ps1) names that host as its own' `
+        ((Get-SplitPieceHost (Join-Path $ptDir 'test-host\units-a.ps1')) -eq (Join-Path $ptDir 'test-host.ps1'))
+    [IO.File]::WriteAllText((Join-Path $ptDir 'test-host\stray.ps1'), "`$s = 1`n", $u8)
+    StT 'MUST NOT FIRE: a file in the host''s folder that the host never points at is no piece' `
+        ((Get-SplitPieceHost (Join-Path $ptDir 'test-host\stray.ps1')) -eq '')
+    StT 'MUST NOT FIRE: a file in a folder with no sibling host script (lib\helper.ps1) is no piece' `
+        ((Get-SplitPieceHost (Join-Path $ptDir 'lib\helper.ps1')) -eq '')
   } finally {
     Remove-Item -LiteralPath $ptDir -Recurse -Force -ErrorAction SilentlyContinue
   }

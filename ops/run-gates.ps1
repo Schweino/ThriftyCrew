@@ -67,6 +67,7 @@ Clear-TcGitRepoEnv
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot - discovery excludes below the root, so a worktree root is scanned
 . (Join-Path $repo 'lib\selftest-verdict.ps1')   # Get-TcSelfTestScore - no param() block, so it cannot reset ours
 . (Join-Path $repo 'lib\ratchet.ps1')   # Get-TcStaticZeroScan - no param() block, so it cannot reset ours
+. (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SplitPieceHost - no param() block, so it cannot reset ours
 
 # Self-tests that cannot run hermetically, with the reason. Keyed by file name, same standard as every other
 # allowlist here: a line is a decision someone defends in a diff, not a way to make the gate quiet.
@@ -108,6 +109,11 @@ $selfSwitch = @{}
 $declinedSwitch = @()
 foreach ($s in $scripts) {
   if ($SKIP.ContainsKey($s.Name)) { continue }
+  # A SPLIT PIECE IS NEVER A SELF-TEST OF ITS OWN (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 4). A piece
+  # runs only inside its host (grocery\test-auditors\units-05.ps1 inside grocery\test-auditors.ps1), has no param block to
+  # take -SelfTest, and can quote the declaration in a fixture string: the first run after the split enrolled two pieces
+  # and scored both NO VERDICT. The host is the unit of discovery, and the host's own entry decides it (SKIP above).
+  if (Get-SplitPieceHost $s.FullName) { continue }
   # NEVER DISCOVER YOURSELF. run-gates runs every file it discovers with -SelfTest; discovering this
   # file means running this file, which discovers it again. On 2026-09-01 a COMMENT added here quoted
   # the switch declaration in prose, the matcher below saw its own text, and run-gates spawned a fresh

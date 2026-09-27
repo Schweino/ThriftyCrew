@@ -71,6 +71,7 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\lf-write.ps1')   # Write-TcLfFile: the baseline is tracked and stored eol=lf
 . (Join-Path $repo 'lib\ps-source.ps1')
 . (Join-Path $repo 'lib\tree-walk.ps1')   # Get-TcPathBelowRoot: skip dirs match below the root, so a worktree root is not skipped whole
+. (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SplitPieceHost, Expand-SelfTestPointers: a split host is judged whole
 
 # NEEDLES BY CONCATENATION. This file scans source for a comment-stripping idiom, so spelling the
 # idiom out as a literal would make this file match itself - and a detector that finds itself cannot
@@ -86,6 +87,16 @@ function Test-StripsLineCommentsOnly {
   if ($Text -notmatch $script:SCS_LINE_STRIP) { return $false }
   if ($Text -match $script:SCS_BLOCK_STRIP) { return $false }
   return $true
+}
+
+function Get-ScsFileText {
+  <# The text this audit judges for one file. A split host (grocery\test-auditors.ps1) is judged as it READS, with its
+     pieces back in place (lib\selftest-lib.ps1 Expand-SelfTestPointers), and a piece returns $null because its host
+     already carried it (2026-09-27, split step 4): judged alone, a piece holding a line-comment strip read as a new
+     scanner although the same file, whole, strips blocks too. Any other file is its own text. #>
+  param([string]$Path)
+  if (Get-SplitPieceHost $Path) { return $null }
+  return (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($Path)) -Path $Path)
 }
 
 function Get-ScsCandidateFiles {
@@ -151,6 +162,18 @@ if ($SelfTest) {
     T 'MUST FIRE  a root that IS a worktree is scanned, not skipped whole' (($wtHits.Root - $wtNested.Count) -eq 2) ("root=" + $wtHits.Root)
     T 'MUST NOT FIRE  a worktree nested inside a scanned directory below that root is still skipped' ($wtNested.Count -eq 0) ("nested=" + $wtNested.Count)
   } finally { Remove-Item -LiteralPath $wtFx.Temp -Recurse -Force -ErrorAction SilentlyContinue }
+  # A SPLIT HOST IS JUDGED WHOLE (2026-09-27, split step 4): the line strip moved into a piece, the block strip stayed.
+  $spx = Join-Path $env:TEMP ('scs-split-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  try {
+    [void][IO.Directory]::CreateDirectory((Join-Path $spx 'h'))
+    $spU8 = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText((Join-Path $spx 'h\p.ps1'), $founding, $spU8)
+    [IO.File]::WriteAllText((Join-Path $spx 'h.ps1'), (". (Join-Path `$PSScriptRoot 'h\p.ps1')`n" + $ownBlock), $spU8)
+    T 'MUST NOT FIRE  a piece is not judged alone (its host carries it)' ($null -eq (Get-ScsFileText (Join-Path $spx 'h\p.ps1'))) 'judged alone'
+    T 'MUST NOT FIRE  the host, read with its piece in place, strips blocks too and is not reported' (-not (Test-StripsLineCommentsOnly (Get-ScsFileText (Join-Path $spx 'h.ps1')))) 'reported'
+    [IO.File]::WriteAllText((Join-Path $spx 'h.ps1'), ". (Join-Path `$PSScriptRoot 'h\p.ps1')`n", $spU8)
+    T 'MUST FIRE  a host whose only line strip sits in its piece, with no block strip anywhere, is reported' (Test-StripsLineCommentsOnly (Get-ScsFileText (Join-Path $spx 'h.ps1'))) 'not reported'
+  } finally { Remove-Item -LiteralPath $spx -Recurse -Force -ErrorAction SilentlyContinue }
   # THE LIVE PATH, DRIVEN (2026-09-11). The founding shape is a pre-push run-gates pass whose count FELL: it rewrote
   # the tracked baseline and left the pushing checkout dirty. These run THIS script as a child against a one-file
   # temp tree and a temp baseline, so they exercise the code a gate runs, not a copy of it. One directory per run,
@@ -217,10 +240,11 @@ $rootFull = Get-TcRootFull $Root
 $scanned = 0
 $findings = New-Object System.Collections.Generic.List[string]
 foreach ($f in @(Get-ScsCandidateFiles -RootDir $rootFull)) {
-  $scanned++
   $p = $f.FullName
   $txt = ''
-  try { $txt = [IO.File]::ReadAllText($p) } catch { continue }
+  try { $txt = Get-ScsFileText $p } catch { continue }
+  if ($null -eq $txt) { continue }   # a split piece: its host was judged with it in place
+  $scanned++
   if (Test-StripsLineCommentsOnly $txt) { [void]$findings.Add((Get-TcPathBelowRoot $p $rootFull).TrimStart('\', '/')) }
 }
 if ($scanned -eq 0) {

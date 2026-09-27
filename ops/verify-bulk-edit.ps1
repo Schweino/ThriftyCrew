@@ -160,24 +160,6 @@ function Get-FrozenLiteralBreaks {
   return ,@($breaks.ToArray())
 }
 
-function Get-PieceHostPath {
-  <# The host a split PIECE belongs to, or '' when the file is not one (2026-09-27,
-     design\PLAN-split-giant-files-2026-09-27.md step 4). A giant script is cut into a folder named for it and
-     each piece is dot-sourced from the host at the exact line its text left: grocery\test-auditors\units-02.ps1
-     runs INSIDE grocery\test-auditors.ps1, after the libraries the host loads. So a piece is judged as the host
-     READS (Expand-SelfTestPointers): judged alone it "calls Read-JsonFile but never loads json-io", and a marked
-     frozen literal that moved into it reads as deleted from the host. A piece is a file whose folder has a
-     sibling <folder>.ps1 that carries the pointer '<folder>\<file>'; a folder with no such host is no piece. #>
-  param([string]$FullPath)
-  $dir = Split-Path -Parent $FullPath
-  if (-not $dir) { return '' }
-  $hostPath = $dir + '.ps1'
-  if (-not (Test-Path -LiteralPath $hostPath -PathType Leaf)) { return '' }
-  $ptr = "'" + (Split-Path -Leaf $dir) + '\' + (Split-Path -Leaf $FullPath) + "'"
-  if (-not ([IO.File]::ReadAllText($hostPath)).Contains($ptr)) { return '' }
-  return $hostPath
-}
-
 function Get-DependencyGaps {
   # A file that CALLS a function must be able to resolve it: a real dot-source (not a mention of the lib in
   # a comment or a fixture string), a local definition, or a conditional load. Defect 3 was exactly this
@@ -432,17 +414,17 @@ $rc = Read-JsonFile $p
     $pcMark = '# json-readers' + ':allow a frozen fixture'
     [IO.File]::WriteAllText($pcPiece, ("`$x = Read-JsonFile `$f`n`$needle = 'shape' " + $pcMark + "`n"), $pcU8)
     [IO.File]::WriteAllText($pcHost, (". (Join-Path `$root 'lib\json-io.ps1')`n" + $pcPtr + "`n"), $pcU8)
-    $hp = Get-PieceHostPath $pcPiece
+    $hp = Get-SplitPieceHost $pcPiece
     if ($hp -eq $pcHost) { Write-Output '  PASS  MUST FIRE: a file its folder''s sibling host points at (h\p.ps1 from h.ps1) is a piece of that host' } else { Write-Output "  FAIL  a pointed-at piece was not recognised (host='$hp')"; $fail++ }
     $g = Get-DependencyGaps -Text (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($hp)) -Path $hp) -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
-    if (-not $g) { Write-Output '  PASS  CLEAN TWIN: a piece calling Read-JsonFile resolves it through the host that loads json-io above the pointer' } else { Write-Output "  FAIL  a piece was refused though its host loads json-io: $g"; $fail++ }
+    if (-not $g) { Write-Output '  PASS  MUST NOT FIRE: a piece calling Read-JsonFile resolves it through the host that loads json-io above the pointer' } else { Write-Output "  FAIL  a piece was refused though its host loads json-io: $g"; $fail++ }
     [IO.File]::WriteAllText($pcHost, ($pcPtr + "`n"), $pcU8)
     $g = Get-DependencyGaps -Text (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($pcHost)) -Path $pcHost) -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1'
     if ($g) { Write-Output '  PASS  MUST FIRE: a piece calling Read-JsonFile under a host that never loads json-io is still refused' } else { Write-Output '  FAIL  a piece whose host cannot resolve Read-JsonFile went unreported'; $fail++ }
     $null = New-Item -ItemType Directory -Path (Join-Path $pcDir 'k') -Force -ErrorAction Stop
     [IO.File]::WriteAllText((Join-Path $pcDir 'k.ps1'), "'no pointer here'`n", $pcU8)
     [IO.File]::WriteAllText((Join-Path $pcDir 'k\q.ps1'), "'x'`n", $pcU8)
-    if (-not (Get-PieceHostPath (Join-Path $pcDir 'k\q.ps1'))) { Write-Output '  PASS  MUST NOT FIRE: a file whose sibling .ps1 carries no pointer to it is not a piece' } else { Write-Output '  FAIL  an unpointed file was taken for a piece'; $fail++ }
+    if (-not (Get-SplitPieceHost (Join-Path $pcDir 'k\q.ps1'))) { Write-Output '  PASS  MUST NOT FIRE: a file whose sibling .ps1 carries no pointer to it is not a piece' } else { Write-Output '  FAIL  an unpointed file was taken for a piece'; $fail++ }
     $pcBefore = "`$needle = 'shape' " + $pcMark + "`n"
     $fbMoved = Get-FrozenLiteralBreaks -BeforeText $pcBefore -AfterText (Expand-SelfTestPointers -Text ($pcPtr + "`n") -Path $pcHost)
     if ($fbMoved.Count -eq 0) { Write-Output '  PASS  MUST NOT FIRE: a marked frozen literal that MOVED into the host''s own piece is kept, not deleted' } else { Write-Output "  FAIL  a moved frozen literal was reported ($($fbMoved.Count))"; $fail++ }
@@ -523,7 +505,7 @@ try {
       else { $parsed++ }
       $txt = [IO.File]::ReadAllText($full)
       $depPath = $full
-      $pieceHost = Get-PieceHostPath $full
+      $pieceHost = Get-SplitPieceHost $full
       if ($pieceHost) { $depPath = $pieceHost; $txt = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($pieceHost)) -Path $pieceHost }
       $gap = Get-DependencyGaps -Text $txt -FnName 'Read-JsonFile' -LibLeaf 'json-io.ps1' -FilePath $depPath
       if ($gap) { [void]$findings.Add("DEPENDENCY    $n - $gap") }
