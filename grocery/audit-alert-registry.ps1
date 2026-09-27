@@ -36,6 +36,7 @@ $repo = Split-Path $root -Parent
 . (Join-Path $repo 'lib\guard-contract.ps1')
 . (Join-Path $repo 'lib\json-io.ps1')          # Read-JsonFile for the queue read below; named here, not inherited through the lib
 . (Join-Path $root 'alert-registry-lib.ps1')
+. (Join-Path $repo 'lib\selftest-lib.ps1')      # Get-SplitPieceHost / Expand-SelfTestPointers: a split host is judged whole, never a piece alone
 
 # Files that are the transport, not an emitter: the mailer itself, the one helper every emitter calls, and this.
 $script:TransportFiles = @('send-alert.ps1', 'alert-lib.ps1', 'audit-alert-registry.ps1')
@@ -496,8 +497,12 @@ foreach ($rel in $tracked) {
   if ($script:TransportFiles -contains (Split-Path -Leaf $rel)) { continue }
   $full = Join-Path $repo $rel
   if (-not (Test-Path -LiteralPath $full)) { continue }
+  # A SPLIT PIECE IS JUDGED INSIDE ITS HOST (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md D4). check-ad-cycles.ps1
+  # defines its own Send-Alert, so Get-AlertCallSites skips it whole; its moved watchers define none and, read alone, were
+  # counted as 12 new emitter sites. A piece is skipped here and its host is read with every piece in place.
+  if (Get-SplitPieceHost $full) { continue }
   $scanned++
-  $text = [IO.File]::ReadAllText($full)
+  $text = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($full)) -Path $full
   if ($text.IndexOf('send-alert', [StringComparison]::OrdinalIgnoreCase) -lt 0) { continue }
   $parsed++
   foreach ($s in (Get-AlertCallSites (ConvertTo-ParsedAst $text) $rel)) { [void]$sites.Add($s) }

@@ -267,7 +267,11 @@ T 'MUST NOT FIRE a script in some other folder is NOT a tester by its folder' (-
 }
 
 # ---- which detectors does the chain actually invoke? -----------------------------------------------------
-$chainText = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+# READ AS IT RUNS (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md D4): the DAILY/WEEKLY watchers moved into
+# grocery\check-ad-cycles\ and the host dot-sources them at their old spot, so the host with its pieces in place is the
+# chain's text. Read alone, the host hid 8 of the 68 detectors the watchers invoke.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\selftest-lib.ps1')
+$chainText = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1')
 # A MENTION IS NOT A CALL (2026-08-23). This scanned the WHOLE file text for anything shaped like a
 # .ps1 name, so three files were reported as having "joined the chain with no completion marker"
 # when the chain does not run them at all:
