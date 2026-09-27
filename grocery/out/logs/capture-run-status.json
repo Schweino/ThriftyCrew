@@ -3,14 +3,18 @@
                   "date":  "2026-09-26",
                   "pid":  22320,
                   "started":  "2026-09-26T08:00:06",
-                  "updated":  "2026-09-26T08:42:30",
-                  "stage":  "publishing",
-                  "exit_code":  null,
+                  "updated":  "2026-09-26T09:11:44",
+                  "stage":  "complete",
+                  "exit_code":  1,
                   "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-26.log",
                   "failed_lanes":  [
                                        {
                                            "lane":  "guards-blocked",
                                            "paged":  ""
+                                       },
+                                       {
+                                           "lane":  "push",
+                                           "paged":  "Grocery pipeline could not push - 2026-09-26"
                                        }
                                    ],
                   "dirty_at_start":  [
@@ -37,9 +41,20 @@
                                          "meal-prep/recipes-db.json",
                                          "public/free-dinners.json"
                                      ],
-                  "commit_size":  null,
-                  "held_deletions":  [
+                  "commit_size":  {
+                                      "verdict":  "within-caps",
+                                      "ok":  true,
+                                      "own_files":  7,
+                                      "unvouched_files":  3,
+                                      "carried_runs":  [
 
+                                                       ],
+                                      "deep":  false,
+                                      "deep_days":  0
+                                  },
+                  "held_deletions":  [
+                                         "grocery/out/browser-capture-due-2026-09-22.flag",
+                                         "grocery/out/browser-capture-due-2026-09-23.flag"
                                      ],
                   "sync":  {
                                "outcome":  "synced-by-parent",
@@ -47,33 +62,51 @@
                                "why":  "the parent run synced to ef7edb1a39055e943406508d7699405837db4ef1|3a2eecdc5bb0402c97787182ee620dd8 and handed off; this child neither syncs nor re-executes",
                                "inherited_lock":  true
                            },
-                  "tail_sync":  null,
-                  "committed_sha":  "",
-                  "pushed":  null
+                  "tail_sync":  {
+                                    "outcome":  "current",
+                                    "class":  "",
+                                    "why":  "HEAD already contains origin; nothing was written",
+                                    "H0":  "8df33b9be70dcc520029db6cca693890125baf8f",
+                                    "NEW":  "8df33b9be70dcc520029db6cca693890125baf8f",
+                                    "behind":  0,
+                                    "behind_after":  0,
+                                    "startup_changed":  false,
+                                    "page":  false
+                                },
+                  "pushed":  false,
+                  "committed_sha":  "06f6f7f40927b53c3eaa16bebdd0f69e8edd8075",
+                  "push_retry":  {
+                                     "at":  "2026-09-26T14:00:11",
+                                     "outcome":  "stale-code-feed",
+                                     "reason":  "stale-code-feed",
+                                     "why":  "the sync brought in a change to grocery/build-sale-windows.ps1, grocery/check-ad-cycles.ps1, grocery/export-feed.ps1, grocery/guards.ps1, which produce the public/smp-feed.json this commit ships; a retry does not rebuild the feed, so it is NOT pushed and the next full run rebuilds it",
+                                     "tries":  5
+                                 }
               },
     "ad":  {
-               "date":  "2026-09-26",
-               "pid":  41824,
-               "started":  "2026-09-26T07:00:03",
-               "updated":  "2026-09-26T07:02:09",
-               "stage":  "complete",
-               "exit_code":  1,
-               "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-26.log",
+               "date":  "2026-09-27",
+               "pid":  50632,
+               "started":  "2026-09-27T07:00:01",
+               "updated":  "2026-09-27T07:03:54",
+               "stage":  "publishing",
+               "exit_code":  null,
+               "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-09-27.log",
                "failed_lanes":  [
-                                    {
-                                        "lane":  "sync",
-                                        "paged":  "Grocery bot checkout sync blocked at the push - 2026-09-26"
-                                    }
+
                                 ],
                "dirty_at_start":  [
+                                      "grocery/ad-schedule.json",
                                       "grocery/alert-log.txt",
-                                      "grocery/out/alert-census-class.jsonl",
-                                      "grocery/out/alert-census.jsonl",
+                                      "grocery/out/asof-evidence.json",
                                       "grocery/out/audit/soundness-report.json",
                                       "grocery/out/browser-capture-due-2026-09-22.flag",
                                       "grocery/out/browser-capture-due-2026-09-23.flag",
+                                      "grocery/out/browser-capture-due-2026-09-24.flag",
                                       "grocery/out/capture-cursor-log.jsonl",
                                       "grocery/out/capture-cursor.json",
+                                      "grocery/out/capture-evictions.json",
+                                      "grocery/out/coverage-ledger-history.jsonl",
+                                      "grocery/out/deals-page.sig",
                                       "grocery/out/ff-term-ledger.json",
                                       "grocery/out/health-heartbeat.sig",
                                       "grocery/out/logs/capture-run-status.json",
@@ -81,53 +114,40 @@
                                       "grocery/out/logs/rejection-families-last.txt",
                                       "grocery/out/logs/rejection-families.json",
                                       "grocery/out/regular/family-fare-regular-2026-09-25.json",
+                                      "grocery/out/regular/family-fare-regular-2026-09-26.json",
+                                      "grocery/out/store-guide.sig",
                                       "grocery/out/throttled/family-fare-2026-09-25.throttled.json",
+                                      "grocery/out/throttled/family-fare-2026-09-26.throttled.json",
+                                      "grocery/out/trend-pages.stamp",
                                       "grocery/out/url-inputs/store-fareway1-urls.json",
                                       "grocery/out/worklists/capture-familyfare-2026-09-25.json",
+                                      "grocery/out/worklists/capture-familyfare-2026-09-26.json",
                                       "grocery/rollback-first-seen.json",
+                                      "meal-prep/cheapnow-data.js",
+                                      "meal-prep/dinner-data.js",
                                       "meal-prep/free-rotation.json",
-                                      "meal-prep/pipeline/v2-perserving.prev.json",
                                       "meal-prep/recipes-db.json",
-                                      "public/free-dinners.json"
+                                      "public/share/omaha-drops.png",
+                                      "site/tools/cheap-dinners-tool.html",
+                                      "site/tools/dinner-tonight-tool.html"
                                   ],
-               "commit_size":  {
-                                   "verdict":  "within-caps",
-                                   "ok":  true,
-                                   "own_files":  4,
-                                   "unvouched_files":  15,
-                                   "carried_runs":  [
-
-                                                    ],
-                                   "deep":  false,
-                                   "deep_days":  0
-                               },
+               "commit_size":  null,
                "held_deletions":  [
-                                      "grocery/out/browser-capture-due-2026-09-22.flag",
-                                      "grocery/out/browser-capture-due-2026-09-23.flag"
+
                                   ],
                "sync":  {
-                            "outcome":  "partial",
-                            "class":  "foreign",
-                            "why":  "moved to the observed push tip f342743d7, 28 commit(s) short of origin, because uncommitted work the bot does not own sits on path(s) first changed upstream by 73efe379e \"Triage plan-2026-09-25-15 (round 2) and its routing artifact, as gated\": grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M)",
-                            "H0":  "fa5d8260eea2e8f04a6f8f6190fcaced28651bb0",
-                            "NEW":  "f342743d70d1af3bbca2d05493fc6c50ba020e88",
-                            "behind":  29,
-                            "behind_after":  28,
+                            "outcome":  "synced",
+                            "class":  "",
+                            "why":  "moved 42 commit(s) forward, 1 local commit(s) replayed",
+                            "H0":  "558c01b75e947ad0e40541e9ebd6c856f3aea06f",
+                            "NEW":  "0404bde9927872c60ad470729d34095726dbbace",
+                            "behind":  42,
+                            "behind_after":  0,
                             "startup_changed":  false,
-                            "page":  true
+                            "page":  false
                         },
-               "tail_sync":  {
-                                 "outcome":  "blocked",
-                                 "class":  "foreign",
-                                 "why":  "uncommitted work the bot does not own sits on path(s) upstream changed, and no observed push tip lies between the merge base and 73efe379e \"Triage plan-2026-09-25-15 (round 2) and its routing artifact, as gated\", which is the first upstream commit to change them: grocery/test-asof-evidence-scope.ps1 (??), grocery/triage-plans/plan-2026-09-25-15.json (??), ops/report-ratchet-trends.ps1 ( M); nothing was written",
-                                 "H0":  "2a365ec3373a52c7bdb8a3a4ed3e7cc1f081771a",
-                                 "NEW":  "",
-                                 "behind":  28,
-                                 "behind_after":  0,
-                                 "startup_changed":  false,
-                                 "page":  true
-                             },
-               "committed_sha":  "2a365ec3373a52c7bdb8a3a4ed3e7cc1f081771a",
-               "pushed":  false
+               "tail_sync":  null,
+               "committed_sha":  "",
+               "pushed":  null
            }
 }
