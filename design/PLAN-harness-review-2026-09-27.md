@@ -208,7 +208,39 @@ Ordered by consequence, then by cost. Each carries its bar, written before the w
   local-LLM pilot's three questions, 10 ready-for-brad items. Presented as one question batch, with a
   recommendation on each, not as prose.
 
-## Rulings Brad owns
+## Rulings given (Brad, 2026-09-27)
+
+- **R1, answered differently from both options offered.** Accepted learning proposals go to the existing
+  "Waiting on Brad" UI, not to an automatic apply. And that UI is REDONE first, because its items today "just
+  give the text details and it makes it very hard to understand what to do." Every item shows, in layman
+  terms: **the issue, why it is a problem, and Claude's recommendation**; Brad decides. W2.1 now means: route
+  the 18 accepted proposals (and future ones) to Waiting on Brad in that shape, and apply on his decision.
+  W2.6's 7-day stall page stays. W8 is rewritten below to build the new item format.
+- **R5: plan order**, as listed.
+- **R3 and R4: approved.** W4.1-W4.4 trim; contract and trace fields on every brief, warn 7 days then refuse.
+  R3b (path-scoping) is not approved.
+- **R7: Recipe Hunter stays paused for now.**
+- R2, R6, R8: not yet asked; they go onto Waiting on Brad in the new format as its first items.
+
+### W8 (rewritten per R1) - Waiting on Brad, readable
+- W8.1 Find the Waiting on Brad page's source and every writer that adds an item.
+- W8.2 One item shape: headline (one line, plain words), "What's going on", "Why it matters" (what it costs
+  or risks a reader or the business), "Claude recommends" (and why, one or two sentences), the choices as
+  buttons, and a "technical detail" fold holding ids and paths. No jargon above the fold.
+- W8.3 A gate refusing an item without the four plain fields, and a MUST FIRE fixture of today's raw-detail
+  shape.
+- W8.4 Rewrite every item currently waiting into the new shape; add the learning proposals, R2, R6, R8, and
+  the rulings backlog (3 NEEDS A RULING plans, 5 backlog rulings, split-plan D1-D6, token-cut W1, the pilot's
+  three questions, 10 ready-for-brad items).
+- Bar: Brad can decide each item without opening anything else; judged by Brad on the first ten.
+
+### W9 - Process: a pathspec commit sweeps a shared file's other edits
+- Found while landing this plan: a pathspec commit of `MEMORY.md` in the memory store carried three other
+  sessions' uncommitted index lines with it (all pointing at tracked files, so harmless this time). A shared,
+  hand-edited index needs a hunk-level add, not a whole-file pathspec. Add the note to the memory store's
+  commit guidance.
+
+## Rulings Brad owns (as first proposed)
 
 - R1 Learning: may accepted proposals apply automatically behind the shadow gate (W2.1), or stay a human step
   with a 7-day stall page (W2.6 only)? Recommend: automatic. A human step that has not run in 37 days is the
