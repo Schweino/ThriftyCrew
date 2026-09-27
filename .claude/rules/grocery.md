@@ -17,14 +17,15 @@ the anchor its tag names (`full: gr-NN`), word for word. Every rule ends with `g
 it, or `judgement` when only this text carries it. `ops/audit-rule-format.ps1` refuses a push that breaks the shape.
 
 - **A BAD CELL QUARANTINES ITSELF; A BAD STORE DROPS ITSELF; ONLY A BOARD-SCOPED FAILURE OR THE CIRCUIT BREAKER HOLDS
-  THE BOARD** (Brad's ruling; a held cell shows its last verified published price, with that price's date). `guards.ps1`
+  THE BOARD** (Brad; a held cell shows its last verified published price and date). `guards.ps1`
   sorts each hard failure into CELL, STORE or BOARD scope; an unscoped failure is BOARD scope and holds. Under the
   breaker (over 2% of priced cells, or 10% of one store's) guards exits 2 `GUARDS QUARANTINE-REQUIRED`,
   `apply-cell-quarantine.ps1` holds or WITHHOLDS each named cell against `public/board.json` at origin/main, and guards
-  must then exit 4 `GUARDS QUARANTINED`: neither clean nor held. A delegated audit scopes itself with `QUARANTINE-CELL`
-  lines and `QUARANTINE-SCOPE complete`. **Teaching a guard to scope is a per-guard change with its own fixture, never
-  a default.** Rules: `grocery/cell-quarantine-lib.ps1`; spec `design/PLAN-per-cell-quarantine-2026-09-21.md`.
-  (channel: gate grocery/test-cell-quarantine.ps1; full: gr-01)
+  must then exit 4 `GUARDS QUARANTINED`: neither clean nor held, so the served paths ship and it pages once as
+  `grocery board cells quarantined`, never `GUARDS FAILED`. WITHHELD instead of held: no prior value, a prior sale,
+  older than the publish window, or the value a VALUE guard condemned. Delegated audits scope via `QUARANTINE-CELL`
+  and `QUARANTINE-SCOPE complete` lines. **Teaching a guard to scope is a per-guard change with its own fixture, never
+  a default.** (channel: gate grocery/test-cell-quarantine.ps1; full: gr-01)
 - **"NOW" IS NEVER `week_of`.** `week_of` and the board's file-name date name the AD SET; ages run from per-cell
   `as_of`, or `judged_on`, to the real date (`lib/board-clock.ps1`), never `built_at`.
   [[the-board-has-three-dates]] (channel: gate ops/audit-board-clock.ps1; full: gr-02)
@@ -44,7 +45,8 @@ it, or `judgement` when only this text carries it. `ops/audit-rule-format.ps1` r
 - **A CAPTURE THAT CANNOT NAME ITS STORE IS REFUSED.** Walmart, Aldi and Sam's captures open with a `#tc-store` line;
   Fareway rows carry a per-row `loc` stamp. **Post the emitter's output UNALTERED and never strip the stamp.** The
   builders refuse no stamp, `UNRECORDED`, two stores, and (Walmart and Fareway, pinned in `stores.json` ->
-  `store_identity`) any other store. **The id is the discriminator, never the word "Omaha".** Aldi and Sam's are not
+  `store_identity`) any other store. `pull-walmart-instore.js` re-reads the store from EVERY `/search` response,
+  because a session flips mid-sweep: keep that. **The id is the discriminator, never the word "Omaha".** Aldi and Sam's are not
   pinned; Hy-Vee, Family Fare and Baker's need no line (store is a request parameter).
   [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]] (channel: judgement; full: gr-07)
 - **AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL, AND THE ROW USUALLY CANNOT SAY WHICH.**

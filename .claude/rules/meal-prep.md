@@ -37,11 +37,13 @@ tag names (`full: mp-NN`), word for word. `ops/audit-rule-format.ps1` refuses a 
   while any line carries a `label:` basis (`Get-LabelBasisLines`). An unpriceable ingredient stays NO PRICE BASIS and
   pages: the repair is a store fetch. The `ledger:` basis is the one interim road, a one-time in-store read bounded by
   the quarter. Retire nothing until its replacement is live. **A LIVE recipe that cannot be fully costed is TAKEN
-  DOWN** (Brad's ruling): `pipeline/unpriced-takedown.ps1`. (channel: judgement; full: mp-08)
+  DOWN** (Brad's ruling): `pipeline/unpriced-takedown.ps1`, which shipped DRY-RUN only, so nothing is taken down
+  automatically yet. (channel: judgement; full: mp-08)
 - **A PRICE IN A RECIPE POST RENDERS FROM THE FEED AT VIEW TIME; NO PRICE LITERAL SHIPS IN A BUILT CARD** (Brad's
   instruction). A price is a `data-tc-live-price` span written ONLY by `Format-TcLivePriceSpan`
   (`meal-prep/lib/render-tokens.ps1`) and filled by `fillLivePrices()`; its fallback is stamped on the FILL's basis,
-  never `stat.cost_ps`. Checks: `meal-prep/lib/price-literal-gate.ps1` (build and publish), the feed contract and daily
+  never `stat.cost_ps`. The fill refuses a non-finite or non-positive value and keeps the fallback, and a card whose
+  fallback `build-cards.ps1` cannot stamp is a build error. Checks: `meal-prep/lib/price-literal-gate.ps1` (build and publish), the feed contract and daily
   `-LivePosts` completeness (`meal-prep/pipeline/audit-live-price-contract.ps1`), the live monitor
   (`meal-prep/pipeline/monitor-live-recipe-prices.ps1`). A new live field needs a registry entry, a `fillLivePrices()`
   branch and a feed key. `design/PLAN-live-recipe-prices-2026-09-21.md`. (channel: judgement; full: mp-09)
