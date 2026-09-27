@@ -702,6 +702,61 @@ function Get-TcFlagQuarantineCells($Ledger, $Board) {
   return ,($out.ToArray())
 }
 
+# The wow wording sanity-check.ps1 writes when the cheapest store's product itself changed and nothing explains the move.
+$script:TcNewCrownWowNeedle = 'unexplained: a NEW price at the cheapest store'
+
+function Get-TcPendingPairCells($Ledger, $Board, $Flags) {
+  <# A NEW-PRODUCT CROWN WITH TWO UNANSWERED FLAGS HOLDS ITSELF (queue 2026-09-27-c744ba). A crown whose sanity flags for the
+     SAME claim include both an unverified 'outlier' (never 'outlier-verified') and a 'wow' naming "unexplained: a NEW price
+     at the cheapest store" is held while the verifier has no verdict for it. Measured over the 14 days to 09-27: 7 such
+     pairs, 5 of them defects (Breadstix as frozen pizza, Glad trash bags as lemons, Hy-Vee coffee and croissants parsed on
+     the wrong basis). Released by a closed 'match' verdict on the same claim; a wrong verdict is named by
+     Get-TcFlagQuarantineCells, so it is skipped here rather than named twice. The claim key (item + per-unit) must be
+     what the board publishes today, so a stale flags file names nothing the board no longer shows.
+     SCOPE OF A CLEAN REPORT: unsound - a wrong crown carrying only one of the two flags is not seen. #>
+  $ix = Get-TcBoardCellIndex $Board
+  $crown = @{}
+  foreach ($r in @($Board.comparison)) {
+    if ($null -eq $r) { continue }
+    foreach ($st in @([string]$r.cheapest_store, [string]$r.nomem_store) + @($r.cheapest_tie_with | ForEach-Object { [string]$_ })) {
+      if ($st) { $crown[[string]$r.id + '|' + $st] = $true }
+    }
+  }
+  $outl = @{}; $wow = @{}
+  foreach ($f in @($Flags)) {
+    if ($null -eq $f) { continue }
+    $k = [string]$f.id + '|' + [string]$f.store + '|' + (Get-TcClaimKey $f)
+    if ([string]::Equals([string]$f.type, 'outlier', [StringComparison]::Ordinal)) { $outl[$k] = $f }
+    elseif ([string]::Equals([string]$f.type, 'wow', [StringComparison]::Ordinal) -and ([string]$f.detail).Contains($script:TcNewCrownWowNeedle)) { $wow[$k] = $f }
+  }
+  $open = ConvertTo-TcLedgerEntries $Ledger
+  $matched = @{}
+  foreach ($c in @($Ledger.closed)) { if ($null -ne $c -and [string]$c.status -eq 'match') { $matched[[string]$c.key + '|' + [string]$c.claim_key] = $true } }
+  $out = New-Object System.Collections.ArrayList
+  foreach ($k in @($outl.Keys | Sort-Object)) {
+    if (-not $wow.ContainsKey($k)) { continue }
+    $f = $outl[$k]
+    $cell = [string]$f.id + '|' + [string]$f.store
+    if (-not $crown.ContainsKey($cell) -or -not $ix.ContainsKey($cell)) { continue }
+    $c = $ix[$cell]
+    if ($null -eq $c.cell) { continue }
+    if ($c.cell.PSObject.Properties['quarantine'] -and $c.cell.quarantine) { continue }
+    $ck = Get-TcClaimKey $f
+    if ([string]$c.published_key -ne $ck) { continue }
+    if ($matched.ContainsKey($cell + '|' + $ck)) { continue }
+    $status = 'no-entry'
+    if ($open.Contains($cell)) {
+      $e = $open[$cell]
+      if ([string]$e.claim_key -eq $ck) {
+        if (@('wrong-price', 'wrong-product') -contains [string]$e.status) { continue }
+        $status = [string]$e.status
+      }
+    }
+    [void]$out.Add([pscustomobject]@{ id = [string]$f.id; store = [string]$f.store; kind = 'value'; status = ('pending-pair:' + $status); reason = ('unverified outlier AND an unexplained new cheapest product (' + [string]$f.item + ' ' + [string]$f.per_unit + '/' + [string]$f.unit + '), no verdict yet') })
+  }
+  return ,($out.ToArray())
+}
+
 function Get-TcFlagVerifyOwed {
   <#
     .SYNOPSIS Which commodities a store owes a re-read because a flagged cell of theirs is still PENDING verification.
