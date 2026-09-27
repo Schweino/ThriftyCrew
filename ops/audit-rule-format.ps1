@@ -9,7 +9,7 @@
   gate is what stops it growing back: the size of the files as a whole is held by ops\audit-always-loaded-bytes.ps1
   (W6.6), and this holds the SHAPE of each rule.
 
-  FOR EACH FILE IN $Manifest (a file joins when it is converted; ops-and-gates.md is the first), every top-level
+  FOR EACH FILE IN $Manifest (a file joins when it is converted: ops-and-gates.md, then grocery.md, measurement.md and meal-prep.md), every top-level
   bullet (a line starting `- **` and its indented continuation) must:
     1. end with a channel tag: `(channel: gate <path>[, <path>]; full: <id>)` or `(channel: judgement; full: <id>)`.
        `gate` means a push gate refuses a violation; `judgement` means only the text carries the rule;
@@ -37,7 +37,7 @@ $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path -Parent $here
 
-$Manifest = @('ops-and-gates.md')
+$Manifest = @('ops-and-gates.md', 'grocery.md', 'measurement.md', 'meal-prep.md')
 $MaxBulletChars = 1100
 
 function Get-TcRuleBullets([string]$Text) {

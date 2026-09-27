@@ -1,0 +1,144 @@
+# measurement rules: the full account (history, never loaded into a session)
+
+This is `.claude/rules/measurement.md` exactly as it stood on 2026-09-27 before the trim of
+design/PLAN-rules-trim-2026-09-25.md, byte for byte below the rule, with one `<a id="ms-NN">` anchor added before
+each of its 10 rules. The rules file keeps each rule's operative text and points here for the measurements,
+dates, incidents and verbatim rulings behind it. Nothing loads this file: open it when a rule's pointer names its anchor.
+
+---
+
+---
+description: Rules for anything that scores, compares two versions, or reports a rate - denominators, acceptance bars, per-case evidence.
+---
+
+**First, the analysis preflight:** [experiment-craft/analysis-preflight.md](C:/Users/Owner/.claude/skills/experiment-craft/analysis-preflight.md), the ten checks to run before any analysis verdict, each naming where its depth lives.
+
+> **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
+> `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
+> pointer; the file is the account. Read it before acting on the pointer, and never write to that
+> directory - it is outside the repo and outside your worktree.
+
+
+# Measuring anything here
+
+Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
+(design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). It holds for anything that
+scores, compares two versions, or prints a rate. These four rules were each learned from a number that
+was wrong in a way nobody could see, and every one of them is cheap at the moment the code is written
+and impossible to add afterwards.
+
+**The exemplar is `sidecar/matcher_eval.py`.** Read its header before writing a new scorer - it
+carries all four rules in one file, and copying it is faster than re-deriving them.
+
+<a id="ms-01"></a>
+- **A rate is printed with its DENOMINATOR, always** (backlog E20). `88%` is a mood; `examined 15 of
+  17 (88%)` is a measurement. This is not pedantry: the dedup head-to-head reported recall over 31
+  pairs while the ledger held 168, so the real coverage was **18%**, and nothing on the page said so.
+  Worse, the 82% that dropped out were not random - a twin leaves the candidate pool when its recipe
+  is accepted and built, so the surviving evidence was weighted toward the cases the pipeline already
+  handles. Swept 2026-09-07: 45 percentage computations across 25 files, 42 already compliant.
+  `Write-GuardComplete` states the same rule for guards - `scanned=3164 findings=3`, never
+  `findings=3`.
+<a id="ms-02"></a>
+- **A matcher that ABSTAINS is scored on what it skipped** (also E20). A component returning
+  `UNUSABLE`, `PENDING` or nothing on the rows it finds hard, then scored only on the rows it
+  answered, outscores one that attempts everything - and neither number looks wrong. Report coverage
+  beside every accuracy figure, or count a decline as a miss.
+<a id="ms-03"></a>
+- **Write the ACCEPTANCE BAR before the run** (backlog E21), in the metric's own units. A threshold
+  chosen after seeing the number is not a threshold; it is a description of a decision already taken.
+  `meal-prep/pipeline/bm25_dedup_probe.py:309` states its bar in the source above the run. And **a
+  number that moved is not a number that improved**: say how far, over how many cases, and how many
+  variants were tried, or the delta is unqualified. [[pick-the-best-run-is-selection-on-noise]]
+<a id="ms-04"></a>
+- **Write ONE ROW PER CASE PER ARM, and derive the totals from that file** (backlog E24). A pair of
+  totals - `old: 50 wrong, new: 38 wrong` - cannot be un-aggregated, so the paired comparison that
+  would have been free is gone forever. Cheap to adopt, impossible to backfill.
+  `meal-prep/db/dedup-headtohead-cases.jsonl` is what this looks like.
+<a id="ms-05"></a>
+- **RECORD THE CASE AT THE MOMENT IT FAILS**, including the ones you fix by hand and move on from,
+  and give every corpus row a `source` (backlog E23). Fixtures here are assembled from bugs we found
+  and cases we already handle, so the ones that failed silently are absent - and **their absence is
+  invisible in the score**. Measured 2026-09-07: **189 of 6,476 gold rows** come from a recorded
+  failure, and `graph/gold/hunter-gold.jsonl` is **281 rows, every one a SUCCESS, every label MATCH**
+  - a corpus with no negative cases cannot measure over-firing at all, which is a fixture with no
+  clean twin wearing a bigger coat. `ops/audit_corpus_provenance.py` prints the mix and ratchets
+  corpora that carry no `source` at all.
+<a id="ms-06"></a>
+- **Record an INPUT FINGERPRINT** with the result. The dedup probe disagreed with itself across two
+  runs because its inputs moved underneath it and it recorded nothing about what it had read.
+<a id="ms-07"></a>
+- **NAME THE HARNESS AND THE COMMIT IT RAN AT** (2026-09-09, backlog I47). A difference can be real,
+  reproducible and significant and still be caused by something that differed between the arms and
+  was not the intervention - and that is a DESIGN defect, so more data makes it worse rather than
+  better. This estate has paid twice: `grocery/check-ad-cycles.ps1` carries a block headed *"THE
+  MEASUREMENT WAS CONFOUNDED"* where a 30.9-vs-41.7-minute verdict **reverted a working parallel
+  path**, the parallel arm having run through a wrapper measured an hour later at 3.8 minutes per
+  call for a 1-second script; `design/EVAL-hunter-wall-clock-2026-09-04.md` 46 is the second and says
+  it plainly - *"arithmetically true and causally wrong"*. **Both were caught by a human re-reading
+  the commit clock months later, by luck.**
+  **NAMING A SCRATCH HARNESS IS NOT NAMING A HARNESS** (2026-09-12). `MEASURE-gate-slot-starvation-2026-09-11.md`
+  did everything this rule asks - it named its probes, described each body beside the number it produced, and gave
+  the commit. The probes were still scratch, so when the next day asked whether the fix had held, re-running that
+  measurement meant WRITING IT AGAIN, and a rewritten probe is a second harness however faithful the description
+  was. A described probe also cannot go red when the thing it measures moves. So a measurement that anyone may
+  want to repeat COMMITS its harness, as `ops/probe-gate-slot-fairness.ps1` now does for that file's item 5, and
+  a one-off keeps the description. The test is whether the question can recur, not how big the probe is.
+  **Measured 2026-09-09: 8 of the 9 `design/EVAL-*.md` and `MEASURE-*.md` documents name a harness
+  that has CHANGED since the document was written**, and the ninth only reads current because it was
+  edited for an unrelated item the day before - so the honest figure is nearer 9 of 9. A moved harness
+  does not make a verdict wrong; **it makes it UNQUALIFIED until somebody re-reads it**, and today
+  answering that costs archaeology. So a recorded measurement states the script it ran through and
+  the commit hash it ran at. Retro-filling the nine is NOT asked for, and a gate over them would be
+  red on day one against every single one - which the ops rules already forbid. The ask is that the
+  next one carries it.
+  **A rebase after the run REWRITES the hash you recorded** (2026-09-11). The sidecar double-load trials
+  were committed from a worktree, their rows stamped with the harness and arm commits, and the rebase
+  onto a moved origin/main before the push gave every one of those commits a new id - so the document
+  cited commits that would never exist on main. Cite the BLOB of each file the run read as well
+  (`git rev-parse <commit>:<path>`), because a rebase cannot move a blob, and after any rebase map old id
+  to new and check the blobs match rather than assuming it. `design/MEASURE-sidecar-double-load-2026-09-11.md`
+  is what that looks like.
+  **RE-QUALIFY A MOVED HARNESS BY ITS BLOB** (2026-09-18, backlog I228). `ops/audit-conclusion-currency.ps1` marks a
+  document UNQUALIFIED when a harness it names moved after its newest cited commit, and lists the harness commits
+  the pair moved past since it was last qualified. **The preferred form since 2026-09-23 is a ROW in
+  `design/reread-ledger.tsv`, written by `ops/add-reread.ps1`** (W4.1 of `design/PLAN-push-derived-conflicts-2026-09-23.md`):
+      `powershell -NoProfile -File ops\add-reread.ps1 -Doc <design\MEASURE-...md> -Harness <path> -Note "<what still holds>"`
+  The row carries the harness's full blob (`git rev-parse HEAD:<path>`, or `git hash-object <path>` when the working
+  copy differs), the blob the pair was last qualified at, the date and your note, and it qualifies ONLY its own
+  (doc, harness) pair and only at that exact blob. The writer refuses an empty note, a note that repeats one already
+  written for the pair, and a harness the doc does not name; nothing writes a row on anyone's behalf, and the audit
+  prints no command to copy, because deciding that the listed changes altered nothing IS the re-read. The ledger is
+  merged by union (`.gitattributes`), so two sessions' rows never conflict, and `ops/audit-reread-ledger.ps1` refuses a
+  push that deletes or edits a row; take a re-read back by appending a `withdrawn` row for the same blob. The doc-line
+  form still works:
+      `Re-read at harness blob <id> (<path>): <what still holds>`
+  with `<id>` from `git rev-parse HEAD:<path>` (or `git hash-object <path>` before the commit), and the audit
+  accepts it exactly as it accepts a commit at or after the harness's last change. A blob from before that change
+  is not the harness's current blob and qualifies nothing, so a stale re-read stays stale. The older
+  `Re-read at commit <hash>` form still works when the hash is already on origin/main.
+  **Never cite your own unlanded commit hash, anywhere: cite a blob.** `ops/push-main.ps1` rebases before it
+  pushes, so the id you read in your worktree is not the id that lands, and a document, backlog entry or commit
+  message naming it points at nothing on main. Hit several times on 2026-09-18 before this form existed.
+
+Three more that live elsewhere and bite here:
+
+<a id="ms-08"></a>
+- **A hash-based change detector compares SETS keyed by primary key, and samples by KEY, never at
+  random** (backlog I201). The `sql-performance-testing-and-data-integrity` course's two versions are
+  each blind: counting distinct row hashes cannot see a changed value (one hash replaces another, the
+  count holds), and an `ORDER BY random()` sample hashes differently on unchanged data. Nothing here
+  implements either yet. **Any design doc that proposes a board-level change or drift detector cites
+  `~/.claude/skills/data-quality-craft/checks-and-thresholds.md` section 5c**, which has the measured
+  account and the correct shape, and fixtures both halves: silent on an unchanged board, loud on one
+  changed value at a constant row count.
+<a id="ms-09"></a>
+- **Three score spaces do not share a scale** - bi-encoder cosine, cross-encoder sigmoid and BM25.
+  `sidecar/THRESHOLDS.md` is the register and `ops/audit-threshold-register.ps1` gates it.
+<a id="ms-10"></a>
+- **A fixture's 50% base rate overstates precision enormously.** Live precision comes from
+  `grocery/audit-alert-precision.ps1`, off the dispositions `grocery/triage-close.ps1` records.
+
+Regime: this holds for scoring, comparison and reporting code. Detector and gate mechanics are
+`ops-and-gates.md`.

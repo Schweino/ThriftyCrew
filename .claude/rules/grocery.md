@@ -1,7 +1,3 @@
----
-description: Traps when working on the grocery board, captures, or the comparison pipeline.
----
-
 > **Resolving the `[[citations]]` below.** Each is a filename without its extension, under
 > `~/.claude/projects/C--Codex-ThriftyCrew/memory/`. So `[[propagate-has-no-slugs]]` is
 > `~/.claude/projects/C--Codex-ThriftyCrew/memory/propagate-has-no-slugs.md`. The line here is a
@@ -13,200 +9,83 @@ description: Traps when working on the grocery board, captures, or the compariso
 
 Loaded in every ThriftyCrew session: this file has no `paths:` key, on purpose
 (design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md, W2.3). These are the traps that have
-actually cost this estate a day; each names the memory or file holding the full account rather than
-restating it, so there is one copy of every rule and nothing here can drift from it.
+actually cost this estate a day.
+
+**HOW THIS FILE IS WRITTEN** (design/PLAN-rules-trim-2026-09-25.md). Each rule holds its OPERATIVE text only. The
+measurements, dates, incidents and Brad's verbatim rulings behind a rule live in `docs/rules-history/grocery.md` at
+the anchor its tag names (`full: gr-NN`), word for word. Every rule ends with `gate <path>` when a push gate enforces
+it, or `judgement` when only this text carries it. `ops/audit-rule-format.ps1` refuses a push that breaks the shape.
 
 - **A BAD CELL QUARANTINES ITSELF; A BAD STORE DROPS ITSELF; ONLY A BOARD-SCOPED FAILURE OR THE CIRCUIT BREAKER HOLDS
-  THE BOARD** (Brad, 2026-09-21: *"The ENTIRE board shouldn't be held hostage because of one (or a few) bad items. Each
-  item is unique/individual."*, and his ruling on what a held cell shows: *"A"* - its last verified published price,
-  with that price's date). `guards.ps1` sorts every hard failure into CELL, STORE or BOARD scope; a failure nobody
-  taught to name its scope is BOARD scope and holds exactly as before. When every failure is scoped and under the
-  breaker (more than 2% of priced cells, or more than 10% of one store's, holds), guards exits 2 with
-  `GUARDS QUARANTINE-REQUIRED`, `apply-cell-quarantine.ps1` holds each named cell at its value on `public/board.json` at
-  origin/main (the true record of what was last live) or WITHHOLDS it (no prior value, a prior sale, older than the
-  publish window, or the very value a VALUE guard condemned), and guards runs again and must exit 4
-  (`GUARDS QUARANTINED`). **Exit 4 is neither clean nor held**: the chain verdict records `verdict: quarantine`, the
-  served paths ship, and the page pages once under `grocery board cells quarantined`, never `GUARDS FAILED`. A
-  delegated audit scopes itself by printing `QUARANTINE-CELL <id>|<store>|<value|selection>` lines and
-  `QUARANTINE-SCOPE complete cells=N stores=M` before its marker; without the complete line it holds. **Teaching a
-  guard to scope is a per-guard change with its own fixture, never a default.** The rules and every consumer of the
-  exit code are in `grocery/cell-quarantine-lib.ps1` and `grocery/triage-plans/plan-2026-09-21-4.json`; the fixtures are
-  `grocery/test-cell-quarantine.ps1`. `design/PLAN-per-cell-quarantine-2026-09-21.md` is the spec.
-- **"NOW" IS NEVER `week_of`** (2026-09-26). `week_of` and the board's file-name date are the AD SET and lag the real
-  date; ages run from per-cell `as_of`, or `judged_on`, to the real date (`lib/board-clock.ps1`), never `built_at`.
-  `ops/audit-board-clock.ps1` holds it. [[the-board-has-three-dates]]
-- **`known-wrong.json` is the MAIN-board corrector, and `comparison-*.json` is rebuilt daily.** A fresh
-  ruling reads as red until the next build. That is on purpose, not a bug to chase.
-  [[known-wrong-is-the-main-board-corrector]]
-- **`compare-deals.ps1` is not standalone.** A mid-day rebuild needs identity emission AND link repair.
-  Never revert-to-isolate. **MANY scripts LIFT its functions**, against a `three` that stood in
-  this file for months. **DO NOT QUOTE A NUMBER HERE. RUN THE SCRIPT.** This quantity was counted
-  SIX times on 2026-09-08 and produced six answers, and not one disagreement was about the code -
-  every one was about which test the writer meant:
-  ```
-  powershell -NoProfile -File ops\count-source-lifters.ps1 -Script compare-deals.ps1
-  ```
-  It defines and prints all three tests - NAMES, READS, EXECUTES - splits one-off scratch out,
-  names each executing file with the line that runs the lifted text, and carries frozen fixtures.
-  On 2026-09-08 over 562 scanned files: 54 name it, 18 read its source (15 outside
-  `grocery\out\`), and 12 executed by the OLD test below. Say which test you mean or the number
-  means nothing.
-  **Backlog I82 shipped both halves on 2026-09-09** - the pricing math is `pricing-math-lib.ps1` and
-  the exclude list is `global-exclude-lib.ps1`.
-  **EXECUTES was a co-occurrence until 2026-09-10** - a read plus an Invoke-Expression ANYWHERE in the
-  same file - so it named `test-auditors`, which only `-match`es compare-deals' text and runs text cut
-  from OTHER files, and it could not see a `[scriptblock]::Create` at all. It now follows the text from
-  the read to the call that runs it. Over 596 files on 2026-09-11 it read 57 NAME it, 8 READ its
-  source, and **1 EXECUTES: `test-match-lib.ps1`** (line 78 then, 96 since I184 on 2026-09-18), which runs the original matcher cut out of
-  compare-deals so it can prove match-lib decides identically. That one is on purpose.
-  **The live production lift was not from compare-deals at all.** `-Script build-walmart-deals.ps1`
-  named `import-walmart-batch.ps1` (Build-Row, six helpers and `$script:UnitFamily`) until 2026-09-11,
-  when they moved to `walmart-row-lib.ps1` and both Walmart writers began dot-sourcing it
-  (`design/PLAN-walmart-row-lib-2026-09-11.md`). What remains is `-Script import-walmart-batch.ps1`
-  naming `import-instacart-batch.ps1` (Merge-IwbRows), and `ops/audit-lift-completeness.ps1` checks that
-  list is closed. **Still run the script rather than quoting any of these numbers.**
-  A lifted `$script:` constant does not
-  travel - the lift needs functions, parens and a column-0 brace, which is why the exclude list is
-  exported as `Get-TcGlobalExclude` and not as a variable.
+  THE BOARD** (Brad's ruling; a held cell shows its last verified published price, with that price's date). `guards.ps1`
+  sorts each hard failure into CELL, STORE or BOARD scope; an unscoped failure is BOARD scope and holds. Under the
+  breaker (over 2% of priced cells, or 10% of one store's) guards exits 2 `GUARDS QUARANTINE-REQUIRED`,
+  `apply-cell-quarantine.ps1` holds or WITHHOLDS each named cell against `public/board.json` at origin/main, and guards
+  must then exit 4 `GUARDS QUARANTINED`: neither clean nor held. A delegated audit scopes itself with `QUARANTINE-CELL`
+  lines and `QUARANTINE-SCOPE complete`. **Teaching a guard to scope is a per-guard change with its own fixture, never
+  a default.** Rules: `grocery/cell-quarantine-lib.ps1`; spec `design/PLAN-per-cell-quarantine-2026-09-21.md`.
+  (channel: gate grocery/test-cell-quarantine.ps1; full: gr-01)
+- **"NOW" IS NEVER `week_of`.** `week_of` and the board's file-name date name the AD SET; ages run from per-cell
+  `as_of`, or `judged_on`, to the real date (`lib/board-clock.ps1`), never `built_at`.
+  [[the-board-has-three-dates]] (channel: gate ops/audit-board-clock.ps1; full: gr-02)
+- **`known-wrong.json` is the MAIN-board corrector, and `comparison-*.json` is rebuilt daily.** A fresh ruling reads
+  red until the next build, on purpose. [[known-wrong-is-the-main-board-corrector]] (channel: judgement; full: gr-03)
+- **`compare-deals.ps1` is not standalone.** A mid-day rebuild needs identity emission AND link repair; never
+  revert-to-isolate. Many scripts lift its functions: never quote a count, run
+  `powershell -NoProfile -File ops\count-source-lifters.ps1 -Script <script>` and say which test (NAMES, READS,
+  EXECUTES) you mean. Pricing math is `pricing-math-lib.ps1`, the exclude list `Get-TcGlobalExclude` in
+  `global-exclude-lib.ps1`; a lifted `$script:` constant does not travel, so export a function.
   [[compare-deals-is-not-standalone]], [[compare-deals-functions-are-lifted-by-many-scripts]]
-- **A wrong product is a SELLER SHAPE, not a brand.** Blocking the brand hands the cell to the next
-  bulk seller. [[wrong-product-class-is-a-seller-shape]]
+  (channel: gate ops/audit-lift-completeness.ps1; full: gr-04)
+- **A wrong product is a SELLER SHAPE, not a brand.** Blocking the brand hands the cell to the next bulk seller.
+  [[wrong-product-class-is-a-seller-shape]] (channel: judgement; full: gr-05)
 - **One bad Walmart pull holds a ship-only cell for 90 days** once Marketplace rows enter the union.
-  [[walmart-marketplace-rows-pollute-the-union]]
-- **A CAPTURE THAT CANNOT NAME ITS STORE IS REFUSED, at Walmart and at Aldi** (2026-09-12, Aldi
-  2026-09-10). Both emitters open their capture with a `#tc-store` line naming the store each row was
-  READ at, and both builders write `source` from that line instead of a literal. **Post the emitter's
-  output UNALTERED and never strip the line.** Walmart's `build-walmart-deals` refuses a capture with no
-  store line, an `UNRECORDED` one, one read anywhere but the sanctioned storeId (stores.json -> Walmart
-  -> `store_identity`, currently 5361 / 68137 on Brad's 2026-08-28 ruling), or one that straddles two
-  stores; `pull-walmart-instore.js` refuses to sweep at the wrong store at all and re-reads the store
-  from EVERY `/search` response, because a session flips mid-sweep. **The id is the discriminator, never
-  the word "Omaha"** - the drifted 3153 Neighborhood Market is an Omaha address too, which is why
-  414 rows on 2026-08-27 and 380 on 2026-09-12 read as perfectly normal and both had to be quarantined
-  by hand. Right prices in the wrong basis is the hardest defect here to find later.
-  **Aldi's OLA number is deliberately NOT pinned** and Walmart's storeId deliberately IS: that session
-  legitimately moves between Omaha Aldis, where one Walmart is ruled. What neither may do is claim a
-  store nobody read. [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]]
-  **Sam's Club joined them on 2026-09-18 (backlog I124)**: `samsSweepToCsv` opens with a `#tc-store` line
-  naming the club each row was read at, and `build-sams-deals` writes the file's `club` and every row's
-  `store_location` from it, refusing the same four shapes Aldi does. Until then it stamped "13130 L St" from a
-  literal while the session sat at 15429 Blackwell Dr. The club is NOT pinned: no ruling names one.
-  **Fareway joined them the same day**, as a per-row stamp rather than a line because its capture is JSONL:
-  every `farewayShopExtract` row carries the retailerLocation its own page's cache named (`loc`), and
-  `select-fareway-shop` refuses a capture with no stamp, an UNRECORDED one, two stores, or any store but
-  `stores.json` -> Fareway -> `store_identity` (531573, pinned like Walmart's). Post the rows unaltered.
-  **Hy-Vee, Family Fare and Baker's need no line**: their store is a request parameter on a sessionless API,
-  so it cannot drift under a sweep, and Hy-Vee already keeps only rows whose echoed storeId matches.
-- **AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL, AND THE ROW USUALLY CANNOT SAY WHICH**
-  (2026-09-19). `build-aldi-regular`'s `Resolve-PackBasis` used to assume the card showed one unit whenever
-  the NAME stated a pack count, and multiplied. Aldi prints it both ways, between siblings in one capture and
-  over time on ONE product id: `Lunch Buddies Pineapple Tidbits ... 4 pack` carded 16 oz, the pack TOTAL, and
-  published $0.0342/oz against a true $0.1369/oz, four times too cheap. It stayed off the board only because
-  canned-pineapple's band floor refused it. **The basis is now resolved by arithmetic proof or not at all**:
-  the name states a size that is N times the card (the card is one unit) or a size the card is N times (the
-  card is the total). A name size EQUAL to the card proves NOTHING, and both readings of that shape are real,
-  so it is refused. Everything else gets no size and a reject reason that names the pack. **Do not add a
-  plausibility bar here** - "divide by the count and see whether it looks single-serve" was measured over the
-  whole capture set and rejected, because four distinct modern cases cannot establish one and it would be a
-  hard-coded band. **The cheapest real oracle is Aldi's own per-unit rate, which the sweep does not collect**:
-  it is on the product PAGE (`18 oz | $0.26/oz`) and on 0 of the 30 affected rows' cards.
-  **Rule 4 has the same ambiguity and is NOT fixed**: `Puraqua Water 40pk 676 FL OZ` still builds 27,040 fl oz.
-  `design/MEASURE-aldi-pack-basis-2026-09-19.md` has every count and what was deliberately not done.
-- **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked and never
-  hand-discharged (2026-09-12). Brad's store-drift ruling named 23 terms to recapture and said to put
-  them at the head of the next Walmart worklist; nothing carried that anywhere for a fortnight, because
-  a list in a JSON file and a line in a runbook are reminders and not mechanisms. `Get-WalmartRulingOwed`
-  in `capture-policy-lib.ps1` now derives what is owed - the ruling's own list, minus terms a built
-  `walmart-regular` file PROVES were recaptured at the sanctioned store - and `Get-CaptureWorklist` puts
-  the result at the head as `ruling_terms`. Two properties are what make it a mechanism: it **empties
-  itself** as captures land (so **do not edit a ruling file to mark a term done**), and the owed terms
-  come out of the allowance the **sale expiries** get, never out of the rotation's daily drip, so the
-  cursor can never advance over a term a prepend displaced. A file built under `-WaiveMissingStoreLine`
-  discharges NOTHING - its own stamp says the store was never recorded.
-- **No hard-coded bands** (Brad, 2026-09-04). [[no-hardcoded-bands]]
+  [[walmart-marketplace-rows-pollute-the-union]] (channel: judgement; full: gr-06)
+- **A CAPTURE THAT CANNOT NAME ITS STORE IS REFUSED.** Walmart, Aldi and Sam's captures open with a `#tc-store` line;
+  Fareway rows carry a per-row `loc` stamp. **Post the emitter's output UNALTERED and never strip the stamp.** The
+  builders refuse no stamp, `UNRECORDED`, two stores, and (Walmart and Fareway, pinned in `stores.json` ->
+  `store_identity`) any other store. **The id is the discriminator, never the word "Omaha".** Aldi and Sam's are not
+  pinned; Hy-Vee, Family Fare and Baker's need no line (store is a request parameter).
+  [[walmart-session-store-3153-drift]], [[aldi-store-is-ola-42]] (channel: judgement; full: gr-07)
+- **AN ALDI MULTIPACK CARD IS EITHER ONE UNIT OR THE PACK TOTAL, AND THE ROW USUALLY CANNOT SAY WHICH.**
+  `build-aldi-regular`'s `Resolve-PackBasis` resolves the basis by arithmetic proof only (the name's size is N times
+  the card, or the card N times the name's); a name size EQUAL to the card proves nothing and is refused. **Do not add
+  a plausibility bar.** Rule 4 has the same ambiguity and is NOT fixed. `design/MEASURE-aldi-pack-basis-2026-09-19.md`.
+  (channel: judgement; full: gr-08)
+- **A STANDING RULING'S OWED TERMS ARE DERIVED AND LEAD THE WORKLIST**, never hand-picked or hand-discharged:
+  `Get-WalmartRulingOwed` (`capture-policy-lib.ps1`) derives them and `Get-CaptureWorklist` puts them first as
+  `ruling_terms`, out of the sale-expiry allowance. **Do not edit a ruling file to mark a term done**; a file built
+  under `-WaiveMissingStoreLine` discharges nothing. (channel: judgement; full: gr-09)
+- **No hard-coded bands** (Brad). [[no-hardcoded-bands]] (channel: judgement; full: gr-10)
 - **EVERY PRICE IS FETCHED FROM AN OMAHA STORE'S AD OR WEBSITE BY THE PIPELINE, never typed or agent-captured**
-  (Brad's standing ruling, 2026-09-21; the full rule is in `.claude/rules/meal-prep.md`). The fix that day
-  landed here: `pull-regular-hyvee.ps1` asks FIRST for a row the newest board withheld only for its store on a
-  commodity it prices nowhere (`Get-HyVeeUncoveredIds`), and builds its lookup from `$script:HvRequest*` by name,
-  because a bare `$StoreId` inside the fetch resolved by dynamic scope to `Invoke-HyVeeWorkPass`'s `[string]`
-  parameter and Hy-Vee answered every lookup HTTP 400 (0 of 93 on 2026-09-21). `grocery/triage-plans/plan-2026-09-21-2.json`.
-- **AN EVERYDAY PRICE IS RE-READ ABOUT ONCE EVERY 90 DAYS, AT EVERY STORE** (Brad's standing rule, restated
-  2026-09-19). The rotation and the publish limit are both the quarter (`capture-policy-lib.ps1`,
-  `RotationDays = MaxPublishAgeDays = QuarterDays`); sale prices follow their ad windows instead. A session
-  shortened both to 14 days on 2026-09-19 because this rule sat only in the graph rules, and Brad reversed it.
-  `test-capture-policy.ps1` fails a push that moves either off the quarter. [[graph-time-gates-decision]]
-- **A script you edit that holds its own copy of the store list reads `stores.json` instead, in the same change** (Brad, 2026-09-19, backlog I192: convert on touch, no sweep). `audit-store-registry.ps1` check 5 stays the guard for the copies nobody has touched yet.
-- **The boards are gitignored**, so a worktree, a CI runner or a clean checkout is BLIND here and the
-  engines exit 0 having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them.
-  **A RE-SEED REFRESHES a seeded FILE whose source was rewritten since the copy** (2026-09-11). A board is
-  rebuilt under the SAME dated name several times a day, and a seeder that left every present file alone gave
-  a half-old, half-new set: a stale board under a fresh ruling. **Since 2026-09-23 a file INSIDE a directory seed
-  is refreshed by the same rule** (a `db\built` card copied 2026-09-03 refused a push over a 2026-09-21 template),
-  and `ops\push-main.ps1` re-seeds before every gate, not only an unseeded checkout. A file deleted from the source
-  is still not removed.
-- **A check that compares a derived file with a board reads that file by the BOARD'S road** (2026-09-11). A
-  board reaches a checkout by copy; a tracked file reaches it only by commit, and a hand-run chain rebuilds a
-  board and commits its source only. test-auditors' capture-eviction currency case read the tracked report and
-  refused unrelated pushes from every worktree carrying the rebuilt board, until somebody committed it; it now
-  reads a gitignored stamp that `.worktreeinclude` carries. **Do not repair a lag like that by untracking a file
-  the bot rewrites daily.** Measured in scratch repos: the bot's commit-then-`rebase -X theirs` hits a
-  modify/delete conflict and aborts, and an autostash rebase over a local edit exits 0 with the path left
-  unmerged, so the next commit exits 128. `design/PLAN-capture-eviction-stamp-2026-09-11.md`.
-  **Putting the record on the right road is only half: with NO record on that road the answer is a counted SKIP,
-  never a FAIL** (same day, second pass). The stamp only reaches a checkout seeded after the first live pass writes
-  one, so every checkout made before that still fell back to the tracked report - the same commit-lag measurement,
-  still refusing pushes, and main's dirty working copy still passing what a clean checkout failed. The question is
-  now asked in two steps: could this checkout ever have RUN the pass? It reads `out/candidates-*.json`, which
-  `.worktreeinclude` does not carry, so a worktree exits 3 BLIND there. With none present the case says so and
-  counts a SKIP; with candidates present - the chain's own checkout, where the report is that run's own output -
-  it is judged exactly as before, message for message. Nothing is weakened: the FAIL that goes away could never
-  tell "the pass did not run" from "nobody has committed a report yet".
-- **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells** - never a group
-  of members or a group of recipes (2026-09-08, backlog I100). `build-arrivals-docket.ps1:27-31,56-57`,
-  `check-ad-cycles.ps1:1791`, `adjudicate-discovery.ps1:23`, `aisle-test.ps1:35-36` and
-  `sidecar/probe_peer.py:59-80` all use it that way and keep the bare word. In the skills store it also
-  means a release cohort; `retention` there is LOG retention and `churn` is TEST-SUITE churn. **A future
-  session grepping `cohort` while working on members gets a page of grocery hits and reads them as
-  coverage** - the `identity-graph-commodity-is-namespaced` shape, an agreeing answer about something
-  else. **If member work ever lands it is written `member cohort` IN FULL, every time.**
-  Worth stealing in the other direction: `build-arrivals-docket.ps1:56-57` already **refuses to score a
-  cohort it cannot form** and reports it BLIND rather than passing it - scoring needs at least 2 other
-  priced cells, and 41 of 492 commodities on the 2026-07-30 board could not reach that.
-- **A 200 with a correct selector and ZERO ROWS has FOUR causes and only two have names**
-  (2026-09-08, backlog I72). `blocked` (a wall, a CAPTCHA, a challenge) and `not-carried` (the store
-  genuinely does not stock it) are first-class and enforced - *UNCHECKED IS NEVER NOT-CARRIED*,
-  `[[a-could-not-look-must-not-settle-the-question]]`. The two the vocabulary was missing:
-  - **`unrendered`** - HTTP 200, markup present, selector right, and the rows are absent because the
-    content is injected by JavaScript that nothing executed. It currently reads as a SELECTOR BUG and
-    gets a selector fix, when the repair is to render the page or find the underlying JSON call.
-  - **`unsettled`** - the element exists but was still filling behind a loading screen. **This is the
-    worse of the two, because it produces a PARTIAL result rather than an empty one and so looks like a
-    success.** Not hypothetical: `[[fareway-capture-defects]]`'s repeated exact 9 is this shape, and it
-    was diagnosed by hand weeks after the fact.
-
-  **The mechanism, and it is the useful half: do not sleep and hope - WAIT ON A COUNT-BASED SELECTOR.**
-  After a scroll, wait for an element that can only exist if the scroll actually produced more rows
-  (`div.row:nth-child(11)` when the page starts with 10). If the eleventh never appears the wait fails
-  LOUDLY. **The assertion that the load worked is built into the wait condition rather than bolted on
-  after**, which a fixed `Start-Sleep` can never do: a sleep cannot tell "the page finished and there
-  were only 10" from "page 2 never loaded".
-  **And the cheaper repair that may retire half of this:** open the Network tab, filter to Fetch/XHR,
-  and read the URL the page's own JavaScript calls - that call usually returns the data as JSON with no
-  browser needed. Three of the seven feeds here are already server-side JSON. **This was checked on
-  2026-09-10** (`design/PROBE-store-direct-data-2026-09-10.md`, ruling 7 of `design/PLAN-zero-alert-days-2026-09-10.md`):
-  Family Fare direct data found, Aldi and Fareway partial, Sam's none, and Walmart not probed on purpose.
-
-- **A DEEP DISCOUNT IS EVIDENCE ABOUT A CELL'S FUTURE, not only about its price today** (2026-09-12,
-  backlog I126). A retailer's markdown is either **temporary** (a promotion, the item stays) or
-  **permanent** (an exit: clear the inventory at the end of the product's life, then drop it from the
-  assortment in a reviewed deletion, not by drift). The two are INDISTINGUISHABLE in one day's
-  capture, and today a deep discount and a later `not-carried` are recorded here as unrelated events.
-  **Nothing automated is proposed and none should be.** The forward habit is only this: an unusually
-  deep discount must NOT raise confidence that a store carries an item, because it can mean the
-  opposite. And if a cheap signal is ever wanted, a commodity that showed a deep discount and THEN
-  went quiet is a better `not-carried` candidate than one that simply went quiet - which bears on
-  `[[a-could-not-look-must-not-settle-the-question]]`, since it is the one case where the silence
-  carries information rather than none.
+  (Brad's standing ruling; full rule in `.claude/rules/meal-prep.md`). `pull-regular-hyvee.ps1` asks first for rows
+  withheld only for its store (`Get-HyVeeUncoveredIds`) and builds its lookup from `$script:HvRequest*` by name, never
+  a bare dynamically-scoped `$StoreId`. (channel: judgement; full: gr-11)
+- **AN EVERYDAY PRICE IS RE-READ ABOUT ONCE EVERY 90 DAYS, AT EVERY STORE** (Brad's standing rule). Rotation and
+  publish limit are both the quarter (`capture-policy-lib.ps1`); sale prices follow their ad windows. Never shorten
+  them. [[graph-time-gates-decision]] (channel: gate grocery/test-capture-policy.ps1; full: gr-12)
+- **A script you edit that holds its own copy of the store list reads `stores.json` instead, in the same change**
+  (Brad: convert on touch, no sweep). (channel: gate grocery/audit-store-registry.ps1; full: gr-13)
+- **The boards are gitignored**, so a worktree, CI runner or clean checkout is BLIND here and the engines exit 0
+  having priced nothing. `ops/seed-worktree.ps1` and `.worktreeinclude` seed them; a re-seed refreshes a copied file
+  whose source was rewritten, and `ops\push-main.ps1` re-seeds before every gate. A file deleted from the source is
+  not removed. (channel: judgement; full: gr-14)
+- **A check that compares a derived file with a board reads that file by the BOARD'S road** (a gitignored stamp
+  `.worktreeinclude` carries, not a tracked report). With NO record on that road the answer is a counted SKIP, never a
+  FAIL. **Do not repair a lag by untracking a file the bot rewrites daily.**
+  `design/PLAN-capture-eviction-stamp-2026-09-11.md`. (channel: judgement; full: gr-15)
+- **`cohort` here means the PEER GROUP OF PRODUCTS holding a commodity's board cells**, never members or recipes.
+  **Member work, if it lands, is written `member cohort` IN FULL, every time.** A cohort that cannot be formed (fewer
+  than 2 other priced cells) is BLIND, never passed (`build-arrivals-docket.ps1`). (channel: judgement; full: gr-16)
+- **A 200 with a correct selector and ZERO ROWS has FOUR causes**: `blocked`, `not-carried` (UNCHECKED IS NEVER
+  NOT-CARRIED), `unrendered` (JavaScript nothing executed: render it or find the JSON call, not a selector fix) and
+  `unsettled` (still loading: a PARTIAL result that looks like success). **Never sleep and hope: WAIT ON A COUNT-BASED
+  SELECTOR** (`div.row:nth-child(11)` after a scroll from 10), so a failed load fails loudly. Prefer the page's own
+  Fetch/XHR JSON call. [[a-could-not-look-must-not-settle-the-question]], [[fareway-capture-defects]]
+  (channel: judgement; full: gr-17)
+- **A DEEP DISCOUNT IS EVIDENCE ABOUT A CELL'S FUTURE**: a temporary promotion and a permanent exit are
+  indistinguishable in one capture. It must NOT raise confidence that a store carries an item. Nothing automated is
+  proposed. (channel: judgement; full: gr-18)
 
 Regime: this holds for files under `grocery/`. It says nothing about `meal-prep/`, which has its own
 rules file and its own corrector.
