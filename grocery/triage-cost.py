@@ -308,6 +308,13 @@ def latest_by_key(rows):
     return out
 
 
+def plan_names(arg):
+    """The plan file NAMES in a comma-separated --plan argument. validate-triage-plan.ps1 -Closing matches a row by
+    the bare name, so a path (grocery/triage-plans/plan-X.json, as the SKILL's own commands spell it) wrote rows the
+    gate could never find (2026-09-27: three plans refused NOT CLOSED with their rows on the ledger)."""
+    return [os.path.basename(p.strip().replace('\\', '/')) for p in arg.split(',') if p.strip()]
+
+
 def append_rows(rows, plans, ledger):
     """Append each row whose numbers moved since its key's last row. Returns how many were written. Written as
     one append of LF lines, so the file stays one JSON object per line."""
@@ -483,6 +490,13 @@ def selftest():
              n3 == 2 and lo['cost_units'] == 583 and lo['plans'] == ['plan-2026-09-25-2.json', 'plan-2026-09-25.json'],
              (n3, lo['cost_units'], lo['plans']))
 
+        pn = plan_names('grocery/triage-plans/plan-2026-09-27.json, C:\\x\\plan-2026-09-27-2.json')
+        case('MUST FIRE: a --plan given as a path is stored as the bare name the closing gate matches',
+             pn == ['plan-2026-09-27.json', 'plan-2026-09-27-2.json'], pn)
+        pb = plan_names('plan-2026-09-25.json,plan-2026-09-25-2.json')
+        case('CLEAN TWIN: bare --plan names pass through unchanged',
+             pb == ['plan-2026-09-25.json', 'plan-2026-09-25-2.json'], pb)
+
         # budget bar: at the bar is within it, one unit past is over
         case('BAR: spend exactly AT the budget (582 of 582) is within it', budget_verdict(582, 582) == 0,
              budget_verdict(582, 582))
@@ -558,7 +572,7 @@ def selftest():
     bad = [r for r in results if not r[1]]
     for label, ok, got in results:
         print('%s  %s%s' % ('PASS' if ok else 'FAIL', label, '' if ok else '  got=%r' % (got,)))
-    expected = 18
+    expected = 20
     if len(results) != expected:
         print('FAIL  the suite ran %d case(s), expected %d' % (len(results), expected))
         bad.append(None)
@@ -681,7 +695,7 @@ def main():
         a.session, total, len(rows), spawns, why))
     rc = 0
     if a.append:
-        plans = [p.strip() for p in a.plan.split(',') if p.strip()]
+        plans = plan_names(a.plan)
         if not plans:
             print('triage-cost: REFUSED - --append needs --plan naming the plan file(s) this spend belongs to')
             print('TRIAGE-COST-COMPLETE refused=no-plan')
