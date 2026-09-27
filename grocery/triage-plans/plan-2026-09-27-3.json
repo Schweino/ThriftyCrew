@@ -1,0 +1,321 @@
+{
+  "lane": "weekly",
+  "generated": "2026-09-27T11:30:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-27 (built 2026-09-27 10:20); match-worklist generated 2026-09-27 10:43",
+  "head_at_dispatch": "1d9d8229f",
+  "routing_artifact": "",
+  "queue_ids_seen": ["2026-09-26-735ea6", "2026-09-26-564dc6", "2026-09-26-7ed369", "2026-09-27-c744ba", "2026-09-26-a30920", "2026-09-25-1b7001", "2026-09-25-0cefa4", "2026-09-25-602457", "2026-09-18-a0c785", "2026-09-22-0c812e", "2026-09-25-633d2b", "2026-09-25-b3c8ca"],
+  "scope_note": "Weekly lane 2026-09-27, one agent, 150-call lane ceiling. Worked: the prevention item and the 12 ids above. Left open and still due (not worked, budget): 2026-09-25-d835e2, 2026-09-25-f9c8ce, 2026-09-25-bf2c6f, 2026-09-26-86a27b, 2026-09-26-6b8ce9, 2026-09-26-a7dbb1, 2026-09-26-62b170, 2026-09-26-203892. Routed to the money lane by triage-due and not worked here: 2026-09-27-9a351a, 2026-09-27-75f918, 2026-09-27-ef1612. Not worked by dispatch: 2026-09-27-8161ce, 2026-09-27-ae8b7a.",
+  "knowledge_consulted": [
+    "dispatch: 'brand include exclude wrong product seasoning' -> data-quality-craft/applies-here.md, 'First-match-wins and freshness ranking let the wrong row take a board cell' (why every matching item here is bounced, not fixed)",
+    "searched 'stale hook headline overstates' and 'alert headline label wording hook' (knowledge-search --estate): nothing applicable; knowledge-search/applies-here.md s2 is about the Claude hook stack, not git hooks",
+    "rule used: .claude/rules/ops-and-gates.md og-02 (a detector owes its COMPLETE marker last): the new hook-headline line is printed before Exit-Guard's marker",
+    "code read: grocery/send-alert.ps1 Get-AlertConditionKey derives the suppression key from the leading label, so the new label is a new key; no alert-registry.json entry names 'GIT HOOKS' (grep), so no registry change"
+  ],
+  "last_week_target_measured": "plan-2026-09-25-6.json targeted 'grocery store s dropped from a commodity they carry' with days_fired 8 (rank 2, 14 days ending 2026-09-25) and BOUNCED it (no shipped_commit: every repair is a grocery/commodities.json rule). Census since: fired 2026-09-26 and 2026-09-27, 2 of the 2 days after 2026-09-25, against 8 of 14 before. Nothing shipped, so nothing to credit; the class is live.",
+  "prevention_target": {
+    "type": "grocery guards failed board not published",
+    "window_days": 14,
+    "days_fired": 8,
+    "rank": 2,
+    "why_not_top": "Rank 1 is 'the knowledge store s nightly pass went red' (11 days): its emitter is C:/Users/Owner/.claude/skills/recall-sleep.py in the separate local ~/.claude store, not this repository, and its class fix landed there on 2026-09-26 (7f49063, queue 2026-09-26-d21fb2: pending judgements exit REVIEW, another session's in-flight memory is not a break); the 2026-09-27 pass did not page, the first night after, so it is being measured, not re-fixed. Tied at rank 2, 'grocery store s dropped from a commodity they carry' already has prevention bounced in plan-2026-09-25-6.json (its fix is grocery/commodities.json)."
+  },
+  "new_source_check": "no row contract exists yet (build step 8 of design/PLAN-zero-alert-days-2026-09-10.md), so this is a record, not a validation. Since the lane stamp (2026-09-20T07:45:35): no new store in grocery/stores.json (4 commits: 2d18a5b00 Hy-Vee flyer-line linker in SHADOW, 828d5226b warehouse reference group for derived bands, 8eb56de7f browser-literal exemption dropped, 44e9660dd alert types); 23 commits to grocery/commodities.json (rule batches, including 4880ebc98 which minted blackened-seasoning, lo-mein-noodles and sweet-potato-glass-noodles); capture builders: 944b04430 (Sam's blank unit price carries the proven size) and a47a2fe43 (board clock), no new store or feed.",
+  "ship_sequence": [
+    "audit-alert-census.ps1 (exit 0, ALERT-CENSUS-COMPLETE) and the 14-day ranking through Get-AlertCensusTypeDays (absolute path)",
+    "prevention:grocery guards failed board not published - measured, bounced",
+    "2026-09-26-735ea6 - re-measured: filed, prevention already shipped (702e9b7fa)",
+    "2026-09-26-564dc6, 2026-09-26-7ed369, 2026-09-27-c744ba - re-measured, bounced",
+    "2026-09-26-a30920 - hook headline fix (ops/audit-hook-installed.ps1, grocery/capture-watchdog.ps1), residual 2026-09-27-78df57",
+    "2026-09-25-1b7001 - re-measured, needs-more-time",
+    "2026-09-25-0cefa4, 2026-09-25-602457 - needs-brad",
+    "2026-09-18-a0c785, 2026-09-22-0c812e, 2026-09-25-633d2b, 2026-09-25-b3c8ca - bounced (THE LINE files)"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-27-sams-weight-first-pack",
+      "question": "Sam's writes a weight-first pack both ways ('Red Baron ... 69.60 oz., 12 PK' is 12 pieces of 69.6 oz, or a 69.6 oz pack total). The pricing code reads it as 12 pieces. Options from 2026-09-25-0cefa4: (A) weight-first = pack total when Sam's own unit price reproduces it, else refuse; (B) keep reading it as pieces. Today: 1 row (Red Baron), held by its known-wrong ruling; 27 occurrences of the shape over captures."
+    }
+  ],
+  "items": [
+    {
+      "queue_id": "prevention:grocery guards failed board not published",
+      "subject": "Prevention: guards hold the whole board (8 of the 14 days ending 2026-09-27)",
+      "classification": "infra",
+      "evidence": [
+        "census: 'grocery guards failed board not published' fired 2026-09-14, 09-17, 09-18, 09-19, 09-20, 09-21, 09-23, 09-26: 8 days, rank 2 (tied) of the 14 days ending 2026-09-27 (Get-AlertCensusTypeDays over grocery/out/alert-census.jsonl)",
+        "2026-09-23-0c8e6e close note: 'The 09-23 hold was one Sam's vegetable-oil held value (0.0373) condemned on the verify pass, which held the whole board'",
+        "2026-09-26-e0d5cf close note: 'audit-asof-evidence called a measured Fareway date laundered ... and that row is on no board cell, so it could not scope'",
+        "2026-09-19-b66b54 and 2026-09-18-f90ba6: a wrong-product crown (Bolthouse RTD coffee at Family Fare; a Whole Moon beverage row) held the board, fixed by a coffee exclude and a matching change"
+      ],
+      "root_cause": "a guard finding that cannot be scoped to one cell is BOARD scope by rule (cell-quarantine-lib: an unscoped failure holds), so every audit that has not yet been taught to scope, and every finding on a row that sits on no board cell, holds the whole board for one row; the other half of the days are wrong-product crowns the matching rules let in",
+      "root_fix": {
+        "what": "the money lane teaches the remaining unscoped guards to emit QUARANTINE-CELL lines (a per-guard change with its own fixture, per the grocery rules) and decides what a finding on a row that is on NO board cell does (drop the row, never hold the board)",
+        "files": ["grocery/guards.ps1", "grocery/cell-quarantine-lib.ps1"],
+        "exact_change": "none from this lane: guards.ps1 is on THE LINE, and cell scoping decides whether the board publishes; bounced with the measurement above"
+      },
+      "prevention": {
+        "source": ["grocery/guards.ps1", "grocery/cell-quarantine-lib.ps1"],
+        "what": "the scope decision in guards is where one unscopable row becomes a board hold; that is the producer of the page",
+        "exact_change": "none from this lane (THE LINE): per-guard QUARANTINE-CELL scoping, and a row on no board cell scoped as a dropped row, each with a frozen must-fire from 2026-09-23-0c8e6e and 2026-09-26-e0d5cf"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "NOT a before/after run (this lane changes no guard): the five close notes in triage-queue.json for this type over 2026-09-18..2026-09-26",
+        "affected_now": 0,
+        "cell_effects": [],
+        "cell_effects_note": "empty because this lane moves no cell and ships no guard change",
+        "risk": "a guard taught to scope can under-hold: a real board-wide defect scoped to one cell; each guard needs its own board-scope must-fire"
+      },
+      "proof": {
+        "must_fire_case": "the 2026-09-26 Fareway as_of row on no board cell, and the 2026-09-23 condemned held value: each yields a cell or row quarantine, not a board hold",
+        "clean_twin": "an unscoped failure from a guard not yet taught to scope still holds the board (grocery/test-cell-quarantine.ps1)",
+        "guard_or_fixture": "grocery/test-cell-quarantine.ps1"
+      },
+      "rollback": "revert the money lane's guard commit",
+      "freshness": "measured 2026-09-27 from the census (rows through 2026-09-27) and the queue close notes",
+      "leaves_open": "the whole class: 8 days of board holds in 14; each guard that still cannot scope is the money lane's worklist",
+      "leaves_open_occurrences": 8,
+      "leaves_open_followup": "bounced to the money lane (orchestrator), no new queue item minted",
+      "resolution_note": "Bounced: the producer is guards.ps1 scope handling (THE LINE). Last week's target measured: 'grocery store s dropped from a commodity they carry' 8 days in the 14 ending 2026-09-25 (plan-2026-09-25-6, bounced, no shipped_commit); after: fired 2026-09-26 and 2026-09-27, 2 of 2 days. Nothing shipped for it, so the class stands.",
+      "status": "bounced",
+      "premise_verified": "yes: census ranks the type 2 at 8 days over the 14 ending 2026-09-27; no plan-*.json names prevention:grocery guards failed board not published",
+      "deviation": "the dispatch named '44 NEW price flag(s)', the semantic sweep and store-dropped as the top recurring (all-time census); over the 14-day window they rank 4, 4 and 2. Price flags has prevention done (plan-2026-09-11-2.json); semantic sweep's repair is include rules; store-dropped is bounced in plan-2026-09-25-6.json",
+      "shipped_commit": null,
+      "actual_tool_calls": 14
+    },
+    {
+      "queue_id": "2026-09-26-735ea6",
+      "subject": "Grocery: a commodity is in no category (no filter) - review",
+      "classification": "no-code-change",
+      "evidence": [
+        "git log -S: blackened-seasoning, lo-mein-noodles, sweet-potato-glass-noodles minted in grocery/commodities.json by 4880ebc98 (2026-09-26 04:53) and filed in grocery/categories.json by 7f05f77e9 (10:48)",
+        "audit-category-coverage.ps1 -Source today: exit 0, 'CATEGORY-COVERAGE-COMPLETE examined=599 categories=16 findings=0'",
+        "audit-category-coverage.ps1 -SelfTest: exit 0, '4 of 4 case(s) passed', including 'MUST FIRE -Source over the 4880ebc98 push (3 commodities in no category) exits 2'",
+        "census: the type fired 2026-08-29 and 2026-09-26 only; not on 2026-09-27"
+      ],
+      "root_cause": "a rule batch can mint a commodity without filing it into a category, and until 2026-09-26 the only check ran in the daily chain, so the gap surfaced as a held publish the next morning instead of a refused push",
+      "root_fix_none_because": "the class fix already shipped at the source: 702e9b7fa (2026-09-26 10:58, queue 2026-09-26-f73dc7 item 3) made audit-category-coverage -Source a run-gates push gate, with a must-fire built from this exact push",
+      "prior_closes": ["2026-08-29-97443c"],
+      "prevention_none_because": "prevention already shipped at the producer's push: grocery/audit-category-coverage.ps1 -Source runs in ops/run-gates.ps1 since 702e9b7fa, so a commodity minted uncategorized is refused at push",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "resolution_note": "No longer reproduces. Before: 3 commodities uncategorized on 2026-09-26. After: 0 of 599 (audit-category-coverage -Source exit 0), and the push gate added in 702e9b7fa refuses the class at push (self-test 4 of 4).",
+      "close_disposition": "confirmed",
+      "status": "done",
+      "premise_verified": "yes: RETURN of 2026-08-29-97443c; re-measured today as instructed, 0 findings",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 6
+    },
+    {
+      "queue_id": "2026-09-26-564dc6",
+      "subject": "Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-26",
+      "classification": "no-code-change",
+      "evidence": [
+        "match-worklist.json generated 2026-09-27 10:43: the named widen rows 'Scott Paper Towels, Choose-A-Sheet, 6 Double Rolls' and 'Viva Signature Cloth Paper Towels, 6 Double Rolls / 8 Triple Rolls' are absent; kinds today coverage=7 semantic=2 contested=17 band=1262",
+        "census: the type fired 2026-09-26 and 2026-09-27 (1 alert each)"
+      ],
+      "root_cause": "matching is first-match-wins over hand-written include lists, so every new product name a store lists either matches no include or is claimed by an earlier commodity; the only repair road is a grocery/commodities.json rule",
+      "prior_closes": ["2026-08-31-ad3b81", "2026-09-01-4a481e", "2026-09-02-995502", "2026-09-06-39933e", "2026-09-07-0e9482", "2026-09-19-2a0748", "2026-09-21-b96f21", "2026-09-23-d493dd"],
+      "prevention_none_because": "the repair for every instance is a grocery/commodities.json widening or release (THE LINE), and the producer is the stores' catalogue growth; the prevention item for this type is already bounced in plan-2026-09-25-6.json",
+      "resolution_note": "Re-measured: this instance's paper-towel widen rows no longer reproduce (0 of the named rows on today's worklist), but the type fired again 2026-09-27 with 7 coverage rows standing. Bounced to the money lane for the standing coverage rows.",
+      "status": "bounced",
+      "premise_verified": "yes: RETURN (8 prior closes); re-measured against the 2026-09-27 10:43 worklist",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 3
+    },
+    {
+      "queue_id": "2026-09-26-7ed369",
+      "subject": "Grocery: a price band refused rows it cannot explain - 2026-09-26",
+      "classification": "no-code-change",
+      "evidence": [
+        "match-worklist.json 2026-09-27 10:43: 'band | Baker's | Bragg Organic Apple Cider Vinegar with the Mother | claimer=apple-cider-vinegar' still present (1262 band rows)",
+        "census: the type fired 2026-09-23, 09-24, 09-25, 09-26 and 09-27"
+      ],
+      "root_cause": "the derived band refuses rows that carry no basis error, so each is a wrong product the include rules admit or a real price the band derivation censors; both repairs are rule or band data",
+      "prior_closes": ["2026-09-23-57b66b"],
+      "prevention_none_because": "the repair is a grocery/commodities.json exclude through apply-coverage-batch or a band derivation change (grocery/price-bands.json), both on THE LINE",
+      "resolution_note": "Re-measured after the 06:59 script change: still reproduces (the Bragg Baker's row is on today's worklist; the type fired 2026-09-27). Bounced to the money lane.",
+      "status": "bounced",
+      "premise_verified": "yes: RETURN of 2026-09-23-57b66b; re-measured against the 2026-09-27 worklist",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 2
+    },
+    {
+      "queue_id": "2026-09-27-c744ba",
+      "subject": "Grocery matching soundness: NEW CONTESTED",
+      "classification": "no-code-change",
+      "evidence": [
+        "match-worklist.json 2026-09-27 10:43: contested=17",
+        "c744ba body: 'Campbell's cream of mushroom, cream of chicken, tomato or chicken noodle soup, SALE, $0.99 | chain: chicken-noodle-soup (oz) > cream-of-mushroom-soup (oz) > cream-of-chicken-soup (oz) | engine: UNPRICED'",
+        "seed plan-2026-09-25-6.json item 2026-09-23-b2850b: 'two rules admit a product and array order picks the winner, so each capture brings new contested names'"
+      ],
+      "root_cause": "two include rules admit one product and array order picks the winner, so each capture brings new contested names; each is decided by a confirm, a release exclude or an ad-line split",
+      "prior_closes": ["2026-09-22-2dae07", "2026-09-23-b2850b"],
+      "prevention_none_because": "each decision that changes routing is a grocery/commodities.json release or ad-line rule (THE LINE); the -Accept blessing class from b2850b was fixed as 2026-09-25-a8448d (resolved)",
+      "resolution_note": "Re-measured: reproduces, 17 contested rows on today's worklist. Bounced to the money lane: deciding them changes matching rules.",
+      "status": "bounced",
+      "premise_verified": "yes: RETURN (2 prior closes), routed with seed b2850b; re-measured against the 2026-09-27 worklist",
+      "deviation": "routed to the ops lane, but the work is matching decisions, which this lane hands back",
+      "shipped_commit": null,
+      "actual_tool_calls": 2
+    },
+    {
+      "queue_id": "2026-09-26-a30920",
+      "subject": "Triage residual: watchdog calls any stale hook 'pushes ungated', and a hooks change waits up to 24 h to install (4b6616)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/capture-watchdog.ps1:1584 (before): 'if ($haRc -eq 2) { [void]$findings.Add(\"GIT HOOKS NOT LIVE - pushes are ungated: $haLine\") }' for any missing or stale hook",
+        "a30920 body: 'On 2026-09-26 only pre-commit was stale and pre-push (the push gate) was current, so the page overstated'",
+        "audit-hook-installed.ps1 live run today: exit 0, 'hook-installed: INSTALL-HOOKS-COMPLETE 4 live'"
+      ],
+      "surface_fix": {
+        "what": "the watchdog's hook finding takes its headline from the audit",
+        "files": ["grocery/capture-watchdog.ps1"],
+        "exact_change": "read the audit's 'hook-headline:' line as the finding label; with no such line, keep 'GIT HOOKS NOT LIVE - pushes are ungated'"
+      },
+      "root_cause": "the watchdog wrote one fixed label for every hook finding, so which hook was stale never reached the page's headline; only pre-push runs the change-time gate",
+      "root_fix": {
+        "what": "the audit that knows which hook is stale states the headline",
+        "files": ["ops/audit-hook-installed.ps1"],
+        "exact_change": "Get-HookHeadline (pure): 'pushes are ungated' when pre-push is named NOT INSTALLED or STALE, or when the finding names no hook; otherwise 'GIT HOOKS STALE - pushes still gated (pre-push is live), stale: <names>'; printed as 'hook-headline:' on code 2, before the COMPLETE marker"
+      },
+      "blast_radius": {
+        "measured_as": "call-sites",
+        "measured_by": "grep for 'GIT HOOKS' and 'hook-headline' over grocery/, ops/, lib/ (ps1, json): the watchdog finding is the one consumer; no alert-registry.json entry names the label",
+        "affected_now": 1,
+        "cell_effects": [],
+        "cell_effects_note": "no board cell: the change is an alert headline",
+        "risk": "the page's leading label is send-alert's condition key (Get-AlertConditionKey), so a pre-commit-only stale page gets a new once-per-day key; a pre-push page keeps the old key"
+      },
+      "proof": {
+        "must_fire_case": "audit-hook-installed -SelfTest 'headline: a stale pre-push says pushes are ungated' and 'headline: pre-push missing beside another stale hook says ungated' and 'headline: a finding naming no hook keeps the strong wording'",
+        "clean_twin": "audit-hook-installed -SelfTest MUST NOT FIRE 'headline: only pre-commit stale does not say pushes are ungated' (the founding 2026-09-26 page); run: exit 0, 17 of 17 cases pass",
+        "guard_or_fixture": "ops/audit-hook-installed.ps1 -SelfTest"
+      },
+      "rollback": "revert this commit's two hunks in ops/audit-hook-installed.ps1 and grocery/capture-watchdog.ps1",
+      "freshness": "measured 2026-09-27: live audit exit 0 (4 live), self-test 17 of 17, watchdog parses with 0 errors",
+      "leaves_open": "part 2: a landed ops\\hooks change sits uninstalled until the next 10:30 watchdog -Repair, up to about 24 h (1 occurrence, 2026-09-26); the watchdog's parse of the headline line is not itself fixtured (the audit's function is)",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-27-78df57",
+      "resolution_note": "Part 1 fixed: the headline says pushes are ungated only when pre-push is missing or stale (4 new self-test cases, 17 of 17 pass). Part 2 (install delay) minted as 2026-09-27-78df57, weekly lane.",
+      "close_disposition": "confirmed",
+      "status": "done",
+      "premise_verified": "yes: capture-watchdog.ps1:1584 wrote the fixed label for every rc 2; audit-hook-installed's Why names each stale hook",
+      "deviation": "part 2 not fixed here (budget); owned by 2026-09-27-78df57",
+      "shipped_commit": "this plan's commit (subject 'Weekly lane plan-2026-09-27-3: hook headline names the stale hook; prevention target and leftovers')",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 13
+    },
+    {
+      "queue_id": "2026-09-25-1b7001",
+      "subject": "Triage residual: Hy-Vee size-conflict links the size-first relink could not re-point",
+      "classification": "needs-more-time",
+      "evidence": [
+        "size_conflict_parked in grocery/out/regular/hyvee-regular-2026-09-26.json: 12 entries, 12 of the 12 named pids; 2026-09-27: 13 entries, 12 of the 12 named pids still parked",
+        "grocery/out/hyvee-ask-ledger.json (written 2026-09-27 09:51) names all 12 pids; no 'no size match' or 'size conflict stands' line found in grocery/*.txt or *.log"
+      ],
+      "root_cause": "the relink queue shipped in plan-2026-09-25-9 either has not run over these pids or ran and printed nowhere this lane could find; not established within budget",
+      "resolution_note": "Re-measured: 12 of 12 still parked on 09-26 and 09-27 (plus 1 new). Next step: find where check-ad-cycles logs resolve-hyvee-links' relink output, or run resolve-hyvee-links on one pid read-only.",
+      "status": "needs-more-time",
+      "premise_verified": "partly: the ask ledger exists and names the 12; the relink's own output was not found",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 4
+    },
+    {
+      "queue_id": "2026-09-25-0cefa4",
+      "subject": "Triage residual: Sam's weight-first pack total vs pieces needs a reading rule (dc1b5b residual 6)",
+      "classification": "needs-brad",
+      "evidence": [
+        "0cefa4 body: 'Which reading is right is a RULING (or a per-row oracle such as Sam's product-page unit price), not a parse fix. Today: 1 row (Red Baron), held by its known-wrong ruling; 27 occurrences of the shape counted over captures.'"
+      ],
+      "root_cause": "Sam's writes a weight-first pack both ways and the row cannot say which; the pricing code reads it as pieces",
+      "resolution_note": "Parked as a ruling: Q-2026-09-27-sams-weight-first-pack. The one live row is held by known-wrong, so no wrong price is served meanwhile. Any change is pricing-math-lib.ps1 (money lane).",
+      "status": "needs-brad",
+      "premise_verified": "yes from the body; not re-measured (a ruling, and the row is held)",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-25-602457",
+      "subject": "Triage residual: per-serving cost feed vs v2-perserving disagree (30 of 570)",
+      "classification": "needs-brad",
+      "evidence": [
+        "plan-2026-09-25-6.json open_questions_for_brad 'Q-2026-09-25-per-serving-canonical': 'Two producers publish one per-serving cheapest cost and disagree on 32 of 570 shared recipes'"
+      ],
+      "root_cause": "the same per-serving fact is published by two producers (the feed and v2-perserving), and which one is canonical is a ruling",
+      "resolution_note": "Still waiting on Q-2026-09-25-per-serving-canonical (asked 2026-09-25); no new measurement this run.",
+      "status": "needs-brad",
+      "premise_verified": "yes: the question is open in plan-2026-09-25-6.json",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-18-a0c785",
+      "subject": "Grocery: beverage class absent on 241 non-drink commodities in five display buckets",
+      "classification": "no-code-change",
+      "evidence": [
+        "a0c785 body: 'the shared apply block ^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks) has no beverage class: Dairy & Eggs 25, Canned & Soup 59, Sauces & Condiments 61, Baking & Spices 78, Coffee, Oils & Spreads 14'"
+      ],
+      "root_cause": "the food-class guard scopes the beverage class by display bucket, so buckets whose apply block lacks it cannot see a drink in a food cell",
+      "resolution_note": "Bounced (again, as in plan-2026-09-25-6): the fix is grocery/category-excludes.json apply_ids, on THE LINE.",
+      "status": "bounced",
+      "premise_verified": "from the body (measured 2026-09-18); not re-measured, the file is off-limits to this lane",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-22-0c812e",
+      "subject": "Triage residual: 1,165 band-refused rows no basis error explains",
+      "classification": "no-code-change",
+      "evidence": [
+        "match-worklist.json 2026-09-27 10:43: band=1262 rows"
+      ],
+      "root_cause": "wrong products admitted by include rules are refused on the dear side of the derived band instead of being excluded",
+      "resolution_note": "Bounced: each row becomes a grocery/commodities.json exclude through apply-coverage-batch (THE LINE). Standing count today 1262 band rows on the worklist, against 1,165 keys when minted.",
+      "status": "bounced",
+      "premise_verified": "yes: band rows on today's worklist",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-25-633d2b",
+      "subject": "Triage residual: N-for-M deals on each-unit commodities priced per pack (18 rows)",
+      "classification": "no-code-change",
+      "evidence": [
+        "633d2b body: 'Get-UnitPrice (grocery/pricing-math-lib.ps1, each branch) divides a stated pack count only for a plain price ... 18 are N-for-$M rows'"
+      ],
+      "root_cause": "Get-UnitPrice does not divide a stated pack count on an N-for-$M price",
+      "resolution_note": "Bounced: the fix is grocery/pricing-math-lib.ps1, on THE LINE.",
+      "status": "bounced",
+      "premise_verified": "from the body (measured 2026-09-25); not re-measured, pricing code is off-limits",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    },
+    {
+      "queue_id": "2026-09-25-b3c8ca",
+      "subject": "triage residual: a name that cannot state its form is routed by name alone (d493dd)",
+      "classification": "no-code-change",
+      "evidence": [
+        "b3c8ca body: 'Hy-Vee Dole Mandarin Oranges In 100% Fruit Juice, 23.5 oz $4.99 ... fruit-cups (index 244) claims it by name and cannot price it; mandarin-oranges (index 360) is right'"
+      ],
+      "root_cause": "first-match-wins routes by name, so a name that does not state its form lands on the first commodity that claims it even when that commodity cannot price its basis",
+      "resolution_note": "Bounced: routing by form is a matching change (compare-deals.ps1 or grocery/commodities.json), on THE LINE.",
+      "status": "bounced",
+      "premise_verified": "from the body (1 occurrence, 2026-09-25); not re-measured",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": 1
+    }
+  ]
+}

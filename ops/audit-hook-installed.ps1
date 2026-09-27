@@ -61,6 +61,19 @@ function Get-HookVerdict {
   return @{ Code = 0; Why = (($text -split "`n" | Where-Object { $_ -match 'live' } | Select-Object -Last 1)) }
 }
 
+function Get-HookHeadline {
+  <# The page's leading label for a hook finding. Pure: takes the verdict's Why.
+     Only the pre-push hook runs the change-time gate, so "pushes are ungated" is said only when pre-push itself is
+     missing or stale (queue 2026-09-26-a30920: on 2026-09-26 only pre-commit was stale, pre-push was current, and
+     the page said pushes were ungated). A finding that names no hook at all keeps the strong wording, so an
+     unreadable finding is never softened. #>
+  param([string]$Why)
+  $bad = [regex]::Matches([string]$Why, '(?<![\w-])([\w-]+)\s+(?:NOT INSTALLED|STALE)\b')
+  $names = @($bad | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique)
+  if ($names.Count -eq 0 -or ($names -contains 'pre-push')) { return 'GIT HOOKS NOT LIVE - pushes are ungated' }
+  return ('GIT HOOKS STALE - pushes still gated (pre-push is live), stale: ' + ($names -join ', '))
+}
+
 function Invoke-HookAudit {
   <# The whole audit, with its three effects as seams so the self-test drives the real flow.
      $Check { -> @{ Lines; ExitCode } } runs install-hooks -Check; $Install { -> @{ Lines; ExitCode } } runs install-hooks;
@@ -146,6 +159,16 @@ if ($SelfTest) {
   $f = & $mk $false $false $false
   $r11 = Invoke-HookAudit -Check $f.chk -Install $f.ins -State $f.sta -Repair
   Case 'CLEAN TWIN' 'live hooks under -Repair: pass (0), not REPAIRED, nothing installed' ($r11.Code -eq 0 -and $r11.Why -notmatch 'REPAIRED' -and $f.hk.installs -eq 0) ("code=$($r11.Code) installs=$($f.hk.installs)")
+  # Headline (queue 2026-09-26-a30920). MUST FIRE: pre-push stale or missing says pushes are ungated.
+  $h1 = Get-HookHeadline -Why 'hook(s) missing or stale: pre-push STALE - differs from ops\hooks'
+  Case 'MUST FIRE' 'headline: a stale pre-push says pushes are ungated' ($h1 -eq 'GIT HOOKS NOT LIVE - pushes are ungated') $h1
+  $h2 = Get-HookHeadline -Why 'hook(s) missing or stale: pre-commit STALE - differs from ops\hooks; pre-push NOT INSTALLED - NOT repaired: x'
+  Case 'MUST FIRE' 'headline: pre-push missing beside another stale hook says ungated' ($h2 -eq 'GIT HOOKS NOT LIVE - pushes are ungated') $h2
+  $h3 = Get-HookHeadline -Why 'hook(s) missing or stale'
+  Case 'MUST FIRE' 'headline: a finding naming no hook keeps the strong wording' ($h3 -eq 'GIT HOOKS NOT LIVE - pushes are ungated') $h3
+  # MUST NOT FIRE (the founding page, 2026-09-26): only pre-commit stale, pre-push current - pushes are still gated.
+  $h4 = Get-HookHeadline -Why 'hook(s) missing or stale: pre-commit STALE - differs from ops\hooks - repair FAILED (install-hooks exit 1, re-check: x)'
+  Case 'MUST NOT FIRE' 'headline: only pre-commit stale does not say pushes are ungated' ($h4 -eq 'GIT HOOKS STALE - pushes still gated (pre-push is live), stale: pre-commit') $h4
   # CLEAN TWIN: the checker this wraps is where the citations say it is.
   Case 'CLEAN TWIN' 'ops\install-hooks.ps1 exists and declares -Check' `
     ((Test-Path -LiteralPath (Join-Path $repo 'ops\install-hooks.ps1')) -and
@@ -178,5 +201,6 @@ Invoke-Guard -Name 'HOOK-INSTALLED' -Body {
   }
   $v = Invoke-HookAudit -Check $chk -Install $ins -State $sta -Repair:$Repair
   "hook-installed: $($v.Why)"
+  if ($v.Code -eq 2) { "hook-headline: $(Get-HookHeadline -Why $v.Why)" }
   Exit-Guard -Name 'HOOK-INSTALLED' -Code $v.Code -Summary ("code={0}" -f $v.Code)
 }

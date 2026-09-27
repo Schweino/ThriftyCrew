@@ -1581,7 +1581,11 @@ if (Test-Path $hookAudit) {
   $haOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $hookAudit -Repair
   $haRc = $LASTEXITCODE
   $haLine = ($haOut | Where-Object { $_ -match '^hook-installed:' } | Select-Object -Last 1)
-  if ($haRc -eq 2) { [void]$findings.Add("GIT HOOKS NOT LIVE - pushes are ungated: $haLine") }
+  # The headline comes from the audit's own hook-headline line (queue 2026-09-26-a30920): "pushes are ungated" only
+  # when pre-push itself is missing or stale. No headline line keeps the strong wording, so an older audit is never softened.
+  $haHead = ($haOut | Where-Object { $_ -match '^hook-headline:' } | Select-Object -Last 1)
+  $haLabel = if ($haHead) { ([string]$haHead -replace '^hook-headline:\s*', '').Trim() } else { 'GIT HOOKS NOT LIVE - pushes are ungated' }
+  if ($haRc -eq 2) { [void]$findings.Add("${haLabel}: $haLine") }
   elseif ($haRc -ne 0) { [void]$findings.Add("GIT HOOKS could not be checked (exit $haRc): $haLine") }
   else { [void]$ok.Add((("git hooks " + $haLine) -replace '\s+', ' ').Trim()) }
 }
