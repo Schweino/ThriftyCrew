@@ -227,6 +227,16 @@ function Get-AuditorInputs([string]$Text, [string]$SelfRel) {
   return [pscustomobject]@{ self = $SelfRel; selfDir = $selfDir; fixRoot = $fixRoot; globs = $globs; code = $code; data = $data; botOwned = $owned }
 }
 
+# THE HOST'S OWN FOLDER IS THE HOST (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 0). test-auditors.ps1 is split
+# into grocery\test-auditors\*.ps1, each dot-sourced from the entry at the exact spot its text came from, so an edit to any
+# piece is an edit to test-auditors itself: an input always, and a FULL run, never a selective one.
+function Test-TaHostPiece([string]$Path, [string]$SelfRel) {
+  if (-not $SelfRel -or -not $SelfRel.EndsWith('.ps1', [StringComparison]::OrdinalIgnoreCase)) { return $false }
+  $p = $Path.Replace('\', '/')
+  $dir = $SelfRel.Replace('\', '/').Substring(0, $SelfRel.Length - 4) + '/'
+  return ($p.StartsWith($dir, [StringComparison]::OrdinalIgnoreCase) -and $p.EndsWith('.ps1', [StringComparison]::OrdinalIgnoreCase))
+}
+
 # -CodeOnly (the record's in-flight check) drops rule 5. Measured 2026-09-10: grocery\sale-fallback-ownership.json
 # is quoted by test-auditors, is not bot-owned, and is rewritten by the chain and left uncommitted most
 # mornings, so counting named data files would refuse nearly every daily record and the record would never
@@ -235,6 +245,7 @@ function Test-GuardInput([string]$Path, $Inputs, [bool]$CodeOnly = $false) {
   $p = $Path.Replace('\', '/')
   $b = ($p -split '/')[-1]
   if ([string]::Equals($p, $Inputs.self, [StringComparison]::OrdinalIgnoreCase)) { return 'test-auditors itself' }
+  if (Test-TaHostPiece $p $Inputs.self) { return 'test-auditors itself (a piece in its own folder)' }
   if ($Inputs.fixRoot -and $p.StartsWith($Inputs.fixRoot, [StringComparison]::OrdinalIgnoreCase)) { return ('under its fixture root ' + $Inputs.fixRoot) }
   foreach ($g in $Inputs.globs) { if ($p -match $g.rx) { return ('matches its glob ' + $g.pattern) } }
   $named = $Inputs.code.Contains($b) -or $Inputs.data.Contains($b)
@@ -1207,6 +1218,7 @@ function Get-UnitsForPath([string]$Path, $Model, $Inputs, [scriptblock]$Reader, 
 function Get-Selection([string[]]$Paths, [string[]]$GuardPaths, $Model, $Inputs, [scriptblock]$Reader, [hashtable]$Cache) {
   $s = [pscustomobject]@{ mode = 'full'; why = ''; selected = @(); skipped = @(); attributed = @{}; needed = @(); always = @() }
   if (-not $Model.ok) { $s.why = ('the unit model could not be built: ' + $Model.why); return $s }
+  foreach ($p in @($Paths)) { if ($Inputs -and (Test-TaHostPiece $p $Inputs.self)) { $s.why = ($p + ' is a piece of the harness, in its own folder'); return $s } }
   foreach ($p in @($Paths)) { foreach ($hp in $Model.harness) { if ([string]::Equals($p.Replace('\', '/'), $hp, [StringComparison]::OrdinalIgnoreCase)) { $s.why = ($p + ' is the harness or a library every unit runs through'); return $s } } }
   $sel = @{}
   $nf = Get-NoFollow $Model $Inputs
@@ -1872,6 +1884,8 @@ $w = Get-Content (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')
   Case 'MUST FIRE' 'a script in a repo-rooted glob is an input' ((Test-GuardInput 'modz/pipeline/some-audit.ps1' $in) -ne '')
   Case 'MUST FIRE' 'test-auditors.ps1 itself is an input' ((Test-GuardInput 'modx/test-auditors.ps1' $in) -ne '')
   Case 'MUST NOT FIRE' 'a document outside every rule is not an input' ((Test-GuardInput 'notes/a-plan.md' $in) -eq '')
+  Case 'MUST FIRE' 'a piece of test-auditors in its own folder (modx/test-auditors/units-a.ps1) is test-auditors itself' ((Test-GuardInput 'modx/test-auditors/units-a.ps1' $in) -match 'itself')
+  Case 'MUST NOT FIRE' 'a script under an out folder (modx/out/x.ps1) is no piece of test-auditors' (-not (Test-TaHostPiece 'modx/out/x.ps1' 'modx/test-auditors.ps1'))
   Case 'MUST NOT FIRE' 'a daily output it names, under out\, is not an input' ((Test-GuardInput 'modx/out/daily-verdict.json' $in) -eq '')
   Case 'MUST NOT FIRE' 'a file it names that the daily bot owns is not an input' ((Test-GuardInput 'modx/daily-ledger.json' $in) -eq '')
   Case 'MUST NOT FIRE' 'a script one directory below a non-recursive glob is not an input' ((Test-GuardInput 'modx/sub/deeper-thing.ps1' $in) -eq '')
@@ -2007,6 +2021,8 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
   Case 'MUST FIRE' 'a library the harness dot-sources before its first unit makes the run full' ($s7.mode -eq 'full' -and $s7.why -match 'harness') "mode=$($s7.mode) why=$($s7.why)"
   $s8 = Get-Selection @('modx/test-auditors.ps1') @('modx/test-auditors.ps1') $um $uxIn $uxReader $uc
   Case 'MUST FIRE' 'a push touching the harness itself is a full run' ($s8.mode -eq 'full') "mode=$($s8.mode) why=$($s8.why)"
+  $s8p = Get-Selection @('modx/test-auditors/units-a.ps1') @('modx/test-auditors/units-a.ps1') $um $uxIn $uxReader $uc
+  Case 'MUST FIRE' 'a push touching a piece of the harness in its own folder is a full run' ($s8p.mode -eq 'full' -and $s8p.why -match 'piece of the harness') "mode=$($s8p.mode) why=$($s8p.why)"
   $dp = Get-UnitsForPath 'notes/a-plan.md' $um $uxIn $uxReader $uc
   Case 'MUST NOT FIRE' 'a document reaches no unit' (@($dp).Count -eq 0) "units=$(@($dp) -join ',')"
   $umBad = Get-UnitModel ($ux.Replace("if (Use-Unit 'u003-scan' -Reads 'modx/*.ps1') {", 'if (Use-Unit $scanId) {')) 'modx/test-auditors.ps1'
@@ -2619,7 +2635,7 @@ exit 0
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 124
+  $expectedCases = 127
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''

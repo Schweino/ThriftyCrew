@@ -117,6 +117,19 @@ function Get-TcTreeFiles {
   return $out.ToArray()
 }
 
+function Get-TcScriptFiles {
+  # Every .ps1 under $DirFull, SUBFOLDERS INCLUDED, never entering an archive\ or out\ directory below it, in
+  # Get-TcTreeFiles order. The sweep for a walk that used to read <dir>\*.ps1 (top level only).
+  #
+  # WHY (Brad, 2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 0). A giant script is split into a SUBFOLDER
+  # named for it (grocery\test-auditors\, later grocery\compare-deals\), so every sweep that read grocery\*.ps1 would stop
+  # seeing the moved code the day it moved. archive\ and out\ stay out, as every whole-tree walk here already keeps them.
+  # .ps1 only: -Filter *.ps1 also returns .ps1xml, and the old path glob did not.
+  param([string]$DirFull)
+  $all = Get-TcTreeFiles -RootFull $DirFull -Filter *.ps1 -PruneBelow '\\archive\\|\\out\\'
+  return @(@($all) | Where-Object { $null -ne $_ -and $_.Extension -eq '.ps1' })
+}
+
 function New-TcWorktreeFixture {
   # A throwaway tree for a detector's self-test, shaped like the real thing: the ROOT the detector is pointed
   # at is <temp>\host\.claude\worktrees\wt1, and every file is written twice, once under that root and once
@@ -231,6 +244,21 @@ if ($__treeWalkSelfTest) {
       TwT 'MUST FIRE  a root under .claude\worktrees is walked, not pruned whole' ($wtHits.Root -eq 2) ('root=' + $wtHits.Root)
       TwT 'MUST NOT FIRE  the sibling worktree below that root is neither returned nor listed' `
         ($wtHits.Sibling -eq 0 -and -not (@($st4['Entered']) | Where-Object { $_.StartsWith($twWt.Sibling, [StringComparison]::OrdinalIgnoreCase) })) ('sibling=' + $wtHits.Sibling)
+
+      # A SCRIPT SWEEP SEES A SUBFOLDER (2026-09-27, PLAN-split-giant-files step 0): a split host's pieces live in
+      # grocery\<host>\, and the sweep that read grocery\*.ps1 must still see them; out\ and archive\ stay unseen.
+      $twG = Join-Path $twRoot 'g'
+      foreach ($p in @('top.ps1', 'test-auditors\units-a.ps1', 'out\x.ps1', 'archive\old.ps1', 'x.ps1xml')) {
+        $gp = Join-Path $twG $p
+        [void](New-Item -ItemType Directory -Force -Path (Split-Path $gp -Parent) -ErrorAction Stop)
+        [IO.File]::WriteAllText($gp, '1')
+      }
+      $sf = Get-TcScriptFiles -DirFull $twG
+      $sfRel = @(@($sf) | ForEach-Object { (Get-TcPathBelowRoot $_.FullName (Get-TcRootFull $twG)) })
+      TwT 'MUST FIRE  Get-TcScriptFiles sees a script in a new subfolder (g\test-auditors\units-a.ps1)' `
+        ($sfRel -contains '\test-auditors\units-a.ps1') ('found=' + ($sfRel -join ','))
+      TwT 'MUST NOT FIRE  Get-TcScriptFiles never returns g\out\x.ps1, g\archive\old.ps1 or a .ps1xml' `
+        (-not ($sfRel -contains '\out\x.ps1') -and -not ($sfRel -contains '\archive\old.ps1') -and -not ($sfRel -contains '\x.ps1xml') -and $sfRel -contains '\top.ps1') ('found=' + ($sfRel -join ','))
     } catch {
       TwT ('the self-test ran to the end without throwing') $false $_.Exception.Message
     }
@@ -239,7 +267,7 @@ if ($__treeWalkSelfTest) {
     Remove-Item -LiteralPath $twRoot -Recurse -Force -ErrorAction SilentlyContinue
     if ($twWt) { Remove-Item -LiteralPath $twWt.Temp -Recurse -Force -ErrorAction SilentlyContinue }
   }
-  $twExpected = 11
+  $twExpected = 13
   if ($script:twCases -ne $twExpected) { Write-Output ('FAIL  ran ' + $script:twCases + ' case(s), the list holds ' + $twExpected); $script:twFail++ }
   if ($script:twFail -eq 0) { Write-Output ('tree-walk SELF-TEST PASS (' + $script:twCases + ' cases)'); exit 0 }
   else { Write-Output ('tree-walk SELF-TEST FAIL (' + $script:twFail + ' of ' + $script:twCases + ')'); exit 1 }

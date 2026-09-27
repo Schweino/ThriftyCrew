@@ -1,6 +1,6 @@
 # PLAN: split the four largest PowerShell files into pieces small enough to rewrite whole
 
-Status: PROPOSED, awaiting Brad's rulings D1-D6. Nothing built.
+Status: RULED 2026-09-27 (see Rulings under Decisions; D1+D2 revised to subfolders). Phase 1 under way.
 Date: 2026-09-27. Scope: `grocery\test-auditors.ps1` (8,027 lines), `ops\push-main.ps1` (4,962),
 `grocery\check-ad-cycles.ps1` (4,577), `grocery\compare-deals.ps1` (3,742). Behaviour must not change.
 Drafted by a read-only planning agent; the file readings below are its own and are inputs, not verified facts.
@@ -139,6 +139,25 @@ Steps 3 and 5 are worth one small script, `ops\prove-split.ps1`, used ~20 times 
 - **D4. check-ad-cycles: approve the self-test change (AST over all stage files, minimum match counts) first,** or split only its runner lib and watchers tail?
 - **D5. Build `ops\prove-split.ps1`, or run the checks by hand each time?**
 - **D6. Keep compare-deals' lifted region frozen in the host for good?** Recommended: yes (~130 lines, not worth changing how the lift works).
+
+### Rulings (Brad, 2026-09-27)
+- **D1 + D2, revised together: SUBFOLDERS, not flat siblings**, for future-proofing: `grocery/test-auditors/`, later
+  `grocery/compare-deals/`, `ops/push-main/`, `grocery/check-ad-cycles/`. A moved self-test keeps a two-line pointer
+  in the host (`if ($SelfTest) { . <file>; exit ... }`), and `Get-SelfTestBlock` (`lib/selftest-lib.ps1`) is taught
+  to follow it. Because a subfolder falls outside every top-level-only glob, **step 0 comes first**: every walk that
+  scopes on a folder's top-level scripts (cadence `-InputGlobs 'grocery/*.ps1'`, push-main's test-auditors reuse key,
+  run-gates discovery, the mustfire and script censuses, any `grocery\*.ps1` walk) is taught to include subfolders,
+  still excluding `archive` and `out`, with a fixture: a script in a new subfolder is seen (MUST FIRE) and
+  `grocery/out/x.ps1` is not (MUST NOT FIRE).
+- **D3: yes, cautious.** push-main moves only its self-test and read-only helpers, and `Get-TcScriptBlob` first
+  covers host plus its libs, as its own commit. Not in phase 1.
+- **D4: only check-ad-cycles' runner helpers and watchers tail.** Not in phase 1.
+- **D5: build `ops/prove-split.ps1`** (function-body hash diff plus golden-output diff), self-tested.
+- **D6: yes**, compare-deals' lifted `$GLOBAL_EXCLUDE ... -Explain` region stays frozen in the host.
+
+**Phase 1, in order, one landed commit each:** (1) step 0 subfolder globs; (2) `ops/prove-split.ps1`; (3) the
+`Get-SelfTestBlock` pointer-follow; (4) `grocery/test-auditors.ps1` split into `grocery/test-auditors/` per section 2,
+entry stays at `grocery/test-auditors.ps1`.
 
 ## Open before starting (not read by the planner)
 - `Get-TcScriptBlob` (what it hashes) and `Get-TcHookTestAuditorsScope` (what it scans): the D3 and test-auditors reader traps depend on them.

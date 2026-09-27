@@ -514,7 +514,23 @@ function Test-CadenceDue {
     if (-not $g) { continue }
     $full = if ([IO.Path]::IsPathRooted($g)) { $g } else { Join-Path $script:CadenceRoot $g }
     $hits = @()
-    try { $hits = @(Get-ChildItem -Path $full -File -ErrorAction SilentlyContinue) } catch { return $true }
+    try {
+      if ($full -match '^(.*?)[\\/]\*\*[\\/]([^\\/]+)$') {
+        # A '**' GLOB IS EVERY SUBFOLDER (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 0): a split
+        # script's pieces live in grocery\<host>\, which 'grocery/*.ps1' cannot see. archive\ and out\ are never
+        # entered, at any depth. Self-contained on purpose: grocery\test-cadence.ps1 runs this function on its own.
+        $cdLeaf = $Matches[2]
+        $cdStack = New-Object System.Collections.Stack
+        if (Test-Path -LiteralPath $Matches[1] -PathType Container) { $cdStack.Push((Get-Item -LiteralPath $Matches[1])) }
+        while ($cdStack.Count -gt 0) {
+          $cdDir = $cdStack.Pop()
+          $hits += @(Get-ChildItem -LiteralPath $cdDir.FullName -File -Filter $cdLeaf -ErrorAction SilentlyContinue)
+          foreach ($cdSub in @(Get-ChildItem -LiteralPath $cdDir.FullName -Directory -ErrorAction SilentlyContinue)) {
+            if ($cdSub.Name -ne 'archive' -and $cdSub.Name -ne 'out') { $cdStack.Push($cdSub) }
+          }
+        }
+      } else { $hits = @(Get-ChildItem -Path $full -File -ErrorAction SilentlyContinue) }
+    } catch { return $true }
     foreach ($h in $hits) { if ($h.LastWriteTime -gt $last) { return $true } }
   }
   return $false
@@ -2221,11 +2237,11 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         @{ n = 'matcher-parity';     d = 7; g = @('grocery/match-lib.ps1','grocery/compare-deals.ps1','grocery/audit-household-in-food.ps1','grocery/commodities.json') }
         @{ n = 'precedence-ladders'; d = 7; g = @('grocery/compare-deals.ps1','grocery/known-wrong-lib.ps1','grocery/known-wrong.json','grocery/match-lib.ps1') }
         @{ n = 'board-clock';        d = 7; g = @('grocery/compare-deals.ps1','grocery/rollback-ttl-lib.ps1','grocery/regular-fileset-lib.ps1','grocery/capture-depth-lib.ps1') }
-        @{ n = 'store-registry';     d = 7; g = @('grocery/*.ps1','grocery/stores.json') }
+        @{ n = 'store-registry';     d = 7; g = @('grocery/**/*.ps1','grocery/stores.json') }
         @{ n = 'commodity-dupes';    d = 7; g = @('grocery/commodities.json','grocery/recipe-commodities.json','grocery/categories.json') }
         @{ n = 'search-terms';       d = 7; g = @('grocery/commodity-search.json','grocery/out/regular/*.json') }
-        @{ n = 'guard-contract';     d = 7; g = @('grocery/*.ps1','lib/*.ps1') }
-        @{ n = 'cloud-readiness';    d = 7; g = @('grocery/*.ps1','meal-prep/**/*.ps1') }
+        @{ n = 'guard-contract';     d = 7; g = @('grocery/**/*.ps1','lib/*.ps1') }
+        @{ n = 'cloud-readiness';    d = 7; g = @('grocery/**/*.ps1','meal-prep/**/*.ps1') }
       )) {
         # FAIL OPEN, exactly as Test-CadenceDue does internally: a gate we could not evaluate means RUN.
         # The cost of a wrong DUE is seconds of CPU; the cost of a wrong SKIP is a guard that stopped
@@ -4027,7 +4043,7 @@ if ($script:DownstreamRan) {
 # while the broken commodity quietly held no cell. The roster entry for matcher-parity already lists
 # grocery/commodities.json for exactly this reason; this gate had not caught up.
 $taSkip = $false
-try { $taSkip = -not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/*.ps1','lib/*.ps1','grocery/commodities.json','grocery/recipe-commodities.json')) }
+try { $taSkip = -not (Test-CadenceDue -Name 'test-auditors' -EveryDays 7 -InputGlobs @('grocery/**/*.ps1','lib/*.ps1','grocery/commodities.json','grocery/recipe-commodities.json')) }
 catch { Log ('test-auditors cadence gate threw (' + $_.Exception.Message + ') - running the suite anyway; a gate that cannot decide must not skip, and must never take the rest of the chain with it') }
 if ($taSkip) {
   Log ('test-auditors: SKIPPED by cadence - inputs unchanged since ' + (Get-CadenceLast 'test-auditors') + "; runs every 7d or the moment its inputs move. A SKIP IS NOT A PASS.")

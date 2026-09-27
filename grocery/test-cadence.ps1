@@ -52,6 +52,22 @@ T (Test-CadenceDue -Name 'old' -EveryDays 7 -InputGlobs @()) '8 days since last 
 Set-Content (Join-Path $script:CadenceDir 'cadence-bad.txt') -Value 'not-a-date'
 T (Test-CadenceDue -Name 'bad' -EveryDays 7 -InputGlobs @()) 'unreadable stamp -> DUE (fails OPEN, never silently skips)'
 T ((Get-CadenceLast 'nope') -eq 'never') 'a never-run check reports "never", not a fake date'
+# A '**' GLOB SEES A SUBFOLDER AND NEVER out\ (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md step 0): a split
+# script's pieces live in grocery\<host>\, and the cadence must go DUE when one of them moves.
+foreach ($sp in @('g\top.ps1', 'g\test-auditors\units-a.ps1', 'g\out\x.ps1', 'g\archive\old.ps1')) {
+  $spF = Join-Path $sandbox $sp
+  New-Item -ItemType Directory -Path (Split-Path $spF -Parent) -Force | Out-Null
+  Set-Content $spF -Value 'x'
+}
+Set-CadenceRan 'sub'; Set-CadenceRan 'subout'; Set-CadenceRan 'subtop'
+T (-not (Test-CadenceDue -Name 'sub' -EveryDays 7 -InputGlobs @('g/**/*.ps1'))) 'CLEAN TWIN  a ** glob over unchanged files is not due'
+Start-Sleep -Seconds 1
+Set-Content (Join-Path $sandbox 'g\out\x.ps1') -Value 'y'
+Set-Content (Join-Path $sandbox 'g\archive\old.ps1') -Value 'y'
+T (-not (Test-CadenceDue -Name 'subout' -EveryDays 7 -InputGlobs @('g/**/*.ps1'))) 'MUST NOT FIRE  an edit under g\out\ or g\archive\ does not make a g/**/*.ps1 check due'
+Set-Content (Join-Path $sandbox 'g\test-auditors\units-a.ps1') -Value 'y'
+T (Test-CadenceDue -Name 'sub' -EveryDays 7 -InputGlobs @('g/**/*.ps1')) 'MUST FIRE  an edit in a new subfolder (g\test-auditors\) makes a g/**/*.ps1 check due'
+T (-not (Test-CadenceDue -Name 'subtop' -EveryDays 7 -InputGlobs @('g/*.ps1'))) 'CLEAN TWIN  the top-level g/*.ps1 glob still reads the top level only'
 
 # ---- THE WEEKLY GUARD PROOF (2026-09-10, queue 2026-09-10-267ba6), lifted from the SHIPPED source like the helpers above ----
 # Frozen from the founding morning: chain-verdict.json guards_rc=2 at 08:11:12, the weekly stamp last written
