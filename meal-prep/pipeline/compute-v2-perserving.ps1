@@ -16,6 +16,8 @@
 # demands it match this manifest. That is what keeps the PowerShell mirror of the pricing rule honest
 # against the JS that actually prices the page - run it after any change to either side. Not daily: it
 # reads 544 built cards.
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\compute-v2-perserving.ps1
 param([string]$FeedPath = '', [switch]$SelfTest, [switch]$NoAlert, [switch]$CrossCheck)
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }

@@ -25,6 +25,8 @@
 #   .\audit-cost-plausibility.ps1 -SelfTest
 # Exit 0 clean, 1 findings, 2 self-test failure.
 # ---------------------------------------------------------------------------------------------------
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\audit-cost-plausibility.ps1
 param(
   [string[]]$Slugs = @(), [string]$CostedFile, [double]$FloorCps = 0.25, [switch]$Json, [switch]$SelfTest
 )

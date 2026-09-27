@@ -22,6 +22,8 @@
   NO param() BLOCK, DELIBERATELY - dot-sourced under PS 5.1 a param() block runs in the CALLER's scope
   (lib\json-io.ps1 has the account).
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: lib\main-checkout.ps1
 $__mcSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Get-TcMainCheckout {

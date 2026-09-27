@@ -85,6 +85,8 @@
 #   ops\audit-mustfire-census.ps1 -Update    rewrite the baseline (deliberate, after a real change)
 #   ops\audit-mustfire-census.ps1 -SelfTest  frozen must-fire fixtures + clean twins
 # Exit 0 = nothing lost. 1 = a file lost must-fire assertions. 2 = self-test regression. 3 = BLIND.
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\audit-mustfire-census.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Update)
 $ErrorActionPreference = 'Stop'

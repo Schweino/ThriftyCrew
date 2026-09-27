@@ -73,6 +73,8 @@
     ops\audit-selftest-fallthrough.ps1             scan the tracked tree
     ops\audit-selftest-fallthrough.ps1 -SelfTest   the rule over fixture files, each shape run as a child, the walk
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\audit-selftest-fallthrough.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

@@ -45,6 +45,8 @@
 #   powershell -NoProfile -File ops\probe-gate-slot-fairness.ps1                    # 20 arrivals
 #   powershell -NoProfile -File ops\probe-gate-slot-fairness.ps1 -Lib <path>        # a mutant mirror
 #   powershell -NoProfile -File ops\probe-gate-slot-fairness.ps1 -SelfTest
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\probe-gate-slot-fairness.ps1
 [CmdletBinding()]
 param(
   [int]$Arrivals = 20,

@@ -41,6 +41,8 @@
     powershell -NoProfile -File ops\count-tracked-writers.ps1 -JsonOut f    plus every site as JSON (UTF-8, no BOM)
     powershell -NoProfile -File ops\count-tracked-writers.ps1 -SelfTest     the report run as a child over a fixture
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\count-tracked-writers.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$ShowHits, [string]$JsonOut = '', [string]$Root = '', [string]$TrackedFile = '')
 $ErrorActionPreference = 'Stop'

@@ -14,6 +14,8 @@
 #   .\ingredient-resolutions.ps1 -Invalidate -ItemId x    (a registrar ruling changed a commodity id)
 #   .\ingredient-resolutions.ps1 -SelfTest
 # ---------------------------------------------------------------------------------------------------
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\ingredient-resolutions.ps1
 param(
   [switch]$Record, [switch]$Query, [switch]$Invalidate, [switch]$List, [switch]$SelfTest,
   [string]$Term = '', [string]$ItemId = '', [string]$Evidence = '', [string]$By = '',

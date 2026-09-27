@@ -24,6 +24,8 @@
   Compared as BYTES (lib\git-blob-lib.ps1 Get-ResponseBytes), never as a decoded string: memo compare-bytes-not-decodings.
   The fetch carries a unique query so the edge cache is not what answers (the feed is served with max-age=1800).
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: grocery\feed-served-lib.ps1
 # No param() block: dot-sourced by publish-deals-page, whose own -SelfTest a param() here would reset (the rule
 # lib\git-blob-lib.ps1 states). The switch is read off $args, and only when this file is RUN.
 $__fslSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')

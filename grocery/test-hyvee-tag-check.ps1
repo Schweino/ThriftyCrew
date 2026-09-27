@@ -14,6 +14,8 @@
 
   Run: test-hyvee-tag-check.ps1     (exit 0 clean, 1 on any failure)
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: grocery\test-hyvee-tag-check.ps1
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1')

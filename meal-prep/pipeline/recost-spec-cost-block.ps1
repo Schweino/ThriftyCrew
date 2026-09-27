@@ -37,6 +37,8 @@
                                                                <path> is newline-delimited, one slug per line
          .\recost-spec-cost-block.ps1 -SelfTest
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\recost-spec-cost-block.ps1
 # PositionalBinding=$false + an explicit remaining-arguments sink, both load-bearing. Only -Slugs is
 # positional, so a bare word after the first can NEVER bind to -SlugFile by position (it did while
 # -SlugFile was declared plainly: `-File ... -Slugs a b` bound 'b' as the slug FILE). Everything the

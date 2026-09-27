@@ -32,7 +32,7 @@
 # Its self-test builds every sandbox it reads under %TEMP% and reads three frozen blobs by id from git's object store,
 # which cannot change under an id. So it reads nothing else of this repo, and says so rather than being guessed at.
 # Its scan-set fixtures build a temp git repository, so they load lib\git-repo-env.ps1 to clear an inherited GIT_DIR.
-# gate-inputs: lib\gate-input-key.ps1, lib\git-repo-env.ps1
+# gate-inputs: lib\gate-input-key.ps1, lib\gate-input-derived.ps1, lib\git-repo-env.ps1
 $__gikSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # A DATA DIRECTORY IS BYTES THAT CHANGE WITHOUT A COMMIT. A gate that reads one cannot be keyed on source.
@@ -140,6 +140,9 @@ function Get-TcGateVarBase {
   return $out
 }
 
+# Round 5: variables whose every assignment traces to a repo folder (Get-TcGateDerivedBases).
+. (Join-Path $PSScriptRoot 'gate-input-derived.ps1')
+
 function Get-TcGateAncestorDirs {
   <# Every folder from $Rel up to the checkout root, root last as ''. Repo-relative, no trailing separator. #>
   param([string]$Rel)
@@ -159,8 +162,9 @@ function Test-TcGateUnparsed {
      does not parse would otherwise be neither keyed nor refused - an input dropped from the key in silence. Returns
      the name of the first such spelling, or '' when there is none. A backtick-escaped `$root inside a fixture string
      is text, not a read, so every pattern refuses only an unescaped $. #>
-  param([string]$Code)
+  param([string]$Code, [string[]]$ExtraBases = @())
   $b = '(?:repo|root|RepoRoot|here|PSScriptRoot)'
+  if (@($ExtraBases | Where-Object { $_ }).Count) { $b = '(?:(?:script:)?(?:' + ((@($ExtraBases | Where-Object { $_ }) | ForEach-Object { [regex]::Escape($_) }) -join '|') + '))' }
   $rules = @(
     @(('(?i)\[(?:System\.)?IO\.Path\]::Combine\(\s*\$' + $b + '\b'), '[IO.Path]::Combine on a base folder'),
     @(('(?i)"[^"\r\n]*(?<!`)\$\{?' + $b + '\}?\\'), 'a path interpolated into a double-quoted string on a base folder'),
@@ -195,12 +199,19 @@ function Resolve-TcGateFileRefs {
   foreach ($d in $gateAnc) { if (-not $fallback.Contains($d)) { $fallback.Add($d) } }
   $paths = [Collections.Generic.List[string]]::new()
   $absent = [Collections.Generic.List[string]]::new()
-  foreach ($m in [regex]::Matches($code, $script:TcGateLiteralRx)) {
-    $baseTxt = $m.Groups[1].Value
-    $lit = $m.Groups[2].Value -replace '/', '\'
+  # ROUND 5: literals on a RESOLVED variable (lib\gate-input-derived.ps1) join the same rules below.
+  $items = Get-TcGateDerivedItems -Code $code -Vars $vars
+  foreach ($it in $items) {
+    $baseTxt = $it.Base
+    $lit = $it.Lit -replace '/', '\'
     $dirs = [Collections.Generic.List[string]]::new()
     $bases = $null
-    if ($baseTxt -match '(?i)^\$PSScriptRoot$') { $bases = @(0) }
+    if ($null -ne $it.Derived) {
+      $dd = Get-TcGateDerivedDirs -Derived $it.Derived -FileAnc $fileAnc -RepoFull $repoFull
+      if ($null -eq $dd) { if ($Strict) { return [pscustomobject]@{ Ok = $false; Why = ("names '" + $lit + "' on a folder that resolves outside this repo, so the key cannot hash it"); Paths = @(); Absent = @() } }; continue }
+      foreach ($d in $dd) { $dirs.Add($d) }; $bases = @()
+    }
+    elseif ($baseTxt -match '(?i)^\$PSScriptRoot$') { $bases = @(0) }
     elseif ($baseTxt.StartsWith('(')) {
       # (Split-Path <base> -Parent): one folder above whatever the inner base names.
       $inner = [regex]::Match($baseTxt, '(?i)\$(PSScriptRoot|repo|root|RepoRoot|here)\b').Groups[1].Value
@@ -329,6 +340,10 @@ function Get-TcGateUnpinnedBase {
      name, or ''. An escaped `$v inside a fixture string is text, never a read. #>
   param([string]$Code)
   $known = @('repo', 'root', 'reporoot', 'here', 'psscriptroot')
+  # ROUND 5: a variable whose every assignment traces to a repo-rooted folder is RESOLVED, not unpinned; its literals
+  # are hashed (or refused as data) by Resolve-TcGateFileRefs exactly as a $repo literal is.
+  $derived = Get-TcGateDerivedBases -Code $Code -Vars (Get-TcGateVarBase -Code $Code)
+  $known = @($known) + @($derived.Keys)
   $names = New-Object Collections.Generic.List[string]
   foreach ($m in [regex]::Matches($Code, '(?i)(?<!`)Join-Path\s+(?:-Path\s+)?\$(?:script:)?(\w+)\s+[''"]')) {
     $n = $m.Groups[1].Value.ToLowerInvariant()
@@ -393,6 +408,8 @@ function Test-TcGateCacheable {
   if ($unpinned) {
     return [pscustomobject]@{ Ok = $false; Why = ('builds a path on $' + $unpinned + ', a folder the key cannot pin to a sandbox or resolve in this repo, so the file it reads cannot be hashed') }
   }
+  $derivedWhy = Test-TcGateDerivedRefusal -Code $code
+  if ($derivedWhy) { return [pscustomobject]@{ Ok = $false; Why = $derivedWhy } }
   $unparsed = Test-TcGateUnparsed -Code $code
   if ($unparsed) {
     return [pscustomobject]@{ Ok = $false; Why = ('builds a path with ' + $unparsed + ', a spelling the key does not parse, so the file it reads cannot be hashed') }

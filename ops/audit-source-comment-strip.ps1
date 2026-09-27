@@ -61,6 +61,8 @@
   Exit: 0 = at or under the baseline. 2 = a NEW line-comment-only scanner, or -Tighten refused an implausible
   fall. 3 = could not evaluate.
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\audit-source-comment-strip.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Accept, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

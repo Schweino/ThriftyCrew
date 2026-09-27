@@ -43,6 +43,8 @@
   Usage: .\refresh-sams-verified.ps1 -Date 2026-08-01 [-WhatIf]
          .\refresh-sams-verified.ps1 -SelfTest
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: grocery\refresh-sams-verified.ps1
 param(
   [string]$Date = "",
   [string]$Root = "",

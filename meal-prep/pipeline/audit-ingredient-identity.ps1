@@ -53,6 +53,8 @@
   admits another member while the row's name still routes to its bid (Zucchini / Yellow Squash was exactly that).
   A refusal is complete: the row's own name routed differently from its mark, which is the defect.
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\audit-ingredient-identity.ps1
 [CmdletBinding()]
 param(
   [switch]$SelfTest,

@@ -30,6 +30,8 @@
 # WHICH FEED: grocery\out\smp-feed.json (what the next deploy ships) by default; -Live reads the deployed URL.
 # Exit: 0 clean, 1 findings, 3 could not evaluate. Last line: LIVE-PRICE-CONTRACT-COMPLETE.
 # Self-test: powershell -File meal-prep\pipeline\audit-live-price-contract.ps1 -SelfTest
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\audit-live-price-contract.ps1
 param([string]$Slugs = '', [string]$FeedPath = '', [switch]$Live, [string]$BuiltDir = '', [switch]$LivePosts, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $SelfTestLpc = $SelfTest.IsPresent       # before the dot-source: the gate lib's param block rebinds $SelfTest

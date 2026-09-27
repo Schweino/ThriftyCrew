@@ -79,6 +79,8 @@
     ops\audit-typed-param-shadow.ps1 -Tighten -AcceptDrop  record a fall lib\ratchet.ps1 would refuse
     ops\audit-typed-param-shadow.ps1 -SelfTest             founding shapes, legal forms, scopes, walk, live path
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\audit-typed-param-shadow.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Tighten, [switch]$AcceptDrop, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'

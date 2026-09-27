@@ -61,6 +61,8 @@
 # PS 5.1 NOTES: this file writes NEW spec files via per-object ConvertTo-Json (the proven r300
 # build-specs path). It never round-trips an EXISTING spec (the \uXXXX prose corruption trap); on
 # -Force it rebuilds from the intake file, it does not read-modify-write the old spec.
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\build-v2-spec.ps1
 param(
   [string]$InFile,
   [string]$OutDir,          # default <meal-prep>\db\recipes  (point at a scratch dir to stage/test)

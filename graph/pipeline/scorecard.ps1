@@ -39,6 +39,8 @@
 #   .\scorecard.ps1 -SelfTest
 # Exit 0 ok, 2 self-test failure, 3 could-not-evaluate (no graph db / no python).
 # ---------------------------------------------------------------------------------------------------
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: graph\pipeline\scorecard.ps1
 param(
   [int]$Days = 7,
   [string]$Since = '',

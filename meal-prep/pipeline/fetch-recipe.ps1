@@ -33,6 +33,8 @@
 # (every 60th by name), the full and slim copies agreed 314 of 314 on recipe_jsonld, 314 of 314 on
 # page_text_from_html and 314 of 314 on mined link domains, at 8.7% of the bytes. One variant tried.
 # ---------------------------------------------------------------------------------------------------
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\fetch-recipe.ps1
 param(
   [string]$Url = '', [switch]$Refresh, [switch]$BodyPath, [switch]$Stats, [switch]$Json, [switch]$SelfTest,
   # PROBING IS NOT USING (2026-08-24). A publisher PROBE fetches a few sample pages to decide

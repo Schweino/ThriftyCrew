@@ -35,6 +35,8 @@
   Exit: 0 = no rule file staged, or the baseline matches. 1 = staged rules were never reviewed.
         3 = could not evaluate (no git, no repo).
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: ops\verify-commodities-gate.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Head)
 $ErrorActionPreference = 'Stop'

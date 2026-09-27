@@ -19,6 +19,8 @@
 #   -AllowStale     merge them anyway (a deliberate replay, e.g. restoring from url-inputs-archive)
 #   -NoArchive      leave consumed files in place (ONLY for debugging; re-enables the replay bug)
 #   -SelfTest       sandbox test: fresh file is consumed AND archived; stale file is refused
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: grocery\merge-product-urls.ps1
 param(
   [string]$Root = '',
   [int]$MaxAgeDays = 10,

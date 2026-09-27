@@ -56,6 +56,8 @@
 # dot-sourcing a script runs its param() block in the CALLER's scope, and compute-v2-perserving.ps1 (the
 # production caller) has its own [switch]$SelfTest. A param block here would silently reset the caller's
 # switch on the line after it bound. Read -SelfTest off $args, and only when RUN.
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\feed-freshness.ps1
 $__ffSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 $script:FEED_PERIOD_HOURS      = 24    # SMP Grocery Daily Pipeline (local), 08:30 daily

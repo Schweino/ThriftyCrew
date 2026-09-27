@@ -53,6 +53,8 @@
 # The completion marker `BUILD-INTAKE-SKELETON-COMPLETE` is the last line on every path except a crash,
 # because "did it finish" and "what did it find" are different questions.
 # ---------------------------------------------------------------------------------------------------
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\build-intake-skeleton.ps1
 param(
   [string]$RunDir = '',
   [string]$Slug = '',

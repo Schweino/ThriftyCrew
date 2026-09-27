@@ -36,6 +36,8 @@
 # PS 5.1, dot-sourcing a script runs its param() block in the CALLER's scope, so a param([switch]$SelfTest)
 # here would reset the caller's own -SelfTest to $false on the line after it bound, silently disarming its
 # self-test. Read the switch off $args, and only when this file is RUN rather than dot-sourced.
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: lib\bot-paths.ps1
 $__botPathsSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Get-BotInputPaths {

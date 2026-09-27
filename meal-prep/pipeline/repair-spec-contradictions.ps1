@@ -31,6 +31,8 @@
   Every repair is reported with the before and after. Read-only unless -Apply.
   Usage: .\repair-spec-contradictions.ps1 [-Apply]   |   .\repair-spec-contradictions.ps1 -SelfTest
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\repair-spec-contradictions.ps1
 param([switch]$Apply, [switch]$SelfTest, [switch]$IncludeArchive, [string]$Root = "")
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }

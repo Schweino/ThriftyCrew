@@ -24,6 +24,8 @@
   the block AND its value accounts for the gap in the total. Both halves, or it is not this bug. That
   test finds 5 specs out of 574 - and every one is real.
 #>
+# Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
+# gate-inputs: meal-prep\pipeline\audit-cost-line-coverage.ps1
 [CmdletBinding()]
 param(
   [string[]]$Slugs,
