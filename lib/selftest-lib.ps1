@@ -261,11 +261,54 @@ function Get-SelfTestSpans {
   return @($kept)
 }
 
+function Expand-SelfTestPointers {
+  <# A host's text as it READS, with every dot-source POINTER into the host's own folder replaced by that file's text.
+
+     WHY (Brad's ruling D1, 2026-09-27, design\PLAN-split-giant-files-2026-09-27.md). A giant script is split into a
+     subfolder named for it, and a moved self-test leaves a two-line pointer in the host:
+         if ($SelfTest) { . (Join-Path $PSScriptRoot 'push-main\selftest.ps1'); exit $LASTEXITCODE }
+     and grocery\test-auditors.ps1 dot-sources its unit groups from grocery\test-auditors\. Without this the census would
+     read a pointer where the must-fires used to be and report them LOST, and a moved suite could lose its must-fires
+     and stay green (og-35).
+
+     A POINTER is `. (Join-Path $PSScriptRoot '<host>\<file>.ps1')`, <host> being the host's file name without .ps1, so
+     only the host's own pieces are followed: a dot-source of lib\ or of a neighbour is a library, not a piece, and is
+     left alone (following those would change every census count in the tree). On a line of its own the WHOLE LINE
+     becomes the file's text, so a pure MOVE expands back to the original bytes; anywhere else (the D1 shape above) the
+     pointer becomes a newline, the text and a newline. A pointer whose file is missing is left as it is, and the census
+     then reports the must-fires it lost, loudly. Pieces are followed to 4 levels. Without -Path nothing is followed. #>
+  param([string]$Text, [string]$Path = '', [int]$Depth = 0)
+  if (-not $Path -or -not $Text -or $Depth -gt 4) { return $Text }
+  $leaf = [IO.Path]::GetFileNameWithoutExtension($Path)
+  $dir = Split-Path -Parent $Path
+  $ptr = "\.[ \t]+\(Join-Path[ \t]+\`$PSScriptRoot[ \t]+'(?<rel>" + [regex]::Escape($leaf) + "[\\/][^'\\/\r\n]+\.ps1)'\)"
+  $read = {
+    param([string]$Rel)
+    $f = if ($dir) { Join-Path $dir $Rel } else { $Rel }
+    if (-not (Test-Path -LiteralPath $f -PathType Leaf)) { return $null }
+    $t = [IO.File]::ReadAllText((Resolve-Path -LiteralPath $f).ProviderPath)
+    if ($t.Length -and $t[0] -eq [char]0xFEFF) { $t = $t.Substring(1) }
+    return (Expand-SelfTestPointers -Text $t -Path $f -Depth ($Depth + 1))
+  }
+  $whole = [regex]::Replace($Text, ('(?m)^[ \t]*' + $ptr + '[ \t]*\r?\n'), {
+    param($m)
+    $t = & $read $m.Groups['rel'].Value
+    if ($null -eq $t) { return $m.Value } else { return $t }
+  })
+  return [regex]::Replace($whole, $ptr, {
+    param($m)
+    $t = & $read $m.Groups['rel'].Value
+    if ($null -eq $t) { return $m.Value } else { return ("`n" + $t + "`n") }
+  })
+}
+
 function Get-SelfTestBlock {
   <# Every outermost self-test body, joined in source order: the TEXT answer, and the only thing this lib
      returned before the spans were split out above. Same bytes for the same input, which is what
      ops\audit-fixture-inputs.ps1 and ops\audit-mustfire-census.ps1 both read. #>
   param([string]$Text, [string]$Path = '')
+  # A host's pointers into its own folder read as the moved text (D1, 2026-09-27; Expand-SelfTestPointers above).
+  $Text = Expand-SelfTestPointers -Text $Text -Path $Path
   # Assign, THEN wrap. @(Get-Thing ...) inline reads a comma-returned array as ONE element [[ps-json-array-collapse]].
   $kept = Get-SelfTestSpans -Text $Text -Path $Path
   $kept = @($kept)
@@ -415,6 +458,44 @@ if ($__stlSelfTest) {
       (($sp2.Count -eq 2) -and ($sp2[0].S -lt $sp2[1].S) -and
        [string]::Equals((@($sp2 | ForEach-Object { $twoSrc.Substring($_.S, $_.E - $_.S) }) -join "`n"),
          (Get-SelfTestBlock -Text $twoSrc), [StringComparison]::Ordinal))
+
+  # THE POINTER-FOLLOW (Brad's D1, 2026-09-27, design\PLAN-split-giant-files-2026-09-27.md). Real files, because a pointer
+  # names a file; one temp directory per run, removed in the finally. The fixture labels are built by concatenation so
+  # this file's own text never carries them where the census would count them ([[selftest-greps-its-own-source]]).
+  $ptDir = Join-Path ([IO.Path]::GetTempPath()) ('tc-stp-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  try {
+    [void](New-Item -ItemType Directory -Path (Join-Path $ptDir 'test-host') -Force -ErrorAction Stop)
+    [void](New-Item -ItemType Directory -Path (Join-Path $ptDir 'push-x') -Force -ErrorAction Stop)
+    [void](New-Item -ItemType Directory -Path (Join-Path $ptDir 'lib') -Force -ErrorAction Stop)
+    $u8 = New-Object Text.UTF8Encoding($false)
+    $unitsBody = "if (`$true) {`n  T '" + $MFs + ": moved unit'`n}`n"
+    $wholeOrig = "param([string]`$SkipUnitsFile = '')`n`$first = 1`n" + $unitsBody + "`$last = 1`n"
+    $wholeHost = "param([string]`$SkipUnitsFile = '')`n`$first = 1`n. (Join-Path `$PSScriptRoot 'test-host\units-a.ps1')`n`$last = 1`n"
+    [IO.File]::WriteAllText((Join-Path $ptDir 'test-host.ps1'), $wholeHost, $u8)
+    [IO.File]::WriteAllText((Join-Path $ptDir 'test-host\units-a.ps1'), $unitsBody, $u8)
+    $bWhole = Get-SelfTestBlock -Text $wholeHost -Path (Join-Path $ptDir 'test-host.ps1')
+    StT 'MUST FIRE: a whole-file suite split into its own folder is read with the moved unit back in place (the test-auditors shape)' `
+        (($bWhole -match 'moved unit') -and ($bWhole -match '\$last = 1'))
+    StT 'CLEAN TWIN: a pure MOVE expands back to the original bytes, line for line' `
+        ([string]::Equals((Expand-SelfTestPointers -Text $wholeHost -Path (Join-Path $ptDir 'test-host.ps1')), $wholeOrig, [StringComparison]::Ordinal))
+    $d1Host = "param([switch]`$SelfTest)`nif (`$SelfTest) { . (Join-Path `$PSScriptRoot 'push-x\selftest.ps1'); exit `$LASTEXITCODE }`n`$live = 'production'`n"
+    [IO.File]::WriteAllText((Join-Path $ptDir 'push-x\selftest.ps1'), ("`$moved = 1`nT '" + $MFs + ": in the moved suite'`n"), $u8)
+    $bD1 = Get-SelfTestBlock -Text $d1Host -Path (Join-Path $ptDir 'push-x.ps1')
+    StT 'MUST FIRE: the D1 pointer, if ($SelfTest) { . <host>\selftest.ps1; exit }, reads the moved suite and still not the live path' `
+        (($bD1 -match '\$moved = 1') -and ($bD1 -match 'in the moved suite') -and ($bD1 -notmatch 'production'))
+    [IO.File]::WriteAllText((Join-Path $ptDir 'lib\helper.ps1'), ("T '" + $MFs + ": a library, not a piece'`n"), $u8)
+    $libHost = "param([string]`$SkipUnitsFile = '')`n. (Join-Path `$PSScriptRoot 'lib\helper.ps1')`n. (Join-Path `$PSScriptRoot 'test-other\x.ps1')`n`$z = 1`n"
+    $bLib = Get-SelfTestBlock -Text $libHost -Path (Join-Path $ptDir 'test-host.ps1')
+    StT 'MUST NOT FIRE: a dot-source outside the host''s own folder (lib\, a neighbour) is a library and is not followed' `
+        (($bLib -notmatch 'a library, not a piece') -and ($bLib -match 'lib\\helper\.ps1'))
+    $missHost = "param([string]`$SkipUnitsFile = '')`n. (Join-Path `$PSScriptRoot 'test-host\gone.ps1')`n`$z = 1`n"
+    StT 'MUST NOT FIRE: a pointer to a missing piece is left as written, never read as an empty piece' `
+        ((Get-SelfTestBlock -Text $missHost -Path (Join-Path $ptDir 'test-host.ps1')) -match 'test-host\\gone\.ps1')
+    StT 'MUST NOT FIRE: without -Path no pointer is followed (a caller passing text alone gets the old answer)' `
+        ([string]::Equals((Expand-SelfTestPointers -Text $wholeHost), $wholeHost, [StringComparison]::Ordinal))
+  } finally {
+    Remove-Item -LiteralPath $ptDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
 
   if ($fail) { Write-Output "SELFTEST-LIB SELF-TEST FAILED ($fail)"; exit 1 }
   Write-Output 'SELFTEST-LIB SELF-TEST PASSED (every opening shape found - gated body, guard-return, Invoke-*SelfTest, whole-file suite - production paths refused, and the two shapes that broke the hand-written scanners are armed)'

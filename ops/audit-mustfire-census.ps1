@@ -491,7 +491,8 @@ foreach ($s in $scripts) {
   [void]$inputs.Add([pscustomobject]@{
     Rel  = $s.FullName.Replace($repo, '').TrimStart('\')
     Path = $s.FullName                                     # -Path: a whole-file test-*.ps1 suite is read by its name
-    Text = [IO.File]::ReadAllText($s.FullName)
+    # A split host reads as its pieces back in place (D1, 2026-09-27): Expand-SelfTestPointers, lib\selftest-lib.ps1.
+    Text = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($s.FullName)) -Path $s.FullName
   })
 }
 $bodies = Get-McBodies -Files $inputs.ToArray()
