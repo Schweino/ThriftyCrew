@@ -66,3 +66,19 @@ silent stand-in, and only holds recipes where the stand-in really is a different
 
 Q-2026-09-26-form-style: **"B: shape same, style own"** - a different pasta SHAPE is the same commodity; a different
 STYLE (cajun vs creole, salsa verde vs green chile, sauce styles, chili oil etc.) is its own.
+
+## Ruling on whole-grain pasta (2026-09-26, Brad in chat)
+
+Asked whether whole-grain pasta (the 6 keys priced by Kroger 100% Whole Grain Penne Rigate at Baker's) is the same
+food as regular pasta under "shape same, style own". Brad: **"Separate food"** - whole grain is a different grain, so
+whole-grain pasta is excluded from the regular pasta cells, the same way a style is.
+
+Executed the same day through the mechanism the form/style ruling used: `grocery/commodities.json` pasta excludes
+`\bwhole[\s-]*(?:grain|wheat)\b`, with MUST FIRE / MUST NOT FIRE / CLEAN TWIN cases in
+`grocery/test-commodity-rules.ps1`. Paired scratch rebuild (compare-deals, same inputs, old rules vs new): 1 of 2,807
+priced cells moved - pasta at Baker's, Kroger 100% Whole Grain Penne Rigate to Kroger Penne Rigate Pasta, both
+$0.0831/oz; the pasta crown (Aldi $0.0591/oz) did not move. No whole-grain pasta commodity was minted, because no
+recipe line names one.
+
+The green chile sauce style from the ruling above now has its own commodity, `green-chile-sauce`, with the capture
+term "green chile sauce". The recipe line stays on salsa verde until a store fetch prices it.

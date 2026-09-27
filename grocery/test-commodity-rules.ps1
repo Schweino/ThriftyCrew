@@ -574,6 +574,29 @@ $cases = @(
      why='MUST FIRE a red chile sauce is not enchilada sauce; it priced Enchilada Sauce at Walmart (5a9676, form-style B)' }
   @{ id='enchilada-sauce'; name='Las Palmas Mild Enchilada Sauce, 28 oz'; expect='included'
      why='CLEAN TWIN the same maker''s enchilada sauce stays on enchilada-sauce (5a9676)' }
+  # Brad's ruling of 2026-09-26 on whole-grain pasta, "Separate food" (design/ready-for-brad/Q-2026-09-26-form-style.md):
+  # whole grain is a different grain, so it leaves the regular pasta cells the way a style does. Real names from the
+  # captures behind comparison-2026-09-23 (the Baker's cell holder and the other whole-wheat spellings).
+  @{ id='pasta'; name='Kroger 100% Whole Grain Penne Rigate'; expect='excluded'
+     why='MUST FIRE the Baker''s whole-grain penne held the pasta cell at $0.0831/oz for 6 recipe keys (form-style residual)' }
+  @{ id='pasta'; name='Great Value Whole Wheat Spaghetti, 16 oz (Shelf Stable)'; expect='excluded'
+     why='MUST FIRE the whole-wheat spelling of the same food, a Walmart pasta candidate (form-style residual)' }
+  @{ id='pasta'; name='Barilla Whole Grain Penne Non-GMO and Kosher Pasta Made With Whole Wheat'; expect='excluded'
+     why='MUST FIRE a whole-grain penne at Baker''s under a brand name (form-style residual)' }
+  @{ id='pasta'; name='Kroger Penne Rigate Pasta'; expect='included'
+     why='MUST NOT FIRE the plain Baker''s penne that takes the cell at the same $0.0831/oz stays on pasta (form-style residual)' }
+  @{ id='pasta'; name='Creamette Elbow Macaroni 1 Lb'; expect='included'
+     why='CLEAN TWIN a different SHAPE is still the same food, per "shape same, style own" (form-style residual)' }
+  # green-chile-sauce, minted 2026-09-26 for the Green Chile Sauce recipe line (priced by salsa verde until a store
+  # fetch lands). Style own: a green chile ENCHILADA sauce, a salsa verde and a meat-in-sauce can are other foods.
+  @{ id='green-chile-sauce'; name='505 Southwestern Green Chile Sauce, 40 oz.'; expect='included'
+     why='MUST FIRE the Sam''s capture of 2026-09-25 that no commodity claimed (form-style residual)' }
+  @{ id='green-chile-sauce'; name='Old El Paso Mild Green Chile Enchilada Sauce'; expect='no-include-match'
+     why='MUST NOT FIRE a green chile enchilada sauce is enchilada-sauce''s style, not this one (form-style residual)' }
+  @{ id='green-chile-sauce'; name='Stokes Green Chile Sauce with Pork, Mild, 15 oz Can'; expect='excluded'
+     why='MUST NOT FIRE a can of pork in green chile sauce is a meal, not the sauce (form-style residual)' }
+  @{ id='enchilada-sauce'; name='Old El Paso Mild Green Chile Enchilada Sauce'; expect='included'
+     why='CLEAN TWIN the green chile enchilada sauce stays on enchilada-sauce (form-style residual)' }
 )
 
 $bad = 0
