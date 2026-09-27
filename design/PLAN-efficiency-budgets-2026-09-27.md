@@ -44,8 +44,23 @@ Never `--force`, never an unmerged worktree. It reports counts (removed, refused
 
 **B4. Weekly efficiency report.** One section in the existing Monday brain digest: each budget's current
 number, its mark, the 4-week trend, and anything within 10% of its mark. Budgets: push cost (both classes),
-largest files, always-loaded bytes, script-census orphans, worktree count, plans marked under way.
+largest files, always-loaded bytes, script-census orphans, worktree count, plans marked under way. Each budget's
+STATE is printed by the budget policy below.
 
+## Budget policy (added at the build, 2026-09-27, from the build brief)
+Agreed in advance, so a budget is a decision and not a gauge (reliability-craft/slos-and-error-budgets.md section 4).
+Every budget with a mark is in exactly one state, and the state carries its action:
+
+| State | When | Action |
+|---|---|---|
+| healthy | 25% or more headroom, and it did not grow over 4 weeks | carry on |
+| at risk | 25% or more headroom, and it grew over the last 4 weeks | review what grew |
+| nearly exhausted | under 25% headroom left: (mark - current) / mark < 0.25 | new machinery must shrink something else first |
+| over | past the mark | cleanup before new feature work |
+
+A ratchet AT its mark is nearly exhausted by definition, which is the ratchet's own rule: to add, take something away.
+The "within 10% of its mark" flag in B4 is inside nearly exhausted and printed beside it. A budget with no mark is
+report only; a number that could not be read is unknown, never 0. `ops/report-efficiency-budgets.ps1` owns the states.
 ## Bars (written before the build)
 - B1 and B2 red on a fixture that breaks them and green on the tree as landed.
 - B3 removes nothing a person could lose: fixtures for dirty, unmerged and locked worktrees, each left alone.
@@ -54,3 +69,19 @@ largest files, always-loaded bytes, script-census orphans, worktree count, plans
 ## Decisions (ruled)
 - D1 Budgets over new gates: YES.
 - D2 Build after round 4 so the baseline is current: YES.
+
+## Build record (2026-09-27)
+Each item landed as its own commit under `Plan: design/PLAN-efficiency-budgets-2026-09-27.md B<n>`; find them with
+`git log origin/main --grep "PLAN-efficiency-budgets"`.
+- **B1** `lib/push-cost-budget.ps1`, `ops/push-cost-budget.ps1`, 11 lines in `ops/run-gates.ps1`. Starting mark: NONE,
+  report-only. After cc40a2820 the gate-times rows held one full run, and it was cold, so there was no median to take.
+  Each class arms once it has 9 full green runs: `ops\push-cost-budget.ps1 -Accept -Class data` (and `code`), committed
+  with the reason. Added cost per run: 135 ms measured at 540 jobs against a 2,000-row file.
+- **B2** `ops/audit-file-size-budget.ps1`, keyed on the code scan set. Starting marks: 54 files over 1,000 lines, each
+  at its size (`ops/out/file-size-budget-baseline.json`). 0 s on a data-only push; about 0.9 s on a code push.
+- **B3** `ops/clean-worktrees.ps1`, called by `ops/run-daily-ratchets.ps1`. First dry run: 160 worktrees, 0 removable.
+- **B4** `ops/report-efficiency-budgets.ps1`, printed by `ops/brain-digest.ps1` on Mondays (or `-Weekly`). The 4-week
+  trend starts from its own history rows, so the first real trend is on 2026-10-26 or later. The digest MAILS only
+  under ruling 8b (a red stage), so on a green Monday the section is in the page and the run log, not the inbox.
+
+Open: B1's marks (after 9 runs of each class); whether the B4 section should itself make a Monday digest send.

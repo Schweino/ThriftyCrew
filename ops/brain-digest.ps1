@@ -32,7 +32,7 @@
   EXIT CODES: 0 always, unless -SelfTest fails. Overdue queues are the CONTENT, not the verdict.
 #>
 [CmdletBinding()]
-param([switch]$SelfTest, [switch]$Alert, [switch]$Quiet)
+param([switch]$SelfTest, [switch]$Alert, [switch]$Quiet, [switch]$Weekly)
 
 $ErrorActionPreference = 'Stop'
 # The self-test is pure over in-file rows and temp files; three libraries come through a computed repo path.
@@ -226,7 +226,7 @@ function Format-Digest {
   <# The page, as text. PURE - takes the gathered state, returns the string, so the
      fixtures can drive the wording without a filesystem or a mailer. #>
   param($Night, $Queues, [string]$Weakest, $Events, [string[]]$Estate = @(), [string]$InboxCommand = 'recall-inbox.py',
-    [string[]]$Learning = @())
+    [string[]]$Learning = @(), [string[]]$Efficiency = @())
   $out = New-Object Collections.Generic.List[string]
   $out.Add("BRAIN DIGEST - $(Get-Date -Format 'yyyy-MM-dd HH:mm')")
   $out.Add('')
@@ -251,6 +251,12 @@ function Format-Digest {
   # shaped from skills\recall-recurrence.py --digest, which reads the nightly build and computes nothing.
   if (@($Learning).Count) {
     foreach ($l in @($Learning)) { $out.Add($l) }
+    $out.Add('')
+  }
+  # B4 of design\PLAN-efficiency-budgets-2026-09-27.md: the weekly budgets section, Mondays only (or -Weekly), already shaped
+  # by ops\report-efficiency-budgets.ps1, which computes the states; nothing here judges them.
+  if (@($Efficiency).Count) {
+    foreach ($l in @($Efficiency)) { $out.Add($l) }
     $out.Add('')
   }
   $out.Add("WAITING FOR A RULING")
@@ -504,7 +510,12 @@ if ($SelfTest) {
   Case 'MUST NOT FIRE' 'a class row with no first_seen is aged UNKNOWN (-1), never 0' ($cc.AgeDays -eq -1) "age=$($cc.AgeDays)"
 
   # A literal-case suite asserts how many ran (brain-consults plan 4.8).
-  $expected = 43
+  # B4: the weekly section rides the page when given, and is absent when not.
+  $effTxt = Format-Digest -Night $night -Queues $agedQ -Weakest 'x' -Events @() -Efficiency @('EFFICIENCY BUDGETS (weekly)', '  lines in files >1,000   OVER - cleanup before new feature work')
+  Case 'CLEAN TWIN' 'a Monday page carries the efficiency budgets section, above the rulings table' `
+    (($effTxt -match 'EFFICIENCY BUDGETS \(weekly\)[\s\S]*OVER - cleanup before new feature work[\s\S]*WAITING FOR A RULING')) $effTxt
+  Case 'MUST NOT FIRE' 'a page given no efficiency lines prints no efficiency section' (-not ($agedTxt -match 'EFFICIENCY BUDGETS')) $agedTxt
+  $expected = 45
   if ($ran.Count -ne $expected) { $script:fails += "CASE COUNT ran $($ran.Count) cases, expected $expected" }
 
   ''
@@ -717,8 +728,20 @@ Invoke-Guard -Name 'BRAIN-DIGEST' -Body {
   if (-not $learning.Count) {
     $learning = @('LEARNING FROM MISTAKES', '  UNKNOWN - recall-recurrence.py could not run, which is not a brain that stopped nothing')
   }
+  # B4 (design\PLAN-efficiency-budgets-2026-09-27.md): the efficiency budgets, on Mondays. A report that could not run
+  # says UNKNOWN, never nothing: a missing section would read as a week with nothing over budget.
+  $efficiency = @()
+  if ($Weekly -or (Get-Date).DayOfWeek -eq [DayOfWeek]::Monday) {
+    try {
+      $eo = @(& powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repo 'ops\report-efficiency-budgets.ps1'))
+      $efficiency = @($eo | Where-Object { "$_" -notmatch '^[A-Z0-9-]+-COMPLETE\b' })
+    } catch { }
+    if (-not @($efficiency | Where-Object { "$_" -like 'EFFICIENCY BUDGETS*' }).Count) {
+      $efficiency = @('EFFICIENCY BUDGETS (weekly)', '  UNKNOWN - ops\report-efficiency-budgets.ps1 could not run, which is not a week with nothing over budget')
+    }
+  }
   $inboxCmd = "$PY " + (Join-Path $SKILLS 'recall-inbox.py')
-  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd -Learning $learning
+  $text = Format-Digest -Night $night -Queues $queues -Weakest $weakest -Events $events -Estate $estatePage -InboxCommand $inboxCmd -Learning $learning -Efficiency $efficiency
   if (-not $Quiet) { $text }
 
   $digestSends = Test-DigestShouldSend -RedStages (@($estateRed | Where-Object { $_ }).Count) -EstateRead $estateRead
