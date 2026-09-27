@@ -353,6 +353,9 @@ function Select-CrossStoreRank($winners) {
 # not be dot-sourced. The functions never had that problem - they are pure - so they moved out and
 # every caller dot-sources them instead of cutting them out with a regex.
 . (Join-Path $PSScriptRoot 'pricing-math-lib.ps1')
+# THE TILE CARRIES ITS LINK (design/PLAN-link-rides-with-price-2026-09-27.md L1): the per-store URL rules, one copy
+# shared with derive-links-from-prices.ps1. Proven once per build, not per row.
+. (Join-Path $PSScriptRoot 'link-identity-lib.ps1')
 # Sam's Club is the only store requiring a paid membership (100% deterministic) - drives the "no-membership" winner.
 function Test-Membership([string]$store) { return ($store -eq "Sam's Club") }
 
@@ -2465,7 +2468,13 @@ function Add-Norm {
   # split_from: the WHOLE flyer line this row was cut out of, when Split-TwoProductAdLine cut it (queue
   # 2026-09-10-582032). Carried so audit-match-soundness and the identity table can show provenance, and so
   # Get-UnitPrice can tell a part whose size is its own from a two-size line nobody has split.
-  $deals.Add([pscustomobject]@{ store=$Store; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; dedupe_type=[string]$DedupeType; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
+  # link / link_source (PLAN-link-rides-with-price L1): the product URL of the row that set this price, so the price
+  # and its link are one record. $SrcRow and $ProvRow are both the capture row; a flyer line passes neither.
+  $lkRow = if ($SrcRow) { $SrcRow } else { $ProvRow }
+  if ($null -eq $script:TcSamsAlnumProven) { $script:TcSamsAlnumProven = [bool](Test-SamsAlnumShapeProven $OutDir).proven }
+  $lkUrl = Get-TcRowUrl $Store $lkRow $script:TcSamsAlnumProven
+  $lkSrc = Get-TcLinkSource ([string]$lkUrl) ($null -ne $lkRow)
+  $deals.Add([pscustomobject]@{ store=$Store; link=[string]$lkUrl; link_source=$lkSrc; name=[string]$Name; price_text=[string]$PriceText; size_text=[string]$SizeText; regular=$Regular; source_ad=$SourceAd; price_type=$PriceType; src_date=[string]$SrcDate; ad_from=[string]$AdFrom; ad_to=[string]$AdTo; ad_basis=[string]$AdBasis; product_id=[string]$ProductId; fulfillment=[string]$Fulfillment; src_file=[string]$SrcFile; native_up=$(if ($nup) { [double]$nup.Value } else { $null }); native_up_unit=$(if ($nup) { [string]$nup.Unit } else { '' }); pu_rounding_pct=$purp; split_from=[string]$SplitFrom; dedupe_type=[string]$DedupeType; prov_row=$ProvRow; prov_kind=[string]$ProvKind; file_source=[string]$FileSource })
 }
 $ads = Read-JsonFile $AdsFile
 # TWO DATES, EACH NAMED FOR WHAT IT IS (2026-09-26, design\PLAN-board-clock-2026-09-26.md).
@@ -3260,6 +3269,8 @@ foreach ($pp in $prePass) {
     # fields, which is why the tie-break silently did nothing the first time it was written - it was
     # reading link_url off a shape that never had it.
     has_identity=[bool]($d.link_url -or $d.item_id -or $d.product_id -or $d.sams_item_id)
+    # link / link_source: stamped by Add-Norm from the capture row (PLAN-link-rides-with-price L1).
+    link=[string]$d.link; link_source=[string]$d.link_source
     # THE STORE'S OWN PRODUCT ID, carried as ONE string for Select-FreshestCaptureRows' same-product
     # supersession (2026-09-05). Name equality alone leaves a stale row standing whenever a store re-words
     # a listing between captures, and Walmart's July batch names are truncated at 60 chars so they cannot
@@ -3437,6 +3448,11 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
       $nat = Resolve-NativeUnitPrice $_.native_up ([string]$_.native_up_unit) ([string]$f.unit)
       $row = [ordered]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; member_label=$_.member_label; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad; ad_from=$_.ad_from; ad_to=$_.ad_to; ad_basis=$_.ad_basis; as_of=[string]$_.as_of }
       if ($nat) { $row['native_unit_price'] = $nat.price; $row['native_unit'] = $nat.unit }
+      # link / link_source (PLAN-link-rides-with-price L1): the price's own product link, from the row that set it.
+      # row = that product; none = a storefront row with no identity (capture defect); ad = a flyer line, which Brad's
+      # D1 ruling says the system must still resolve to a product. link is absent unless source is row.
+      if ([string]$_.link_source) { $row['link_source'] = [string]$_.link_source }
+      if ([string]$_.link) { $row['link'] = [string]$_.link }
       # deal_qty / deal_condition: the quantity condition this per-unit was priced under (Brad's ruling on a2af45,
       # 2026-09-22: the deal IS the price and the condition is SHOWN). Absent means the price holds for one unit.
       $null = Add-TcDealConditionFields $row ([string]$_.price_text) ([string]$_.note)

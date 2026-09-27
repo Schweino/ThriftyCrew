@@ -62,6 +62,7 @@ if (-not $KnownWrongFile) { $KnownWrongFile = Join-Path $root 'known-wrong.json'
 . (Join-Path $root 'known-wrong-lib.ps1')   # THE ruling matcher (KwNorm/KwCore) compare-deals and audit-known-wrong use
 . (Join-Path $root 'global-exclude-lib.ps1')
 . (Join-Path $root 'commodity-rules-lib.ps1')   # Add-TcRuleIndex / Get-TcReleasingPattern: an exclude releases a linked product
+. (Join-Path $root 'link-identity-lib.ps1')      # Get-TcRowUrl / Test-SamsAlnumShapeProven: ONE copy of the per-store URL rules
 . (Join-Path $root 'link-sibling-lib.ps1')      # Get-TiSiblingReason: THE sibling rule audit-tile-integrity reports by
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
 
@@ -73,18 +74,7 @@ if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.jso
 # and name). Only the NEWEST file counts, and only a clean 3 of 3: 2 of 3, a wall ('blocked'), a parse failure or no
 # file at all leave the alphanumeric id refused exactly as before. A proof that goes stale (the store changes its
 # URL scheme) is caught the next morning, because the next pass re-proves it and a failed proof un-proves it.
-function Test-SamsAlnumShapeProven([string]$Dir) {
-  $f = Get-ChildItem (Join-Path $Dir 'sams\sams-url-shape-*.json') -ErrorAction SilentlyContinue |
-    Where-Object { $_.BaseName -match '^sams-url-shape-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
-  if (-not $f) { return @{ proven = $false; why = 'no sams-url-shape file' } }
-  $d = $null
-  try { $d = Read-JsonFile $f.FullName } catch { return @{ proven = $false; why = ($f.Name + ' does not parse') } }
-  $cases = @($d.cases | Where-Object { $_ })
-  $allMatch = ($cases.Count -eq 3) -and (@($cases | Where-Object { $_.match -eq $true -and $_.blocked -ne $true }).Count -eq 3)
-  $ok = ([string]$d.verdict -eq 'proven') -and ([int]$d.proven -eq 3) -and ([int]$d.checked -eq 3) -and $allMatch
-  $why = ($f.Name + ': verdict ' + [string]$d.verdict + ', ' + [string]$d.proven + ' of ' + [string]$d.checked)
-  return @{ proven = $ok; why = $why }
-}
+# The proof function lives in link-identity-lib.ps1 (one copy, shared with compare-deals).
 $script:SamsShape = Test-SamsAlnumShapeProven $OutDir
 
 # ---- price helpers, shared by the staleness test and the write rule -----------------------------------
@@ -426,31 +416,8 @@ function Get-StoreFiles([string]$store) {
   return $files
 }
 
-function Get-RowUrl($store, $r) {
-  # A URL the row already holds always wins - it was observed, not built.
-  if ($r.link_url -and ([string]$r.link_url) -match '^https?://') { return [string]$r.link_url }
-  if ($r.canonical_url -and ([string]$r.canonical_url) -match '^https?://') { return [string]$r.canonical_url }
-  # Otherwise build one ONLY from an id whose URL shape is proven for that store.
-  switch ($store) {
-    'Hy-Vee' {
-      if ($r.product_id -and ([string]$r.product_id) -match '^\d+$') {
-        $slug = ((([string]$r.item).ToLower() -replace '[^a-z0-9]+', '-').Trim('-'))
-        if ($slug.Length -gt 80) { $slug = $slug.Substring(0, 80).TrimEnd('-') }
-        return ('https://www.hy-vee.com/aisles-online/p/' + [string]$r.product_id + '/' + $slug)
-      }
-    }
-    'Walmart' { if ($r.item_id -and ([string]$r.item_id) -match '^\d+$') { return ('https://www.walmart.com/ip/' + [string]$r.item_id) } }
-    "Sam's Club" {
-      # the quarantine-recovery rows stamp the id as sams_item_id; older rows used item_id. Accept both.
-      # Bare /ip/<id> is PROVEN (2026-07-17, Brad's browser): Sam's 301s it to the canonical /ip/<slug>/<id>
-      # and renders the exact product; a bogus id renders an "Uh-oh" page, so the shape cannot silently lie.
-      $sid = if ($r.sams_item_id) { [string]$r.sams_item_id } elseif ($r.item_id) { [string]$r.item_id } else { '' }
-      if ($sid -match '^\d+$') { return ('https://www.samsclub.com/ip/' + $sid) }
-      if ($script:SamsShape.proven -and $sid -match '^[A-Za-z0-9]{6,20}$') { return ('https://www.samsclub.com/ip/' + $sid) }
-    }
-  }
-  return $null
-}
+# The per-store URL rules live in link-identity-lib.ps1, so the tile and this bridge cannot disagree.
+function Get-RowUrl($store, $r) { return (Get-TcRowUrl $store $r ([bool]$script:SamsShape.proven)) }
 
 $cmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
 $cmp = (Read-JsonFile $cmpF.FullName).comparison

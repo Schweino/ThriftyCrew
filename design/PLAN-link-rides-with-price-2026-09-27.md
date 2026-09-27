@@ -1,8 +1,7 @@
 # PLAN: the "See item" link rides with the price, so a priced tile always knows its product
 
-Status: D1 to D4 RULED by Brad 2026-09-27 (see Decisions). Nothing is built. The work items below predate the rulings
-and must be revised to match them (flyer prices linked or not published, no hand-made link file, Aldi re-read, engines
-merged) before any build.
+Status: D1 to D4 RULED by Brad 2026-09-27 (see Decisions). Work items revised to match; L1 built
+2026-09-27.
 
 ## In one paragraph, for Brad
 Every price on the board is read from a real product page, and in most cases that page's product id or link is
@@ -70,65 +69,78 @@ fileset split (08-30, memory `reporter-outruns-repairer`), the price-versus-URL 
   `recipe-board.json`" was proved against a positive control: the same search over the same file finds its
   `comparison-*` read at line 456.
 
-## Work items
-Staged so each stage ships alone, is additive until the stage that removes, and has its own bar.
+## Work items (revised 2026-09-27 to match D1 to D4)
+Staged so each stage ships alone and is additive until the stage that removes. Brad's rulings reshape the end state:
+every published price carries its own product link, fetched by the system; there is no hand-made link file (D2); a
+flyer price the system cannot resolve to a product is not published (D1); one per-unit engine (D4).
 
-**L1. The tile carries its link (additive, nothing reads it yet).** Move `Get-RowUrl` and the Sam's URL-shape proof
-out of `derive-links-from-prices.ps1` into `grocery/link-identity-lib.ps1` (one function, dot-sourced by both, so
-there is one copy of the per-store URL rules). In `compare-deals.ps1`, carry the winning row's URL through the
-projection and write two fields on every store tile: `link` (the URL, or absent) and `link_source`:
-`row` (from the priced row), `ad` (the row came from a flyer or ad feed: no product page exists), `none` (a storefront
-row with no identity: a capture defect). The recipe board's SALE overlay gets it free, because `recipe-overlay.ps1`
-runs the same `compare-deals.ps1`; its EVERYDAY baseline (`recipe-board-everyday.json`, refreshed monthly and
-corrected by `set-board-cell.ps1`) does not pass through the tile builder, so L1 also stamps `link` and
-`link_source` there from the row each baseline cell names, or `none` when it names no row. Cost: two short fields
-per tile; no new step in the chain.
-Fixtures: MUST FIRE a Walmart row with `item_id` and empty `link_url` gets `/ip/<id>`; MUST NOT FIRE a flyer row gets
-`link_source=ad` and no link; CLEAN TWIN a Fareway storefront SALE row keeps its product link (source, not type).
+**L1. The tile carries its link (additive, nothing reads it yet). BUILT 2026-09-27.** `grocery/link-identity-lib.ps1`
+holds `Get-TcRowUrl`, `Test-SamsAlnumShapeProven` and `Get-TcLinkSource`, dot-sourced by `compare-deals.ps1` and
+`derive-links-from-prices.ps1` (one copy of the per-store URL rules). `Add-Norm` computes the link from the capture row
+it is handed, and every store tile gets `link_source` (`row`, `none` = storefront row with no identity, `ad` = flyer
+line) and `link` when the source is `row`. Fixtures: `grocery/test-link-identity-lib.ps1` (11 cases).
+Measured on the 2026-09-27 board (base = origin/main compare-deals, same inputs, same day): 2,825 tiles, 0 differ
+beyond the two new fields, no top-level key differs. Priced tiles: row 2,493, none 199, ad 133. Storefront linked
+2,493 of 2,692 (92.6%), BELOW the 97% bar: Family Fare 266 of 400 (the 134 are `carried_forward` everyday rows, 1,907
+such rows in today's capture with no `canonical_url`), Aldi 319 of 383 (64; 940 Aldi rows with no `link_url`), Fareway
+296 of 297. Baker's, Hy-Vee, Sam's and Walmart 100%. The miss is capture defects, which L5 owns; L2 does not wait on
+it, because L2 only prefers a link when one exists.
+Still owed in L1: stamp `link` / `link_source` on `recipe-board-everyday.json` cells (they do not pass the tile
+builder). Found in passing: the `has_identity` tie-break reads `link_url` off a record that never carries it, so only
+`product_id` rows count as linkable; switching it to `link` changes winners and ships as its own measured change.
+
+**L1b. Flyer lines are resolved to a product before they publish (new, D1).** A flyer line (`link_source=ad`, 133
+tiles: Hy-Vee 70, Family Fare 61, Aldi 2) is matched to the store's own product at capture time: Hy-Vee by its
+storefront search API, Family Fare by the Freshop search `resolve-ff-boardmatch` already runs (commodity include and
+exclude, cheapest), Aldi by its product search. The resolved row's id is stamped on the flyer row, so the tile is
+`row`. Additive first: the resolved link is recorded and counted for 7 builds. Then the switch: a flyer price with no
+resolved product is withheld (cell falls back to that store's everyday price or shows no price), never published
+without a link. Bar before the switch: at least 90% of flyer tiles resolved, and a sampled 20 checked by eye for
+same product, same size.
 
 **L2. The page and the feed read the tile's link first.** `build-deals-page.ps1` `SeeLink` uses `tile.link` when
-`link_source=row`, and only then falls back to `product-urls.json`, the weekly-ad pill, and store search, in that
-order, as today. `export-feed.ps1` ships the tile link beside the price, so recipe pages get it too. A row-derived
-link needs no per-unit re-check: it is the product that set the price. Cost: none per push; one branch in SeeLink.
+`link_source=row`; otherwise store search, never `product-urls.json` (D2). `export-feed.ps1` ships the tile link
+beside the price. A row link needs no per-unit re-check: it is the product that set the price.
 
-**L3. The link checks judge identity, not arithmetic, for row links.** `audit-tile-integrity.ps1` and the link
-checks in `guards.ps1` stop re-pricing a `link_source=row` link through `pu-lib` and instead assert it is the SAME
-product: the tile's link equals the URL built from the row the tile names. `pu-lib` keeps checking only the
-exception links left in `product-urls.json`. This is what makes removing the write-time refusal safe (memory
+**L3. The link checks judge identity, not arithmetic.** `audit-tile-integrity.ps1` and the link checks in `guards.ps1`
+assert the tile's link equals the URL built from the row the tile names. With no exception file (D2) nothing is left
+for `pu-lib`'s link re-pricing, which is what makes removing `derive-links`' write-time refusal safe (memory
 `link-derivation-order`). Extends the existing guards; no new gate.
 
-**L4. The backlog lists only what can be fixed.** `resolve-worklist.ps1` reads `link_source` from the tile:
-`row` is never listed; `ad` goes to a separate `no_product_page` count, not the backlog; `none` is listed with the
-store and capture file, because it is a capture defect, not a link search. It also writes the class per entry, which
-retires the scratch join used to measure this plan (the measurement becomes existing machinery).
+**L4. The backlog lists only what the system must fix.** `resolve-worklist.ps1` reads `link_source`: `row` is never
+listed; `none` is listed with store and capture file (capture defect); `ad` is listed as an unresolved flyer line
+(L1b's work, not a resting state, per D1).
 
-**L5. Fix the captures that drop identity.** `build-walmart-deals` writes `link_url` from `item_id` (today 0 of
-459); Hy-Vee's `everyday shelf price` rows keep `product_id` (311 missing); Aldi rows older than its `href` capture
-age out of the 90-day union on their own by about 2026-10-15, so no backfill unless D3 says otherwise.
+**L5. Fix the captures that drop identity.** `build-walmart-deals` writes `link_url` from `item_id`; Hy-Vee's
+`everyday shelf price` rows keep `product_id`; Family Fare's carried-forward rows (1,907 with no `canonical_url`) get
+re-read or carry the URL forward from the capture that had it; Aldi's 940 unlinked rows, including the 19 on the
+backlog, are re-read in the next 06:15 browser run (D3).
 
-**L6. Shrink the link file and retire the bridge.** After L1 to L4 hold for 7 daily builds: `product-urls.json`
-keeps only hand-made exceptions (entries whose tile is `link_source` other than `row`). Retire, one commit each with
-`audit-script-census` evidence of no remaining caller: `derive-links-from-prices.ps1`, `merge-product-urls.ps1`,
-`relink-drifted-cells.ps1`, `withdraw-stale-link.ps1`, `sync-browser-links.ps1`, the per-store resolvers
-(`resolve-hyvee-links`, `refresh-hyvee-links`, `refresh-bakers-links`, `resolve-ff-boardmatch`, `fix-links-ff`,
-`resolve-chips-hyvee`) and the product-link item in the 06:15 browser task. 58 scripts read `product-urls.json` today;
-each is either moved to the tile field or kept for exceptions, and the census lists which.
+**L6. Retire the link file and the bridge (D2).** After L1 to L5 hold for 7 daily builds: `product-urls.json` is
+retired outright, not shrunk. Retire, one commit each with `audit-script-census` evidence of no remaining caller:
+`derive-links-from-prices.ps1`, `merge-product-urls.ps1`, `relink-drifted-cells.ps1`, `withdraw-stale-link.ps1`,
+`sync-browser-links.ps1`, the per-store resolvers (`resolve-hyvee-links`, `refresh-hyvee-links`,
+`refresh-bakers-links`, `resolve-ff-boardmatch` once L1b owns its search, `fix-links-ff`, `resolve-chips-hyvee`) and
+the product-link item in the 06:15 browser task. Each of the 58 readers of `product-urls.json` moves to the tile field.
+
+**L7. One per-unit engine (D4).** Once L3 has removed `pu-lib` from the link checks, list its remaining callers and
+move each to `pricing-math-lib`, with a paired run showing identical per-unit on every board tile, then retire
+`pu-lib`.
 
 ## Bars (written before the build)
 Measured on the daily board, main comparison plus recipe board, counted per store tile:
-- **L1:** of priced tiles whose winning row came from a storefront (not an ad), at least 97% carry `link_source=row`,
-  stated as `N of M`, on each board separately. The pre-change figure is taken by L1's first build before any reader
-  switches, with the same denominator; today's numbers (2,435 main-board links derive-links calls already correct;
-  134 + 109 + 21 storefront entries on the backlog) do not share one denominator and are not the baseline.
-- **L1:** zero tiles where `link` and the priced row name different products (identity check, per tile).
-- **L2:** priced tiles rendering the store-SEARCH fallback on the deals page fall by at least 200 from today's count,
-  read off the built page, not from the JSON.
-- **L4:** the backlog's `missing` count, recomputed by the new classifier, falls from 277 to at most 40, and every
-  remaining entry is `link_source=none` with a named capture file.
+- **L1:** storefront tiles with `link_source=row` at least 97%, as `N of M` per board. First reading 2,493 of 2,692
+  (92.6%) on 2026-09-27; met only after L5.
+- **L1:** zero tiles where `link` and the priced row name different products.
+- **L1b:** at least 90% of flyer tiles resolved before the withhold switch; after it, zero published flyer prices
+  with no link.
+- **L2:** priced tiles rendering the store-SEARCH fallback fall by at least 200, read off the built page.
+- **L4:** every remaining backlog entry is `none` or `ad` with a named capture file or flyer.
+- **L7:** per-unit identical on every tile between the two engines before `pu-lib` retires.
 - **No regression:** `audit-tile-integrity` and `guards` link failures do not rise over 7 daily builds after L3.
-A miss on any bar stops the next stage; L6 never starts until L1 to L4 hold for 7 builds.
+A miss stops the stage that depends on it; L6 never starts until L1 to L5 hold for 7 builds.
 
-## Decisions (need Brad)
+## Decisions (ruled)
 - **D1. Flyer-only sale tiles** (83 today): link to the store's weekly ad page (the pill that exists today), or show
   no link. Recommendation: the weekly-ad link, labelled as the ad, never presented as the product.
   **RULED by Brad 2026-09-27: neither.** Verbatim: *"We should NOT be storing products without links. Full stop. The
