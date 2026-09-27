@@ -5,23 +5,22 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-26; next_pull 2026-09-27",
-    "cursor_start":  425,
-    "cursor_next":  428,
+    "cursor_start":  428,
+    "cursor_next":  431,
     "total_terms":  640,
     "rotation_terms":  [
-                           "fresh okra",
-                           "olive oil",
-                           "onion powder"
+                           "yellow onion",
+                           "onion soup mix",
+                           "orange juice"
                        ],
     "sale_terms":  [
 
                    ],
     "terms":  [
-                  "chile de arbol",
-                  "chili de arbol",
-                  "fresh okra",
-                  "olive oil",
-                  "onion powder",
+                  "fennel seed",
+                  "yellow onion",
+                  "onion soup mix",
+                  "orange juice",
                   "cooked jasmine rice",
                   "frozen french fries",
                   "garden salad bag",
@@ -30,11 +29,10 @@
                   "canned vegetable soup"
               ],
     "commodities":  [
-                        "dried-arbol-chiles",
-                        "dried-arbol-chiles",
-                        "okra",
-                        "olive-oil",
-                        "onion-powder",
+                        "ground-fennel",
+                        "onions",
+                        "onion-soup-mix",
+                        "orange-juice",
                         "cooked-jasmine-rice",
                         "frozen-fries",
                         "garden-salad",

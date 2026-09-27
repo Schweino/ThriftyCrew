@@ -2,3 +2,7 @@
 {"date":"2026-09-26","store":"Sam's Club","model":"opus","requested":45,"with_rows":45,"rows":1011,"unusable":0,"builder_refused":false,"note":"swept twice after tab-group loss"}
 {"date":"2026-09-26","store":"Fareway","model":"opus","requested":45,"with_rows":45,"rows":2947,"unusable":0,"builder_refused":false,"note":"rows = candidates; swept three times after tab-group loss"}
 {"date":"2026-09-26","store":"Aldi","model":"sonnet","requested":13,"with_rows":13,"rows":646,"unusable":0,"builder_refused":false,"note":"trial day 1; re-run alone after the Opus attempt lost its tabs"}
+{"date":"2026-09-27","store":"Walmart","model":"sonnet","requested":16,"with_rows":16,"rows":858,"unusable":0,"builder_refused":false,"note":"trial day 1"}
+{"date":"2026-09-27","store":"Sam's Club","model":"sonnet","requested":9,"with_rows":9,"rows":209,"unusable":0,"builder_refused":false,"note":"trial day 1"}
+{"date":"2026-09-27","store":"Aldi","model":"sonnet","requested":21,"with_rows":21,"rows":1205,"unusable":0,"builder_refused":false,"note":"trial day 2; 2 rescue + 19 rotation"}
+{"date":"2026-09-27","store":"Fareway","model":"sonnet","requested":90,"with_rows":90,"rows":6178,"unusable":0,"builder_refused":false,"note":"trial day 1; rows = candidates; 45 rescue + 45 rotation; select-fareway-shop passed; build-fareway-regular NOT run: chain mutex HELD 07:04-07:24, left to the 08:00 run"}

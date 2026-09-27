@@ -5,13 +5,13 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-26; next_pull 2026-09-27",
-    "cursor_start":  416,
-    "cursor_next":  419,
+    "cursor_start":  419,
+    "cursor_next":  422,
     "total_terms":  640,
     "rotation_terms":  [
-                           "shredded mozzarella cheese",
-                           "blueberry muffins",
-                           "white mushrooms"
+                           "yellow mustard",
+                           "mustard greens",
+                           "nectarines"
                        ],
     "sale_terms":  [
 
@@ -19,10 +19,9 @@
     "terms":  [
                   "chile de arbol",
                   "chili de arbol",
-                  "fennel seed",
-                  "shredded mozzarella cheese",
-                  "blueberry muffins",
-                  "white mushrooms",
+                  "yellow mustard",
+                  "mustard greens",
+                  "nectarines",
                   "cooked jasmine rice",
                   "frozen french fries",
                   "garden salad bag",
@@ -33,10 +32,9 @@
     "commodities":  [
                         "dried-arbol-chiles",
                         "dried-arbol-chiles",
-                        "ground-fennel",
-                        "mozzarella-cheese",
-                        "muffins",
-                        "mushrooms",
+                        "mustard",
+                        "mustard-greens",
+                        "nectarines",
                         "cooked-jasmine-rice",
                         "frozen-fries",
                         "garden-salad",

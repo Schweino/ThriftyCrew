@@ -15,6 +15,20 @@
                               "agrees_with_engine_divisor":  true
                           },
                           {
+                              "id":  "banana-peppers",
+                              "commodity":  "Banana Peppers",
+                              "unit":  "oz",
+                              "store":  "Fareway",
+                              "per_unit":  0.2075,
+                              "size":  "12 oz",
+                              "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "weight",
+                              "agrees_with_engine_divisor":  true
+                          },
+                          {
                               "id":  "cherry-tomatoes",
                               "commodity":  "Cherry / Grape Tomatoes",
                               "unit":  "oz",
@@ -102,6 +116,20 @@
                               "id":  "horseradish-sauce",
                               "commodity":  "Horseradish Sauce (creamy)",
                               "unit":  "oz",
+                              "store":  "Aldi",
+                              "per_unit":  0.2989,
+                              "size":  "9.5 oz",
+                              "item":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
+                              "kind":  "weight",
+                              "row_kind":  "volume",
+                              "holds_crown":  false,
+                              "unit_kind":  "weight",
+                              "agrees_with_engine_divisor":  true
+                          },
+                          {
+                              "id":  "horseradish-sauce",
+                              "commodity":  "Horseradish Sauce (creamy)",
+                              "unit":  "oz",
                               "store":  "Family Fare",
                               "per_unit":  0.3773,
                               "size":  "9.25 oz",
@@ -111,20 +139,6 @@
                               "holds_crown":  false,
                               "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  true
-                          },
-                          {
-                              "id":  "iced-tea",
-                              "commodity":  "Iced Tea (bottled/gallon)",
-                              "unit":  "floz",
-                              "store":  "Fareway",
-                              "per_unit":  0.0689,
-                              "size":  "6 pk .5 L btls",
-                              "item":  "Pure Leaf Tea",
-                              "kind":  "count",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "volume",
-                              "agrees_with_engine_divisor":  false
                           },
                           {
                               "id":  "insect-spray",
@@ -223,9 +237,23 @@
                               "holds_crown":  false,
                               "unit_kind":  "weight",
                               "agrees_with_engine_divisor":  false
+                          },
+                          {
+                              "id":  "yogurt",
+                              "commodity":  "Yogurt",
+                              "unit":  "oz",
+                              "store":  "Family Fare",
+                              "per_unit":  0.104,
+                              "size":  "1.5 qt",
+                              "item":  "Kemps Ff Vanilla Yogurt 48 Oz",
+                              "kind":  "volume",
+                              "row_kind":  "weight",
+                              "holds_crown":  false,
+                              "unit_kind":  "weight",
+                              "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-23.json",
+    "compare_file":  "comparison-2026-09-27.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -299,20 +327,6 @@
                                                      "agrees_with_engine_divisor":  false
                                                  },
                                                  {
-                                                     "id":  "iced-tea",
-                                                     "commodity":  "Iced Tea (bottled/gallon)",
-                                                     "unit":  "floz",
-                                                     "store":  "Fareway",
-                                                     "per_unit":  0.0689,
-                                                     "size":  "6 pk .5 L btls",
-                                                     "item":  "Pure Leaf Tea",
-                                                     "kind":  "count",
-                                                     "row_kind":  "volume",
-                                                     "holds_crown":  false,
-                                                     "unit_kind":  "volume",
-                                                     "agrees_with_engine_divisor":  false
-                                                 },
-                                                 {
                                                      "id":  "pickled-jalapenos",
                                                      "commodity":  "Pickled Jalapenos (sliced)",
                                                      "unit":  "oz",
@@ -334,6 +348,20 @@
                                                      "per_unit":  0.0842,
                                                      "size":  "26 fl oz",
                                                      "item":  "Our Family Condensed Soup, Tomato, Classic 26 Fl Oz",
+                                                     "kind":  "volume",
+                                                     "row_kind":  "weight",
+                                                     "holds_crown":  false,
+                                                     "unit_kind":  "weight",
+                                                     "agrees_with_engine_divisor":  false
+                                                 },
+                                                 {
+                                                     "id":  "yogurt",
+                                                     "commodity":  "Yogurt",
+                                                     "unit":  "oz",
+                                                     "store":  "Family Fare",
+                                                     "per_unit":  0.104,
+                                                     "size":  "1.5 qt",
+                                                     "item":  "Kemps Ff Vanilla Yogurt 48 Oz",
                                                      "kind":  "volume",
                                                      "row_kind":  "weight",
                                                      "holds_crown":  false,
@@ -371,6 +399,19 @@
                          "size":  "3.25 oz",
                          "item":  "Our Family Bouillon Cubes, Chicken Flavor, Instant 3.25 Oz",
                          "peers_packed":  "1 of 4",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "iced-tea",
+                         "commodity":  "Iced Tea (bottled/gallon)",
+                         "unit":  "floz",
+                         "store":  "Family Fare",
+                         "per_unit":  0.1538,
+                         "median":  0.0304,
+                         "mult":  5.06,
+                         "size":  "24 fl oz",
+                         "item":  "Twisted Tea Hard Iced Tea, Peach 24 Fl Oz",
+                         "peers_packed":  "0 of 5",
                          "size_shape_mismatch":  false
                      },
                      {
@@ -413,16 +454,29 @@
                          "size_shape_mismatch":  false
                      },
                      {
-                         "id":  "cat-food",
-                         "commodity":  "Cat Food (dry)",
-                         "unit":  "lb",
-                         "store":  "Hy-Vee",
-                         "per_unit":  4.598,
-                         "median":  1.1359,
-                         "mult":  4.05,
-                         "size":  "",
-                         "item":  "Blue Buffalo cat food, 5 lb. bag, $22.99",
-                         "peers_packed":  "0 of 5",
+                         "id":  "sponges",
+                         "commodity":  "Dish Sponges",
+                         "unit":  "each",
+                         "store":  "Family Fare",
+                         "per_unit":  2.6633,
+                         "median":  0.6433,
+                         "mult":  4.14,
+                         "size":  "3 ct",
+                         "item":  "Mr. Clean Mr. Clean Magic Eraser Sponge, Shower \u0026 Tub Cleaner, Lemon, 3ct 3 Ct",
+                         "peers_packed":  "3 of 4",
+                         "size_shape_mismatch":  false
+                     },
+                     {
+                         "id":  "gruyere",
+                         "commodity":  "Gruyere Cheese",
+                         "unit":  "oz",
+                         "store":  "Fareway",
+                         "per_unit":  1.7488,
+                         "median":  0.4362,
+                         "mult":  4.01,
+                         "size":  "8 oz",
+                         "item":  "Grand Suisse Le Gruyere Cheese",
+                         "peers_packed":  "0 of 4",
                          "size_shape_mismatch":  false
                      }
                  ],
@@ -430,7 +484,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-26T14:02:10",
+    "generated":  "2026-09-27T08:18:47",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",
@@ -475,6 +529,20 @@
                                                        "agrees_with_engine_divisor":  true
                                                    },
                                                    {
+                                                       "id":  "banana-peppers",
+                                                       "commodity":  "Banana Peppers",
+                                                       "unit":  "oz",
+                                                       "store":  "Fareway",
+                                                       "per_unit":  0.2075,
+                                                       "size":  "12 oz",
+                                                       "item":  "Vlasic Mild Banana Pepper Rings, Keto Friendly",
+                                                       "kind":  "weight",
+                                                       "row_kind":  "volume",
+                                                       "holds_crown":  false,
+                                                       "unit_kind":  "weight",
+                                                       "agrees_with_engine_divisor":  true
+                                                   },
+                                                   {
                                                        "id":  "coconut-oil",
                                                        "commodity":  "Coconut Oil",
                                                        "unit":  "oz",
@@ -482,6 +550,20 @@
                                                        "per_unit":  0.3207,
                                                        "size":  "14 oz",
                                                        "item":  "Refined Coconut Oil Our Family",
+                                                       "kind":  "weight",
+                                                       "row_kind":  "volume",
+                                                       "holds_crown":  false,
+                                                       "unit_kind":  "weight",
+                                                       "agrees_with_engine_divisor":  true
+                                                   },
+                                                   {
+                                                       "id":  "horseradish-sauce",
+                                                       "commodity":  "Horseradish Sauce (creamy)",
+                                                       "unit":  "oz",
+                                                       "store":  "Aldi",
+                                                       "per_unit":  0.2989,
+                                                       "size":  "9.5 oz",
+                                                       "item":  "Inglehoffer Horseradish Cream Style 9.5 OZ",
                                                        "kind":  "weight",
                                                        "row_kind":  "volume",
                                                        "holds_crown":  false,

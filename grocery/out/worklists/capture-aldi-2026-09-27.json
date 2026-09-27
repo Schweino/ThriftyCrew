@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-29; next_pull 2026-09-30",
-    "cursor_start":  218,
-    "cursor_next":  226,
-    "total_terms":  640,
+    "cursor_start":  226,
+    "cursor_next":  234,
+    "total_terms":  641,
     "rotation_terms":  [
-                           "disinfecting wipes",
-                           "dry dog food",
-                           "dog treats",
-                           "glazed donuts",
-                           "chili bean sauce",
-                           "drain cleaner",
-                           "ancho chiles",
-                           "chile de arbol"
+                           "chili de arbol",
+                           "dried basil",
+                           "dried cranberries",
+                           "dill weed",
+                           "guajillo chiles",
+                           "oregano leaves",
+                           "parsley flakes",
+                           "rosemary leaves"
                        ],
     "sale_terms":  [
 
@@ -33,14 +33,14 @@
                   "bartlett pears",
                   "spaghetti squash",
                   "spring mix",
-                  "disinfecting wipes",
-                  "dry dog food",
-                  "dog treats",
-                  "glazed donuts",
-                  "chili bean sauce",
-                  "drain cleaner",
-                  "ancho chiles",
-                  "chile de arbol"
+                  "chili de arbol",
+                  "dried basil",
+                  "dried cranberries",
+                  "dill weed",
+                  "guajillo chiles",
+                  "oregano leaves",
+                  "parsley flakes",
+                  "rosemary leaves"
               ],
     "commodities":  [
                         "cherries",
@@ -54,14 +54,14 @@
                         "pears",
                         "spaghetti-squash",
                         "spring-mix",
-                        "disinfecting-wipes",
-                        "dog-food",
-                        "dog-treats",
-                        "donuts",
-                        "doubanjiang",
-                        "drain-cleaner",
-                        "dried-ancho-chiles",
-                        "dried-arbol-chiles"
+                        "dried-arbol-chiles",
+                        "dried-basil",
+                        "dried-cranberries",
+                        "dried-dill",
+                        "dried-guajillo-chiles",
+                        "dried-oregano",
+                        "dried-parsley",
+                        "dried-rosemary"
                     ],
     "ruling_terms":  [
 

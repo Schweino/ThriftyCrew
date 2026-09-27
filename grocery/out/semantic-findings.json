@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-26 21:33",
-    "board":  "comparison-2026-09-23.json",
-    "sidecar_generated":  "2026-09-26 21:33:40",
+    "generated":  "2026-09-27 08:29",
+    "board":  "comparison-2026-09-27.json",
+    "sidecar_generated":  "2026-09-27 08:29:03",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,26 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2810,
-                     "corpus":  44134,
-                     "rule_invisible":  9015
+                     "board_pairs":  2825,
+                     "corpus":  44236,
+                     "rule_invisible":  9072
                  },
     "identity_count":  0,
-    "coverage_count":  1,
+    "coverage_count":  2,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "taco-seasoning",
+                         "commodity":  "Taco Seasoning (packet)",
+                         "store":  "Walmart",
+                         "product":  "McCormick Street Taco Carne Asada Seasoning Mix, 0.87 oz Packet",
+                         "cos":  0.6829,
+                         "score":  0.944192,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "creamy-cilantro-lime-dressing",
@@ -30,8 +40,56 @@
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  7,
+    "coverage_excluded_count":  10,
     "coverage_excluded":  [
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
+                                  "store":  "Walmart",
+                                  "product":  "Smithfield Roasted Garlic \u0026 Herb Fresh Seasoned Pork Loin Filet, 1.98 - 2.5lb, 20 Grams of Protein per 4 oz Serving",
+                                  "cos":  0.7535,
+                                  "score":  0.94709,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "corn-dogs",
+                                  "commodity":  "Corn Dogs (frozen)",
+                                  "store":  "Family Fare",
+                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen 46 Ct",
+                                  "cos":  0.6916,
+                                  "score":  0.943265,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "corn-dogs",
+                                  "commodity":  "Corn Dogs (frozen)",
+                                  "store":  "Fareway",
+                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen",
+                                  "cos":  0.6916,
+                                  "score":  0.943265,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "sirloin-steak",
+                                  "commodity":  "Sirloin Steak",
+                                  "store":  "Fareway",
+                                  "product":  "USDA Choice Sirloin Tip Steak",
+                                  "cos":  0.6912,
+                                  "score":  0.928476,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027(?:beef\\s+)?sirloin\u0027 matched, exclude \u0027\\bsirloin\\s+tip\\b\u0027 killed it"
+                              },
                               {
                                   "kind":  "coverage",
                                   "id":  "ground-pork",
@@ -46,39 +104,27 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "corn-dogs",
-                                  "commodity":  "Corn Dogs (frozen)",
-                                  "store":  "Family Fare",
-                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen 46 Ct",
-                                  "cos":  0.6838,
-                                  "score":  0.923633,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "corn-dogs",
-                                  "commodity":  "Corn Dogs (frozen)",
-                                  "store":  "Fareway",
-                                  "product":  "State Fair Classic Mini Corn Dogs, Frozen",
-                                  "cos":  0.6838,
-                                  "score":  0.923633,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "tea-bags",
-                                  "commodity":  "Tea Bags",
+                                  "id":  "canned-butter-beans",
+                                  "commodity":  "Canned Butter Beans",
                                   "store":  "Walmart",
-                                  "product":  "Taylors of Harrogate Assam, Black Tea, Individually Wrapped Bags, 20 Count (Pack of 1), Full-bodied, Satisfying \u0026 Malty, Caffeinated, Enjoy Hot or Iced, 20 Teabags",
-                                  "cos":  0.6629,
-                                  "score":  0.915973,
+                                  "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
+                                  "cos":  0.6813,
+                                  "score":  0.92039,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027black\\s+tea\u0027 matched, exclude \u0027iced\u0027 killed it"
+                                  "detail":  "include \u0027\\bbutter\\s+beans?\\b\u0027 matched, exclude \u0027\\b(?:baked|refried|seasoned|soup|chili|salad|dip|hummus|entree)\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
+                                  "store":  "Walmart",
+                                  "product":  "Smithfield Roasted Garlic \u0026 Cracked Black Pepper Fresh Seasoned Pork Tenderloin, 0.5–2.5 lb, 19 Grams of Protein per 4 oz Serving",
+                                  "cos":  0.8234,
+                                  "score":  0.915407,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "EXCLUDED",
+                                  "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
@@ -94,15 +140,15 @@
                               },
                               {
                                   "kind":  "coverage",
-                                  "id":  "baby-formula",
-                                  "commodity":  "Baby Formula",
-                                  "store":  "Family Fare",
-                                  "product":  "Similac Infant Formula, With Iron, Hypoallergenic, Ready To Feed, 0 12 Months 6 Ea",
-                                  "cos":  0.7041,
-                                  "score":  0.909211,
+                                  "id":  "tea-bags",
+                                  "commodity":  "Tea Bags",
+                                  "store":  "Walmart",
+                                  "product":  "Taylors of Harrogate Assam, Black Tea, Individually Wrapped Bags, 20 Count (Pack of 1), Full-bodied, Satisfying \u0026 Malty, Caffeinated, Enjoy Hot or Iced, 20 Teabags",
+                                  "cos":  0.6578,
+                                  "score":  0.908709,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027(?:infant|baby)\\s+formula\u0027 matched, exclude \u0027ready[\\s-]?to[\\s-]?feed\u0027 killed it"
+                                  "detail":  "include \u0027black\\s+tea\u0027 matched, exclude \u0027iced\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",
@@ -110,8 +156,8 @@
                                   "commodity":  "Pork Tenderloin",
                                   "store":  "Walmart",
                                   "product":  "Marketside Roasted Garlic and Herb Fresh Seasoned Pork Loin Filet, 1.4 - 1.9 lbs., 21g of Protein per 4 oz Serving",
-                                  "cos":  0.7234,
-                                  "score":  0.909089,
+                                  "cos":  0.7321,
+                                  "score":  0.906988,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "REFUSED-BY-EXCLUDE",
                                   "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
