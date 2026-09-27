@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-26 08:20",
+    "generated":  "2026-09-26 21:33",
     "board":  "comparison-2026-09-23.json",
-    "sidecar_generated":  "2026-09-26 08:20:16",
+    "sidecar_generated":  "2026-09-26 21:33:40",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,17 +9,26 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2808,
+                     "board_pairs":  2810,
                      "corpus":  44134,
-                     "rule_invisible":  8831
+                     "rule_invisible":  9015
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  1,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "creamy-cilantro-lime-dressing",
+                         "commodity":  "Creamy Cilantro Lime Dressing",
+                         "store":  "Walmart",
+                         "product":  "Brianna\u0027s Home Style Creamy Cilantro Lime, 12 fl oz Bottle",
+                         "cos":  0.7808,
+                         "score":  0.926476,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ],
     "coverage_excluded_count":  7,
     "coverage_excluded":  [

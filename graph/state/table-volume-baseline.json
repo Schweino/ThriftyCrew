@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-25T21:30:12",
+  "generated": "2026-09-26T21:30:12",
   "history": [
     {
       "date": "2026-09-07T07:43:28",
@@ -124,20 +124,24 @@
     {
       "date": "2026-09-25T21:30:12",
       "total_rows": 354430
+    },
+    {
+      "date": "2026-09-26T21:30:12",
+      "total_rows": 356623
     }
   ],
   "note": "Row counts per table in graph/sqlite/graph.db. Growth is the steady state, so a rise retrains this silently; a fall past 40% or to zero is a finding. This is the VOLUME limb of the four data-quality checks.",
   "tables": {
-    "aliases": 84131,
+    "aliases": 84466,
     "approved_patches": 255,
-    "cell_state": 3426,
-    "decision_log": 10712,
-    "edges": 94692,
-    "eval_runs": 55,
-    "learning_proposals": 330,
-    "nodes": 56438,
-    "price_observations": 72141,
-    "provenance": 15349,
-    "question_verdicts": 16901
+    "cell_state": 3427,
+    "decision_log": 10888,
+    "edges": 94842,
+    "eval_runs": 57,
+    "learning_proposals": 343,
+    "nodes": 56532,
+    "price_observations": 72827,
+    "provenance": 15841,
+    "question_verdicts": 17145
   }
 }
