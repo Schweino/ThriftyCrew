@@ -24,6 +24,11 @@
   falls back to the stored verdicts and says so: missing evidence holds, it never passes.
   -NoRejudge reads the stored verdicts only (the pre-2026-09-26 behaviour), for a replay. Fixtures: test-flag-verification-rejudge.ps1.
 
+  IT ALSO HOLDS AN UNVERIFIED NEW-PRODUCT CROWN (2026-09-27, queue 2026-09-27-c744ba). A crown whose sanity flags (the newest
+  out\guards-<date>.json on or before the board's date, or -FlagsFile) carry BOTH an unverified 'outlier' and a 'wow' reading
+  "unexplained: a NEW price at the cheapest store" for the claim the board publishes, with no verdict yet, is named too:
+  a flag in state pending used to publish. A closed 'match' releases it. Get-TcPendingPairCells in flag-verify-lib.ps1.
+
   SCOPE OF A CLEAN REPORT: complete over the ledger it reads - every open disagreement still on the board is named, by
   construction - and unsound about the board as a whole: it can only name cells the verifier has put to a store, which
   are cells a sanity flag named. A clean run says no flagged price is contradicted by its store; it says nothing about
@@ -33,7 +38,7 @@
   (no board, or no readable ledger): guards reports that as a WARN naming what went unproven, never as a pass.
 #>
 [CmdletBinding()]
-param([string]$OutDir = '', [string]$BoardFile = '', [string]$LedgerFile = '', [string]$Today = '', [switch]$NoRejudge)
+param([string]$OutDir = '', [string]$BoardFile = '', [string]$LedgerFile = '', [string]$Today = '', [string]$FlagsFile = '', [switch]$NoRejudge)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 $repo = Split-Path $root -Parent
@@ -78,12 +83,34 @@ elseif ($openN -gt 0) {
   }
 }
 $cells = Get-TcFlagQuarantineCells -Ledger $judged -Board $board
+# PENDING PAIR (queue 2026-09-27-c744ba): a crown flagged BOTH as an unverified outlier and as an unexplained new cheapest
+# product holds while its check is pending (Get-TcPendingPairCells). Flags come from the newest guards-<date>.json no later
+# than the board's own date (sanity-check writes it after a publish, so the day's first build reads the previous one; the
+# claim-key match means a stale flag names nothing the board no longer publishes). No flags file: said, never a pass.
+if (-not $FlagsFile) {
+  $bday = ''; if ((Split-Path $BoardFile -Leaf) -match 'comparison-(\d{4}-\d{2}-\d{2})\.json$') { $bday = $matches[1] }
+  $gf = Get-ChildItem (Join-Path (Split-Path $BoardFile -Parent) 'guards-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^guards-(\d{4}-\d{2}-\d{2})$' -and (-not $bday -or [string]::CompareOrdinal($matches[1], $bday) -le 0) } | Sort-Object Name -Descending | Select-Object -First 1
+  if ($gf) { $FlagsFile = $gf.FullName }
+}
+if ($FlagsFile -and (Test-Path -LiteralPath $FlagsFile)) {
+  $flagsRaw = Read-JsonFile $FlagsFile
+  $flagList = @($flagsRaw | ForEach-Object { $_ })
+  $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -Flags $flagList
+  $have = @{}; foreach ($c in @($cells)) { $have[[string]$c.id + '|' + [string]$c.store] = $true }
+  $merged = New-Object System.Collections.ArrayList
+  foreach ($c in @($cells)) { [void]$merged.Add($c) }
+  foreach ($p in @($pair)) { if (-not $have.ContainsKey([string]$p.id + '|' + [string]$p.store)) { [void]$merged.Add($p) } }
+  Write-Output ('flag verification: pending-pair check read ' + $flagList.Count + ' sanity flag(s) from ' + (Split-Path $FlagsFile -Leaf) + '; ' + @($pair).Count + ' unverified new-product crown(s)')
+  $cells = $merged.ToArray()
+} else {
+  Write-Output 'flag verification: pending-pair check BLIND - no guards-<date>.json sanity flags on or before this board, so an unverified new-product crown is not judged this run'
+}
 $n = @($cells).Count
 if ($n -eq 0) {
   Write-Output ('flag verification: no store-contradicted claim is on ' + (Split-Path $BoardFile -Leaf))
   Exit-Guard -Name 'audit-flag-verification' -Summary 'cells=0' -Code 0
 }
-foreach ($c in @($cells)) { Write-Output ('  CONTRADICTED BY ITS STORE: ' + $c.id + ' / ' + $c.store + ' [' + $c.status + '] ' + $c.reason) }
+foreach ($c in @($cells)) { Write-Output ('  ' + $(if (([string]$c.status).StartsWith('pending-pair')) { 'UNVERIFIED NEW-PRODUCT CROWN' } else { 'CONTRADICTED BY ITS STORE' }) + ': ' + $c.id + ' / ' + $c.store + ' [' + $c.status + '] ' + $c.reason) }
 foreach ($c in @($cells)) { Write-Output ('QUARANTINE-CELL ' + $c.id + '|' + $c.store + '|' + $c.kind) }
 Write-Output ('QUARANTINE-SCOPE complete cells=' + $n + ' stores=0')
 Exit-Guard -Name 'audit-flag-verification' -Summary ('cells=' + $n) -Code 2

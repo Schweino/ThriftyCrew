@@ -1538,6 +1538,7 @@
                         "grade\\s*a\\s+egg"
                     ],
         "exclude":  [
+                        "\\bsliders?\\b",
                         "eggo",
                         "eggplant",
                         "\\bpizza\\b",
@@ -17275,6 +17276,7 @@
                         "\\bpizza\\b"
                     ],
         "exclude":  [
+                        "stix\\b",
                         "rolls?",
                         "\\bbites\\b",
                         "bagel",
@@ -27956,6 +27958,7 @@
                         "pepperoni"
                     ],
         "exclude":  [
+                        "stix\\b",
                         "pizza",
                         "hot\\s+pockets",
                         "\\brolls?\\b",
@@ -29176,6 +29179,7 @@
                         "parmigiano"
                     ],
         "exclude":  [
+                        "stix\\b",
                         "\\bseasoning\\b",
                         "\\bpasta\\b",
                         "\\bfrozen\\b",
@@ -51087,6 +51091,7 @@
                         "teriyaki"
                     ],
         "exclude":  [
+                        "chicken\\s+bites",
                         "jack\\s*link",
                         "tender\\s+bites",
                         "\\bjerky\\b",
