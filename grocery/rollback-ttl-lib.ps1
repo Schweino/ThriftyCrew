@@ -91,9 +91,71 @@ $script:RbDirty = $false
 # memory; every other entry is whatever is on disk at the moment of the save.
 $script:RbTouched = $null
 
+# ---- WHICH LEDGER A BUILD WRITES: A SCRATCH BUILD NEVER WRITES THE LIVE ONE (2026-09-26) ------------------
+# A paired scratch rebuild on 2026-09-26 (compare-deals and build-sams-deals with -OutDir at a scratch folder) wrote
+# the TRACKED grocery\rollback-first-seen.json anyway, because every saver passed its own folder as the ledger root
+# and -OutDir never moved it; the helper restored the file by hand. The ~07:00 bot commits tracked grocery files, so
+# a stray write like that ships. THE RULE, in one place for every saver:
+#   - an explicit ledger root (build-sams-deals -LedgerRoot) is used exactly as given;
+#   - no output folder, or the live one (<grocery>\out), is the chain's run and writes the live ledger unchanged;
+#   - ANY OTHER output folder is a scratch build: its ledger is <that folder>\rollback-first-seen.json, SEEDED once from
+#     the live ledger when absent, so the scratch build dates rollbacks exactly as the live one would (a paired rebuild
+#     stays comparable) and its writes stay in scratch.
+# compare-deals is not edited for this (it is on the money lane's line): the library reads the -OutDir of the script
+# that dot-sources it, from THAT script's own scope only (Get-Variable -Scope 0), at load. Another caller states its
+# scope with Set-RollbackLedgerScope. test-rollback-ttl-scope.ps1 holds it.
+$script:RbScopeRoot = $null     # set only for a scratch or explicit scope; $null means "the Root the caller passes"
+$script:RbScopeNote = ''
+
+function Resolve-RollbackLedgerScope {
+  <# Pure: which folder holds the ledger for a build with this output folder. Returns root, scratch, reason. #>
+  param([Parameter(Mandatory=$true)][string]$LiveRoot, [string]$OutDir = '', [string]$LedgerRoot = '')
+  $full = { param($p) [IO.Path]::GetFullPath($p).TrimEnd('\', '/') }
+  $live = & $full $LiveRoot
+  if ($LedgerRoot) {
+    $lr = & $full $LedgerRoot
+    return [pscustomobject]@{ root = $lr; scratch = (-not [string]::Equals($lr, $live, [StringComparison]::OrdinalIgnoreCase)); explicit = $true; reason = 'explicit ledger root' }
+  }
+  if (-not $OutDir) { return [pscustomobject]@{ root = $live; scratch = $false; explicit = $false; reason = 'no output folder: the live run' } }
+  $od = & $full $OutDir
+  if ([string]::Equals($od, (Join-Path $live 'out'), [StringComparison]::OrdinalIgnoreCase)) {
+    return [pscustomobject]@{ root = $live; scratch = $false; explicit = $false; reason = 'the live output folder' }
+  }
+  return [pscustomobject]@{ root = $od; scratch = $true; explicit = $false; reason = ('scratch output folder ' + $od) }
+}
+
+function Set-RollbackLedgerScope {
+  <# Point this process's ledger at the scope Resolve-RollbackLedgerScope chose. A scratch scope that was not given
+     explicitly is seeded from the live ledger when it has none yet. Call before the first Get-RollbackWindow. #>
+  param([Parameter(Mandatory=$true)][string]$LiveRoot, [string]$OutDir = '', [string]$LedgerRoot = '', [switch]$Quiet)
+  $s = Resolve-RollbackLedgerScope -LiveRoot $LiveRoot -OutDir $OutDir -LedgerRoot $LedgerRoot
+  if (-not $s.scratch) { $script:RbScopeRoot = $null; $script:RbScopeNote = $s.reason; return $s }
+  $script:RbScopeRoot = $s.root
+  $script:RbScopeNote = $s.reason
+  if ($null -eq $script:RbLedger) { $script:RbLedgerPath = $null }
+  $dest = Join-Path $s.root 'rollback-first-seen.json'
+  $src = Join-Path $LiveRoot 'rollback-first-seen.json'
+  if (-not $s.explicit -and -not (Test-Path -LiteralPath $dest) -and (Test-Path -LiteralPath $src)) {
+    [void][IO.Directory]::CreateDirectory($s.root)
+    [IO.File]::Copy($src, $dest)
+  }
+  if (-not $Quiet) { Write-Host ('rollback ledger: SCRATCH scope (' + $s.reason + ') -> ' + $dest + '; the live ledger is not written') }
+  return $s
+}
+
 function Get-RollbackLedgerPath([string]$Root) {
+  if ($script:RbScopeRoot) { return (Join-Path $script:RbScopeRoot 'rollback-first-seen.json') }
   if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' } }
   return (Join-Path $Root 'rollback-first-seen.json')
+}
+
+# The host's own -OutDir, read from the dot-sourcing script's scope only, never a parent's.
+if ($MyInvocation.InvocationName -eq '.' -and $PSScriptRoot) {
+  $__rbHostOut = Get-Variable -Name OutDir -Scope 0 -ValueOnly -ErrorAction SilentlyContinue
+  $__rbHostLedger = Get-Variable -Name LedgerRoot -Scope 0 -ValueOnly -ErrorAction SilentlyContinue
+  if (-not ($__rbHostOut -is [string])) { $__rbHostOut = '' }
+  if (-not ($__rbHostLedger -is [string])) { $__rbHostLedger = '' }
+  if ($__rbHostOut -or $__rbHostLedger) { [void](Set-RollbackLedgerScope -LiveRoot $PSScriptRoot -OutDir $__rbHostOut -LedgerRoot $__rbHostLedger) }
 }
 
 function Read-RollbackLedgerFile([string]$Path) {

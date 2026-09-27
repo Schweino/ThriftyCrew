@@ -519,6 +519,9 @@ $rows = New-Object System.Collections.ArrayList
 $ids = @{}
 $markdowns = 0
 . (Join-Path $root 'rollback-ttl-lib.ps1')
+# -OutRoot is a sandbox: its markdowns' first sightings go to <OutRoot>\out\rollback-first-seen.json (seeded from the
+# live ledger), never the live one (2026-09-26, rollback-ttl-lib's WHICH LEDGER A BUILD WRITES).
+if ($OutRoot) { [void](Set-RollbackLedgerScope -LiveRoot $root -OutDir (Join-Path $outRootDir 'out')) }
 $dropped3P = New-Object System.Collections.ArrayList
 $droppedTest = New-Object System.Collections.ArrayList
 $quarantined = New-Object System.Collections.ArrayList

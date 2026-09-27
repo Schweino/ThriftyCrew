@@ -1565,6 +1565,9 @@ $rejects = New-Object System.Collections.Generic.List[object]
 # Inert until the capture carries a was-price, so an older CSV is unaffected.
 . (Join-Path $root 'rollback-ttl-lib.ps1')
 $ledgerRoot = if ($LedgerRoot) { $LedgerRoot } else { $root }
+# A scratch -OutDir with no -LedgerRoot writes a SEEDED ledger under -OutDir, never the live one (2026-09-26,
+# rollback-ttl-lib's WHICH LEDGER A BUILD WRITES). Stated here as well as inferred by the library at load.
+[void](Set-RollbackLedgerScope -LiveRoot $root -OutDir $OutDir -LedgerRoot $LedgerRoot -Quiet)
 $rollbacks = 0
 # THE PROOFS A BLANK UNIT PRICE MAY CARRY FROM (see Get-SamsCarriedRow): this builder's own earlier outputs, in the
 # directory it writes to, dated before this capture. Read once, on the first blank row.
