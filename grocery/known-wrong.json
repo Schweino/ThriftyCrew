@@ -5270,6 +5270,36 @@
                         "ruled_on":  "2026-09-23",
                         "ruled_by":  "triage-developer 2026-09-23 (crown review, queue 2026-09-22-e9aed3 run)",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "cherries|Bakers|bakery-fresh-glazed-cherry-fritters",
+                        "commodity":  "cherries",
+                        "store":  "Baker\u0027s",
+                        "names":  [
+                                      "Bakery Fresh Glazed Cherry Fritters"
+                                  ],
+                        "product_id":  "0001111065057",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Board-wrong-cells 2026-09-26 cherry fritter: \u0027Bakery Fresh Glazed Cherry Fritters\u0027 (4 pk 4 oz, $6.00, kroger-api) is a glazed bakery pastry, not fresh cherries; it held Baker\u0027s live cherries chip at $6.00/lb on public/board.json. Class fixed in category-excludes.json bakery_carrier (\\bfritters?\\b).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-26",
+                        "ruled_by":  "triage-money-lane 2026-09-26",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "lemons|FamilyFare|8-ct-lemon-bars",
+                        "commodity":  "lemons",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "8 Ct Lemon Bars"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Board-wrong-cells 2026-09-26 cherry fritter sweep: \u00278 Ct Lemon Bars\u0027 is a baked lemon dessert bar (8 count), not fresh lemons; it held Family Fare\u0027s lemons cell at $0.7488 each on comparison-2026-09-23. Class fixed in category-excludes.json bakery_carrier ((?\u003c!salad\\s)\\bbars?\\b).",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-26",
+                        "ruled_by":  "triage-money-lane 2026-09-26",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

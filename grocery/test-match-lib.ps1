@@ -322,6 +322,21 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  X2 dried prunes that say unsweetened still route to prunes (the exempt)' 'Great Value Unsweetened Pitted Prunes, 16 oz' 'prunes'
   _RT 'CLEAN TWIN  X2 a fresh grapefruit bag still routes to grapefruit' 'Fresh Red Grapefruit, 5 lb Bag' 'grapefruit'
   _RT 'CLEAN TWIN  X5 a fresh-cut cantaloupe bowl is still cantaloupe (bowl alone is not the token)' 'Fresh Cut In Store Cantaloupe Bowl' 'cantaloupe'
+  # A BAKED OR DESSERT ITEM CARRYING A FRUIT NAME IS NOT THE FRUIT (2026-09-26, board-wrong-cells cherry fritter). Baker's
+  # 'Bakery Fresh Glazed Cherry Fritters' (4 pk 4 oz, $6.00, kroger-api) held Baker's live fresh-cherries chip at $6.00/lb on
+  # comparison-2026-09-23 and public/board.json; Family Fare's '8 Ct Lemon Bars' held lemons at $0.7488 each. bakery_carrier
+  # gains the fritter and the bar (Little Salad Bar excepted), and oatmeal fences plural bars. Founding names verbatim from
+  # match-baseline.json at rules 978bb53b; each routed to the fresh fruit (or oatmeal) before this change.
+  _RT 'MUST FIRE  Y1 a glazed cherry fritter is not fresh cherries (bakery_carrier fritter)' 'Bakery Fresh Glazed Cherry Fritters' '<none>'
+  _RT 'MUST FIRE  Y2 lemon bars are not lemons (bakery_carrier bar)' '8 Ct Lemon Bars' '<none>'
+  _RT 'MUST FIRE  Y2 an orange cream bar is not oranges (bakery_carrier bar)' 'Sundae Shoppe Orange Cream Bar 12 CT' '<none>'
+  _RT 'MUST FIRE  Y3 an oatmeal crumble strawberry bar is neither strawberries nor oatmeal (bar class, oatmeal plural fence)' 'Nature''s Bakery Oatmeal Crumble Strawberry Bars, 20 ct.' '<none>'
+  _RT 'MUST FIRE  Y3 chewy oat chocolate bars are not oatmeal (the singular bar fence missed the plural)' 'Fiber One Chewy Oats & Chocolate Bars Value Pack 10 Ea' '<none>'
+  _RT 'MUST NOT FIRE  Y2 the bar token is silent on Little Salad Bar spinach (the lookbehind)' 'Little Salad Bar Spinach 8 OZ' 'spinach'
+  _RT 'MUST NOT FIRE  Y2 the bar token is silent on Little Salad Bar romaine hearts' 'Little Salad Bar Hearts OF Romaine 1 Each' 'lettuce'
+  _RT 'CLEAN TWIN  Y1 a fresh cherry bag still routes to cherries' 'Fresh Rainier Cherries in Bag' 'cherries'
+  _RT 'CLEAN TWIN  Y1 the pie token still spares a real pie pumpkin (the pumpkin exempt)' 'Fresh Grown Pie Pumpkin' 'pie-pumpkins'
+  _RT 'CLEAN TWIN  Y3 old fashioned oats still route to oatmeal' '(2 pack) Bob''s Red Mill, Old Fashioned Rolled Oats, Organic, 32 oz' 'oatmeal'
   # teriyaki-sauce sits earlier in the file and wins this name either way, so the route alone cannot see the
   # coconut-aminos fence: the detail scan's contested set can, because it lists every commodity that also wanted it.
   $script:rtRan++
@@ -425,7 +440,7 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  a can of tuna still prices canned-tuna (the can word never reached Meat)' 'StarKist Chunk Light Tuna in Water Can' 'canned-tuna'
   _RT 'CLEAN TWIN  a can of mixed nuts with pecans still prices mixed-nuts (the can word never left produce)' 'Planters Lightly Salted Deluxe Mixed Nuts with Cashews, Almonds, Brazil Nuts, Pistachios, Pecans. 5g Protein (6% DV) per serving, 15.25 oz Can' 'mixed-nuts'
   _RT 'CLEAN TWIN  a canned garlic tomato paste leaves garlic for tomato-paste, not dried-oregano' 'Hunts Tomato Paste with Basil, Garlic and Oregano, Perfect for Chili & Soups, 6 oz. Can' 'tomato-paste'
-  $rtWant = 79   # 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
+  $rtWant = 89   # +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)

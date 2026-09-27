@@ -3058,7 +3058,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -3349,7 +3351,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -3617,7 +3621,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -3879,7 +3885,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -4137,7 +4145,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -4400,7 +4410,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -4677,7 +4689,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -4946,7 +4960,8 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -5216,7 +5231,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -5495,7 +5512,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -5761,7 +5780,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -6038,7 +6059,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -8599,7 +8622,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -8874,7 +8899,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -9154,7 +9181,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -9427,7 +9456,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -9686,7 +9717,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -9949,7 +9982,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -10221,7 +10256,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -10478,7 +10515,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -10734,7 +10773,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -10990,7 +11031,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -11250,7 +11293,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -11532,7 +11577,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -11794,7 +11841,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -12066,7 +12115,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -12669,7 +12720,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -14899,7 +14952,8 @@
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbars\\b"
                     ]
     },
     {
@@ -18454,7 +18508,9 @@
                         "\\bgelato\\b",
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -18743,7 +18799,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -18997,7 +19055,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -19250,7 +19310,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -19490,7 +19552,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -19763,7 +19827,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -20028,7 +20094,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -20285,7 +20353,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -20581,7 +20651,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -20834,7 +20906,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -21089,7 +21163,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -21351,7 +21427,9 @@
                         "\\bgelato\\b",
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -21607,7 +21685,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -21863,7 +21943,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -22121,7 +22203,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -22379,7 +22463,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -22631,7 +22717,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -22885,7 +22973,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -23137,7 +23227,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -23388,7 +23480,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -23658,7 +23752,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -23916,7 +24012,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -24184,7 +24282,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -24435,7 +24535,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -24693,7 +24795,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -24953,7 +25057,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -44535,7 +44641,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -54681,7 +54789,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -58338,7 +58448,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -58591,7 +58703,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -58850,7 +58964,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -59108,7 +59224,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -60275,7 +60393,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -61574,7 +61694,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -62627,7 +62749,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -62890,7 +63014,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "pint_oz":  10
     },
@@ -64147,7 +64273,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -64412,7 +64540,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -64682,7 +64812,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -64945,7 +65077,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -65217,7 +65351,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -65474,7 +65610,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -65757,7 +65895,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -66010,7 +66150,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -66265,7 +66407,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -66512,7 +66656,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -66764,7 +66910,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -67025,7 +67173,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -67280,7 +67430,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -67535,7 +67687,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -67788,7 +67942,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -68065,7 +68221,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -68332,7 +68490,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -68585,7 +68745,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -68836,7 +68998,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -69087,7 +69251,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -69337,7 +69503,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -69595,7 +69763,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -69848,7 +70018,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -70101,7 +70273,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -70351,7 +70525,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -70605,7 +70781,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -70858,7 +71036,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -71109,7 +71289,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -71361,7 +71543,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -71620,7 +71804,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -71873,7 +72059,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -72131,7 +72319,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -72391,7 +72581,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -72641,7 +72833,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -72909,7 +73103,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -73172,7 +73368,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -73428,7 +73626,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -73680,7 +73880,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -73936,7 +74138,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -74185,7 +74389,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -74443,7 +74649,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -74694,7 +74902,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -74949,7 +75159,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -75208,7 +75420,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -75464,7 +75678,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -75959,7 +76175,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -76218,7 +76436,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -76477,7 +76697,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -76731,7 +76953,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -78105,7 +78329,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -81638,7 +81864,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -83922,7 +84150,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
@@ -85385,7 +85615,9 @@
                         "\\bgel\\s+(?:bowls?|cups?)\\b",
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
-                        "\\bsalad\\s+bowls?\\b"
+                        "\\bsalad\\s+bowls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b"
                     ]
     },
     {
