@@ -8,6 +8,8 @@ of the other design grafted in. The bars in section 8 are written now, before an
 
 **RULED 2026-09-23 (Brad): build it with every recommendation, live from its first commit with the kill switch. Section 12 records each ruling.**
 
+**Status: DONE 2026-09-27 (status sweep, design/PLAN-status-sweep-2026-09-27.tsv): every work item landed on origin/main** - W0.1 73eec5dd0, W0.2 c7e7adb00/ef63cb2c8, W1.1 2dcd09aff, W1.2 9db72c188, W2.1 22ad1c98c, W2.2 abefde4df, W3.1 a12d273e4, W3.2 f06c5a004/845137f98, W4.1 a6c5b6228, W4.2 and W5.1 items 1-3 94a05ad05, W5.1 item 4 in the store (reliability-craft/applies-here.md:329-330), addendum d54417a55. Still owed and NOT build items: the section 8 bar read-outs (backlog inbox 3f04ff9d4, 6be84a177; section 13 is still empty) and D8, ruled for after 14 days of passing bars. The line below is the status as first written, kept as it was.
+
 **Status: PLAN, ruled by Brad 2026-09-23, not ruled.** Section 12 lists what only Brad can decide. Each decision has a recommendation.
 
 **Numbers.** Every measured number in this plan is **SCRATCH** unless it names a committed harness. None of the

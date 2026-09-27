@@ -1,0 +1,75 @@
+plan	status_before	status_after	evidence
+design/PLAN-after-dedup-2026-09-04.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-after-review-2026-09-04.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-alert-member-token-2026-09-18.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-alert-quiet-2026-09-20.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-backlog-2026-09-06-phase3.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-backlog-2026-09-06.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-bakers-weekly-ad-feed-2026-09-18.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-board-accuracy-2026-09-19.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-board-build-latency-2026-09-19.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-board-clock-2026-09-26.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-bot-checkout-self-heal-2026-09-23.md	under-way	finished	CLOSED: every work item W0.1-W5.1 and the addendum has a landing commit on origin/main (hashes in the new Status line); W5.1 item 4 is in the store; bar read-outs and D8 remain as follow-ons, not build items
+design/PLAN-bot-dedicated-checkout-2026-09-25.md	under-way	under-way	LEFT OPEN: Stage 0 (8967522b2, 91680deee, e73645e53) and Stage 1 W1.1 warn-only (b06a3628e) landed; W2.2 shipped at switch position wait (f1fa0ec79); Stage 2 enforce and Stage 3 retire-the-rule have no landing commit
+design/PLAN-brain-consults-on-code-and-analysis-2026-09-22.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-brain-efficiency-2026-09-12.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-brain-v2-2026-09-09.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-brain-v3-2026-09-10.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-capture-eviction-stamp-2026-09-11.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-carriage-gate-2026-08-22.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-certification-cost-2026-08-16.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-cheapest-store-selection.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-compare-deals-interface-2026-09-09.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-confirm-match-review-2026-08-20.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-drain-architecture-2026-09-07.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-faster-pushes-no-accuracy-loss-2026-09-25.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-flyer-line-product-link-2026-09-26.md	under-way	under-way	LEFT OPEN: linker is in SHADOW and its bar is still missed (5c36f3205: 18 of 53 linked, 0 wrong); rollout not done
+design/PLAN-food-db-provenance-2026-08-26.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-gate-queue-2026-09-11.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-gate-slot-consolidation-2026-09-12.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-gate-slot-fair-admission-2026-09-11.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-getting-better-2026-09-12.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-graph-graduation-2026-08-21.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-graph-learning-reconcile-2026-09-23.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-hunter-judge-contract-2026-08-25.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-ingredient-memory-2026-08-25.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-ingredient-vocabulary-2026-08-16.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-latency-F1-F7-2026-08-25.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-live-price-state-2026-08-21.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-live-recipe-prices-2026-09-21.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-local-llm-triage-pilot-2026-09-26.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-local-matching-2026-08-22.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-local-matching-rescope-2026-08-23.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-map-judge-split-2026-08-25.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-map-lane-latency-M1-M4-2026-08-25.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-parity-road-2026-08-20.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-per-cell-quarantine-2026-09-21.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-pipeline-committers-2026-09-07.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-precedent-window-2026-09-05.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-price-state-2026-08-20.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-product-identity-2026-08-22.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-push-derived-conflicts-2026-09-23.md	under-way	under-way	LEFT OPEN: W5.1 deferred on D7 with no landing commit; W3.4a, W8.4, W8.5 landed with bars B15, B16, B19 reading out 2026-10-07 (124f4157d, dbc7b87d8, 69aaf57c4); section 13 results empty
+design/PLAN-push-livelock-2026-09-11.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-push-ref-race-2026-09-11.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-push-under-a-minute-2026-09-12.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-recipe-hunter-v2-2026-08-15.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-recipe-hunter-v2.1-2026-08-15.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-recipe-hunter-v3-2026-08-23.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-review-followups-2026-08-20.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-rules-trim-2026-09-25.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-selftest-verdict-line-2026-09-11.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-shared-checkout-2026-09-12.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-split-shredded-cheese-by-type-2026-08-28.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-storage-hygiene-2026-08-23.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-store-ab-2026-09-19.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-stranded-parks-repair-2026-08-26.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-test-auditors-concurrency-2026-09-09.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-token-efficiency-2026-08-16.md	not-yet	not-yet	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-triage-lean-2026-09-24.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-triage-token-cut-2026-09-25.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-triage-token-efficiency-2026-09-24.md	no-status	no-status	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-use-the-cores-2-2026-08-23.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-use-the-cores-2026-08-23.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-walmart-row-lib-2026-09-11.md	unclassified	unclassified	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-zero-alert-days-2026-09-10.md	finished	finished	not judged by plan_citation (first status word not ruled/under way); status not examined further and not changed
+design/PLAN-zero-alert-days-remainder-2026-09-24.md	under-way	under-way	LEFT OPEN: its own Status says not started; only commit naming it is its creation b849988b4
