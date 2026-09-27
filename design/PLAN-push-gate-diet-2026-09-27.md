@@ -317,6 +317,49 @@ and correctly refused, because real readers of the file are in the same walk.
 
 **Cost:** one SHA-256 of two small files per stamp write and per key that reaches them; no new process, no new gate.
 
+### Round 3 as built
+
+**Item 1** built as designed (`lib/gate-input-key.ps1`: `Get-TcGateRunnerOutputs`, `Save-TcGateRunnerOutputStamp`,
+`Get-TcGateRunnerOutputStates`, `-RunnerOutputs` on `Get-TcGateInputKey`; `ops/run-gates.ps1` declares its two outputs and
+stamps each after writing). Self-test 115 -> 123 cases, exit 0, with the fixtures listed in the design.
+
+**Item 2: 11 of 13 static detectors keyed** (scan sets read from each detector's live path by a read-only helper and
+spot-checked; every pathspec matches 1 to 587 tracked files): audit-json-encoding, audit-fact-claims,
+audit-ingredient-routes, audit-category-coverage, audit-instore-shutout, audit-ruling-drift, audit-backlog-status,
+audit-threshold-register, golden-test, audit-phantom-paths, audit-rule-format. Left unkeyed: audit-rule-currency (its
+file set is chosen by the rules files' `paths:` entries through `git ls-files`) and audit-secrets (reads
+`git log origin/main..HEAD`). fdc_lookup.py NOT changed: its self-test branches on a gitignored API-key file; the
+helper's proposed fix (clear `FDC_API_KEY`, point `FDC_KEY_FILE` at a missing temp path, run the no-key case always,
+restore in `finally`, then declare `# gate-scan:`) is open. Two notes kept beside the sets in run-gates: a new
+ruling-registry row naming a non-code file must join audit-ruling-drift's set, and a channel tag naming a non-code gate
+must join audit-rule-format's. golden-test writes two tracked files on failure (an og-39 matter, not fixed here). The
+pathspecs tripped audit-cross-module-reach (118 -> 127); each line carries a `reach-fixture-ok:` reason (they are names
+hashed from the index, never opened), back to 118.
+
+**Measurement** (same shape as D1 and M3; harness: the gate-times rows `ops/run-gates.ps1` writes, totals derived from
+the rows; one worktree, 2026-09-27; before B and C the whole-run verdict file was deleted so per-gate reuse is what is
+measured, which is also the absent state item 1 keys as as-written):
+
+| Run | Exit | Jobs executed of 540 | Gate CPU executed |
+|---|---|---|---|
+| A (records) | 0, pass=541 fail=0 | 540 | 4,188 s |
+| B (same content) | 0, pass=541 fail=0 | 62 | 425 s |
+| C (`grocery\notify-known-ids.json` edited, then restored) | 0, pass=541 fail=0 | 58 | **292 s** |
+
+**Bar 2 (data-only push at most 150 s): MISSED.** Run C is 292 s against 484 s after M3 and 748 s after D1: ONE run per
+arm, one variant tried, so it is a direction and not a median. Split: 257 s in 49 unkeyable jobs, 36 s in 9 keyed jobs
+that correctly re-ran (audit-json-encoding scans `grocery/*.json`, the edited file; check-ad-cycles 14 s re-runs on data
+as M3 recorded). test-prepush-hook was REUSED in C after B had rewritten both runner outputs, and capture-watchdog was
+reused in B and C, so the self-invalidation is gone. test-prepush-hook did re-run in B (133 s); the only files run A
+wrote were the two declared outputs, so the likeliest cause is that A recorded no pass for it (4 gates reported BLIND
+cases in A). Not verified; open.
+
+**What stands between run C and the bar**, largest first: prepush-test-auditors 45 s (whole-tree `ls-files`),
+audit-conclusion-currency 22 s and audit-secrets (static 20 s, self-test 19 s) (git history), audit-memory-backup 19 s
+(network), decide_apply.py 15 s, audit-sale-fallback 12 s, audit-source-comment-strip 12 s. These are unkeyable by
+nature, so without D3 the bar stays out of reach; the remaining keyable items are fdc_lookup and rule-currency, a few
+seconds each.
+
 ## Open items
 
 - W0 (the catch column is unverified).
