@@ -31,7 +31,8 @@
 #>
 # Its self-test builds every sandbox it reads under %TEMP% and reads three frozen blobs by id from git's object store,
 # which cannot change under an id. So it reads nothing else of this repo, and says so rather than being guessed at.
-# gate-inputs: lib\gate-input-key.ps1
+# Its scan-set fixtures build a temp git repository, so they load lib\git-repo-env.ps1 to clear an inherited GIT_DIR.
+# gate-inputs: lib\gate-input-key.ps1, lib\git-repo-env.ps1
 $__gikSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 # A DATA DIRECTORY IS BYTES THAT CHANGE WITHOUT A COMMIT. A gate that reads one cannot be keyed on source.
@@ -565,10 +566,51 @@ function Test-TcGateDeclarationMoves {
   return [pscustomobject]@{ Ok = [bool]($rows.Count -and -not $still.Count); Why = $why; Rows = $rows.ToArray() }
 }
 
+# A STATIC DETECTOR IS KEYED ON ITS SCAN SET (D1 of design\PLAN-push-gate-diet-2026-09-27.md, Brad 2026-09-27).
+# A static detector walks the whole tree by construction, so no source key can name what it reads; its run-gates entry
+# DECLARES the set instead, as git pathspecs (`scan = @('*.ps1', ...)`). The set is every matching file git can see:
+# the index's blob ids (`ls-files -s`), the working-tree bytes of any modified one, and every untracked file under the
+# specs, ignored or not, because a tree walk sees those too. Any change in the set moves the key and the detector runs
+# over the WHOLE tree exactly as before (D2 ruled NO to diff-scoped scans). Nothing here narrows what a detector
+# reads; it only decides whether an identical input set may replay a pass.
+# REFUSES, never guesses: a git call that fails, or specs that match no tracked file (a stale declaration).
+# COST: three git calls per distinct spec set per run (one set today), about 1 s, against 400+ s of detectors skipped
+# on a push that touches none of the set.
+function Get-TcGateScanRows {
+  param([Parameter(Mandatory = $true)][string]$Repo, [Parameter(Mandatory = $true)][string[]]$Scan)
+  $none = [pscustomobject]@{ Ok = $false; Why = ''; Rows = @(); Tracked = 0 }
+  $specs = @($Scan | Where-Object { $_ } | ForEach-Object { ([string]$_).Trim() } | Sort-Object -Unique)
+  if (-not $specs.Count) { $none.Why = 'declares an empty scan set'; return $none }
+  $rows = [Collections.Generic.List[string]]::new()
+  foreach ($s in $specs) { $rows.Add('scanspec ' + $s) }
+  $eap = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = 'Continue'
+    $idx = @(& git -C $Repo -c core.quotepath=off ls-files -s -- $specs 2>$null)
+    if ($LASTEXITCODE -ne 0) { $none.Why = ('git ls-files -s exited ' + $LASTEXITCODE + ' over the scan set'); return $none }
+    $mod = @(& git -C $Repo -c core.quotepath=off ls-files -m -- $specs 2>$null)
+    if ($LASTEXITCODE -ne 0) { $none.Why = ('git ls-files -m exited ' + $LASTEXITCODE + ' over the scan set'); return $none }
+    $unt = @(& git -C $Repo -c core.quotepath=off ls-files -o -- $specs 2>$null)
+    if ($LASTEXITCODE -ne 0) { $none.Why = ('git ls-files -o exited ' + $LASTEXITCODE + ' over the scan set'); return $none }
+  } finally { $ErrorActionPreference = $eap }
+  $idx = @($idx | Where-Object { $_ })
+  if (-not $idx.Count) { $none.Why = ('the scan set (' + ($specs -join ' ') + ') matches no tracked file, so the declaration is stale or misspelt'); return $none }
+  foreach ($l in $idx) { $rows.Add('scan ' + $l) }
+  $repoFull = [IO.Path]::GetFullPath($Repo).TrimEnd('\')
+  # Working-tree bytes, hashed here rather than by hash-object: a modified or untracked file the walk would read.
+  foreach ($p in @($mod + $unt | Where-Object { $_ } | Sort-Object -Unique)) {
+    $rows.Add('scanwt ' + $p + ' ' + (Get-TcFileSha256 ([IO.Path]::Combine($repoFull, ($p -replace '/', '\')))))
+  }
+  return [pscustomobject]@{ Ok = $true; Why = ''; Rows = $rows.ToArray(); Tracked = $idx.Count }
+}
+
 function Get-TcGateInputKey {
   <# The key for ONE gate. $Repo is the checkout, $GateFile its full path, $GateArg the argument it runs with
      (so `-SelfTest` and a renamed switch are different entries), $RunnerFiles the bytes of whatever dispatches
      it - change the runner and every key changes, which is the conservative direction.
+     $ScanRows (from Get-TcGateScanRows) marks a STATIC detector: its declared scan set answers what the inference
+     would refuse over (a walk builds paths from variables), so the refusal is lifted exactly as a # gate-inputs:
+     line lifts it, the scan rows join the key, and the walk over its own source and loaded libraries still runs.
 
      Returns Ok, Key, Why and Files (what went into it, for the fixture and for a reader). NOT cacheable comes
      back Ok=$false with Why, and the caller must then run the gate. #>
@@ -576,7 +618,8 @@ function Get-TcGateInputKey {
     [Parameter(Mandatory = $true)][string]$Repo,
     [Parameter(Mandatory = $true)][string]$GateFile,
     [string]$GateArg = '',
-    [string[]]$RunnerFiles = @()
+    [string[]]$RunnerFiles = @(),
+    [string[]]$ScanRows = @()
   )
   if (-not [IO.File]::Exists($GateFile)) {
     return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'the gate file does not exist'; Files = @() }
@@ -605,7 +648,8 @@ function Get-TcGateInputKey {
   # open() of a board would be invisible, and a pass would replay after either changed. That is the unsafe direction,
   # so for anything but PowerShell the only road to a key is the author's own list.
   # Either line form is a declaration; each form's patterns are resolved, and refused on a miss, exactly once.
-  $hasDecl = ($declared.Count + $textDecl.Count) -gt 0
+  $ScanRows = @($ScanRows | Where-Object { $_ })
+  $hasDecl = (($declared.Count + $textDecl.Count) -gt 0) -or ($ScanRows.Count -gt 0)
   if (-not $hasDecl -and $GateFile -notmatch '(?i)\.psm?1$') {
     return [pscustomobject]@{ Ok = $false; Key = ''; Why = 'is not PowerShell and declares no inputs, and the inference cannot see what it imports or opens'; Files = @() }
   }
@@ -763,6 +807,7 @@ function Get-TcGateInputKey {
   }
   # A CANDIDATE THAT IS NOT THERE STILL GOES INTO THE KEY, so a file appearing where a base could point moves it.
   foreach ($p in @($absentSeen.Keys)) { if (-not $seen.ContainsKey($p)) { $rows.Add('cand ' + $p + ' absent') } }
+  foreach ($sr in $ScanRows) { $rows.Add([string]$sr) }
   foreach ($rf in @($RunnerFiles)) {
     if (-not $rf) { continue }
     $rows.Add('runner ' + [IO.Path]::GetFileName($rf) + ' ' + (Get-TcFileSha256 $rf))
@@ -1448,6 +1493,73 @@ if ($SelfTest) { }
     $idD = Get-TcGateCacheId -Repo 'C:\Box\Main' -GateFile 'c:\box\main\OPS/audit-thing.ps1' -GateArg '-SelfTest' -Key 'k1'
     T 'MUST NOT FIRE  case and separator spelling do not split one gate into two entries' ($idA -eq $idD) "$idA / $idD"
 
+    # ---- A STATIC DETECTOR KEYED ON ITS SCAN SET (D1, design\PLAN-push-gate-diet-2026-09-27.md) ----
+    # A real git repository, because the scan set IS what git lists. The detector walks the tree through a variable,
+    # which the inference refuses; the declared scan set is what lets it be keyed at all.
+    . (Join-Path $PSScriptRoot 'git-repo-env.ps1')
+    Clear-TcGitRepoEnv
+    $sr = Join-Path $sb 'scanrepo'
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sr 'lib') -ErrorAction Stop
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sr 'ops') -ErrorAction Stop
+    $null = New-Item -ItemType Directory -Force -Path (Join-Path $sr 'grocery') -ErrorAction Stop
+    $sDet = Join-Path $sr 'ops\audit-shape.ps1'
+    $sDetText = ". (Join-Path `$repo 'lib\walk.ps1')`n`$files = Get-ChildItem -Recurse `$repo -Filter *.ps1`nforeach (`$x in `$files) { `$p = Join-Path `$repo `$x.Name }`n"
+    [IO.File]::WriteAllText($sDet, $sDetText, $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'lib\walk.ps1'), "# the walk library`n", $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\scanned.ps1'), "# a scanned script`n", $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\board.json'), "{`"price`": 1}`n", $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\stamp.txt'), "2026-09-27`n", $utf8)
+    $eapG = $ErrorActionPreference
+    try {
+      $ErrorActionPreference = 'Continue'
+      $null = & git -C $sr init -q 2>$null
+      $null = & git -C $sr -c user.email=t@t -c user.name=t add -A 2>$null
+      $null = & git -C $sr -c user.email=t@t -c user.name=t commit -q -m base 2>$null
+    } finally { $ErrorActionPreference = $eapG }
+    $scanSpec = @('*.ps1', '*.psm1')
+    function Get-ScanKeyForFixture { $rr = Get-TcGateScanRows -Repo $sr -Scan $scanSpec; if (-not $rr.Ok) { return $rr }; Get-TcGateInputKey -Repo $sr -GateFile $sDet -GateArg 'static' -RunnerFiles @($runner) -ScanRows $rr.Rows }
+    $plain = Get-TcGateInputKey -Repo $sr -GateFile $sDet -GateArg 'static' -RunnerFiles @($runner)
+    T 'CLEAN TWIN  without a scan set a walking detector is still refused, exactly as before D1' (-not $plain.Ok) ("ok={0}" -f $plain.Ok)
+    $s0 = Get-ScanKeyForFixture
+    $s0b = Get-ScanKeyForFixture
+    T 'CLEAN TWIN  a declared scan set keys a detector that walks the tree, and the same tree keys the same twice' `
+      ($s0.Ok -and $s0b.Ok -and $s0.Key -eq $s0b.Key) ("ok={0} why={1}" -f $s0.Ok, $s0.Why)
+    # MUST NOT FIRE: a data-only push. Tracked data outside the scan set changes, committed and uncommitted.
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\board.json'), "{`"price`": 2}`n", $utf8)
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\stamp.txt'), "2026-09-28`n", $utf8)
+    $sData = Get-ScanKeyForFixture
+    T 'MUST NOT FIRE  a data-only change (.json and .txt edited) leaves a code detector''s key alone, so its pass is reused' ($sData.Ok -and $sData.Key -eq $s0.Key) 'the key moved on data the detector does not scan'
+    $eapG = $ErrorActionPreference
+    try { $ErrorActionPreference = 'Continue'; $null = & git -C $sr -c user.email=t@t -c user.name=t commit -q -am data 2>$null } finally { $ErrorActionPreference = $eapG }
+    $sDataC = Get-ScanKeyForFixture
+    T 'MUST NOT FIRE  the same data change COMMITTED leaves the key alone too' ($sDataC.Ok -and $sDataC.Key -eq $s0.Key) 'the key moved on a committed data change'
+    # MUST FIRE: a scanned .ps1 changes, uncommitted then committed, and a new untracked one appears.
+    [IO.File]::WriteAllText((Join-Path $sr 'grocery\scanned.ps1'), "# a scanned script, edited`n", $utf8)
+    $sEdit = Get-ScanKeyForFixture
+    T 'MUST FIRE  editing a scanned .ps1 in the working tree moves the key, so the detector runs' ($sEdit.Ok -and $sEdit.Key -ne $s0.Key) 'key survived an edit inside the scan set'
+    $eapG = $ErrorActionPreference
+    try { $ErrorActionPreference = 'Continue'; $null = & git -C $sr -c user.email=t@t -c user.name=t commit -q -am code 2>$null } finally { $ErrorActionPreference = $eapG }
+    $sEditC = Get-ScanKeyForFixture
+    T 'MUST FIRE  the scanned .ps1 change COMMITTED still differs from the base key' ($sEditC.Ok -and $sEditC.Key -ne $s0.Key) 'a committed change inside the scan set replayed the old pass'
+    $newP = Join-Path $sr 'grocery\brand-new.ps1'
+    [IO.File]::WriteAllText($newP, "# untracked, but a tree walk reads it`n", $utf8)
+    $sNew = Get-ScanKeyForFixture
+    T 'MUST FIRE  a new UNTRACKED .ps1 moves the key, because the detector''s walk reads it' ($sNew.Ok -and $sNew.Key -ne $sEditC.Key) 'an untracked scanned file did not reach the key'
+    [IO.File]::Delete($newP)
+    # CLEAN TWIN: the detector's own source, and a library it loads, each move the key on their own.
+    $sBase = Get-ScanKeyForFixture
+    [IO.File]::WriteAllText($sDet, $sDetText + "# a new rule`n", $utf8)
+    $sSelf = Get-ScanKeyForFixture
+    [IO.File]::WriteAllText($sDet, $sDetText, $utf8)
+    T 'CLEAN TWIN  editing the detector''s OWN source moves its key, so a changed rule re-runs over the tree' ($sSelf.Ok -and $sSelf.Key -ne $sBase.Key) 'key survived an edit to the detector'
+    [IO.File]::WriteAllText((Join-Path $sr 'lib\walk.ps1'), "# the walk library, edited`n", $utf8)
+    $sLib = Get-ScanKeyForFixture
+    T 'CLEAN TWIN  editing a library the detector dot-sources moves its key' ($sLib.Ok -and $sLib.Key -ne $sBase.Key) 'key survived an edit to a loaded library'
+    $sNone = Get-TcGateScanRows -Repo $sr -Scan @('*.nothing-matches')
+    T 'MUST FIRE  a scan set that matches no tracked file REFUSES, never keys an empty set' ((-not $sNone.Ok) -and $sNone.Why -match 'matches no tracked file') ("ok={0} why={1}" -f $sNone.Ok, $sNone.Why)
+    $sBad = Get-TcGateScanRows -Repo (Join-Path $sb 'not-a-repo') -Scan $scanSpec
+    T 'MUST FIRE  a scan set git cannot list REFUSES, so the detector runs' (-not $sBad.Ok) ("ok={0}" -f $sBad.Ok)
+
     # ---- PRUNING, which is only safe because it agrees with the hit rule ----
     $pc = Join-Path $sb 'cache'
     $null = New-Item -ItemType Directory -Force -Path $pc
@@ -1476,7 +1588,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 96) { $f++; Write-Output ("FAIL  only {0} of 96 cases ran" -f $cases) }
+  if ($cases -lt 107) { $f++; Write-Output ("FAIL  only {0} of 107 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

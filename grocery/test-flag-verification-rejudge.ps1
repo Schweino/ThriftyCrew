@@ -7,7 +7,7 @@
   Each case runs the real audit as a child with -OutDir at a per-run fixture tree (board, ledger, the store's own capture)
   and reads its exit code and its QUARANTINE lines, exactly as guards.ps1 does.
 #>
-# gate-inputs: grocery\audit-flag-verification.ps1 grocery\flag-verify-lib.ps1
+# gate-inputs: grocery\audit-flag-verification.ps1, grocery\flag-verify-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'

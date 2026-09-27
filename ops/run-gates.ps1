@@ -204,15 +204,25 @@ foreach ($s in $withSelfTest) {
   [void]$selfJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $s.FullName, ('-' + $selfSwitch[[string]$s.FullName])) })
 }
 # ---- static-analysis detectors: they read SOURCE, so they work on a bare checkout ----
+# `scan` = THE FILES THIS DETECTOR WALKS, as git pathspecs (D1 of design\PLAN-push-gate-diet-2026-09-27.md, Brad
+# 2026-09-27). With it the detector is keyed like a self-test: its own bytes, every library it loads, every file its
+# source names, this runner, and every file in the scan set (lib\gate-input-key.ps1 Get-TcGateScanRows). A pass over an
+# identical key is replayed; any change in the set runs it over the WHOLE tree as before. A set must be a SUPERSET of
+# what the walk reads - a set too narrow is a stale pass. An entry with no `scan` runs on every push, and does so when
+# what it reads is not files git can list: commit history, origin/main, unpushed messages, the scheduler, the home
+# directory's memory store, or data it names by a variable. `*` crosses folders in a git pathspec.
+$scanCode     = @('*.ps1', '*.psm1', '*.psd1', '*.py', '*.sh', 'ops/hooks/*')
+$scanCodeWide = @($scanCode) + @('*.js', '*.yml', '*.yaml', '*.vbs', '*.bat', '*.cmd')   # walks that also read scripts of other kinds
+$scanLessons     = @('content/*.md')
 $static = @(
-  @{ f = 'grocery\audit-guard-contract.ps1';   n = 'every chain detector can prove it ran, none are dead or half-covered' }
+  @{ scan = $scanCodeWide; f = 'grocery\audit-guard-contract.ps1';   n = 'every chain detector can prove it ran, none are dead or half-covered' }
   @{ f = 'grocery\audit-cloud-readiness.ps1';  n = 'every credential consumer in the chain can run on a runner' }
-  @{ f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
+  @{ scan = $scanCodeWide; f = 'grocery\audit-script-census.ps1';    n = 'no script is unreachable and unrecorded' }
   @{ f = 'grocery\audit-json-encoding.ps1';    n = 'the matching rules are still in the encoding they were written in' }
   # MOVED HERE FROM guards.ps1 on 2026-09-21: a bare JSON reader is a SOURCE defect, so it stops the push that adds it
   # instead of holding a board with no bad cell (it held the 2026-09-20 board that way). Its baseline is tracked, so a
   # clean checkout can read it; its report is rewritten only when its findings change.
-  @{ f = 'grocery\audit-json-readers.ps1';     n = 'no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)' }
+  @{ scan = $scanCode; f = 'grocery\audit-json-readers.ps1';     n = 'no NEW script reads JSON in a way PS 5.1 decodes with the ANSI codepage (RATCHET, may only go down)' }
   # MOVED UP FROM PUBLISH TIME on 2026-09-26 (queue 2026-09-26-f73dc7): 4880ebc98 pushed three commodities filed in no
   # category and the first thing to notice was publish-deals-page holding that day's republish. commodities.json and
   # categories.json are tracked, so -Source judges them on a bare checkout and writes nothing; the daily chain and
@@ -223,13 +233,13 @@ $static = @(
   # matcher can still tell a sweep from an ownership list, and THIS entry runs it over the real tree,
   # which is what catches the next script to be written with a bare `git add`. Four incidents in seven
   # weeks, every one of them fixed only in the file that caused it (2026-09-06, PLAN-top5 area 3).
-  @{ f = 'ops\audit-git-sweepers.ps1';         n = 'no tracked script stages by sweep - every git add names what it owns' }
+  @{ scan = $scanCodeWide; f = 'ops\audit-git-sweepers.ps1';         n = 'no tracked script stages by sweep - every git add names what it owns' }
   # 2026-09-11: on 2026-09-10 seven self-tests that build temp repos ran under a linked worktree's GIT_DIR and wrote
   # the SHARED .git\config. This hook and this file clear it now; the fixtures are the layer present on every other path.
-  @{ f = 'ops\audit-git-fixture-env.ps1';      n = 'every script that builds a temp repo clears the repository environment first, so a hook-spawned run cannot write the shared .git' }
+  @{ scan = $scanCode; f = 'ops\audit-git-fixture-env.ps1';      n = 'every script that builds a temp repo clears the repository environment first, so a hook-spawned run cannot write the shared .git' }
   # 2026-09-11: sessions' own load tests held the shared box at 100% for over an hour. Deliberate load now comes
   # from ops\cpu-load.ps1, which draws on the same machine-wide budget as this file's pool.
-  @{ f = 'ops\audit-cpu-load.ps1';             n = 'every committed script that starts CPU burners takes its cores from the machine-wide budget run-gates shares' }
+  @{ scan = $scanCode; f = 'ops\audit-cpu-load.ps1';             n = 'every committed script that starts CPU burners takes its cores from the machine-wide budget run-gates shares' }
   # Same both-halves reason again: the discovery pass proves the scanner can still tell a frozen fixture
   # from a live ruling; this entry runs it over the real tree, which is what catches the NEXT self-test
   # written to read its own live allowlist (2026-09-06, PLAN-top5 area 4).
@@ -256,11 +266,11 @@ $static = @(
   # journal hook Invoke-GhostApi; 17 mutating calls to Ghost, thriftycrew.com and the Cloudflare API go
   # around it entirely, ten of them in .claude\skills\lesson. A ratchet, so the number can only fall
   # (2026-09-06, backlog E1).
-  @{ f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
+  @{ scan = $scanCode; f = 'ops\audit-write-seam.ps1';           n = 'no NEW irreversible write bypasses the E1 safety layer' }
   # A HELD READER REFUSES A TEMP-THEN-RENAME, and under the default ErrorActionPreference the refusal does not even
   # throw: the write is lost and the script carries on (measured 2026-09-11). lib\atomic-write.ps1 waits the reader
   # out. A ratchet, so a NEW bare Move-Item -Force fails the push and the known ones may only fall.
-  @{ f = 'ops\audit-bare-replace.ps1';         n = 'no NEW Move-Item -Force replace bypasses lib\atomic-write.ps1, where a held reader would lose the write' }
+  @{ scan = $scanCode; f = 'ops\audit-bare-replace.ps1';         n = 'no NEW Move-Item -Force replace bypasses lib\atomic-write.ps1, where a held reader would lose the write' }
   # AN AUDITOR THAT REPORTS INTO A FILE NOBODY OPENS IS A MEASUREMENT WITH NO CONSEQUENCE, and one whose
   # ALERT describes a consumer that does not exist is worse: it suppresses the manual repair that would
   # otherwise have happened. audit-ff-carry told its reader that confirmed victims "lead the next window's
@@ -295,14 +305,14 @@ $static = @(
   # Import-CaptureCsv dropped vendor TEST rows at ingest - the right place - and recorded the count in
   # $script:CapturePlaceholderCount, which ZERO of its callers read. A drop nobody reads is a clean
   # bill (2026-09-06, backlog E5).
-  @{ f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
+  @{ scan = $scanCode; f = 'ops\audit-capture-ingest-reporting.ps1'; n = 'a row dropped at ingest is reported by whoever read it' }
   # "CLEAN TWIN" meant two OPPOSITE things here - zero findings in the PowerShell audits, a HIT in
   # knowledge-search - so the standing instruction to "add a must-fire and a clean twin" could be read
   # either way, and read the wrong way it produces a fixture that passes while proving nothing about
   # over-firing. Brad ruled the knowledge-search vocabulary canonical on 2026-09-07 and the 133
   # provable cases were renamed; this keeps a new one from appearing (backlog I11). It only judges
   # labels whose ASSERTION settles the sign, and its own header says so rather than implying a sweep.
-  @{ f = 'ops\audit-fixture-vocabulary.ps1'; n = 'no fixture is labelled CLEAN TWIN while asserting that a detector found nothing' }
+  @{ scan = $scanCode; f = 'ops\audit-fixture-vocabulary.ps1'; n = 'no fixture is labelled CLEAN TWIN while asserting that a detector found nothing' }
   # The same one-label-two-meanings defect as the line above, one floor up: the backlog's `OPEN` meant
   # work nobody started, a decision waiting on Brad, AND a measurement whose conclusion was "do not
   # build this". Seventeen items read as a to-do list and five of them were never tasks (2026-09-07).
@@ -345,7 +355,7 @@ $static = @(
   # looks at production.
   # (This comment deliberately does NOT spell the switch declaration out. Writing it in prose here is
   # what made run-gates discover ITSELF on 2026-09-01 and respawn every two minutes for 39 minutes.)
-  @{ f = 'ops\audit-twin-drift.ps1';           n = 'no rule this estate keeps in two files has drifted apart' }
+  @{ scan = $scanCode; f = 'ops\audit-twin-drift.ps1';           n = 'no rule this estate keeps in two files has drifted apart' }
   # THE COST ENGINE'S GOLDEN TEST, ungated until 2026-09-01 and the only thing that caught a schema
   # change to costed.json the same day. It has no -SelfTest switch, so the discovery pass above cannot
   # see it, and it was in no static list either - the identical hole coverage_check.py was sitting in.
@@ -372,15 +382,15 @@ $static = @(
   # second one can see a registrar somebody adds tomorrow. Hermetic - it reads .ps1 source, the
   # committed task XML and expected-automations.json, all tracked, so it is green on a bare checkout.
   @{ f = 'ops\audit-task-registration.ps1';    n = 'no registrar can register a scheduled task that has no committed definition and no watch entry - a task must be impossible to leave unwatched at CHANGE time, not reported unwatched the next morning' }
-  @{ f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
+  @{ scan = $scanCode; f = 'ops\audit-arg-binding.ps1';          n = 'every audit/verify/test/check script REFUSES an argument it does not declare, so a scoped check cannot silently run unscoped and report clean' }
   # Hermetic: reads .ps1 source text, never a board, so it belongs here rather than in the daily chain.
-  @{ f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
+  @{ scan = $scanCode; f = 'ops\audit-cross-module-reach.ps1';   n = 'no NEW script reaches into another module''s internals directory - a ratchet on cross-module path literals, high-water mark may only go DOWN' }
   # NO zero_ok HERE, DELIBERATELY (2026-09-23). Its scanned= counts the LIFTS it checked, not files, and a 0 there is
   # not always an empty set: it read 0 on 78 main-checkout runs over 2026-09-10 and 11, the days it had gone vacuous
   # and checked nothing on every push. It reads 1 today (Merge-IwbRows). When that last lift becomes a library, retire
   # this entry or give it zero_ok with that reason - a decision somebody makes, not a default.
-  @{ f = 'ops\audit-lift-completeness.ps1';   n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
-  @{ f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
+  @{ scan = $scanCode; f = 'ops\audit-lift-completeness.ps1';   n = 'every function a grocery script lifts out of another script''s source brings the functions it CALLS with it, so a hand-maintained lift list cannot fall behind and fail at run time' }
+  @{ scan = $scanCode; f = 'ops\audit-one-way-actuators.ps1';    n = 'a control constant that may only move ONE WAY carries a rate limit and a plausibility bar - a REPORT, exit 0, because "one-directional" is a property of a design and no pattern matcher can be precise about it' }
   @{ f = 'ops\audit-event-bus.ps1';            n = 'every declared producer of an estate event still writes one, and the bus is not silently dead - the wiring half is static, and the FLOOR half is one of the estate''s only checks that fires on nothing happening' }
   @{ f = 'ops\audit-phantom-paths.ps1';        n = 'a script path named in standing guidance (CLAUDE.md, rules, agents, docs, hooks, rulings) exists in the tree - the founding phantom was ops\audit-hook-installed.ps1, cited five times as a running guard and never written' }
   @{ f = 'ops\audit-conclusion-currency.ps1'; n = 'a recorded conclusion that was current does not name a harness changed after it (WS 7d ratchet)' }
@@ -395,26 +405,26 @@ $static = @(
   # new rule arrives as operative text plus a channel tag and its history goes to docs\rules-history. Hermetic, reads source only.
   @{ f = 'ops\audit-rule-format.ps1';          n = 'every rule in a channel-tagged rules file (ops-and-gates.md) ends with a channel tag naming a gate that exists or judgement, points at its own history anchor, and stays under the per-rule bar; no history anchor is orphaned' }
   @{ f = 'ops\audit-measurement-provenance.ps1'; n = 'a recorded measurement names the harness it ran through and the commit or date it ran at - a RATCHET at 8, because retro-filling the existing set was explicitly not asked for and a bar over them would be red on day one' }
-  @{ f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
+  @{ scan = $scanCode; f = 'ops\audit-source-comment-strip.ps1'; n = 'no source scanner reduces PowerShell by LINE comments only - a block header must not be readable as a declaration (it enrolled 8 libraries here as self-tests)' }
   # From a linked worktree every FULL path carries \.claude\worktrees\, so a walk excluding on it reads nothing and reports clean; e1afb523b fixed nineteen and this blocks the next.
   @{ daily = $true; f = 'ops\audit-full-path-excludes.ps1';   n = 'no NEW tree walk excludes worktrees or .claude by matching a file''s FULL path instead of the path below its root - a ratchet, hermetic, reads source only' }
   # A typed parameter keeps its type for its whole scope and names are case-insensitive, so `$rule = @(...)` beside [string]$Rule made ONE string and a self-test passed over nothing; the rule in ops-and-gates.md did not stop the recurrence (2026-09-11).
-  @{ f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-typed-param-shadow.ps1';   n = 'no NEW assignment reuses a typed parameter''s name with a value of another kind, which converts it rather than making a local - a ratchet over the AST, hermetic, reads source only' }
   # 8253ded82 glued a self-test's closing if/else onto its last case line, so the branch never exited and every push's gate ran a live three-store pull and scored it ok.
   @{ daily = $true; f = 'ops\audit-keyword-arguments.ps1';    n = 'no tracked .ps1 or .psm1 carries a statement keyword (if, else, exit, return, try, throw, continue and the rest) as a bare command ARGUMENT - a statement glued onto a command line never runs as one; a gate at zero, hermetic, reads source only' }
   # 2026-09-23: a typed backslash-n joined two self-test cases onto a comment line in audit-match-soundness.ps1; neither ran and the suite printed PASS.
-  @{ f = 'ops\audit-literal-newline-escape.ps1'; n = 'no tracked .ps1 or .psm1 carries a typed newline escape outside a string that joins two source lines, or a self-test case call inside a line comment - a case in a comment never runs; a gate at zero, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-literal-newline-escape.ps1'; n = 'no tracked .ps1 or .psm1 carries a typed newline escape outside a string that joins two source lines, or a self-test case call inside a line comment - a case in a comment never runs; a gate at zero, hermetic, reads source only' }
   # 2026-09-23: rehearse-chain's cases returned `(c1) -and (c2), ('got')`, which parses as `c1 -and (c2, 'got')`; the array is truthy, so 28 last conditions were never judged.
-  @{ f = 'ops\audit-and-comma-case.ps1'; n = 'no self-test case body or case-call argument in a tracked .ps1 or .psm1 carries a -and/-or/-xor whose right operand is an unparenthesised array, which swallows the condition before the comma - a gate at zero outside one named pin, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-and-comma-case.ps1'; n = 'no self-test case body or case-call argument in a tracked .ps1 or .psm1 carries a -and/-or/-xor whose right operand is an unparenthesised array, which swallows the condition before the comma - a gate at zero outside one named pin, hermetic, reads source only' }
   # The keyword audit above sees that SPELLING and lib\selftest-verdict.ps1 sees the silence AFTER the live work ran. This reads the control flow, so the push stops before a self-test can reach a store.
-  @{ f = 'ops\audit-selftest-fallthrough.ps1'; n = 'no top-level self-test block that live statements follow can end without exit, throw, return or Exit-Guard - a gate at zero, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-selftest-fallthrough.ps1'; n = 'no top-level self-test block that live statements follow can end without exit, throw, return or Exit-Guard - a gate at zero, hermetic, reads source only' }
   # 2026-09-11: this watcher ran only inside test-auditors, which this file skips, and walked grocery\ only; wave-preaudit's drill died mid-suite on the class it watches.
-  @{ f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'grocery\test-native-stderr-eap.ps1'; n = 'no NEW native child redirects its stderr under EAP=Stop anywhere in the repo - the shell fixtures of the 2026-08-22 bug, plus an AST scan ratcheted by named site; hermetic, reads source only' }
   # Concurrent pushes run the same self-tests over each other in ONE %TEMP%, so a fixed name there is shared; c3a686290 moved guard-contract and test-guards to a per-run directory and this blocks the next fixed name.
-  @{ f = 'ops\audit-fixed-temp-names.ps1';     n = 'no NEW path under %TEMP% is built from a FIXED leaf that concurrent runs of one suite would share - a ratchet, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-fixed-temp-names.ps1';     n = 'no NEW path under %TEMP% is built from a FIXED leaf that concurrent runs of one suite would share - a ratchet, hermetic, reads source only' }
   # 2026-09-11: ingredient-queue defined a function named Get-Item, which outranks the cmdlet, so its live-ledger assertion
   # read 0 before and after for 17 days. A rule in ops-and-gates.md reaches whoever opens it; this reaches the next definition.
-  @{ f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-cmdlet-shadow.ps1';        n = 'no tracked script defines a function named after a built-in cmdlet or module function, except a file-and-name allowlist entry with its reason - hermetic, a pinned name list, reads source only' }
   # 9c44c3a37 wrote `@($rejects) + @($hintNotes)` over a New-Object List[object], which throws under PS 5.1, so
   # every Sam's build carrying a reject died after writing the deals file and before its rejects file, summary and
   # cursor advance - for five days. The same trap had already been hand-fixed in build-arrivals-docket.ps1 and
@@ -422,20 +432,20 @@ $static = @(
   # file's own criterion: unlike the six tree-wide ratchets below, what it catches is not degraded guard quality but
   # a lane that CRASHES at run time, and the value is the new site in THIS diff - the same reason
   # test-native-stderr-eap stays. It cost 24s over 785 tracked scripts on 2026-09-17. Hermetic, reads source only.
-  @{ f = 'ops\audit-list-array-wrap.ps1';      n = 'no tracked script wraps a New-Object List[object] in @(), which throws "Argument types do not match" under PS 5.1 even when the list is empty - a gate at ZERO, with a marked fixture that proves the throw as its only exception' }
+  @{ scan = $scanCode; f = 'ops\audit-list-array-wrap.ps1';      n = 'no tracked script wraps a New-Object List[object] in @(), which throws "Argument types do not match" under PS 5.1 even when the list is empty - a gate at ZERO, with a marked fixture that proves the throw as its only exception' }
   # Queue 2026-09-21-85c3b7 (plan-2026-09-22-2, Brad-ruled): one density rule, one library, two builders, and only one
   # builder called it, so Walmart's density-contradicted derived sizes were written and then ruled by hand. The census
   # names every builder that derives a size as lp / up and refuses a new one that does not run Test-DerivedSizeDensity.
   # ON EVERY PUSH, because what it stops is a builder that publishes a wrong per-unit price; about 2 s over 691 scripts.
-  @{ f = 'grocery\audit-derived-size-callers.ps1'; n = 'every builder that derives a package size as linePrice / unitPrice runs the density refusal (Test-DerivedSizeDensity, with derived-size-density-lib dot-sourced) in the same function - a ratchet at 0 unguarded that also names the registered builders and fails when one stops resolving; hermetic, AST, reads source only' }
-  @{ f = 'ops\audit-readjson-inline-wrap.ps1'; n = 'no script wraps the json-io reader inline in @(), which hands a loop the whole file as ONE row - a gate at ZERO (2026-09-21: it had blinded sync-recipesdb-cost''s partial-cost gate and two wave-preaudit maps)' }
+  @{ scan = $scanCode; f = 'grocery\audit-derived-size-callers.ps1'; n = 'every builder that derives a package size as linePrice / unitPrice runs the density refusal (Test-DerivedSizeDensity, with derived-size-density-lib dot-sourced) in the same function - a ratchet at 0 unguarded that also names the registered builders and fails when one stops resolving; hermetic, AST, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-readjson-inline-wrap.ps1'; n = 'no script wraps the json-io reader inline in @(), which hands a loop the whole file as ONE row - a gate at ZERO (2026-09-21: it had blinded sync-recipesdb-cost''s partial-cost gate and two wave-preaudit maps)' }
   # Brad's ruling, 2026-09-12, backlog I138: a title we publish on a paid page is our claim whatever blog it came
   # from. This one is on EVERY push rather than daily, because it is one of the few detectors here that CAN put a
   # wrong claim in front of a paying reader, which is the distinction the daily/push split above is drawn on. It
   # reads the committed specs, which are tracked and present in a bare checkout, so it is hermetic.
   # It sits in meal-prep\pipeline rather than ops\ because its population IS meal-prep\db\recipes, and an ops\
   # detector reading that is the coupling audit-cross-module-reach ratchets: its first draft moved 118 to 120.
-  @{ f = 'meal-prep\pipeline\audit-forbidden-prose.ps1'; n = 'no recipe title and no reader-facing prose carries a globally forbidden health word - a gate at ZERO over the 584 committed specs, with the source attribution line exempt by Brad''s ruling; hermetic, reads tracked data only' }
+  @{ scan = $scanCode; f = 'meal-prep\pipeline\audit-forbidden-prose.ps1'; n = 'no recipe title and no reader-facing prose carries a globally forbidden health word - a gate at ZERO over the 584 committed specs, with the source attribution line exempt by Brad''s ruling; hermetic, reads tracked data only' }
   # Brad's ruling, 2026-09-19, backlog I166: the .gitignore allow-list protects a NEW secret file, and nothing read a key pasted into an
   # already-tracked file or a commit message. ON EVERY PUSH, because a secret is exposed the moment it leaves the box and no later
   # morning can take it back. Hermetic (git grep over tracked files plus the unpushed messages), about 20 s on 8,625 files.
@@ -443,26 +453,26 @@ $static = @(
   # design\PLAN-board-clock-2026-09-26.md W6: on 2026-09-26 the ad set's date (week_of, the ads file's today) lagged the
   # real date by 3 days and every consumer that used it as "now" went wrong - ended sales priced, a 93-day window, every
   # chain push refused. ON EVERY PUSH, because C1 and C5 put a wrong price in front of a paying reader. About 12 s.
-  @{ f = 'ops\audit-board-clock.ps1';          n = 'no NEW code treats the ad set''s date (week_of, the ads file''s today, BoardToday, or a variable carrying one) as now - a compare with a non-literal, date arithmetic or a clock-named parameter; a ratchet held by key, AST taint within one file, hermetic, reads source only' }
-  @{ f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
-  @{ f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-board-clock.ps1';          n = 'no NEW code treats the ad set''s date (week_of, the ads file''s today, BoardToday, or a variable carrying one) as now - a compare with a non-literal, date arithmetic or a clock-named parameter; a ratchet held by key, AST taint within one file, hermetic, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-unread-wait.ps1';          n = 'every TIMED WaitOne has its answer read on some path - a timed-out wait returns $false and the caller holds nothing, which rewrote the triage queue unlocked on 2026-09-11; hermetic, AST, reads source only' }
+  @{ scan = $scanCode; f = 'ops\audit-internal-ast-members.ps1'; n = 'no script reads an AST member that is INTERNAL under PS 5.1 (VariablePath.UnqualifiedPath reads as $null, so a name walk returns an agreeing empty) - hermetic, AST, reads source only' }
   # Brad's ruling (2026-09-12, backlog I112): a lesson may state a rate of return only beside its source, the
   # period it covers, whether it is nominal or after inflation, and the fee position. ON EVERY PUSH rather than
   # daily, on this file's own criterion: unlike the six tree-wide ratchets below, this one CAN put a wrong number
   # in front of a paying reader, and the number in question is somebody's retirement. Hermetic - it reads tracked
   # markdown under content\, so it is green on a bare checkout, and it cost ~2s over 118 files on its first run.
-  @{ f = 'ops\audit-lesson-rate-claims.ps1';   n = 'no NEW published lesson states a rate of return without the source, the period, the nominal-or-real basis and the fee statement Brad''s ruling requires beside it - a made-up rate labelled as an example is exempt; a ratchet, high-water mark may only go DOWN' }
+  @{ scan = $scanLessons; f = 'ops\audit-lesson-rate-claims.ps1';   n = 'no NEW published lesson states a rate of return without the source, the period, the nominal-or-real basis and the fee statement Brad''s ruling requires beside it - a made-up rate labelled as an example is exempt; a ratchet, high-water mark may only go DOWN' }
   # Brad's ruling 1 (2026-09-10): every alert type is exactly one class. With no argument this is the SOURCE half
   # only, so a new Send-Alert call site with no registry entry fails the push instead of paging next morning as
   # UNREGISTERED ALERT TYPE. The queue half reads data and runs in the daily chain's alert-registry lane.
-  @{ f = 'grocery\audit-alert-registry.ps1';   n = 'every Send-Alert call site whose subject can be read maps to exactly one class in grocery\alert-registry.json' }
+  @{ scan = $scanCode; f = 'grocery\audit-alert-registry.ps1';   n = 'every Send-Alert call site whose subject can be read maps to exactly one class in grocery\alert-registry.json' }
   # ops\verify-commodities-gate.ps1 WITH NO ARGUMENT is deliberately not listed: that form judges a staged set, which is
   # empty during a gate run - a confident "not applicable" that proves nothing. Its -Head form needs no staged set: it
   # hashes HEAD's committed rule files against HEAD's committed match-baseline.json (2026-09-22, queue 2026-09-21-a25dc0),
   # so rules that a rebase or a --no-verify commit landed without their review are refused at push. `a` = arguments.
   # grocery\audit-store-registry.ps1 -CodeOnly (2026-09-22, queue 2026-09-22-175249): the roster scan over tracked source,
   # so a script with a hand-typed store list is refused at its own push, not paged by the daily chain 17 hours later.
-  @{ f = 'grocery\audit-store-registry.ps1'; a = @('-CodeOnly'); n = 'no live grocery script holds its own copy of the store list, and every registered subset exemption still names a real line - the code half; the board and file halves stay in the daily chain' }
+  @{ scan = $scanCode; f = 'grocery\audit-store-registry.ps1'; a = @('-CodeOnly'); n = 'no live grocery script holds its own copy of the store list, and every registered subset exemption still names a real line - the code half; the board and file halves stay in the daily chain' }
   @{ f = 'ops\verify-commodities-gate.ps1'; a = @('-Head'); n = 'the matching rules committed at HEAD are the ones HEAD''s committed match baseline reviewed (a rebase or --no-verify cannot land them apart)' }
 )
 # `zero_ok = $true` MEANS "AN EMPTY POPULATION IS A LEGITIMATE ANSWER FOR THIS GATE" (2026-09-23, W6.9 of
@@ -499,6 +509,7 @@ $static = @(
 # ops-and-gates.md warns about, so the daily run's own verdict must be READ, and a run that did not happen must
 # be as visible as a run that failed.
 $staticJobs = [Collections.Generic.List[object]]::new(); $staticKeys = [Collections.Generic.List[string]]::new()
+$staticEntries = [Collections.Generic.List[object]]::new()
 $dailyDeferred = 0
 foreach ($g in $static) {
   $pp = Join-Path $repo $g.f
@@ -508,6 +519,7 @@ foreach ($g in $static) {
   # two forms without one result answering for both.
   $gArgs = @(); if ($g.ContainsKey('a')) { $gArgs = @($g.a) }
   [void]$staticKeys.Add(([string]$g.f + ' ' + ($gArgs -join ' ')).Trim())
+  [void]$staticEntries.Add([pscustomobject]@{ Full = $pp; Arg = (('static ' + ($gArgs -join ' ')).Trim()); Scan = $(if ($g.ContainsKey('scan')) { @($g.scan) } else { @() }) })
   [void]$staticJobs.Add([pscustomobject]@{ Exe = $PSEXE; ArgList = (@('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $pp) + $gArgs) })
 }
 # ---- PYTHON self-tests -----------------------------------------------------------------------------
@@ -745,8 +757,10 @@ $script:gateWidthMax = $lease.Count
 # cached, because a key over source cannot watch bytes that move without a commit. Measured over the 279
 # self-tests: 185 keyable, 83 refused for data, 11 for an unresolvable path.
 #
-# ONLY SELF-TESTS. The static detectors scan the whole tree by construction, so their input IS the tree
-# and a two-file change really can change their answer. They run every time.
+# STATIC DETECTORS TOO, SINCE 2026-09-27 (D1, design\PLAN-push-gate-diet-2026-09-27.md). They scan the whole tree by
+# construction, so their input IS the tree and a two-file change really can change their answer - but only a change
+# INSIDE the files they scan. An entry that declares `scan` is keyed on that whole set (see the $static header); one
+# that does not runs every time, as all of them did before.
 #
 # A REUSED GATE IS A GATE THAT PASSED, NOT A GATE THAT WAS SKIPPED, and the line below says which it was.
 # Nothing red is ever cached, and a run that reported a BLIND case is not cached either - that note has to
@@ -822,6 +836,31 @@ if ($cacheDir -and $pyRunner.Count) {
     }
   }
 }
+# STATIC DETECTORS WITH A DECLARED SCAN SET (D1). The scan rows are computed once per distinct set, and a set git cannot
+# list leaves every detector declaring it unkeyed, so it runs: the refusal direction, never a replay.
+$stReused = 0; $stUnkeyed = 0; $stKeyed = 0
+$scanRowCache = @{}
+if ($cacheDir) {
+  for ($i = 0; $i -lt $staticEntries.Count; $i++) {
+    $se = $staticEntries[$i]; $idx = $offStatic + $i
+    if (-not @($se.Scan).Count) { $unkeyWhy[$idx] = 'static detector declares no scan set in run-gates'; $stUnkeyed++; continue }
+    $sid = (@($se.Scan) -join '|')
+    if (-not $scanRowCache.ContainsKey($sid)) { $scanRowCache[$sid] = Get-TcGateScanRows -Repo $repo -Scan @($se.Scan) }
+    $sr = $scanRowCache[$sid]
+    if (-not $sr.Ok) { $unkeyWhy[$idx] = ('scan set: ' + $sr.Why); $stUnkeyed++; continue }
+    $k = Get-TcGateInputKey -Repo $repo -GateFile $se.Full -GateArg $se.Arg -RunnerFiles $runnerFiles -ScanRows $sr.Rows
+    if (-not $k.Ok) { $unkeyWhy[$idx] = [string]$k.Why; $stUnkeyed++; continue }
+    $stKeyed++
+    $gateKey[$idx] = $k.Key
+    $gateCachePath[$idx] = Get-TcGateCachePath -CacheDir $cacheDir -GateId (Get-TcGateCacheId -Repo $repo -GateFile $se.Full -GateArg $se.Arg -Key $k.Key)
+    $line = ''
+    try { if ([IO.File]::Exists($gateCachePath[$idx])) { $line = ([IO.File]::ReadAllText($gateCachePath[$idx])).Trim() } } catch { $line = '' }
+    $verdictLine = Get-TcGateCachedVerdict -Line $line
+    if (-not $NoReuse -and $verdictLine -and (Test-TcGateCacheHit -Line $line -Key $k.Key -NowUtc $nowUtcKey).Hit) {
+      $cacheHit[$idx] = $true; $cacheVerdict[$idx] = $verdictLine; $stReused++
+    }
+  }
+} else { $stUnkeyed = $staticEntries.Count }
 # DISPATCH ONLY WHAT IS NOT ALREADY ANSWERED, then scatter the results back into their own slots, because
 # every loop below indexes by the job's position. A reused entry is filled in afterwards.
 $toRun = [Collections.Generic.List[object]]::new()
@@ -829,6 +868,7 @@ $runIdx = [Collections.Generic.List[int]]::new()
 for ($i = 0; $i -lt $allJobs.Count; $i++) { if (-not $cacheHit[$i]) { [void]$toRun.Add($allJobs[$i]); [void]$runIdx.Add($i) } }
 Write-Output ("run-gates: {0} of {1} self-test(s) already passed over these exact inputs and were not run again; {2} could not be keyed and always run" -f $reusedCount, $selfJobs.Count, $unkeyable)
 Write-Output ("run-gates: {0} of {1} Python suite(s) already passed over their declared inputs and were not run again; {2} declare nothing and always run, and the rest ran because an input changed or no pass is recorded yet" -f $pyReused, $pySuiteJobs.Count, $pyUnkeyed)
+Write-Output ("run-gates: {0} of {1} static detector(s) already passed over their whole scan set and were not run again; {2} keyed, {3} declare no scan set or could not be keyed and always run" -f $stReused, $staticEntries.Count, $stKeyed, $stUnkeyed)
 # SAID OUT LOUD ON EVERY RUN, because what a green run did NOT cover is part of what the green means. A reader who
 # does not know six ratchets were deferred will read this pass as wider than it is.
 if ($dailyDeferred -gt 0) {
@@ -890,6 +930,23 @@ if ($cacheDir) {
     $v = Get-TcSelfTestVerdict -Lines @($r.Out)
     if (-not $v.Found -or -not $v.Line) { continue }
     try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + ([string]$v.Line).Trim()) } catch { }
+  }
+  # A STATIC DETECTOR'S PASS (D1): exit 0, a last COMPLETE marker with no blind=<n>, and not a zero-population read
+  # (Get-TcStaticZeroScan), because each of those is scored something other than ok below and a replay would hide it.
+  # The replayed line is that marker, the one line the static judge reads; a detector with no marker replays a plain
+  # exit-0 line, which the judge scores by its exit code exactly as it did when it ran.
+  for ($i = 0; $i -lt $staticEntries.Count; $i++) {
+    $idx = $offStatic + $i
+    if ($cacheHit[$idx] -or -not $gateKey[$idx]) { continue }
+    $r = $allRes[$idx]
+    if ($null -eq $r -or $r.ExitCode -ne 0) { continue }
+    $marks = @(@($r.Out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
+    $last = if ($marks.Count) { ([string]$marks[$marks.Count - 1]).Trim() } else { '' }
+    if ($last -match '\bblind=([1-9][0-9]*)\b') { continue }
+    $zsRec = Get-TcStaticZeroScan -ExitCode 0 -Marker $last -ZeroOk $false
+    if ($zsRec.Blind) { continue }
+    if (-not $last) { $last = 'STATIC-PASS exit 0 with no COMPLETE marker' }
+    try { $null = Write-TcAtomicFile -Path $gateCachePath[$idx] -Text ($gateKey[$idx] + ' 0 ' + ([DateTime]::UtcNow.ToString('o')) + ' ' + $last) } catch { }
   }
   # PRUNED PAST THE BACKSTOP, because entries are named by content now and nothing else ever removed one. Safe by the
   # hit rule: an entry that old cannot be a hit, so no run's answer changes. Said only when it did something.
@@ -1006,7 +1063,9 @@ foreach ($g in $static) {
   Add-TcGateTiming -Name ($g.f) -Ms $gr.Ms -SpawnMs 209
   $rc = $gr.ExitCode
   $gMarks = @(@($out) | Where-Object { "$_" -match '^[A-Z0-9][A-Z0-9-]*-COMPLETE\b' })
-  if ($gMarks.Count) { [void]$gateReadings.Add([pscustomobject]@{ gate = [string]$g.f; rc = $rc; marker = [string]$gMarks[$gMarks.Count - 1] }) }
+  # A REPLAYED pass is not a new reading: ops\report-ratchet-trends.ps1 counts rows as runs that looked.
+  $gReused = (@($out).Count -gt 0) -and ([string]@($out)[0]).StartsWith('REUSED - ')
+  if ($gMarks.Count -and -not $gReused) { [void]$gateReadings.Add([pscustomobject]@{ gate = [string]$g.f; rc = $rc; marker = [string]$gMarks[$gMarks.Count - 1] }) }
   # A STATIC GATE THAT READ NOTHING IS BLIND, NOT OK (2026-09-23, W6.9). Its last marker says how much it read; exit 0
   # over a population of 0 is scored 3 unless the entry declares zero_ok. A non-zero exit is judged below as before.
   $gLast = if ($gMarks.Count) { [string]$gMarks[$gMarks.Count - 1] } else { '' }

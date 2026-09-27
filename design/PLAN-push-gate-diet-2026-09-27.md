@@ -1,6 +1,6 @@
 # PLAN: push gate diet (2026-09-27)
 
-Status: PLAN ONLY. No gate is changed by this document. Every move below waits on the decision it names.
+Status: D1-D5 RULED 2026-09-27 (see Brad's rulings below). W1 (M1, D1) built; M2 and M4 withdrawn; M3 and W0 open.
 
 Goal: cut what every push costs in `ops/run-gates.ps1` without losing protection. Moving a gate to a
 different tier is a design decision for Brad, and every tier still runs the gate: nothing here removes a
@@ -169,6 +169,30 @@ what moves wall most.
   caught.
 - **D4.** Batching cheap self-tests into shared processes (M4)? Recommended: no, the saving is about 13 s CPU.
 - **D5.** Is the bar right: code push at most 800 s CPU and 240 s wall, data-only at most 150 s CPU?
+
+### Brad's rulings (2026-09-27)
+
+- **D1 YES.** The static detectors run by `ops/run-gates.ps1` get an input key: the tracked files they scan (by their
+  own globs), their own script, and the libraries they load. When none of those changed since a recorded pass, the pass
+  is reused exactly as self-tests' are, so a data-only push skips them. A push that changes any scanned file runs the
+  detector over the WHOLE tree, as today. A detector whose scanned set cannot be declared stays unkeyed and runs every push.
+- **D2 NO.** No changed-files-only scanning and no nightly tier. Brad: full scans are safer and leave less for the
+  triage agent. M2 is withdrawn.
+- **D3 not yet.** No gate moves to a nightly-only tier (M5 stays unproposed; W0 still owed before it is asked again).
+- **D4 NO.** No batching of cheap self-tests into shared processes (M4 withdrawn).
+- **D5 accepted.** The bar stands for data-only pushes: at most 150 s gate CPU. A code push is to be unchanged by the
+  D1 work (a code push touching a scan set runs every keyed detector as before).
+
+### W1 as built (D1)
+
+`scan = <git pathspecs>` on each `$static` entry in `ops/run-gates.ps1`; `Get-TcGateScanRows` in
+`lib/gate-input-key.ps1` lists the set (index blob ids, working-tree bytes of modified files, and every untracked file
+under the specs), and `Get-TcGateInputKey -ScanRows` adds them to the detector's ordinary key (own bytes, loaded
+libraries, named literals, runner). A pass is recorded only for exit 0 with no `blind=` and no zero-population marker.
+33 of the 61 push-time static entries declare a set: 32 on code (`*.ps1 *.psm1 *.psd1 *.py *.sh ops/hooks/*`, three
+of them also `*.js *.yml *.yaml *.vbs *.bat *.cmd`; `audit-forbidden-prose`'s recipe specs reach its key through its
+own `# gate-inputs:` line) and `audit-lesson-rate-claims` on `content/*.md`. The other 28 run every push; the
+gate-times `why` column names each.
 
 ## Open items
 
