@@ -200,6 +200,16 @@ if ($fails.Count) {
   Write-Output ('  failed: ' + ($fails -join ', '))
   Write-Output '  These are the tree-wide ratchets a push no longer runs. Fix the cause; do not retrain a baseline to make a red go away.'
 }
+# WORKTREE CLEANUP (B3 of design\PLAN-efficiency-budgets-2026-09-27.md): the 2026-09-27 hand procedure, nightly. A REPORT
+# beside the ratchets: it never changes this run's exit code or its stamp, because a worktree left in place is not a red
+# ratchet. ops\clean-worktrees.ps1 removes only what git itself agrees to remove without --force.
+$cwPath = Join-Path $repo 'ops\clean-worktrees.ps1'
+if (Test-Path -LiteralPath $cwPath) {
+  $cwOut = @(& $PSEXE -NoProfile -ExecutionPolicy Bypass -File $cwPath)
+  $cwRc = $LASTEXITCODE
+  foreach ($l in @($cwOut | Where-Object { "$_" -match '^\s+(removed|refused|branch kept)\b|^clean-worktrees:' })) { Write-Output ('  ' + ("$l").Trim()) }
+  if ($cwRc -ne 0) { Write-Output ("  worktree cleanup could not evaluate (exit {0}); nothing was removed" -f $cwRc) }
+}
 $judged = Get-TcJudgedCommit -Repo $repo
 if ($judged.on_origin_main -ne $true -or $judged.contains_origin_main -ne $true) {
   Write-Output ("  NOTE  this run judged {0}, which is not origin/main as this checkout last fetched it ({1}; on_origin_main={2}, contains_origin_main={3}). A green stamp records that." -f `
