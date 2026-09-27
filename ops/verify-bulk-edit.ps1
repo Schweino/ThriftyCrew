@@ -41,7 +41,7 @@
 # Its declared inputs (lib\gate-input-key.ps1): the three libraries it dot-sources. Every -SelfTest fixture is a literal
 # or a temp file. One clean twin runs this script's live -Staged path over this checkout's index, and accepts every exit
 # that path can give (0, 1, 3), so what the index holds cannot change the verdict and is not an input.
-# gate-inputs: lib\guard-contract.ps1, lib\ps-source.ps1, lib\production-text.ps1
+# gate-inputs: lib\guard-contract.ps1, lib\ps-source.ps1, lib\production-text.ps1, lib\selftest-lib.ps1
 [CmdletBinding()]
 param([switch]$SelfTest, [switch]$Staged)
 $ErrorActionPreference = 'Stop'
