@@ -17,7 +17,7 @@
   A budget with no mark yet is REPORT ONLY (its number and trend, no state), and a number that could not be read is
   UNKNOWN, never 0.
 
-  THE BUDGETS (the plan's list): push cost for a data-only and a code push (B1, ops\push-cost-budget.ps1), the files
+  THE BUDGETS (the plan's list): push cost as the COUNT of unkeyed gate jobs (B1, Brad's ruling; data-push seconds as a trend), the files
   over 1,000 lines (B2, ops\audit-file-size-budget.ps1), the always-loaded bytes (ops\audit-always-loaded-bytes.ps1),
   the script-census orphans outside grocery\ (grocery\audit-script-census.ps1's wide tier), the worktree count, and the
   plans marked under way (ops\plan_citation.py's own reading of a Status line).
@@ -176,14 +176,13 @@ function Add-Budget([string]$Name, $Current, $Mark, [string]$Unit, [string]$Note
 $pc = Get-TcChildLines 'ops\push-cost-budget.ps1' @('-Json')
 $pj = $null
 if ($pc) { $l = @($pc | Where-Object { "$_" -like 'push-cost-json: *' }); if ($l.Count) { try { $pj = ("$($l[0])".Substring('push-cost-json: '.Length)) | ConvertFrom-Json } catch { $pj = $null } } }
-foreach ($c in @('data', 'code')) {
-  if ($pj) {
-    $cj = $pj.classes.$c
-    $note = if ([string]$cj.state -ceq 'report-only') { ('report-only: ' + [string]$cj.why) } else { ('median of ' + [int]$cj.n + ' runs') }
-    Add-Budget ("push cost ($c)") $cj.median_s $cj.mark_s ' s' $note $true
-  } else { Add-Budget ("push cost ($c)") $null $null ' s' 'ops\push-cost-budget.ps1 could not run' }
-}
-# B2: files over 1,000 lines: their total lines against the sum of their marks.
+if ($pj) {
+  Add-Budget 'unkeyed gate jobs' $pj.unkeyed_jobs $pj.mark '' 'jobs that run on every push, data-only included (B1, Brad''s ruling: the count, not seconds)' ([bool]$pj.known)
+  Add-Budget 'data push seconds' $pj.data_median_s $null ' s' ('trend only, median of ' + [int]$pj.data_runs + ' run(s)') $true
+} else {
+  Add-Budget 'unkeyed gate jobs' $null $null '' 'ops\push-cost-budget.ps1 could not run'
+  Add-Budget 'data push seconds' $null $null ' s' 'ops\push-cost-budget.ps1 could not run'
+}# B2: files over 1,000 lines: their total lines against the sum of their marks.
 $fs = Get-TcChildLines 'ops\audit-file-size-budget.ps1' @('-Json')
 $fj = $null
 if ($fs) { $l = @($fs | Where-Object { "$_" -like 'file-size-json: *' }); if ($l.Count) { try { $fj = ("$($l[0])".Substring('file-size-json: '.Length)) | ConvertFrom-Json } catch { $fj = $null } } }

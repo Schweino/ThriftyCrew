@@ -1,5 +1,9 @@
 <#
-  push-cost-budget.ps1 - what a push costs in gate time, per class, held by a mark that may only fall.
+  push-cost-budget.ps1 - what a push costs, held by a mark that may only fall.
+
+  BRAD'S RULING (2026-09-27, supersedes the median-of-seconds verdict described below): the JUDGED number is the COUNT of
+  gate jobs that run UNKEYED (Invoke-TcPushCostCheck). It does not move with load, so it needs no sample. The class and
+  the seconds below are still recorded per run and read by the weekly report as a trend; nothing fails on them.
 
   B1 of design\PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27 ("Yes, all of it"). The gate-diet plan cut
   a data-only push from 748 s of gate work to 292 s and the 2026-09-27 safety fix (cc40a2820) put it back near 500 s,
@@ -38,6 +42,7 @@
 # TUNING CONSTANTS (og-14). Nine runs: the first plausible odd window, not swept; at the 2026-09-27 rate of about 60 full
 # runs a day it fills within hours, and one run moved by load cannot move a median of nine. 90% full-run share: a real
 # run's job count moves by a handful as suites are added, a fixture's is a small fraction of it; not swept.
+. (Join-Path $PSScriptRoot 'ratchet.ps1')   # Test-RatchetMove, Read-TcRatchetBaseline, Compare-TcRatchetSites
 $script:TcPushCostMinRunsDefault = 9
 $script:TcPushCostFullShare = 0.9
 
@@ -134,14 +139,29 @@ function Read-TcPushCostMarks {
   return [pscustomobject]$o
 }
 
+function Get-TcGateJobName {
+  <# A job's gate as run-gates' gate-times rows name it: the first .ps1/.py argument below the repo, plus its first
+     switch. Pure. #>
+  param($Job, [string]$RepoFull)
+  $n = ''; $a = ''
+  foreach ($x in @($Job.ArgList)) { $s = [string]$x; if (-not $n -and $s -match '\.(ps1|py)$') { $n = $s } elseif ($n -and -not $a -and $s -match '^-') { $a = $s } }
+  $rf = $RepoFull.TrimEnd('\') + '\'
+  if ($n.StartsWith($rf, [StringComparison]::OrdinalIgnoreCase)) { $n = $n.Substring($rf.Length) }
+  return (($n + ' ' + $a).Trim())
+}
+
 function Invoke-TcPushCostCheck {
-  <# run-gates' whole use of this file, so run-gates grows by a few lines. From the run's own arrays: its class, its
-     executed time, the verdict for its class, the lines to print, and the row to append once its exit code is known.
-     OtherFailed: another gate already failed this run, so it is not a green run and does not join its own sample. #>
-  param([string]$RowsPath, [string]$MarkPath, $AllRes, [bool[]]$CacheHit, [string[]]$UnkeyWhy, [int[]]$CodeKeyedIdx, [bool]$NoReuse, [bool]$OtherFailed, [string]$Run)
+  <# run-gates' whole use of this file. BRAD'S RULING (2026-09-27): the budget is the COUNT of jobs that ran UNKEYED,
+     which run on every push including a data-only one, and a rise is refused; it does not move with load. Seconds stay
+     in the row as a trend for the weekly report and are never judged. Judged only when the run could key at all
+     (CodeKeyedIdx non-empty: a cache directory existed), since without one nothing is keyed and every job would read
+     unkeyed. Writes nothing itself; returns the lines, the row and the unkeyed names (for -Accept's latest file). #>
+  param([string]$RowsPath, [string]$MarkPath, $AllRes, [bool[]]$CacheHit, [string[]]$UnkeyWhy, [int[]]$CodeKeyedIdx, [bool]$NoReuse, [bool]$OtherFailed, [string]$Run, [string[]]$Names = @())
   $n = @($AllRes).Count
   $execMs = 0; $execJobs = 0; $unkMs = 0; $reused = 0
+  $unk = [System.Collections.Generic.List[string]]::new()
   for ($i = 0; $i -lt $n; $i++) {
+    if ($UnkeyWhy[$i]) { $unk.Add($(if ($i -lt @($Names).Count -and $Names[$i]) { [string]$Names[$i] } else { "job $i" })) }
     if ($CacheHit[$i]) { $reused++; continue }
     $ms = 0; if ($AllRes[$i]) { $ms = [int]$AllRes[$i].Ms }
     $execMs += $ms; $execJobs++
@@ -149,29 +169,30 @@ function Invoke-TcPushCostCheck {
   }
   $ckr = 0; foreach ($ix in @($CodeKeyedIdx)) { if ($CacheHit[$ix]) { $ckr++ } }
   $class = Get-TcPushCostClass -Reused $reused -CodeKeyed @($CodeKeyedIdx).Count -CodeKeyedReused $ckr -NoReuse $NoReuse
-  $row = [ordered]@{ utc = [DateTime]::UtcNow.ToString('o'); run = $Run; class = $class; executed_ms = $execMs; executed_jobs = $execJobs; unkeyable_ms = $unkMs; reused = $reused; jobs = $n; rc = $(if ($OtherFailed) { 1 } else { 0 }) }
+  $row = [ordered]@{ utc = [DateTime]::UtcNow.ToString('o'); run = $Run; class = $class; unkeyed_jobs = $unk.Count; executed_ms = $execMs; executed_jobs = $execJobs; unkeyable_ms = $unkMs; reused = $reused; jobs = $n; rc = $(if ($OtherFailed) { 1 } else { 0 }) }
   $lines = [System.Collections.Generic.List[string]]::new()
   $v = $null
-  if ($class -ceq 'data' -or $class -ceq 'code') {
-    $mk = Read-TcPushCostMarks -Path $MarkPath
-    $sample = Select-TcPushCostSample -Rows (Read-TcPushCostRows -Path $RowsPath -Tail 400) -Class $class -Last $mk.MinRuns -Extra ([pscustomobject]$row)
-    $secs = @(@($sample) | ForEach-Object { [double]$_.executed_ms / 1000 })
-    $markS = if ($mk.State -ceq 'read') { $mk.Marks[$class] } else { $null }
-    $v = Get-TcPushCostVerdict -SampleS $secs -MarkS $markS -MinRuns $mk.MinRuns
-    $medTxt = if ($null -ne $v.MedianS) { '{0:N0} s' -f $v.MedianS } else { '-' }
-    $markTxt = if ($null -ne $markS) { '{0:N0} s' -f $markS } else { 'none' }
-    $head = 'push-cost budget ({0} push): this run executed {1:N0} s of gate time, {2:N0} s of it unkeyable; median of the last {3} {0} run(s) {4}, mark {5}' -f $class, ($execMs / 1000), ($unkMs / 1000), $v.N, $medTxt, $markTxt
-    $lines.Add($head)
-    if ($mk.State -ceq 'unreadable') { $lines.Add('  the mark file is unreadable (' + $mk.Why + '), so this is report-only: a mark nobody can read is not a mark') }
-    switch -CaseSensitive ($v.State) {
-      'report-only' { $lines.Add('  REPORT-ONLY - ' + $v.Why + '; nothing fails on this number yet') }
-      'rose'        { $lines.Add('  RATCHET BROKEN - the median is over the mark. A check that declares no inputs runs on every push; key it (lib\gate-input-key.ps1), or if the cost is the decision record it with ops\push-cost-budget.ps1 -Accept -Class ' + $class + ' and say why in the commit.') }
-      'can-tighten' { $lines.Add('  ratchet CAN tighten: NOT written here. Record it with ops\push-cost-budget.ps1 -Tighten and commit ops\out\push-cost-budget.json.') }
-      'held'        { }
-      default       { throw ('Invoke-TcPushCostCheck: unknown verdict ' + $v.State) }
+  if (@($CodeKeyedIdx).Count -gt 0) {
+    $rb = Read-TcRatchetBaseline -Path $MarkPath -Field 'unkeyed_jobs'
+    $head = 'push-cost budget: {0} job(s) ran UNKEYED (they run on every push, a data-only one included); this {1} run executed {2:N0} s' -f $unk.Count, $class, ($execMs / 1000)
+    if ($rb.State -cne 'read') {
+      $lines.Add($head + '; mark ' + $rb.State)
+      $lines.Add('  REPORT-ONLY - the mark is ' + $rb.State + ' (' + $rb.Why + '); record it with ops\push-cost-budget.ps1 -Accept')
+    } else {
+      $v = Test-RatchetMove -Name 'unkeyed jobs' -Count $unk.Count -Baseline $rb.Value
+      $lines.Add($head + ('; mark {0}' -f $rb.Value))
+      if ($v.Verdict -ceq 'rose') {
+        $known = @(); if ($rb.Doc -and $rb.Doc.PSObject.Properties['names']) { $known = @($rb.Doc.names | ForEach-Object { [string]$_ }) }
+        $cmp = Compare-TcRatchetSites -Current $unk.ToArray() -Baseline $known
+        $lines.Add('  RATCHET BROKEN - more jobs run unkeyed than the mark allows. Key the new one (a `# gate-inputs:` or `# gate-scan:` line, lib\gate-input-key.ps1), or if it must run on every push record it with ops\push-cost-budget.ps1 -Accept and say why in the commit.')
+        foreach ($x in @($cmp.New)) { $lines.Add('    new unkeyed: ' + $x) }
+      } elseif ($v.Verdict -ceq 'tightened' -or $v.Verdict -ceq 'implausible') {
+        $lines.Add('  ratchet CAN tighten (' + $v.Verdict + '): NOT written here. Record it with ops\push-cost-budget.ps1 -Tighten and commit ops\out\push-cost-budget.json.')
+      }
     }
   } else {
-    $lines.Add(('push-cost budget: a {0} run ({1:N0} s executed) is recorded and not judged' -f $class, ($execMs / 1000)))
+    $lines.Add(('push-cost budget: no gate cache in this run, so nothing could be keyed; {0:N0} s executed, recorded and not judged' -f ($execMs / 1000)))
   }
-  return [pscustomobject]@{ Class = $class; Verdict = $v; Lines = $lines.ToArray(); Row = $row }
+  $code = 0; if ($v -and $v.Verdict -ceq 'rose') { $code = 2 }
+  return [pscustomobject]@{ Class = $class; Code = $code; Verdict = $v; Unkeyed = $unk.ToArray(); Lines = $lines.ToArray(); Row = $row; Judged = (@($CodeKeyedIdx).Count -gt 0) }
 }

@@ -1229,9 +1229,11 @@ $pcb = $null; $pcbRows = $(if ($gtRoot -and $gtRoot -ne 'off') { Join-Path $gtRo
 try {
   . (Join-Path $repo 'lib\push-cost-budget.ps1')
   $pcbCk = @(for ($i = 0; $i -lt $staticEntries.Count; $i++) { if ($cacheDir -and (@($staticEntries[$i].Scan) -contains '*.ps1')) { $offStatic + $i } })
-  $pcb = Invoke-TcPushCostCheck -RowsPath $pcbRows -MarkPath (Join-Path $repo 'ops\out\push-cost-budget.json') -AllRes $allRes -CacheHit $cacheHit -UnkeyWhy $unkeyWhy -CodeKeyedIdx $pcbCk -NoReuse ([bool]$NoReuse) -OtherFailed ([bool]($fail.Count -or $noVerdict.Count -or $staticBlind.Count)) -Run ([string]$PID)
+  $pcbNames = @(for ($i = 0; $i -lt $allJobs.Count; $i++) { Get-TcGateJobName -Job $allJobs[$i] -RepoFull $repoFull })
+  $pcb = Invoke-TcPushCostCheck -RowsPath $pcbRows -MarkPath (Join-Path $repo 'ops\out\push-cost-budget.json') -AllRes $allRes -CacheHit $cacheHit -UnkeyWhy $unkeyWhy -CodeKeyedIdx $pcbCk -NoReuse ([bool]$NoReuse) -OtherFailed ([bool]($fail.Count -or $noVerdict.Count -or $staticBlind.Count)) -Run ([string]$PID) -Names $pcbNames
   foreach ($l in $pcb.Lines) { Write-Output $l }
-  if ($pcb.Verdict -and $pcb.Verdict.Code -eq 2) { $fail += 'push-cost-budget' }
+  if ($pcb.Code -eq 2) { $fail += 'push-cost-budget' }
+  if ($pcbRows -and $pcb.Judged) { . (Join-Path $repo 'lib\atomic-write.ps1'); $null = Write-TcAtomicFile -Path (Join-Path $gtRoot 'push-cost-unkeyed-latest.json') -Text (@{ utc = [DateTime]::UtcNow.ToString('o'); names = @($pcb.Unkeyed) } | ConvertTo-Json -Compress) }
 } catch { Write-Output ('push-cost budget: not judged, report-only (' + $_.Exception.Message + ')') }
 
 Write-Output ''
