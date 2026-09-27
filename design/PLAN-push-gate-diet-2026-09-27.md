@@ -1,6 +1,7 @@
 # PLAN: push gate diet (2026-09-27)
 
-Status: D1-D5 RULED 2026-09-27 (see Brad's rulings below). W1 (M1, D1) built; M2 and M4 withdrawn; M3 and W0 open.
+Status: D1-D5 RULED 2026-09-27 (see Brad's rulings below). W1 (M1, D1) built; M3 built (bar 2 still missed, see
+"M3 as built"); M2 and M4 withdrawn; W0 open.
 
 Goal: cut what every push costs in `ops/run-gates.ps1` without losing protection. Moving a gate to a
 different tier is a design decision for Brad, and every tier still runs the gate: nothing here removes a
@@ -193,6 +194,87 @@ libraries, named literals, runner). A pass is recorded only for exit 0 with no `
 of them also `*.js *.yml *.yaml *.vbs *.bat *.cmd`; `audit-forbidden-prose`'s recipe specs reach its key through its
 own `# gate-inputs:` line) and `audit-lesson-rate-claims` on `content/*.md`. The other 28 run every push; the
 gate-times `why` column names each.
+
+### M3 as built
+
+Measured before M3 (the D1 agent's run C, one run, one worktree, exit 0): a data-only push ran **748 s** of gate CPU:
+586 s of refused self-tests and Python suites, 128 s of unkeyed static detectors, 34 s of three keyed static detectors
+that re-ran anyway.
+
+**What changed** (`lib/gate-input-key.ps1`, `ops/run-gates.ps1`, and declaration lines in ten suites):
+
+1. **`# gate-scan: <git pathspecs>` in a suite's own source.** run-gates hands D1's scan rows to the key for a self-test
+   or Python suite exactly as for a static entry (`Get-TcGateOwnScanRows`). `ops/rehearse-chain.ps1` (115 s) reads the
+   chain manifest set at HEAD, its dot-source closure and the whole `lib\`, so it declares `*.ps1 *.psm1
+   ops/chain-manifest.json ops/hooks/*`, which also covers the brief's "key must include the chain step list".
+2. **Why the three keyed detectors re-ran.** Each names `*.ps1` beside itself, and the key walked INTO every listed
+   script, inheriting its data literals and its own self-test's declared inputs: 1,777 files (1,218 of them data such
+   as `meal-prep\db`, `content\ghost-adopted`, bot logs) for `audit-json-readers` and `audit-store-registry -CodeOnly`,
+   2,053 files with 33 gitignored boards for `audit-guard-contract`. Any bot data commit moved all three keys. Under a
+   scan set, a listed file the set already hashes is now text (hashed, not walked); one the gate or its walk LOADS is
+   still walked. Keys now: 343, 399 and 9 files. The load check reads each file's loaded leaf names once
+   (`Get-TcGateLoadedLeafSet`), because with hundreds of text inputs the per-leaf regex took 69 s for one key (now 1.2 s).
+3. **Declarations on nine suites** whose `-SelfTest` reads only code and %TEMP% fixtures. `-VerifyDeclared`: 9 of 9.
+   `ops/verify-gate-declaration.ps1` (sandbox vs real arm) first REFUSED `audit-db-agreement` (its held-state library
+   loads `lib\json-io.ps1` through a variable), which was then declared and verified; review-staged and
+   apply-coverage-batch cannot run in its git-less sandbox, the same limit D1 recorded for gate-input-key itself.
+
+**Suites newly keyed: 10 of the 45 refused on the pre-M3 cheapest run** (rehearse-chain, review-staged, check-ad-cycles,
+apply-coverage-batch, build-live-price-script, verify-gate-declaration, audit-db-agreement, audit-category-coverage,
+sidecar-watchdog, gen-planner-data). run-gates' own count of unkeyable self-tests: 34 before, 23 after (run A).
+
+**Left unkeyed, with the reason** (each read from its source; the classification was delegated and spot-checked):
+
+| Suite | Why it stays unkeyed |
+|---|---|
+| `ops\prepush-test-auditors.ps1` (65 s) | runs `git ls-files` over the whole checkout for its live cases; only a whole-tree scan covers it, which gains nothing |
+| `meal-prep\pipeline\wave-preaudit.ps1` (40 s) | reads a gitignored built card (`db\built\...body.html`) |
+| `ops\audit-memory-backup.ps1` (30 s) | a real network probe (github.com) changes its output |
+| `ops\audit-secrets.ps1 -SelfTest` (21 s) | `git grep` over every tracked file; narrowing that case to one file would make it declarable |
+| `grocery\audit-sale-fallback.ps1`, `audit-store-registry.ps1 -SelfTest` | data reads run above the self-test block (newest board, `out\regular`) |
+| `grocery\test-flag-verification.ps1`, `pull-regular-bakers-api.ps1`, `pull-regular-familyfare.ps1`, `commit-capture-cursor.ps1` | `Get-CapturePlan` with no `-OutDir` reads gitignored `sale-windows.json` and `out\sale-fallback-*` |
+| `grocery\validate-triage-plan.ps1` | its child runs read gitignored `out\archive` and the clock |
+| `grocery\audit-guard-contract.ps1 -SelfTest` | walks the whole tree including ignored files |
+| `grocery\send-friday-email.ps1`, `send-price-alerts.ps1` | `git check-ignore` reads `.git\info\exclude` and the home directory's global excludes |
+| `grocery\audit-ghost-drift.ps1` | compares the working tree with HEAD |
+| `meal-prep\pipeline\monitor-live-recipe-prices.ps1`, `feed-covers-published.ps1` | read gitignored built cards |
+| `ops\audit-rule-currency.ps1` | declarable (tracked reads only) but not done in this pass |
+| `grocery\compare-deals.ps1` | not finished: about ten libraries and a list of files read from its own text |
+| Python: `harvest.py`, `decide_apply.py`, `extract_sweep.py` | live `considered-dishes.json`, catalog digest, candidate pool, `hunt-run.ps1` |
+| Python: `priors_ablation.py`, `scorecard_query.py` | the live `graph.db` |
+| Python: `fdc_lookup.py` | branches on a gitignored API key file; pinning it in the self-test would make it declarable |
+| Python: `local_extract.py`, `dedup_paired_run.py` | declarable, but the delegated import lists missed modules (`harvest_embed` -> `sidecar\lib_match.py`, `score_cache.py`), so not declared until traced |
+
+`check-ad-cycles` keys but still re-runs on data: its key walks the ~150 audits the LIVE path runs, and the key cannot
+separate that from the self-test path.
+
+**Measurement** (same shape as D1's: run A records, run B same content, run C one tracked `.json` edited, one worktree):
+one row per gate per run from the gate-times harness (`ops/run-gates.ps1` writes them; totals derived from the rows),
+all in one worktree on 2026-09-27, content = the M3 commits.
+
+| Run | Exit | Jobs executed of 540 | Gate CPU executed |
+|---|---|---|---|
+| A (records; after the fixture-label fix) | 0, pass=541 fail=0 | 540 | 3,789 s |
+| B (same content) | 0, pass=541 fail=0 | 74 | 497 s |
+| C (`grocery\notify-known-ids.json` edited, then restored) | 0, pass=541 fail=0 | 71 | **484 s** |
+
+**Bar 2 (data-only push at most 150 s): MISSED.** Run C is 484 s against 748 s before M3: 264 s lower, over ONE run per
+arm, one variant tried. That is one case, not a median over 20 pushes, so it is a direction, not a rate. Run C splits as
+306 s in 59 unkeyed jobs and 179 s in 12 keyed jobs that re-ran on identical content.
+
+**Why the 12 keyed jobs re-run, measured:** `ops\test-prepush-hook.ps1` (129 s) and `grocery\capture-watchdog.ps1` (17 s)
+hash `ops\out\gate-verdict.json` and `ops\out\gate-readings.jsonl`, which run-gates itself rewrites on every run, so each
+run invalidates the next. A `# gate-output:` on run-gates was tried and reverted: the log's reader
+(`ops\report-ratchet-trends.ps1`) is in the same walks and really reads it, and `lib\gate-verdict.ps1` names
+`Read-TcGateVerdict`, so the rule correctly keeps both. Separating them needs the suites to stop walking run-gates' live
+path, which is design work, not a declaration.
+
+**What stands between run C and the bar, largest first:** test-prepush-hook's self-invalidating key (129 s),
+prepush-test-auditors (47 s, whole-tree `ls-files`), the 28 undeclared static detectors (about 110 s, largest
+`audit-conclusion-currency` 22 s and `audit-secrets` 18 s, which read git history or the whole tree), audit-memory-backup's
+network probe (22 s), audit-secrets -SelfTest (19 s). Even with every declarable item done, the unkeyable-by-nature set
+(network, history, gitignored data) is roughly 150 to 200 s on its own, so the bar is likely unreachable without D3's
+tier question or narrowing those suites' live cases.
 
 ## Open items
 
