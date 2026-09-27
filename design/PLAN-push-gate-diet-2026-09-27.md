@@ -411,6 +411,63 @@ fix plus round 4; whole-run verdict file deleted first; ONE run per arm):
 Against the 292 s land bar: over by 246.5 s. Round 4 alone measured 332 s. The safety fix's cost on a data-only push is
 therefore about 205 s of now-unkeyable jobs, the price of never replaying a pass over a read the key cannot see.
 The safety-fix-only tree was not measured separately.
+
+## Round 5 as built (Brad, 2026-09-27: "do it now")
+
+Win back the 76 always-run self-tests SAFELY: make each one's real reads visible to the key, never narrower.
+
+**Half 1, the key resolves a repo-rooted variable** (`lib/gate-input-derived.ps1`, dot-sourced by `lib/gate-input-key.ps1`).
+A variable outside the four named bases is resolved only when EVERY assignment traces to a repo folder: `$mp = Split-Path
+-Parent $here`, `$d = Join-Path $mp 'sub'`, and the json-io walk-up `$__jioRoot`. Its literals are then hashed, or refused
+as data, exactly as a `$repo` literal is; a computed child, an interpolated or unparsed spelling on it is refused. A
+parameter, loop variable, by-name setter, mid-line assignment or unreadable right-hand side leaves it unresolved, and the
+key still refuses. Fixtures (`lib/gate-input-derived.ps1 -SelfTest`, 10 cases, exit 0): MUST NOT FIRE `$mp` keys and the
+file read through it moves the key, and the walk-up idiom keys with `lib\json-io.ps1` moving it; MUST FIRE a `$Root`-
+conditional `$mp`, a mid-line reassignment, a meal-prep data read, a computed child and an interpolated path each refuse;
+CLEAN TWIN a function-parameter base and a script-parameter base still refuse. `gate-input-key -SelfTest` 126 of 126, exit 0.
+**Half 1 alone re-keyed none of the 98 files refusing on a base** (scan of every tracked self-test, no regressions): their
+live code reads `meal-prep\db`, so resolution turns "unpinned" into a correct data-read refusal. The time came from half 2.
+
+**Half 2, declarations proven in a sandbox.** 111 refused self-tests got a candidate `# gate-inputs: <self>` line, and each
+was kept only if `ops/verify-gate-declaration.ps1` (G1) gave the same exit, verdict and case lines in a sandbox holding only
+its keyed files and in this checkout. The first batch ran in an UNSEEDED worktree, where both arms lack the gitignored
+boards and built cards and so would agree over a data read; it was discarded, the worktree seeded, and the batch re-run.
+54 verified; 5 of those were reverted by rule (below), 2 more to keep grocery pullers at their size marks; 47 kept, all
+`-VerifyDeclared` 47 of 47, exit 0. **41 of the 76 are re-keyed**, plus 6 refused before round 4 for a data read their
+self-test does not make (audit-store-registry, test-hyvee-tag-check, audit-fixture-inputs, audit-memory-backup,
+audit-mustfire-census, audit-source-comment-strip).
+
+**Never pinnable, left always-on by the brief's rule** (a library whose base is a caller's function parameter; each would
+verify, and was deliberately NOT declared): lib\atomic-write (`$dir` from `$Destination`), lib\git-blob-lib, grocery\
+rollback-ttl-lib (`$LiveRoot`), grocery\regular-fileset-lib, grocery\browser-feeds-lib (`$OutDir`).
+**Not narrowed, per round 4's standing note:** test-flag-verification and audit-guard-contract verified and were reverted.
+
+**Still always-on from the 76 (35), each for the sandbox's own reason:** 21 meal-prep\pipeline suites whose self-test reads
+a file outside its key (sandbox exit 1: repair-absurd-units, -basis-relabel, -bulk-buy-line, -cook-measures,
+-measure-vs-grams, -plural-unit, -range-buy, -scaled-notes, -to-taste-labels, -unitless-buy, -unmeasurable-qty,
+audit-buy-label-plurals, audit-vocab-integrity, ingredient-vocab, migrate-prose-tokens, stamp-live-price-fallback,
+sync-recipesdb-buy, sync-recipesdb-cost, db-build, source-domains; repair-head-ingredients differs by 6 case lines),
+nutrient-claim-lib and provenance-contract-lib (sandbox errors), sidecar start/stop, ops\hold-push-lock (sandbox exit 1),
+audit-readjson-inline-wrap (sandbox blind), drill-push-main-runner and observe-gate-queue (real arm red under a parallel
+verifier, not retried), the archived repair-unreachable-prose-money (not discovered), and the five never-pinnable above.
+The meal-prep ones are the next win: each needs its real reads found and declared, which is per-file work, not a key change.
+
+**Cost** (new machinery pays for itself): `lib/gate-input-key.ps1` +17 lines of wiring (size mark 1,923 -> 1,940, recorded
+with `audit-file-size-budget -Accept`, the rest split into the new 230-line library); one extra regex pass per keyed file.
+
+**Measurement** (harness: the push-cost rows `ops/run-gates.ps1` writes; one seeded worktree, 2026-09-27; ONE run per arm):
+
+| Run | Exit | Tally | Jobs executed of 546 | Gate CPU executed | unkeyed jobs |
+|---|---|---|---|---|---|
+| A (records) | 0 | pass=547 fail=0 | 86 | 492.4 s | 73 |
+| B (same content) | 0 | pass=547 fail=0, whole run reused | 0 | 0 s | - |
+| C (`grocery\notify-known-ids.json` edited, restored) | 0 | pass=547 fail=0 | 82 | **357.6 s** (331.6 s unkeyable) | **73** |
+
+Run C 357.6 s against round 4's 538.5 s with the safety fix: 180.9 s lower, one run per arm, one variant of the
+declaration set. Still above round 3's 292 s and the 150 s bar. **B1 tightened 119 -> 73** (`ops/push-cost-budget.ps1
+-Tighten`, off run C's latest file). Four measurement docs whose harness moved only by the new comment were re-read and
+ledgered (`design/reread-ledger.tsv`).
+
 ## Open items
 
 - W0 (the catch column is unverified).
