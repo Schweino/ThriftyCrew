@@ -1666,7 +1666,7 @@ if ($SelfTest) { }
     $sOwnStale = Get-TcGateOwnScanRows -Repo $sr -GateFile $sSuite -Cache @{}
     T 'MUST FIRE  a self-test gate-scan line that matches no tracked file refuses the suite, never keys an empty set' ((-not $sOwnStale.Ok) -and $sOwnStale.Why -match 'matches no tracked file') ("ok={0} why={1}" -f $sOwnStale.Ok, $sOwnStale.Why)
     $sOwnNone = Get-TcGateOwnScanRows -Repo $sr -GateFile $sDet -Cache @{}
-    T 'CLEAN TWIN  a gate with no gate-scan line gets no rows and keys exactly as before' ($sOwnNone.Ok -and @($sOwnNone.Rows).Count -eq 0) ("ok={0} rows={1}" -f $sOwnNone.Ok, @($sOwnNone.Rows).Count)
+    T 'MUST NOT FIRE  a gate with no gate-scan line gets no rows and keys exactly as before' ($sOwnNone.Ok -and @($sOwnNone.Rows).Count -eq 0) ("ok={0} rows={1}" -f $sOwnNone.Ok, @($sOwnNone.Rows).Count)
 
     # ---- UNDER A SCAN SET, A LISTED SCRIPT IS TEXT (M3) ----
     # The founding shape: a detector lists grocery\*.ps1 and one listed script names a bot log. The log is not the
