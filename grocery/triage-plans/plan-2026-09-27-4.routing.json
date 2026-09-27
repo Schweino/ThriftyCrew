@@ -1,0 +1,553 @@
+{
+ "plan": "plan-2026-09-27-4.json",
+ "generated": "2026-09-27T12:30:00",
+ "board_week": "comparison-2026-09-27 (built 2026-09-27 10:20:29); candidates-2026-09-27.json 10:20:17; match-worklist.json 10:43:23",
+ "board_built": "2026-09-27T10:20:29",
+ "freshness": "measured 2026-09-27 ~11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED about 50 min before the corpus froze) and candidates-2026-09-27.json (10:20:17), plus 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was running during the measurement and local main carries 41d8d0d31 (10:47) whose public/board.json holds the Breadstix crown; re-run scratch route_sim2.py logic (the routing artifact is the contract) if the board rebuilds before you act",
+ "corpus": {
+  "candidates_file": "grocery/out/candidates-2026-09-27.json",
+  "capture_files": 109,
+  "capture_window": "grocery/out/{regular,sams,bakers,fareway}/*.json modified within 14 days of the run",
+  "distinct_names": 42874,
+  "skipped_files": [],
+  "python_uncompilable_patterns": [],
+  "global_exclude_tokens": 87
+ },
+ "positive_control": {
+  "name": "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea",
+  "expected": "<none>",
+  "observed": "<none>",
+  "before_expected": "frozen-pizza",
+  "before_observed": "frozen-pizza",
+  "note": "the live frozen-pizza crown; asserted before any other number was read"
+ },
+ "rule_change": {
+  "frozen-pizza": [
+   "stix\\b"
+  ],
+  "pepperoni": [
+   "stix\\b"
+  ],
+  "parmesan": [
+   "stix\\b"
+  ],
+  "eggs": [
+   "\\bsliders?\\b"
+  ],
+  "teriyaki-sauce": [
+   "chicken\\s+bites"
+  ]
+ },
+ "token_matching_names": 109,
+ "rule_change_routing": [
+  {
+   "name": "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea",
+   "before": "frozen-pizza",
+   "after": "<none>",
+   "source": "candidates-2026-09-27.json"
+  },
+  {
+   "name": "Screamin' Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea",
+   "before": "frozen-pizza",
+   "after": "<none>",
+   "source": "candidates-2026-09-27.json"
+  },
+  {
+   "name": "Deli egg protein sliders, 3 ct., $0.99 per slider",
+   "before": "eggs",
+   "after": "<none>",
+   "source": "candidates-2026-09-27.json"
+  },
+  {
+   "name": "Screamin' Sicilian Loaded Breadstix Pepperoni 15.65 Oz",
+   "before": "pepperoni",
+   "after": "<none>",
+   "source": "candidates-2026-09-27.json"
+  },
+  {
+   "name": "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ",
+   "before": "teriyaki-sauce",
+   "after": "<none>",
+   "source": "candidates-2026-09-27.json"
+  }
+ ],
+ "commodity_rows": {
+  "frozen-pizza": {
+   "candidate_rows_today": 244,
+   "names_leaving": 2
+  },
+  "pepperoni": {
+   "candidate_rows_today": 85,
+   "names_leaving": 1
+  },
+  "parmesan": {
+   "candidate_rows_today": 125,
+   "names_leaving": 0
+  },
+  "eggs": {
+   "candidate_rows_today": 145,
+   "names_leaving": 1
+  },
+  "teriyaki-sauce": {
+   "candidate_rows_today": 114,
+   "names_leaving": 1
+  }
+ },
+ "claimed_by_earlier": [],
+ "cell_effects": [
+  {
+   "commodity": "eggs",
+   "store": "Hy-Vee",
+   "board_now": [
+    3.96,
+    "Deli egg protein sliders, 3 ct., $0.99 per slider"
+   ],
+   "cand_min_before": [
+    3.96,
+    "Deli egg protein sliders, 3 ct., $0.99 per slider"
+   ],
+   "cand_min_after": null
+  },
+  {
+   "commodity": "frozen-pizza",
+   "store": "Family Fare",
+   "board_now": [
+    0.7767,
+    "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea"
+   ],
+   "cand_min_before": [
+    0.7767,
+    "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea"
+   ],
+   "cand_min_after": [
+    5,
+    "Digiorno Rising Crust Supreme Pizza"
+   ]
+  },
+  {
+   "commodity": "pepperoni",
+   "store": "Family Fare",
+   "board_now": [
+    0.4224,
+    "Screamin' Sicilian Loaded Breadstix Pepperoni 15.65 Oz"
+   ],
+   "cand_min_before": [
+    0.4224,
+    "Screamin' Sicilian Loaded Breadstix Pepperoni 15.65 Oz"
+   ],
+   "cand_min_after": [
+    0.4992,
+    "Armour Family Pack Pepperoni Slices 12 Oz"
+   ]
+  },
+  {
+   "commodity": "teriyaki-sauce",
+   "store": "Aldi",
+   "board_now": [
+    0.7494,
+    "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ"
+   ],
+   "cand_min_before": null,
+   "cand_min_after": null,
+   "note": "on the board, but no PRICED Aldi teriyaki-sauce row is in candidates-2026-09-27.json, so the after state is NOT measured; expected: the Aldi cell drops. Developer confirms with compare-deals -Explain teriyaki-sauce"
+  }
+ ],
+ "rejected_engine_alternative": {
+  "what": "refuse a count-only multipack (count > 1, no readable weight) on every min_piece_oz commodity",
+  "result": "REJECTED: newly refuses 42 of 385 in-scope candidate rows, including real Sam's Member's Mark 3 pk pizzas (the $2.6367 frozen-pizza cell) and every breakfast-sandwiches multipack",
+  "rows": [
+   {
+    "commodity": "frozen-pizza",
+    "store": "Hy-Vee",
+    "name": "Jack's pizza, 3 pk., $9.99",
+    "unit_price": 3.33,
+    "basis": "per-3-pack",
+    "size_text": ""
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Family Fare",
+    "name": "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea",
+    "unit_price": 0.7767,
+    "basis": "per-9-pack",
+    "size_text": "9 ea"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Family Fare",
+    "name": "Screamin' Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea",
+    "unit_price": 0.7767,
+    "basis": "per-9-pack",
+    "size_text": "9 ea"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Member's Mark Rising Crust Pepperoni Pizza, Frozen, 3 pk.",
+    "unit_price": 4.3267,
+    "basis": "per-3-pack",
+    "size_text": "3 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Member's Mark Rising Crust Three Meat Pizza, Frozen, 3 pk.",
+    "unit_price": 4.3267,
+    "basis": "per-3-pack",
+    "size_text": "3 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Member's Mark Rising Crust Four Cheese Pizza, Frozen, 3 pk.",
+    "unit_price": 2.6367,
+    "basis": "per-3-pack",
+    "size_text": "3 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Jack's Original Thin Pepperoni Frozen Pizza 4 pk.",
+    "unit_price": 2.97,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Jack's Original Thin Sausage Pepperoni Frozen Pizza 4 pk.",
+    "unit_price": 2.97,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Member's Mark Rising Crust Four Cheese Pizza, Frozen, 3 pk.",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "3 ct"
+   },
+   {
+    "commodity": "frozen-pizza",
+    "store": "Sam's Club",
+    "name": "Jack's Original Thin Pepperoni Frozen Pizza, 4 pk",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Sam's Club",
+    "name": "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches, Frozen, 12ct.",
+    "unit_price": 0.9775,
+    "basis": "per-12-pack",
+    "size_text": "12 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Sam's Club",
+    "name": "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches, Frozen, 12ct.",
+    "unit_price": 1.165,
+    "basis": "per-12-pack",
+    "size_text": "12 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Sam's Club",
+    "name": "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "12 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Delights Turkey Sausage Egg White & Cheese English Muffin Frozen Breakfast Sandwiches",
+    "unit_price": 2.1225,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Delights Turkey Sausage Egg White & Cheese English Muffin Frozen Breakfast Sandwiches",
+    "unit_price": 2.2475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Sausage Egg & Cheese English Muffin Frozen Breakfast Sandwiches",
+    "unit_price": 1.7475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Sausage Egg & Cheese English Muffin Frozen Breakfast Sandwiches",
+    "unit_price": 1.8725,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Delights Turkey Sausage Egg White & Cheese English Muffin Frozen Breakfast Sandwiches",
+    "unit_price": 1.8738,
+    "basis": "per-8-pack",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Sausage Egg & Cheese Croissant Frozen Breakfast Sandwiches",
+    "unit_price": 1.7475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Sausage Egg & Cheese Croissant Frozen Breakfast Sandwiches",
+    "unit_price": 1.8725,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Frozen Bacon Egg and Cheese Croissant Breakfast Sandwiches",
+    "unit_price": 1.4988,
+    "basis": "per-8-pack",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Delights Turkey Sausage Egg White & Cheese Croissant Frozen Breakfast Sandwiches",
+    "unit_price": 2.1225,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Delights Turkey Sausage Egg White & Cheese Croissant Frozen Breakfast Sandwiches",
+    "unit_price": 2.2475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Jimmy Dean Sausage Egg & Cheese Croissant Frozen Breakfast Sandwiches",
+    "unit_price": 1.4988,
+    "basis": "per-8-pack",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Baker's",
+    "name": "Kroger Sausage Egg and Cheese Biscuit Breakfast Sandwich",
+    "unit_price": 1.6225,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Family Fare",
+    "name": "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
+    "unit_price": 1.7488,
+    "basis": "per-8-pack",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Family Fare",
+    "name": "Jimmy Dean Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen, 8 Ct",
+    "unit_price": 1.7488,
+    "basis": "per-8-pack",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Family Fare",
+    "name": "Jimmy Dean Cheddar Biscuit Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 4 Ct",
+    "unit_price": 2.1225,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Family Fare",
+    "name": "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct",
+    "unit_price": 2.7475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Family Fare",
+    "name": "Jimmy Dean Delights Egg’wich Breakfast Sandwiches With Bacon, Spinach, Caramelized Onions, And Parmesan Egg Frittatas With Turkey Sausage And Cheese, Breadless, Frozen 4 Ct",
+    "unit_price": 2.7475,
+    "basis": "per-4-pack",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Fareway",
+    "name": "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-STORE",
+    "size_text": "each"
+   },
+   {
+    "commodity": "breakfast-sandwiches",
+    "store": "Walmart",
+    "name": "Great Value Croissant Sandwiches Sausage Egg and Cheese",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "4 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Sam's Club",
+    "name": "Cole's Garlic Texas Toast, Frozen",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "32 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Baker's",
+    "name": "Kroger Garlic Texas Toast",
+    "unit_price": 2,
+    "basis": "per-package (8 ct inside)",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Baker's",
+    "name": "Kroger Garlic Texas Toast BIG DEAL!",
+    "unit_price": 3.79,
+    "basis": "per-package (16 ct inside)",
+    "size_text": "16 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Baker's",
+    "name": "New York Bakery Frozen Garlic Bread Knots",
+    "unit_price": 4.49,
+    "basis": "per-package (6 ct inside)",
+    "size_text": "6 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Baker's",
+    "name": "New York Bakery Gluten Free Texas Toast with Real Garlic",
+    "unit_price": 6.99,
+    "basis": "per-package (6 ct inside)",
+    "size_text": "6 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Baker's",
+    "name": "New York Bakery Gluten Free Texas Toast Five Cheese",
+    "unit_price": 7.99,
+    "basis": "per-package (6 ct inside)",
+    "size_text": "6 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Family Fare",
+    "name": "Our Family Slices Original Garlic Texas Toast 8 Ea",
+    "unit_price": 2.89,
+    "basis": "per-package (8 ct inside)",
+    "size_text": "8 ea"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Fareway",
+    "name": "Fareway Garlic Texas Toast",
+    "unit_price": 3.99,
+    "basis": "per-package (8 ct inside)",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Fareway",
+    "name": "Fareway Garlic Texas Toast",
+    "unit_price": 4.49,
+    "basis": "per-package (8 ct inside)",
+    "size_text": "8 ct"
+   },
+   {
+    "commodity": "garlic-bread",
+    "store": "Walmart",
+    "name": "Great Value Garlic Texas Toast",
+    "unit_price": null,
+    "basis": "WITHHELD-UNPROVEN-CHANNEL",
+    "size_text": "8 ct"
+   }
+  ]
+ },
+ "quarantine_trigger_measurement": {
+  "rule": "a crown carrying BOTH a sanity flag of type outlier (NOT outlier-verified) AND a wow flag whose detail says \"unexplained: a NEW price at the cheapest store\", same commodity+store+item",
+  "window": "guards-2026-09-14,17,20,21,22,23,27.json (the 7 guards files in the 14 days to 2026-09-27; no file on 09-15,16,18,19,24,25,26)",
+  "rows": [
+   {
+    "date": "2026-09-23",
+    "cell": "raspberries|Fareway",
+    "item": "AE Dairy Raspberry Yolite",
+    "per_unit": "0.165/oz",
+    "verdict": "wrong-product (a yogurt)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "frozen-pizza|Family Fare",
+    "item": "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea",
+    "per_unit": "0.7767/each",
+    "verdict": "wrong-product (breadsticks)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "lemons|Family Fare",
+    "item": "Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct",
+    "per_unit": "0.2748/each",
+    "verdict": "wrong-product (trash bags)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "coffee|Hy-Vee",
+    "item": "Keurig coffee, 8 or 10 ct., 12 oz., $6.99",
+    "per_unit": "0.0582/oz",
+    "verdict": "parse-basis-bug (6.99/120: count times 12 oz)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "croissants|Hy-Vee",
+    "item": "Bakery-fresh large croissants, sold in a 6 ct. 5.94, $0.99 each",
+    "per_unit": "0.165/each",
+    "verdict": "parse-basis-bug ($0.99 each divided by 6 again)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "carrots|Family Fare",
+    "item": "Our Family Whole Carrots 32 Oz",
+    "per_unit": "0.458/lb",
+    "verdict": "plausibly real (a would-be false quarantine)"
+   },
+   {
+    "date": "2026-09-27",
+    "cell": "celery|Family Fare",
+    "item": "Fresh Celery",
+    "per_unit": "1.116/each",
+    "verdict": "plausibly real (a would-be false quarantine)"
+   }
+  ],
+  "summary": "7 co-occurrences in 7 guards files, 5 defects (3 wrong-product, 2 parse-basis), 2 plausibly real; 6 cells today of about 2825 published (0.2%, far under the 2% breaker)"
+ }
+}
