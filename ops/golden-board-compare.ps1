@@ -21,6 +21,7 @@
 
   Self-test: powershell -NoProfile -File ops\golden-board-compare.ps1 -SelfTest
 #>
+# gate-inputs: ops\golden-board-compare.ps1
 [CmdletBinding()]
 param(
   [string]$Work = '',

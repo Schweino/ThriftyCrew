@@ -21,6 +21,7 @@
 
   Self-test: powershell -NoProfile -File ops\golden-board-run.ps1 -SelfTest (the written-file listing only).
 #>
+# gate-inputs: ops\golden-board-run.ps1
 [CmdletBinding()]
 param(
   [string]$Commit = '',
@@ -90,7 +91,7 @@ git clone -q --no-checkout $repo $base
 if ($LASTEXITCODE -ne 0) { Stop-GoldenRun 3 'COULD NOT RUN - git clone failed' }
 git -C $base -c core.autocrlf=false checkout -q $Commit
 if ($LASTEXITCODE -ne 0) { Stop-GoldenRun 3 ('COULD NOT RUN - checkout of ' + $Commit + ' failed') }
-robocopy $Snapshot (Join-Path $base 'grocery\out') /MIR /NFL /NDL /NJH /NJS /R:1 /W:1 > (Join-Path $Work ('robo-' + $Tag + '.txt'))
+robocopy $Snapshot (Join-Path $base 'grocery\out') /MIR /NFL /NDL /NJH /NJS /R:1 /W:1 > (Join-Path $Work ('robo-' + $Tag + '.txt'))   # reach-fixture-ok: the scratch CLONE's grocery\out, where the frozen snapshot goes; never this checkout's
 if ($LASTEXITCODE -ge 8) { Stop-GoldenRun 3 ('COULD NOT RUN - robocopy of the snapshot exited ' + $LASTEXITCODE) }
 Start-Sleep -Seconds 2   # the snapshot's own mtimes must fall strictly before t0
 $t0 = Get-Date
