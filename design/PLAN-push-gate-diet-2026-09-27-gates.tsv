@@ -1,0 +1,540 @@
+gate	runs_seen	runs_executed	median_s_when_run	p90_s	reused	ran_keyed	unkeyable	nonzero_rc_runs	unkeyable_why	always_executes_warm	real_red_candidate_mentions_unverified	first_candidate_source
+ops\push-main.ps1 -SelfTest	86	10	337.8	452.4	76	10	0	0		no	36	commit bcf5b3f8b
+lib\checkout-sync.ps1 -SelfTest	86	13	277.1	361.8	73	13	0	1		no	6	commit 2c8ffaac7
+grocery\test-native-stderr-eap.ps1	86	86	199.4	252.7	0	86	0	1		yes	10	commit 663e2dd5c
+ops\test-prepush-hook.ps1 -SelfTest	86	82	151.3	182.9	4	82	0	1		no	13	commit bda9e5e0d
+ops\rehearse-chain.ps1 -SelfTest	86	86	104.5	126.3	0	0	86	0	builds a repo path from a variable, which a source key canno	yes	12	commit cee026ee9
+ops\audit-list-array-wrap.ps1	86	86	85.0	94.0	0	86	0	0		yes	1	commit eae70d0d2
+ops\drill-chain-queue.ps1 -SelfTest	86	7	78.0	94.2	79	7	0	0		no	1	commit d0e1aa625
+ops\test-precommit-hook.ps1 -SelfTest	86	21	68.4	88.2	65	21	0	0		no	4	commit b06a3628e
+ops\prepush-test-auditors.ps1 -SelfTest	86	86	63.7	74.4	0	0	86	0	builds a repo path from a variable, which a source key canno	yes	24	commit cbbe61b42
+ops\run-backlog-merge.ps1 -SelfTest	86	23	58.8	72.0	63	23	0	0		no	0	
+grocery\send-alert.ps1 -SelfTest	86	23	57.2	66.2	63	23	0	0		no	20	commit a2307af0b
+meal-prep\pipeline\map-preresolve.ps1 -SelfTest	86	18	56.0	61.9	68	18	0	0		no	10	commit 5b4cc0982
+lib\gate-slots.ps1 -SelfTest	86	7	49.9	70.0	79	7	0	0		no	4	commit f66f8f59e
+meal-prep\pipeline\wave-preaudit.ps1 -SelfTest	86	86	43.3	49.4	0	0	86	0	builds a path with Join-Path over a nested expression on a b	yes	37	commit f27215e9e
+ops\audit-literal-newline-escape.ps1	86	86	39.2	45.8	0	86	0	0		yes	0	
+ops\cpu-load.ps1 -SelfTest	86	7	38.1	38.7	79	7	0	0		no	1	commit 7d223adf9
+ops\audit-fixed-temp-names.ps1	86	86	36.8	41.4	0	86	0	0		yes	2	commit 8bc6bf576
+lib\pipeline-commit.ps1 -SelfTest	86	8	35.5	43.2	78	8	0	0		no	10	commit 845137f98
+ops\audit-conclusion-currency.ps1 -SelfTest	86	18	34.7	51.3	68	18	0	0		no	29	commit 73a59ee72
+grocery\test-push-data.ps1 -SelfTest	86	9	32.7	38.6	77	9	0	0		no	1	commit 5f16140f7
+meal-prep\pipeline\hunt-run.ps1 -SelfTest	86	15	31.4	38.1	71	15	0	0		no	12	commit 95738617b
+ops\record-hook-refusal.ps1 -SelfTest	86	7	31.0	31.2	79	7	0	0		no	2	commit df3202bff
+grocery\audit-script-census.ps1	86	86	28.6	36.7	0	86	0	6		yes	14	commit c6783fa8e
+meal-prep\pipeline\unpriced-takedown.ps1 -SelfTest	84	28	28.4	34.6	56	10	18	0	a file it loads (meal-prep\pipeline\hold-recipe.ps1) names '	no	0	
+ops\audit-conclusion-currency.ps1	86	86	27.9	33.4	0	86	0	11		yes	29	commit 73a59ee72
+grocery\export-feed.ps1 -SelfTest	86	12	27.7	29.7	74	12	0	0		no	16	commit a9d1f1691
+meal-prep\pipeline\learn_apply.py --selftest	86	17	27.2	31.0	69	17	0	0		no	6	commit 9105ca380
+ops\audit-cpu-load.ps1	86	86	26.7	30.2	0	86	0	0		yes	1	commit 7d223adf9
+ops\audit-typed-param-shadow.ps1	86	86	25.8	29.0	0	86	0	0		yes	4	commit 38d4513b4
+ops\seed-worktree.ps1 -SelfTest	86	26	25.5	26.9	60	6	20	0	builds a repo path from a variable, which a source key canno	no	18	commit 23a256fc9
+ops\audit-capture-ingest-reporting.ps1	86	86	25.5	28.5	0	86	0	0		yes	0	
+ops\audit-memory-backup.ps1 -SelfTest	86	86	24.4	31.1	0	0	86	0	reads '.git', which resolves into a data directory (.git), w	yes	4	commit 635680048
+meal-prep\pipeline\ingredient-resolutions.ps1 -SelfTest	86	15	23.0	26.7	71	15	0	0		no	7	commit 92f2cfa7c
+grocery\ingredient-queue.ps1 -SelfTest	86	9	22.8	25.8	77	9	0	0		no	8	commit 2502e2b3a
+ops\audit-git-fixture-env.ps1	86	86	22.2	25.8	0	86	0	0		yes	0	
+ops\audit-and-comma-case.ps1	86	86	22.2	25.6	0	86	0	0		yes	0	
+ops\audit-reread-ledger.ps1 -SelfTest	86	7	21.5	26.4	79	7	0	0		no	0	
+grocery\capture-policy-lib.ps1 -SelfTest	86	29	21.1	22.8	57	9	20	0	names 'sale-windows.json', which exists nowhere it could be 	no	9	commit 54eb1efa0
+meal-prep\pipeline\source-domains.ps1 -SelfTest	86	7	20.8	23.8	79	7	0	0		no	6	commit 763b34292
+lib\chain-queue.ps1 -SelfTest	86	7	19.7	20.2	79	7	0	0		no	4	commit 69659bab4
+ops\audit-cmdlet-shadow.ps1	86	86	19.4	22.0	0	86	0	0		yes	1	commit 46085e69f
+grocery\audit-guard-contract.ps1	86	86	19.1	24.4	0	86	0	2		yes	16	commit 663e2dd5c
+ops\audit-secrets.ps1 -SelfTest	86	86	18.9	28.9	0	0	86	0	a file it loads (grocery\aisle-lib.ps1) builds a repo path f	yes	0	
+grocery\pull-bakers-ad-list.ps1 -SelfTest	86	20	18.6	21.3	66	20	0	0		no	0	
+grocery\audit-alert-registry.ps1	86	86	18.5	20.1	0	86	0	0		yes	22	commit b605282da
+ops\audit-unread-wait.ps1	86	86	18.5	21.1	0	86	0	0		yes	1	commit f02a971d0
+ops\audit-secrets.ps1	86	86	18.4	20.4	0	86	0	0		yes	0	
+ops\audit-internal-ast-members.ps1	86	86	18.0	20.7	0	86	0	0		yes	0	
+ops\audit-bare-replace.ps1	86	86	17.6	19.8	0	86	0	0		yes	1	grocery/triage-plans/plan-2026-09-26-3.json
+meal-prep\pipeline\build-live-price-script.ps1 -SelfTest	86	86	16.7	18.3	0	0	86	0	reads a data directory under this repo, whose bytes change w	yes	2	commit c5a2f9c68
+ops\audit-board-clock.ps1	52	52	15.9	17.6	0	52	0	0		no	1	commit 97c6c602f
+grocery\audit-store-registry.ps1 -CodeOnly	86	86	15.9	17.5	0	86	0	2		yes	8	commit 345a515be
+ops\add-reread.ps1 -SelfTest	86	18	15.1	16.1	68	18	0	0		no	1	commit 09cf85c3f
+grocery\capture-watchdog.ps1 -SelfTest	86	73	15.0	17.5	13	73	0	0		no	26	commit a2307af0b
+ops\audit-fixture-vocabulary.ps1	86	86	14.8	17.7	0	86	0	5		yes	0	
+ops\audit-prompt-backup.ps1 -SelfTest	86	9	14.8	17.5	77	9	0	0		no	30	commit d8ba6d944
+grocery\test-commodity-rules-lib.ps1 -SelfTest	86	15	14.5	16.0	71	15	0	0		no	1	commit f9d65159d
+ops\audit-cross-module-reach.ps1	86	86	14.3	16.7	0	86	0	1		yes	11	commit 38d4513b4
+ops\audit-write-seam.ps1	86	86	13.7	19.2	0	86	0	0		yes	3	commit b09f7c958
+meal-prep\engine\golden-test.ps1	86	86	13.4	15.6	0	86	0	0		yes	11	commit bd0ac43e2
+ops\probe-mutants.ps1 -SelfTest	86	7	13.2	13.6	79	7	0	0		no	0	
+lib\push-lock.ps1 -SelfTest	86	7	13.2	15.2	79	7	0	0		no	5	commit 2f0470f8d
+ops\reap-runaway-processes.ps1 -SelfTest	86	23	12.9	14.0	63	23	0	0		no	0	
+meal-prep\pipeline\decide_apply.py --selftest	86	86	12.9	15.1	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	3	commit 82e15c846
+ops\hold-push-lock.ps1 -SelfTest	86	7	12.8	13.9	79	7	0	0		no	3	commit 2f0470f8d
+grocery\report-checkout-sync.ps1 -SelfTest	86	7	12.6	14.1	79	7	0	0		no	0	
+grocery\build-sams-deals.ps1 -SelfTest	86	30	12.4	14.8	56	10	20	0	reads 'out\sams\sams-deals-1999-01-01.json', which resolves 	no	17	commit 73a59ee72
+grocery\audit-sale-fallback.ps1 -SelfTest	86	86	12.3	14.1	0	0	86	1	reads 'out', which resolves into a data directory (grocery\o	yes	3	commit 8eb56de7f
+ops\run-daemon-battery.ps1 -SelfTest	86	28	11.6	26.5	58	8	20	0	names 'ops\out\logs\daemon-battery-green.json', which exists	no	1	commit 7d223adf9
+grocery\fanout-lib.ps1 -SelfTest	86	7	11.1	11.4	79	7	0	0		no	2	commit 142299f39
+ops\plan_citation.py --selftest	86	7	10.9	14.5	79	7	0	0		no	2	commit 19d89f515
+grocery\commit-size-lib.ps1 -SelfTest	86	7	10.9	11.6	79	7	0	0		no	2	commit abefde4df
+lib\ledger-fixture.ps1 -SelfTest	86	7	10.5	10.7	79	7	0	0		no	0	
+ops\run-once-a-day.ps1 -SelfTest	86	28	10.3	12.2	58	8	20	0	names the directory 'ops\scheduled-tasks', whose listing a s	no	9	commit 468dcec6a
+ops\merge-backlog-inbox.ps1 -SelfTest	86	7	10.0	10.8	79	7	0	0		no	7	commit 2d4abd61a
+lib\parallel-run.ps1 -SelfTest	86	7	9.9	10.8	79	7	0	0		no	4	commit 7fa04d9c9
+ops\audit-cross-module-reach.ps1 -SelfTest	86	35	9.8	11.7	51	15	20	0	a file it loads (lib\chain-code-currency.ps1) builds a repo 	no	11	commit 38d4513b4
+grocery\derive-links-from-prices.ps1 -SelfTest	86	33	9.2	13.4	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	10	commit b28788fa4
+ops\audit-git-sweepers.ps1	86	86	9.1	19.1	0	86	0	0		yes	0	
+meal-prep\pipeline\audit-forbidden-prose.ps1	86	86	9.1	10.7	0	86	0	0		yes	1	commit 1a97b53af
+ops\audit-full-path-excludes.ps1 -SelfTest	86	26	9.1	10.5	60	6	20	0	builds a repo path from a variable, which a source key canno	no	5	commit 693c0f24d
+grocery\check-ad-cycles.ps1 -SelfTest	86	86	9.1	12.3	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	59	commit 614010d45
+ops\consistency-oracle.ps1 -SelfTest	86	26	9.0	10.1	60	6	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 8bc6bf576
+lib\gate-verdict.ps1 -SelfTest	86	7	8.9	9.3	79	7	0	0		no	0	
+grocery\test-flag-verification-rejudge.ps1 -SelfTest	47	47	8.8	10.6	0	0	47	0	the declared input 'grocery\audit-flag-verification.ps1 groc	no	0	
+ops\audit-selftest-fallthrough.ps1	86	86	8.7	11.2	0	86	0	0		yes	0	
+ops\audit-typed-param-shadow.ps1 -SelfTest	86	7	8.7	9.7	79	7	0	0		no	4	commit 38d4513b4
+ops\audit-source-comment-strip.ps1 -SelfTest	86	7	8.6	9.8	79	7	0	0		no	3	commit 8947b6ef1
+lib\push-ledger.ps1 -SelfTest	86	7	8.6	8.7	79	7	0	0		no	3	commit df3202bff
+ops\audit-write-seam.ps1 -SelfTest	86	7	8.5	9.8	79	7	0	0		no	3	commit b09f7c958
+meal-prep\pipeline\audit-spec-contradictions.ps1 -SelfTest	86	28	8.3	10.2	58	8	20	0	builds a path with Join-Path over a nested expression on a b	no	9	commit 837b963a0
+ops\audit-board-clock.ps1 -SelfTest	52	4	8.3	8.9	48	4	0	0		no	1	commit 97c6c602f
+ops\audit-lesson-rate-claims.ps1 -SelfTest	86	26	8.2	10.5	60	6	20	0	reads 'content', which resolves into a data directory (conte	no	2	commit e7012a906
+meal-prep\engine\cost-recipes.ps1 -SelfTest	86	34	7.9	14.8	52	13	21	1	names the directory 'meal-prep\engine\regression-inputs\gold	no	20	commit bd0ac43e2
+grocery\test-pull-agent-lib.ps1 -SelfTest	86	28	7.7	8.2	58	8	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 9105ca380
+grocery\validate-triage-plan.ps1 -SelfTest	86	86	7.6	10.4	0	0	86	0	builds a repo path from a variable, which a source key canno	yes	9	commit a39912a58
+grocery\record-sample-verdict.ps1 -SelfTest	86	37	7.5	8.6	49	17	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+grocery\test-flag-verification.ps1 -SelfTest	86	86	7.5	10.3	0	0	86	0	a file it loads (grocery\apply-cell-quarantine.ps1) reads 'o	yes	1	grocery/triage-plans/plan-2026-09-22-2.json
+grocery\audit-tile-integrity.ps1 -SelfTest	86	31	7.2	8.2	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	25	commit 6a318a5c0
+lib\gate-input-key.ps1 -SelfTest	86	7	7.1	7.2	79	7	0	0		no	8	commit 56cabc745
+ops\store_citation.py --selftest	86	26	7.1	8.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	4	commit d4d332945
+meal-prep\pipeline\audit-ingredient-identity.ps1 -SelfTest	86	17	7.0	15.7	69	17	0	0		no	2	commit 92f2cfa7c
+grocery\adjudicate-discovery.ps1 -SelfTest	86	33	6.9	7.7	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+meal-prep\pipeline\build-intake-skeleton.ps1 -SelfTest	86	7	6.9	7.7	79	7	0	0		no	2	commit 026f7e6c1
+ops\review-staged.ps1 -SelfTest	86	86	6.9	8.8	0	0	86	0	names 'ops\staged-writes.jsonl', which exists nowhere it cou	yes	1	commit 9cb317217
+ops\audit-arg-binding.ps1 -SelfTest	86	7	6.9	7.6	79	7	0	0		no	3	commit 663e2dd5c
+grocery\add-commodity-rule.ps1 -SelfTest	86	15	6.9	7.7	71	15	0	0		no	2	commit 3e0ab0c69
+grocery\audit-json-readers.ps1 -SelfTest	86	86	6.8	9.6	0	19	67	0	a file it loads (grocery\test-flag-verification-rejudge.ps1)	yes	7	commit 9267d6046
+ops\probe-push-convergence.ps1 -SelfTest	86	9	6.8	9.5	77	9	0	0		no	6	commit aa89f37a9
+grocery\audit-band-censorship.ps1 -SelfTest	86	26	6.7	7.3	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	8	commit 201fadc9a
+ops\verify-gate-declaration.ps1 -SelfTest	66	66	6.7	7.6	0	0	66	0	builds a repo path from a variable, which a source key canno	yes	1	commit 663e2dd5c
+grocery\select-fareway-shop.ps1 -SelfTest	86	35	6.7	12.7	51	15	20	1	builds a path with Join-Path on a base folder with a double-	no	4	commit 28ca35a25
+lib\git-blob-lib.ps1 -SelfTest	86	7	6.5	6.8	79	7	0	0		no	2	commit 763b34292
+ops\audit-ruling-drift.ps1 -SelfTest	86	7	6.4	6.7	79	7	0	0		no	3	commit 610a7b66e
+grocery\match-lib.ps1 -SelfTest	86	7	6.3	6.4	79	7	0	0		no	4	commit 4bb2295e9
+meal-prep\pipeline\repair-measure-vs-grams.ps1 -SelfTest	86	9	6.1	6.3	77	9	0	0		no	0	
+grocery\fmt-lib.ps1 -SelfTest	86	7	6.1	6.2	79	7	0	0		no	0	
+grocery\audit-json-encoding.ps1	86	86	5.9	9.6	0	86	0	0		yes	6	commit e438ce71f
+meal-prep\engine\audit-published-macros.ps1 -SelfTest	86	26	5.7	6.5	60	6	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+ops\audit-always-loaded-bytes.ps1 -SelfTest	86	10	5.5	6.0	76	10	0	0		no	1	commit 1f7643b7a
+grocery\compare-deals.ps1 -SelfTest	86	86	5.5	6.8	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	50	commit 130b52598
+grocery\pull-grocery-ads.ps1 -SelfTest	86	50	5.5	6.1	36	30	20	0	builds a path with a path interpolated into a double-quoted 	no	10	commit 3a7ebd340
+grocery\audit-board-mojibake.ps1 -SelfTest	86	38	5.5	6.2	48	18	20	0	reads 'out', which resolves into a data directory (grocery\o	no	5	commit 985f8aaeb
+meal-prep\pipeline\audit-ingredient-routes.ps1	47	47	5.4	6.4	0	47	0	0		no	1	commit 73a59ee72
+grocery\build-fareway-regular.ps1 -SelfTest	86	33	5.4	5.9	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	7	commit 2502e2b3a
+sidecar\start-sidecar.ps1 -SelfTest	86	34	5.3	19.0	52	34	0	0		no	7	commit 78db9d6a9
+meal-prep\pipeline\extract_sweep.py --selftest	86	86	5.3	6.4	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	0	
+ops\verify-commodities-gate.ps1 -SelfTest	86	9	5.1	21.9	77	9	0	0		no	5	commit 613b83a70
+grocery\apply-coverage-batch.ps1 -SelfTest	86	86	5.1	5.6	0	0	86	0	builds a repo path from a variable, which a source key canno	yes	12	commit 81a961a00
+grocery\resolve-match-worklist.ps1 -SelfTest	86	30	5.0	5.7	56	10	20	1	reads 'out', which resolves into a data directory (grocery\o	no	3	commit 74cc780df
+grocery\audit-instore-shutout.ps1	86	86	4.9	8.0	0	86	0	0		yes	1	commit b4dca9335
+meal-prep\pipeline\stamp-live-price-fallback.ps1 -SelfTest	86	7	4.9	5.2	79	7	0	0		no	2	commit 23a256fc9
+lib\chain-code-currency.ps1 -SelfTest	86	26	4.9	5.8	60	6	20	0	builds a repo path from a variable, which a source key canno	no	0	
+ops\audit-write-only-reports.ps1 -SelfTest	86	15	4.7	6.5	71	8	7	0	"names ' + ""', which exists nowhere it could be read from (no"	no	6	commit 96f73c607
+ops\verify-commodities-gate.ps1 -Head	86	86	4.6	6.0	0	86	0	0		yes	5	commit 613b83a70
+lib\ledger-lock.ps1 -SelfTest	86	7	4.6	4.8	79	7	0	0		no	1	commit e035a9ecc
+lib\concurrency-probe.ps1 -SelfTest	86	7	4.5	4.7	79	7	0	0		no	0	
+ops\audit-selftest-fallthrough.ps1 -SelfTest	86	7	4.4	5.2	79	7	0	0		no	0	
+grocery\audit-derived-size-callers.ps1 -SelfTest	86	10	4.4	5.0	76	10	0	0		no	0	
+meal-prep\pipeline\harvest.py --selftest	86	86	4.3	5.1	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	24	commit 94a05ad05
+ops\audit-fixed-temp-names.ps1 -SelfTest	86	7	4.2	4.5	79	7	0	0		no	2	commit 8bc6bf576
+ops\count-tracked-writers.ps1 -SelfTest	86	9	4.2	4.9	77	9	0	0		no	0	
+grocery\audit-search-terms.ps1 -SelfTest	86	20	4.1	4.4	66	14	6	0	reads 'out\regular', which resolves into a data directory (g	no	0	
+ops\audit-event-bus.ps1 -SelfTest	86	50	4.1	4.9	36	30	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 85238faf6
+meal-prep\lib\publish-journal.ps1 -SelfTest	19	3	4.0	4.0	16	3	0	0		no	3	commit d05680d91
+meal-prep\pipeline\sync-recipesdb-grams.ps1 -SelfTest	86	26	4.0	4.2	60	6	20	0	reads 'db\densities.json', which resolves into a data direct	no	1	commit 99cd431bf
+grocery\triage-close.ps1 -SelfTest	86	30	3.9	4.4	56	10	20	0	names 'triage-queue.json', which exists nowhere it could be 	no	5	commit 966397ae1
+grocery\add-known-wrong.ps1 -SelfTest	86	33	3.9	4.3	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	12	commit 576566ced
+grocery\rollback-ttl-lib.ps1 -SelfTest	86	10	3.9	4.1	76	10	0	0		no	2	commit 8523fd033
+meal-prep\pipeline\monitor-live-recipe-prices.ps1 -SelfTest	86	86	3.9	4.4	0	0	86	0	a file it loads (lib\chain-verdict-lib.ps1) builds a path wi	yes	1	commit c5a2f9c68
+ops\audit-git-fixture-env.ps1 -SelfTest	86	7	3.9	4.3	79	7	0	0		no	0	
+grocery\test-pack-basis-scope.ps1 -SelfTest	73	15	3.8	4.3	58	8	7	0	a file it loads (grocery\audit-pack-basis.ps1) reads 'out', 	no	0	
+ops\run-daily-ratchets.ps1 -SelfTest	86	29	3.8	5.7	57	9	20	0	builds a repo path from a variable, which a source key canno	no	1	commit d69d4be75
+grocery\test-board-mojibake-scope.ps1 -SelfTest	48	10	3.8	4.1	38	10	0	0		no	0	
+meal-prep\pipeline\audit-ghost-field-limits.ps1 -SelfTest	86	7	3.8	4.1	79	7	0	0		no	0	
+lib\push-landable.ps1 -SelfTest	86	7	3.6	4.1	79	7	0	0		no	1	commit b1aab0424
+ops\report-production-intruders.ps1 -SelfTest	86	26	3.6	5.8	60	6	20	0	a file it loads (lib\production-writers.ps1) builds a repo p	no	0	
+ops\audit-bare-replace.ps1 -SelfTest	86	7	3.5	3.7	79	7	0	0		no	1	grocery/triage-plans/plan-2026-09-26-3.json
+grocery\test-capture-encoding-scope.ps1 -SelfTest	70	11	3.5	4.3	59	7	4	0	a file it loads (grocery\audit-capture-encoding.ps1) builds 	no	0	
+ops\audit-arg-binding.ps1	86	86	3.5	4.1	0	86	0	1		yes	3	commit 663e2dd5c
+meal-prep\pipeline\wave-publish.ps1 -SelfTest	86	41	3.5	4.0	45	21	20	0	a file it loads (meal-prep\pipeline\audit-spec-contradiction	no	23	commit 65dba8444
+grocery\pull-regular-bakers-api.ps1 -SelfTest	86	86	3.4	4.0	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	2	commit 689f03dba
+grocery\test-tile-integrity-scope.ps1 -SelfTest	70	15	3.3	3.7	55	11	4	0	a file it loads (grocery\audit-tile-integrity.ps1) reads 'ou	no	0	
+lib\guard-contract.ps1 -SelfTest	86	7	3.2	3.6	79	7	0	0		no	25	commit 663e2dd5c
+grocery\test-asof-evidence-scope.ps1 -SelfTest	70	12	3.2	4.6	58	8	4	0	a file it loads (grocery\audit-asof-evidence.ps1) reads 'out	no	1	grocery/triage-plans/plan-2026-09-26-4.json
+grocery\test-match-lib.ps1 -SelfTest	86	39	3.1	3.3	47	19	20	0	reads 'out\comparison-*.json', which resolves into a data di	no	4	commit 4bb2295e9
+meal-prep\pipeline\audit-lane-shape.ps1 -SelfTest	86	9	3.1	3.4	77	9	0	0		no	4	commit 1c64b865e
+grocery\audit-capture-encoding.ps1 -SelfTest	86	27	3.1	3.9	59	7	20	0	builds a repo path from a variable, which a source key canno	no	6	commit 72cd626de
+ops\sidecar-watchdog.ps1 -SelfTest	86	86	3.1	3.6	0	0	86	0	names 'ops\out\sidecar-watchdog-stamp.json', which exists no	yes	1	commit fabaf4315
+grocery\audit-store-registry.ps1 -SelfTest	86	86	3.0	3.4	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	8	commit 345a515be
+grocery\test-household-in-food-scope.ps1 -SelfTest	70	14	3.0	3.5	56	10	4	0	builds a repo path from a variable, which a source key canno	no	0	
+grocery\test-known-wrong-scope.ps1 -SelfTest	73	20	3.0	3.2	53	13	7	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+ops\audit-and-comma-case.ps1 -SelfTest	86	8	3.0	3.2	78	8	0	0		no	0	
+meal-prep\pipeline\audit-fact-claims.ps1	86	86	2.9	4.5	0	86	0	0		yes	1	commit a90b20817
+ops\probe-staged-corpus.ps1 -SelfTest	86	26	2.9	4.5	60	6	20	0	builds a repo path from a variable, which a source key canno	no	0	
+ops\verify-bulk-edit.ps1 -SelfTest	86	7	2.9	3.2	79	7	0	0		no	12	commit a66ef0e94
+meal-prep\pipeline\audit-fact-claims.ps1 -SelfTest	86	7	2.8	3.1	79	7	0	0		no	1	commit a90b20817
+ops\audit-twin-drift.ps1	86	86	2.8	4.1	0	86	0	0		yes	9	commit 00c3527d7
+grocery\pull-regular-hyvee.ps1 -SelfTest	86	33	2.8	3.2	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	8	commit 5ebb4abde
+meal-prep\pipeline\propagate-recipes.ps1 -SelfTest	86	41	2.7	3.5	45	21	20	0	a file it loads (meal-prep\pipeline\feed-covers-published.ps	no	7	commit 419535a9d
+meal-prep\pipeline\audit-buy-label-plurals.ps1 -SelfTest	86	9	2.7	2.9	77	9	0	0		no	2	commit 5ed63c6a0
+meal-prep\pipeline\local_extract.py --selftest	86	86	2.6	2.8	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	2	commit 82e15c846
+meal-prep\pipeline\rebid-ingredient.ps1 -SelfTest	86	30	2.6	2.9	56	10	20	0	reads a data directory under this repo, whose bytes change w	no	1	commit 4ad20f97e
+meal-prep\pipeline\sync-prose-from-spec.ps1 -SelfTest	86	7	2.6	2.8	79	7	0	0		no	0	
+grocery\capture-sink.ps1 -SelfTest	86	26	2.6	2.9	60	6	20	0	reads 'out\captures\_sink', which resolves into a data direc	no	6	commit 57c4f04c5
+lib\production-writers.ps1 -SelfTest	86	26	2.6	2.9	60	6	20	0	builds a repo path from a variable, which a source key canno	no	3	commit f1fa0ec79
+lib\selftest-verdict.ps1 -SelfTest	86	7	2.5	2.8	79	7	0	0		no	1	commit 31fe44004
+lib\main-checkout.ps1 -SelfTest	86	7	2.4	2.6	79	7	0	0		no	2	commit 12a3b1687
+meal-prep\lib\gated-republish-lib.ps1 -SelfTest	86	34	2.4	2.7	52	14	20	0	a file it loads (grocery\check-ad-cycles.ps1) reads 'out', w	no	0	
+ops\replay-store-citations.py --selftest	86	26	2.4	2.7	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 7d9c1eb89
+grocery\update-history.ps1 -SelfTest	86	28	2.4	2.7	58	8	20	0	reads 'out', which resolves into a data directory (grocery\o	no	4	commit 97c6c602f
+grocery\audit-category-coverage.ps1 -SelfTest	47	47	2.4	2.7	0	0	47	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit 702e9b7fa
+ops\count-source-lifters.ps1 -SelfTest	86	7	2.4	3.0	79	7	0	0		no	2	commit 985f8aaeb
+lib\gate-leftovers.ps1 -SelfTest	86	26	2.3	2.5	60	6	20	0	reads '.git', which resolves into a data directory (.git), w	no	3	commit 38357202c
+grocery\audit-derived-size-callers.ps1	86	86	2.3	2.6	0	86	0	0		yes	0	
+grocery\build-walmart-deals.ps1 -SelfTest	86	30	2.2	2.7	56	10	20	0	reads 'out\regular', which resolves into a data directory (g	no	8	commit fd6afd08a
+meal-prep\pipeline\dedup_paired_run.py --selftest	86	86	2.2	3.7	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	0	
+ops\probe-hostile-input.ps1 -SelfTest	86	9	2.2	2.3	77	9	0	0		no	1	commit f1a23d662
+grocery\test-cell-quarantine.ps1 -SelfTest	86	26	2.2	2.7	60	6	20	0	a file it loads (grocery\apply-cell-quarantine.ps1) reads 'o	no	2	grocery/triage-plans/plan-2026-09-21-4.json
+grocery\triage-due.ps1 -SelfTest	86	31	2.1	2.5	55	11	20	0	names 'triage-queue.json', which exists nowhere it could be 	no	13	commit 126f2a73f
+grocery\audit-instore-shutout.ps1 -SelfTest	86	26	2.1	2.4	60	6	20	0	reads 'out\regular', which resolves into a data directory (g	no	1	commit b4dca9335
+grocery\audit-guard-contract.ps1 -SelfTest	86	86	2.1	4.7	0	0	86	0	builds a repo path from a variable, which a source key canno	yes	16	commit 663e2dd5c
+ops\audit-keyword-arguments.ps1 -SelfTest	86	7	2.0	2.3	79	7	0	0		no	3	commit 239134013
+ops\audit-one-way-actuators.ps1	86	86	2.0	2.5	0	86	0	0		yes	0	
+ops\audit-literal-newline-escape.ps1 -SelfTest	86	7	2.0	2.2	79	7	0	0		no	0	
+ops\audit-readjson-inline-wrap.ps1 -SelfTest	86	7	2.0	2.1	79	7	0	0		no	2	commit 8bf0d72f8
+grocery\derive-not-carried.ps1 -SelfTest	86	29	2.0	2.4	57	9	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit c997ca144
+meal-prep\lib\render-tokens.ps1 -SelfTest	86	28	2.0	7.1	58	8	20	0	reads 'db\recipes', which resolves into a data directory (me	no	4	commit 79270acf3
+ops\audit-rule-currency.ps1 -SelfTest	86	86	2.0	2.5	0	0	86	0	names the directory '.claude\rules', whose listing a source 	yes	1	commit 05d301129
+grocery\test-price-mode-scope.ps1 -SelfTest	70	10	2.0	2.1	60	6	4	0	a file it loads (grocery\audit-price-mode.ps1) reads 'out\re	no	0	
+grocery\audit-json-readers.ps1	86	86	2.0	4.5	0	86	0	0		yes	7	commit 9267d6046
+grocery\pull-regular-familyfare.ps1 -SelfTest	86	86	2.0	2.3	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	4	commit 2f0394147
+ops\audit-lesson-rate-claims.ps1	86	86	1.9	3.4	0	86	0	0		yes	2	commit e7012a906
+ops\audit-backlog-status.ps1	86	86	1.9	2.4	0	86	0	0		yes	11	commit 3ab316870
+ops\audit-readjson-inline-wrap.ps1	86	86	1.9	3.2	0	86	0	1		yes	2	commit 8bf0d72f8
+meal-prep\pipeline\considered-dishes.ps1 -SelfTest	86	7	1.9	2.2	79	7	0	0		no	1	commit 14f8c577a
+grocery\set-board-cell.ps1 -SelfTest	86	26	1.9	2.2	60	6	20	0	reads 'out\recipe-board-everyday.json', which resolves into 	no	0	
+grocery\audit-ghost-drift.ps1 -SelfTest	86	86	1.9	2.2	0	0	86	0	reads a data directory under this repo, whose bytes change w	yes	2	commit 87940921e
+grocery\send-friday-email.ps1 -SelfTest	86	86	1.9	2.3	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	1	commit ce75cd7cc
+grocery\audit-ad-forecast.ps1 -SelfTest	86	9	1.8	2.2	77	9	0	0		no	1	commit 38d4513b4
+ops\audit-list-array-wrap.ps1 -SelfTest	86	7	1.8	2.0	79	7	0	0		no	1	commit eae70d0d2
+grocery\send-price-alerts.ps1 -SelfTest	86	86	1.8	2.1	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	1	commit ce75cd7cc
+ops\audit-prompt-backup.ps1	86	86	1.8	2.2	0	86	0	1		yes	30	commit d8ba6d944
+ops\audit-ruling-drift.ps1	86	86	1.7	2.1	0	86	0	0		yes	3	commit 610a7b66e
+ops\audit-stray-root-artifacts.ps1	86	86	1.7	3.5	0	86	0	9		yes	2	commit f9d8ab6e4
+grocery\audit-row-age.ps1 -SelfTest	86	30	1.7	1.9	56	10	20	0	reads 'out', which resolves into a data directory (grocery\o	no	6	commit 8b14bfd72
+grocery\health-heartbeat.ps1 -SelfTest	86	45	1.7	2.0	41	25	20	0	reads a data directory under this repo, whose bytes change w	no	21	commit bdd5960ce
+lib\atomic-write.ps1 -SelfTest	86	7	1.7	1.7	79	7	0	0		no	5	commit e035a9ecc
+grocery\audit-ingest-shape.ps1 -SelfTest	86	30	1.6	1.9	56	10	20	0	names the directory 'grocery\regression-inputs\guard-fixture	no	2	grocery/triage-plans/plan-2026-09-22-10.json
+grocery\triage-land.ps1 -SelfTest	86	26	1.6	1.7	60	6	20	0	a file it loads (grocery\audit-feed-week-parity.ps1) reads '	no	1	commit 39e16c00c
+ops\audit-task-registration.ps1	86	86	1.6	2.0	0	86	0	0		yes	6	commit 7f7af2e99
+lib\append-line.ps1 -SelfTest	86	7	1.6	1.7	79	7	0	0		no	1	commit 966397ae1
+ops\audit-source-comment-strip.ps1	86	86	1.6	2.0	0	86	0	0		yes	3	commit 8947b6ef1
+meal-prep\pipeline\find-similar.ps1 -SelfTest	86	27	1.6	1.7	59	6	21	0	a file it loads (ops\seed-worktree.ps1) builds a repo path f	no	5	commit 7d1b2c017
+grocery\backfill-aldi-link-urls.ps1 -SelfTest	86	29	1.6	1.7	57	9	20	0	reads 'out\regular', which resolves into a data directory (g	no	0	
+grocery\audit-alert-registry.ps1 -SelfTest	86	38	1.6	1.9	48	18	20	0	builds a repo path from a variable, which a source key canno	no	22	commit b605282da
+grocery\alert-lib.ps1 -SelfTest	86	38	1.5	1.8	48	18	20	0	builds a repo path from a variable, which a source key canno	no	4	commit 33ed4ee36
+meal-prep\pipeline\ingredient-vocab.ps1 -SelfTest	86	8	1.5	1.8	78	8	0	0		no	2	commit de8ddbeb3
+ops\audit-memory-citations.ps1	86	86	1.5	5.0	0	86	0	0		yes	1	commit a56c0b0ff
+grocery\audit-coverage-gaps.ps1 -SelfTest	86	33	1.5	1.6	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	3	commit 995d69f7f
+grocery\pull-fareway-ads.ps1 -SelfTest	86	26	1.5	1.6	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	grocery/triage-plans/plan-2026-09-18-3.json
+ops\audit-ghost-page-census.ps1 -SelfTest	86	28	1.5	1.7	58	8	20	0	builds a repo path from a variable, which a source key canno	no	1	grocery/triage-plans/plan-2026-09-25-6.json
+grocery\import-walmart-batch.ps1 -SelfTest	86	30	1.5	1.8	56	10	20	0	builds a repo path from a variable, which a source key canno	no	6	commit 7e757b81c
+ops\drain-staged.ps1 -SelfTest	86	10	1.5	2.1	76	10	0	0		no	0	
+grocery\audit-match-soundness.ps1 -SelfTest	86	43	1.5	1.7	43	23	20	0	reads 'out', which resolves into a data directory (grocery\o	no	17	commit 81a961a00
+ops\audit-mustfire-census.ps1 -SelfTest	86	8	1.4	1.5	78	8	0	0		no	4	commit 740f62afd
+ops\brain-digest.ps1 -SelfTest	86	77	1.4	1.7	9	57	20	0	reads a data directory under this repo, whose bytes change w	no	1	commit ecd4fa9e8
+ops\boot-watch.ps1 -SelfTest	86	23	1.4	1.7	63	23	0	0		no	2	commit 4567d219c
+meal-prep\pipeline\audit-wave-blocker-headings.ps1 -SelfTest	86	7	1.4	1.5	79	7	0	0		no	1	commit 30444c2c0
+lib\json-io.ps1 -SelfTest	86	7	1.4	1.4	79	7	0	0		no	7	commit a12d273e4
+grocery\publish-deals-page.ps1 -SelfTest	86	36	1.4	1.5	50	36	0	0		no	20	commit 702e9b7fa
+ops\audit-agent-tools.ps1	86	86	1.4	2.2	0	86	0	0		yes	3	commit 091e6520d
+check-uncommitted-source.ps1 -SelfTest	86	7	1.4	1.4	79	7	0	0		no	1	commit 5f16140f7
+grocery\add-recipe-board-rows.ps1 -SelfTest	86	27	1.3	1.6	59	7	20	0	reads 'out', which resolves into a data directory (grocery\o	no	3	commit 2cb56beda
+ops\audit-reread-ledger.ps1	86	86	1.3	1.6	0	86	0	0		yes	0	
+grocery\commit-capture-cursor.ps1 -SelfTest	86	86	1.3	1.6	0	0	86	0	reads 'out', which resolves into a data directory (grocery\o	yes	1	commit d81391efa
+meal-prep\pipeline\sync-recipesdb-buy.ps1 -SelfTest	86	9	1.3	1.4	77	9	0	0		no	0	
+meal-prep\pipeline\feed-freshness.ps1 -SelfTest	86	7	1.3	1.5	79	7	0	0		no	1	commit 8bc6bf576
+ops\audit-twin-drift.ps1 -SelfTest	86	7	1.3	1.4	79	7	0	0		no	9	commit 00c3527d7
+ops\brain-report.ps1 -SelfTest	86	60	1.3	1.6	26	40	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+ops\count-unchecked-child-parse.ps1 -SelfTest	86	26	1.3	2.2	60	6	20	0	builds a repo path from a variable, which a source key canno	no	0	
+grocery\test-hyvee-flyer-link.ps1 -SelfTest	17	3	1.2	1.2	14	3	0	0		no	0	
+meal-prep\pipeline\retire-recipe.ps1 -SelfTest	86	12	1.2	1.3	74	12	0	0		no	3	commit bd0ac43e2
+grocery\audit-alert-census.ps1 -SelfTest	86	32	1.2	1.5	54	12	20	0	names 'triage-queue.json', which exists nowhere it could be 	no	2	commit 85d930e37
+meal-prep\pipeline\repair-cook-measures.ps1 -SelfTest	86	9	1.2	1.3	77	9	0	0		no	1	commit da9fafbc8
+grocery\import-aldi-batch.ps1 -SelfTest	86	30	1.2	1.3	56	10	20	0	a file it loads (grocery\import-instacart-batch.ps1) builds 	no	0	
+ops\audit-task-registry.ps1	86	86	1.2	1.5	0	86	0	0		yes	3	commit 4fc53b55a
+grocery\audit-semantic-identity.ps1 -SelfTest	86	31	1.2	1.3	55	11	20	0	names 'sidecar\data\commodity-defs-graph.json', which exists	no	3	grocery/triage-plans/plan-2026-09-18.json
+grocery\pull-browser-stores.py --selftest-lookup	86	26	1.2	2.6	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit cc468f93d
+grocery\refresh-chain-verdict.ps1 -SelfTest	86	33	1.2	1.3	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit cc3f6c3d4
+meal-prep\pipeline\build-v2-spec.ps1 -SelfTest	86	10	1.2	1.4	76	10	0	0		no	15	commit fd9c443cc
+meal-prep\pipeline\audit-nutrient-claims.ps1 -SelfTest	86	28	1.2	1.3	58	8	20	0	names 'a-list-that-does-not-exist.json', which exists nowher	no	4	commit 66ed2335a
+ops\audit-cmdlet-shadow.ps1 -SelfTest	86	7	1.2	1.3	79	7	0	0		no	1	commit 46085e69f
+ops\audit-fixture-inputs.ps1 -SelfTest	86	11	1.2	1.3	75	11	0	0		no	0	
+meal-prep\pipeline\repair-range-buy.ps1 -SelfTest	86	9	1.1	1.3	77	9	0	0		no	0	
+ops\audit-event-bus.ps1	86	86	1.1	1.4	0	86	0	0		yes	1	commit 85238faf6
+ops\audit-lift-completeness.ps1	86	86	1.1	1.5	0	86	0	0		yes	2	commit cf2766fee
+meal-prep\pipeline\hold-recipe.ps1 -SelfTest	86	30	1.1	1.4	56	10	20	0	names ' + [char]0x27 + ', which exists nowhere it could be r	no	1	commit bda9e5e0d
+ops\audit-backlog-status.ps1 -SelfTest	86	7	1.1	1.2	79	7	0	0		no	11	commit 3ab316870
+grocery\audit-cloud-readiness.ps1	86	86	1.1	3.1	0	86	0	0		yes	0	
+meal-prep\pipeline\repair-unitless-buy.ps1 -SelfTest	86	9	1.1	1.2	77	9	0	0		no	0	
+meal-prep\pipeline\repair-scaled-notes.ps1 -SelfTest	86	9	1.1	1.2	77	9	0	0		no	0	
+ops\member-cohorts.ps1 -SelfTest	86	30	1.1	1.4	56	10	20	0	names 'meal-prep\.ghostkey', which exists nowhere it could b	no	2	commit abefde4df
+lib\mutex-hold.ps1 -SelfTest	86	7	1.1	1.2	79	7	0	0		no	0	
+grocery\audit-pull-profiles.ps1 -SelfTest	86	8	1.1	1.2	78	8	0	0		no	0	
+meal-prep\pipeline\repair-unmeasurable-qty.ps1 -SelfTest	86	9	1.1	1.2	77	9	0	0		no	0	
+grocery\build-aldi-regular.ps1 -SelfTest	86	29	1.1	1.3	57	9	20	0	builds a repo path from a variable, which a source key canno	no	3	commit 968abcec8
+grocery\test-guards.ps1 -SelfTest	86	86	1.1	1.2	0	19	67	0	a file it loads (grocery\test-flag-verification-rejudge.ps1)	yes	16	commit 0b300ae04
+ops\audit-task-registration.ps1 -SelfTest	86	27	1.0	1.3	59	7	20	0	builds a repo path from a variable, which a source key canno	no	6	commit 7f7af2e99
+grocery\heal-degraded-sizes.ps1 -SelfTest	86	29	1.0	1.2	57	9	20	0	reads 'out\regular', which resolves into a data directory (g	no	0	
+graph\lib\graphdb_selftest.py --selftest	86	26	1.0	1.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit daa1698d8
+ops\incident-trigger.ps1 -SelfTest	86	51	1.0	1.3	35	31	20	0	names the directory 'grocery', whose listing a source key ca	no	0	
+lib\production-text.ps1 -SelfTest	86	7	1.0	1.4	79	7	0	0		no	1	grocery/triage-plans/plan-2026-09-11.json
+ops\audit-agent-tools.ps1 -SelfTest	86	26	1.0	1.2	60	6	20	0	names the directory '.claude\agents', whose listing a source	no	3	commit 091e6520d
+grocery\audit-ff-carry.ps1 -SelfTest	86	42	1.0	1.2	44	22	20	0	reads 'out', which resolves into a data directory (grocery\o	no	6	commit 130b52598
+meal-prep\pipeline\repair-plural-unit.ps1 -SelfTest	86	7	1.0	1.1	79	7	0	0		no	1	commit 3c74e0d24
+ops\install-grocery-tasks.ps1 -SelfTest	86	27	1.0	1.4	59	7	20	0	names the directory 'ops\scheduled-tasks', whose listing a s	no	3	commit da99ecfd4
+grocery\audit-household-in-food.ps1 -SelfTest	86	33	1.0	1.1	53	13	20	0	builds a repo path from a variable, which a source key canno	no	1	commit f510c776c
+meal-prep\pipeline\audit-surface-staleness.ps1 -SelfTest	86	27	1.0	1.1	59	7	20	0	reads a data directory under this repo, whose bytes change w	no	4	commit a3952ca0f
+ops\install-ops-tasks.ps1 -SelfTest	86	27	1.0	1.2	59	7	20	0	names the directory 'ops\scheduled-tasks', whose listing a s	no	4	commit 4567d219c
+meal-prep\pipeline\harvest-crawl.ps1 -SelfTest	86	37	1.0	1.2	49	17	20	0	builds a path with Join-Path over a nested expression on a b	no	8	commit 4d5d96b43
+meal-prep\pipeline\sync-recipesdb-cost.ps1 -SelfTest	86	7	1.0	1.0	79	7	0	0		no	7	commit 87be6150e
+meal-prep\pipeline\repair-basis-relabel.ps1 -SelfTest	86	7	1.0	1.0	79	7	0	0		no	0	
+meal-prep\pipeline\audit-allergen-line.ps1 -SelfTest	86	30	1.0	1.1	56	10	20	0	a file it loads (meal-prep\pipeline\build-card2.ps1) reads '	no	4	commit ad3570162
+grocery\refresh-sams-verified.ps1 -SelfTest	86	7	1.0	1.1	79	7	0	0		no	0	
+lib\bot-paths.ps1 -SelfTest	86	9	1.0	1.1	77	9	0	0		no	10	commit bda9e5e0d
+meal-prep\pipeline\db-build.ps1 -SelfTest	86	9	1.0	1.1	77	9	0	0		no	5	commit 87940921e
+lib\selftest-lib.ps1 -SelfTest	86	8	1.0	1.0	78	8	0	0		no	0	
+grocery\carry-forward-regular.ps1 -SelfTest	86	26	0.9	1.1	60	6	20	0	reads 'out\regular', which resolves into a data directory (g	no	3	commit 335eeabd5
+ops\audit-run-log-claims.ps1 -SelfTest	86	7	0.9	1.1	79	7	0	0		no	5	commit 4fc53b55a
+meal-prep\set-recipe-visibility.ps1 -SelfTest	86	37	0.9	1.1	49	17	20	0	names '.ghostkey', which exists nowhere it could be read fro	no	0	
+grocery\audit-asof-evidence.ps1 -SelfTest	86	27	0.9	1.1	59	7	20	0	reads 'out\asof-evidence-baseline.json', which resolves into	no	3	commit 337b3a0d3
+grocery\feed-served-lib.ps1 -SelfTest	86	7	0.9	1.0	79	7	0	0		no	1	grocery/triage-plans/plan-2026-09-22-6.json
+grocery\not-carried-lib.ps1 -NotCarriedLibSelfTest	86	26	0.9	1.1	60	6	20	0	a file it loads (grocery\build-deals-page.ps1) reads 'out', 	no	0	
+grocery\audit-live-page-parity.ps1 -SelfTest	47	3	0.9	0.9	44	3	0	0		no	2	grocery/triage-plans/plan-2026-09-26-3.json
+grocery\repair-asof-evidence.ps1 -SelfTest	86	29	0.9	1.0	57	9	20	0	reads 'out\regular', which resolves into a data directory (g	no	0	
+meal-prep\pipeline\prepare-article-price-edits.ps1 -SelfTest	86	28	0.9	1.0	58	8	20	0	reads a data directory under this repo, whose bytes change w	no	2	commit f4ab3d20e
+meal-prep\pipeline\monitor-sitewide-prices.ps1 -SelfTest	86	37	0.9	1.1	49	17	20	0	a file it loads (grocery\alert-lib.ps1) builds a repo path f	no	1	commit 5e8bd23ba
+meal-prep\pipeline\retrofit-source-credit.ps1 -SelfTest	86	9	0.9	0.9	77	9	0	0		no	0	
+ops\report-push-time.ps1 -SelfTest	86	7	0.9	1.0	79	7	0	0		no	0	
+grocery\audit-capture-eviction.ps1 -SelfTest	86	27	0.9	1.0	59	7	20	0	reads 'out', which resolves into a data directory (grocery\o	no	10	commit 12063034d
+meal-prep\pipeline\repair-head-ingredients.ps1 -SelfTest	86	9	0.9	1.0	77	9	0	0		no	3	commit 56dafab6e
+lib\ps-source.ps1 -SelfTest	86	7	0.9	1.0	79	7	0	0		no	1	commit 99cd431bf
+grocery\audit-unit-basis-outlier.ps1 -SelfTest	86	30	0.9	1.0	56	10	20	0	reads 'out', which resolves into a data directory (grocery\o	no	17	commit 5d42fb944
+lib\ratchet.ps1 -SelfTest	86	7	0.9	0.9	79	7	0	0		no	78	commit 88437664f
+grocery\audit-category-coverage.ps1 -Source	47	47	0.9	2.5	0	47	0	0		no	1	commit 702e9b7fa
+ops\report-ratchet-trends.ps1 -SelfTest	86	66	0.9	1.2	20	46	20	0	names 'out\gate-readings.jsonl', which exists nowhere it cou	no	1	grocery/triage-plans/plan-2026-09-26-4.json
+meal-prep\pipeline\recost-spec-cost-block.ps1 -SelfTest	86	9	0.9	1.1	77	9	0	0		no	3	commit 2cb56beda
+grocery\audit-board-reconciliation.ps1 -SelfTest	86	29	0.9	0.9	57	9	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+ops\audit-threshold-register.ps1 -SelfTest	86	7	0.9	0.9	79	7	0	0		no	0	
+grocery\probe-sale-cadence.ps1 -SelfTest	86	26	0.9	1.0	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+graph\pipeline\nightly.ps1 -SelfTest	86	28	0.9	1.0	58	8	20	0	builds a path with Join-Path over a nested expression on a b	no	32	commit e73645e53
+ops\audit-rule-currency.ps1	86	86	0.9	1.0	0	86	0	0		yes	1	commit 05d301129
+lib\seed-hint.ps1 -SelfTest	86	8	0.9	0.9	78	8	0	0		no	1	commit 7d1b2c017
+ops\audit-cpu-load.ps1 -SelfTest	86	7	0.9	0.9	79	7	0	0		no	1	commit 7d223adf9
+lib\board-clock.ps1 -SelfTest	52	4	0.9	0.9	48	4	0	0		no	6	commit bafcc8cc6
+meal-prep\pipeline\repair-absurd-units.ps1 -SelfTest	86	9	0.9	0.9	77	9	0	0		no	0	
+meal-prep\engine\audit-db-agreement.ps1 -SelfTest	86	86	0.8	1.0	0	0	86	0	builds a path with Join-Path over a nested expression on a b	yes	14	commit 3371c6df5
+grocery\audit-commodity-dupes.ps1 -SelfTest	86	31	0.8	1.0	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+meal-prep\pipeline\audit-forbidden-prose.ps1 -SelfTest	86	28	0.8	0.9	58	8	20	0	names 'a-list-that-does-not-exist.json', which exists nowher	no	1	commit 1a97b53af
+grocery\test-derived-band.ps1 -SelfTest	86	8	0.8	0.9	78	8	0	0		no	2	commit 641fb5288
+meal-prep\pipeline\feed-covers-published.ps1 -SelfTest	86	86	0.8	1.0	0	0	86	0	reads a data directory under this repo, whose bytes change w	yes	28	commit 3371c6df5
+grocery\audit-commodity-rules-agree.ps1 -SelfTest	86	15	0.8	0.9	71	15	0	0		no	0	
+grocery\import-instacart-batch.ps1 -SelfTest	86	30	0.8	0.9	56	10	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 9eb32182d
+meal-prep\pipeline\repair-bulk-buy-line.ps1 -SelfTest	86	9	0.8	1.0	77	9	0	0		no	1	commit 1561238bb
+meal-prep\pipeline\test-scaler-labels.ps1 -SelfTest	86	29	0.8	1.0	57	9	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 0019861ed
+ops\audit-always-loaded-bytes.ps1	86	86	0.8	1.0	0	86	0	4		yes	1	commit 1f7643b7a
+ops\audit-unread-wait.ps1 -SelfTest	86	7	0.8	1.0	79	7	0	0		no	1	commit f02a971d0
+lib\ingest-ledger.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+meal-prep\pipeline\repair-missing-scaler-bid.ps1 -SelfTest	86	26	0.8	0.9	60	6	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+grocery\provenance-contract-lib.ps1 -SelfTest	86	7	0.8	0.9	79	7	0	0		no	1	commit 79f200d78
+ops\verify-bot-commit-scope.ps1 -SelfTest	86	9	0.8	0.9	77	9	0	0		no	3	commit a34add59f
+meal-prep\pipeline\audit-live-price-contract.ps1 -SelfTest	86	9	0.8	0.8	77	9	0	0		no	2	commit c5a2f9c68
+meal-prep\pipeline\build-card2.ps1 -SelfTest	86	29	0.8	0.9	57	9	20	0	reads '..\db\allergens.json', which resolves into a data dir	no	7	commit fd9c443cc
+grocery\purge-verdict-lows.ps1 -SelfTest	86	28	0.8	0.9	58	8	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit f51f04fdc
+grocery\audit-carriage.ps1 -SelfTest	86	26	0.8	0.9	60	6	20	0	names the directory 'meal-prep', whose listing a source key 	no	2	commit 165949e80
+grocery\merge-product-urls.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+ops\audit-internal-ast-members.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+ops\probe-push-throughput.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+meal-prep\pipeline\hunt_lib.py --selftest	86	26	0.8	0.8	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	7	commit 82e15c846
+lib\selftest-discovery.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+grocery\audit-graph-gates.ps1 -SelfTest	86	26	0.8	0.9	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit 8c79c4a08
+grocery\repair-multipack-sizes.ps1 -SelfTest	86	29	0.8	0.9	57	9	20	0	reads 'out\regular', which resolves into a data directory (g	no	5	commit 6f0fa6899
+ops\audit-phantom-paths.ps1	86	86	0.8	1.0	0	86	0	0		yes	0	
+ops\audit-fixture-vocabulary.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+ops\audit-lift-completeness.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	2	commit cf2766fee
+grocery\export-identity-eval.ps1 -SelfTest	86	30	0.8	0.9	56	10	20	0	names the directory 'sidecar\data', whose listing a source k	no	0	
+ops\probe-ghost-version-shape.ps1 -SelfTest	86	9	0.8	0.8	77	9	0	0		no	0	
+lib\tree-walk.ps1 -SelfTest	86	7	0.8	0.9	79	7	0	0		no	1	commit c6783fa8e
+ops\audit-git-sweepers.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+grocery\audit-band-refusals.ps1 -SelfTest	86	26	0.8	0.8	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	6	commit 1429d3944
+grocery\audit-null-rate.ps1 -SelfTest	86	28	0.8	0.9	58	8	20	0	reads 'out', which resolves into a data directory (grocery\o	no	2	commit a45bc1008
+ops\report-safety-liveness.ps1 -SelfTest	86	7	0.8	0.8	79	7	0	0		no	0	
+meal-prep\pipeline\batch-ledger.ps1 -SelfTest	86	28	0.8	0.9	58	8	20	0	builds a path with Join-Path over a nested expression on a b	no	3	commit 4ecc598fc
+grocery\measure-cheapest-selection.ps1 -SelfTest	86	28	0.8	0.8	58	8	20	0	reads a data directory under this repo, whose bytes change w	no	1	grocery/triage-plans/plan-2026-09-03.json
+meal-prep\pipeline\repair-spec-contradictions.ps1 -SelfTest	86	9	0.7	0.8	77	9	0	0		no	0	
+grocery\aisle-test.ps1 -SelfTest	86	35	0.7	0.9	51	15	20	0	reads 'out\regular\family-fare-regular-*.json', which resolv	no	3	commit b83c524d8
+ops\audit-cloudflare-estate.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	0	
+grocery\audit-board-freshness.ps1 -SelfTest	86	27	0.7	1.0	59	7	20	0	reads 'out', which resolves into a data directory (grocery\o	no	2	commit a47a2fe43
+grocery\audit-size-parser-parity.ps1 -SelfTest	86	26	0.7	0.9	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	2	commit a095f76e0
+ops\revert-ghost-write.ps1 -SelfTest	86	9	0.7	0.8	77	9	0	0		no	0	
+grocery\probe-known-wrong-patterns.ps1 -SelfTest	85	35	0.7	0.9	50	16	19	0	builds a repo path from a variable, which a source key canno	no	0	
+lib\input-assert.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	1	commit af55112b3
+ops\audit-python-pins.ps1 -SelfTest	86	28	0.7	0.8	58	8	20	0	names 'sidecar\.venv\Lib\site-packages', which exists nowher	no	0	
+grocery\build-sale-windows.ps1 -SelfTest	86	28	0.7	0.8	58	8	20	0	reads 'out', which resolves into a data directory (grocery\o	no	4	commit a47a2fe43
+meal-prep\lib\price-literal-gate.ps1 -SelfTest	86	28	0.7	0.8	58	8	20	0	builds a path with Join-Path over a nested expression on a b	no	3	commit fd9c443cc
+meal-prep\pipeline\audit-store-integrity.ps1 -SelfTest	86	26	0.7	0.8	60	6	20	0	builds a path with Join-Path over a nested expression on a b	no	6	commit 561f40628
+meal-prep\pipeline\reconcile-publish-journal.ps1 -SelfTest	86	31	0.7	0.8	55	11	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+ops\audit-rule-format.ps1 -SelfTest	81	22	0.7	0.9	59	7	15	0	builds a repo path from a variable, which a source key canno	no	0	
+grocery\audit-json-encoding.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	6	commit e438ce71f
+ops\audit-one-way-actuators.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	0	
+ops\audit-phantom-paths.ps1 -SelfTest	86	34	0.7	0.8	52	14	20	0	builds a repo path from a variable, which a source key canno	no	0	
+graph\learning\ingest_hunter_events.py --selftest	86	28	0.7	1.0	58	8	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit daa1698d8
+meal-prep\pipeline\sync-paywall-schema.ps1 -SelfTest	86	31	0.7	0.8	55	11	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+ops\audit-gate-followthrough.ps1 -SelfTest	86	38	0.7	0.8	48	38	0	0		no	0	
+meal-prep\pipeline\feed-everyday-ps.ps1 -SelfTest	86	29	0.7	0.9	57	9	20	0	reads a data directory under this repo, whose bytes change w	no	4	commit 9827b3c77
+grocery\tune-alert-rearm.ps1 -SelfTest	86	31	0.7	0.8	55	11	20	0	names 'triage-queue.json', which exists nowhere it could be 	no	0	
+lib\keep-awake.ps1 -SelfTest	73	15	0.7	0.8	58	8	7	0	a file it loads (grocery\capture-run.ps1) reads a data direc	no	1	commit 71099a45f
+grocery\discover-hyvee.ps1 -SelfTest	86	33	0.7	0.9	53	13	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+meal-prep\pipeline\audit-vocab-integrity.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	3	commit 561f40628
+meal-prep\pipeline\migrate-prose-tokens.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	1	commit 50ac76313
+graph\pipeline\scorecard.ps1 -SelfTest	86	9	0.7	0.8	77	9	0	0		no	1	commit 284679203
+meal-prep\pipeline\install-harvest-task.ps1 -SelfTest	86	37	0.7	0.8	49	17	20	0	a file it loads (meal-prep\pipeline\harvest-crawl.ps1) build	no	1	grocery/triage-plans/plan-2026-09-10.json
+ops\probe-gate-slot-fairness.ps1 -SelfTest	86	7	0.7	0.7	79	7	0	0		no	1	commit 7d223adf9
+ops\new-commit-message.ps1 -SelfTest	86	7	0.7	0.7	79	7	0	0		no	0	
+ops\audit-stray-root-artifacts.ps1 -SelfTest	86	26	0.7	0.8	60	6	20	0	builds a repo path from a variable, which a source key canno	no	2	commit f9d8ab6e4
+grocery\promote-ingredient-queue.ps1 -SelfTest	86	28	0.7	0.8	58	8	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit 2502e2b3a
+grocery\probe-ingredient.ps1 -SelfTest	86	31	0.7	0.8	55	11	20	0	names '.krogerkey', which exists nowhere it could be read fr	no	2	commit 321bbb88b
+grocery\price-ingredient.ps1 -SelfTest	86	30	0.7	0.7	56	10	20	0	reads 'out', which resolves into a data directory (grocery\o	no	3	commit c98564ff0
+ops\audit-threshold-register.ps1	86	86	0.7	0.8	0	86	0	0		yes	0	
+lib\carriage-lib.ps1 -SelfTest	86	7	0.7	0.8	79	7	0	0		no	0	
+meal-prep\pipeline\fetch-recipe.ps1 -SelfTest	86	7	0.7	0.7	79	7	0	0		no	2	commit 9f3ca3cbd
+grocery\probe-capture-stage-order.ps1 -SelfTest	86	26	0.7	0.8	60	6	20	0	reads 'out\logs', which resolves into a data directory (groc	no	1	commit 025584405
+grocery\resolve-hyvee-links.ps1 -SelfTest	73	23	0.7	0.7	50	16	7	0	reads 'out\regular\hyvee-regular-*.json', which resolves int	no	0	
+grocery\reconcile-ghost-drift.ps1 -SelfTest	86	37	0.7	0.8	49	17	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+meal-prep\pipeline\audit-paid-not-public.ps1 -SelfTest	86	38	0.7	0.8	48	18	20	0	a file it loads (grocery\alert-lib.ps1) builds a repo path f	no	0	
+grocery\audit-price-capture-reach.ps1 -SelfTest	86	26	0.7	0.8	60	6	20	0	builds a repo path from a variable, which a source key canno	no	1	grocery/triage-plans/plan-2026-09-24.json
+sidecar\stop-sidecar.ps1 -SelfTest	86	7	0.7	0.7	79	7	0	0		no	2	commit 85094bf87
+grocery\test-hold-scope.ps1 -SelfTest	86	28	0.7	0.8	58	8	20	0	builds a repo path from a variable, which a source key canno	no	0	
+meal-prep\pipeline\sync-recipesdb-macros.ps1 -SelfTest	86	9	0.7	0.7	77	9	0	0		no	1	commit 0bfa9ebfe
+meal-prep\pipeline\compute-v2-perserving.ps1 -SelfTest	86	10	0.7	0.9	76	10	0	0		no	5	commit 2190d28b0
+ops\audit-memory-citations.ps1 -SelfTest	86	26	0.7	0.7	60	6	20	0	builds a repo path from a variable, which a source key canno	no	1	commit a56c0b0ff
+meal-prep\pipeline\repair-to-taste-labels.ps1 -SelfTest	86	7	0.6	0.7	79	7	0	0		no	0	
+grocery\resolve-worklist.ps1 -SelfTest	86	31	0.6	0.7	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	2	commit b28788fa4
+grocery\notify-item-added.ps1 -SelfTest	86	32	0.6	0.7	54	12	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit 5e9978e00
+grocery\promote-verdicts.ps1 -SelfTest	86	31	0.6	0.7	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+grocery\audit-ended-window.ps1 -SelfTest	52	4	0.6	0.7	48	4	0	0		no	1	commit a47a2fe43
+ops\audit-run-log-claims.ps1	86	86	0.6	0.9	0	86	0	0		yes	5	commit 4fc53b55a
+grocery\audit-board-consistency.ps1 -SelfTest	86	31	0.6	0.8	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+lib\lf-write.ps1 -SelfTest	86	7	0.6	0.7	79	7	0	0		no	0	
+meal-prep\pipeline\lane-tokens.ps1 -SelfTest	86	7	0.6	0.7	79	7	0	0		no	0	
+grocery\cutover-feed-url.ps1 -SelfTest	86	32	0.6	0.9	54	12	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+grocery\probe-sams-unit-price-shapes.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	reads 'out\captures', which resolves into a data directory (	no	0	
+ops\audit-hook-installed.ps1 -SelfTest	86	27	0.6	0.8	59	7	20	0	a file it loads (ops\install-hooks.ps1) builds a repo path f	no	1	grocery/triage-plans/plan-2026-09-26-4.json
+grocery\audit-store-taxonomy.ps1 -SelfTest	86	29	0.6	0.8	57	9	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+lib\ghost-drift-lib.ps1 -SelfTest	86	28	0.6	0.8	58	8	20	0	a file it loads (meal-prep\engine\publish.ps1) builds a path	no	0	
+grocery\search-verdict-lib.ps1 -SearchVerdictSelfTest	86	7	0.6	0.7	79	7	0	0		no	1	commit e4c5d603d
+ops\audit-capture-ingest-reporting.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	names the directory 'grocery', whose listing a source key ca	no	0	
+grocery\recipe-overlay.ps1 -SelfTest	86	34	0.6	0.7	52	14	20	0	reads 'out', which resolves into a data directory (grocery\o	no	6	commit cc3f6c3d4
+ops\audit-measurement-provenance.ps1	86	86	0.6	0.7	0	86	0	2		yes	3	commit 38d4513b4
+meal-prep\pipeline\probe-allergen-backfill.ps1 -SelfTest	86	32	0.6	0.7	54	12	20	0	a file it loads (meal-prep\pipeline\build-card2.ps1) reads '	no	1	commit 372d8cc47
+grocery\capture-lib.ps1 -CaptureLibSelfTest	86	9	0.6	0.6	77	9	0	0		no	1	commit ec7071c6e
+graph\import\importers_selftest.py --selftest	86	28	0.6	1.0	58	8	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\report-chain-stages.ps1 -SelfTest	86	9	0.6	0.7	77	9	0	0		no	0	
+ops\audit-source-control-bytes.ps1 -SelfTest	86	26	0.6	0.8	60	6	20	0	builds a repo path from a variable, which a source key canno	no	1	commit 683363de8
+ops\audit-rule-format.ps1	81	81	0.6	0.7	0	81	0	0		yes	0	
+meal-prep\pipeline\make-saturation.ps1 -SelfTest	86	27	0.6	0.8	59	6	21	0	a file it loads (ops\seed-worktree.ps1) builds a repo path f	no	5	commit 7d1b2c017
+meal-prep\pipeline\audit-schema-constraints.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	builds a path with Join-Path over a nested expression on a b	no	1	commit 5ed63c6a0
+grocery\stamp-ad-as-of.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	commit e6e63823d
+meal-prep\pipeline\rebase-spec-ingredient.ps1 -SelfTest	86	9	0.6	0.8	77	9	0	0		no	1	grocery/triage-plans/plan-2026-09-02.json
+meal-prep\rotate-free-dinners.ps1 -SelfTest	86	32	0.6	0.7	54	12	20	0	reads 'grocery\out', which resolves into a data directory (g	no	7	commit baece0f29
+ops\audit-measurement-provenance.ps1 -SelfTest	86	36	0.6	0.8	50	16	20	0	names the directory 'design', whose listing a source key can	no	3	commit 38d4513b4
+meal-prep\pipeline\audit-unbid-ingredients.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	a file it loads (meal-prep\pipeline\repair-missing-scaler-bi	no	2	commit 561f40628
+grocery\build-arrivals-docket.ps1 -SelfTest	86	31	0.6	0.7	55	11	20	0	reads 'out', which resolves into a data directory (grocery\o	no	1	grocery/triage-plans/plan-2026-09-24-3.json
+meal-prep\pipeline\audit-count-gpu.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	builds a path with Join-Path over a nested expression on a b	no	2	commit 56dafab6e
+meal-prep\pipeline\harvest-lane-tokens.ps1 -SelfTest	86	28	0.6	0.7	58	8	20	0	a file it loads (meal-prep\pipeline\batch-ledger.ps1) builds	no	0	
+grocery\audit-feed-week-parity.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	2	commit 4064d8087
+graph\pipeline\install-nightly-task.ps1 -SelfTest	86	29	0.6	0.6	57	9	20	0	a file it loads (graph\pipeline\nightly.ps1) builds a path w	no	1	grocery/triage-plans/plan-2026-09-09-2.json
+grocery\notify-desktop.ps1 -SelfTest	86	37	0.6	0.7	49	17	20	0	names '..\platform\scripts\ack-capture-challenge.ps1', which	no	2	commit 23f1c714e
+grocery\audit-shelf-signal.ps1 -SelfTest	86	26	0.6	0.7	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+grocery\queue-depth.ps1 -SelfTest	86	43	0.6	0.7	43	23	20	0	reads a data directory under this repo, whose bytes change w	no	2	commit bfaa89f24
+meal-prep\lib\spec-edit.ps1 -SelfTest	86	7	0.6	0.6	79	7	0	0		no	0	
+grocery\prune-out.ps1 -SelfTest	86	26	0.6	0.6	60	6	20	0	reads 'out', which resolves into a data directory (grocery\o	no	0	
+meal-prep\pipeline\audit-price-claims.ps1 -SelfTest	86	26	0.6	0.6	60	6	20	0	reads a data directory under this repo, whose bytes change w	no	1	commit 2914a732c
+worker\test_member_token.py --selftest	86	26	0.6	0.7	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\drain-staged.ps1	86	86	0.5	0.8	0	86	0	0		yes	0	
+meal-prep\pipeline\audit-cost-line-coverage.ps1 -SelfTest	86	7	0.5	0.6	79	7	0	0		no	4	commit 561f40628
+grocery\ff-price-lib.ps1 -FfPriceSelfTest	86	7	0.5	0.6	79	7	0	0		no	1	commit 8253ded82
+meal-prep\pipeline\audit-cost-plausibility.ps1 -SelfTest	86	7	0.5	0.5	79	7	0	0		no	2	commit 561f40628
+grocery\audit-cloud-readiness.ps1 -SelfTest	86	86	0.5	0.6	0	19	67	0	a file it loads (grocery\test-flag-verification-rejudge.ps1)	yes	0	
+lib\trend-publish-key.ps1 -SelfTest	52	4	0.5	0.5	48	4	0	0		no	0	
+meal-prep\pipeline\add-ingredient-row.ps1 -SelfTest	86	26	0.5	0.6	60	6	20	0	reads a data directory under this repo, whose bytes change w	no	2	commit 5b4cc0982
+graph\pipeline\vacuum_graph_db.py --selftest	86	26	0.5	0.6	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\audit-recost-freshness.ps1 -SelfTest	86	26	0.5	0.6	60	6	20	0	reads a data directory under this repo, whose bytes change w	no	0	
+meal-prep\gen-planner-data.ps1 -SelfTest	28	28	0.5	0.6	0	0	28	0	reads '..\grocery\out\smp-feed.json', which resolves into a 	no	6	commit 87be6150e
+graph\bench\priors_ablation.py --selftest	86	86	0.5	1.0	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	2	commit 740f62afd
+lib\site-endpoints.ps1 -SelfTest	86	9	0.4	0.5	77	9	0	0		no	0	
+meal-prep\pipeline\annotate-writer-note.ps1 -SelfTest	86	7	0.4	0.5	79	7	0	0		no	0	
+graph\lib\graphdb.py --selftest	86	26	0.4	0.5	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	2	commit ceed001cc
+ops\audit_corpus_provenance.py --selftest	86	26	0.4	0.5	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit cff386b7d
+ops\injection_resistance_selftest.py --selftest	86	28	0.3	0.4	58	8	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit ecfdfe43d
+ops\injection_eval.py --selftest	86	28	0.3	0.3	58	8	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 56dafab6e
+sidecar\probe_distance_concentration.py --selftest	86	26	0.3	0.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\hunt_dispatch.py --selftest	86	27	0.3	0.3	59	7	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit dccaba76b
+ops\store_citation.py	86	86	0.2	0.5	0	86	0	1		yes	4	commit d4d332945
+ops\audit_corpus_provenance.py	86	86	0.2	0.5	0	86	0	0		yes	1	commit cff386b7d
+ops\hooks\claude\production_barrier.py --selftest	86	26	0.2	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit b06a3628e
+graph\learning\learning_status.py --selftest	86	26	0.2	0.5	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 4cf756443
+meal-prep\pipeline\food_source_backfill.py --selftest	86	26	0.2	0.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 56dafab6e
+grocery\triage-cost.py --selftest	86	26	0.2	0.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\food_sodium_backfill.py --selftest	86	26	0.2	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+media\reels\cdp.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\fdc_lookup.py --selftest	86	86	0.2	0.3	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	2	commit 82e15c846
+graph\pipeline\audit_graph_durability.py --selftest	86	26	0.2	0.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\learning\verdict_expiry.py --selftest	86	28	0.2	0.5	58	8	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\learning\promote_aliases.py --selftest	86	26	0.2	0.4	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	grocery/triage-plans/plan-2026-09-21-4.json
+ops\seo_url_inspect.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 1975ea45d
+meal-prep\pipeline\retire_food_db_row.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 82e15c846
+graph\audit_schema_change.py --selftest	86	26	0.2	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	3	commit cc053f374
+graph\agentic\executor_selftest.py --selftest	86	27	0.2	0.4	59	7	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit d2dc0cd50
+graph\pipeline\scorecard_query.py --selftest	86	86	0.2	0.4	0	0	86	0	is not PowerShell and declares no inputs, and the inference 	yes	1	commit 284679203
+meal-prep\pipeline\coverage_check.py --selftest	86	29	0.2	0.4	57	9	20	0	is not PowerShell and declares no inputs, and the inference 	no	8	commit 82e15c846
+graph\lib\durable_write.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\pipeline\newest_observation.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\audit-seo-surface.py --selftest	86	26	0.2	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+grocery\triage-plan-item.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\food_provenance.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\pipeline\probe_basis_modes.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\audit_graph_shape.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	3	commit 90a20c1de
+meal-prep\pipeline\browser_price_work.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit c55809755
+meal-prep\pipeline\band_precheck.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit bf420469a
+meal-prep\pipeline\dedup_paired_probe.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\lib\units_selftest.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\price_evidence.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\lib\service_time.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\extractor_model_probe.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\lib\fanout.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	3	commit 74cc780df
+sidecar\app_selftest.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\eval\probe_listing_overlap.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\score_ingredient_mapper.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\measure-bot-checkout.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\audit_transcription_fidelity.py --selftest	86	26	0.1	0.3	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\measure_heartbeat_gap.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 5756209e5
+tools\local-llm\finetune-probe\split_holdout.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+grocery\analyse_coverage_tolerances.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\probe_cold_corpus_scrub.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+grocery\triage-group.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\count_unchecked_child_parse.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\seo_search_console.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+meal-prep\pipeline\bm25_dedup_probe.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit d77ab681e
+sidecar\matcher_eval.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 2101d0e7a
+ops\seo_reach_diagnosis.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+ops\seo_reach_position.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+tools\local-llm\finetune-probe\eval_holdout.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+sidecar\checkpoint_selection.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 6b64dc0f5
+sidecar\backtest_veto.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	1	commit 7ef404f47
+tools\local-llm\finetune-probe\rank_sweep.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
+graph\lib\authority.py --selftest	86	26	0.1	0.2	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	11	commit d59c837bc
+sidecar\derive_coverage_floor.py --selftest	86	26	0.1	0.1	60	6	20	0	is not PowerShell and declares no inputs, and the inference 	no	0	
