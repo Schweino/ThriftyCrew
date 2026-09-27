@@ -1,0 +1,50 @@
+check	job	run_c_s	median_s	median_n	real_catches	evidence	risk_if_nightly	cheaper_at_push	recommendation	unkeyed_on_data_push_after
+ops\prepush-test-auditors.ps1	-SelfTest	45.0	66.4	145	1	748967ad4 (4 of 88 MUST FIREs red on a reporter rename, fixed before landing)	test-auditors case wiring breaks the push gate's live-red pairing for a day	declare # gate-inputs: (the self-test builds temp repos; key it on its own code and libs)	cheaper	no
+ops\audit-conclusion-currency.ps1	(static)	21.7	29.4	145	23	23 refusals of other changes, e.g. 73a59ee72, bcf5b3f8b, 663e2dd5c, c11c080f2 (rebased hash); 0 of 23 re-reads found a changed conclusion	a measurement doc names a moved harness, unqualified for a day; paperwork so far	key on the tracked code, design docs and design/reread-ledger.tsv blobs: a data-only push cannot move a harness	cheaper	no
+ops\audit-secrets.ps1	-SelfTest	20.0	18.9	145	0	none	the static scan goes blind for a day	declare # gate-inputs: (fixture-only)	cheaper	no
+ops\audit-memory-backup.ps1	-SelfTest	19.2	24.9	145	0	none strict (5f16140f7 was a leaked GIT_DIR in the harness, not a script change)	a broken public/private detector misses memory exposure for a day	point the self-test away from the real .git and declare inputs	cheaper (else nightly)	no
+ops\audit-secrets.ps1	(static)	19.0	18.8	145	0	none (3a7ebd340 introduces it, 0 findings)	a secret reaches origin and GitHub; cannot be undone	none that keeps it whole: it reads the push's own commits	keep	yes
+meal-prep\pipeline\decide_apply.py	--selftest	15.1	13.5	145	0	none	a dedup ruling-apply regression before the next hunter run	declare # gate-inputs: (68 Python files already do)	cheaper	no
+grocery\audit-sale-fallback.ps1	-SelfTest	12.3	12.3	145	0	none (8eb56de7f was audit-store-registry)	sale-fallback owner mis-routing unreported for a day	make its fixtures read a temp copy, not grocery\out, then declare inputs	cheaper (else nightly)	no
+ops\audit-source-comment-strip.ps1	-SelfTest	11.9	9.2	35	0	none for the self-test (static run: c02f11eac, b1aa4dfff)	the static ratchet's reducer goes blind for a day	fix the comment example at lib\selftest-lib.ps1:269 the key reads as a path	cheaper	no
+grocery\test-flag-verification.ps1	-SelfTest	10.2	8.0	145	0	none (38357202c, 613b83a70: the suite itself was the defect)	flag-verification or quarantine regression reaches the daily chain	fixtures to a temp copy of grocery\out, then declare inputs	cheaper (else nightly)	no
+grocery\validate-triage-plan.ps1	-SelfTest	9.7	8.4	145	0	none (283145723 was the live plan run)	a malformed triage plan admitted for a day	declare # gate-inputs:	cheaper	no
+grocery\compare-deals.ps1	-SelfTest	6.4	5.6	145	0	none in 103 leads (every red is the change proving its own new fixture)	an engine edit breaks pricing; the daily guards see it on a real board	fixtures to a temp copy of grocery\out, then declare inputs	cheaper	no
+meal-prep\pipeline\harvest.py	--selftest	6.4	4.4	145	0	none	near-duplicate candidates taken in for a day; no publish	declare # gate-inputs:	cheaper	no
+meal-prep\pipeline\extract_sweep.py	--selftest	5.6	5.3	145	0	none	an extraction regression reaches a same-day hunter run	declare # gate-inputs:	cheaper	no
+grocery\pull-regular-bakers-api.ps1	-SelfTest	3.4	3.4	145	0	none	one store's rows missed or mis-dated for a day	fixtures to temp, then declare inputs	cheaper (else nightly)	no
+ops\verify-commodities-gate.ps1	-Head	2.9	4.0	145	0	none for -Head (613b83a70 was the pre-commit form; -Head exists since 09-22)	rules and baseline land apart (6 of 39 before the fix); match audit judges the wrong baseline for a day	declare a scan set: the identity rules and their baseline	cheaper	no
+ops\audit-and-comma-case.ps1	-SelfTest	2.9	2.9	47	0	none	a case that never judges its second condition lands for a day	fix the lib\selftest-lib.ps1:269 comment	cheaper	no
+meal-prep\pipeline\local_extract.py	--selftest	2.8	2.7	145	0	none	local-model extraction regression; no board effect until a build	declare # gate-inputs:	cheaper	no
+grocery\audit-store-registry.ps1	-SelfTest	2.7	3.1	145	0	none for the self-test (static run: 2dcd09aff, 641fb5288, 8eb56de7f)	the static roster check goes blind for a day	fixtures to temp, then declare inputs	cheaper	no
+meal-prep\pipeline\dedup_paired_run.py	--selftest	2.3	2.3	145	0	none	offline measurement runner drifts; no production effect	declare # gate-inputs:	cheaper (else nightly)	no
+grocery\pull-regular-familyfare.ps1	-SelfTest	2.1	2.0	145	0	none	one store's everyday pull captures wrong rows for a day	fixtures to temp, then declare inputs	cheaper (else nightly)	no
+ops\audit-rule-currency.ps1	-SelfTest	2.1	2.0	145	0	none	a stale rule statement sits for a day; advisory text	declare # gate-inputs:	cheaper	no
+grocery\send-friday-email.ps1	-SelfTest	2.0	1.9	145	0	none	a broken weekly send; costs at most one Friday	fixtures to temp, then declare inputs	cheaper (else nightly)	no
+meal-prep\pipeline\wave-preaudit.ps1	-SelfTest	2.0	43.2	145	0	none (about 12 reds were unseeded worktrees)	a publish wave runs a weakened pre-audit	parse the nested Join-Path in the key, or declare inputs	cheaper	no
+grocery\audit-guard-contract.ps1	-SelfTest	1.9	2.1	145	0	none for the self-test (live job: e62f9c130, 30444c2c0 and five more)	the live contract check goes blind for a day	declare # gate-inputs:	cheaper	no
+ops\audit-reread-ledger.ps1	(static)	1.9	1.4	145	0	none	an edited or deleted ledger row lands for a day	declare a scan set: design/reread-ledger.tsv	cheaper	no
+grocery\send-price-alerts.ps1	-SelfTest	1.8	1.8	145	0	none	the next member email could run broken logic	fixtures to temp, then declare inputs; keep on push if not keyable	cheaper (else keep)	no
+ops\audit-prompt-backup.ps1	(static)	1.8	1.8	145	8	d8ba6d944, 6621324d3, fc55f4f29, 3c363cba9, a6a7714fc, 9a2a80b2e, d169f5ba7, 0eefa0ff4 (prompt changed without its mirror)	an agent prompt edited with no versioned copy	already scoped to the pushed change (ffd0f0022); 1.8 s	keep	yes
+grocery\audit-ghost-drift.ps1	-SelfTest	1.6	1.8	145	0	none	the paid-site drift detector goes blind for a day	declare inputs over its fixture folder	cheaper (else keep)	no
+ops\audit-mustfire-census.ps1	-SelfTest	1.4	1.5	47	0	none for the self-test	a suite could lose must-fires unseen for a day	fix the lib\selftest-lib.ps1:269 comment	cheaper	no
+ops\audit-task-registry.ps1	(static)	1.4	1.2	145	0	none	a task registry mismatch for a day	reads machine state; 1.4 s	keep	yes
+ops\audit-agent-tools.ps1	(static)	1.4	1.4	145	0	none (c42d0a679 was a fixture update)	an agent file with a bad tool list for a day	declare a scan set: .claude/agents	cheaper	no
+ops\audit-task-registration.ps1	(static)	1.3	1.6	145	1	7f7af2e99 (a watched task with no committed definition refused)	an unregistered or undefined scheduled task for a day	reads Get-ScheduledTask, machine state; 1.3 s	keep	yes
+lib\selftest-lib.ps1	-SelfTest	1.3	1.3	46	0	none	the census library breaks unseen for a day	fix the comment at line 269	cheaper	no
+ops\audit-stray-root-artifacts.ps1	(static)	1.2	1.5	145	1	4e8102c21 (.worktreeinclude untracked at root); 13 recent ambient reds from an empty recall-sleep.py, open, coordinator handling	root debris ships or is left for the bot	reads the untracked root; 1.2 s	keep	yes
+grocery\commit-capture-cursor.ps1	-SelfTest	1.2	1.3	145	0	none	a cursor commit regression for a day	fixtures to temp, then declare inputs	cheaper (else nightly)	no
+meal-prep\pipeline\feed-covers-published.ps1	-SelfTest	1.1	0.9	145	0	none (reds on 09-11 were unseeded worktrees)	publishing runs a weakened guard	declare inputs over the seeded cards	cheaper	no
+ops\audit-fixture-inputs.ps1	-SelfTest	1.1	1.2	50	0	none for the self-test (live audit: 478ce8b0e, a2307af0b and three more)	the live fixture-input audit goes blind for a day	fix the lib\selftest-lib.ps1:269 comment	cheaper	no
+ops\audit-event-bus.ps1	(static)	1.1	1.1	145	0	none (85238faf6 was a false red from a stale events.jsonl)	an event-bus contract break for a day	reads live events; 1.1 s	keep	yes
+ops\audit-memory-citations.ps1	(static)	1.1	1.3	145	0	none	a dead memory citation in a rules file for a day; documentary	reads the memory folder outside the repo; 1.1 s	keep	yes
+ops\audit-rule-currency.ps1	(static)	0.9	0.9	145	0	none	a rules file key the loader never reads; advisory	declare a scan set from the rules files' paths: entries (open in round 3)	cheaper	no
+ops\audit-always-loaded-bytes.ps1	(static)	0.9	0.9	145	3	1f7643b7a (push refused, 536 pass 1 fail), bcf5b3f8b (+989 B cut to +304 B), bda9e5e0d (+683 B cut to +246 B)	every session's context grows unchecked for a day	0.9 s	keep	yes
+grocery\audit-cloud-readiness.ps1	(static)	0.8	1.1	145	0	none	a cloud-readiness regression for a day	declare a scan set	cheaper	no
+ops\audit-run-log-claims.ps1	(static)	0.8	0.6	145	0	borderline only: 88c7a835c (red from main-checkout lag)	a false run-log claim for a day	0.8 s	keep	yes
+ops\drain-staged.ps1	(static)	0.8	0.6	145	0	none	staged leftovers for the bot for a day	reads the index; 0.8 s	keep	yes
+meal-prep\pipeline\monitor-live-recipe-prices.ps1	-SelfTest	0.7	3.9	145	0	none	a miss in the live price monitor could span two days	parse the nested Join-Path in lib\chain-verdict-lib.ps1, or declare inputs	cheaper (else keep)	no
+ops\audit-measurement-provenance.ps1	(static)	0.6	0.6	145	1	98c3f060a (ratchet 8 to 9 on a bullet-form marker, fixed to 8)	a measurement doc without harness and commit for a day; documentary	0.6 s	keep	yes
+graph\bench\priors_ablation.py	--selftest	0.4	0.5	145	0	none (31fe44004 was a false red)	benchmark drift; no production effect	declare # gate-inputs:	cheaper	no
+meal-prep\pipeline\fdc_lookup.py	--selftest	0.2	0.2	145	0	none (76a55eb8d was found by git status)	an FDC lookup regression for a day	the round-3 open fix: no-key case always, then # gate-scan:	cheaper	no
+graph\pipeline\scorecard_query.py	--selftest	0.1	0.2	145	0	none	scorecard query drift; no production effect	declare # gate-inputs:	cheaper	no
