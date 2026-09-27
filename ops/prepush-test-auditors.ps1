@@ -1206,6 +1206,12 @@ $script:AttribWhy = @{}
 function Get-UnitsForPath([string]$Path, $Model, $Inputs, [scriptblock]$Reader, [hashtable]$Cache) {
   $p = $Path.Replace('\', '/')
   $b = ($p -split '/')[-1]
+  # A SPLIT PIECE READS AS ITS HOST (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md D4). grocery\check-ad-cycles\
+  # watchers.ps1 runs inside grocery\check-ad-cycles.ps1, and a unit that reads that host as text reads it with its pieces
+  # in place, so a changed piece reaches every unit that names its host. Judged on the path alone: <dir>\<x>.ps1 counts as
+  # a piece of <dir>.ps1, and a folder with no such host can only over-select, the safe direction.
+  $pp = $p -split '/'
+  $hb = if ($pp.Count -ge 2 -and $b -like '*.ps1') { $pp[$pp.Count - 2] + '.ps1' } else { '' }
   $nf = Get-NoFollow $Model $Inputs
   $out = @()
   foreach ($e in $Model.entries) {
@@ -1215,6 +1221,7 @@ function Get-UnitsForPath([string]$Path, $Model, $Inputs, [scriptblock]$Reader, 
     if (-not $why) { foreach ($g in $e.globs) { $gp = $g.Replace('<fix>', $Inputs.fixRoot); if ($p -match (ConvertTo-PatternRx $gp)) { $why = ('enumerates ' + $gp); break } } }
     if (-not $why -and $Inputs.fixRoot) { foreach ($fp in $e.fixPrefixes) { $full = $Inputs.fixRoot + $fp.TrimEnd('/'); if ([string]::Equals($p, $full, [StringComparison]::OrdinalIgnoreCase) -or $p.StartsWith($full + '/', [StringComparison]::OrdinalIgnoreCase)) { $why = ('names fixture ' + $fp); break } } }
     if (-not $why -and $e.named.ContainsKey($b)) { $why = ('names ' + $b) }
+    if (-not $why -and $hb -and $e.named.ContainsKey($hb)) { $why = ('names ' + $hb + ', the host of the piece ' + $p) }
     if (-not $why -and $e.run.Count -gt 0) {
       $cl = Get-RunClosure $e $Reader $Cache $nf
       if ($cl.Contains($b)) { $via = @($e.run.Keys | Where-Object { (Get-NameClosure @($_) $Reader $Cache $nf).Contains($b) } | Select-Object -First 1); $why = ('runs ' + ($via -join '') + ', which reaches ' + $b) }
@@ -2044,6 +2051,12 @@ if ($r.rc -eq 0 -and (Test-DeltaShape 1)) { Ok 'delta' } else { Bad 'delta' }
   Case 'MUST FIRE' 'a unit holding the harness''s own completion marker makes the model unusable (a full run)' (-not $umTail.ok -and $umTail.why -match 'verdict') "ok=$($umTail.ok) why=$($umTail.why)"
   $bc = Get-UnitsForPath 'modx/beta-child.ps1' $um $uxIn $uxReader $uc
   Case 'MUST FIRE' 'a script that a run script invokes reaches the unit (one child hop)' (@($bc) -contains 'u002-beta') "units=$(@($bc) -join ',')"
+  # A SPLIT HOST'S PIECE (2026-09-27, PLAN-split-giant-files D4): u001 reads gamma.ps1 as text, so a piece gamma\stage.ps1
+  # that the host dot-sources in place reaches u001; a piece of a host no unit names reaches nothing.
+  $gp = Get-UnitsForPath 'modx/gamma/stage.ps1' $um $uxIn $uxReader $uc
+  Case 'MUST FIRE' 'a piece in a host''s own folder reaches every unit that names the host' (@($gp) -contains 'u001-alpha') "units=$(@($gp) -join ',')"
+  $zp = Get-UnitsForPath 'modx/zeta/stage.ps1' $um $uxIn $uxReader $uc
+  Case 'MUST NOT FIRE' 'a piece of a host no unit names reaches no unit' (@($zp).Count -eq 0) "units=$(@($zp) -join ',')"
 
   # A UNIT MOVED INTO A PIECE STILL REACHES THE MODEL (split step 4, 2026-09-27): the host is read through
   # Read-TaHostText, which puts each piece's text back where its pointer line stands.
@@ -2660,7 +2673,7 @@ exit 0
 
   # A SUITE THAT SILENTLY RAN A SUBSET still prints "N of N". The first run of this file did exactly that:
   # a throw inside the record block skipped five cases and the tally read 30 of 30. The count is pinned.
-  $expectedCases = 129
+  $expectedCases = 131
   if ($ran -ne $expectedCases) { $fails += "ran $ran case(s), expected $expectedCases - a block of cases was skipped" }
 
   ''
