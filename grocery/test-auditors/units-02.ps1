@@ -922,7 +922,7 @@ else { Bad 'guards.ps1 lost an advisory-wrapper exit-3 branch or the missing-all
 # (k) the direct callers keep their blind branches (source asserts - house precedent for caller plumbing;
 # the behavioral exit-3s are covered by the producer fixtures above).
 if (Use-Unit 'u046-k-the-direct-callers-keep-their') {
-$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 } # u046-k-the-direct-callers-keep-their
 
 # ---- THE LAST MILE: what the pipeline computes must reach a reader, and only if it passed ------------

@@ -38,6 +38,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 # child's real code through the helper (verified), so the `$rc = $LASTEXITCODE` lines are unchanged.
 . (Join-Path $root 'native-lib.ps1')
 . (Join-Path (Split-Path $root -Parent) 'lib\production-text.ps1')   # Get-TcProductionLines / Get-TcProductionText: a class sweep over script text reads only what runs in production, so a frozen -SelfTest fixture is not an offender (queue 2026-09-11-220094). No param() block, so it cannot reset ours.
+. (Join-Path (Split-Path $root -Parent) 'lib\selftest-lib.ps1')   # Expand-SelfTestPointers: check-ad-cycles.ps1 is split into grocery\check-ad-cycles\ (2026-09-27, PLAN-split-giant-files D4), so every source-shape read takes the host with its pieces in place. No param() block.
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage. Must load BEFORE any use - the estate-wide sweep converted 25 call sites in this file and the presence check that adds this line matched a MENTION of json-io in a fixture string rather than a real dot-source, so the file was converted and left without it.
 function PSChild {
   # TWO EXPLICIT PARAMETERS, NOT ONE CATCH-ALL. A single ValueFromRemainingArguments array
@@ -730,7 +731,7 @@ $shapeS = Get-ParityLaneShape $fxLaneSampled
 if ($shapeS -eq 'sampled') { Ok 'MUST FIRE  a matcher-parity chain lane that passes -Sample is read as SAMPLED' } else { Bad ('MUST FIRE  a sampled matcher-parity lane was read as ' + $shapeS) }
 $shapeC = Get-ParityLaneShape $fxLaneCensus
 if ($shapeC -eq 'census') { Ok 'MUST NOT FIRE  a census lane whose trailing comment names -Sample is still a census' } else { Bad ('MUST NOT FIRE  a census lane was read as ' + $shapeC) }
-$cadSrcI133 = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+$cadSrcI133 = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 $shapeLive = Get-ParityLaneShape $cadSrcI133
 if ($shapeLive -eq 'census') { Ok 'the daily chain runs matcher parity as a CENSUS over every product name (I133)' }
 else { Bad ('the daily chain matcher-parity lane is ' + $shapeLive + ', not a census - a stride of 400 reached 188 of 583 commodities (backlog I133)') }

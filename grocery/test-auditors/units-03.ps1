@@ -366,7 +366,7 @@ else { Bad 'the OLD CRLF end marker matches the shipped capture-run.ps1 again, s
 # THIS UNIT READS ITS OWN SOURCES (2026-09-26). $crSrc and $cacSrc used to arrive from u046/u047, so a push
 # that selected u051 alone judged 12 cases against $null and read every one red. Same files, same reader.
 $crSrc  = Get-Content (Join-Path $root 'capture-run.ps1') -Raw
-$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 if ($crSrc -match '# >>> BUILDER-BLOCK >>>' -and $crSrc -match '# <<< BUILDER-BLOCK <<<') {
   Ok 'capture-run.ps1 still carries the named BUILDER-BLOCK markers the fixture locates by'
 } else { Bad 'capture-run.ps1 has lost one of its BUILDER-BLOCK markers - test-capture-builders will go BLIND on the next run' }
@@ -715,7 +715,7 @@ else { Bad 'publish-deals-page lost a blind surface line - a blind audit falls t
 # actually ran them would either publish to the live site or prove nothing about the live wiring. The
 # checker below is exercised against a source with the gate REMOVED, so it cannot pass while blind.
 if (Use-Unit 'u060-a-held-board-must-hold-the-things') {
-$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 } # u060-a-held-board-must-hold-the-things
 function Test-CacInspectGating([string]$src) {
   $bad = New-Object System.Collections.Generic.List[string]

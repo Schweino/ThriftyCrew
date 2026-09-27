@@ -270,7 +270,7 @@ if ($r.rc -eq 3 -and $r.text -match 'BLIND') { Ok 'store-taxonomy goes BLIND (ex
 else { Bad ('store-taxonomy reported a result from an empty out\ (rc=' + $r.rc + ') - "0 disagreements" from zero examination is back') }
 Remove-Item $fxTx -Recurse -Force -ErrorAction SilentlyContinue
 # a green self-test cannot tell you the tool is still being CALLED
-$cacTx = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacTx = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 if ($cacTx -match 'audit-store-taxonomy\.ps1') { Ok 'the daily job still runs the store-taxonomy second opinion' }
 else { Bad 'check-ad-cycles no longer calls audit-store-taxonomy - the only check that does not inherit the include regex is dark, and the script census will call it an orphan' }
 } # u097-v2-the-hy-vee-pull-s-own-numbers

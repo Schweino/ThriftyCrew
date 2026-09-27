@@ -570,7 +570,7 @@ if ($dhMergeAt -gt 0 -and $dhWriteAt -gt $dhMergeAt -and $dhSrc -match '\$docket
   Ok 'discovery docket MERGES the open queue forward instead of overwriting it with the current slice'
 } else { Bad 'discover-hyvee overwrites its docket again - every unadjudicated candidate outside the current 40-term slice is being discarded' }
 # MUST FIRE, the ordering half of the cycle wiring: the desk reads the docket, so discovery has to run first.
-$cacSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 $cacDisc = $cacSrc.IndexOf("'discover-hyvee.ps1'")
 $cacArr  = $cacSrc.IndexOf("'build-arrivals-docket.ps1'")
 if ($cacDisc -gt 0 -and $cacArr -gt $cacDisc) { Ok 'the cycle runs discover-hyvee BEFORE the arrivals desk that reads its docket' }

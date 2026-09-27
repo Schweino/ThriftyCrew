@@ -326,7 +326,7 @@ else { Bad 'purge-verdict-lows no longer subtracts overturned verdicts - it will
 $wpc2 = Get-Content (Join-Path $root 'weekly-post-capture.ps1') -Raw
 if ($wpc2 -match "purge-verdict-lows\.ps1'\) @\('-Apply'\)") { Ok 'weekly publish still purges verdict-rejected history entries after banking' }
 else { Bad 'weekly-post-capture no longer runs purge-verdict-lows - a late DROP verdict stops reaching the weeks it already poisoned' }
-$cacSrc2 = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$cacSrc2 = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 if ($cacSrc2 -match "purge-verdict-lows\.ps1'\) -Apply") { Ok 'the daily history bank is swept for verdict-rejected entries' }
 else { Bad 'check-ad-cycles no longer purges after banking - the raw branch skips verify-apply, so every standing DROP is inert there and can bank a fresh record low' }
 } # u066-the-encoding-pair
@@ -343,7 +343,7 @@ else { Bad 'check-ad-cycles no longer purges after banking - the raw branch skip
 #   3. -NoAlert stamped last_alerted on flags it never mailed; the GitHub Actions backup runs -NoAlert and
 #      commits the tracked state file back, so it consumed re-arms nobody was ever told about.
 if (Use-Unit 'u067-l-review-flag-re-arm-ack-expiry') {
-$rfSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+$rfSrc = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 # [regex]::Match into a LOCAL - $Matches is global and gets clobbered.
 $rfD = [regex]::Match($rfSrc, '(?s)<<REVIEW-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-DECISION-END>>')
 $rfS = [regex]::Match($rfSrc, '(?s)<<REVIEW-STAMP-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<REVIEW-STAMP-END>>')
@@ -611,7 +611,7 @@ else { Bad 'sanity wow: update-history no longer writes a unit into the history 
 # Extracted and run, never transcribed. FAIL CLOSED is the property under test: the quiet list is an
 # ALLOWLIST of one, so a type this code has never heard of pages by construction.
 if (Use-Unit 'u070-and-the-pager-a-verified-outlier-is') {
-$spSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$spSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 $spM = [regex]::Match($spSrc, '(?s)<<SANITY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SANITY-PAGER-END>>')
 if (-not $spM.Success) {
   Bad 'SANITY-PAGER region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the quiet-type allowlist is untested'
@@ -638,7 +638,7 @@ if (-not $spM.Success) {
 # transcribed. Rows FROZEN from flagged-2026-09-23 (Family Fare); the half field is what compare-deals now writes.
 # A row with no half (every flagged file before this change) must still page: fail closed.
 if (Use-Unit 'u146-multibuy-pager-pages-only-the-unresolved-half' -Reads 'grocery/check-ad-cycles.ps1') {
-$mpM = [regex]::Match((Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw), '(?s)<<MULTIBUY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<MULTIBUY-PAGER-END>>')
+$mpM = [regex]::Match(((Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))), '(?s)<<MULTIBUY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<MULTIBUY-PAGER-END>>')
 if (-not $mpM.Success) {
   Bad 'MULTIBUY-PAGER region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the multibuy half filter is untested'
 } else {
@@ -749,7 +749,7 @@ if (($eT -join ',') -eq 'wow') { Ok 'sanity explain: ONE STEP PAST THE BAR - 0.3
 else { Bad ('sanity explain: one step past the bar (0.3126 vs 0.3125) did not page (types=' + ($eT -join ',') + ')') }
 Remove-Item $fxE -Recurse -Force -ErrorAction SilentlyContinue
 # and the PAGER half: the quiet allowlist in check-ad-cycles names wow-explained, and a plain wow still pages beside it.
-$epM = [regex]::Match((Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw), '(?s)<<SANITY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SANITY-PAGER-END>>')
+$epM = [regex]::Match(((Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))), '(?s)<<SANITY-PAGER-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<SANITY-PAGER-END>>')
 if (-not $epM.Success) { Bad 'sanity explain: SANITY-PAGER region is GONE from check-ad-cycles.ps1 - the wow-explained quiet type is untested' }
 else {
   $fxEp = NewFxDir 'sanity-explain-pager'
@@ -830,7 +830,7 @@ if (Get-Command Live -ErrorAction SilentlyContinue) {
 } # u071-k3-this-harness-s-own-verdict
 # ---- the OTHER half: check-ad-cycles must route the two tiers differently ----
 if (Use-Unit 'u072-the-other-half-check-ad-cycles-must') {
-$wdSrc = Get-Content (Join-Path $root 'check-ad-cycles.ps1') -Raw
+$wdSrc = (Expand-SelfTestPointers -Text ((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 $wdM = [regex]::Match($wdSrc, '(?s)<<WATCHERS-DECISION-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<WATCHERS-DECISION-END>>')
 if (-not $wdM.Success) {
   Bad 'WATCHERS-DECISION region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the two-tier routing is untested'
@@ -900,7 +900,7 @@ if (-not $wdM.Success) {
 # never a transcription and never regenerated from out\coverage-gaps.json - the bug is in which rows the
 # region selects, and a fixture rebuilt from today's live file would encode whatever it does now.
 if (Use-Unit 'u073-l2-coverage-gap-alert-actionable') {
-$cgSrc = [IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))
+$cgSrc = (Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1'))
 $cgR = [regex]::Match($cgSrc, '(?s)<<COVERAGE-GAP-ALERT-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<COVERAGE-GAP-ALERT-END>>')
 if (-not $cgR.Success) {
   Bad 'the coverage-gap alert region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the actionable-only selection is untested'

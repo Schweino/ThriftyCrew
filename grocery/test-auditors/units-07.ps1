@@ -464,7 +464,7 @@ else { Bad 'compare-deals no longer emits src_date into candidates-*.json - audi
 #       comparison's built_at. A stamp older than the job that writes it is the tell of a roster entry that
 #       never armed (gates-that-can-never-arm), and it is also what a call that throws every run looks like
 #       from the outside, where the source check alone would stay green forever.
-$cacLive = @(Get-Content (Join-Path $root 'check-ad-cycles.ps1') | Where-Object { $_ -match 'audit-capture-eviction\.ps1' -and $_ -notmatch '-SelfTest' -and $_ -notmatch '^\s*#' })
+$cacLive = @(((Expand-SelfTestPointers -Text ([IO.File]::ReadAllText((Join-Path $root 'check-ad-cycles.ps1'))) -Path (Join-Path $root 'check-ad-cycles.ps1')) -split "`n") | Where-Object { $_ -match 'audit-capture-eviction\.ps1' -and $_ -notmatch '-SelfTest' -and $_ -notmatch '^\s*#' })
 if ($cacLive.Count -gt 0) { Ok 'audit-capture-eviction is ROSTERED in check-ad-cycles - the eviction check runs on every board generation, not only when a human remembers it' }
 else { Bad 'audit-capture-eviction is not called by check-ad-cycles.ps1 - the ONLY check that can see a thin capture evicting a rich one is hand-cranked, and a passing -SelfTest proves the code works, not that anything runs it' }
 

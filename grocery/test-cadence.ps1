@@ -22,7 +22,11 @@
 # RESOLVED BESIDE THIS FILE, never from an absolute path (2026-09-11). The literal C:\Codex\ThriftyCrew path
 # meant a run from a worktree tested MAIN's check-ad-cycles.ps1 and passed or failed on code the change had
 # not touched. capture-run.ps1 below was already read this way.
-$src = Get-Content (Join-Path $PSScriptRoot 'check-ad-cycles.ps1') -Raw
+# READ AS IT RUNS, pieces in place (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md D4): the helpers moved into
+# grocery\check-ad-cycles\ and the host dot-sources them at their old spot, so the expanded text is the old text.
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\selftest-lib.ps1')
+$cacPath = Join-Path $PSScriptRoot 'check-ad-cycles.ps1'
+$src = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($cacPath)) -Path $cacPath
 $m = [regex]::Match($src, '(?s)function Test-CadenceDue \{.*?\n\}\r?\nfunction Set-CadenceRan.*?\n\}\r?\nfunction Get-CadenceLast.*?\n\}')
 if (-not $m.Success) { 'FAIL: could not extract the helpers'; exit 1 }
 $sandbox = Join-Path $env:TEMP ('cad-' + [guid]::NewGuid().ToString('N').Substring(0,8))
