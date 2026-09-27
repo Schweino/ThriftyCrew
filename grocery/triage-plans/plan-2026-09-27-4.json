@@ -1,0 +1,348 @@
+{
+  "generated": "2026-09-27T12:30:00",
+  "round": 2,
+  "reviewer_note": "Round 2 for the money lane after the weekly ops lane (plan-2026-09-27-3) bounced these. Budget: one money developer spawn, at most 60 est_tool_calls, so ONE item is planned (c744ba, 58) and the rest are deferred-budget with their diagnosis. c744ba was chosen over 564dc6 because it carries a LIVE wrong crown (frozen-pizza at $0.78 each for breadsticks) that local commit 41d8d0d31 is about to deploy; 564dc6 and 7ed369 serve no wrong price today.",
+  "board_week": "comparison-2026-09-27 (built 2026-09-27 10:20:29, JUST LANDED ~50 min before the corpus froze)",
+  "board_note": "triage-due printed BOARD comparison-2026-09-27 built 10:20:29 (47 min ago at 11:07). A landing was in flight during the review; local main 41d8d0d31 (10:47) holds public/board.json with the Breadstix crown, origin/main's last board.json change is 94d3e7970 (09-26).",
+  "queue_ids_seen": [
+    "2026-09-27-c744ba",
+    "2026-09-26-564dc6",
+    "2026-09-26-7ed369",
+    "prevention:grocery guards failed board not published",
+    "2026-09-18-a0c785",
+    "2026-09-22-0c812e",
+    "2026-09-25-633d2b",
+    "2026-09-25-b3c8ca"
+  ],
+  "routing_artifact": "plan-2026-09-27-4.routing.json",
+  "knowledge_consulted": {
+    "searched": [
+      "\"brand include exclude wrong product seasoning\" (orchestrator)",
+      "\"normalize path argument basename match\" (orchestrator): nothing applicable",
+      "\"each commodity pack piece price\"",
+      "\"brand name defeats include exclude\""
+    ],
+    "used": [
+      "C:/Users/Owner/.claude/skills/data-quality-craft/applies-here.md, section 'First-match-wins and freshness ranking let the wrong row take a board cell': Match-Category walks commodities.json in array order and the first include wins, so the simulation replicates that order exactly (include on raw+normalized text, relax_global, exclude on raw)",
+      "C:/Users/Owner/.claude/skills/data-quality-craft/detecting-anomalies.md, section 1 (taxonomy): the co-occurrence trigger is a CONTEXTUAL anomaly (new product + unexplained move), not only a point outlier, which is why the outlier flag alone was not proposed as the trigger",
+      ".claude/rules/grocery.md gr-01 (a bad cell quarantines itself; teaching a guard to scope is a per-guard change with its own fixture) and CLAUDE.md \"New machinery must pay for itself\": the prevention extends the existing audit-flag-verification delegate instead of adding a guard"
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-27-c744ba",
+      "subject": "Grocery matching soundness: NEW CONTESTED",
+      "classification": "wrong-product",
+      "evidence": [
+        "LIVE CROWN: frozen-pizza | Family Fare | \"Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea\" | $6.99 / 9 ea | $0.7767/each, cheapest on the board against Sam's $2.6367 (comparison-2026-09-27; main public/board.json 10:44 renders 'Cheapest Family Fare $0.78 each')",
+        "c744ba row: \"Screamin' Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea\" | chain frozen-pizza (each) > parmesan (oz) [FORM] | per-9-pack 0.7767/each",
+        "LIVE CELL: pepperoni | Family Fare | \"Screamin' Sicilian Loaded Breadstix Pepperoni 15.65 Oz\" | $6.99 | $0.4224/oz (crown is Sam's $0.1923); in main public/board.json",
+        "LIVE CELL: eggs | Hy-Vee | 'Deli egg protein sliders, 3 ct., $0.99 per slider' | $3.96/dozen (crown Walmart $1.624); c744ba chain bacon > eggs > deli-ham > tomatoes > spinach [FORM]; in main public/board.json",
+        "LIVE CELL (found, not in the alert): teriyaki-sauce | Aldi | 'Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ' | $2.99 | $0.7494/floz",
+        "guards-2026-09-27.json 08:27: frozen-pizza|Family Fare carries type 'outlier' ('71% below runner-up Sam's Club $2.64 - verify the price/size parse') AND type 'wow' ('unexplained: a NEW price at the cheapest store ... was Jack's Original Thin Cheese Pizza 13.8 Oz $3.5000'); ad-cycle-log 08:46:44 'arrivals FLAG#3 div=0.80 CROWN frozen-pizza @ Family Fare'; 08:51:46 'verify: pending frozen-pizza|Family Fare ... no read of this product later than 2026-09-27 has landed yet'; cell-quarantine.json (10:25) does not name frozen-pizza",
+        "commodities.json frozen-pizza (unit each, min_piece_oz 12, include '\\bpizza\\b', exclude has 'sticks?' and no 'stix'); the brand 'Pizza Co.' satisfies the include and 'Breadstix' spells around the exclude",
+        "worklist 10:43: contested 17, all first_seen 2026-09-27; 14 of the 17 are on no board cell today (checked against comparison-2026-09-27)"
+      ],
+      "surface_fix": {
+        "what": "exclude the three wrong products (and the Aldi teriyaki chicken bites found beside them) from the commodities that admit them, and keep the Garlic Parmesan variant from re-landing on parmesan",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "frozen-pizza.exclude += 'stix\\b'; pepperoni.exclude += 'stix\\b'; parmesan.exclude += 'stix\\b'; eggs.exclude += '\\bsliders?\\b'; teriyaki-sauce.exclude += 'chicken\\s+bites'. Then audit-match-soundness.ps1 -Accept and commit grocery/out/audit/match-baseline.json WITH the rule change (ops/verify-commodities-gate.ps1 refuses otherwise)"
+      },
+      "root_cause": "a wrong product reaches a CROWN whenever a brand word satisfies an include and a spelling defeats the exclude (the same shape as the salsa-on-habanero typo), and nothing downstream holds the cell: sanity-check flags it (unverified outlier + unexplained NEW cheapest product) as REVIEW only, and audit-flag-verification (guards) quarantines a flagged cell only after verify-price-flags returns a verdict from a LATER read, so a flag in state 'pending' publishes. The contested detector cannot be the backstop: it saw the Garlic Parmesan variant (two rules match) and not the Cheesy Marinara crown (one rule matches). Measured over the 7 guards files in the 14 days to 09-27: this co-occurrence happened 7 times, 5 of them defects (3 wrong-product incl. today's lemons trash bags, 2 parse-basis incl. today's Hy-Vee coffee and croissants), 2 plausibly real",
+      "root_fix": {
+        "what": "teach the existing guard delegate audit-flag-verification.ps1 to QUARANTINE-CELL a crown whose sanity flags for the SAME item include both an unverified outlier and a wow 'unexplained: a NEW price at the cheapest store', while its verify state is pending (no verdict yet); the cell shows its last verified published price with that price's date until verify-price-flags returns 'verified' (then it releases) or a wrong verdict (then it stays quarantined as today)",
+        "files": [
+          "grocery/audit-flag-verification.ps1",
+          "grocery/test-guards.ps1"
+        ],
+        "exact_change": "in audit-flag-verification.ps1: read the newest out/guards-<date>.json (the sanity flags sanity-check writes) beside the verify ledger; for each board crown (cheapest_store cell) where flags of type 'outlier' (not 'outlier-verified') and type 'wow' with detail matching 'unexplained: a NEW price at the cheapest store' name the same id+store+item and the ledger has no verdict for it, print 'QUARANTINE-CELL <id>|<store>' and exit 2 with 'QUARANTINE-SCOPE complete' (the Get-TcChildQuarantineScope protocol guards.ps1 already scopes at lines 632-637). Do NOT change sanity-check thresholds (OutlierFrac 0.35, WowFrac 0.40) or the breaker. PREMISE TO VERIFY FIRST: I did not read audit-flag-verification.ps1's body; if it cannot see the guards-<date>.json flags or the pending state, put the read in verify-price-flags.ps1's ledger instead and record the deviation"
+      },
+      "prior_closes": [
+        "2026-09-22-2dae07",
+        "2026-09-23-b2850b"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-flag-verification.ps1"
+        ],
+        "what": "the emitting check that decides whether a flagged cell publishes; moves a new-product crown with an unverified outlier and an unexplained move to CELL quarantine BEFORE it publishes, whichever include admitted it and whatever spelling defeated the exclude",
+        "exact_change": "as root_fix.exact_change (same change: this item returned twice, so the prevention is the guard delegate, not an exclude)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "first-match-wins simulation of Match-Category (include on raw+normalized text, global exclude from global-exclude-lib.ps1 (87 tokens) with relax_global, exclude on raw) over 42,874 distinct names: candidates-2026-09-27.json + 109 capture files in out/{regular,sams,bakers,fareway} within 14 days, 0 files skipped, 0 uncompilable patterns; 109 names contain a new token and 5 change route",
+        "affected_now": 5,
+        "names": [
+          "Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea (frozen-pizza -> none)",
+          "Screamin' Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea (frozen-pizza -> none; without the parmesan exclude it re-lands on parmesan)",
+          "Deli egg protein sliders, 3 ct., $0.99 per slider (eggs -> none)",
+          "Screamin' Sicilian Loaded Breadstix Pepperoni 15.65 Oz (pepperoni -> none)",
+          "Park Street Deli Chicken Bites With Sauce Teriyaki 3.99 OZ (teriyaki-sauce -> none)"
+        ],
+        "risk": "all 5 are the wrong products themselves; the other 104 token-matching names do not change route; no commodity loses its last row (frozen-pizza keeps 242 of 244 candidate rows, pepperoni 84 of 85, eggs 144 of 145, teriyaki-sauce 113 of 114). Quarantine rule: 6 cells would hold today (frozen-pizza FF, lemons FF, coffee Hy-Vee, croissants Hy-Vee, carrots FF, celery FF), 4 of them defects and 2 plausibly real sale prices held at their last verified price for one verify cycle; 0.2% of about 2825 published cells, far under the 2% breaker. REJECTED engine alternative (refuse count-only multipacks on min_piece_oz commodities): 42 of 385 in-scope rows, including real Sam's 3 pk pizzas, so it is not proposed",
+        "cell_effects": [
+          {
+            "commodity": "frozen-pizza",
+            "store": "Family Fare",
+            "before": 0.7767,
+            "after": 5.0,
+            "note": "after = cheapest priced FF candidate left (Digiorno Rising Crust Supreme); the engine may pick another admitted row; the CROWN moves to Sam's Club $2.6367"
+          },
+          {
+            "commodity": "pepperoni",
+            "store": "Family Fare",
+            "before": 0.4224,
+            "after": 0.4992,
+            "note": "Armour Family Pack Pepperoni Slices 12 Oz; crown unchanged (Sam's 0.1923)"
+          },
+          {
+            "commodity": "eggs",
+            "store": "Hy-Vee",
+            "before": 3.96,
+            "after": "dropped: no priced Hy-Vee eggs row left",
+            "note": "Hy-Vee eggs cell DROPS: the slider is its only priced candidate today. A decision, not a surprise: a slider is not a dozen eggs"
+          },
+          {
+            "commodity": "teriyaki-sauce",
+            "store": "Aldi",
+            "before": 0.7494,
+            "after": "NOT MEASURED, expected dropped: no priced Aldi teriyaki candidate row",
+            "note": "NOT MEASURED: no priced Aldi teriyaki candidate row in candidates-2026-09-27.json; expected to drop. Confirm with compare-deals -Explain teriyaki-sauce"
+          }
+        ]
+      },
+      "claimed_by_earlier": [],
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first",
+      "proof": {
+        "guard_or_fixture": "test-guards.ps1 (a new case for audit-flag-verification) + audit-match-soundness baseline",
+        "must_fire_case": "frozen from the REAL 2026-09-27 rows, never regenerated: a board whose frozen-pizza crown is Family Fare \"Screamin' Sicilian Pizza Co. Cheesy Marinara Loaded Breadstix 9 Ea\" $0.7767/each, a guards json carrying the 'outlier' and the 'wow ... unexplained: a NEW price at the cheapest store' flags quoted in evidence, and a verify ledger with no verdict for it: audit-flag-verification exits 2 with QUARANTINE-CELL frozen-pizza|Family Fare and QUARANTINE-SCOPE complete, and guards.ps1 scopes it to that ONE cell (exit 4 GUARDS QUARANTINED, not a board hold). Second must-fire from 09-23: raspberries|Fareway 'AE Dairy Raspberry Yolite' 0.165/oz with the same two flags",
+        "clean_twin": "the same frozen-pizza row with the outlier flag typed 'outlier-verified' (the store's own unit price reproduces ours) OR with the wow flag 'wow-explained' must stay silent (exit 0), and a crown with both flags whose ledger verdict is 'verified' must be released; plus the real 'Member's Mark Rising Crust Four Cheese Pizza, Frozen, 3 pk.' at Sam's $2.6367 (no flags) must stay published",
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-09-22-2dae07",
+            "case": "Fresh Cut In Store Carrot & Cucumber Ranch (carrots > cucumbers, OUT-OF-BAND): never crowned, carried no outlier+wow pair on 09-22, so it is a MUST-NOT-FIRE twin for the quarantine"
+          },
+          {
+            "queue_id": "2026-09-23-b2850b",
+            "case": "the 09-23 co-occurrence raspberries|Fareway 'AE Dairy Raspberry Yolite' (MUST FIRE); b2850b's Simek's meatballs OUT-OF-BAND never crowned (MUST NOT FIRE)"
+          },
+          {
+            "queue_id": "2026-09-27-c744ba",
+            "case": "frozen-pizza|Family Fare Breadstix crown (MUST FIRE); the exclude cases route the five names in plan-2026-09-27-4.routing.json to <none>"
+          }
+        ],
+        "commands": [
+          "powershell -File grocery\\test-guards.ps1",
+          "powershell -File grocery\\audit-match-soundness.ps1 -Accept (after review)",
+          "powershell -File ops\\verify-commodities-gate.ps1",
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "revert the five commodities.json exclude hunks with the match-baseline.json hunk, and the audit-flag-verification.ps1 + test-guards.ps1 change; no data migration; a quarantined cell releases on the next guards run once the rule is gone",
+      "do_not_touch": [
+        "sanity-check.ps1 thresholds (OutlierFrac 0.35, WowFrac 0.40)",
+        "the quarantine breaker (2% / 10%)",
+        "compare-deals.ps1 Test-PieceSize (the count-only refusal was measured and rejected)",
+        "the 14 other c744ba contested rows (on no board cell)"
+      ],
+      "leaves_open": "(1) the held rebuild: tile-integrity board hard fail and apply-cell-quarantine exit 2 on the 11:41:56 board, so the 3 wrong crowns (lemons FF, coffee Hy-Vee, croissants Hy-Vee) are not held; HEAD 41d8d0d31 board must not land; (2) single-flag wrong crowns; (3) NEW-CONTESTED page per name",
+      "leaves_open_occurrences": 3,
+      "leaves_open_occurrences_window": "NEW-CONTESTED pages in 30 days: 2dae07 (09-22), b2850b (09-23), c744ba (09-27). Single-flag wrong crowns: not measured",
+      "resolution_note": "Wrong product at the frozen-pizza crown: Family Fare's Screamin' Sicilian Breadstix ($0.78 each) got in through the brand 'Pizza Co.' and past the 'sticks' exclude by the spelling 'stix'. It is now excluded from frozen-pizza, pepperoni and parmesan, along with the Hy-Vee egg slider on eggs and the Aldi teriyaki chicken bites (5 names re-routed of 42,874 measured). Prevention: audit-flag-verification now quarantines a new-product crown that has an unverified outlier and an unexplained move while verification is pending, instead of publishing it.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 58,
+      "status": "needs-more-time",
+      "premise_verified": true,
+      "premise_check": "HEAD public/board.json carried 2 Breadstix; guards-2026-09-27.json carried outlier+wow(unexplained NEW) pairs for exactly the plan's 6 cells; ledger status pending for all 6; audit-flag-verification.ps1 (89 lines) read in full before editing",
+      "shipped_commit": "17163c82c",
+      "deviation": "Fixture went to a new suite grocery/test-flag-pending-pair.ps1 (9 cases, exit 0, self-test pass) beside test-flag-verification-rejudge.ps1, not test-guards.ps1, which never covered this audit. match-soundness DROPPED one name outside the routing artifact: the carried Hy-Vee ad line \"Screamin' Sicilian pizza or breadstix, 14.45 to 26.9 oz., $5.99\" (frozen-pizza -> none, absent today, zero board effect, same class); MOVED=0. REBUILD HELD: chain 11:38-11:48 built comparison-2026-09-27 at 11:41:56; guards exit 2 disposition=hold twice (hard: audit-tile-integrity, board-scoped; audit-flag-verification) and apply-cell-quarantine exited 2 without holding any cell, so lemons FF (Glad), coffee Hy-Vee ($0.0582/oz) and croissants Hy-Vee ($0.165) are still crowned in the rebuilt working-tree public/board.json. Frozen pizza is fixed there (crown Sam's $2.6367, Breadstix count 0). Nothing from the rebuild was committed; export-feed not run.",
+      "leaves_open_followup": "weekly:2026-09-27-10d164 for (2)(3); (1) is this item's own queue id, needs-more-time",
+      "actual_tool_calls": 58,
+      "full_suite": "deferred-to-land",
+      "eviction_stamp": "compare_built_at 2026-09-27T11:41:56 = board built_at 11:41:56",
+      "live_check": "frozen-pizza crown Sam's Club 2.6367/each (not Family Fare Breadstix); only after a guards-clean rebuild lands"
+    },
+    {
+      "queue_id": "2026-09-26-564dc6",
+      "subject": "Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-26",
+      "classification": "wrong-product",
+      "status": "deferred-budget",
+      "evidence": [
+        "564dc6's own rows (Walmart paper-towels and toilet-paper widen rows) are absent from match-worklist.json 10:43; today's 7 coverage rows are different names, all first_seen 2026-09-27: almond-flour@Sam's (widen), stuffing-mix@Fareway (claimed by onions), canned-pears@Fareway, green-olives@Family Fare (widen), banana-peppers@Hy-Vee 'Mezzetta Sweet Banana Peppers, Mild' (claimed by BANANAS, release '\\bpepper'), walnuts@Fareway (claimed by oatmeal, correctly), coleslaw-mix@Fareway (ad-line). None of the 7 is on a board cell, so no wrong price is served; each is a store missing from a cell"
+      ],
+      "root_cause": "check-ad-cycles pages every NEW worklist key once, and says 'the weekly lane applies releases and widenings through apply-coverage-batch -FromWorklist', but no agent definition, task or script runs apply-coverage-batch -FromWorklist (grep over .claude, ops and the grocery runners: 0 hits) and the weekly ops lane is forbidden commodities.json (THE LINE), so classifier-decided widen/release rows never apply and every day's catalogue growth pages and bounces",
+      "prior_closes": [
+        "2026-08-31-ad3b81",
+        "2026-09-01-4a481e",
+        "2026-09-02-995502",
+        "2026-09-06-39933e",
+        "2026-09-07-0e9482",
+        "2026-09-19-2a0748",
+        "2026-09-21-b96f21",
+        "2026-09-23-d493dd"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/check-ad-cycles.ps1",
+          "grocery/apply-coverage-batch.ps1"
+        ],
+        "what": "give the worklist the executor its own page names: classifier-decided widen/release rows (decision widen or release WITH a pattern) are applied by apply-coverage-batch -FromWorklist in a money-lane slot, gated by audit-match-soundness and guards, and only undecided rows page",
+        "exact_change": "NOT DESIGNED TODAY (deferred-budget). Next run: decide who runs apply-coverage-batch -FromWorklist (a money-lane weekly item, or the chain for rows the classifier decided), then change the page body in check-ad-cycles.ps1 lines 2197-2257 to page only undecided keys"
+      },
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Its own paper-towel rows no longer reproduce; 7 new coverage rows stand, none on a board cell. Root cause found: the executor named by the alert (apply-coverage-batch -FromWorklist, \"weekly lane\") has no runner, and the weekly ops lane may not edit commodities.json. Fix that before deciding rows.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first",
+      "proof": {
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-08-31-ad3b81",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-01-4a481e",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-02-995502",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-06-39933e",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-07-0e9482",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-19-2a0748",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-21-b96f21",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-23-d493dd",
+            "case": "deferred-budget: the fixture is designed when the worklist executor is (see prevention)"
+          },
+          {
+            "queue_id": "2026-09-26-564dc6",
+            "case": "Walmart paper-towels widen rows (no longer on the worklist) and today's banana-peppers@Hy-Vee row claimed by bananas"
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "2026-09-26-7ed369",
+      "subject": "Grocery: a price band refused rows it cannot explain - 2026-09-26",
+      "classification": "real-economics",
+      "status": "deferred-budget",
+      "evidence": [
+        "apple-cider-vinegar | Baker's | 'Bragg Organic Apple Cider Vinegar with the Mother' | 0.3119 against reference 0.0546 (7ed369 body); the Baker's apple-cider-vinegar cell on comparison-2026-09-27 is 0.0546 from another row, so this refusal changes no cell. Beside it, 'Bettergoods Hot Honey ... with Habanero and Apple Cider Vinegar' @ Walmart is a wrong product the band correctly refused. Worklist band rows: 1262"
+      ],
+      "root_cause": "the band-refusal alert pages every refused row with no basis error, including real premium-brand prices dearer than the store's own shown row, which can never change a cell; the repair it names (an exclude or a band change) is money-lane work for a row that has no board effect",
+      "prior_closes": [
+        "2026-09-23-57b66b"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/audit-band-refusals.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "what": "page an UNEXPLAINED refusal only when it could change an outcome: the store has no shown row for that commodity, or the refused row's per-unit is below the store's shown per-unit; record the rest to the worklist without paging",
+        "exact_change": "NOT DESIGNED TODAY (deferred-budget). The prevention is in ops-lane files (neither is on THE LINE), so the ops lane owns it; the bounce to the money lane was only right for the instance excludes"
+      },
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. The Bragg row at Baker's is a real premium price and cannot move the Baker's cell (0.0546 from another row). The prevention (page only refusals that could change a cell) is in audit-band-refusals.ps1 / check-ad-cycles.ps1, ops lane.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first",
+      "proof": {
+        "fixture_occurrences": [
+          {
+            "queue_id": "2026-09-23-57b66b",
+            "case": "conditioner|Baker's L'Oreal EverPure 6.8 fl oz 1.4691 vs 0.2137: page only if it could change the Baker's conditioner cell"
+          },
+          {
+            "queue_id": "2026-09-26-7ed369",
+            "case": "apple-cider-vinegar|Baker's Bragg 0.3119 vs cell 0.0546 from another row: MUST NOT page; a refused row on a store with no shown row MUST page"
+          }
+        ]
+      }
+    },
+    {
+      "queue_id": "prevention:grocery guards failed board not published",
+      "subject": "prevention: grocery guards failed board not published (8 of 14 days)",
+      "classification": "infra",
+      "status": "deferred-budget",
+      "evidence": [
+        "ops plan-2026-09-27-3 census: fired 2026-09-14, 17, 18, 19, 20, 21, 23, 26 (8 of the 14 days to 09-27); causes named in the closes: one held Sam's vegetable-oil value (09-23), an as_of finding on a row on no board cell (09-26), wrong-product crowns (09-18, 09-19)"
+      ],
+      "root_cause": "an unscoped guard finding is BOARD scope by rule, so every audit not yet taught QUARANTINE-CELL and every finding on a row that sits on no board cell holds the whole board; the other half of the days are wrong-product crowns",
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Partial overlap: c744ba (planned) moves new-product crowns with an unverified outlier and an unexplained move into CELL quarantine, which is the wrong-product half. The unscoped-audit half (a finding on no board cell holds the board) still needs each audit taught to scope, one audit and one fixture at a time.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first"
+    },
+    {
+      "queue_id": "2026-09-18-a0c785",
+      "subject": "Grocery: beverage class absent on 241 non-drink commodities in five display buckets",
+      "classification": "wrong-product",
+      "status": "deferred-budget",
+      "evidence": [
+        "a0c785 body via plan-2026-09-27-3: the shared apply block ^(Dairy|Bread|Canned|Sauces|Baking|Pasta|Coffee|Frozen|Snacks) has no beverage class (Dairy & Eggs 25, Canned & Soup 59, Sauces & Condiments 61, Baking & Spices 78, Coffee, Oils & Spreads 14)"
+      ],
+      "root_cause": "the food-class guard scopes the beverage class by display bucket, so a bucket whose apply block lacks it cannot see a drink in a food cell",
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Fix is category-excludes.json apply_ids (money lane); not re-measured today.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first"
+    },
+    {
+      "queue_id": "2026-09-22-0c812e",
+      "subject": "Triage residual: 1,165 band-refused rows no basis error explains",
+      "classification": "wrong-product",
+      "status": "deferred-budget",
+      "evidence": [
+        "match-worklist.json 10:43: 1262 band rows (1,165 when minted)"
+      ],
+      "root_cause": "wrong products the include rules admit are refused on the dear side of the derived band instead of being excluded",
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Shares 7ed369's finding: most band rows change no cell; take 7ed369's paging prevention first, then this worklist.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first"
+    },
+    {
+      "queue_id": "2026-09-25-633d2b",
+      "subject": "Triage residual: N-for-M deals on each-unit commodities priced per pack (18 rows)",
+      "classification": "parse-basis-bug",
+      "status": "deferred-budget",
+      "evidence": [
+        "633d2b body via plan-2026-09-27-3: Get-UnitPrice (pricing-math-lib.ps1, each branch) divides a stated pack count only for a plain price; 18 are N-for-$M rows"
+      ],
+      "root_cause": "Get-UnitPrice does not divide a stated pack count on an N-for-$M price",
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Fix is pricing-math-lib.ps1 (money lane); not re-measured today.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first"
+    },
+    {
+      "queue_id": "2026-09-25-b3c8ca",
+      "subject": "triage residual: a name that cannot state its form is routed by name alone",
+      "classification": "wrong-product",
+      "status": "deferred-budget",
+      "evidence": [
+        "b3c8ca body via plan-2026-09-27-3: 'Hy-Vee Dole Mandarin Oranges In 100% Fruit Juice, 23.5 oz $4.99': fruit-cups (index 244) claims it by name and cannot price it; mandarin-oranges (index 360) is right"
+      ],
+      "root_cause": "first-match-wins routes by name, so a name that does not state its form lands on the first commodity that claims it even when that commodity cannot price its basis",
+      "resolution_note": "Deferred for budget, 2026-09-27 round 2. Fix is a matching change (compare-deals.ps1 / commodities.json, money lane); today's c744ba [FORM] rows (peas and carrots on carrots, cheddar blocks on shredded-cheese) are more of the same class.",
+      "freshness": "measured 2026-09-27 11:40-12:30 against comparison-2026-09-27 (built 10:20:29, JUST LANDED), candidates-2026-09-27.json (10:20:17), match-worklist.json (10:43:23), guards-2026-09-27.json (08:27) and 109 capture files under out/{regular,sams,bakers,fareway} modified within 14 days; a landing (triage-land.ps1) was in flight and local main already carries 41d8d0d31 (10:47) whose public/board.json publishes the Breadstix crown. If the board has rebuilt since, re-run the routing diff against plan-2026-09-27-4.routing.json first"
+    }
+  ],
+  "ship_sequence": [
+    "0. Re-check the premise: grep main public/board.json for Breadstix and read audit-flag-verification.ps1 before editing (I did not read its body)",
+    "1. c744ba surface: five commodities.json excludes; audit-match-soundness.ps1 -Accept; stage match-baseline.json with the rule change; ops/verify-commodities-gate.ps1",
+    "2. c744ba prevention: audit-flag-verification.ps1 pending co-occurrence -> QUARANTINE-CELL; test-guards.ps1 must-fire (frozen-pizza FF, raspberries Fareway) and clean twins (outlier-verified, wow-explained, verified verdict, Sam's 3 pk pizza)",
+    "3. compare-deals.ps1 -SelfTest, test-guards.ps1, test-auditors.ps1; read exit codes and verdict lines",
+    "4. commit with a pathspec on a branch; land through ops\\push-main.ps1 (never git push origin HEAD:main); publish batch 1 is the next board rebuild",
+    "5. live verification: the frozen-pizza crown is Sam's Club $2.6367 (or a quarantined FF cell at its last verified price) on public/board.json and on the live board with a cache-busting query; Hy-Vee eggs and Family Fare pepperoni no longer show the slider or the Breadstix",
+    "deferred-budget (no work today): 564dc6, 7ed369, prevention:grocery guards failed board not published, a0c785, 0c812e, 633d2b, b3c8ca"
+  ],
+  "open_questions_for_brad": [],
+  "discovered_during_review": [
+    "LIVE wrong crowns today beyond this dispatch, all caught by the proposed quarantine trigger: lemons|Family Fare Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct $0.2748/each (trash bags); coffee|Hy-Vee Keurig 8 or 10 ct., 12 oz., $6.99 at $0.0582/oz (6.99/120, a parse-basis bug); croissants|Hy-Vee $0.99 each read as $0.165/each. These are presumably the price-review items the orchestrator held out (8161ce / ae8b7a); their instance fixes are not planned here.",
+    "Mezzetta Sweet Banana Peppers routes to BANANAS at Hy-Vee (not on the board today); release exclude bananas += \\bpepper is the worklist's own decision and waits for the missing executor (564dc6)."
+  ]
+}
