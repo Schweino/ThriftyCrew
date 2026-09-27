@@ -10,6 +10,10 @@
   line equally (the same flyer price on several flavours), or NO-MATCH (no single product proves it). A link is WRONG
   when its id is not in the label's ids, or the label is NO-MATCH.
   The replay runs flag-verify-lib's Resolve-TcRereadVerdict, unchanged, on the linked candidate's in-window read.
+  A SET link (variant 2, linked_set on the line row) is correct only when EVERY member is in the label's ids, and every
+  member is replayed; one wrong-price among them counts the line as a false wrong-price.
+  -Append appends only the -Arm rows to -CasesOut (the A-no-link rows are already there from the first run), and the
+  totals are still derived from this run's rows.
   Last line: FLYER-LINK-SCORE-COMPLETE ...
 #>
 [CmdletBinding()]
@@ -17,7 +21,8 @@ param(
   [Parameter(Mandatory)][string]$Links,
   [Parameter(Mandatory)][string]$Gold,
   [Parameter(Mandatory)][string]$CasesOut,
-  [string]$Arm = 'linker-v1'
+  [string]$Arm = 'linker-v1',
+  [switch]$Append
 )
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -51,27 +56,31 @@ foreach ($L in $lineRows) {
   $noMatch = ([string]$g.label -eq 'NO-MATCH')
   foreach ($armName in @('A-no-link', $Arm)) {
     $linked = if ($armName -eq 'A-no-link') { '' } else { [string]$L.linked }
+    $set = @()
+    if ($linked) { $set = @(@($L.linked_set) | ForEach-Object { [string]$_ } | Where-Object { $_ }); if ($set.Count -eq 0) { $set = @($linked) } }
     $cell = ''
-    if ($linked) { $cell = if ((-not $noMatch) -and ($ids -contains $linked)) { 'correct link' } else { 'WRONG LINK' } }
+    if ($linked) { $outside = @($set | Where-Object { $ids -notcontains $_ }); $cell = if ((-not $noMatch) -and ($outside.Count -eq 0)) { 'correct link' } else { 'WRONG LINK' } }
     else { $cell = if ($noMatch) { 'correct abstain' } else { 'abstain' } }
     $verdict = ''; $vreason = ''
-    if ($linked) {
-      $c = @($candRows | Where-Object { [string]$_.commodity -eq [string]$L.commodity -and [string]$_.line -eq [string]$L.line -and [string]$_.product_id -eq $linked }) | Select-Object -First 1
+    foreach ($member in $set) {
+      $c = @($candRows | Where-Object { [string]$_.commodity -eq [string]$L.commodity -and [string]$_.line -eq [string]$L.line -and [string]$_.product_id -eq $member }) | Select-Object -First 1
       $pm = [int]$c.price_multiple; if ($pm -lt 1) { $pm = 1 }
       $claim = [pscustomobject]@{ row_type = 'sale'; item = [string]$L.line; per_unit = [double]$L.cell_per_unit; size = ''; ad = [string]$L.line; ad_from = [string]$L.ad_from; ad_to = [string]$L.ad_to; as_of = '' }
       $answer = [pscustomobject]@{ item = [string]$c.name; current_price = ('{0:0.00}' -f ([double]$c.price / $pm)); ad_price = ''; size = [string]$c.size_field; as_of = [string]$c.read_day }
       $idn = Test-TcStoreNameIdentity $judge ([string]$L.commodity) @([string]$c.name)
       $v = Resolve-TcRereadVerdict -Claim $claim -Answer $answer -Unit ([string]$L.unit) -Identity $idn
-      $verdict = [string]$v.verdict; $vreason = [string]$v.reason
+      if ($verdict -ne 'wrong-price') { $verdict = [string]$v.verdict; $vreason = [string]$v.reason }
     }
     $r = [pscustomobject][ordered]@{ arm = $armName; commodity = [string]$L.commodity; line = [string]$L.line; label = [string]$g.label; label_ids = $ids
-      linked = $(if ($linked) { $linked } else { 'none' }); reason = $(if ($armName -eq 'A-no-link') { 'no linker (today: unverifiable, published)' } else { [string]$L.reason })
+      linked = $(if ($linked) { $linked } else { 'none' }); linked_set = @($set); reason = $(if ($armName -eq 'A-no-link') { 'no linker (today: unverifiable, published)' } else { [string]$L.reason })
       cell = $cell; replay_verdict = $verdict; replay_reason = $vreason; source = 'score-hyvee-flyer-link.ps1 over ' + (Split-Path $Links -Leaf) + ' and ' + (Split-Path $Gold -Leaf) }
     $rows.Add($r)
+    if ($Append -and $armName -eq 'A-no-link') { continue }
     [void]$out.Append(($r | ConvertTo-Json -Compress -Depth 4)).Append("`n")
   }
 }
-[IO.File]::WriteAllText($CasesOut, $out.ToString(), (New-Object Text.UTF8Encoding($false)))
+if ($Append) { [IO.File]::AppendAllText($CasesOut, $out.ToString(), (New-Object Text.UTF8Encoding($false))) }
+else { [IO.File]::WriteAllText($CasesOut, $out.ToString(), (New-Object Text.UTF8Encoding($false))) }
 
 $verdictLine = ''
 foreach ($armName in @('A-no-link', $Arm)) {

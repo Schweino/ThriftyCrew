@@ -118,6 +118,68 @@ Assert-Case 'MUST NOT FIRE  a Hy-Vee line never links another brand at the same 
   (Resolve-TcFlyerLink -Line $l -Candidates @(New-Cand 'b' 'Betty Crocker Frosting 16 oz' 1.88) -CellPerUnit (1.88 / 16) -Unit 'oz').linked -eq ''
 }
 
+# ---- variant 2a: the abbreviation map (Brad 2026-09-26, "Both loosenings") -----------------------------------------------
+$thighText = 'Fresh chicken thighs, 100% natural, value pack No antibiotics ever., $1.88 lb.'
+$thigh = ConvertFrom-TcFlyerLine $thighText
+Assert-Case 'MUST FIRE  variant 2 links "Hy-Vee Ckn Thighs Fam Pk" to a chicken thighs line (ckn -> chicken, the founding miss)' {
+  (Resolve-TcFlyerLink -Line $thigh -Candidates @(New-Cand '31783' 'Hy-Vee Ckn Thighs Fam Pk' 1.88 $true 1 'silent' '1 lb') -CellPerUnit 1.88 -Unit 'lb' -Variant 2).linked -eq '31783'
+}
+Assert-Case 'CLEAN TWIN  variant 1 is unchanged: the same Ckn candidate is not linked, a family word is missing' {
+  $r = Resolve-TcFlyerLink -Line $thigh -Candidates @(New-Cand '31783' 'Hy-Vee Ckn Thighs Fam Pk' 1.88 $true 1 'silent' '1 lb') -CellPerUnit 1.88 -Unit 'lb'
+  ($r.linked -eq '') -and ($r.rows[0].reason -like 'a family word is missing*chicken*')
+}
+Assert-Case 'MUST NOT FIRE  an abbreviation the map does not hold is not expanded (Chx is not chicken)' {
+  (Resolve-TcFlyerLink -Line $thigh -Candidates @(New-Cand 'x' 'Hy-Vee Chx Thighs Fam Pk' 1.88 $true 1 'silent' '1 lb') -CellPerUnit 1.88 -Unit 'lb' -Variant 2).linked -eq ''
+}
+Assert-Case 'MUST NOT FIRE  expanding an abbreviation never supplies a DROPPED brand word (Ckn Wings, no Hy-Vee)' {
+  $l = ConvertFrom-TcFlyerLine 'Hy-Vee fresh chicken wings, 100% natural, value pack, $2.99 lb.'
+  $r = Resolve-TcFlyerLink -Line $l -Candidates @(New-Cand 'w' 'Ckn Wings Fam Pk' 2.99 $true 1 'admitted' '1 lb') -CellPerUnit 2.99 -Unit 'lb' -Variant 2
+  ($r.linked -eq '') -and ($r.rows[0].reason -like '*hyvee*')
+}
+Assert-Case 'MUST FIRE  every map entry has the shape of an abbreviation (initials, or an ordered subsequence of the word)' {
+  $bad = @($script:HfAbbrev.Keys | Where-Object { -not (Test-TcFlyerAbbrevShape $_ ([string[]]$script:HfAbbrev[$_].words)) -or -not $script:HfAbbrev[$_].cite })
+  ($script:HfAbbrev.Count -ge 30) -and ($bad.Count -eq 0)
+}
+Assert-Case 'MUST NOT FIRE  a guessed expansion fails the shape test (ckn -> turkey, bc -> bob evans, cn -> chicken)' {
+  (-not (Test-TcFlyerAbbrevShape 'ckn' @('turkey'))) -and (-not (Test-TcFlyerAbbrevShape 'bc' @('bob', 'evans'))) -and (-not (Test-TcFlyerAbbrevShape 'ckn' @('ckn'))) -and (Test-TcFlyerAbbrevShape 'ckn' @('chicken'))
+}
+
+# ---- variant 2b: same-price sets -----------------------------------------------------------------------------------------
+$bbq = ConvertFrom-TcFlyerLine 'Hy-Vee BBQ sauce, 18 oz., $2.19'
+$bbqCell = 2.19 / 18
+function New-BbqSet { @((New-Cand '3963369' 'Hy-Vee Hickory BBQ Sauce' 2.19 $true 1 'admitted' '18 oz'), (New-Cand '3963368' 'Hy-Vee Honey BBQ Sauce' 2.19 $true 1 'admitted' '18 oz'), (New-Cand '3963370' 'Hy-Vee Swt & Spicy BBQ Sauce' 2.19 $true 1 'admitted' '18 oz')) }
+Assert-Case 'MUST FIRE  variant 2 links a same-price set of three flavours, reporting the lowest id and all three members' {
+  $s = New-BbqSet
+  $r = Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz' -Variant 2
+  ($r.linked -eq '3963368') -and ((@($r.linked_set) -join ',') -eq '3963368,3963369,3963370') -and ($r.reason -like 'set:*')
+}
+Assert-Case 'CLEAN TWIN  variant 1 is unchanged: the same three flavours are ambiguous and not linked' {
+  $s = New-BbqSet
+  $r = Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz'
+  ($r.linked -eq '') -and ($r.reason -like 'ambiguous*')
+}
+Assert-Case 'MUST NOT FIRE  a same-price set with ONE off-price member at the cell''s size ($2.49 against $2.19) is not linked' {
+  $s = New-BbqSet; $s += New-Cand '9' 'Hy-Vee Original BBQ Sauce' 2.49 $true 1 'admitted' '18 oz'
+  $r = Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz' -Variant 2
+  ($r.linked -eq '') -and ($r.reason -like 'set refused*(9)')
+}
+Assert-Case 'MUST NOT FIRE  a set member whose read says onSale false at the line price refuses the set' {
+  $s = New-BbqSet; $s += New-Cand '9' 'Hy-Vee Original BBQ Sauce' 2.19 $false 1 'admitted' '18 oz'
+  (Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz' -Variant 2).linked -eq ''
+}
+Assert-Case 'MUST NOT FIRE  a set member with no in-window read refuses the set (unread is not proven)' {
+  $s = New-BbqSet; $u = New-Cand '9' 'Hy-Vee Original BBQ Sauce' 2.19 $true 1 'admitted' '18 oz'; $u.read_ok = $false; $s += $u
+  (Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz' -Variant 2).linked -eq ''
+}
+Assert-Case 'CLEAN TWIN  an off-price product at ANOTHER size (28 oz) or of another brand does not refuse the set' {
+  $s = New-BbqSet; $s += New-Cand '9' 'Hy-Vee Original BBQ Sauce' 3.49 $true 1 'admitted' '28 oz'; $s += New-Cand '10' 'Sweet Baby Rays BBQ Sauce' 2.99 $true 1 'admitted' '18 oz'
+  (@((Resolve-TcFlyerLink -Line $bbq -Candidates $s -CellPerUnit $bbqCell -Unit 'oz' -Variant 2).linked_set)).Count -eq 3
+}
+Assert-Case 'MUST FIRE  an unknown variant is refused, never read as variant 1' {
+  $a = $false; try { [void](Resolve-TcFlyerLink -Line $bbq -Candidates (New-BbqSet) -CellPerUnit $bbqCell -Unit 'oz' -Variant 3) } catch { $a = $true }
+  $a
+}
+
 # ---- the off switch --------------------------------------------------------------------------------------------------
 Assert-Case 'MUST FIRE  the off switch: no flyer_link key reads off, "off" reads off, "shadow" reads shadow' {
   $none = [pscustomobject]@{ stores = @([pscustomobject]@{ name = 'Hy-Vee' }) }
@@ -134,7 +196,7 @@ Assert-Case 'MUST FIRE  "live" is refused until Brad rules, and an unknown value
   $a -and $b
 }
 
-$expected = 24
+$expected = 37
 if ($script:ran -ne $expected) { $script:fail++; Write-Output ('FAIL case count: ran ' + $script:ran + ', the suite lists ' + $expected) }
 if ($script:fail -eq 0) { Write-Output ('test-hyvee-flyer-link self-test pass (' + $script:ran + ' cases)'); exit 0 }
 Write-Output ('test-hyvee-flyer-link SELF-TEST FAIL: ' + $script:fail + ' of ' + $script:ran); exit 1

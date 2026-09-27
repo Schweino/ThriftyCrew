@@ -12,6 +12,8 @@
   Sessionless API, paced: -PaceMs between every request (default 1200).
   -CollectOnly   write the reads with no decision (so labels can be written before the linker runs on them).
   -EvidenceIn    decide from an earlier file's reads, with no network at all.
+  -Variant       1 (default, the plan's section 2) or 2 (Brad 2026-09-26: abbreviation map + same-price sets; the lib header).
+                 The daily chain runs variant 2 in shadow.
   Last line: FLYER-LINK-COMPLETE lines=N linked=M candidates=K read_ok=R.
 #>
 [CmdletBinding()]
@@ -21,7 +23,8 @@ param(
   [string]$EvidenceIn = '',
   [switch]$CollectOnly,
   [int]$PageSize = 8,
-  [int]$PaceMs = 1200
+  [int]$PaceMs = 1200,
+  [int]$Variant = 1
 )
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
@@ -164,13 +167,13 @@ foreach ($L in $lines) {
   foreach ($c in $cs) { $nCand++; if ($c.read_ok) { $nRead++ }; [void]$sb.Append(($c | ConvertTo-Json -Compress -Depth 4)).Append("`n") }
   if ($CollectOnly) { continue }
   $parsed = ConvertFrom-TcFlyerLine $L.item
-  $res = Resolve-TcFlyerLink -Line $parsed -Candidates $cs -CellPerUnit $L.per_unit -Unit $L.unit
+  $res = Resolve-TcFlyerLink -Line $parsed -Candidates $cs -CellPerUnit $L.per_unit -Unit $L.unit -Variant $Variant
   if ($res.linked) { $nLinked++ }
   $row = [ordered]@{ kind = 'line'; mode = $mode; commodity = $L.commodity; line = $L.item; unit = $L.unit; cell_per_unit = $L.per_unit
-    ad_from = $L.ad_from; ad_to = $L.ad_to; linked = $res.linked; reason = $res.reason; candidates = @($cs).Count; decisions = @($res.rows) }
+    ad_from = $L.ad_from; ad_to = $L.ad_to; variant = $Variant; linked = $res.linked; linked_set = @($res.linked_set); reason = $res.reason; candidates = @($cs).Count; decisions = @($res.rows) }
   [void]$sb.Append(([pscustomobject]$row | ConvertTo-Json -Compress -Depth 5)).Append("`n")
 }
 [IO.File]::WriteAllText($Out, $sb.ToString(), (New-Object Text.UTF8Encoding($false)))
 Write-Output ('hyvee-flyer-link: wrote ' + $Out)
-Write-Output ('FLYER-LINK-COMPLETE lines=' + $lines.Count + ' linked=' + $(if ($CollectOnly) { 'not-decided' } else { $nLinked }) + ' candidates=' + $nCand + ' read_ok=' + $nRead + ' mode=' + $mode)
+Write-Output ('FLYER-LINK-COMPLETE lines=' + $lines.Count + ' linked=' + $(if ($CollectOnly) { 'not-decided' } else { $nLinked }) + ' candidates=' + $nCand + ' read_ok=' + $nRead + ' mode=' + $mode + ' variant=' + $Variant)
 exit 0

@@ -2254,6 +2254,11 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         New-FanoutLane -Name 'commodity-dupes'     -File (Join-Path $root 'audit-commodity-dupes.ps1')      -Due $cadDue['commodity-dupes'] -Marker 'COMMODITY-DUPES-COMPLETE'
         New-FanoutLane -Name 'search-terms'        -File (Join-Path $root 'audit-search-terms.ps1')         -Due $cadDue['search-terms'] -Marker 'SEARCH-TERMS-COMPLETE'
         New-FanoutLane -Name 'discover-hyvee'      -File (Join-Path $root 'discover-hyvee.ps1')             -TimeoutSec 900 -Arguments @('-Slice','40')
+      # SHADOW ONLY (design\PLAN-flyer-line-product-link-2026-09-26.md, Brad's 2026-09-26 variant-2 ruling): the Hy-Vee flyer-line
+      # linker re-reads each flyer line's candidates at the ruled store and writes ONLY out\hyvee\flyer-links-<date>.jsonl
+      # (gitignored). It writes no board, cell or verdict, and stores.json Hy-Vee flyer_link 'off' makes it ask nothing.
+      # Paced at 1.5 s because discover-hyvee reads the same API in parallel. ~560 requests, so the budget is 1500 s.
+      New-FanoutLane -Name 'hyvee-flyer-link'    -File (Join-Path $root 'hyvee-flyer-link.ps1')           -TimeoutSec 1500 -Arguments @('-Variant','2','-PaceMs','1500') -Marker 'FLYER-LINK-COMPLETE'
         New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir) -Marker 'STORE-TAXONOMY-COMPLETE'
         New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1') -Marker 'SALE-FALLBACK-COMPLETE'
         # the zero-alert-days scoreboard (design\PLAN-zero-alert-days-2026-09-10.md, Phase 0): a measurement,
@@ -2745,6 +2750,14 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         $dhOut = @($dhJ.Output)
         @($dhOut | Where-Object { $_ -match '^DOCKET:|^  \(|SEARCH FAILED|^BLIND' }) | ForEach-Object { Log ('discover-hyvee: ' + $_) }
       } catch { Log ('discover-hyvee threw: ' + $_.Exception.Message); $summary += 'REVIEW    discover-hyvee threw - no NEW Hy-Vee products were looked for today (the refresh-only puller cannot find any on its own)' }
+
+      # The flyer-line linker's SHADOW run (lane above). Logged only: nothing reads its file to change a board, and a BLIND
+      # day is a gap in the one-ad-cycle shadow record the plan asks for, which the log line makes visible.
+      try {
+        $hflJ = Get-FanoutRecord 'hyvee-flyer-link' $fanRecs
+        if ($hflJ.ExitCode -ne 0) { Log ('hyvee-flyer-link BLIND (exit ' + $hflJ.ExitCode + ') - no shadow flyer-line links recorded today') }
+        @(@($hflJ.Output) | Where-Object { $_ -match '^FLYER-LINK-COMPLETE|searches that failed|BLIND' }) | ForEach-Object { Log ('hyvee-flyer-link (shadow): ' + $_) }
+      } catch { Log ('hyvee-flyer-link threw: ' + $_.Exception.Message) }
 
       try {
         # No 2>&1 on the child: under EAP=Stop a native child's first stderr line becomes a TERMINATING throw,

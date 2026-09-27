@@ -343,6 +343,9 @@ grocery/logs-archive/
 #     one stamp gate), so the repo copy is disposable. Diagnostic reports are current-run snapshots.
 #     Local caches (published-hashes, catalog-digest) are per-run/per-machine. See check-uncommitted-source.ps1. ---
 /grocery/out/trend/
+# Hy-Vee flyer-line linker SHADOW output (daily chain lane hyvee-flyer-link, 2026-09-26): capture-run stages the whole
+# of grocery/out, and a shadow file must never ride into a bot commit. The measured evidence lives in grocery/hyvee/.
+/grocery/out/hyvee/flyer-links-*.jsonl
 /grocery/out/store-guide-embed.html
 /grocery/out/tile-integrity.json
 /grocery/out/coverage-gaps.json

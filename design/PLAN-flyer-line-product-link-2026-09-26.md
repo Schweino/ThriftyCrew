@@ -148,3 +148,18 @@ candidate's read, so the fixture set grows from real failures.
 "Yes, build to that bar"
 
 Build in SHADOW mode. Open question 1 answered: the bar stands as written. Open question 2 answered: the orchestrator labels the 53-line answer set (`labels: proposed`) and Brad reviews the labels.
+
+## Ruling (Brad, in chat, 2026-09-26): variant 2 and the labels
+
+On the variant question (Q-2026-09-26-flyer-link-labels, item 2): **"Both loosenings"**. (a) Map Hy-Vee's abbreviations
+(Ckn, BC, Qkr, ...) to brand and family words, and (b) accept any flavour in a same-price set. Re-score against the SAME
+bar; the linker stays in shadow.
+
+On the labels (item 1): **"Accept sets"**. The 13 set-shaped labels in `grocery/hyvee/flyer-link-gold.jsonl` are accepted as
+the label shape.
+
+Result (`design/MEASURE-flyer-line-link-2026-09-26.md`, Variant 2): variants tried 2, bar unchanged, **18 of 53 linked,
+0 wrong of 18, 0 false wrong-price on replay. The bar is MISSED on coverage (18 is under 20).** The abbreviation map was
+derived from the same evidence it is scored on, so it is not held out. Step 2's shadow period now runs daily as the
+`check-ad-cycles` fan-out lane `hyvee-flyer-link` (variant 2); `stores.json` stays `shadow` and nothing reads the file to
+change a verdict. Step 4 (going live) still waits on a ruling over a result that meets the bar.
