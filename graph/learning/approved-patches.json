@@ -2212,6 +2212,20 @@
     "verdict": "accept"
   },
   {
+    "applied_at": null,
+    "applied_by": null,
+    "id": "ap:9ad06f7d8874405014d5",
+    "payload_json": "{\"payload\": \"dry\\\\s+doog\\\\s+food\"}",
+    "proposal_id": "lp:15b86381b00f7df97f95",
+    "rationale": "Brad chose \"Accept\" on the approvals page (2026-09-27). The item said no blast-radius report existed for it, so one was run at ruling time against the commodity the estate actually holds (commodity:staple:dog-food, canonical name \"Dog Food (dry)\"): kill=false, no warnings, 1 intended_capture (\"Premium Dry Doog Food Each\", 26 rows), 0 absorbs_review, 0 already_matched, 0 cross_commodity, 0 known_wrong_hit, 0 rejected_hit, 0 blocked_by_rules over 1 total hit. The declared target id dog-food-dry does not resolve under resolve_target (the node is commodity:staple:dog-food), so --apply cannot land this accept yet; that gap is filed in design/backlog-inbox and is not decided here.",
+    "reviewed_at": "2026-09-27T04:58:30",
+    "reviewer": "a person at recall-inbox",
+    "shadow_after_json": null,
+    "shadow_before_json": null,
+    "shadow_verdict": "not_run",
+    "verdict": "accept"
+  },
+  {
     "applied_at": "2026-08-20T18:22:55",
     "applied_by": "learning-loop",
     "id": "ap:9ae9f1aedb727c3a533b",
