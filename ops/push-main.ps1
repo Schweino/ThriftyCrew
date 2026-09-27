@@ -131,7 +131,8 @@
     - -DryRun NEVER REBASES: it says whether a rebase is needed and the approximate conflict list, and runs one round.
     - A REBASE THAT BRINGS IN A NEW COPY OF THIS SCRIPT RE-EXECUTES IT ONCE: the guard is released, the new copy runs as a
       child with the same arguments and TC_PUSH_MAIN_REEXEC=1, its exit code is this run's, and the child writes the one
-      row. A run with TC_PUSH_MAIN_REEXEC set never re-executes; -NoReexec skips it on purpose.
+      row. A run with TC_PUSH_MAIN_REEXEC set never re-executes; -NoReexec skips it on purpose. "New copy" means the
+      host OR any piece under ops\push-main\ (Get-TcScriptSetKey); the row's pm_blob stays the host's own blob.
 
   THE CATCH-UP (2026-09-23, W2.2R). After a round's legs pass, ONE unlocked fetch asks whether origin moved while they ran.
   Unmoved, the lock is taken. Moved, the branch is rebased HERE, outside the lock (a conflict refuses, phase catchup), and
@@ -972,6 +973,35 @@ function Get-TcScriptBlob {
   $h = Get-TcFirstLine (Invoke-TcGit -Dir (Split-Path -Parent $Path) -Arguments @('hash-object', $Path))
   if ($h -match '^[0-9a-f]{40}([0-9a-f]{24})?$') { return $h }
   return ''
+}
+
+function Get-TcScriptSetKey {
+  <# WHICH CODE IS RUNNING, host AND pieces: the re-exec test's key (design\PLAN-split-giant-files-2026-09-27.md D3).
+     push-main dot-sources pieces from the push-main folder beside it, so a change to a piece alone is new code as much as
+     a change to the host, and a key over the host only would let a stale copy land a push. The key is the host's blob
+     when that folder holds no .ps1 (so a checkout before the split keys exactly as pm_blob did), and otherwise the
+     SHA-256 of the host blob plus every piece's relative path and blob, in ordinal order. '' when any file cannot be
+     hashed, which skips the re-exec exactly as an unreadable pm_blob always has. The row's pm_blob stays the host blob:
+     probe-push-convergence maps it onto ops/push-main.ps1's history. #>
+  param([string]$Path)
+  $hb = Get-TcScriptBlob -Path $Path
+  if (-not $hb) { return '' }
+  $pd = Join-Path (Split-Path -Parent $Path) ([IO.Path]::GetFileNameWithoutExtension($Path))
+  if (-not (Test-Path -LiteralPath $pd -PathType Container)) { return $hb }
+  $rels = New-Object 'System.Collections.Generic.List[string]'
+  foreach ($f in @(Get-ChildItem -LiteralPath $pd -Filter '*.ps1' -File -Recurse -ErrorAction SilentlyContinue)) { $rels.Add($f.FullName.Substring($pd.Length).TrimStart('\', '/')) }
+  if ($rels.Count -eq 0) { return $hb }
+  $arr = $rels.ToArray(); [Array]::Sort($arr, [StringComparer]::Ordinal)
+  $sb = New-Object System.Text.StringBuilder
+  [void]$sb.Append($hb).Append("`n")
+  foreach ($r in $arr) {
+    $b = Get-TcFirstLine (Invoke-TcGit -Dir $pd -Arguments @('hash-object', (Join-Path $pd $r)))
+    if ($b -notmatch '^[0-9a-f]{40}([0-9a-f]{24})?$') { return '' }
+    [void]$sb.Append(($r -replace '\\', '/')).Append("`t").Append($b).Append("`n")
+  }
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try { $bytes = $sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($sb.ToString())) } finally { $sha.Dispose() }
+  return ('set:' + (-join ($bytes | ForEach-Object { $_.ToString('x2') })))
 }
 
 function Get-TcBranchBase {
@@ -1912,6 +1942,8 @@ function Invoke-TcPushMain {
   # origin changed ops\push-main.ps1 they rewrite THIS script on disk: a hash taken after that names code this process is
   # not running, which is the one thing pm_blob exists to say.
   $pmBlob = Invoke-TcRowReader 'pm_blob' { Get-TcScriptBlob -Path $script:TcPushMainPath } ''
+  # ...and the key over the host AND its pieces, also at START, which is what the re-exec compares (D3 of the split plan).
+  $pmKey = Invoke-TcRowReader 'pm_key' { Get-TcScriptSetKey -Path $script:TcPushMainPath } ''
   # WHAT THE REMOTE HELD BEFORE THIS PUSH QUEUED. Read here and compared with what the fetch inside the lock returns,
   # it is this wrapper's own answer to "did the remote move while I waited" - the quantity that decides whether a
   # retry can ever converge, recorded per push in lib\push-ledger.ps1 rather than re-derived from %TEMP% afterwards.
@@ -2146,10 +2178,11 @@ function Invoke-TcPushMain {
         # after 5841e96b1 landed ran an older copy). So the guard is released and the new copy runs ONCE as a child with
         # the same arguments; its exit code is this run's and it writes the one row. A child never re-execs again
         # (TC_PUSH_MAIN_REEXEC), -NoReexec skips it on purpose, and a copy that cannot start leaves this one running.
-        if ($s.Rebased -and $pmBlob -and -not $NoReexec -and -not $env:TC_PUSH_MAIN_REEXEC) {
-          $nowBlob = Invoke-TcRowReader 'reexec-blob' { Get-TcScriptBlob -Path $script:TcPushMainPath } ''
-          if ($nowBlob -and -not [string]::Equals($nowBlob, $pmBlob, [StringComparison]::Ordinal)) {
-            Say ("push-main: the pre-flight rebase brought in a new ops\push-main.ps1 (blob {0} -> {1}), so the NEW copy runs this push once; this run writes no row of its own." -f $pmBlob.Substring(0, 9), $nowBlob.Substring(0, 9))
+        # The key covers the host AND every piece under ops\push-main\, so a piece-only change re-execs too.
+        if ($s.Rebased -and $pmKey -and -not $NoReexec -and -not $env:TC_PUSH_MAIN_REEXEC) {
+          $nowKey = Invoke-TcRowReader 'reexec-blob' { Get-TcScriptSetKey -Path $script:TcPushMainPath } ''
+          if ($nowKey -and -not [string]::Equals($nowKey, $pmKey, [StringComparison]::Ordinal)) {
+            Say ("push-main: the pre-flight rebase brought in a new ops\push-main.ps1 or piece of it (key {0} -> {1}), so the NEW copy runs this push once; this run writes no row of its own." -f $pmKey.Substring(0, 9), $nowKey.Substring(0, 9))
             Exit-TcCheckoutGuard $guard
             $reArgs = [string[]](@('-Remote', $Remote, '-Branch', $Branch, '-LockWaitSec', [string]$LockWaitSec) + @($(if ($DryRun) { '-DryRun' })) + @($(if ($ChainQueue -ceq 'off') { '-ChainQueue'; 'off' })) + @($script:TcPmReexecExtra) | Where-Object { $null -ne $_ -and $_ -ne '' })
             $childRc = Invoke-TcPushMainReexec -Path $script:TcPushMainPath -Arguments $reArgs
@@ -4271,7 +4304,7 @@ exit 0
     # the script's own -ChainQueue. Read from the AST of this file, because a fixture drives the function and never the
     # entry point: W9.2's first commit bound it nowhere, so `-ChainQueue off` on the command line was silently live.
     $epErrs = $null
-    $epAst = [System.Management.Automation.Language.Parser]::ParseFile($PSCommandPath, [ref]$null, [ref]$epErrs)
+    $epAst = [System.Management.Automation.Language.Parser]::ParseFile($script:TcPushMainPath, [ref]$null, [ref]$epErrs)
     $epCalls = @($epAst.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] -and $n.GetCommandName() -ceq 'Invoke-TcPushMain' }, $true) | Where-Object {
       $p = $_.Parent; $inFn = $false
       while ($p) { if ($p -is [System.Management.Automation.Language.FunctionDefinitionAst]) { $inFn = $true; break }; $p = $p.Parent }
@@ -4308,6 +4341,60 @@ exit 0
     T ($kCT + '  with TC_PUSH_MAIN_REEXEC set the run does not re-execute again: no child ran, it landed itself, and its row carries its start blob and reexec true') `
       ($rRe2 -eq 0 -and -not (Test-Path -LiteralPath $reMarker) -and $re2Rows.Count -eq 1 -and [string]$re2Row.outcome -ceq 'landed-after-rebase' -and [string]$re2Row.pm_blob -ceq $reStart2 -and $re2Row.reexec -eq $true) `
       ("rc={0} childRan={1} rows={2} outcome={3} blob={4} start={5} reexec={6}" -f $rRe2, (Test-Path -LiteralPath $reMarker), $re2Rows.Count, $(if ($re2Row) { $re2Row.outcome }), $(if ($re2Row) { $re2Row.pm_blob }), $reStart2, $(if ($re2Row) { $re2Row.reexec }))
+
+    # CLEAN TWIN (split plan D3): with no pieces folder beside the host, the re-exec key IS the host blob, so a checkout
+    # from before the split keys exactly as pm_blob always did. re1 was cloned before any piece existed.
+    $skPath1 = Join-Path $re1 $reRel
+    $skKey1 = Get-TcScriptSetKey -Path $skPath1
+    $skBlob1 = Get-TcScriptBlob -Path $skPath1
+    T ($kCT + '  with no push-main pieces folder beside the host, the re-exec key is exactly the host blob') `
+      ($skBlob1 -match '^[0-9a-f]{40}$' -and [string]::Equals($skKey1, $skBlob1, [StringComparison]::Ordinal)) ("key={0} blob={1}" -f $skKey1, $skBlob1)
+    # MUST FIRE (split plan D3): a pre-flight rebase that changes ONLY a piece under the host's push-main folder, leaving
+    # the host byte-identical, still runs the NEW copy once. A key over the host alone would let the stale copy land.
+    $pcRel = 'pmre/push-main/readings.ps1'
+    $null = & git -C $mover pull -q --rebase origin main 2>$null
+    $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $mover 'pmre\push-main')
+    [IO.File]::WriteAllText((Join-Path $mover $pcRel), "# piece v1`n")
+    $null = & git -C $mover add -- $pcRel 2>$null; $null = & git -C $mover commit -q -m 'piece v1' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    $re3 = & $newPusher 're3'
+    $re3HostStart = Get-TcScriptBlob -Path (Join-Path $re3 $reRel)
+    [IO.File]::WriteAllText((Join-Path $mover $pcRel), "# piece v2`n")
+    $null = & git -C $mover add -- $pcRel 2>$null; $null = & git -C $mover commit -q -m 'piece v2' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    Remove-Item -LiteralPath $reMarker -Force -ErrorAction SilentlyContinue
+    $ledRe3 = Join-Path $tmp 'ledre3'
+    $rRe3 = $null
+    try {
+      $script:TcPushMainPath = Join-Path $re3 $reRel
+      $env:TC_PUSH_LEDGER_ROOT = $ledRe3
+      $rRe3 = Invoke-TcPushMain -Dir $re3 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe3 -ChainQueue off
+    } finally { $script:TcPushMainPath = $pmPathWas2; $env:TC_PUSH_LEDGER_ROOT = $ledEnvWas }
+    $re3HostNow = Get-TcScriptBlob -Path (Join-Path $re3 $reRel)
+    $re3Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRe3)
+    $re3Rows = @($re3Raw)
+    $re3Said = $(if (Test-Path -LiteralPath $reMarker) { ([IO.File]::ReadAllText($reMarker)).Trim() } else { '<not run>' })
+    T ($kMF + '  a pre-flight rebase that changes only a piece under ops\push-main\ (host byte-identical) still runs the NEW copy once, and the child writes the only row') `
+      ($rRe3 -eq 0 -and $re3Said -ceq 'reexec=1 remote=origin branch=main cq=off tag=v3' -and $re3Rows.Count -eq 1 -and [string]$re3Rows[0].checkout -ceq 'reexec-child' -and $re3HostStart -and [string]::Equals($re3HostStart, $re3HostNow, [StringComparison]::Ordinal)) `
+      ("rc={0} child={1} rows={2} checkout={3} hostStart={4} hostNow={5}" -f $rRe3, $re3Said, $re3Rows.Count, $(if ($re3Rows.Count) { $re3Rows[0].checkout }), $re3HostStart, $re3HostNow)
+    # CLEAN TWIN: pieces present, and the rebase brings in only an unrelated file: no child runs, the push lands itself.
+    $re4 = & $newPusher 're4'
+    [IO.File]::WriteAllText((Join-Path $mover 'pmre-other.txt'), 'other')
+    $null = & git -C $mover add -- 'pmre-other.txt' 2>$null; $null = & git -C $mover commit -q -m 'unrelated' 2>$null
+    $null = & git -C $mover push -q origin HEAD:main 2>$null
+    Remove-Item -LiteralPath $reMarker -Force -ErrorAction SilentlyContinue
+    $ledRe4 = Join-Path $tmp 'ledre4'
+    $rRe4 = $null
+    try {
+      $script:TcPushMainPath = Join-Path $re4 $reRel
+      $env:TC_PUSH_LEDGER_ROOT = $ledRe4
+      $rRe4 = Invoke-TcPushMain -Dir $re4 -Remote 'origin' -Branch 'main' -LockWaitSec 30 -DryRun $false -LockPrefix $prefix -LockQueueRoot $qroot -GateRunner $okGate -RehearsalRunner $rhGreen -LedgerRoot $ledRe4 -ChainQueue off
+    } finally { $script:TcPushMainPath = $pmPathWas2; $env:TC_PUSH_LEDGER_ROOT = $ledEnvWas }
+    $re4Raw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledRe4)
+    $re4Rows = @($re4Raw)
+    T ($kCT + '  with pieces present, a rebase that brings in only an unrelated file runs no child and the push lands itself') `
+      ($rRe4 -eq 0 -and -not (Test-Path -LiteralPath $reMarker) -and $re4Rows.Count -eq 1 -and [string]$re4Rows[0].outcome -ceq 'landed-after-rebase') `
+      ("rc={0} childRan={1} rows={2} outcome={3}" -f $rRe4, (Test-Path -LiteralPath $reMarker), $re4Rows.Count, $(if ($re4Rows.Count) { $re4Rows[0].outcome }))
 
     # MUST NOT FIRE: a fetch that fails ONCE with `cannot lock ref` succeeds on its retry. Origin moves so the fetch must
     # update the remote-tracking ref, and that ref's .lock file exists (git creates a lock with O_EXCL, so a file present
@@ -4687,7 +4774,7 @@ exit 0
     $dlRaw = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $ledDl)
     $dlRows = @($dlRaw)
     $dlRow = $(if ($dlRows.Count) { $dlRows[$dlRows.Count - 1] } else { $null })
-    $blobWant = ([string](@(& git -C (Split-Path -Parent $PSCommandPath) hash-object $PSCommandPath 2>$null))[0]).Trim()
+    $blobWant = ([string](@(& git -C (Split-Path -Parent $script:TcPushMainPath) hash-object $script:TcPushMainPath 2>$null))[0]).Trim()
     T ($kCT + '  a clean rebase writes landed-after-rebase with no conflict_files, a numeric lock_held_ms, schema 2 and a 40-hex pm_blob equal to git hash-object of the script under test') `
       ($rDl -eq 0 -and $dlRows.Count -eq 1 -and [string]$dlRow.outcome -ceq 'landed-after-rebase' -and $null -eq $dlRow.conflict_files -and $null -eq $dlRow.phase -and `
         ($dlRow.lock_held_ms -is [int] -or $dlRow.lock_held_ms -is [long]) -and [int]$dlRow.schema -eq 2 -and [string]$dlRow.pm_blob -match '^[0-9a-f]{40}$' -and [string]$dlRow.pm_blob -ceq $blobWant -and `
@@ -4932,8 +5019,8 @@ exit 0
   # case was rewritten in place, not added), and W2.2R's 10 (9 catch-up cases, and the could-not-decide case split into a
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
   # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, W9.3's 11, and W9.2's 14 (W9.4's queue-member hand-back among
-  # them) and the rh_key reader's 1; read off this file, not added up.
-  $expectedCases = 172
+  # them) and the rh_key reader's 1, and the split plan D3's 3 (the re-exec key over host and pieces); read off this file, not added up.
+  $expectedCases = 175
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)
