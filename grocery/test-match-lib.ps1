@@ -59,53 +59,92 @@ $isShard = [bool]$ChunkFile
 # A name blind again stays could-not-look and fails (I183/I209: a blind name must never pass by agreeing with an
 # unmatched original). A name that resolves must equal the reference's decision, or it is a divergence: a retry never
 # launders a disagreement. The bound is never raised here (ops-and-gates.md: name the timeout and retry it).
-$script:BlindRetryCap = 50   # more blind looks than this in one run is not load noise; the rest stay could-not-look
+# NO CAP since 2026-09-27 (06cd9b): the 3ca22f cap of 50 assumed more blind looks than that was not load noise, and
+# the 09:11 run that day had 2,274 blind under chain load and 0 at rest. EVERY divergence is re-looked too, not only
+# blind looks, and sorted into three classes the alert names: DRIFT (disagrees again: a real matcher gap),
+# UNRECORDED (a non-blind divergence that agrees on re-look: a pure function answered twice differently with no
+# recorded timeout) and still-blind. RETRIED (load) is the only class that passes. One fresh matcher serves every
+# re-look until a look goes blind, and is replaced then, so a tripped breaker never answers for the next name.
 function New-MatchLibPsTwin($m) {
   # the interpreted fallback over the SAME entries, with its own look state so a timeout is RECORDED, not thrown
   return [pscustomobject]@{ gex = $m.gex; entries = $m.entries; core = $null; span = $m.span; look = (New-MatchLookState) }
 }
 function Invoke-MatchLibBlindRetry {
-  param([object[]]$Blind, [Parameter(Mandatory)][scriptblock]$Reference, [Parameter(Mandatory)][scriptblock]$NewMatcher)
+  # -Blind: rows (name, path compiled|fallback) whose first look hit the bound. -Divergent: the non-blind divergence
+  # rows (name, path compiled|powershell|powershell-fallback, original, fast), re-looked on the fast path only.
+  param([object[]]$Blind, [object[]]$Divergent, [Parameter(Mandatory)][scriptblock]$Reference, [Parameter(Mandatory)][scriptblock]$NewMatcher)
   $retried = New-Object System.Collections.ArrayList; $still = New-Object System.Collections.ArrayList
   $diverged = New-Object System.Collections.ArrayList; $lines = New-Object System.Collections.ArrayList
+  $drift = New-Object System.Collections.ArrayList; $unrec = New-Object System.Collections.ArrayList
   $seen = @{}; $bounds = New-Object System.Collections.ArrayList
-  foreach ($b in @($Blind)) {
-    if ($null -eq $b) { continue }
+  $pair = @{ m = $null; tw = $null }
+  $work = New-Object System.Collections.ArrayList
+  foreach ($b in @($Blind)) { if ($null -ne $b) { [void]$work.Add([pscustomobject]@{ kind = 'blind'; row = $b }) } }
+  foreach ($b in @($Divergent)) { if ($null -ne $b) { [void]$work.Add([pscustomobject]@{ kind = 'diff'; row = $b }) } }
+  foreach ($w in $work) {
+    $b = $w.row
     $nm = [string]$b.name; $path = [string]$b.path
-    $key = $path + [char]1 + $nm
+    $key = $w.kind + [char]1 + $path + [char]1 + $nm
     if ($seen.ContainsKey($key)) { continue }
     $seen[$key] = 1
-    $row = [pscustomobject]@{ name = $nm; path = $path; decision = ''; reference = '' }
-    if ($seen.Count -gt $script:BlindRetryCap) { [void]$still.Add($row); continue }
-    $m = & $NewMatcher
-    if ($path -eq 'fallback') { $m = New-MatchLibPsTwin $m }
+    $row = [pscustomobject]@{ name = $nm; path = $path; decision = ''; reference = ''; first_reference = [string]$b.original; first_fast = [string]$b.fast; class = '' }
+    if ($null -eq $pair.m) { $pair.m = & $NewMatcher; $pair.tw = New-MatchLibPsTwin $pair.m }
+    $isFb = ($path -eq 'fallback') -or ($path -eq 'powershell-fallback')
+    $m = $(if ($isFb) { $pair.tw } else { $pair.m })
     $c = Resolve-Commodity -Matcher $m -Name $nm
     $row.decision = $(if ($c) { [string]$c.id } else { '' })
     $detailId = $row.decision
-    if ($path -ne 'fallback') { $d = Resolve-CommodityDetail -Matcher $m -Name $nm; $detailId = $(if ($d.commodity) { [string]$d.commodity.id } else { '' }) }
+    if ((-not $isFb) -and ($w.kind -eq 'blind')) { $d = Resolve-CommodityDetail -Matcher $m -Name $nm; $detailId = $(if ($d.commodity) { [string]$d.commodity.id } else { '' }) }
     $mb = Get-CommodityMatcherBlind -Matcher $m
     [void]$bounds.Add([int]$mb.timeout_ms)
-    if (@($mb.could_not_look | Where-Object { $null -ne $_ }).Count -gt 0) { [void]$still.Add($row); continue }
+    if (@($mb.could_not_look | Where-Object { $null -ne $_ }).Count -gt 0) {
+      # blind on the re-look: stays could-not-look, and the matcher that went blind is retired before the next name
+      $row.class = 'still-blind'; [void]$still.Add($row); $pair.m = $null; $pair.tw = $null; continue
+    }
     $row.reference = [string](& $Reference $nm)
-    if (($row.decision -ne $row.reference) -or ($detailId -ne $row.reference)) {
-      [void]$diverged.Add($row)
-      [void]$lines.Add(("  could-not-look RETRIED, DIVERGES: [{0}] {1} -> {2}, reference {3}" -f $path, $nm, $(if ($row.decision) { $row.decision } else { '<none>' }), $(if ($row.reference) { $row.reference } else { '<none>' })))
+    $agree = ($row.decision -eq $row.reference) -and ($detailId -eq $row.reference)
+    $shown = { param($x) $(if ($x) { $x } else { '<none>' }) }
+    if ($w.kind -eq 'diff') {
+      if ($agree) {
+        $row.class = 'UNRECORDED'; [void]$unrec.Add($row)
+        [void]$lines.Add(("  divergence UNRECORDED (agreed on re-look, no timeout recorded): [{0}] {1}: {2} -> {3} at first, {4} now" -f $path, $nm, (& $shown $row.first_reference), (& $shown $row.first_fast), (& $shown $row.decision)))
+      } else {
+        $row.class = 'DRIFT'; [void]$drift.Add($row)
+        [void]$lines.Add(("  divergence DRIFT (disagrees again): [{0}] {1} -> {2}, reference {3}" -f $path, $nm, (& $shown $row.decision), (& $shown $row.reference)))
+      }
+    } elseif (-not $agree) {
+      $row.class = 'DRIFT'; [void]$diverged.Add($row)
+      [void]$lines.Add(("  could-not-look RETRIED, DIVERGES: [{0}] {1} -> {2}, reference {3}" -f $path, $nm, (& $shown $row.decision), (& $shown $row.reference)))
     } else {
-      [void]$retried.Add($row)
-      [void]$lines.Add(("  could-not-look RETRIED (load): {0} -> {1} [{2}]" -f $nm, $(if ($row.decision) { $row.decision } else { '<none>' }), $path))
+      $row.class = 'RETRIED'; [void]$retried.Add($row)
+      [void]$lines.Add(("  could-not-look RETRIED (load): {0} -> {1} [{2}]" -f $nm, (& $shown $row.decision), $path))
     }
   }
-  return [pscustomobject]@{ retried = @($retried.ToArray()); still = @($still.ToArray()); diverged = @($diverged.ToArray()); lines = @($lines.ToArray()); bounds_ms = @($bounds.ToArray()) }
+  return [pscustomobject]@{ retried = @($retried.ToArray()); still = @($still.ToArray()); diverged = @($diverged.ToArray()); drift = @($drift.ToArray()); unrecorded = @($unrec.ToArray()); lines = @($lines.ToArray()); bounds_ms = @($bounds.ToArray()) }
 }
 function Get-MatchLibVerdict {
   # ONE verdict line for the live run and the self-test. test-auditors keeps only lines matching FAIL|diverg in its Bad
   # message, so the still-blind names ride ON the FAILED line (up to 15, each cut to 80 characters).
-  param([int]$Diff, [int]$DetailDiff, [int]$DetailNoHit, [object[]]$StillBlind, [int]$TextDiff, [int]$RetryDiverged)
+  # -Drift / -Unrecorded: the re-looked divergence rows (06cd9b). -Diff counts divergences NOT re-looked (0 in the live
+  # run since 06cd9b; kept for callers that have no re-look). -ListFile: where the full per-class lists were written.
+  param([int]$Diff, [int]$DetailDiff, [int]$DetailNoHit, [object[]]$StillBlind, [int]$TextDiff, [int]$RetryDiverged,
+        [object[]]$Drift, [object[]]$Unrecorded, [string]$ListFile)
   $sb = @($StillBlind | Where-Object { $null -ne $_ })
-  $fast = $Diff + $RetryDiverged
+  $dr = @($Drift | Where-Object { $null -ne $_ }); $un = @($Unrecorded | Where-Object { $null -ne $_ })
+  $fast = $Diff + $RetryDiverged + $dr.Count + $un.Count
   $total = $fast + $DetailDiff + $DetailNoHit + $sb.Count + $TextDiff
   if ($total -eq 0) { return [pscustomobject]@{ rc = 0; line = 'MATCH-LIB PASSED' } }
   $line = ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look, {5} Get-MatchTexts) - match-lib must not be used by the engine until it decides identically" -f $total, $fast, $DetailDiff, $DetailNoHit, $sb.Count, $TextDiff)
+  # THE CLASS OF THE RED, on the line test-auditors keeps: DRIFT is a real matcher gap, UNRECORDED is match-lib
+  # answering differently with no recorded timeout (a money-lane question), still-blind is load or a pattern.
+  $line += (" | classes: {0} DRIFT, {1} UNRECORDED, {2} still-blind, {3} blind-retry-diverged" -f $dr.Count, $un.Count, $sb.Count, $RetryDiverged)
+  if ($dr.Count -or $un.Count) {
+    $cut = { param($s) $t = ([string]$s -replace '\s+', ' '); if ($t.Length -gt 80) { $t = $t.Substring(0, 80) + '...' }; $t }
+    $shown = { param($x) $(if ($x) { $x } else { '<none>' }) }
+    $named = @(@($dr) + @($un) | Select-Object -First 15 | ForEach-Object { ("{0} '{1}' [{2}] {3} -> {4}" -f $_.class, (& $cut $_.name), $_.path, (& $shown $_.first_reference), (& $shown $_.first_fast)) })
+    $line += ' | re-looked divergences: ' + ($named -join '; ')
+  }
+  if ($ListFile) { $line += ' | full lists: ' + $ListFile }
   if ($sb.Count) {
     $named = @($sb | Select-Object -First 15 | ForEach-Object { $t = ([string]$_.name -replace '\s+', ' '); if ($t.Length -gt 80) { $t = $t.Substring(0, 80) + '...' }; ("'{0}' [{1}]" -f $t, $_.path) })
     $line += ' | blind again on one re-look at the same bound: ' + ($named -join '; ')
@@ -156,6 +195,27 @@ if ($SelfTest) {
   $v0 = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind @() -TextDiff 0 -RetryDiverged 0
   $v1 = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind @([pscustomobject]@{ name = 'x'; path = 'compiled' }) -TextDiff 0 -RetryDiverged 0
   _ST 'AT THE BAR  0 still-blind passes, 1 still-blind fails' (($v0.rc -eq 0) -and ($v0.line -eq 'MATCH-LIB PASSED') -and ($v1.rc -eq 1)) ($v0.line + ' / ' + $v1.line)
+  # 06cd9b: EVERY divergence is re-looked and classed. The founding shape: a shard's fast path answered 'fixture-other'
+  # for a name the reference routes to 'fixture-breast', and recorded no timeout. The re-look agrees: UNRECORDED, rc 1.
+  $dv = [pscustomobject]@{ name = $BENIGN; path = 'compiled'; original = 'fixture-breast'; fast = 'fixture-other' }
+  $r = Invoke-MatchLibBlindRetry -Divergent @($dv) -Reference $refBreast -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count -Drift $r.drift -Unrecorded $r.unrecorded -ListFile 'C:\fixture\relook.json'
+  _ST 'MUST FIRE  a non-blind divergence that AGREES on re-look fails rc 1 as UNRECORDED, never as load' (($v.rc -eq 1) -and ($r.unrecorded.Count -eq 1) -and ($r.drift.Count -eq 0) -and ($r.retried.Count -eq 0) -and ($v.line -match '0 DRIFT, 1 UNRECORDED, 0 still-blind')) ("rc=" + $v.rc + " " + $v.line)
+  _ST 'MUST FIRE  ...and the FAILED line names it as name [path] reference -> fast, and points at the full lists' (($v.line -like "*UNRECORDED '$BENIGN' [[]compiled[]] fixture-breast -> fixture-other*") -and ($v.line -like '*full lists: C:\fixture\relook.json*')) $v.line
+  # A divergence the re-look still disagrees on: DRIFT, rc 1, named.
+  $dv = [pscustomobject]@{ name = $BENIGN; path = 'powershell-fallback'; original = ''; fast = 'fixture-breast' }
+  $r = Invoke-MatchLibBlindRetry -Divergent @($dv) -Reference $refNone -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count -Drift $r.drift -Unrecorded $r.unrecorded
+  _ST 'MUST FIRE  a divergence that disagrees again fails rc 1 as DRIFT and is named' (($v.rc -eq 1) -and ($r.drift.Count -eq 1) -and ($v.line -match '1 DRIFT, 0 UNRECORDED') -and ($v.line -like "*DRIFT '$BENIGN' [[]powershell-fallback[]] <none> -> fixture-breast*")) ("rc=" + $v.rc + " " + $v.line)
+  # A divergence blind on its re-look stays could-not-look: rc 1, never passed by agreeing with nothing.
+  $r = Invoke-MatchLibBlindRetry -Divergent @([pscustomobject]@{ name = $VICTIM; path = 'compiled'; original = ''; fast = 'fixture-redos' }) -Reference $refNone -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count -Drift $r.drift -Unrecorded $r.unrecorded
+  _ST 'MUST FIRE  a divergence blind on its re-look stays still-blind, rc 1' (($v.rc -eq 1) -and ($r.still.Count -eq 1) -and ($r.unrecorded.Count -eq 0) -and ($r.drift.Count -eq 0)) ("rc=" + $v.rc + " " + $v.line)
+  # THE CAP IS GONE (AT THE OLD BAR and ONE PAST it): 51 distinct load-blind looks that all resolve and agree pass rc 0.
+  $many = @(); for ($i = 1; $i -le 51; $i++) { $many += [pscustomobject]@{ name = ('Fresh Chicken Breast, pack ' + $i); path = 'compiled' } }
+  $r = Invoke-MatchLibBlindRetry -Blind $many -Reference $refBreast -NewMatcher $newM
+  $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count -Drift $r.drift -Unrecorded $r.unrecorded
+  _ST 'CLEAN TWIN  51 load-blind looks (one past the removed cap of 50) all re-looked, all agree, pass rc 0' (($v.rc -eq 0) -and ($r.retried.Count -eq 51) -and ($r.still.Count -eq 0)) ("rc=" + $v.rc + " retried=" + $r.retried.Count + " still=" + $r.still.Count)
   if ($stBad -eq 0) { Write-Output ("test-match-lib SELF-TEST PASSED ({0} of {0} case(s))" -f $stRan); exit 0 }
   Write-Output ("test-match-lib SELF-TEST FAILED ({0} of {1} case(s))" -f $stBad, $stRan); exit 1
 }
@@ -695,9 +755,22 @@ $matched     = 0; foreach ($r in $results) { $matched += [int]$r.matched }
 $blindNames  = 0; foreach ($r in $results) { $blindNames += [int]$r.blind }
 # THE RE-LOOK (2026-09-24, 3ca22f): only now, with the shard pool drained and the box as quiet as this run gets.
 $blindRecs = @(Gather $results 'blindNames')
-$retry = Invoke-MatchLibBlindRetry -Blind $blindRecs -NewMatcher { New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE } `
+# Since 2026-09-27 (06cd9b) every fast-path divergence is re-looked as well, so the red says which class it is.
+$swRelook = [Diagnostics.Stopwatch]::StartNew()
+$retry = Invoke-MatchLibBlindRetry -Blind $blindRecs -Divergent $diff -NewMatcher { New-CommodityMatcher -Commodities $commodities -GlobalExclude $GLOBAL_EXCLUDE } `
   -Reference { param($nm) $c = & $origMatch $nm; if ($c) { [string]$c.id } else { '' } }
-foreach ($ln in @($retry.lines)) { Write-Output $ln }
+$tRelook = $swRelook.Elapsed.TotalSeconds
+$relookLines = @($retry.lines)
+foreach ($ln in @($relookLines | Select-Object -First 40)) { Write-Output $ln }
+if ($relookLines.Count -gt 40) { Write-Output ("  ... {0} more re-look line(s) in the full lists" -f ($relookLines.Count - 40)) }
+# THE FULL LISTS, one file per run (og-38 naming), kept after the run so a saved fail copy can point at them.
+$relookFile = ''
+if (@($retry.drift).Count + @($retry.unrecorded).Count + @($retry.still).Count + @($retry.diverged).Count + @($retry.retried).Count) {
+  $relookFile = Join-Path $env:TEMP ('matchlib-relook-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8) + '.json')
+  ([pscustomobject]@{ names = $list.Count; core = $hasCore; relook_s = [math]::Round($tRelook, 1)
+      drift = @($retry.drift); unrecorded = @($retry.unrecorded); still_blind = @($retry.still); blind_retry_diverged = @($retry.diverged); retried_load = @($retry.retried)
+  } | ConvertTo-Json -Depth 4) | Set-Content -LiteralPath $relookFile -Encoding UTF8
+}
 
 if (-not $Quiet) {
   Write-Output ("match-lib identity: {0} distinct names ({1} matched by the original)" -f $list.Count, $matched)
@@ -714,9 +787,11 @@ if (-not $Quiet) {
   foreach ($n in ($detailNoHit | Select-Object -First 10)) { Write-Output ("     [detail] '{0}' matched but named no include pattern" -f $n) }
   foreach ($d in ($textDiff | Select-Object -First 10)) { Write-Output ("     [texts] '{0}'  original='{1}'  match-lib='{2}'" -f $d.name, $d.original, $d.lib) }
 }
-$verdict = Get-MatchLibVerdict -Diff $diff.Count -DetailDiff $detailDiff.Count -DetailNoHit $detailNoHit.Count -StillBlind $retry.still -TextDiff $textDiff.Count -RetryDiverged $retry.diverged.Count
+# Every $diff row was re-looked and sits in exactly one of drift, unrecorded or still, so -Diff is 0 here.
+if (-not $Quiet) { Write-Output ("  re-look (06cd9b)        : {0,7:N1}s   {1} divergence(s) re-looked: {2} DRIFT, {3} UNRECORDED, {4} blind again{5}" -f $tRelook, $diff.Count, @($retry.drift).Count, @($retry.unrecorded).Count, @($retry.still | Where-Object { $_.first_fast -ne '' -or $_.first_reference -ne '' }).Count, $(if ($relookFile) { '; lists: ' + $relookFile } else { '' })) }
+$verdict = Get-MatchLibVerdict -Diff 0 -DetailDiff $detailDiff.Count -DetailNoHit $detailNoHit.Count -StillBlind $retry.still -TextDiff $textDiff.Count -RetryDiverged $retry.diverged.Count -Drift $retry.drift -Unrecorded $retry.unrecorded -ListFile $relookFile
 if ($verdict.rc -ne 0) {
-  $total = $diff.Count + $retry.diverged.Count + $detailDiff.Count + $detailNoHit.Count + $retry.still.Count + $textDiff.Count
+  $total = @($retry.drift).Count + @($retry.unrecorded).Count + $retry.diverged.Count + $detailDiff.Count + $detailNoHit.Count + $retry.still.Count + $textDiff.Count
   Write-Output $verdict.line
   Exit-Guard -Name 'match-lib' -Summary "names=$($list.Count) divergences=$total" -Code 1
 }
