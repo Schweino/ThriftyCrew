@@ -103,7 +103,7 @@
       "status": "done",
       "premise_verified": "true: the prior widening is in commodities.json and its two names are gone from the sweep; today's three findings read against each commodity's include list",
       "deviation": "the batch printed 'BOARD NOT PUBLISHABLE YET' over 12 tile-integrity faults that sat on other commodities before the edit (its own baseline read 12). Nothing was republished from this run, and those faults are not this item's.",
-      "shipped_commit": null,
+      "shipped_commit": "52d262281",
       "resolution_note": "The prior bounce is resolved: 3ba362's laundry and hot-sauce widenings are in commodities.json and both names left the sweep. The 09-27 carne asada mix has also left today's sweep. Today's 3 findings (Hy-Vee No Stick spray, Walmart Brianna's Creamy Cilantro Lime, Family Fare Garlic & Crushed Herbs) are widened through apply-coverage-batch: BATCH ACCEPTED, 0 crown changes, theft check OK, 1+1+2 rows revealed, 0 tile faults on the batch's commodities. audit-match-soundness: MOVED=0 DROPPED=0 drift-vs-engine=0, and none of its 24 new-contested names involves these commodities. Accepted. The rows gain candidates on the next board build; no cell moved today.",
       "actual_tool_calls": 22,
       "claimed_by_earlier": "none: semantic-findings.json 2026-09-28 08:29 records 'no rule matches it' for all three names, so no commodity at a lower array index admits any of them; re-checked after the edit by the batch's crown diff",
