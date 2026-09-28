@@ -224,7 +224,10 @@ T 'E  MUST NOT FIRE (held post): nothing pending -> none' `
 T 'E  the held-post check is wired after the same-run decision and before the live-page parity audit' `
   (($src.IndexOf('$heldDecision = Get-HeldPostDecision') -gt $src.IndexOf('$postDecision = Get-DeferredPostDecision')) -and ($src.IndexOf('$heldDecision = Get-HeldPostDecision') -lt $src.IndexOf('(Join-Path $root ''audit-live-page-' + 'parity.ps1'')')) -and ($src.IndexOf('$postDecision = Get-DeferredPostDecision') -gt 0))
 $cacSrc = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'check-ad-cycles.ps1'))
-T 'E  and check-ad-cycles records WHICH board the held post would name (board_sha256), so the check has something to prove' ($cacSrc.IndexOf('board_sha256 = $pdBoardSha') -gt 0)
+# Since 2026-09-28 the deferral is written by Invoke-DeferPostBuild in publish-outcome-lib.ps1, which the -DeferPost branch
+# calls (test-defer-post.ps1 proves that call and that the hash names the board just built).
+$poSrc = [IO.File]::ReadAllText((Join-Path $PSScriptRoot 'publish-outcome-lib.ps1'))
+T 'E  and check-ad-cycles records WHICH board the held post would name (board_sha256), so the check has something to prove' (($poSrc.IndexOf('board_sha256 = $pdBoardSha') -gt 0) -and ($cacSrc.IndexOf('Invoke-DeferPostBuild -Root') -gt 0))
 T 'E  the daily chain is called WITH -DeferPost, so the post is never upserted ahead of the commit' ($src -match '-File \$cac -NoPull -NoCommit -DeferPost')
 T 'E  and the pointer watcher is told the post was deferred, so a held post is not paged as pointer-without-object' ($src -match 'Test-PointerShippedWithoutObject -ShipServed \(\[bool\]\(\$shipServed -and -not \$postDeferred\)\)')
 # THE TWO ADJACENT BLOCKS MUST STAY IN STEP. The served-dirty block was already gated on $shipServed and is

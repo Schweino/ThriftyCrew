@@ -323,6 +323,8 @@ foreach ($d in @($fxLeLf, $fxLeCrLf)) {
   # AND check-ad-cycles.ps1 (2026-09-26, queue 518fff): the held-post cases read its source from the fixture's
   # own directory to prove it records board_sha256. Without the copy the fixture threw at that read with rc=1.
   Copy-Item (Join-Path $root 'check-ad-cycles.ps1') (Join-Path $d 'check-ad-cycles.ps1') -Force
+  # AND publish-outcome-lib.ps1 (2026-09-28): the board_sha256 write moved there from check-ad-cycles.
+  Copy-Item (Join-Path $root 'publish-outcome-lib.ps1') (Join-Path $d 'publish-outcome-lib.ps1') -Force
 }
 [IO.File]::WriteAllText((Join-Path $fxLeLf   'capture-run.ps1'), $crLf,   (New-Object Text.UTF8Encoding $true))
 [IO.File]::WriteAllText((Join-Path $fxLeCrLf 'capture-run.ps1'), $crCrLf, (New-Object Text.UTF8Encoding $true))
