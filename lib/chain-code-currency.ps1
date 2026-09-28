@@ -16,15 +16,19 @@
 # design/PLAN-bot-checkout-self-heal-2026-09-23.md, ruled by Brad the same day, whose G2 forbids the bot a rebase or an
 # autostash on the shared checkout. A second start-sync built on a rebase would contradict that ruling.
 ## HOW THE PRODUCER SET IS DERIVED. Roots: every script under the chain manifest's derive_dirs (ops\chain-manifest.json)
-# whose text names the artifact's file name on a line that also WRITES (WriteAllText, Set-Content, Out-File,
-# Write-TcAtomicFile, Write-TcLfFile, Copy-Item, Move-Item). Then the closure: every .ps1 or .js a producer names,
-# resolved by file name under the same dirs, minus the manifest's exclude_globs. For public\smp-feed.json at
-# origin/main on 2026-09-23 that is export-feed.ps1 and what it names, which includes feed-everyday-ps.ps1 and its
-# live-price-fill.js, the change that was missed.
-# SCOPE OF A CLEAN ANSWER: unsound - a producer that writes an artifact through a path assembled on another line, or
-# names a script through a computed string, is outside the set, and a clean answer then proves nothing about it. It is
-# also incomplete: a comment that names a script pulls it into the closure, so a finding is a candidate to read, never
-# a proof the artifact changed. Reading an INPUT (the board a builder consumes) is out of scope by design: this asks
+# whose code names the artifact's file name on a line that also WRITES (WriteAllText, Set-Content, Out-File,
+# Write-TcAtomicFile, Write-TcLfFile, Copy-Item, Move-Item), OR assigns it to a variable ('$p = Join-Path $db
+# ''costed.json''') that another code line of the same script writes through (the DATAFLOW root). Then the closure:
+# every .ps1 or .js a producer INVOKES (named on a line carrying dot-source, '&', -File, node, Invoke-Native(Script),
+# Start-Process, powershell or RunPS), resolved by file name under the same dirs, minus the manifest's exclude_globs.
+# For public\smp-feed.json at origin/main on 2026-09-23 that is export-feed.ps1 and what it calls, which includes
+# feed-everyday-ps.ps1 and its live-price-fill.js, the change that was missed. Until 2026-09-28 the closure followed
+# EVERY name in code, string literals and fixtures included, and 116 to 183 of 650 scripts were producers of each
+# served file; with invocation edges and dataflow roots the prototype measured 19 to 82 (queue 2026-09-28-d70062).
+# SCOPE OF A CLEAN ANSWER: unsound - a producer whose artifact path arrives as a parameter or is assembled in another
+# function (cost-recipes -OutFile), or a script named through a computed string, is outside the set, and a clean answer
+# then proves nothing about it. It is also incomplete: a name on a line that happens to carry an invocation token is
+# followed whether or not that line calls it, so a finding is a candidate to read, never a proof the artifact changed. Reading an INPUT (the board a builder consumes) is out of scope by design: this asks
 # whether the WRITER's code moved.
 #
 # NO param() BLOCK: dot-sourced into capture-run, which runs under EAP=Stop. Git runs through Invoke-GitCaptured
@@ -39,6 +43,9 @@ if (-not (Get-Command Invoke-GitCaptured -ErrorAction SilentlyContinue)) { . (Jo
 # origin/main: export-feed names 8, feed-everyday-ps 3, build-deals-page 21, capture-run and check-ad-cycles well over 60.
 $script:CccHubNames = 25
 $script:CccWriteVerb = '(WriteAllText|WriteAllBytes|Set-Content|Out-File|Write-TcAtomicFile|Write-TcLfFile|Copy-Item|Move-Item)'
+# A line that names a script AND carries one of these calls it; the reviewer's prototype token set, the first plausible
+# list (1 variant), measured over 650 scripts at 812fad5b3 (queue 2026-09-28-d70062).
+$script:CccInvokeToken = '(^\s*\.\s)|(&\s*[\(''"$\.])|(-File\b)|(\bnode(\.exe)?\b)|(Invoke-Native(Script)?\b)|(Start-Process\b)|(\bpowershell(\.exe)?\b)|(\bRunPS\b)'
 
 function Invoke-TcCccGit([string]$Repo, [string[]]$GitArgs) {
   $r = Invoke-GitCaptured -Repo $Repo -GitArgs $GitArgs
@@ -78,8 +85,17 @@ function Get-TcArtifactProducers {
     if (-not $byLeaf.ContainsKey($leaf)) { $byLeaf[$leaf] = New-Object Collections.ArrayList }
     [void]$byLeaf[$leaf].Add($p)
   }
-  $textCache = @{}
-  $getText = { param($p) if (-not $textCache.ContainsKey($p)) { $t = Invoke-TcCccGit $Repo @('show', ($Rev + ':' + $p)); $textCache[$p] = $(if ($t.Rc -eq 0) { $t.Out } else { '' }) }; $textCache[$p] }
+  # CODE ONLY: block comments, whole-line comments and a trailing " # ..." are dropped before names are read, so a
+  # script a producer merely MENTIONS (its history, a sibling it is compared with) does not join the closure. Measured
+  # 2026-09-23 with comments read: the feed's closure was 522 scripts, nearly the whole tree.
+  $codeCache = @{}
+  $getCode = { param($p)
+    if (-not $codeCache.ContainsKey($p)) {
+      $t = Invoke-TcCccGit $Repo @('show', ($Rev + ':' + $p))
+      $c = [regex]::Replace($(if ($t.Rc -eq 0) { $t.Out } else { '' }), '(?s)<#.*?#>', '')
+      $codeCache[$p] = @($c -split "`r?`n" | Where-Object { -not $_.TrimStart().StartsWith('#') -and -not $_.TrimStart().StartsWith('//') } | ForEach-Object { $_ -replace '\s#\s.*$', '' })
+    }
+    , $codeCache[$p] }
   $result = @{}
   $leaves = @{}
   foreach ($a in @($Artifacts)) { $leaves[$a] = (($a -replace '\\', '/') -split '/')[-1] }
@@ -97,27 +113,45 @@ function Get-TcArtifactProducers {
       $path = $m.Groups[1].Value; $code = $m.Groups[2].Value
       if ($path -notmatch '\.(ps1|js)$' -or (Test-TcCccExcluded $path $mf.Exclude)) { continue }
       if ($code.TrimStart().StartsWith('#')) { continue }
-      if ($code.IndexOf($leaf, [StringComparison]::OrdinalIgnoreCase) -lt 0) { continue }
-      if ($code -notmatch $script:CccWriteVerb) { continue }
-      [void]$roots.Add($path)
+      # The leaf is a whole FILE NAME: 'recipe-board.json' is not board.json (measured 2026-09-28: without the boundary
+      # audit-ingredient-identity's sandbox '$rbf = Join-Path $tmp ''recipe-board.json''' became a board.json root).
+      if ($code -notmatch ('(?i)(?<![A-Za-z0-9_.-])' + [regex]::Escape($leaf))) { continue }
+      if ($code -match $script:CccWriteVerb) { [void]$roots.Add($path); continue }
+      # DATAFLOW ROOT: the real builders write through a path variable ('$costedPath = Join-Path $db ''costed.json'''
+      # then WriteAllText($costedPath, ...)), so a line assigning the leaf to $<var> makes a root when another code line
+      # of the same script writes and names $<var> whole-word. Without it costed.json's roots were all self-test
+      # sandbox writes and cost-recipes.ps1 was reached only by accident (queue 2026-09-28-d70062).
+      $am = [regex]::Match($code, '^\s*\$([A-Za-z_][A-Za-z0-9_]*)\s*=')
+      if (-not $am.Success) { continue }
+      $vRx = '\$' + [regex]::Escape($am.Groups[1].Value) + '\b'
+      $body = & $getCode $path
+      if (@($body | Where-Object { $_ -match $script:CccWriteVerb -and $_ -match $vRx }).Count) { [void]$roots.Add($path) }
     }
     $seen = New-Object 'Collections.Generic.HashSet[string]'
     $queue = New-Object Collections.Queue
     foreach ($r in $roots) { if ($seen.Add($r)) { $queue.Enqueue($r) } }
     while ($queue.Count) {
       $p = [string]$queue.Dequeue()
-      # CODE ONLY: block comments, whole-line comments and a trailing " # ..." are dropped before names are read, so a
-      # script a producer merely MENTIONS (its history, a sibling it is compared with) does not join the closure. Measured
-      # 2026-09-23 with comments read: the feed's closure was 522 scripts, nearly the whole tree.
-      $code = [regex]::Replace((& $getText $p), '(?s)<#.*?#>', '')
-      $code = (@($code -split "`r?`n" | Where-Object { -not $_.TrimStart().StartsWith('#') -and -not $_.TrimStart().StartsWith('//') } | ForEach-Object { $_ -replace '\s#\s.*$', '' }) -join "`n")
-      $named = @([regex]::Matches($code, '[A-Za-z0-9_.-]+\.(ps1|js)\b') | ForEach-Object { $_.Value.ToLowerInvariant() } | Select-Object -Unique)
+      $lines = & $getCode $p
+      # INVOCATION EDGES ONLY: a name is followed when the line naming it also INVOKES (dot-source, '&', -File, node,
+      # Invoke-Native(Script), Start-Process, powershell, RunPS). A name in a string literal, a fixture or doc text is
+      # not a call: on 2026-09-28 such names chained alert-lib -> send-alert -> verify-price-flags -> flag-verify-lib
+      # -> audit-flag-verification into every served artifact's set (116 to 183 of 650 scripts each). The hub test
+      # below still counts ALL names, as before.
+      $allNamed = New-Object 'Collections.Generic.HashSet[string]'
+      $invNamed = New-Object 'Collections.Generic.HashSet[string]'
+      foreach ($l in $lines) {
+        $ms = [regex]::Matches($l, '[A-Za-z0-9_.-]+\.(ps1|js)\b')
+        if ($ms.Count -eq 0) { continue }
+        $isInv = ($l -match $script:CccInvokeToken)
+        foreach ($mm in $ms) { $v = $mm.Value.ToLowerInvariant(); [void]$allNamed.Add($v); if ($isInv) { [void]$invNamed.Add($v) } }
+      }
       # AN ORCHESTRATOR IS A PRODUCER BUT NOT A PATH: a script that names more than $script:CccHubNames others (the
       # chain's own runners, check-ad-cycles with its ~150 audits) joins the set when it writes the artifact, and its
       # own edits count, but the closure does not walk through it. Walking through it made every script a producer
       # (404 of the tree for the feed, measured 2026-09-23), and a set that is everything decides nothing.
-      if ($named.Count -gt $script:CccHubNames) { continue }
-      foreach ($nm in $named) {
+      if ($allNamed.Count -gt $script:CccHubNames) { continue }
+      foreach ($nm in $invNamed) {
         $k = $nm
         if (-not $byLeaf.ContainsKey($k)) { continue }
         foreach ($q in $byLeaf[$k]) { if ($seen.Add([string]$q)) { $queue.Enqueue([string]$q) } }
@@ -195,10 +229,47 @@ if ($__cccSelfTest) {
     CcT 'MUST NOT FIRE  a rebase over unrelated commits (a feed READER, an excluded test, a new script) leaves the feed current: no stale row, producers still derived' (-not $s2.Blind -and @($s2.Rows).Count -eq 0 -and @($s2.Producers['public/smp-feed.json']).Count -eq 2) (($s2 | ConvertTo-Json -Depth 4 -Compress))
     $s3 = Get-TcStaleArtifacts -Repo $w -Base '' -Tip $tipC -Artifacts @('public/smp-feed.json')
     CcT 'MUST FIRE  no recorded base is BLIND, never a clean answer' ([bool]$s3.Blind) (($s3 | ConvertTo-Json -Compress))
+    # The 2026-09-28 shape (queue 2026-09-28-d70062), frozen: the real builder writes costed.json only through a path
+    # VARIABLE, dot-sources its lib and an alert lib; the alert lib's self-test holds a JSON string literal naming
+    # verify-price-flags.ps1, which dot-sources flag-verify-lib, whose doc text names audit-flag-verification.ps1.
+    $costRel = 'meal-prep/pipeline/cost-recipes.ps1'
+    $costV1 = '$costedPath = Join-Path $db ''costed.json''' + "`n" + '. (Join-Path $here ''cost-lib.ps1'')' + "`n" + '. (Join-Path $here ''alert-lib.ps1'')' + "`n" + '[IO.File]::WriteAllText($costedPath, $json, $enc)' + "`n"
+    & $put $w $costRel $costV1
+    & $put $w 'lib/cost-lib.ps1' ('function Get-Cost { 1 }' + "`n")
+    & $put $w 'lib/alert-lib.ps1' ('$fixture = ''{"type":"x","route":"lane:grocery/verify-price-flags.ps1"}''' + "`n")
+    & $put $w 'grocery/verify-price-flags.ps1' ('. (Join-Path $PSScriptRoot ''flag-verify-lib.ps1'')' + "`n")
+    & $put $w 'grocery/flag-verify-lib.ps1' ('$usage = ''the lib that audit-flag-verification.ps1 reads''' + "`n")
+    & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 1' + "`n")
+    & $put $w 'meal-prep/pipeline/audit-recipe-costed.ps1' ('$rcf = Join-Path $tmp ''recipe-costed.json''' + "`n" + 'Set-Content $rcf x' + "`n")
+    & $put $w 'meal-prep/db/costed.json' '{}'
+    $null = & $g $w 'add', '-A'; $null = & $g $w 'commit', '-q', '-m', 'D: cost builder'
+    $tipD = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
+    $pc = Get-TcArtifactProducers -Repo $w -Rev 'HEAD' -Artifacts @('meal-prep/db/costed.json')
+    $cset = @($pc['meal-prep/db/costed.json'])
+    CcT 'MECHANISM  costed.json''s producers are its path-variable WRITER (a dataflow root) and the two libs it dot-sources, never a script named only inside a string literal, nor a writer of recipe-costed.json (a longer file name ending in the leaf)'($cset.Count -eq 3 -and $cset -contains $costRel -and $cset -contains 'lib/cost-lib.ps1' -and $cset -contains 'lib/alert-lib.ps1') ($cset -join ',')
+    # MUST NOT FIRE: the 09-28 range changed only the audit and its lib.
+    & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 2' + "`n")
+    & $put $w 'grocery/flag-verify-lib.ps1' ('$usage = ''the lib that audit-flag-verification.ps1 reads, v2''' + "`n")
+    $null = & $g $w 'commit', '-q', '-am', 'E: an unverified new-product crown quarantines itself'
+    $tipE = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
+    $s4 = Get-TcStaleArtifacts -Repo $w -Base $tipD -Tip $tipE -Artifacts @('meal-prep/db/costed.json', 'public/smp-feed.json')
+    CcT 'MUST NOT FIRE  a range changing only an audit reached through a string literal and doc text (the 2026-09-28 page) names no artifact' (-not $s4.Blind -and @($s4.Rows).Count -eq 0) (($s4 | ConvertTo-Json -Depth 4 -Compress))
+    # MUST FIRE: a change to the path-variable writer itself (the old same-line root rule missed it).
+    & $put $w $costRel ($costV1 + '$v = 2' + "`n")
+    $null = & $g $w 'commit', '-q', '-am', 'F: cost builder changes'
+    $tipF = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
+    $s5 = Get-TcStaleArtifacts -Repo $w -Base $tipE -Tip $tipF -Artifacts @('meal-prep/db/costed.json')
+    CcT 'MUST FIRE  a range changing a builder that writes costed.json only through ''$p = Join-Path $db ''''costed.json'''''' names costed.json' (-not $s5.Blind -and @($s5.Rows).Count -eq 1 -and (@(@($s5.Rows)[0].Changed) -contains $costRel)) (($s5 | ConvertTo-Json -Depth 4 -Compress))
+    # CLEAN TWIN: a lib the builder DOT-SOURCES changes, and the artifact is still named (the invocation filter kept a real edge).
+    & $put $w 'lib/cost-lib.ps1' ('function Get-Cost { 2 }' + "`n")
+    $null = & $g $w 'commit', '-q', '-am', 'G: cost lib changes'
+    $tipG = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
+    $s6 = Get-TcStaleArtifacts -Repo $w -Base $tipF -Tip $tipG -Artifacts @('meal-prep/db/costed.json')
+    CcT 'CLEAN TWIN  a range changing a lib the builder dot-sources still names costed.json' (-not $s6.Blind -and @($s6.Rows).Count -eq 1 -and (@(@($s6.Rows)[0].Changed) -contains 'lib/cost-lib.ps1')) (($s6 | ConvertTo-Json -Depth 4 -Compress))
   } catch {
     CcT ('the suite ran to the end without throwing') $false $_.Exception.Message
   } finally { Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue }
-  $want = 4
+  $want = 8
   if ($script:cn -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:cn, $want); $script:cf++ }
   if ($script:cf) { Write-Output ('chain-code-currency self-test FAIL: {0} of {1}' -f $script:cf, $script:cn); exit 1 }
   Write-Output ('chain-code-currency self-test PASS: {0} of {0} cases - led by the feed-everyday-ps change of cec9779a3 being named as a stale producer' -f $script:cn)

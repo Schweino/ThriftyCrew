@@ -40,6 +40,7 @@
   ],
   "exclude_globs": [
     "grocery/test-*.ps1",
+    "grocery/test-auditors/*.ps1",
     "meal-prep/pipeline/test-*.ps1",
     "meal-prep/engine/test-*.ps1",
     "ops/test-*.ps1",
