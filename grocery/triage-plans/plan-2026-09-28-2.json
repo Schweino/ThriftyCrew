@@ -1,0 +1,223 @@
+{
+  "generated": "2026-09-28T11:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "triage-due BOARD line: comparison-2026-09-28 built 08:17:56, 106 min old when read, not MID-BUILD. Nothing in this plan changes a matching or pricing rule, so no routing artifact is written.",
+  "queue_ids_seen": [
+    "2026-09-28-d70062",
+    "2026-09-28-c98dec",
+    "2026-09-27-f50b7a",
+    "2026-09-27-fd7a80"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "orchestrator brief: lib/chain-code-currency.ps1 header (producer closure, SCOPE OF A CLEAN ANSWER: unsound and incomplete), lib/chain-verdict-lib.ps1 (Get-ChainVerdictInputHashes, one implementation for every reader), grocery/feed-served-lib.ps1, .claude/rules/ops-and-gates.md og-47 (board steps run in a scratch clone, never the checkout you land from)",
+    "searched --multi 'autostash rewrites line endings', 'hash fingerprint CRLF normalize', 'producer closure names script': used memory C--Codex/compare-bytes-not-decodings index hook (git normalises line endings, so compare bytes; hook only, file not opened), .claude/rules/ops-and-gates.md og-39 (a tracked file written under PS 5.1 is written LF, Write-TcLfFile) and og-22 (a detector header states the scope of a clean report), machinery index entry lib/chain-code-currency.ps1; data-quality-craft/applies-here.md section 22 (hash sets by key) read as background, not applied",
+    "design/PLAN-bot-dedicated-checkout-2026-09-25.md (RULED 2026-09-25, design D: sessions leave the production checkout; Stage 2 barrier) is the owner of the foreign-writer half of this family; design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2 is the owner of c98dec's half"
+  ],
+  "family_note": "The four ids are one family only at the symptom (the daily chain's served files were not the ones its verdict saw). They have THREE separate mechanisms, each proven below: (1) d70062 is a false page: the stale-code check's producer closure is so wide (116 to 183 of 650 scripts per artifact) that an audit landing mid-run named costed.json and recipes-db.json, which no changed script builds. (2) f50b7a/fd7a80: the 09:45 grocery-alert-triage task's STEP 0.5 'git pull --rebase --autostash' ran in the production checkout at 09:51:09 on 09-27 while the chain (which overran to 09:52:20) held product-urls.json uncommitted and CRLF; the stash round-trip rewrites it LF, the byte hash moves, and the verdict fingerprint read STALE-INPUTS with no content change. (3) c98dec: public/price-history.json is a served path that no pre-commit stage of the -DeferPost chain writes, so a session's leftover bytes on it survive the run and are held; c81a9f W1 makes the chain write it.",
+  "items": [
+    {
+      "queue_id": "2026-09-27-f50b7a",
+      "subject": "Grocery capture watchdog: RUN RECORD 2026-09-27 (capture-run [daily] exit 1, lane guards-blocked)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/logs/capture-run-daily-2026-09-27.log:666 'publish: staging INPUTS only - the chain verdict scored inputs aac533354fdcc3b7 but the tree is now f80049acb9261b1b - guards have not seen this board'; :674 'vouched 110 served file(s) this guards-blocked run built, never to be committed'; :697 'pushed on attempt 3'",
+        "grocery/ad-cycle-log.txt:39612-39613 [2026-09-27T08:20:29] 'GUARDS OK ... GUARDS-COMPLETE hard=0 warn=19 disposition=pass' (verdict written here); :40732 [09:52:20] 'run complete ... total=6510s' (the publish read of the fingerprint follows immediately)",
+        "main reflog: 'd94d53a07 main@{2026-09-27 09:51:09 -0500}: pull --rebase --autostash origin main (finish): refs/heads/main onto b14257c73' - the only recorded write to the production checkout between 08:20:29 and 09:52:20; the same command ran at 09:51:43 on 09-28 ('3451de927 ... pull --rebase --autostash origin main: Fast-forward'), after that day's chain had finished",
+        "C:/Users/Owner/.claude/scheduled-tasks/grocery-alert-triage/SKILL.md:3 'at 09:45 - AFTER the day's pipeline, which is the whole point of the time' and :231 'STEP 0.5 - SYNC: powershell -Command \"git -C C:\\Codex\\ThriftyCrew pull --rebase --autostash origin main\"' (a clock assumption; the 09-27 chain ran 6510 s and was still running)",
+        "git diff --name-only a9d9ae46b d94d53a07 touches NONE of the tracked verdict inputs (commodities.json, known-wrong.json, board-price-overrides.json, product-urls.json): 24 files changed, 0 inputs. So the pull moved no input CONTENT.",
+        "git check-attr: grocery/product-urls.json text=auto eol=lf, core.autocrlf=true; the working copy written by the chain holds 25,892 CR bytes (2,314,512 bytes) and board-price-overrides.json 9; commodities.json and known-wrong.json hold 0",
+        "scratch repo proof (scratchpad eolprobe.ps1, same attributes): a dirty CRLF .json, 'git stash; git stash pop' -> sha256 8935ED63F706 -> 2479CCEF6668, CR bytes after = 0, content equal after CRLF->LF = True. CLEAN TWIN: a CRLF file whose normalised content equals HEAD reads clean in git status and is never stashed.",
+        "product-urls.json was dirty at 09:51 on 09-27: prune-bad-links dropped 2 links at 08:18:01 (ad-cycle-log:39551) and the bot commits it only at the end of the run as an INPUT path"
+      ],
+      "root_cause": "Two defects meet. (a) The verdict input fingerprint (lib/chain-verdict-lib.ps1 Get-ChainVerdictInputHashes) hashes RAW BYTES of JSON inputs whose line endings git owns (eol=lf) while the chain's PS 5.1 writers leave them CRLF, so any git operation that round-trips a dirty input (stash, checkout, autostash rebase) moves the fingerprint with no content change, and the chain withholds a board guards did pass. (b) A scheduled session (grocery-alert-triage STEP 0.5, 09:45) writes the production checkout on a clock that assumes the chain has finished; on 09-27 it had not. INFERENCE CAVEAT, stated loudly: the 09-27 verdict's per-path 'inputs' map was overwritten by 09-28's verdict at 08:21:11, so WHICH input moved is inferred, not read: the autostash pull is the only recorded writer in the window (71 s before the re-read), product-urls.json is the one tracked input the chain leaves dirty and CRLF, and the three ignored inputs (comparison, name-drift, recipe-board) are never touched by a stash. The same verdict-mismatch withhold also happened on 2026-09-20 (capture-run-daily-2026-09-20.log:140), cause not reconstructed.",
+      "surface_fix": {
+        "what": "none needed: 09-27's withheld board was superseded by 09-28's chain and 3451de927 (09:27 today) shipped the 09-28 board by hand",
+        "files": []
+      },
+      "root_fix": {
+        "what": "the verdict fingerprint measures CONTENT, not line endings, and a STALE-INPUTS withhold names the paths that moved and pages as itself",
+        "files": [
+          "lib/chain-verdict-lib.ps1",
+          "grocery/capture-run.ps1",
+          "grocery/alert-registry.json",
+          "grocery/test-auditors/units-03.ps1"
+        ],
+        "exact_change": "1) lib/chain-verdict-lib.ps1 Get-ChainVerdictInputHashes: hash the file's bytes with every 0x0D byte removed (all 7 inputs are JSON; a raw CR can only be inter-token whitespace, a CR inside a string must be escaped, so the parsed value cannot differ) and keep 'absent'/'unreadable' as they are. Write-ChainVerdict records inputs_hash_basis = 'json-cr-stripped-v1'; Read-ChainVerdictStatus treats a verdict whose basis differs from the reader's as STALE-INPUTS (fail closed, as a verdict with no fingerprint is today). 2) Read-ChainVerdictStatus adds 'moved' = the paths whose recorded inputs[path] differs from the hash now (the verdict already stores the per-path map), and 'why' names them. 3) grocery/capture-run.ps1 line ~1470: when $verdict.status is STALE-INPUTS, book lane 'verdict-stale' (not 'guards-blocked'), print the moved paths, and page once as 'Daily chain withheld its board: <paths> changed after guards ran - <date>' via Set-FailedLanePaged so the watchdog's RUN RECORD fold names the real cause; BLOCKED keeps 'guards-blocked'. 4) register the new alert type in grocery/alert-registry.json (audit-alert-registry refuses an unregistered call site). Do NOT add a verdict archive: the moved-path line in the run log is the attribution this item lacked."
+      },
+      "leaves_open": "the foreign-writer half: any session or scheduled task that changes an input's CONTENT in the production checkout mid-run (a hand edit of commodities.json, a pull that brings a rule change) still withholds the board, which is the correct fail-closed answer, and five scheduled tasks still 'git pull --rebase --autostash' the production checkout on a clock (grocery-alert-triage STEP 0.5, grocery-fareway-daily-check, grocery-recipe-everyday-refresh, walmart-headed-probe-once, grocery/bakers-daily-scan.ps1:16). Owned by design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2 (sessions leave the production checkout); the chain's CRLF writers of tracked inputs (og-39 hygiene) are left as they are because the fingerprint no longer depends on them.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_note": "1 unexplained verdict-mismatch withhold (2026-09-20) in the daily logs kept on disk; 0 proven content moves. After this change the moved-path line makes the next one a lookup.",
+      "leaves_open_followup": "2026-09-28-90a544",
+      "leaves_open_followup_note": "at close the developer mints a weekly-lane item (send-alert.ps1 -Lane weekly) for the foreign-writer residual (1 occurrence, so watch: is not allowed), pointing at design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2; the new verdict-stale page is what will report the next one",
+      "prior_closes": [
+        "2026-09-22-7c932a",
+        "2026-09-23-822c30"
+      ],
+      "prevention": {
+        "source": [
+          "lib/chain-verdict-lib.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "what": "the emitting check (the verdict fingerprint and the capture-run lane it books) stops calling an EOL rewrite a changed input and stops filing a stale verdict under guards-blocked, so RUN RECORD no longer pages a lane with no page of its own for this class",
+        "exact_change": "as root_fix.exact_change items 1 to 3"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching or pricing change: no product name routes differently. Measured instead: the 7 fingerprint inputs are all JSON (commodities.json, known-wrong.json, board-price-overrides.json, product-urls.json, newest comparison, out/recipe-board.json, out/name-drift.json); 2 of them carry CR bytes today (product-urls.json 25,892, board-price-overrides.json 9). Readers of the fingerprint: grocery/capture-run.ps1, grocery/push-data.ps1, grocery/refresh-chain-verdict.ps1, grocery/check-ad-cycles.ps1 (writer), grocery/check-ad-cycles/watchers.ps1, grocery/feed-export-lib.ps1, meal-prep/pipeline/audit-surface-staleness.ps1 - all through the lib, so one change moves every reader together.",
+        "corpus": "grocery/out/logs/capture-run-daily-2026-09-*.log (verdict-mismatch withholds: 09-20:140, 09-27:666); main reflog 2026-09-27 and 2026-09-28",
+        "affected_now": 0,
+        "names": [],
+        "risk": "Direction that loses money (a stale PASS shipping an unseen board) is unchanged: any content change still moves the hash, and a basis mismatch fails closed. Transition risk: if the lib change lands mid-run the writer (check-ad-cycles, launched later) and the reader (capture-run, loaded at start) can disagree on basis for one run, which reads STALE and withholds once, fail closed. Land it through ops/push-main.ps1 with the chain rehearsal, outside 06:30 to 09:00.",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors/units-03.ps1 (run by grocery/test-auditors.ps1; it already drives STALE-INPUTS), plus the chain rehearsal (ops/rehearse-chain.ps1 via ops/push-main.ps1)",
+        "must_fire_case": "MUST FIRE: write a verdict over a fixture tree, then change ONE value in commodities.json (LF) -> STALE-INPUTS with moved = ['grocery/commodities.json'] and capture-run's lane 'verdict-stale'",
+        "must_not_fire_case": "MUST NOT FIRE (the 09-27 shape, frozen): write a verdict over a CRLF product-urls.json, rewrite the same content LF (exactly what the autostash round-trip does) -> PASS, fingerprint unchanged",
+        "clean_twin": "CLEAN TWIN: drop one link from the CRLF product-urls.json after the verdict (the real prune shape) -> STALE-INPUTS naming grocery/product-urls.json, so the normalisation did not blind the content check",
+        "fixture_occurrences": [
+          "2026-09-22-7c932a",
+          "2026-09-23-822c30",
+          "2026-09-27-f50b7a"
+        ]
+      },
+      "rollback": "revert the lib and capture-run hunks; verdicts written with basis json-cr-stripped-v1 then read STALE for the rest of that day (fail closed) and the next chain run writes a raw-byte verdict again",
+      "freshness": "measured 2026-09-28 10:50 to 11:15 against the main checkout at 9700c1175 (origin 3451de927), grocery/out/logs/capture-run-daily-2026-09-27.log, ad-cycle-log.txt, and the main reflog; board comparison-2026-09-28 (built 08:17:56) is not an input to this item",
+      "publish_batch": "chain-A (money): this item then d70062, one push-main landing with the chain rehearsal",
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "done",
+      "resolution_note": "09-27's daily run withheld a board guards had passed because the verdict fingerprint hashed raw bytes: the 09:45 triage task's 'git pull --rebase --autostash' (09:51:09, main reflog) round-tripped the chain's uncommitted CRLF product-urls.json to LF (content unchanged), so the fingerprint moved aac533354fdcc3b7 -> f80049acb9261b1b. Fixed at the emitter in 863bbdd14: lib/chain-verdict-lib.ps1 hashes each JSON input with CR bytes stripped (basis json-cr-stripped-v1, recorded in the verdict; another basis reads STALE-INPUTS, fail closed) and Read-ChainVerdictStatus names the moved paths; capture-run books a STALE-INPUTS withhold as lane verdict-stale and pages 'Daily chain withheld its board: <paths> changed after guards ran' (registry chain-verdict-stale-withheld). TRANSITION: today's verdict was written on the old basis and reads STALE-INPUTS from the moment this lands until the next chain run or grocery/refresh-chain-verdict.ps1 rewrites it, so a same-day push-data or feed export after landing holds (fail closed); run refresh-chain-verdict.ps1 after landing if a same-day ship is wanted. Foreign writers in the production checkout: weekly item 2026-09-28-90a544, owned by PLAN-bot-dedicated-checkout Stage 2.",
+      "premise_verified": "true - checked 2026-09-28 against the main checkout: the lib hashed raw bytes via Get-FileHash (lib/chain-verdict-lib.ps1:60 before the change); the real inputs carry CRs today (product-urls.json 25,892, board-price-overrides.json 9, and the three ignored inputs comparison-2026-09-28.json 71,286, recipe-board.json 5,706, name-drift.json 3,032), commodities.json and known-wrong.json 0; for the two CR-free inputs the new content hash equals Get-FileHash, so LF files are unchanged by the basis. capture-run.ps1:1473 booked every non-ship verdict as 'guards-blocked'. No behavioural test drove Read-ChainVerdictStatus in units-03 (only a source-shape check at :421), so u051v is new rather than an extension.",
+      "shipped_commit": "863bbdd1459a6f03db1801a2aa276b585800372f",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 34,
+      "proof_run": "test-auditors.ps1 -SkipUnitsFile (all but u051v) rc=0: 7 of 7 u051v cases PASS, verdict line 'test-auditors SELECTIVE ran 7 case(s) in 1 of 148 unit(s)' (not a full run); refresh-chain-verdict.ps1 -SelfTest rc=0 'SELF-TEST PASS - 9 must-fire ... and 4 clean twins'; audit-alert-registry.ps1 rc=0 'alert-registry: PASSED - 60 readable call-site subject(s)'. Real-tree timing: 7 inputs hashed in 119 ms."
+    },
+    {
+      "queue_id": "2026-09-27-fd7a80",
+      "subject": "Grocery capture watchdog: COMPUTED BUT NOT SHIPPED public/board.json, public/smp-feed.json (2026-09-27)",
+      "classification": "superseded",
+      "superseded_by": "2026-09-27-f50b7a",
+      "evidence": [
+        "same run as f50b7a: capture-run-daily-2026-09-27.log:666 withheld the served files for a verdict-fingerprint mismatch and :674 vouched 110 served files never committed; the watchdog at 10:35:11 saw M public/board.json, M public/smp-feed.json - the files the withhold left on disk"
+      ],
+      "root_cause": "the watchdog's second face of f50b7a: the served files were computed and withheld because the verdict fingerprint moved on an autostash CRLF->LF rewrite of product-urls.json, not on any input content change",
+      "root_fix_none_because": "the fix is f50b7a's (verdict fingerprint measures content; STALE-INPUTS names moved paths and pages as itself); this alert is the watchdog correctly reporting that withhold",
+      "leaves_open": "as f50b7a: a real mid-run content change by a foreign writer still withholds (correct), owned by design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-27-f50b7a",
+      "prior_closes": [
+        "2026-09-22-972de2",
+        "2026-09-24-a4b7c1"
+      ],
+      "prevention": {
+        "source": [
+          "lib/chain-verdict-lib.ps1",
+          "grocery/capture-run.ps1"
+        ],
+        "what": "same producer as f50b7a: the withhold that leaves served files computed-but-unshipped no longer fires on a line-ending rewrite",
+        "exact_change": "see item 2026-09-27-f50b7a root_fix.exact_change items 1 to 3"
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-auditors/units-03.ps1 cases of f50b7a",
+        "must_fire_case": "f50b7a MUST FIRE (content change withholds and names the path)",
+        "clean_twin": "f50b7a MUST NOT FIRE (EOL-only rewrite ships), so the watchdog's COMPUTED BUT NOT SHIPPED stays silent on that shape",
+        "fixture_occurrences": [
+          "2026-09-22-972de2",
+          "2026-09-24-a4b7c1",
+          "2026-09-27-fd7a80"
+        ]
+      },
+      "lane": "money",
+      "est_tool_calls": 0,
+      "status": "superseded",
+      "resolution_note": "Superseded by 2026-09-27-f50b7a: the 09-27 board and feed were computed and withheld because the verdict fingerprint moved on an autostash CRLF->LF rewrite of product-urls.json (09:51:09 triage-task pull), not a content change. f50b7a's fix makes the fingerprint content-based and names moved paths."
+    },
+    {
+      "queue_id": "2026-09-28-d70062",
+      "subject": "Daily chain shipped artifacts built by code that changed mid-run - 2026-09-28",
+      "classification": "infra",
+      "evidence": [
+        "capture-run-daily-2026-09-28.log:195 'sync[tail 1]: synced cbb5b1169..812fad5b3 behind=11 ... moved 11 commit(s) forward'; :196 'public/smp-feed.json was built by code this sync replaced (grocery/audit-flag-verification.ps1, grocery/flag-verify-lib.ps1) - rebuilding it'; :207 '2 other served artifact(s) ... meal-prep/db/costed.json <- grocery/audit-flag-verification.ps1, grocery/flag-verify-lib.ps1 | meal-prep/recipes-db.json <- ...'",
+        "the range changed those two files through 9bfa699c0 and fc9d0721d ('an unverified new-product crown quarantines itself'): +85/-2 lines in an AUDIT and its lib. Neither writes costed.json, recipes-db.json or smp-feed.json, and no builder of them invokes either.",
+        "Get-TcArtifactProducers at 812fad5b3 (scratchpad ccc-probe.ps1): costed.json 137 producers, recipes-db.json 135, board.json 137, smp-feed.json 116, price-history.json 183, of 650 non-excluded scripts under derive_dirs; all five contain grocery/audit-flag-verification.ps1",
+        "traced path (scratchpad ccc-trace.ps1): costed.json roots are lib/gate-input-key.ps1:1311, meal-prep/engine/golden-test.ps1:205, meal-prep/pipeline/unpriced-takedown.ps1:562, meal-prep/pipeline/wave-preaudit.ps1:985 - all self-test or sandbox writes; the REAL writer, meal-prep/engine/cost-recipes.ps1, writes through '$costedPath = ... Join-Path $db 'costed.json'' (line 28) and is not a root. The closure reaches audit-flag-verification via unpriced-takedown -> build-cards -> stamp-live-price-fallback -> feed-freshness (a hard-coded path STRING at :371) -> compute-v2-perserving -> alert-lib -> send-alert.ps1 (a JSON STRING LITERAL inside a self-test fixture at :477 naming 'lane:grocery/verify-price-flags...') -> verify-price-flags -> flag-verify-lib (doc text naming audit-flag-verification at :14/:35)",
+        "the same false edge made the chain rebuild and commit the feed needlessly (5577f8a76 'feed rebuilt on the synced code'), harmless but a wasted stage"
+      ],
+      "root_cause": "lib/chain-code-currency.ps1 Get-TcArtifactProducers derives the producer set in a way that is wrong in BOTH directions: its roots are only lines that name the artifact AND write on the same line, which for costed.json, board.json and price-history.json are self-test sandbox writes while the real builders (cost-recipes.ps1, build-deals-page.ps1) write through a path variable and are missed; and its closure follows every .ps1/.js NAME in code, including names inside string literals, fixtures and doc text, so 116 to 183 of 650 scripts count as producers of each served file. The real builders were only reached by accident through that promiscuous walk, and any mid-run landing of nearly any grocery or lib script pages 'stale artifact'. Occurrences since the check shipped 2026-09-23: 1 page (today), 0 real.",
+      "surface_fix": {
+        "what": "none: the two named artifacts were not built by changed code, and the next run rebuilds everything anyway",
+        "files": []
+      },
+      "root_fix": {
+        "what": "derive producers from the scripts that actually WRITE the artifact (including through a path variable) and walk only INVOCATION edges",
+        "files": [
+          "lib/chain-code-currency.ps1",
+          "ops/chain-manifest.json"
+        ],
+        "exact_change": "1) Roots: keep today's same-line write rule AND add a dataflow root: a line '$<var> = ...<artifact leaf>...' in a script where some other non-comment line has a write verb ($script:CccWriteVerb) and references $<var> (whole-word). 2) Edges: follow a named .ps1/.js only when the line naming it also carries an invocation token: leading dot-source '. ', call operator '&', '-File', 'node', 'Invoke-Native'/'Invoke-NativeScript', 'Start-Process', 'powershell', 'RunPS'. Keep the comment stripping and the $script:CccHubNames orchestrator rule (count ALL names on the hub test, as today). 3) ops/chain-manifest.json exclude_globs: add 'grocery/test-auditors/*.ps1' (the prototype shows units-01..05 as board.json/feed/price-history roots through fixture writes). 4) Header: update the SCOPE OF A CLEAN ANSWER line: still unsound for a path assembled across functions or parameters (cost-recipes -OutFile) and a script named through a computed string; say so. Prototype measured over 650 scripts at 812fad5b3 (scratchpad ccc-inv2.ps1, roots rule 1 + edges rule 2, before rule 3): smp-feed 116 -> 19 (export-feed, feed-everyday-ps, live-price-fill.js kept: the founding cec9779a3 case still fires), board.json 137 -> 82 (build-deals-page now IN, and 12 real writers added such as set-board-cell, assemble-board-brands, add-recipe-board-rows), costed.json 137 -> 36 (cost-recipes now IN as a root), recipes-db.json 135 -> 45 (sync-recipesdb-cost/-buy/-grams/-macros roots), price-history.json 183 -> 43 (build-deals-page, update-history, purge-bad-lows). flag-verify-lib and audit-flag-verification leave all five. Rule 2 alone is NOT enough: measured edges-only, costed.json drops to 33 and LOSES cost-recipes.ps1, because its roots are all fixtures."
+      },
+      "leaves_open": "the check stays unsound by construction for writers whose path arrives as a parameter or through another function, and for scripts named by a computed string (both said in its header); rule 3 (test-auditors glob) is measured only as the list of roots it removes, not re-run. Count of real stale artifacts missed so far: 0 known.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "leaves_open_followup_note": "0 occurrences, but no existing check would page a missed stale artifact (that is what unsound means), so watch: would be a false claim; the developer mints a weekly-lane item at close or narrows leaves_open if the build closes more of it",
+      "c81a9f_relation": "INDEPENDENT of design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2 and it does not change that design, but it must land FIRST or with it: W1 runs build-deals-page inside the chain before the commit, so public/board.json and public/price-history.json join the artifacts this check examines at the tail. With today's closure their producer sets are 137 and 183 scripts, so W1 would turn almost every mid-run landing into a stale-code-artifact page for the board; with this fix they are 82 and 43 and both include build-deals-page, which today's roots miss entirely (so today a real build-deals-page change is caught only by accident). W1 also resolves c98dec (see that item). The money developer builds W1/W2 as designed.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching or pricing change (no product name routes differently). Measured instead: producer sets per served artifact before and after, over every .ps1/.js under ops/chain-manifest.json derive_dirs at 812fad5b3 minus exclude_globs (650 scripts), and replay of the two ranges this check has seen: 09-28 cbb5b1169..812fad5b3 (before: feed rebuilt + 2 artifacts paged; after: 0 artifacts named) and the founding 09-23 feed-everyday-ps change (feed-everyday-ps.ps1 is in the after-set of smp-feed.json, so it still fires).",
+        "corpus": "git ls-tree 812fad5b3 over grocery/, lib/, meal-prep/engine/, meal-prep/lib/, meal-prep/pipeline/, ops/ (650 scripts); artifacts public/smp-feed.json, public/board.json, meal-prep/db/costed.json, meal-prep/recipes-db.json, public/price-history.json",
+        "affected_now": 5,
+        "names": [
+          "public/smp-feed.json 116->19",
+          "public/board.json 137->82",
+          "meal-prep/db/costed.json 137->36",
+          "meal-prep/recipes-db.json 135->45",
+          "public/price-history.json 183->43"
+        ],
+        "risk": "under-inclusion is the dangerous direction (a real stale feed ships): guarded by the must-fire cases and by the fact that each artifact's real builder is IN the after-set and was NOT a root before. A chain change: land only through ops/push-main.ps1 with the chain rehearsal, outside 06:30 to 09:00.",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "lib/chain-code-currency.ps1 -SelfTest (builds its own temp repos; run by run-gates)",
+        "must_fire_case": "MUST FIRE (founding case kept): a range changing feed-everyday-ps names public/smp-feed.json. NEW MUST FIRE: a fixture builder that writes costed.json only through '$p = Join-Path $db ''costed.json''' then '[IO.File]::WriteAllText($p, ...)'; a range changing that builder names costed.json (today's rule misses it)",
+        "must_not_fire_case": "MUST NOT FIRE (the 09-28 shape, frozen): an alert lib whose self-test holds a JSON string literal naming 'verify-price-flags.ps1', which dot-sources a lib that names an audit in doc text; a range changing only that audit names no artifact",
+        "clean_twin": "CLEAN TWIN: a library the builder DOT-SOURCES ('. (Join-Path $here ''x-lib.ps1'')') changes -> the artifact is still named, so the invocation-edge filter did not cut a real edge",
+        "fixture_occurrences": [
+          "2026-09-28-d70062"
+        ]
+      },
+      "rollback": "revert lib/chain-code-currency.ps1 and the manifest glob; the check returns to the wide closure (noisy, never silent)",
+      "freshness": "measured 2026-09-28 10:40 to 11:10 by git show/ls-tree at 812fad5b3 (the chain's own tail rev), not the working tree; HEAD 9700c1175 does not change lib/chain-code-currency.ps1 or ops/chain-manifest.json since 812fad5b3 - the developer re-checks with git log 812fad5b3..HEAD -- those two paths before building",
+      "publish_batch": "chain-A (money): after f50b7a in the same push-main landing, and BEFORE c81a9f W1",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "planned",
+      "resolution_note": "False page: the tail sync brought in an audit (audit-flag-verification.ps1, flag-verify-lib.ps1) that builds none of costed.json, recipes-db.json or smp-feed.json. The producer closure named it because its roots were self-test writes and it walked script names inside strings and doc text (116 to 183 of 650 scripts per artifact). Fixed in lib/chain-code-currency.ps1: dataflow roots (the real builders cost-recipes and build-deals-page are now roots) and invocation-only edges; sets fall to 19-82, the 09-28 range names nothing, the founding feed case still fires."
+    },
+    {
+      "queue_id": "2026-09-28-c98dec",
+      "subject": "Daily chain held a session's edit on a served file - 2026-09-28 (public/price-history.json)",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-run-daily-2026-09-28.log:176 foreign-held lists public/price-history.json as dirty before the run started; :209 'served-held: 1 served path(s) held as another session's edit: public/price-history.json'. The only writer of public/price-history.json is grocery/build-deals-page.ps1 ($histOut, :2484), which the -DeferPost chain does not run before its commit. The dirt is from 09-27: a triage session rebuilt the board in the production checkout (main reflog 10:47 to 11:57 on 09-27; comparison-2026-09-27.json last written 11:41:56) and its 'reset: moving to origin/main' at 11:57 kept the working tree. 3451de927 (09:27 today) shipped the bot's own 09:20 bytes (blob 7ec509e369); the file is clean now."
+      ],
+      "root_cause": "public/price-history.json is a served path with no pre-commit writer in the -DeferPost chain, so a session's leftover bytes on it survive the run and are held (correctly) as foreign; the chain rewrites it only in the deferred post, after the commit",
+      "root_fix_none_because": "owned by 2026-09-28-c81a9f (plan-2026-09-28.json, money lane): design/PLAN-deferpost-builds-board-2026-09-28.md W1 runs build-deals-page inside the chain before capture-run commits, which makes price-history.json the chain's own output every run, so foreign dirt is overwritten and shipped as pipeline output; the session-writes-production-checkout half is design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2",
+      "leaves_open": "until c81a9f W1 lands, any foreign dirt on price-history.json is held and paged the same way (correct behaviour, 1 occurrence)",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-28-c81a9f",
+      "status": "planned",
+      "resolution_note": "No code of its own. The held public/price-history.json was a 09-27 triage rebuild's leftover in the production checkout; the -DeferPost chain never writes that file before its commit, so it could not replace it. 3451de927 shipped the bot's 09:20 bytes and the file is clean. The fix is c81a9f's W1 (build the board inside the chain before the commit), which makes the file chain-written every run."
+    }
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. money (triage-developer), publish batch chain-A: 2026-09-27-f50b7a (lib/chain-verdict-lib.ps1 content fingerprint + moved paths; capture-run verdict-stale lane + page; alert-registry type; units-03 cases), then 2026-09-28-d70062 (lib/chain-code-currency.ps1 dataflow roots + invocation edges; chain-manifest exclude glob; -SelfTest cases). Proof: test-auditors.ps1 exit 0, lib/chain-code-currency.ps1 -SelfTest exit 0 with its verdict line, run-gates exit 0. Land through ops/push-main.ps1 (chain change: rehearsal required), never git push origin HEAD:main, and not between 06:30 and 09:00.",
+    "2. money: 2026-09-28-c81a9f per design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2 AFTER chain-A has landed (W1 adds board.json and price-history.json to the artifacts the stale-code check examines).",
+    "3. close: 2026-09-27-fd7a80 as superseded by f50b7a when chain-A lands; 2026-09-28-c98dec as no-code-change owned by c81a9f (triage-close.ps1 from each resolution_note).",
+    "4. live verification: the next 08:00 daily chain log must show either no 'staging INPUTS only' line or one that names moved paths; no stale-code-artifact page unless the tail range changed a script in the after-set; capture-watchdog raises no RUN RECORD for guards-blocked on a verdict-mismatch day."
+  ]
+}
