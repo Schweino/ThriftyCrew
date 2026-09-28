@@ -87,20 +87,36 @@ $cells = Get-TcFlagQuarantineCells -Ledger $judged -Board $board
 # product holds while its check is pending (Get-TcPendingPairCells). Flags come from the newest guards-<date>.json no later
 # than the board's own date (sanity-check writes it after a publish, so the day's first build reads the previous one; the
 # claim-key match means a stale flag names nothing the board no longer publishes). No flags file: said, never a pass.
+# PERSISTENCE (queue 2026-09-27-10d164): without -FlagsFile it reads EVERY guards-<date>.json from 14 days before the board
+# date up to it, one day each, because a pair named on day 1 decays on day 2 (the wow baseline already holds the wrong claim);
+# Get-TcPendingPairCells windows each claim to its own ad_from. -FlagsFile reads that one file, undated, as before.
+$bday = ''; if ((Split-Path $BoardFile -Leaf) -match 'comparison-(\d{4}-\d{2}-\d{2})\.json$') { $bday = $matches[1] }
+$flagDays = New-Object System.Collections.ArrayList
+$flagNote = ''
 if (-not $FlagsFile) {
-  $bday = ''; if ((Split-Path $BoardFile -Leaf) -match 'comparison-(\d{4}-\d{2}-\d{2})\.json$') { $bday = $matches[1] }
-  $gf = Get-ChildItem (Join-Path (Split-Path $BoardFile -Parent) 'guards-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^guards-(\d{4}-\d{2}-\d{2})$' -and (-not $bday -or [string]::CompareOrdinal($matches[1], $bday) -le 0) } | Sort-Object Name -Descending | Select-Object -First 1
-  if ($gf) { $FlagsFile = $gf.FullName }
+  $lo = ''; if ($bday) { $lo = ([datetime]::ParseExact($bday, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)).AddDays(-14).ToString('yyyy-MM-dd') }
+  $gfs = @(Get-ChildItem (Join-Path (Split-Path $BoardFile -Parent) 'guards-*.json') -ErrorAction SilentlyContinue | Where-Object { $_.BaseName -match '^guards-(\d{4}-\d{2}-\d{2})$' -and (-not $bday -or ([string]::CompareOrdinal($matches[1], $bday) -le 0 -and [string]::CompareOrdinal($matches[1], $lo) -ge 0)) } | Sort-Object Name)
+  if (-not $bday -and $gfs.Count -gt 0) { $gfs = @($gfs[-1]) }
+  foreach ($g in $gfs) {
+    $dy = $g.BaseName.Substring(7)
+    [void]$flagDays.Add([pscustomobject]@{ day = $dy; flags = @(Read-JsonFile $g.FullName | ForEach-Object { $_ }) })
+  }
+  if ($flagDays.Count -gt 0) { $flagNote = ($flagDays.Count.ToString() + ' guards file(s), days ' + (@($flagDays | ForEach-Object { $_.day }) -join ',')) }
 }
-if ($FlagsFile -and (Test-Path -LiteralPath $FlagsFile)) {
-  $flagsRaw = Read-JsonFile $FlagsFile
-  $flagList = @($flagsRaw | ForEach-Object { $_ })
-  $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -Flags $flagList
+if ($flagDays.Count -gt 0 -or ($FlagsFile -and (Test-Path -LiteralPath $FlagsFile))) {
+  if ($flagDays.Count -gt 0) {
+    $flagList = @($flagDays | ForEach-Object { @($_.flags) })
+    $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -FlagDays $flagDays.ToArray() -BoardDay $bday
+  } else {
+    $flagList = @(Read-JsonFile $FlagsFile | ForEach-Object { $_ })
+    $flagNote = (Split-Path $FlagsFile -Leaf)
+    $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -Flags $flagList
+  }
   $have = @{}; foreach ($c in @($cells)) { $have[[string]$c.id + '|' + [string]$c.store] = $true }
   $merged = New-Object System.Collections.ArrayList
   foreach ($c in @($cells)) { [void]$merged.Add($c) }
   foreach ($p in @($pair)) { if (-not $have.ContainsKey([string]$p.id + '|' + [string]$p.store)) { [void]$merged.Add($p) } }
-  Write-Output ('flag verification: pending-pair check read ' + $flagList.Count + ' sanity flag(s) from ' + (Split-Path $FlagsFile -Leaf) + '; ' + @($pair).Count + ' unverified new-product crown(s)')
+  Write-Output ('flag verification: pending-pair check read ' + $flagList.Count + ' sanity flag(s) from ' + $flagNote + '; ' + @($pair).Count + ' unverified new-product crown(s)')
   $cells = $merged.ToArray()
 } else {
   Write-Output 'flag verification: pending-pair check BLIND - no guards-<date>.json sanity flags on or before this board, so an unverified new-product crown is not judged this run'

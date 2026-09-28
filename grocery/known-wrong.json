@@ -4485,6 +4485,21 @@
                         "retire_when":  "ruling-reversed"
                     },
                     {
+                        "key":  "lemons|FamilyFare|glad-drawstring-odor-shield-lemon",
+                        "commodity":  "lemons",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct"
+                                  ],
+                        "product_id":  "14841",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Glad tall kitchen trash bags (Freshop 14841, shopfamilyfare.com/shop/household/trash_bag), not lemons. Crowned lemons at 0.2748/each on comparison-2026-09-27 (held by the pending pair) and on comparison-2026-09-28 (published 3451de927). Found in triage plan-2026-09-28-10, queue 2026-09-27-10d164.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-09-28",
+                        "ruled_by":  "triage-developer 2026-09-28",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
                         "key":  "raspberries|FamilyFare|nutri-grain-breakfast-bars-raspberry-10-4-oz",
                         "commodity":  "raspberries",
                         "store":  "Family Fare",

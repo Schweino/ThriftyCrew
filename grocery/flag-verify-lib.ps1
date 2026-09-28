@@ -706,7 +706,7 @@ function Get-TcFlagQuarantineCells($Ledger, $Board) {
 # Fixtured by test-flag-pending-pair.ps1 (founding cases: the Breadstix frozen-pizza crown and the Yolite raspberries).
 $script:TcNewCrownWowNeedle = 'unexplained: a NEW price at the cheapest store'
 
-function Get-TcPendingPairCells($Ledger, $Board, $Flags) {
+function Get-TcPendingPairCells {
   <# A NEW-PRODUCT CROWN WITH TWO UNANSWERED FLAGS HOLDS ITSELF (queue 2026-09-27-c744ba). A crown whose sanity flags for the
      SAME claim include both an unverified 'outlier' (never 'outlier-verified') and a 'wow' naming "unexplained: a NEW price
      at the cheapest store" is held while the verifier has no verdict for it. Measured over the 14 days to 09-27: 7 such
@@ -714,7 +714,18 @@ function Get-TcPendingPairCells($Ledger, $Board, $Flags) {
      the wrong basis). Released by a closed 'match' verdict on the same claim; a wrong verdict is named by
      Get-TcFlagQuarantineCells, so it is skipped here rather than named twice. The claim key (item + per-unit) must be
      what the board publishes today, so a stale flags file names nothing the board no longer shows.
-     SCOPE OF A CLEAN REPORT: unsound - a wrong crown carrying only one of the two flags is not seen. #>
+     THE PAIR PERSISTS (queue 2026-09-27-10d164). The wow half compares against the PREVIOUS comparison, so a wrong crown
+     named on day 1 becomes the baseline that explains itself on day 2 and the pair decays to a lone outlier (lemons|Family
+     Fare, Glad trash bags, paired on guards-2026-09-27 and outlier-only on guards-2026-09-28, then published). So the pair
+     is judged over EVERY day's flags in -FlagDays (@{ day = 'yyyy-MM-dd'; flags = @(...) }, one per guards-<date>.json):
+     a claim is named when, on ANY one day no earlier than its own ad_from (an everyday claim: its ledger entry's
+     first_flagged, never more than 7 days before -BoardDay), the same claim key carried both flags. A changed claim is a
+     new key and starts over; a closed 'match' still releases it. -Flags alone is one day with no window (older callers).
+     SCOPE OF A CLEAN REPORT: unsound - a wrong crown carrying only one of the two flags on every day is not seen. #>
+  param($Ledger, $Board, $Flags, $FlagDays, [string]$BoardDay = '')
+  $days = @()
+  if ($null -ne $FlagDays) { $days = @($FlagDays | Where-Object { $null -ne $_ }) }
+  if ($null -ne $Flags) { $days += ,([pscustomobject]@{ day = ''; flags = @($Flags) }) }
   $ix = Get-TcBoardCellIndex $Board
   $crown = @{}
   foreach ($r in @($Board.comparison)) {
@@ -723,21 +734,47 @@ function Get-TcPendingPairCells($Ledger, $Board, $Flags) {
       if ($st) { $crown[[string]$r.id + '|' + $st] = $true }
     }
   }
-  $outl = @{}; $wow = @{}
-  foreach ($f in @($Flags)) {
-    if ($null -eq $f) { continue }
-    $k = [string]$f.id + '|' + [string]$f.store + '|' + (Get-TcClaimKey $f)
-    if ([string]::Equals([string]$f.type, 'outlier', [StringComparison]::Ordinal)) { $outl[$k] = $f }
-    elseif ([string]::Equals([string]$f.type, 'wow', [StringComparison]::Ordinal) -and ([string]$f.detail).Contains($script:TcNewCrownWowNeedle)) { $wow[$k] = $f }
-  }
   $open = ConvertTo-TcLedgerEntries $Ledger
+  $bd = $null; if ($BoardDay) { $bd = ConvertTo-TcFvDay $BoardDay }
+  # key -> { flag; days }: a key is a pair on a day that carried both flags for it. Checked against each claim's window below.
+  $pairs = @{}
+  foreach ($d in $days) {
+    $outl = @{}; $wow = @{}
+    foreach ($f in @($d.flags)) {
+      if ($null -eq $f) { continue }
+      $k = [string]$f.id + '|' + [string]$f.store + '|' + (Get-TcClaimKey $f)
+      if ([string]::Equals([string]$f.type, 'outlier', [StringComparison]::Ordinal)) { $outl[$k] = $f }
+      elseif ([string]::Equals([string]$f.type, 'wow', [StringComparison]::Ordinal) -and ([string]$f.detail).Contains($script:TcNewCrownWowNeedle)) { $wow[$k] = $f }
+    }
+    foreach ($k in @($outl.Keys)) {
+      if (-not $wow.ContainsKey($k)) { continue }
+      if (-not $pairs.ContainsKey($k)) { $pairs[$k] = [pscustomobject]@{ flag = $outl[$k]; days = New-Object System.Collections.ArrayList } }
+      [void]$pairs[$k].days.Add([string]$d.day)
+    }
+  }
   $matched = @{}
   foreach ($c in @($Ledger.closed)) { if ($null -ne $c -and [string]$c.status -eq 'match') { $matched[[string]$c.key + '|' + [string]$c.claim_key] = $true } }
   $out = New-Object System.Collections.ArrayList
-  foreach ($k in @($outl.Keys | Sort-Object)) {
-    if (-not $wow.ContainsKey($k)) { continue }
-    $f = $outl[$k]
+  foreach ($k in @($pairs.Keys | Sort-Object)) {
+    $f = $pairs[$k].flag
     $cell = [string]$f.id + '|' + [string]$f.store
+    # WINDOW: a dated pair counts only on or after the claim's own start. An undated day (-Flags) is today's and always counts.
+    $from = $null
+    if ([string]$f.ad_from) { $from = ConvertTo-TcFvDay ([string]$f.ad_from) }
+    elseif ($null -ne $bd) {
+      $from = $bd.AddDays(-7)
+      if ($open.Contains($cell) -and [string]$open[$cell].first_flagged) { $ff = ConvertTo-TcFvDay ([string]$open[$cell].first_flagged); if ($null -ne $ff -and $ff -gt $from) { $from = $ff } }
+    }
+    $inWindow = $false
+    foreach ($dy in @($pairs[$k].days)) {
+      if (-not $dy) { $inWindow = $true; break }
+      $dd = ConvertTo-TcFvDay $dy
+      if ($null -eq $dd) { continue }
+      if ($null -ne $bd -and $dd -gt $bd) { continue }
+      if ($null -ne $from -and $dd -lt $from) { continue }
+      $inWindow = $true; break
+    }
+    if (-not $inWindow) { continue }
     if (-not $crown.ContainsKey($cell) -or -not $ix.ContainsKey($cell)) { continue }
     $c = $ix[$cell]
     if ($null -eq $c.cell) { continue }
