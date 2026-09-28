@@ -1,0 +1,134 @@
+{
+  "generated": "2026-09-28",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "triage-due printed 'BOARD comparison-2026-09-28 built 08:17:56 (460 min ago)'. Not MID-BUILD. Read at HEAD c349cbd77 (main checkout, read-only). public/board.json was hand-shipped at 09:27:41 in 3451de927 from the 09:20 rebuild of the same board (577 of 577 best prices equal comparison-2026-09-28 per that commit).",
+  "queue_ids_seen": [
+    "2026-09-18-a0c785",
+    "2026-09-25-b3c8ca",
+    "2026-09-27-10d164"
+  ],
+  "knowledge_consulted": [
+    "searched \"beverage class display bucket\", \"basis null unpriced first match\", \"single flag crown quarantine\" (knowledge-search --estate --multi): used memory:class-scope-by-display-taxonomy (a category-scoped class cannot reach a mixed display bucket; scope by apply_ids) for a0c785, and memory:aisle-test-built (gate a crown on the store's own shelf department, not on a name) for the 10d164 leaves_open design; the skills leg returned nothing applicable",
+    ".claude/rules/grocery.md gr-05 (a wrong product is a SELLER SHAPE, not a brand): why the Glad instance fix is not the root fix",
+    ".claude/rules/grocery.md gr-01 (a bad cell quarantines itself; WITHHELD when the prior value was a sale): the lemons cell effect",
+    ".claude/rules/grocery.md gr-03 (known-wrong.json is the MAIN-board corrector; a fresh ruling reads red until the next build)",
+    "brief excerpts: rules:grocery.md#gr-04 (compare-deals is not standalone), machinery:grocery/identity-lib.ps1"
+  ],
+  "family_note": "The three ids are not one condition. 10d164 is the only one with a live consequence: a Family Fare trash bag is the published lemons crown today. a0c785 and b3c8ca each re-measured at zero occurrences of their own class on today's board.",
+  "items": [
+    {
+      "queue_id": "2026-09-27-10d164",
+      "subject": "Triage residual: single-flag wrong crowns and held lemons coffee croissants after c744ba",
+      "classification": "infra",
+      "status": "done",
+      "lane": "money",
+      "est_tool_calls": 60,
+      "publish_batch": "money-1",
+      "evidence": [
+        "LIVE WRONG CROWN: grocery/out/comparison-2026-09-28.json lemons: cheapest_store 'Family Fare' 0.2748 each, item 'Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct', ad '$10.99', size '40 ct', basis 'per-40-pack', source_ad 'Weekly Ad' 2026-09-27..2026-10-03. Runner-up Walmart 'Fresh Bulk Yellow Lemons' 0.50. public/board.json at 3451de927 (09:27:41 today) carries 'Glad Drawstring' twice: it is on the live site.",
+        "The quarantine block of comparison-2026-09-28 holds ONE cell (celery / Hy-Vee). ad-cycle-log.txt:41201 [2026-09-28T08:19:55] 'GUARDS QUARANTINED: 0 cell(s) held ..., 1 withheld'. The pending-pair code (fc9d0721d, 9bfa699c0) landed at 08:20:29, AFTER the 08:17-08:19 chain guards, so today's publish never ran it; on 09-27 the chain also ran without it (ad-cycle-log.txt:39612 'GUARDS OK' at 08:20:29).",
+        "WHY IT WILL STAY LIVE TOMORROW (controlled run, read-only, the audit writes nothing): audit-flag-verification.ps1 -BoardFile out/comparison-2026-09-28.json -Today 2026-09-28 -FlagsFile out/guards-2026-09-27.json -> exit 2, 'UNVERIFIED NEW-PRODUCT CROWN: lemons / Family Fare [pending-pair:pending]', 'QUARANTINE-CELL lemons|Family Fare|value'. Same board with -FlagsFile out/guards-2026-09-28.json -> exit 2 naming bacon|Fareway and frozen-pizza|Family Fare only; lemons is NOT named. The 09-29 build reads guards-2026-09-28.json.",
+        "The flag that decayed: guards-2026-09-27.json lemons carries type 'outlier' AND type 'wow' 'cheapest moved down 45% vs last week ($0.50 -> $0.27) - unexplained: a NEW price at the cheapest store: Family Fare 'Glad Drawstring ...' $0.2748 (was '8 Ct Lemon Bars' $0.7488)'. guards-2026-09-28.json lemons carries 'outlier' only: 'Family Fare $0.27 is 45% below runner-up Walmart $0.50 - verify the price/size parse'. The wow baseline is the previous comparison file, which already held the Glad claim.",
+        "Ledger: out/flag-verification.json (generated 2026-09-28) entry 'lemons|Family Fare' status 'pending', reason 'no read of this product later than 2026-09-27 has landed yet', claim item 'Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct' per_unit 0.2748. All 30 entries in the file are pending.",
+        "WHY A TRASH BAG CAN ROUTE TO LEMONS: grocery/commodities.json lemons (index 46) include '\\blemons?\\b'; its exclude already has 'trash\\s+bags?', 'detergent', '\\bcascade\\b', but the Family Fare ad line names the product without its class noun. Same shape as known-wrong 'lemons|FamilyFare|cascade-ap-comp-lemon' ('Cascade Ap Comp Lemon', 09-11), fixed by a brand word. audit-household-in-food.ps1 header: 'SCOPE OF A CLEAN REPORT: unsound. It sees only names that spell one of $HOUSEHOLD_SIGNAL's words'; none is in the Glad name.",
+        "THE STORE ALREADY SAYS WHAT IT IS: grocery/familyfare/flyer-link-evidence-2026-09-27.jsonl:179 resolves this line to Freshop product 14841 with canonical_url 'https://www.shopfamilyfare.com/shop/household/trash_bag...'. Of 171 resolved lines in that file (20 more search-failed), 5 carry department 'household': charcoal, sponges x2, dishwasher-detergent (all correct) and lemons (the bug). Nothing on the board road reads that department.",
+        "Part 3 of the residual, coffee and croissants at Hy-Vee: the ad lines 'Keurig coffee or cocoa, 8 or 10 ct., 12 oz., $6.99' (2026-09-21..09-27) and 'Bakery-fresh large croissants, sold in a 6 ct. 5.94, $0.99 each' (09-25..09-27) are in ads-2026-09-27.json and absent from ads-2026-09-28.json. The 09-28 Hy-Vee cells are 'Maxwell House Coffee, Ground, Medium, Original Roast' 27.5 oz $14.47 (0.5262/oz) and 'Croissants 6 Count' $6.99 (1.165/each). They left with the ad; git log since 09-27 shows no change to pricing-math-lib.ps1, compare-deals.ps1 or pu-lib.ps1, so both basis bugs are latent, not fixed."
+      ],
+      "root_cause": "The c744ba pending-pair hold is judged afresh each day from that day's sanity flags, and its wow half ('unexplained: a NEW price at the cheapest store') compares against the previous COMPARISON file, not against what was published. So a wrong crown the pair names on day 1 becomes the baseline that explains itself on day 2, the pair decays to a single outlier flag, and the cell publishes while its ledger entry is still pending. Reachability underneath it: a Family Fare Weekly Ad line can name a household product without its class noun, and every defence on the road (the commodity exclude, audit-household-in-food's $HOUSEHOLD_SIGNAL) is a noun or brand vocabulary; the store's own department, which the flyer-link lane records, is read by nothing that gates the board.",
+      "surface_fix": {
+        "files": [
+          "grocery/known-wrong.json"
+        ],
+        "what": "Rule the Glad row off lemons at Family Fare so the live wrong crown leaves on the next build.",
+        "exact_change": "Append an entry beside 'lemons|FamilyFare|cascade-ap-comp-lemon': key 'lemons|FamilyFare|glad-drawstring-odor-shield-lemon', commodity 'lemons', store 'Family Fare', names ['Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct'], product_id '14841', verdict 'wrong-product', evidence 'Glad tall kitchen trash bags (Freshop 14841, shopfamilyfare.com/shop/household/trash_bag), not lemons. Crowned lemons at 0.2748/each on comparison-2026-09-27 (held by the pending pair) and on comparison-2026-09-28 (published 3451de927). Found in triage plan-2026-09-28-10, queue 2026-09-27-10d164.', seen_on_board 'yes - on the newest board when this ruling was made', ruled_on '2026-09-28', ruled_by 'triage-developer 2026-09-28', retire_when 'ruling-reversed' (closed vocabulary, see memory known-wrong-retire-when-is-closed-vocabulary)."
+      },
+      "root_fix": {
+        "files": [
+          "grocery/flag-verify-lib.ps1",
+          "grocery/audit-flag-verification.ps1",
+          "grocery/test-flag-pending-pair.ps1"
+        ],
+        "what": "A pending pair PERSISTS for its exact claim until the ledger closes it or the claim leaves the board, instead of being re-derived from one day's flags.",
+        "exact_change": "In Get-TcPendingPairCells (flag-verify-lib.ps1) accept the flags of EVERY guards-<date>.json on or before the board date and no older than the claim's own ad_from (or, for an everyday claim with no ad_from, the ledger entry's first-seen day, capped at 7 days back), not only the newest. A crown is named when, on ANY of those days, the same claim key (id|store|item|per_unit, the key the function already matches on) carried both an unverified 'outlier' and a 'wow' reading 'unexplained: a NEW price at the cheapest store', AND its ledger entry is still pending today. A closed 'match' still releases it; a changed claim (different item or per_unit) is a new claim and starts over. audit-flag-verification.ps1 lines 90-94 today pick ONE file ('Sort-Object Name -Descending | Select-Object -First 1'); pass the list instead, print how many files and which days it read, and say BLIND when none. The guards files are 8 in the 14 days to 09-28, so the read stays cheap."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "affected_now": "1 cell on comparison-2026-09-28 (lemons|Family Fare), the only claim whose day-1 pair decayed; 0 routing changes",
+        "measured_by": "read-only runs of grocery/audit-flag-verification.ps1 against comparison-2026-09-28 with -FlagsFile guards-2026-09-27.json and guards-2026-09-28.json (exit 2 both, cells named compared), plus a per-day flag-type tally for every out/flag-verification.json entry over the 8 guards-2026-09-*.json files 09-14..09-28; call sites of Get-TcPendingPairCells: audit-flag-verification.ps1:98 and grocery/test-flag-pending-pair.ps1",
+        "corpus": "No product routes differently: this changes which already-routed crowns the guard holds. Measured over the 8 guards-2026-09-*.json files 09-14..09-28, out/flag-verification.json (30 entries, generated 2026-09-28) and comparison-2026-09-28. Pair cells by flags day: guards-09-27 -> frozen-pizza|Family Fare, lemons|Family Fare; guards-09-28 -> bacon|Fareway, frozen-pizza|Family Fare. Carrying pairs forward adds exactly ONE cell on today's board: lemons|Family Fare. Positive control: the lemons claim reads 'outlier+wowNEW' on guards-2026-09-27 and 'outlier' on guards-2026-09-28 in the same simulation.",
+        "newly_matched": [],
+        "commodities_losing_a_cell": [
+          "lemons loses its Family Fare cell (the only FF lemons row on comparison-2026-09-28 is the Glad row). That is the intended outcome."
+        ],
+        "cell_effects": [
+          {
+            "commodity": "lemons",
+            "store": "Family Fare",
+            "before": "0.2748/each (Glad trash bags, crown)",
+            "after": "absent (known-wrong) or WITHHELD by the persisted pair; the prior published value, 0.7488 '8 Ct Lemon Bars' at 94d3e7970, was itself a wrong product and a sale, so gr-01 withholds rather than holds"
+          },
+          {
+            "commodity": "lemons",
+            "store": "(crown)",
+            "before": "Family Fare 0.2748",
+            "after": "Walmart 0.50 'Fresh Bulk Yellow Lemons'"
+          }
+        ]
+      },
+      "proof": {
+        "harness": "grocery/test-flag-pending-pair.ps1 (the c744ba suite, 9 cases at landing) plus test-auditors.ps1 and run-gates",
+        "guard_or_fixture": "grocery/test-flag-pending-pair.ps1 new cases (MUST FIRE 'pair decays on day 2', three CLEAN TWINs, one MUST NOT FIRE), frozen from the real 09-27/09-28 rows, never regenerated from the live board; the guard exercised is audit-flag-verification.ps1, a delegated guards.ps1 audit (Register-Kid 'flag-verification')",
+        "must_fire_case": "MUST FIRE 'pair decays on day 2': frozen from the real rows. Board: the comparison-2026-09-28 lemons row (Family Fare, 'Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct', 0.2748, ad_from 2026-09-27). Flags day 1 (guards-2026-09-27): lemons outlier + wow 'unexplained: a NEW price at the cheapest store' for that claim. Flags day 2 (guards-2026-09-28): lemons outlier only. Ledger: 'lemons|Family Fare' pending with that claim. Assert Get-TcPendingPairCells names lemons|Family Fare|value. Today's code names nothing for it (proved by the -FlagsFile guards-2026-09-28 run above), so the case must fail before the fix.",
+        "clean_twin": "CLEAN TWIN 1: the same two days with the ledger entry closed 'match' -> not named (release still works). CLEAN TWIN 2: day 2 board carries a DIFFERENT claim for lemons|Family Fare (another item or per_unit) -> not named from the day-1 pair. CLEAN TWIN 3: a day-1 pair whose day falls before the claim's ad_from -> not carried. MUST NOT FIRE: the 09-28 bacon|Fareway pair is still named exactly once (no duplicate from two days).",
+        "reaches_the_changed_path": "The suite calls Get-TcPendingPairCells directly with -Flags; the multi-day case needs a flags input that is a list of day files, so the signature change is exercised by the suite, not only by the audit script."
+      },
+      "rollback": "Revert the flag-verify-lib.ps1 and audit-flag-verification.ps1 change (the audit returns to the newest single flags file). The known-wrong entry stands on its own; retire it only by 'ruling-reversed'.",
+      "freshness": "comparison-2026-09-28 built 08:17:56 (not mid-build; public/board.json 3451de927 at 09:27:41 is the 09:20 rebuild of the same board); guards-2026-09-27.json 08:27:12 and guards-2026-09-28.json 08:26:54; flag-verification.json generated 2026-09-28; ads-2026-09-27/28.json; flyer-link-evidence-2026-09-27.jsonl. HEAD c349cbd77. The Family Fare sweep lands every three hours; the lemons row is an ad row (window 09-27..10-03), so it will not change before the ad ends.",
+      "leaves_open": "(1) The reachability half of the root cause: no gate reads the store's own department. A Family Fare ad line naming a household product without a class noun still routes to a food commodity, and the new known-wrong entry stops this one product only. Fix shape: audit-household-in-food (hard, cell-scoped) gains a second input, the flyer-link evidence department (/shop/household/, and the personal-care, pet and baby departments), for any FF ad claim on a food commodity. Covers Family Fare ad lines the flyer linker resolves (171 of 191 lines on 09-27); other stores' ad lines stay vocabulary-only. (2) Single-flag wrong crowns that never carried a pair on any day (outlier only, or unexplained wow only): the residual's measurement 'crowns whose ledger verdict later closed wrong' is not computable from out/flag-verification.json, which holds 30 entries, all pending, and no closed history; where closed verdicts go was not located this pass. (3) The NEW-CONTESTED page per contested name (3 pages in 30 days: 2dae07, b2850b, c744ba; 14 of c744ba's 17 rows on no board cell) is alert recalibration, not this fix. (4) The two Hy-Vee basis bugs are latent: 'N or M ct., 12 oz.' read as pack count x 12 oz, and '$0.99 each' divided by the 6 ct. multibuy. They left the board with their ad on 09-27; no code changed.",
+      "leaves_open_occurrences": "(1) 2 in 17 days (Cascade Ap Comp Lemon, board 2026-09-11; Glad Drawstring ... Lemon, boards 09-27 and 09-28), both Family Fare Weekly Ad lines on lemons: becomes a weekly-lane queue item. (2) 0 measurable (the ledger holds no closed verdicts); the one observed single-flag wrong crown (lemons 09-28) is the decay case this fix closes: owned by watch:grocery/audit-flag-verification.ps1. (3) 3 pages in 30 days: weekly-lane Phase 2 recalibration. (4) 1 each on 2026-09-27 (Hy-Vee coffee 0.0582/oz, Hy-Vee croissants 0.165/each): each becomes a weekly-lane parse-basis queue item.",
+      "resolution_note": "Lemons at Family Fare was a Glad trash bag, live on the published board today (3451de927). Two causes: the c744ba pending pair had not landed when the 09-27 and 09-28 chains ran, and even landed it releases a wrong crown on day 2, because the wow half is judged against the previous comparison, which already held the wrong claim (proved: -FlagsFile guards-2026-09-27 names lemons, guards-2026-09-28 does not). Shipped in bef0be7ec: a known-wrong entry for the Glad row (compare-deals drops it at build; audit-known-wrong already BLOCKS the cell on today's board, cell-scoped), and a pending pair that persists for its exact claim across every guards-<date>.json from its ad_from (everyday: ledger first_flagged, max 7 days) until the ledger closes it. Proof: test-flag-pending-pair.ps1 14 cases, exit 0, 'self-test pass'; HEAD's lib fails the new MUST FIRE 'pair decays on day 2' (exit 1) in a temp mirror; live replay adds exactly lemons|Family Fare. Board NOT rebuilt or republished by this item: the live wrong price clears on the next build+publish. Left open: the store's own department (flyer-link records /shop/household/) is read by no gate, 2 occurrences in 17 days, queued weekly as 2026-09-28-6fc290; the Hy-Vee Keurig and $0.99-croissant basis bugs are latent, queued weekly as 2026-09-28-9ee1f9; single-flag-only wrong crowns are watched by grocery/audit-flag-verification.ps1; the NEW-CONTESTED page is recalibration work.",
+      "premise_verified": "true - re-read 2026-09-28 in the main checkout: comparison-2026-09-28 lemons cheapest_store Family Fare 0.2748, FF row 'Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct' ad_from 2026-09-27; guards-2026-09-27 lemons carries outlier + wow 'unexplained: a NEW price at the cheapest store'; guards-2026-09-28 lemons carries outlier only. Blast radius confirmed against the plan's measurement, not re-derived: the read-only multi-day replay (audit-flag-verification.ps1 -BoardFile out/comparison-2026-09-28.json -Today 2026-09-28 -NoRejudge, 8 guards files 09-14..09-28) names bacon|Fareway, frozen-pizza|Family Fare and lemons|Family Fare, exit 2, cells=3: the plan's single-file set plus exactly lemons.",
+      "shipped_commit": "bef0be7ec",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 27,
+      "leaves_open_followup": "2026-09-28-6fc290",
+      "live_check": "lemons / Family Fare: after the next board build and publish, public/board.json carries no 'Glad Drawstring' and the lemons crown is Walmart 0.50 'Fresh Bulk Yellow Lemons' (or another real lemon). Fetch with a fresh cache-busting query, never the new ?v= before the push."
+    },
+    {
+      "queue_id": "2026-09-18-a0c785",
+      "subject": "Grocery: beverage class absent on 241 non-drink commodities in five display buckets (residual of 2026-09-18-55b7aa)",
+      "classification": "no-code-change",
+      "status": "no-code-change",
+      "evidence": [
+        "Re-measured on comparison-2026-09-28 with category-excludes.json classes.beverage (30 tokens) over every cell of the five buckets (a superset: 244 ids, the alert names 241, because the apply_ids exclusion keyed one level too high): Dairy & Eggs 128 cells 0 hits, Canned & Soup 300 cells 0 hits, Sauces & Condiments 256 cells 0 hits, Baking & Spices 338 cells 0 hits, Coffee, Oils & Spreads 106 cells 0 hits. Total 0 of 1,128. Positive control: the same regex matches 'Whole Moon Pistachio Plant Beverage Whole Protein' (True), and 92 cells board-wide carry beverage tokens, all outside these buckets."
+      ],
+      "root_cause": "By design at 55b7aa: the beverage class is scoped by display bucket, and the shared apply block for these five buckets carries no beverage class, so audit-food-category is blind to a drink on them (memory class-scope-by-display-taxonomy).",
+      "root_fix_none_because": "Zero occurrences on two measurements 11 days apart (09-17: 1,284 cells; 09-28: 1,128 cells), and the class has happened once in the estate, on an id now covered by apply_ids (f90ba6). Adding the class needs a routing measurement per bucket for no observed defect: new machinery that does not pay for itself.",
+      "leaves_open": "A fluid-ounce drink crowning a fluid-ounce commodity (oils, vinegars, sauces) in these buckets is seen by nothing. The weight/each half is caught by audit-unit-basis-outlier kind_mismatch_crown (a guards hard fail). For Family Fare ad lines the flyer-link department ('beverages', 52 of 171 resolved lines on 09-27, all on coffee, coffee-creamer and coffee-pods) would cover it without a token list if 10d164's leaves_open (1) lands as a department input.",
+      "leaves_open_occurrences": "0 over 2026-09-17..2026-09-28 in these buckets; owned by watch:grocery/audit-unit-basis-outlier.ps1 for the weight/each half.",
+      "resolution_note": "No code change. Re-measured on comparison-2026-09-28: 0 beverage-token hits across 1,128 cells of the five buckets (positive control: the regex matches the pistachio milk, and 92 cells board-wide carry beverage tokens). Two zero measurements 11 days apart, and one occurrence ever, already fixed. kind_mismatch_crown watches the weight/each half; the fluid-ounce half has no watcher and is named in leaves_open. Reopen if a drink ever crowns a commodity in these buckets."
+    },
+    {
+      "queue_id": "2026-09-25-b3c8ca",
+      "subject": "triage residual: a name that cannot state its form is routed by name alone (d493dd)",
+      "classification": "no-code-change",
+      "status": "no-code-change",
+      "evidence": [
+        "out/coverage-gaps.json (generated 2026-09-28 08:24, classified_against candidates-2026-09-28.json): 316 gaps, 18 BASIS-NULL. By reading all 18: 16 sit on the right commodity with a size the engine cannot express ('' from a size range such as 'Dawn dishwashing liquid, 38 to 67 fl. oz.', 'lb' on each-sold kale and pie pumpkin, '$0.56/oz', 'Fresh Meat Counter', '12 ct' on string-cheese, '2 ea' phyllo); 2 are wrong products whose names DO state their form (Aldi 'Bremer Angus Cheeseburger Pita Melt 13.5 OZ' on pita-bread; Hy-Vee 'apple juice, 12 fl. oz. concentrate' on apple-juice). 0 are the d493dd class (a name that cannot state its form, claimed first by a commodity that cannot price it while another would).",
+        "candidates-2026-09-28.json holds priced rows only (unit_price, basis): 0 BASIS-NULL and 0 null per_unit records, so the row-level count the residual asks for cannot be read from any artifact; coverage-gaps re-derives BASIS-NULL only for store cells that are empty."
+      ],
+      "root_cause": "The engine routes first-match-wins by name and prices only afterwards, so a row whose size kind fits a later commodity is unpriced on its first match and never offered to the later one. Unpriced rows are recorded only where they leave a store cell empty (coverage-gaps BASIS-NULL), so a shadowed occurrence is invisible.",
+      "root_fix_none_because": "One occurrence ever (Hy-Vee Dole Mandarin Oranges on fruit-cups, board 09-23), closed by d493dd's fruit-cups narrowing, and 0 of 18 BASIS-NULL gaps on today's board are the class. Measuring shadowed rows needs a new per-row emit from compare-deals (a lifted, not-standalone engine, gr-04), which costs more than one occurrence in five boards justifies.",
+      "leaves_open": "Shadowed occurrences (a row unpriced on its first match while another row fills that store cell) cannot be counted from any artifact. Also found, outside this class: the Aldi 'Bremer ... Pita Melt' rows are wrong products on pita-bread, currently harmless because they are unpriced.",
+      "leaves_open_occurrences": "1 gap-level occurrence over 2026-09-23..2026-09-28 (the mandarin jar, fixed); 0 today. Owned by watch:grocery/audit-coverage-gaps.ps1, whose BASIS-NULL listing is how d493dd found the first one.",
+      "resolution_note": "No code change. Re-measured on today's coverage-gaps: 18 BASIS-NULL gaps, 16 are right-commodity sizes the engine cannot express, 2 are wrong products that name their own form (Aldi Pita Melt, Hy-Vee juice concentrate), and 0 are the name-cannot-state-its-form class. Rows hidden behind a priced row cannot be counted without a new engine emit, and one occurrence in five boards does not pay for one. Reopen if a second BASIS-NULL of this shape appears in coverage-gaps."
+    }
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. money (triage-developer), publish batch money-1: 2026-09-27-10d164. First the known-wrong.json entry for the Glad row (the live wrong crown), then the flag-verify-lib.ps1 / audit-flag-verification.ps1 persistence change with its new cases in grocery/test-flag-pending-pair.ps1 (MUST FIRE 'pair decays on day 2' red before the fix, green after; 3 clean twins and the bacon MUST NOT FIRE green). Proof: test-flag-pending-pair.ps1 exit 0 with its verdict line, test-auditors.ps1 exit 0, run-gates exit 0. Land through ops/push-main.ps1, never git push origin HEAD:main.",
+    "2. Live verification, in a scratch clone, never the landing checkout: run audit-flag-verification.ps1 -BoardFile out/comparison-2026-09-28.json -Today 2026-09-28 with the multi-file read (no -FlagsFile) and read 'QUARANTINE-CELL lemons|Family Fare|value'. After the next chain build (09-29), confirm comparison-2026-09-29 lemons has no Family Fare 'Glad' row and the crown is Walmart 0.50 or another real lemon, and that public/board.json no longer carries 'Glad Drawstring' (fetch with a cache-busting query).",
+    "3. Close a0c785 and b3c8ca as no-code-change with their resolution notes. Open weekly-lane queue items for 10d164 leaves_open (1) department input to audit-household-in-food and (4) the two Hy-Vee basis bugs."
+  ]
+}
