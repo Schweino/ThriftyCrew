@@ -44,10 +44,24 @@ $script:IdentityQualifierWords = @('fresh','raw','large','small','medium','whole
 # `mozzarella`, "Soy Sauce" about `soy`, "Chicken Broth" about `chicken`.
 $script:IdentityGenericHeads = @('cheese','sauce','seasoning','spice','mix','oil','juice','broth','stock','paste','powder','blend')
 
+function ConvertTo-IdentityFoldedText {
+  <# The text with its diacritics folded (e-grave -> e, n-tilde -> n): FormD, drop NonSpacingMark, back to FormC.
+     The same shape as grocery/pull-regular-bakers-api.ps1's transliteration. Without it the ASCII strip below turned
+     'Gruyere' spelled with an e-grave into 'gruy re', which never names gruyere (2026-09-27-8161ce). Used by the
+     NAME TESTS only: ConvertTo-IdentityStoreKey and ConvertTo-IdentityProductKey stay unfolded so no mark key moves. #>
+  param([string]$Text)
+  if (-not $Text) { return '' }
+  $sb = New-Object System.Text.StringBuilder
+  foreach ($ch in $Text.Normalize([Text.NormalizationForm]::FormD).ToCharArray()) {
+    if ([Globalization.CharUnicodeInfo]::GetUnicodeCategory($ch) -ne [Globalization.UnicodeCategory]::NonSpacingMark) { [void]$sb.Append($ch) }
+  }
+  return $sb.ToString().Normalize([Text.NormalizationForm]::FormC)
+}
+
 function Get-IdentityTokens {
   param([string]$Text)
   if (-not $Text) { return @() }
-  $t = ($Text.ToLower() -replace '[^a-z0-9 ]', ' ')
+  $t = ((ConvertTo-IdentityFoldedText $Text).ToLower() -replace '[^a-z0-9 ]', ' ')
   $out = @()
   foreach ($w in ($t -split '\s+')) { if ($w) { $out += (Get-TokenStem $w) } }
   return $out
@@ -100,7 +114,7 @@ function Test-PricingRowNamesIngredient {
   $toks = @(Get-IdentityTokens $ProductName)
   if ($toks -contains $ask) { return $true }
   # A compound the store splits ('Cornstarch' against 'Corn Starch') is the same word: look in the joined name.
-  $joined = (([string]$ProductName).ToLower() -replace '[^a-z0-9]', '')
+  $joined = ((ConvertTo-IdentityFoldedText ([string]$ProductName)).ToLower() -replace '[^a-z0-9]', '')
   return ($ask.Length -ge 5 -and $joined.Contains($ask))
 }
 

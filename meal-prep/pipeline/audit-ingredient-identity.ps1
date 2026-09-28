@@ -243,6 +243,14 @@ if ($SelfTest) {
   function KeysOf($res) { return ,@(@($res.findings) | ForEach-Object { [string]$_.key }) }
   $emptyIx = @{}
 
+  # ACCENTED NAMES NAME THE FOOD (2026-09-27-8161ce). Built from [char] codes: a BOM-less .ps1 reads as ANSI under PS 5.1.
+  $emmi = 'Emmi Le Gruy' + [char]0x00E8 + 're cheese, 6 oz., $9.99'
+  $gouda = 'Smoked Gouda Cr' + [char]0x00E8 + 'me Cheese'
+  Check 'MUST FIRE  "Emmi Le Gruyere" spelled with an e-grave names Gruyere Cheese (the 2026-09-28 Hy-Vee RISE)' (Test-PricingRowNamesIngredient -Ingredient 'Gruyere Cheese' -ProductName $emmi) 'false'
+  Check 'MUST NOT FIRE  an accented wrong product ("Smoked Gouda Creme" with an e-grave) still does not name Gruyere Cheese' (-not (Test-PricingRowNamesIngredient -Ingredient 'Gruyere Cheese' -ProductName $gouda)) 'true'
+  Check 'CLEAN TWIN  the product KEY of the accented Emmi name is unfolded and unchanged (emmilegruyrecheese6oz999), so no mark key moves' ((ConvertTo-IdentityProductKey $emmi) -eq 'emmilegruyrecheese6oz999') (ConvertTo-IdentityProductKey $emmi)
+  Check 'CLEAN TWIN  the ASCII name "Happy Farms ... Swiss Gruyere Cheese 8 OZ" still names Gruyere Cheese' (Test-PricingRowNamesIngredient -Ingredient 'Gruyere Cheese' -ProductName 'Happy Farms Preferred Specialty Shredded Swiss Gruyere Cheese 8 OZ') 'false'
+
   $k = KindsOf @(Rw 'Shallots' 'onions')
   Check 'MUST FIRE  Shallots bid onions (relation same) is a PROXY: its own name routes to shallots' ($k -contains 'PROXY') ($k -join ',')
   $k = KindsOf @(Rw 'Pork Chorizo' 'ground-pork')
@@ -488,7 +496,7 @@ if ($SelfTest) {
     Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
   } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 66) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 66 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 70) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 70 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
