@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-26T21:37:28",
+  "generated_at": "2026-09-27T21:38:12",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -268,18 +268,6 @@
       "payload": "radiance.*dishwashing\\s+gel",
       "stage1_confidence": 0.9,
       "rationale": "'Radiance Automatic Dishwashing Gel' is dish soap. The pattern anchors on the brand and 'dishwashing gel'.",
-      "blast_radius": {
-        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
-      }
-    },
-    {
-      "proposal_id": "lp:15b86381b00f7df97f95",
-      "kind": "add_alias",
-      "target": "dog-food-dry",
-      "target_label": null,
-      "payload": "dry\\s+doog\\s+food",
-      "stage1_confidence": 0.9,
-      "rationale": "'Premium Dry Doog Food' is dry dog food (typo 'Doog'). The pattern matches the typo specifically.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
@@ -820,6 +808,90 @@
       "payload": "cranberry.*juice",
       "stage1_confidence": 0.9,
       "rationale": "Matches 'Simply Cranberry Cocktail Juice Drink Bottle'. Anchors on 'cranberry' and 'juice'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4225e3b592609573f9a0",
+      "kind": "add_alias",
+      "target": "cajun-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+spice\\s+rub",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Rib Rack Cajun Spice Rub', a specific type of Cajun seasoning.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:4421973afb81d71ecded",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "black\\s+bean\\s+chili",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Amy's Organic Black Bean Chili', a specific variety of canned chili.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:903178d101024ca69763",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "medium\\s+chili",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Amy's Organic Medium Chili' and similar heat-level specific canned chilies.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:d026567568caf7ef6e91",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "spicy\\s+chili",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Amy's Organic Spicy Chili', a specific variety of canned chili.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:6b3538de72f4a3d78efe",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "meatless\\s+chili",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Simple Truth Protein 2 Bean and Vegetable Meatless Chili'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:f1b363ec4dafa4e6e4c4",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "bacon\\s+bean\\s+beef\\s+chilli",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'WENDYS Bacon Bean Beef Chilli', a specific canned chili product.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:a2a0ec317a6e743722b4",
+      "kind": "add_alias",
+      "target": "canned-green-beans",
+      "target_label": null,
+      "payload": "cut\\s+wax\\s+beans",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Kroger Cut Wax Beans', which are a type of canned green bean.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
