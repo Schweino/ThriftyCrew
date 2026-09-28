@@ -362,6 +362,8 @@ if ($rwA.rc -eq 1 -and $rwA.list -match '(?m)^fixture eggs\t+fx-eggs\tDROPPED') 
 else { Bad ('rescue-worklist missed its DROPPED founding case: rc=' + $rwA.rc + ' - a board cell lost to a narrower re-capture produces no re-search term again') }
 if ($rwA.list -match '(?m)^fixture toast\t+fx-toast\tUNTRACEABLE') { Ok 'rescue-worklist flags a cell no capture on disk still carries (unknown provenance = capture it)' }
 else { Bad 'rescue-worklist no longer flags an UNTRACEABLE cell - a price we cannot attribute to any file is being reported as healthy' }
+if ($rwA.list -match '(?m)^fixture jam\t+fx-jam\tEXPIRING\t5d left') { Ok 'rescue-worklist CLEAN TWIN: a marked-down row traces by its REGULAR price, the price the board shows for an everyday cell' }
+else { Bad 'rescue-worklist no longer traces a marked-down row by its regular price - every Fareway markdown reads UNTRACEABLE again (114 of 223 cells on 2026-09-27)' }
 if ($rwA.list -match '(?m)^fixture milk\t+fx-milk\tEXPIRING\t5d left') { Ok 'rescue-worklist counts an expiring cell down to the exact day its only source leaves the union window' }
 else { Bad 'rescue-worklist lost the EXPIRING section or its days-left arithmetic - the 21-cell Walmart silent countdown is invisible again' }
 if ($rwA.hasList -and $rwA.list -match 'DEEP CAPTURE REQUIRED') { Ok 'the emitted worklist carries the DEEP CAPTURE warning (a narrow re-capture WINS the commodity with thinner data)' }

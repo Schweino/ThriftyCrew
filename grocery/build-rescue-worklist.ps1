@@ -226,6 +226,12 @@ foreach ($store in $walled) {
       foreach ($d in @($j.deals)) {
         if ($null -eq $d) { continue }
         $idx[(Get-CellKey ([string]$d.item) ([string]$d.ad_price))] = $cf.date
+        # A row MARKED DOWN in store carries the markdown as ad_price and the shelf price as `regular`, and the
+        # board prices an EVERYDAY cell at the regular. Keyed on ad_price alone, every such cell read
+        # UNTRACEABLE: 114 of 223 Fareway everyday cells on 2026-09-27, each one still in yesterday's capture.
+        if ($d.PSObject.Properties['regular'] -and ([string]$d.regular).Trim()) {
+          $idx[(Get-CellKey ([string]$d.item) ([string]$d.regular))] = $cf.date
+        }
       }
     }
   }
