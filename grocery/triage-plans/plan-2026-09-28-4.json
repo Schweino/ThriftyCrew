@@ -1,100 +1,100 @@
 {
-    "generated":  "2026-09-28T12:45:00",
-    "round":  1,
-    "board_week":  "comparison-2026-09-28",
-    "board_generation_note":  "JOB 3 cheap-items lane of the 2026-09-28 override run. Nothing here reads or changes a board, a matching rule or a price, so no routing artifact is written. Promoted to the reviewer, not planned here: 2026-09-26-6b8ce9 (needs a new share detector) and 2026-09-27-78df57 (27 ops/hooks commits in 30 days, not 1 occurrence; fix sits in ops/push-main.ps1).",
-    "routing_artifact":  null,
-    "queue_ids_seen":  [
-                           "2026-09-26-86a27b",
-                           "2026-09-28-37406f"
-                       ],
-    "knowledge_consulted":  [
-                                "searched --estate --multi \u0027consecutive clean days streak\u0027 \u0027report only never a finding page\u0027: nothing applicable (top hits were retry backoff and audit-triage sections)",
-                                "used .claude/rules/ops-and-gates.md og-06 (a threshold detector carries a case AT its bar and one a step off): the streak fixture reads 7 at the D4 bar of 7 and 6 one step below",
-                                "used .claude/rules/ops-and-gates.md og-13 (a threshold that goes quiet when the producer stops): a clean streak is \u0027nothing happening\u0027, so a day with no census row breaks the streak rather than counting as clean"
-                            ],
-    "open_questions_for_brad":  null,
-    "ship_sequence":  [
-                          "1. ops: 2026-09-26-86a27b, lib/production-writers.ps1 clean streak plus grocery/capture-watchdog.ps1 D4 READY finding.",
-                          "2. ops: 2026-09-28-37406f, no code change; same occurrence as 07ed53, re-measured no recurrence."
-                      ],
-    "items":  [
-                  {
-                      "queue_id":  "2026-09-26-86a27b",
-                      "subject":  "Triage residual: bot checkout intruder set-aside awaits 7 clean census days",
-                      "lane":  "ops",
-                      "est_tool_calls":  10,
-                      "classification":  "confirmed",
-                      "evidence":  [
-                                       "queue 2026-09-26-86a27b body: \"Nothing pages when the 7 days are reached, so this item owns the flip.\"",
-                                       "\u003cgit common dir\u003e\\tc-production-intruders.jsonl rows read 2026-09-28: 2026-09-26 \"unregistered\":12, 2026-09-27 \"unregistered\":12, 2026-09-28 \"unregistered\":8, all \"policy\":\"wait\". Clean streak 0 of 7.",
-                                       "grocery/capture-watchdog.ps1 section 10 before this change: \"It is an ok line, never a finding: D4\u0027s set-aside waits for 7 clean days of these rows\" - only an ok line, so reaching the bar paged nothing."
-                                   ],
-                      "root_cause":  "A ruled switch-on condition (D4: 7 clean census days) was recorded daily but never evaluated: the census check returned a report line and no state, so the flip depended on a queue item sitting open until someone remembered to count rows.",
-                      "root_fix":  {
-                                       "what":  "lib/production-writers.ps1 gains Get-TcProductionCleanStreak (consecutive calendar days ending today with 0 unregistered; a missing day breaks it) and Invoke-TcProductionCensusCheck returns d4_ready when the streak reaches the ruled 7 and intruder_policy is still wait; grocery/capture-watchdog.ps1 turns d4_ready into a D4 READY finding, which pages under -Alert.",
-                                       "where":  "lib/production-writers.ps1 (Get-TcProductionCleanStreak, Invoke-TcProductionCensusCheck d4_ready); grocery/capture-watchdog.ps1 section 10"
-                                   },
-                      "blast_radius":  {
-                                           "measured_as":  "call sites",
-                                           "measured_by":  "grep Invoke-TcProductionCensusCheck: capture-watchdog.ps1 section 10 and ops/report-production-intruders.ps1; the new d4_ready property is read only by the watchdog",
-                                           "affected_now":  0,
-                                           "names":  "capture-watchdog (10:30) adds \u0027clean streak N of 7\u0027 to its ok line; no finding until 7 clean days"
-                                       },
-                      "proof":  {
-                                    "must_fire_case":  "lib/production-writers.ps1 -SelfTest \u0027MUST FIRE: seven clean days in a row read a streak of 7, AT the D4 bar of 7\u0027 and \u0027MUST FIRE: seven clean recorded days under policy wait report d4_ready\u0027",
-                                    "clean_twin":  "\u0027CLEAN TWIN: six clean days read 6, one step below the D4 bar of 7\u0027; MUST NOT FIRE cases for the founding 8-unregistered day, a gap day, and a dirty 7th day",
-                                    "ran":  "powershell -NoProfile -File lib\\production-writers.ps1 -SelfTest: exit 0, PRODUCTION-WRITERS SELF-TEST PASS (23 of 23 cases); capture-watchdog.ps1 parse errors 0",
-                                    "guard_or_fixture":  "lib/production-writers.ps1 -SelfTest, six new cases (streak at bar, step below, founding day, gap day, dirty 7th day, d4_ready)"
-                                },
-                      "rollback":  "Revert the commit; the watchdog returns to an ok line only.",
-                      "freshness":  "measured 2026-09-28 12:30 in the main checkout against the live census log",
-                      "leaves_open":  "The D4 flip itself (set intruder_policy to set-aside) once 7 clean days arrive; 0 of 7 today.",
-                      "leaves_open_occurrences":  0,
-                      "leaves_open_followup":  "watch:grocery/capture-watchdog.ps1",
-                      "leaves_open_note":  "The watchdog\u0027s D4 READY finding pages on the first day the streak reaches 7 while policy is still wait.",
-                      "status":  "done",
-                      "premise_verified":  "Yes: census reads 12, 12, 8 unregistered over 09-26..28, and nothing evaluated the streak.",
-                      "deviation":  "Instead of holding the queue item open for the flip, the flip is now owned by a check that pages when the ruled bar is met.",
-                      "shipped_commit":  null,
-                      "full_suite":  "deferred-to-land",
-                      "close_disposition":  "confirmed",
-                      "resolution_note":  "Real gap: the D4 bar was recorded daily but nothing counted it. The watchdog now pages D4 READY on the first day of 7 clean census days while policy is still wait. Today 0 of 7 (12, 12, 8 unregistered).",
-                      "actual_tool_calls":  9
-                  },
-                  {
-                      "queue_id":  "2026-09-28-37406f",
-                      "subject":  "Triage residual: TC Boot Watch 15-minute repetition dropped by Task Scheduler",
-                      "lane":  "ops",
-                      "est_tool_calls":  4,
-                      "classification":  "no-code-change",
-                      "evidence":  [
-                                       "queue 2026-09-28-37406f emitter \"grocery/triage-plans/plan-2026-09-28-3.json\", body \"Residual of triage 2026-09-27-07ed53\": it is the residual 07ed53 minted, not a duplicate or a separate stall. The plan\u0027s 11:55 change is that plan\u0027s own write (07ed53 leaves_open_followup names 37406f).",
-                                       "Re-measure 2026-09-28 12:25: Get-ScheduledTaskInfo \u0027TC Boot Watch\u0027 LastRunTime 12:20:01, LastTaskResult 0, NextRunTime 12:35:00; TaskScheduler/Operational event 107 for the task since 09-28 00:00: 37 launches, one gap 00:05:01 -\u003e 03:43:39 matching System Kernel-Power 42 sleep at 00:12:03.",
-                                       "plan-2026-09-28-3.json 07ed53 proof.must_fire_case: \"health-heartbeat.ps1 paged TASK STALE for TC Boot Watch at 5.9h against its 2h bar\""
-                                   ],
-                      "root_cause":  "A repetition-based TC task depends on Task Scheduler keeping a PT15M repetition alive inside a P1D window, and the scheduler dropped it once (2026-09-27 04:35) with no event naming a cause; the task definition cannot notice that, only the heartbeat\u0027s age bar can.",
-                      "root_fix_none_because":  "One occurrence since registration, cause unmeasured (LogonTrigger is a hypothesis only), no recurrence in 37 launches today; re-registering a live task\u0027s triggers on one unexplained stall would be a guess, and health-heartbeat\u0027s TASK STALE bar pages any recurrence within 2h.",
-                      "proof":  {
-                                    "must_fire_case":  "Existing: grocery/health-heartbeat.ps1 paged TASK STALE for TC Boot Watch at 5.9h against its 2h bar (queue 2026-09-27-07ed53). No code changed.",
-                                    "clean_twin":  "Existing: the same heartbeat stayed silent for TC Process Reaper and TC Sidecar Watchdog, 78 launches each over the same span.",
-                                    "ran":  "measurement only: Get-ScheduledTaskInfo, Get-WinEvent TaskScheduler/Operational id 107 and System id 42 since 2026-09-28 00:00",
-                                    "guard_or_fixture":  "existing: grocery/health-heartbeat.ps1 TASK STALE 2h bar"
-                                },
-                      "rollback":  "Nothing to roll back: no code changed.",
-                      "freshness":  "measured 2026-09-28 12:25 against the live scheduler in the main checkout",
-                      "leaves_open":  "A second unexplained drop of TC Boot Watch\u0027s repetition (the cause of the first stays unmeasured); the candidate change in plan-2026-09-28-3.json 07ed53 prevention.exact_change applies if it recurs.",
-                      "leaves_open_occurrences":  0,
-                      "leaves_open_followup":  "watch:grocery/health-heartbeat.ps1",
-                      "leaves_open_note":  "0 recurrences since the 2026-09-27 stall; health-heartbeat\u0027s TASK STALE (2h bar) paged the first and pages the next.",
-                      "status":  "done",
-                      "premise_verified":  "Same occurrence as 07ed53, re-measured: no recurrence (37 launches today, only gap is a logged sleep).",
-                      "deviation":  null,
-                      "shipped_commit":  null,
-                      "full_suite":  "not-applicable: no code changed",
-                      "close_disposition":  "wont-fix",
-                      "resolution_note":  "This is 07ed53\u0027s own residual, not a new stall. Re-measured 2026-09-28 12:25: 37 launches today, the only gap is the 00:12 sleep. One unexplained drop in 3.5 days with no scheduler event is not enough to re-register a live task; health-heartbeat pages any recurrence within 2h, and 07ed53\u0027s plan carries the candidate change for that day.",
-                      "actual_tool_calls":  3
-                  }
-              ]
+  "generated": "2026-09-28T12:45:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "JOB 3 cheap-items lane of the 2026-09-28 override run. Nothing here reads or changes a board, a matching rule or a price, so no routing artifact is written. Promoted to the reviewer, not planned here: 2026-09-26-6b8ce9 (needs a new share detector) and 2026-09-27-78df57 (27 ops/hooks commits in 30 days, not 1 occurrence; fix sits in ops/push-main.ps1).",
+  "routing_artifact": null,
+  "queue_ids_seen": [
+    "2026-09-26-86a27b",
+    "2026-09-28-37406f"
+  ],
+  "knowledge_consulted": [
+    "searched --estate --multi 'consecutive clean days streak' 'report only never a finding page': nothing applicable (top hits were retry backoff and audit-triage sections)",
+    "used .claude/rules/ops-and-gates.md og-06 (a threshold detector carries a case AT its bar and one a step off): the streak fixture reads 7 at the D4 bar of 7 and 6 one step below",
+    "used .claude/rules/ops-and-gates.md og-13 (a threshold that goes quiet when the producer stops): a clean streak is 'nothing happening', so a day with no census row breaks the streak rather than counting as clean"
+  ],
+  "open_questions_for_brad": null,
+  "ship_sequence": [
+    "1. ops: 2026-09-26-86a27b, lib/production-writers.ps1 clean streak plus grocery/capture-watchdog.ps1 D4 READY finding.",
+    "2. ops: 2026-09-28-37406f, no code change; same occurrence as 07ed53, re-measured no recurrence."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-26-86a27b",
+      "subject": "Triage residual: bot checkout intruder set-aside awaits 7 clean census days",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "classification": "confirmed",
+      "evidence": [
+        "queue 2026-09-26-86a27b body: \"Nothing pages when the 7 days are reached, so this item owns the flip.\"",
+        "<git common dir>\\tc-production-intruders.jsonl rows read 2026-09-28: 2026-09-26 \"unregistered\":12, 2026-09-27 \"unregistered\":12, 2026-09-28 \"unregistered\":8, all \"policy\":\"wait\". Clean streak 0 of 7.",
+        "grocery/capture-watchdog.ps1 section 10 before this change: \"It is an ok line, never a finding: D4's set-aside waits for 7 clean days of these rows\" - only an ok line, so reaching the bar paged nothing."
+      ],
+      "root_cause": "A ruled switch-on condition (D4: 7 clean census days) was recorded daily but never evaluated: the census check returned a report line and no state, so the flip depended on a queue item sitting open until someone remembered to count rows.",
+      "root_fix": {
+        "what": "lib/production-writers.ps1 gains Get-TcProductionCleanStreak (consecutive calendar days ending today with 0 unregistered; a missing day breaks it) and Invoke-TcProductionCensusCheck returns d4_ready when the streak reaches the ruled 7 and intruder_policy is still wait; grocery/capture-watchdog.ps1 turns d4_ready into a D4 READY finding, which pages under -Alert.",
+        "where": "lib/production-writers.ps1 (Get-TcProductionCleanStreak, Invoke-TcProductionCensusCheck d4_ready); grocery/capture-watchdog.ps1 section 10"
+      },
+      "blast_radius": {
+        "measured_as": "call sites",
+        "measured_by": "grep Invoke-TcProductionCensusCheck: capture-watchdog.ps1 section 10 and ops/report-production-intruders.ps1; the new d4_ready property is read only by the watchdog",
+        "affected_now": 0,
+        "names": "capture-watchdog (10:30) adds 'clean streak N of 7' to its ok line; no finding until 7 clean days"
+      },
+      "proof": {
+        "must_fire_case": "lib/production-writers.ps1 -SelfTest 'MUST FIRE: seven clean days in a row read a streak of 7, AT the D4 bar of 7' and 'MUST FIRE: seven clean recorded days under policy wait report d4_ready'",
+        "clean_twin": "'CLEAN TWIN: six clean days read 6, one step below the D4 bar of 7'; MUST NOT FIRE cases for the founding 8-unregistered day, a gap day, and a dirty 7th day",
+        "ran": "powershell -NoProfile -File lib\\production-writers.ps1 -SelfTest: exit 0, PRODUCTION-WRITERS SELF-TEST PASS (23 of 23 cases); capture-watchdog.ps1 parse errors 0",
+        "guard_or_fixture": "lib/production-writers.ps1 -SelfTest, six new cases (streak at bar, step below, founding day, gap day, dirty 7th day, d4_ready)"
+      },
+      "rollback": "Revert the commit; the watchdog returns to an ok line only.",
+      "freshness": "measured 2026-09-28 12:30 in the main checkout against the live census log",
+      "leaves_open": "The D4 flip itself (set intruder_policy to set-aside) once 7 clean days arrive; 0 of 7 today.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/capture-watchdog.ps1",
+      "leaves_open_note": "The watchdog's D4 READY finding pages on the first day the streak reaches 7 while policy is still wait.",
+      "status": "done",
+      "premise_verified": "Yes: census reads 12, 12, 8 unregistered over 09-26..28, and nothing evaluated the streak.",
+      "deviation": "Instead of holding the queue item open for the flip, the flip is now owned by a check that pages when the ruled bar is met.",
+      "shipped_commit": "31d0d4687",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real gap: the D4 bar was recorded daily but nothing counted it. The watchdog now pages D4 READY on the first day of 7 clean census days while policy is still wait. Today 0 of 7 (12, 12, 8 unregistered).",
+      "actual_tool_calls": 12
+    },
+    {
+      "queue_id": "2026-09-28-37406f",
+      "subject": "Triage residual: TC Boot Watch 15-minute repetition dropped by Task Scheduler",
+      "lane": "ops",
+      "est_tool_calls": 4,
+      "classification": "no-code-change",
+      "evidence": [
+        "queue 2026-09-28-37406f emitter \"grocery/triage-plans/plan-2026-09-28-3.json\", body \"Residual of triage 2026-09-27-07ed53\": it is the residual 07ed53 minted, not a duplicate or a separate stall. The plan's 11:55 change is that plan's own write (07ed53 leaves_open_followup names 37406f).",
+        "Re-measure 2026-09-28 12:25: Get-ScheduledTaskInfo 'TC Boot Watch' LastRunTime 12:20:01, LastTaskResult 0, NextRunTime 12:35:00; TaskScheduler/Operational event 107 for the task since 09-28 00:00: 37 launches, one gap 00:05:01 -> 03:43:39 matching System Kernel-Power 42 sleep at 00:12:03.",
+        "plan-2026-09-28-3.json 07ed53 proof.must_fire_case: \"health-heartbeat.ps1 paged TASK STALE for TC Boot Watch at 5.9h against its 2h bar\""
+      ],
+      "root_cause": "A repetition-based TC task depends on Task Scheduler keeping a PT15M repetition alive inside a P1D window, and the scheduler dropped it once (2026-09-27 04:35) with no event naming a cause; the task definition cannot notice that, only the heartbeat's age bar can.",
+      "root_fix_none_because": "One occurrence since registration, cause unmeasured (LogonTrigger is a hypothesis only), no recurrence in 37 launches today; re-registering a live task's triggers on one unexplained stall would be a guess, and health-heartbeat's TASK STALE bar pages any recurrence within 2h.",
+      "proof": {
+        "must_fire_case": "Existing: grocery/health-heartbeat.ps1 paged TASK STALE for TC Boot Watch at 5.9h against its 2h bar (queue 2026-09-27-07ed53). No code changed.",
+        "clean_twin": "Existing: the same heartbeat stayed silent for TC Process Reaper and TC Sidecar Watchdog, 78 launches each over the same span.",
+        "ran": "measurement only: Get-ScheduledTaskInfo, Get-WinEvent TaskScheduler/Operational id 107 and System id 42 since 2026-09-28 00:00",
+        "guard_or_fixture": "existing: grocery/health-heartbeat.ps1 TASK STALE 2h bar"
+      },
+      "rollback": "Nothing to roll back: no code changed.",
+      "freshness": "measured 2026-09-28 12:25 against the live scheduler in the main checkout",
+      "leaves_open": "A second unexplained drop of TC Boot Watch's repetition (the cause of the first stays unmeasured); the candidate change in plan-2026-09-28-3.json 07ed53 prevention.exact_change applies if it recurs.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1",
+      "leaves_open_note": "0 recurrences since the 2026-09-27 stall; health-heartbeat's TASK STALE (2h bar) paged the first and pages the next.",
+      "status": "done",
+      "premise_verified": "Same occurrence as 07ed53, re-measured: no recurrence (37 launches today, only gap is a logged sleep).",
+      "deviation": null,
+      "shipped_commit": null,
+      "full_suite": "not-applicable: no code changed",
+      "close_disposition": "wont-fix",
+      "resolution_note": "This is 07ed53's own residual, not a new stall. Re-measured 2026-09-28 12:25: 37 launches today, the only gap is the 00:12 sleep. One unexplained drop in 3.5 days with no scheduler event is not enough to re-register a live task; health-heartbeat pages any recurrence within 2h, and 07ed53's plan carries the candidate change for that day.",
+      "actual_tool_calls": 3
+    }
+  ]
 }
