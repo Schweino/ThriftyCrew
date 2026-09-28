@@ -823,6 +823,26 @@ if ($g8dCells.Count -lt 2) {
   Set-G8dCell $g8dCells[0] $g8dLine2 0.5 'per-each'
   ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
   Check 'ad-line provenance: a SAVE-cents savings published as the price ($0.50 a donut against a $1.99 line)' 2 'ad-line price provenance'
+  # THE THIRD FOUNDING ROW (2026-09-28, queue 2026-09-28-b61b08), frozen verbatim off the 09-28 Hy-Vee ad: a
+  # PERKS line. Brad's decision (c) (b3afe6953) publishes the $1.98 member price on a cell gated 'Perks
+  # membership required'; the guard used to read the LAST token ($2.48, the non-member price) and withheld the
+  # correctly priced cell. Guard and engine now share Get-TcPerksPrice, so:
+  #   MUST FIRE - the line published at its NON-MEMBER price $2.48 (the engine read the wrong price);
+  #   MUST FIRE - the line published at $1.98 with NO membership gate (the ruling's other half broken).
+  # Its CLEAN TWIN, the same line at $1.98 with the gate, rides in the MUST NOT FIRE run below.
+  function Set-G8dMember($cell, [bool]$on) {
+    $lbl = if ($on) { 'Perks membership required' } else { '' }
+    $cell | Add-Member -NotePropertyName membership -NotePropertyValue $on -Force
+    $cell | Add-Member -NotePropertyName member_label -NotePropertyValue $lbl -Force
+  }
+  $g8dPerks = 'Bud by Dole celery hearts, SAVE! .50, $1.98 PERKS PRICES, NON- MEMBER PRICE $2.48'
+  Set-G8dCell $g8dCells[0] $g8dPerks 2.48 'per-each'; Set-G8dMember $g8dCells[0] $true
+  ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
+  Check 'ad-line provenance: a Perks line published at its NON-MEMBER price ($2.48 celery where the ruled price is $1.98 Perks)' 2 'ad-line price provenance'
+  Set-G8dCell $g8dCells[0] $g8dPerks 1.98 'per-each'; Set-G8dMember $g8dCells[0] $false
+  ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
+  Check 'ad-line provenance: a Perks member price ($1.98 celery) published WITHOUT the membership gate' 2 'without the membership gate'
+  Set-G8dMember $g8dCells[0] $false
   # MUST NOT FIRE and CLEAN TWIN in one run, because each of these costs a full guards pass.
   #   MUST NOT FIRE - a real cents PRICE. "Bananas, 49c lb." IS quoted in cents and the cents token IS the
   #                   line's last money token, so a guard that simply distrusted cent signs would cry wolf
@@ -832,6 +852,11 @@ if ($g8dCells.Count -lt 2) {
   #                   Frozen from the same Hy-Vee ad: storage bags, 100 ct, $2.99 -> 0.0299 each.
   Set-G8dCell $g8dCells[0] ('Bananas, 49' + $g8dCent + ' lb.') 0.49 'per-lb marker'
   Set-G8dCell $g8dCells[1] 'Hy-Vee storage bags, 75 to 100 ct., $2.99' 0.0299 'per-100-pack'
+  #   CLEAN TWIN    - the 09-28 Perks celery line at the RULED price, $1.98 per-each, gated. Planted on a
+  #                   third cell when the board has one; the run asserts the guard counted it as a Perks line.
+  $g8dPerksTwin = ($g8dCells.Count -ge 3)
+  if ($g8dPerksTwin) { Set-G8dCell $g8dCells[2] $g8dPerks 1.98 'per-each'; Set-G8dMember $g8dCells[2] $true }
+  else { Skip 'ad-line provenance CLEAN TWIN (Perks celery at $1.98, gated): fewer than three plantable Hy-Vee ad-line cells' }
   ($g8dDoc | ConvertTo-Json -Depth 8) | Set-Content $g8dCmpF -Encoding UTF8
   # ASSERT THIS GUARD'S OWN VERDICT, NOT THE SUITE'S EXIT CODE (2026-09-07). A must-not-fire written as
   # "expect exit 0" is hostage to every other invariant in a 31-run mutating suite: the first version of
@@ -844,7 +869,12 @@ if ($g8dCells.Count -lt 2) {
   RestoreGuardState   # the fifth child-run site: it does not go through Check*, so it needs its own call
   $g8dOk    = ($g8dOut -match 'every ad-line cell publishes the price its own ad line quotes last')
   $g8dFired = ($g8dOut -match 'HARD FAIL: ad-line price provenance')
-  if ($g8dOk -and -not $g8dFired) {
+  # the Perks twin must have been READ as a Perks line, not skipped: "0 of them Perks lines" is a silent twin
+  $g8dTwinSilent = ($g8dPerksTwin -and $g8dOk -and -not $g8dFired -and ($g8dOut -notmatch '[1-9]\d* of them Perks lines'))
+  if ($g8dTwinSilent) {
+    Write-Output '  FAIL  ad-line provenance CLEAN TWIN: the gated Perks celery cell ($1.98) was not read as a Perks line - the guard skipped it, so its silence proves nothing'
+    FailEvidence $g8dOut; $script:failed++
+  } elseif ($g8dOk -and -not $g8dFired) {
     Write-Output '  PASS  ad-line provenance MUST NOT FIRE + CLEAN TWIN: a real cents price (Bananas, 49c lb.) and a per-100-pack cell (storage bags, $2.99) both reconcile and the guard stays silent'
     $script:pass++
   } elseif (-not $g8dOk -and -not $g8dFired) {

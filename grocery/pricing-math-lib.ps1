@@ -299,6 +299,17 @@ function ConvertTo-DigitNumerals([string]$t) {
   if (-not $t) { return $t }
   return ($t -replace '(?i)\bone\b','1' -replace '(?i)\btwo\b','2' -replace '(?i)\bthree\b','3' -replace '(?i)\bfour\b','4' -replace '(?i)\bfive\b','5' -replace '(?i)\bsix\b','6' -replace '(?i)\bseven\b','7' -replace '(?i)\beight\b','8' -replace '(?i)\bnine\b','9' -replace '(?i)\bten\b','10')
 }
+function Get-TcPerksPrice([string]$t) {
+  <# THE ONE READING OF A HY-VEE PERKS LINE (queue 2026-09-28-b61b08). Brad's decision (c), commit b3afe6953
+     2026-07-27: a line quoting "$1.98 PERKS PRICES, NON-MEMBER PRICE $2.48" publishes the PERKS (member) price
+     and the cell is gated 'Perks membership required'. Returns that price, or $null when the line quotes none.
+     Get-ItemPrice prices with it AND guards.ps1 10b (ad-line provenance) checks against it, so the engine and
+     the guard can no longer read two different prices off one row: on 2026-09-28 the guard read the LAST
+     token ($2.48, the non-member price) and withheld Hy-Vee celery that the engine had priced per the ruling. #>
+  $m = [regex]::Match(("" + $t), '(?i)\$\s*(\d+(?:\.\d{1,2})?)\s*perks\s*price')
+  if ($m.Success) { return [double]$m.Groups[1].Value }
+  return $null
+}
 function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   $p = ConvertTo-DigitNumerals ((("" + $priceText + " " + $nameText) -replace "`n", ' '))
   # A FUEL-SAVER REWARD IS NOT A PRICE (2026-09-07, queue 2026-09-07-05e4c3). Hy-Vee's weekly ad hangs a
@@ -360,9 +371,9 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # publish the PERKS price (the lower, member price) and let the caller flag the cell membership-gated. This
   # MUST run before the cents and plain-dollar branches below, or a "SAVE! 50c" savings gets read as the price
   # and the LAST dollar in the string is the NON-MEMBER price - both wrong. Grab the $ right before "PERKS PRICE".
-  $mkPerks = [regex]::Match($p, '(?i)\$\s*(\d+(?:\.\d{1,2})?)\s*perks\s*price')
-  if ($mkPerks.Success) {
-    return @{ per_item = [double]$mkPerks.Groups[1].Value; kind=@{perlb=$perlb;pereach=$pereach}; note='' }
+  $mkPerks = Get-TcPerksPrice $p   # the shared reading; guards.ps1 10b checks against the same function
+  if ($null -ne $mkPerks) {
+    return @{ per_item = [double]$mkPerks; kind=@{perlb=$perlb;pereach=$pereach}; note='' }
   }
 
   # BOGO: buy N get K free

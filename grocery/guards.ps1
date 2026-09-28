@@ -54,6 +54,7 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
 . (Join-Path $root 'multipack-lib.ps1')   # THE multipack math - the same one build-walmart-deals pre-filters with
+. (Join-Path $root 'pricing-math-lib.ps1')   # Get-TcPerksPrice: guard 10b reads a Perks line with the ENGINE'S function (no load side effects)
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
@@ -1536,7 +1537,7 @@ function Get-AdLineBasisMultiplier([string]$basis) {
   if ($b -like 'per-package*' -or $b -like 'per-each (*') { return 1.0 }
   return $null
 }
-$alTotal = 0; $alChecked = 0; $alSkipBasis = 0; $alSkipNote = 0; $alSkipToken = 0; $alBad = 0
+$alTotal = 0; $alChecked = 0; $alSkipBasis = 0; $alSkipNote = 0; $alSkipToken = 0; $alBad = 0; $alPerks = 0
 foreach ($row in $cmp.comparison) {
   foreach ($s in @($row.stores)) {
     if ($alSources -notcontains ([string]$s.source_ad)) { continue }
@@ -1546,9 +1547,25 @@ foreach ($row in $cmp.comparison) {
     if (([string]$s.note) -match '(?i)bogo|buy \d|\d+ for \$') { $alSkipNote++; continue }
     $mult = Get-AdLineBasisMultiplier ([string]$s.basis)
     if ($null -eq $mult) { $alSkipBasis++; continue }
-    $lastTok = Get-AdLineLastMoney $adTxt
+    # A HY-VEE PERKS LINE quotes the member price BEFORE "NON-MEMBER PRICE $X", so its last token is the price
+    # Brad ruled we do NOT publish (decision (c), b3afe6953). Read it with the engine's own Get-TcPerksPrice
+    # (pricing-math-lib), never a second parser: on 2026-09-28 this guard read $2.48 off celery the engine had
+    # rightly priced at $1.98 and withheld it (queue 2026-09-28-b61b08). The ruling's other half is checked
+    # too: a member-only price published WITHOUT the membership gate is a wrong cell, not a pass.
+    $perksTok = Get-TcPerksPrice $adTxt
+    $lastTok = if ($null -ne $perksTok) { $perksTok } else { Get-AdLineLastMoney $adTxt }
     if ($null -eq $lastTok -or $lastTok -le 0) { $alSkipToken++; continue }
     $alChecked++
+    if ($null -ne $perksTok) {
+      $alPerks++
+      if (-not ($s.PSObject.Properties['membership'] -and [bool]$s.membership)) {
+        $alBad++
+        $alMsg = ("HARD FAIL: ad-line price provenance  [{0}] {1} @ {2}  publishes the Hy-Vee PERKS member price (`${3}) without the membership gate (membership='{4}', member_label='{5}'). Brad's decision (c) publishes a Perks price only on a cell labelled 'Perks membership required'.`n           line: {6}" -f `
+          [string]$s.store, [string]$row.id, [string]$s.store, $perksTok, [string]$s.membership, [string]$s.member_label, $adTxt)
+        Add-ScopedFail -Message $alMsg -Family 'cell' -Cells @([pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; kind = 'value' }) -BadPerUnit ([double]$s.per_unit) -BadItem ([string]$s.item) -Check 'guard 10b'
+        continue
+      }
+    }
     $implied = [double]$s.per_unit * $mult
     if ([math]::Abs($implied - $lastTok) -gt ([math]::Max(0.01, $lastTok * 0.005))) {
       $alBad++
@@ -1560,7 +1577,7 @@ foreach ($row in $cmp.comparison) {
 }
 if ($alBad -eq 0) {
   OkUnlessBlind $alChecked `
-    ("every ad-line cell publishes the price its own ad line quotes last (checked $alChecked of $alTotal ad-line cell(s); skipped $alSkipBasis for a basis this check cannot reconstruct, $alSkipNote multibuy, $alSkipToken with no money token)") `
+    ("every ad-line cell publishes the price its own ad line quotes last (checked $alChecked of $alTotal ad-line cell(s), $alPerks of them Perks lines read at the gated member price; skipped $alSkipBasis for a basis this check cannot reconstruct, $alSkipNote multibuy, $alSkipToken with no money token)") `
     'ad-line price provenance verified ZERO cells. Either no Hy-Vee-style ad cell reached the board, or the basis strings the engine writes have changed shape and every cell fell into the skip counter - a $0.10 laundry pod would be invisible again either way.'
 }
 

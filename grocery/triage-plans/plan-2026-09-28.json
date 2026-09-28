@@ -241,7 +241,7 @@
         "re-measure: grocery/out/cell-quarantine.json generated 2026-09-28T08:19:55 for comparison-2026-09-28.json, exit_code 4 'quarantined', breaker not tripped: 1 quarantined of 2872 priced (Hy-Vee 1 of 324)",
         "the check is guards.ps1's ad-line price provenance guard; the price choice is in grocery/pricing-math-lib.ps1 (the only reader here matching 'PERKS PRICE' / 'NON-MEMBER' besides build-sams-data.ps1)"
       ],
-      "root_cause": "carried from plan-2026-09-25-4.json item 2026-09-23-92e552: the engine's reading of a row and a guard's reading of the same row disagree, so the cell is condemned and held (there, a bare 'oz' on a fl-oz commodity; its root fix was carried, not designed, with follow-up 2026-09-25-17c0da). TODAY'S INSTANCE IS A DIFFERENT READING: the engine takes Hy-Vee's member (Perks) price $1.98 while the provenance guard reads the line's last (non-member) price $2.48. Whether a Perks price may be published is a pricing ruling to check before any code.",
+      "root_cause": "Two readers of one Hy-Vee ad line: the engine priced the Perks member price per Brad's decision (c) (b3afe6953), while guard 10b re-read the line with its own 'last money token' rule, which on a Perks line is the NON-MEMBER price. The guard, not the engine, contradicted the ruling.",
       "root_fix": {
         "what": "for the money developer: one reading of a Hy-Vee Perks/non-member ad line, decided in the engine's ad-line price reader and used by the provenance guard, after checking the standing ruling on member prices",
         "files": [
@@ -250,8 +250,8 @@
         ],
         "exact_change": "not designed here (money lane, THE LINE): measure every Hy-Vee ad line on comparison-2026-09-28 carrying both 'PERKS PRICE' and 'NON-MEMBER PRICE', count which price the engine took and which the guard reads, then decide"
       },
-      "leaves_open": "unmeasured until the money developer works it: how many other Hy-Vee Perks/non-member lines on comparison-2026-09-28 the engine reads differently from the provenance guard (the seed's bare-oz half was owned by 2026-09-25-17c0da, which the queue records resolved)",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "nothing: 5 of 5 Perks rows on the 09-28 ad now read identically by engine and guard (1 reached a board cell); the only other reader, compare-deals' membership-label regex, matches the same 'perks price' pattern and is now policed by 10b's membership check",
+      "leaves_open_occurrences": 0,
       "prior_closes": [
         "2026-09-21-de4f72",
         "2026-09-23-92e552"
@@ -298,13 +298,15 @@
       ],
       "lane": "money",
       "est_tool_calls": 45,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "Premise held, and the side at fault is the GUARD, not the engine. Standing ruling found BEFORE code: commit b3afe6953 (2026-07-27) 'Hy-Vee PERKS dual-price: publish the member price, gate the cell (Brad decision c)', cited in pricing-math-lib's Get-ItemPrice and compare-deals' per-cell membership label 'Perks membership required'. So the engine's $1.98 is the ruled price; guard 10b's 'price is the LAST money token' invariant read the non-member $2.48. Measured on the 09-28 Hy-Vee ad (out/ads-2026-09-28.json): 5 Perks rows of 1932 (4 dual-price, 1 Perks-only); only celery reached a board cell (comparison-2026-09-28 carries 0 Perks cells, the one candidate withheld). Fixed the CLASS: one reader, Get-TcPerksPrice in pricing-math-lib, used by Get-ItemPrice AND by guards.ps1 10b (which now dot-sources the side-effect-free lib); 10b also now fails a Perks price published WITHOUT the membership gate (the ruling's other half, previously unchecked). DEVIATION FROM THE CHAIN: the board was NOT rebuilt or republished in this spawn. The fix is to a guard, the cell's safe state is WITHHELD (fails closed), the ad runs 2026-09-28 to 2026-10-04, and a mid-day rebuild reads late captures no plan measured (memory triage-rebuild-reads-late-captures); the next daily chain after landing publishes celery/Hy-Vee at the Perks price, gated. full_suite: deferred-to-land (test-guards carries the new cases).",
       "shipped_commit": null,
-      "resolution_note": "Money lane, not yet worked: Hy-Vee celery withheld 09-28 because the engine took the $1.98 Perks price where the line's non-member price is $2.48; fix the ad-line reading at the engine after checking the member-price ruling.",
+      "resolution_note": "Guard fixed to the ruling, engine unchanged in behaviour. pricing-math-lib.ps1: new Get-TcPerksPrice (the one Perks reading), Get-ItemPrice calls it. guards.ps1 10b: reads a Perks line with Get-TcPerksPrice, counts Perks lines in its ok line, and HARD FAILs a Perks price on a cell without membership. test-guards.ps1 8d: MUST FIRE celery published at non-member $2.48; MUST FIRE celery at $1.98 with no membership gate; CLEAN TWIN celery at $1.98 gated, asserted as read ('N of them Perks lines'), beside the existing bananas/storage-bags twins. Proof: scratch harness over all five frozen 09-28 Perks rows plus two single-price lines, 7 of 7 ok (shared function AND engine read the member price); compare-deals -SelfTest exit 0 'SELF-TEST PASS' (its 11b Perks cases); parse of all three files 0 errors. test-guards full run deferred-to-land. Board not republished: celery/Hy-Vee stays WITHHELD until the next daily chain after landing.",
       "close_disposition": null,
-      "leaves_open_followup": null
+      "leaves_open_followup": "watch:grocery/guards.ps1",
+      "live_check": "after the next daily chain following landing: public/board.json celery / Hy-Vee = 1.98 per each, member_label 'Perks membership required' (valid while the 2026-09-28 to 2026-10-04 ad runs); guards 10b ok line reports '1 of them Perks lines'",
+      "republished": false
     },
     {
       "queue_id": "2026-09-28-c81a9f",
