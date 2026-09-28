@@ -476,3 +476,63 @@ function Read-TriagePlanRecords {
   }
   return ,$out.ToArray()
 }
+
+# ---- A LANDED PLAN ITEM WHOSE QUEUE ID NEVER CLOSED IS CLOSE-ONLY WORK (2026-09-28, discovered:planned-done-never-closed)
+# FOUNDING CASE: plan-2026-09-27.json (2026-09-27-b1efed done) and plan-2026-09-27-2.json (2026-09-27-06cd9b done,
+# 2026-09-27-c989c6 deviated) both passed -Closing with their commits on origin/main, yet the three queue ids were
+# still open on the morning of 2026-09-28 and triage-due printed each as a DUE RETURN, so the next run would have
+# paid a second diagnosis for fixes already live. The close is the orchestrator's LAST step (triage-close.ps1 after
+# triage-land.ps1), and a run that ends before it leaves the plan finished and the queue open with nothing naming
+# the gap. This names it: an OPEN queue id whose NEWEST plan item closed done, deviated or superseded, whose
+# shipped_commit is null or already landed, and which has fired only once, is CLOSE-ONLY: close it from the item's
+# resolution_note and close_disposition and buy no diagnosis. Fails toward DUE, never toward hidden:
+#   - a commit that has not landed, or that git cannot find, leaves the item ordinary DUE work (its fix is not live);
+#   - an item that fired more than once (count > 1) may have fired AFTER the fix landed, so it gets a real look;
+#   - a predicate that throws, or no predicate, reads as not landed.
+# $IsLanded is called as & $IsLanded <shipped_commit> <plan path>. A shipped_commit that is not a hash (the
+# "(this commit)" convention, as on c989c6) is the predicate's to judge from the plan path.
+function Get-TriageCloseOnly {
+  <# .SYNOPSIS Pure but for $IsLanded. One record {id, plan, status, commit, disposition} per open queue id that is
+     CLOSE-ONLY (see above). Newest plan first, as Read-TriagePlanRecords returns them. Never throws. #>
+  param($Open, $PlanRecords, [scriptblock]$IsLanded)
+  $out = New-Object System.Collections.Generic.List[object]
+  $finished = @('done', 'deviated', 'superseded')
+  foreach ($q in @($Open)) {
+    try {
+      if ($null -eq $q) { continue }
+      $qid = [string]$q.id
+      if (-not $qid) { continue }
+      $cnt = 1
+      if ($q.PSObject.Properties['count'] -and $null -ne $q.count) { $cnt = [int]$q.count }
+      if ($cnt -gt 1) { continue }
+      $hit = $null
+      foreach ($p in @($PlanRecords)) {
+        if ($null -eq $p) { continue }
+        $its = @($p.items | Where-Object { $null -ne $_ -and [string]$_.queue_id -eq $qid })
+        if ($its.Count) { $hit = [pscustomobject]@{ plan = [string]$p.path; item = $its[$its.Count - 1] }; break }
+      }
+      if ($null -eq $hit) { continue }
+      $st = [string]$hit.item.status
+      if ($finished -notcontains $st) { continue }
+      $sc = ''
+      if ($hit.item.PSObject.Properties['shipped_commit'] -and $null -ne $hit.item.shipped_commit) { $sc = [string]$hit.item.shipped_commit }
+      if ($sc) {
+        $landed = $false
+        try { if ($IsLanded) { $landed = [bool](& $IsLanded $sc $hit.plan) } } catch { $landed = $false }
+        if (-not $landed) { continue }
+      }
+      $disp = ''
+      if ($hit.item.PSObject.Properties['close_disposition'] -and $null -ne $hit.item.close_disposition) { $disp = [string]$hit.item.close_disposition }
+      [void]$out.Add([pscustomobject]@{ id = $qid; plan = $hit.plan; status = $st; commit = $sc; disposition = $disp })
+    } catch { continue }
+  }
+  return ,$out.ToArray()
+}
+
+function Format-TriageCloseOnlyLine {
+  <# .SYNOPSIS One CLOSE-ONLY line for a Get-TriageCloseOnly record. #>
+  param($Rec)
+  $c = if ($Rec.commit) { $Rec.commit } else { 'none (no code)' }
+  $d = if ($Rec.disposition) { $Rec.disposition } else { 'unset' }
+  return ('  CLOSE-ONLY ' + $Rec.id + '  ' + $Rec.plan + ' item ' + $Rec.status + ', shipped ' + $c + ' landed, disposition ' + $d + ' - not new work: confirm validate-triage-plan -Closing on that plan, then triage-close.ps1 from its resolution_note; no diagnosis, no RETURN')
+}

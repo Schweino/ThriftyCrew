@@ -1,0 +1,427 @@
+{
+  "generated": "2026-09-28T10:40:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28 (built 2026-09-28 08:17:56; guards exit 4 QUARANTINED, 1 of 2872 priced cells)",
+  "queue_ids_seen": [
+    "2026-09-18-a0c785",
+    "2026-09-22-0c812e",
+    "2026-09-25-602457",
+    "2026-09-25-1b7001",
+    "2026-09-25-d835e2",
+    "2026-09-25-f9c8ce",
+    "2026-09-25-b3c8ca",
+    "2026-09-25-bf2c6f",
+    "2026-09-25-633d2b",
+    "2026-09-25-0cefa4",
+    "2026-09-26-735ea6",
+    "2026-09-26-564dc6",
+    "2026-09-26-7ed369",
+    "2026-09-26-86a27b",
+    "2026-09-26-6b8ce9",
+    "2026-09-26-a7dbb1",
+    "2026-09-26-62b170",
+    "2026-09-26-a30920",
+    "2026-09-26-203892",
+    "2026-09-27-c744ba",
+    "2026-09-27-9a351a",
+    "2026-09-27-75f918",
+    "2026-09-27-ef1612",
+    "2026-09-27-ec5cac",
+    "2026-09-27-07ed53",
+    "2026-09-27-f50b7a",
+    "2026-09-27-fd7a80",
+    "2026-09-27-8161ce",
+    "2026-09-27-ae8b7a",
+    "2026-09-27-78df57",
+    "2026-09-27-10d164",
+    "2026-09-28-c1f48a",
+    "2026-09-28-c5ad9d",
+    "2026-09-28-b61b08",
+    "2026-09-28-c29f06",
+    "2026-09-28-d70062",
+    "2026-09-28-c98dec",
+    "2026-09-28-c81a9f"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "searched 'triage queue item never closed', 'daily chain held served file', 'code changed mid-run artifacts', 'board cells quarantined' (orchestrator brief): .claude/rules/grocery.md gr-01 (cell quarantine scopes), lib/chain-code-currency.ps1 header, grocery/cell-quarantine-lib.ps1, .claude/rules/ops-and-gates.md og-47",
+    "searched 'queue item closed after landing', 'triage close plan done open', 'is-ancestor landed commit check': nothing applicable; reused grocery/triage-return-lib.ps1 Read-TriagePlanRecords and the ordering Get-TriageUnfinished already uses (newest plan decides)"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-27-f50b7a",
+      "subject": "Grocery capture watchdog: RUN RECORD capture-run [daily] exit 1, failed lane guards-blocked (2026-09-27)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/logs/capture-run-daily-2026-09-27.log:666 'publish: staging INPUTS only - the chain verdict scored inputs aac533354fdcc3b7 but the tree is now f80049acb9261b1b - guards have not seen this board, so public\\** and the recipe files are NOT shipped'",
+        "same log :674 'pipeline-writes: vouched 110 served file(s) this guards-blocked run built, never to be committed'; :697 'pushed on attempt 3' (the DAILY push landed; only the served files were withheld)",
+        "b1efed (the proposed primary) is the AD run's push refusal: capture-run-ad-2026-09-27.log:110 'PUSH FAILED after 4 attempts'. A different run and a different failure."
+      ],
+      "root_cause": "not b1efed: the daily chain's publish step withholds every served file when the tree it is about to commit no longer matches the input fingerprint guards scored (something moved the tree mid-run), so a run whose guards passed ships nothing and the watchdog reads it as guards-blocked. Same family as today's Class A 2026-09-28-d70062 (shipped artifacts built by code that changed mid-run) and 2026-09-28-c98dec (chain held a session's edit on a served file).",
+      "root_fix_none_because": "promoted to the reviewer: the evidence contradicts the grouping (not the b1efed push refusal), and the cause sits with Class A d70062/c98dec, where one diagnosis should cover all four",
+      "leaves_open": "the whole class, handed to the reviewer with d70062/c98dec",
+      "leaves_open_occurrences": 2,
+      "prior_closes": [
+        "2026-09-22-7c932a",
+        "2026-09-23-822c30"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1",
+          "lib/chain-code-currency.ps1"
+        ],
+        "what": "for the reviewer: find what moves the tree between the guards verdict and the publish commit, at the producer",
+        "exact_change": "not designed here (promote): the reviewer designs it together with d70062/c98dec"
+      },
+      "proof": {
+        "must_fire_case": "for the reviewer: the 09-27 daily shape (verdict inputs aac533354fdcc3b7, tree f80049acb9261b1b at publish) must be named as the cause, not guards-blocked",
+        "clean_twin": "a run whose tree is unchanged between verdict and publish ships its served files",
+        "fixture_occurrences": [
+          "2026-09-22-7c932a",
+          "2026-09-23-822c30",
+          "2026-09-27-f50b7a"
+        ],
+        "guard_or_fixture": "for the reviewer: grocery/capture-watchdog.ps1 (the emitter) and the chain rehearsal"
+      },
+      "lane": "ops",
+      "est_tool_calls": 15,
+      "status": "promote",
+      "premise_verified": "false: the brief grouped it under b1efed (ad-run push refused over a stray root artifact); the 09-27 DAILY log says served files were withheld for a tree/verdict mismatch and its push landed on attempt 3",
+      "deviation": "promoted instead of superseded",
+      "shipped_commit": null,
+      "resolution_note": "PROMOTED: not the b1efed push refusal. The 09-27 daily run withheld its served files because the tree moved off the guards verdict's input fingerprint (aac533354fdcc3b7 -> f80049acb9261b1b); same family as Class A d70062/c98dec. Reviewer owns it.",
+      "close_disposition": null,
+      "actual_tool_calls": 3,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: promoted, no change designed here; chain publish ordering, no matching or pricing",
+        "affected_now": 0,
+        "names": [],
+        "risk": "for the reviewer",
+        "cell_effects": []
+      },
+      "rollback": "nothing shipped by this lane",
+      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired"
+    },
+    {
+      "queue_id": "2026-09-27-fd7a80",
+      "subject": "Grocery capture watchdog: COMPUTED BUT NOT SHIPPED public/board.json, public/smp-feed.json (2026-09-27)",
+      "classification": "infra",
+      "evidence": [
+        "capture-watchdog-2026-09-27.log: 'COMPUTED BUT NOT SHIPPED: M public/board.json, M public/smp-feed.json are modified in the working tree after today's run'",
+        "capture-run-daily-2026-09-27.log:666 the served files were withheld because the tree moved off the verdict's input fingerprint (aac533354fdcc3b7 -> f80049acb9261b1b); :674 110 served files vouched and never committed. The same run as f50b7a, not the b1efed ad-run push refusal."
+      ],
+      "root_cause": "the watchdog's second face of f50b7a: the daily run built public/board.json and smp-feed.json, then withheld them because the tree changed between the guards verdict and the commit. Same family as Class A 2026-09-28-d70062 and 2026-09-28-c98dec; today's 3451de927 ('Ship the 2026-09-28 board the daily chain built but could not ship') is the same symptom a day later.",
+      "root_fix_none_because": "promoted to the reviewer with f50b7a: evidence names a different cause from the proposed primary b1efed",
+      "leaves_open": "the whole class, handed to the reviewer with d70062/c98dec",
+      "leaves_open_occurrences": 2,
+      "prior_closes": [
+        "2026-09-22-972de2",
+        "2026-09-24-a4b7c1"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1",
+          "lib/chain-code-currency.ps1"
+        ],
+        "what": "for the reviewer: same producer as f50b7a",
+        "exact_change": "not designed here (promote)"
+      },
+      "proof": {
+        "must_fire_case": "for the reviewer: the 09-27 daily run's withheld served files, and 09-28's (hand-shipped in 3451de927)",
+        "clean_twin": "a run that ships its served files leaves the watchdog's COMPUTED BUT NOT SHIPPED check silent",
+        "fixture_occurrences": [
+          "2026-09-22-972de2",
+          "2026-09-24-a4b7c1",
+          "2026-09-27-fd7a80"
+        ],
+        "guard_or_fixture": "for the reviewer: grocery/capture-watchdog.ps1 (the emitter) and the chain rehearsal"
+      },
+      "lane": "ops",
+      "est_tool_calls": 15,
+      "status": "promote",
+      "premise_verified": "false: not the b1efed condition (see f50b7a)",
+      "deviation": "promoted instead of superseded",
+      "shipped_commit": null,
+      "resolution_note": "PROMOTED with f50b7a: the served files the 09-27 daily run built were withheld for a tree/verdict mismatch, not by the b1efed push refusal. Reviewer owns it with d70062/c98dec.",
+      "close_disposition": null,
+      "actual_tool_calls": 1,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: promoted, no change designed here; chain publish ordering, no matching or pricing",
+        "affected_now": 0,
+        "names": [],
+        "risk": "for the reviewer",
+        "cell_effects": []
+      },
+      "rollback": "nothing shipped by this lane",
+      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired"
+    },
+    {
+      "queue_id": "2026-09-28-c1f48a",
+      "subject": "The knowledge store's nightly pass went RED (2026-09-28 04:42)",
+      "classification": "infra",
+      "evidence": [
+        "C:\\Users\\Owner\\.claude\\recall-sleep-latest.md:48-49 'memory clusters (exit 1): waiting on a judgement', 'gate (exit 1): BROKEN'; :72-74 'FAIL (2): recall-consolidate: the unruled cluster count moved off its mark' and 'C--Codex-ThriftyCrew: 3 memory file(s) uncommitted, 1 past the 48 h bar, oldest 64 h'",
+        "~/.claude git: beb2ef6 2026-09-28 05:48:32 'memory: commit three edits left uncommitted since 09-25 to 09-27' (MEMORY.md, fareway-router-sweep-needs-apollo-reset.md, what-actually-reaches-a-spawned-agent.md); git status over projects/ is now empty",
+        "~/.claude git: f0e9aae 2026-09-28 05:48:33 'recall: abandoned memo edits commit themselves; new clusters get a week's grace owned by a weekly task' (recall-sleep.py commit_abandoned_memory, run BEFORE the gate at 24 h; recall-consolidate.py first-seen grace 7 days; scheduled-tasks/recall-cluster-rulings)",
+        "re-measured 2026-09-28 10:3x: recall-sleep.py --selftest exit 0 'recall-sleep selftest: 82 of 82 cases pass'; recall-consolidate.py --selftest exit 0 '46 of 46 cases pass'"
+      ],
+      "root_cause": "six REDs in 30 days, each for a different reason, from one upstream shape: the nightly gate is the FIRST thing to meet a queue that a writer leaves open (a memory edit nobody committed, a MEMORY.md link to an untracked file, a new cluster nobody ruled), so every such write surfaces at 04:35 as a failed pass. The five prior closes each moved ONE reason to its producer (the 09-26 fix put the untracked-link and dangling-link checks in the write-time lint hook); the two reasons on 09-28 (a 64 h uncommitted memo edit, 2 unruled clusters) had no producer-side owner yet.",
+      "root_fix": {
+        "what": "already shipped by another session after the alert fired: the nightly pass commits abandoned memo edits itself before the gate, and a new cluster gets a 7-day grace owned by a weekly ruling task, so neither reason reaches the gate as a failure",
+        "files": [
+          "~/.claude/skills/recall-sleep.py",
+          "~/.claude/skills/recall-consolidate.py",
+          "~/.claude/skills/recall-cluster-first-seen.json",
+          "~/.claude/scheduled-tasks/recall-cluster-rulings/SKILL.md"
+        ],
+        "exact_change": "f0e9aae (store repo): commit_abandoned_memory() pathspec-commits projects/*/memory/*.md modified or untracked over 24 h, called before run_all so the gate judges the store with them recorded; recall-consolidate counts a cluster as unruled only after 7 days from its first-seen date (re-keyed clusters keep the old date, no date fails closed)"
+      },
+      "leaves_open": "nothing: a cluster still unruled past its 7-day grace turns the pass red by design, as a ruling the weekly recall-cluster-rulings task owns",
+      "leaves_open_occurrences": 0,
+      "prior_closes": [
+        "2026-09-11-18da92",
+        "2026-09-18-35e0f5",
+        "2026-09-19-4fc24c",
+        "2026-09-23-a83841",
+        "2026-09-26-32500f"
+      ],
+      "prevention": {
+        "source": [
+          "~/.claude/skills/recall-sleep.py",
+          "~/.claude/skills/recall-consolidate.py"
+        ],
+        "what": "the pass's own producer steps close the two queues that kept reaching the gate: abandoned memo edits are committed before the gate runs, and a new cluster is in grace for a week with a weekly task owning the ruling",
+        "exact_change": "f0e9aae: commit_abandoned_memory (ABANDONED_MEMO_HOURS 24) before run_all; recall-consolidate first-seen ledger recall-cluster-first-seen.json with a 7-day grace"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: knowledge-store derivers only; no board, price or matching code",
+        "affected_now": 0,
+        "names": [],
+        "risk": "an unattended commit records a memo edit abandoned over 24 h; the hooks already read it from the working tree, so nothing live changes",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "~/.claude/skills/recall-sleep.py --selftest; ~/.claude/skills/recall-consolidate.py --selftest",
+        "must_fire_case": "recall-sleep: 'the 09-25 gate is broken for its uncommitted memory, and that is the reason printed' ok, and the abandoned-memo case (a memo past 24 h is committed by pathspec) ok; recall-consolidate: 'a cluster with no recorded date is past grace (fail closed)' ok, 'a re-keyed cluster sharing a member keeps the OLD first-seen date' ok",
+        "clean_twin": "recall-consolidate: 'a cluster first seen today is IN GRACE (not counted)' ok and 'exactly AT the 7-day bar it is still in grace' ok; recall-sleep: 'a step whose every FAIL line is a ratchet over unruled items is a judgement waiting, not a break' ok",
+        "commands": [
+          "C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/recall-sleep.py --selftest (exit 0, 82/82)",
+          "C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/recall-consolidate.py --selftest (exit 0, 46/46)"
+        ],
+        "fixture_occurrences": [
+          "2026-09-11-18da92",
+          "2026-09-18-35e0f5",
+          "2026-09-19-4fc24c",
+          "2026-09-23-a83841",
+          "2026-09-26-32500f",
+          "2026-09-28-c1f48a"
+        ]
+      },
+      "rollback": "git -C C:/Users/Owner/.claude revert f0e9aae",
+      "freshness": "measured 2026-09-28 about 10:30 against the 04:42 report and the store repo at f0e9aae; the next 04:35 pass is the live confirmation",
+      "lane": "ops",
+      "est_tool_calls": 30,
+      "status": "done",
+      "premise_verified": "true: the 04:42 RED was real (2 unruled clusters + a 64 h uncommitted memo); both reasons had been repaired at the producer by f0e9aae and beb2ef6 at 05:48, after the alert fired",
+      "deviation": "no code from this lane: the root fix was already in the store repo (f0e9aae, another session). This lane re-measured it and ran both self-tests",
+      "shipped_commit": null,
+      "resolution_note": "Real RED on 09-28 04:42: 2 unruled memory clusters and a memo edit uncommitted 64 h. Fixed at the producer by f0e9aae in the store repo at 05:48 (the pass commits abandoned memo edits before its gate; new clusters get a 7-day grace owned by the weekly recall-cluster-rulings task), and beb2ef6 committed the three memo edits. recall-sleep selftest exit 0 (82/82), recall-consolidate exit 0 (46/46).",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 12
+    },
+    {
+      "queue_id": "2026-09-28-b61b08",
+      "subject": "Grocery board cells quarantined (2026-09-28)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "queue body: 'celery / Hy-Vee: WITHHELD (no previously published value for this cell); today's candidate was 1.98. HARD FAIL: ad-line price provenance ... we publish 1.98/each ... the line's own last price is $2.48'; line: 'Bud by Dole celery hearts, SAVE! .50, $1.98 PERKS PRICES, NON- MEMBER PRICE $2.48'",
+        "re-measure: grocery/out/cell-quarantine.json generated 2026-09-28T08:19:55 for comparison-2026-09-28.json, exit_code 4 'quarantined', breaker not tripped: 1 quarantined of 2872 priced (Hy-Vee 1 of 324)",
+        "the check is guards.ps1's ad-line price provenance guard; the price choice is in grocery/pricing-math-lib.ps1 (the only reader here matching 'PERKS PRICE' / 'NON-MEMBER' besides build-sams-data.ps1)"
+      ],
+      "root_cause": "carried from plan-2026-09-25-4.json item 2026-09-23-92e552: the engine's reading of a row and a guard's reading of the same row disagree, so the cell is condemned and held (there, a bare 'oz' on a fl-oz commodity; its root fix was carried, not designed, with follow-up 2026-09-25-17c0da). TODAY'S INSTANCE IS A DIFFERENT READING: the engine takes Hy-Vee's member (Perks) price $1.98 while the provenance guard reads the line's last (non-member) price $2.48. Whether a Perks price may be published is a pricing ruling to check before any code.",
+      "root_fix": {
+        "what": "for the money developer: one reading of a Hy-Vee Perks/non-member ad line, decided in the engine's ad-line price reader and used by the provenance guard, after checking the standing ruling on member prices",
+        "files": [
+          "grocery/pricing-math-lib.ps1",
+          "grocery/guards.ps1"
+        ],
+        "exact_change": "not designed here (money lane, THE LINE): measure every Hy-Vee ad line on comparison-2026-09-28 carrying both 'PERKS PRICE' and 'NON-MEMBER PRICE', count which price the engine took and which the guard reads, then decide"
+      },
+      "leaves_open": "the bare-oz half of the seed (follow-up 2026-09-25-17c0da) is untouched by this item",
+      "leaves_open_occurrences": 1,
+      "prior_closes": [
+        "2026-09-21-de4f72",
+        "2026-09-23-92e552"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "what": "the ad-line price reader, the producer of the number the guard condemns, picks one documented price when a line quotes a member and a non-member price",
+        "exact_change": "money developer designs it from the measurement above; a rule or exclude file is refused as the source (twice returned)"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not measured here (transcribed for the money lane); the developer measures every Hy-Vee Perks/non-member line on comparison-2026-09-28",
+        "affected_now": 1,
+        "names": [
+          "Bud by Dole celery hearts"
+        ],
+        "risk": "a change to the ad-line reader moves every Hy-Vee Perks cell, in either direction",
+        "cell_effects": [
+          {
+            "commodity": "celery",
+            "store": "Hy-Vee",
+            "before": "withheld (candidate 1.98)",
+            "after": "to be measured"
+          }
+        ]
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-guards.ps1 (ad-line price provenance) or grocery/test-cell-quarantine.ps1",
+        "must_fire_case": "the frozen 09-28 line 'Bud by Dole celery hearts, SAVE! .50, $1.98 PERKS PRICES, NON- MEMBER PRICE $2.48' published at a price the guard condemns must fire",
+        "clean_twin": "a Hy-Vee line with one price and a line whose engine price equals the guard's reading stay clean",
+        "fixture_occurrences": [
+          "2026-09-21-de4f72",
+          "2026-09-23-92e552",
+          "2026-09-28-b61b08"
+        ]
+      },
+      "rollback": "revert the engine hunk; the cell stays WITHHELD, which is the safe state",
+      "freshness": "measured against comparison-2026-09-28 (built 08:17:56) and cell-quarantine.json of 08:19:55",
+      "do_not_touch": [
+        "the circuit breaker bars",
+        "the provenance guard's threshold"
+      ],
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "resolution_note": "Money lane, not yet worked: Hy-Vee celery withheld 09-28 because the engine took the $1.98 Perks price where the line's non-member price is $2.48; fix the ad-line reading at the engine after checking the member-price ruling.",
+      "close_disposition": null,
+      "leaves_open_followup": "2026-09-25-17c0da"
+    },
+    {
+      "queue_id": "2026-09-28-c81a9f",
+      "subject": "Grocery page HELD after its data shipped (2026-09-28)",
+      "classification": "infra",
+      "evidence": [
+        "queue body: 'publish-deals-page returned rc=2 ... HELD: the post names board.json?v=7f5bd2f7a2 but feed.thriftycrew.com serves v=a786679133'",
+        "design/PLAN-deferpost-builds-board-2026-09-28.md (67a693441, 09:27): 'check-ad-cycles.ps1 ~1638 does NOT run publish-deals-page.ps1'; capture-run 'commits and pushes public\\board.json as it was: yesterday's board, or older'; publish-deals-page 'rebuilds public\\board.json from today's comparison, gets a new ?v= hash, finds the edge still serving the old one, and refuses (rc 2)'",
+        "re-measure: 3451de927 (09:27) 'Ship the 2026-09-28 board the daily chain built but could not ship' hand-shipped public/board.json and price-history.json; the post itself is not yet confirmed republished"
+      ],
+      "root_cause": "carried from plan-2026-09-26.json item 2026-09-23-80f302 (deviated; follow-up 2026-09-26-518fff): nothing compared a LIVE page with the data it was built from after the run that published it; that item built audit-live-page-parity.ps1, which is what named today's hold. TODAY'S CAUSE is upstream of that check: the deferred-post path ships the board.json on disk rather than the one it built, so the post's ?v= and the served board can never agree on a day the board changes. Likely shares a cause with Class A 2026-09-28-d70062 (chain shipped artifacts built by code that changed mid-run) and 2026-09-28-c98dec (chain held a session's edit on a served file), and with promoted f50b7a/fd7a80: all four are the daily chain's served files not being the ones its own verdict saw.",
+      "root_fix": {
+        "what": "for the money developer: the deferred-post path builds the board it ships (design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2), coordinated with the reviewer's d70062/c98dec design",
+        "files": [
+          "grocery/capture-run.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "per the design plan: W1 run the build half of publish-deals-page into public\\ before capture-run commits; W2 the later publish-deals-page names the same board it finds at the edge"
+      },
+      "leaves_open": "the reviewer's d70062/c98dec may reshape the fix; confirm before building",
+      "leaves_open_occurrences": 1,
+      "prior_closes": [
+        "2026-09-23-80f302"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "what": "the chain that produces the served board also builds it before shipping, so the post and the feed name one board",
+        "exact_change": "design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: publish ordering, no matching or pricing change",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a chain change: land only through ops\\push-main.ps1 with its rehearsal",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-live-page-parity.ps1 and the chain rehearsal",
+        "must_fire_case": "the 09-28 shape: board.json shipped from disk (v=a786679133) while the post was built from today's comparison (v=7f5bd2f7a2) must be refused before ship, not after",
+        "clean_twin": "a day whose board did not change ships and posts one v= and publish-deals-page returns 0",
+        "fixture_occurrences": [
+          "2026-09-23-80f302",
+          "2026-09-28-c81a9f"
+        ]
+      },
+      "rollback": "revert the chain hunk; the post HELD refusal stays the safe fallback",
+      "freshness": "measured 2026-09-28 about 10:35 against origin/main 3451de927",
+      "lane": "money",
+      "est_tool_calls": 60,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "resolution_note": "Money lane, not yet worked: the deferred-post path shipped the on-disk board.json (v=a786679133) while the post was built from today's board (v=7f5bd2f7a2); build per design/PLAN-deferpost-builds-board-2026-09-28.md after the reviewer's d70062/c98dec design.",
+      "close_disposition": null
+    },
+    {
+      "queue_id": "discovered:planned-done-never-closed-2026-09-28",
+      "subject": "A plan item that finished and landed but whose queue id was never closed reads as a new DUE RETURN",
+      "classification": "infra",
+      "evidence": [
+        "orchestrator 2026-09-28: plan-2026-09-27.json (2026-09-27-b1efed done, no commit) and plan-2026-09-27-2.json (2026-09-27-06cd9b done at 2e83fb11f; 2026-09-27-c989c6 deviated, shipped_commit 'see git log: triage 2026-09-27 c989c6 (this commit)') passed -Closing with commits on origin/main; the three ids were still open this morning and triage-due printed them as DUE RETURNs",
+        "re-measure after the fix, live triage-due 2026-09-28 about 10:35 (exit 0): two MORE instances, '  CLOSE-ONLY 2026-09-26-735ea6  grocery/triage-plans/plan-2026-09-27-3.json item done, shipped none (no code) landed, disposition confirmed' and '  CLOSE-ONLY 2026-09-26-a30920  grocery/triage-plans/plan-2026-09-27-3.json item done ...'; neither prints a RETURN line any more"
+      ],
+      "root_cause": "closing a queue id is the orchestrator's LAST step (triage-close.ps1 after triage-land.ps1), and a run that ends before it leaves the plan finished and the queue open; triage-due read only the queue and the RETURN rule, so a finished, landed item looked exactly like fresh work and was routed for a second diagnosis. 5 occurrences in 2 days (the three 09-27 ids, 735ea6, a30920).",
+      "root_fix": {
+        "what": "triage-due names such an id CLOSE-ONLY and gives it no RETURN line",
+        "files": [
+          "grocery/triage-return-lib.ps1",
+          "grocery/triage-due.ps1"
+        ],
+        "exact_change": "triage-return-lib.ps1: Get-TriageCloseOnly (open id whose NEWEST plan item is done|deviated|superseded, count 1, shipped_commit null or landed through an injected predicate) and Format-TriageCloseOnlyLine; triage-due.ps1 prints the CLOSE-ONLY lines after the DUE list and skips those ids in the RETURN block; its landed predicate is git merge-base --is-ancestor for a hash and 'the plan file is on origin/main' for the '(this commit)' text. Fails toward DUE: unlanded, unknown, re-fired (count > 1) or no predicate stays DUE."
+      },
+      "leaves_open": "nothing: the CLOSE-ONLY line puts the close in front of the orchestrator on the next tick, and closing stays the orchestrator's by design (agents never close)",
+      "leaves_open_occurrences": 0,
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not applicable: triage reporting only; live run over today's 38 open ids moved exactly 2 (735ea6, a30920) from RETURN to CLOSE-ONLY",
+        "affected_now": 2,
+        "names": [
+          "2026-09-26-735ea6",
+          "2026-09-26-a30920"
+        ],
+        "risk": "an id whose fix landed but did not hold and whose alert re-fired SAME-DAY: guarded by count > 1 staying DUE; a re-fire on a later day is a new id and is still a RETURN",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/triage-due.ps1 -SelfTest",
+        "must_fire_case": "the three 09-27 ids open against frozen copies of their plan items (b1efed done/no commit, 06cd9b done/2e83fb11f landed, c989c6 deviated/'(this commit)' with its plan on origin/main) are all CLOSE-ONLY, and the line names id, plan and commit",
+        "clean_twin": "the same ids with the commit NOT on origin/main, re-fired (count 2), or with no plan item stay DUE; a newer needs-more-time plan item keeps 06cd9b DUE while the other two stay CLOSE-ONLY; no predicate reads as not landed",
+        "commands": [
+          "powershell -NoProfile -File grocery\\triage-due.ps1 -SelfTest (exit 0, 'SELF-TEST PASS (61 triage-due cases)')",
+          "powershell -NoProfile -File grocery\\triage-due.ps1 (live, exit 0)"
+        ],
+        "full_suite": "deferred-to-land"
+      },
+      "rollback": "revert the two hunks in triage-due.ps1 and the appended block in triage-return-lib.ps1",
+      "freshness": "measured against triage-queue.json at about 10:35 on 2026-09-28",
+      "lane": "ops",
+      "est_tool_calls": 20,
+      "status": "done",
+      "premise_verified": "true: plan-2026-09-27.json and -2.json items read as the brief said; the live run found 2 more instances",
+      "deviation": null,
+      "shipped_commit": "see git log: triage 2026-09-28 discovered planned-done-never-closed (this commit)",
+      "resolution_note": "triage-due now prints CLOSE-ONLY (not RETURN) for an open id whose newest plan item finished and landed; self-test exit 0 with 5 new frozen cases from the 09-27 ids. Orchestrator: 2026-09-26-735ea6 and 2026-09-26-a30920 are CLOSE-ONLY today.",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 14
+    }
+  ],
+  "ship_sequence": [
+    "1. ops (this spawn, done): discovered:planned-done-never-closed-2026-09-28 in grocery/triage-return-lib.ps1 + grocery/triage-due.ps1; proof triage-due -SelfTest exit 0; full_suite deferred-to-land. c1f48a verified fixed upstream (store repo f0e9aae), no code.",
+    "2. reviewer: f50b7a and fd7a80 (promoted) together with Class A d70062 and c98dec: the daily chain withheld or mis-shipped served files when the tree moved mid-run.",
+    "3. money (triage-developer): c81a9f after the reviewer's d70062/c98dec design (design/PLAN-deferpost-builds-board-2026-09-28.md W1/W2), then b61b08 (Hy-Vee Perks/non-member ad line; check the member-price ruling first).",
+    "4. orchestrator: land with grocery\\triage-land.ps1, close c1f48a and the discovered item's CLOSE-ONLY ids (2026-09-26-735ea6, 2026-09-26-a30920) with triage-close.ps1."
+  ]
+}

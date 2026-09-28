@@ -528,6 +528,45 @@ if ($SelfTest) {
     $ln6 = Format-TriageRouteLine '2026-09-10-ccccc1' $rt6
     _T 'CLEAN TWIN the RETURN line and its ROUTE line are unchanged beside unfinished plan items in the same queue' `
       ($rl6.Count -eq 1 -and $rl6[0] -eq $want -and $ln6 -eq $ln1) (($rl6 -join ' | ') + ' // ' + [string]$ln6)
+    # CLOSE-ONLY (2026-09-28, discovered:planned-done-never-closed). Frozen from the 09-27 plans as they stood when
+    # the three ids were still open on the morning of 09-28: b1efed done with no commit, 06cd9b done at 2e83fb11f,
+    # c989c6 deviated with the "(this commit)" text in shipped_commit.
+    $coP1 = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-27-2.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-27-06cd9b'; status = 'done'; shipped_commit = '2e83fb11f'; close_disposition = 'confirmed' },
+      [pscustomobject]@{ queue_id = '2026-09-27-c989c6'; status = 'deviated'; shipped_commit = 'see git log: triage 2026-09-27 c989c6 (this commit)'; close_disposition = $null }) }
+    $coP0 = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-27.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-27-b1efed'; status = 'done'; shipped_commit = $null; close_disposition = 'confirmed' }) }
+    $coOpen = @(
+      [pscustomobject]@{ id = '2026-09-27-b1efed'; count = 1; status = 'open' },
+      [pscustomobject]@{ id = '2026-09-27-06cd9b'; count = 1; status = 'open' },
+      [pscustomobject]@{ id = '2026-09-27-c989c6'; count = 1; status = 'open' })
+    $coLanded = { param($c, $p) return ($c -eq '2e83fb11f' -or $p -eq 'grocery/triage-plans/plan-2026-09-27-2.json') }
+    $co1 = Get-TriageCloseOnly $coOpen @($coP1, $coP0) $coLanded
+    $co1 = @($co1)
+    _T 'MUST-FIRE the three 09-27 ids whose plan items finished and landed are CLOSE-ONLY (done/no commit, done/landed hash, deviated/"(this commit)")' `
+      ($co1.Count -eq 3 -and (($co1 | ForEach-Object { $_.id }) -join ',') -eq '2026-09-27-b1efed,2026-09-27-06cd9b,2026-09-27-c989c6') (($co1 | ForEach-Object { $_.id }) -join ',')
+    $coLine = Format-TriageCloseOnlyLine $co1[1]
+    _T 'MUST-FIRE the CLOSE-ONLY line names the id, the plan and the landed commit' `
+      ($coLine -match '^  CLOSE-ONLY 2026-09-27-06cd9b  grocery/triage-plans/plan-2026-09-27-2\.json item done, shipped 2e83fb11f landed') $coLine
+    # CLEAN TWIN: the same three, each one step away, stay ordinary DUE work (fails toward DUE, never toward hidden)
+    $coNot = { param($c, $p) return $false }
+    $coOpen2 = @(
+      [pscustomobject]@{ id = '2026-09-27-b1efed'; count = 2; status = 'open' },
+      [pscustomobject]@{ id = '2026-09-27-06cd9b'; count = 1; status = 'open' },
+      [pscustomobject]@{ id = '2026-09-27-c989c6'; count = 1; status = 'open' },
+      [pscustomobject]@{ id = '2026-09-28-noplan'; count = 1; status = 'open' })
+    $co2 = Get-TriageCloseOnly $coOpen2 @($coP1, $coP0) $coNot
+    _T 'CLEAN TWIN a commit not on origin/main, a re-fired id (count 2) and an id no plan names are NOT close-only' `
+      ((@($co2)).Count -eq 0) ((@($co2) | ForEach-Object { $_.id }) -join ',')
+    $coNewer = [pscustomobject]@{ path = 'grocery/triage-plans/plan-2026-09-28.json'; items = @(
+      [pscustomobject]@{ queue_id = '2026-09-27-06cd9b'; status = 'needs-more-time'; shipped_commit = $null }) }
+    $co3 = Get-TriageCloseOnly $coOpen @($coNewer, $coP1, $coP0) $coLanded
+    $co3ids = (@($co3) | ForEach-Object { $_.id }) -join ','
+    _T 'CLEAN TWIN the NEWEST plan item decides: a newer needs-more-time item keeps 06cd9b DUE while the other two stay CLOSE-ONLY' `
+      ($co3ids -eq '2026-09-27-b1efed,2026-09-27-c989c6') $co3ids
+    $co4 = Get-TriageCloseOnly $coOpen @($coP1, $coP0) $null
+    _T 'CLEAN TWIN no landed predicate reads as not landed: only the no-commit item is CLOSE-ONLY' `
+      ((((@($co4)) | ForEach-Object { $_.id }) -join ',') -eq '2026-09-27-b1efed') ((@($co4) | ForEach-Object { $_.id }) -join ',')
   } catch {
     _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
   }
@@ -610,6 +649,29 @@ if ($daily.Count) {
   Write-Output ("DUE  " + $daily.Count + " open alert(s) to triage:")
   foreach ($i in $daily) { Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject) }
 }
+# A LANDED PLAN ITEM WHOSE QUEUE ID NEVER CLOSED IS CLOSE-ONLY (2026-09-28, discovered:planned-done-never-closed;
+# triage-return-lib.ps1 Get-TriageCloseOnly has the founding case). Those ids get no RETURN line below: a RETURN
+# would buy a second diagnosis for a fix already live. Wrapped: provenance never costs the tick.
+$closeOnlyIds = @()
+try {
+  $repoTop = Split-Path -Parent $root
+  $landedFn = {
+    param([string]$Commit, [string]$PlanPath)
+    $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
+    try {
+      if ($Commit -match '^[0-9a-fA-F]{7,40}$') {
+        $null = & git -C $repoTop merge-base --is-ancestor $Commit origin/main 2>$null
+        return ($LASTEXITCODE -eq 0)
+      }
+      # not a hash ("(this commit)"): the fix shipped with the plan, so the plan file on origin/main is the landing
+      $h = & git -C $repoTop log -1 --format=%H origin/main -- $PlanPath 2>$null
+      return ($LASTEXITCODE -eq 0 -and [bool]$h)
+    } finally { $ErrorActionPreference = $prev }
+  }.GetNewClosure()
+  $closeOnly = Get-TriageCloseOnly $open $planRecs $landedFn
+  $closeOnly = @($closeOnly)
+  foreach ($co in $closeOnly) { Write-Output (Format-TriageCloseOnlyLine $co); $closeOnlyIds += [string]$co.id }
+} catch { $closeOnlyIds = @() }
 if ($weekly.Count) {
   $lastTxt = if ($null -eq $laneStamp) { 'never' } else { $laneStamp.ToString('yyyy-MM-dd HH:mm') }
   if ($split.WeeklyDue) {
@@ -653,6 +715,7 @@ try {
     $retBlock.Add([string]$l)
     $rid = ''
     if ($l -match 'RETURN:\s+(\S+)\s') { $rid = $Matches[1] }
+    if ($rid -and ($closeOnlyIds -contains $rid)) { continue }   # CLOSE-ONLY above: its fix is live, no RETURN
     $short = '  RETURN ' + $rid
     try {
       $item = @($open | Where-Object { [string]$_.id -eq $rid })
