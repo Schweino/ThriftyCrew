@@ -99,7 +99,8 @@ if (-not $FlagsFile) {
   if (-not $bday -and $gfs.Count -gt 0) { $gfs = @($gfs[-1]) }
   foreach ($g in $gfs) {
     $dy = $g.BaseName.Substring(7)
-    [void]$flagDays.Add([pscustomobject]@{ day = $dy; flags = @(Read-JsonFile $g.FullName | ForEach-Object { $_ }) })
+    $gRead = Read-JsonFile $g.FullName
+    [void]$flagDays.Add([pscustomobject]@{ day = $dy; flags = @($gRead | ForEach-Object { $_ }) })
   }
   if ($flagDays.Count -gt 0) { $flagNote = ($flagDays.Count.ToString() + ' guards file(s), days ' + (@($flagDays | ForEach-Object { $_.day }) -join ',')) }
 }
@@ -108,7 +109,8 @@ if ($flagDays.Count -gt 0 -or ($FlagsFile -and (Test-Path -LiteralPath $FlagsFil
     $flagList = @($flagDays | ForEach-Object { @($_.flags) })
     $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -FlagDays $flagDays.ToArray() -BoardDay $bday
   } else {
-    $flagList = @(Read-JsonFile $FlagsFile | ForEach-Object { $_ })
+    $flagsRead = Read-JsonFile $FlagsFile
+    $flagList = @($flagsRead | ForEach-Object { $_ })
     $flagNote = (Split-Path $FlagsFile -Leaf)
     $pair = Get-TcPendingPairCells -Ledger $judged -Board $board -Flags $flagList
   }
