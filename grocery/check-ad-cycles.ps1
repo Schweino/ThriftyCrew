@@ -1544,6 +1544,13 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # than merely undefined.
       $pubAttempted = $false
       $pubrc = $null
+      # THE DEFERRED ROAD HAS ITS OWN OUTCOME (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md W3). Under
+      # -DeferPost no publish is attempted here, so $pubAttempted stayed false and the summary said "no price change" on
+      # every deferred day, including the ones whose board had moved on 24 commodities. These carry the build-only run's
+      # outcome to SHIP-SUMMARY; $postHeldForFeed carries the feed-refused hold, which said "no price change" too.
+      $deferAttempted = $false
+      $deferBuildRc = $null
+      $postHeldForFeed = $false
       # republish when the price/type/ad-window signature moved OR a new ad window flipped (belt-and-suspenders)
       $boardChanged = ($sigAfter -ne $sigBefore) -or ($sigAfter -ne $prevPub) -or (@($flips).Count -gt 0)
       if (@($flips).Count -gt 0) { Log ("downstream refreshed after flips: " + ($flips -join ',')) }
@@ -1624,6 +1631,32 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # og:image step sees today's png. Non-fatal: a share graphic must never block prices.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-share-image.ps1') | ForEach-Object { Log ('share: ' + $_) } } catch { Log ('share-image threw: ' + $_.Exception.Message) }
 
+      # <<PUBLISH-HELD-GATE-BEGIN>>
+      # ONE EXIT CODE, FOUR GATES, AND THIS BRANCH NAMED THE FIRST OF THEM (2026-09-20, queue 2026-09-20-417020).
+      # publish-deals-page.ps1 exits 2 from FOUR separate hard gates: the coverage gate (its line 122, too few
+      # commodities / a thin store), store-coverage (216, a staple renders no tile for some store),
+      # match-soundness (224, a product MOVED or DROPPED commodity vs the reviewed baseline) and
+      # category-coverage (233, a commodity is in no category). Until today all four paged as
+      # "Grocery page HELD (coverage) ... a store's pull produced too few commodities. Check the store pulls."
+      # On 2026-09-20 12:15 the real hold was match-soundness, and a triage round opened on store pulls that
+      # were fine. Same class as the rc-1/rc-2 ship summary (2026-09-19-bb10f1) and the blind-vs-live
+      # test-auditors tally (2026-09-19-ae9df2): several verdicts share one code and one of them gets printed.
+      # THE GATE NAMES ITSELF ON STDOUT and $pubVerdict above already holds that line - so read it instead of
+      # assuming. FAIL CLOSED: an rc 2 whose HELD line this reader does not recognise reports 'unnamed' and
+      # says so; it must never assert a gate it did not read.
+      function Get-PublishHeldGate([string[]]$VerdictLines) {
+        $held = ''
+        foreach ($l in @($VerdictLines)) { $s = ([string]$l).Trim(); if ($s -like 'HELD:*') { $held = $s; break } }
+        $gate = 'unnamed'
+        $why  = 'publish-deals-page returned 2 with a HELD line this reader does not recognise, or with none at all - read the publish-verdict lines in ad-cycle-log.txt before assuming which gate held it.'
+        if     ($held -match '(?i)coverage gate failed')       { $gate = 'coverage';           $why = "a store's pull produced too few commodities, or a store is thin/missing. Check the store pulls." }
+        elseif ($held -match '(?i)missing a store tile')       { $gate = 'store-coverage';     $why = 'a staple commodity rendered no tile for one of the seven stores (out\store-coverage-report.json). The board would hide a store; fix the render, do not force it.' }
+        elseif ($held -match '(?i)commodity matching changed') { $gate = 'match-soundness';    $why = 'a product MOVED or DROPPED commodity against the reviewed baseline (out\audit\soundness-report.json). Read the moved/dropped list line by line, then run audit-match-soundness.ps1 -Accept AND COMMIT grocery\out\audit\match-baseline.json, which is a TRACKED file: an accept left uncommitted is undone by the next checkout and this gate holds the next build again.' }
+        elseif ($held -match '(?i)not in exactly one category'){ $gate = 'category-coverage'; $why = 'a commodity is not filed in exactly one category (out\category-coverage-report.json), so it would render in no filter. File it in categories.json.' }
+        elseif ($held -match '(?i)the board this post names') { $gate = 'board-not-served'; $why = 'the post would name a board.json version feed.thriftycrew.com does not serve yet, or the feed could not be read (the HELD line says which). Nothing was written to Ghost. Land the push that carries public\board.json, let the edge serve it, then publish - capture-run does exactly that on the daily road (grocery\feed-served-lib.ps1).' }
+        [pscustomobject]@{ gate = $gate; why = $why; held = $held }
+      }
+      # <<PUBLISH-HELD-GATE-END>>
       if ($guardsBlocked) {
         # already logged + alerted above; fall through without publishing
       } elseif ($script:ChainFeedRefused) {
@@ -1632,6 +1665,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         # point readers at a board the edge never serves. Logged and paged where the export ran.
         Log 'POST HELD - export-feed refused today''s feed, so the board and its post do not ship beside the old feed'
         $summary += 'HELD      board post not published - the feed export was refused (see the ERROR line above)'
+        $postHeldForFeed = $true
       } elseif (-not $boardChanged) {
         Log 'no price change today - board already current, nothing republished'
         $summary += 'CURRENT   no price change today - live page already current'
@@ -1643,21 +1677,70 @@ The chain re-derives every store''s link prices from the rows the board priced, 
         # points to it). So under -DeferPost the post is NOT upserted here: the decision to publish, with the signature
         # this board would record, is handed to the caller in out\post-deferred.json, and capture-run publishes it only
         # after the edge serves the committed board.json and smp-feed.json byte for byte (Get-DeferredPostDecision).
-        try {
-          # board_sha256 + compare_file (2026-09-26, queue 2026-09-26-518fff): WHICH board this post would name, so a later
-          # run can republish a held post once that exact board is on origin/main and at the edge, whoever landed it
-          # (capture-run Get-HeldPostDecision). Uppercase hex, the same form lib\git-blob-lib.ps1's Get-Sha256Hex prints.
-          $pdBoardSha = ''
+        # <<DEFER-POST-BEGIN>> test-auditors (units-03, u060) extracts this region and runs it in a per-run temp tree.
+        # AND THE POINTED-TO OBJECT HAS TO BE BUILT BEFORE IT SHIPS (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md
+        # W1). Until today this branch hashed whatever public\board.json was already on disk and built nothing, and
+        # publish-deals-page is the only road to build-deals-page, the only writer of that file. So capture-run committed and
+        # edge-verified YESTERDAY's board, then its deferred publish rebuilt today's, named a ?v= the edge did not serve, and
+        # held rc 2 (2026-09-23 and 2026-09-28; on 09-28 comparison-2026-09-28 moved the cheapest price on 24 of 577
+        # commodities and the served board still read bacon 3.95). Every board readers got from 09-22 on was a hand
+        # republish. Now the build half of publish-deals-page runs here (-BuildOnly: every gate up to category-coverage and
+        # the build, no Ghost call), and board_sha256 hashes the board it just wrote. Its compare_file is the one the build
+        # USED (it prefers a fresh verified-<week>.json), and capture-run's publish passes it back, so both runs build from
+        # one input and the build is byte-deterministic over one input (measured 2026-09-28, two builds, one SHA-256).
+        $deferAttempted = $true
+        $dbSw = [Diagnostics.Stopwatch]::StartNew()
+        $dbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1') -BuildOnly
+        $deferBuildRc = $LASTEXITCODE
+        $dbOut = @($dbOut)
+        $dbSw.Stop()
+        Log ("publish-deals-page -BuildOnly: {0} s (rc={1}) - the board build only, no Ghost call" -f [int]$dbSw.Elapsed.TotalSeconds, $deferBuildRc)
+        $dbStages = @($dbOut | Where-Object { $_ -match 'publish-deals-page timings' -or $_ -match '^\s{4}\S.*\ss$' })
+        foreach ($dbS in $dbStages) { Log ('publish-stage: ' + ([string]$dbS).Trim()) }
+        # ASSIGN, THEN WRAP, AND DROP NULLS (the same shape as the full publish below, [[ps-null-count-is-one]]).
+        $dbVerdictRaw = $dbOut | Where-Object { $_ -match '^(BUILT|ERROR|HELD|WARN|price-mode|name-drift)' }
+        $dbVerdict = @($dbVerdictRaw | Where-Object { $null -ne $_ })
+        foreach ($v in $dbVerdict) { Log ('publish-verdict: ' + ([string]$v).Trim()) }
+        $dbBuiltSha = ''; $dbCompare = ''
+        foreach ($v in $dbVerdict) { if (([string]$v).Trim() -match '^BUILT board\.json sha256=([0-9A-Fa-f]+) compare=(.*)$') { $dbBuiltSha = $Matches[1]; $dbCompare = $Matches[2].Trim() } }
+        if ($deferBuildRc -eq 0) {
           try {
-            $pdBoardF = Join-Path (Split-Path $root -Parent) 'public\board.json'
-            if (Test-Path -LiteralPath $pdBoardF) { $pdH = [System.Security.Cryptography.SHA256]::Create(); try { $pdBoardSha = ([BitConverter]::ToString($pdH.ComputeHash([IO.File]::ReadAllBytes($pdBoardF))) -replace '-', '') } finally { $pdH.Dispose() } }
-          } catch { $pdBoardSha = '' }
-          $pdCmp = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-          $pdDoc = [ordered]@{ date = $asofS; sig = $sigAfter; sig_file = $sigFile; written = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); flips = @($flips); guards_rc = $guardsRc; board_sha256 = $pdBoardSha; compare_file = $(if ($pdCmp) { $pdCmp.FullName } else { '' }) }
-          [IO.File]::WriteAllText((Join-Path $OutDir 'post-deferred.json'), ($pdDoc | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
-          Log 'POST DEFERRED to the caller: it publishes after the served data it points at is live (out\post-deferred.json)'
-          $summary += 'DEFERRED  the board post publishes after capture-run confirms board.json and smp-feed.json are live'
-        } catch { Log ('post-deferred write threw: ' + $_.Exception.Message + ' - the post was NOT published and will not be by the caller either') }
+            # board_sha256 + compare_file (2026-09-26, queue 2026-09-26-518fff): WHICH board this post would name, so a later
+            # run can republish a held post once that exact board is on origin/main and at the edge, whoever landed it
+            # (capture-run Get-HeldPostDecision). Uppercase hex, the same form lib\git-blob-lib.ps1's Get-Sha256Hex prints.
+            # The file on disk is what the caller commits, so it is what is hashed; the build's own line is the cross-check.
+            $pdBoardSha = ''
+            try {
+              $pdBoardF = Join-Path (Split-Path $root -Parent) 'public\board.json'
+              if (Test-Path -LiteralPath $pdBoardF) { $pdH = [System.Security.Cryptography.SHA256]::Create(); try { $pdBoardSha = ([BitConverter]::ToString($pdH.ComputeHash([IO.File]::ReadAllBytes($pdBoardF))) -replace '-', '') } finally { $pdH.Dispose() } }
+            } catch { $pdBoardSha = '' }
+            if ($dbBuiltSha -and -not [string]::Equals($dbBuiltSha, $pdBoardSha, [StringComparison]::OrdinalIgnoreCase)) { Log ('WARN public\board.json changed between the build (' + $dbBuiltSha + ') and the deferral (' + $pdBoardSha + '); the deferral names the file on disk and publish-deals-page re-checks the edge before any Ghost write') }
+            $pdCmpPath = $dbCompare
+            if (-not $pdCmpPath) { $pdCmp = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; $pdCmpPath = $(if ($pdCmp) { $pdCmp.FullName } else { '' }) }
+            $pdDoc = [ordered]@{ date = $asofS; sig = $sigAfter; sig_file = $sigFile; written = (Get-Date).ToString('yyyy-MM-ddTHH:mm:ss'); flips = @($flips); guards_rc = $guardsRc; board_sha256 = $pdBoardSha; compare_file = $pdCmpPath }
+            [IO.File]::WriteAllText((Join-Path $OutDir 'post-deferred.json'), ($pdDoc | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+            Log ('POST DEFERRED to the caller: the board was rebuilt (public\board.json sha256=' + $pdBoardSha + ') and its post publishes after that board is live (out\post-deferred.json)')
+            $summary += 'DEFERRED  board rebuilt; its post publishes after capture-run confirms board.json and smp-feed.json are live'
+          } catch { Log ('post-deferred write threw: ' + $_.Exception.Message + ' - the post was NOT published and will not be by the caller either') }
+        } elseif ($deferBuildRc -eq 2) {
+          # A publish gate held the build. Nothing is deferred, so no road publishes a post for this board today. When the
+          # gate stood after the build (store-coverage, match-soundness, category-coverage) public\board.json is already
+          # rewritten and the caller commits it, exactly as the full publish's HELD road always did: the data ships, the post waits.
+          $heldGate = Get-PublishHeldGate $dbVerdict
+          Log ('BOARD BUILD HELD: the ' + $heldGate.gate + ' gate held it - no post deferred, the live post is NOT updated')
+          $summary += ('HELD      the ' + $heldGate.gate + ' gate held the board build - no post deferred, live post NOT updated')
+          if (-not $NoAlert) {
+            $heldLine = if ($heldGate.held) { $heldGate.held } else { '(publish-deals-page printed no HELD line)' }
+            $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $asofS while it was being built for the deferred post, so no post was deferred and the live post was NOT updated - nothing bad was published. " + $heldGate.why + " The gate's own line was: " + $heldLine
+            try { Send-Alert -Subject ('Grocery page HELD (' + $heldGate.gate + ") - $asofS") -Body $heldBody | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) }
+          }
+        } else {
+          if ($dbVerdict.Count -eq 0) { $dbTailRaw = $dbOut | Where-Object { $null -ne $_ } | Select-Object -Last 5; foreach ($t in @($dbTailRaw | Where-Object { $null -ne $_ })) { Log ('publish-tail: ' + ([string]$t).Trim()) } }
+          Log ("BOARD BUILD ERROR (rc=$deferBuildRc) - the board build failed, no post deferred; live post NOT updated")
+          $summary += ("ERROR     the board build failed (rc=$deferBuildRc) - no post deferred, live post NOT updated; see ad-cycle-log.txt")
+          if (-not $NoAlert) { try { Send-Alert -Subject "Grocery publish FAILED (rc=$deferBuildRc) - $asofS" -Body "publish-deals-page.ps1 -BuildOnly returned $deferBuildRc on $asofS (the board build failed), so no post was deferred and the live post was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} }
+        }
+        # <<DEFER-POST-END>>
       } elseif (-not $NoPublish) {
         # TIME THE PUBLISH, BECAUSE NOBODY COULD (2026-08-23). PLAN-use-the-cores §7 books this step at
         # "60-449 s, 7x day-to-day variance" and calls it network-bound. That number cannot be read off
@@ -1713,32 +1796,6 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           $tail = @($tailRaw | Where-Object { $null -ne $_ })
           foreach ($t in $tail) { Log ('publish-tail: ' + ([string]$t).Trim()) }
         }
-        # <<PUBLISH-HELD-GATE-BEGIN>>
-        # ONE EXIT CODE, FOUR GATES, AND THIS BRANCH NAMED THE FIRST OF THEM (2026-09-20, queue 2026-09-20-417020).
-        # publish-deals-page.ps1 exits 2 from FOUR separate hard gates: the coverage gate (its line 122, too few
-        # commodities / a thin store), store-coverage (216, a staple renders no tile for some store),
-        # match-soundness (224, a product MOVED or DROPPED commodity vs the reviewed baseline) and
-        # category-coverage (233, a commodity is in no category). Until today all four paged as
-        # "Grocery page HELD (coverage) ... a store's pull produced too few commodities. Check the store pulls."
-        # On 2026-09-20 12:15 the real hold was match-soundness, and a triage round opened on store pulls that
-        # were fine. Same class as the rc-1/rc-2 ship summary (2026-09-19-bb10f1) and the blind-vs-live
-        # test-auditors tally (2026-09-19-ae9df2): several verdicts share one code and one of them gets printed.
-        # THE GATE NAMES ITSELF ON STDOUT and $pubVerdict above already holds that line - so read it instead of
-        # assuming. FAIL CLOSED: an rc 2 whose HELD line this reader does not recognise reports 'unnamed' and
-        # says so; it must never assert a gate it did not read.
-        function Get-PublishHeldGate([string[]]$VerdictLines) {
-          $held = ''
-          foreach ($l in @($VerdictLines)) { $s = ([string]$l).Trim(); if ($s -like 'HELD:*') { $held = $s; break } }
-          $gate = 'unnamed'
-          $why  = 'publish-deals-page returned 2 with a HELD line this reader does not recognise, or with none at all - read the publish-verdict lines in ad-cycle-log.txt before assuming which gate held it.'
-          if     ($held -match '(?i)coverage gate failed')       { $gate = 'coverage';           $why = "a store's pull produced too few commodities, or a store is thin/missing. Check the store pulls." }
-          elseif ($held -match '(?i)missing a store tile')       { $gate = 'store-coverage';     $why = 'a staple commodity rendered no tile for one of the seven stores (out\store-coverage-report.json). The board would hide a store; fix the render, do not force it.' }
-          elseif ($held -match '(?i)commodity matching changed') { $gate = 'match-soundness';    $why = 'a product MOVED or DROPPED commodity against the reviewed baseline (out\audit\soundness-report.json). Read the moved/dropped list line by line, then run audit-match-soundness.ps1 -Accept AND COMMIT grocery\out\audit\match-baseline.json, which is a TRACKED file: an accept left uncommitted is undone by the next checkout and this gate holds the next build again.' }
-          elseif ($held -match '(?i)not in exactly one category'){ $gate = 'category-coverage'; $why = 'a commodity is not filed in exactly one category (out\category-coverage-report.json), so it would render in no filter. File it in categories.json.' }
-          elseif ($held -match '(?i)the board this post names') { $gate = 'board-not-served'; $why = 'the post would name a board.json version feed.thriftycrew.com does not serve yet, or the feed could not be read (the HELD line says which). Nothing was written to Ghost. Land the push that carries public\board.json, let the edge serve it, then publish - capture-run does exactly that on the daily road (grocery\feed-served-lib.ps1).' }
-          [pscustomobject]@{ gate = $gate; why = $why; held = $held }
-        }
-        # <<PUBLISH-HELD-GATE-END>>
         if ($pubrc -eq 0)     { Set-Content -Path $sigFile -Value $sigAfter -Encoding ASCII; Log ('AUTO-PUBLISH: live page updated (price change' + $(if (@($flips).Count -gt 0) { '/new ad' } else { ' mid-cycle' }) + ')'); $summary += 'PUBLISHED live page updated (price change detected)' }
         elseif ($pubrc -eq 2) {
           $heldGate = Get-PublishHeldGate $pubVerdict
@@ -1920,6 +1977,20 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       } elseif ($pubAttempted) {
         Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board was rebuilt but the live page was NOT updated (publish rc ' + $pubrc + ': build or Ghost upsert failed); the page is at its last good state - see the publish-verdict lines above. INSPECT (advisory audits) starts now. ----')
         $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board rebuilt, live page NOT updated (publish rc ' + $pubrc + ')')
+      # THE DEFERRED ROAD (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md W3). Until today every -DeferPost run
+      # fell to the last branch and said "no price change", on the days its board moved as well as the days it did not.
+      } elseif ($deferAttempted -and $deferBuildRc -eq 0) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board was rebuilt (public\board.json) and its post is DEFERRED to the caller, which publishes it once the edge serves this board. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board rebuilt, post deferred to the caller')
+      } elseif ($deferAttempted -and $deferBuildRc -eq 2) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board build was HELD by a publish gate (build rc 2), so no post was deferred and the live post is NOT updated - see the publish-verdict lines above. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board build HELD by a publish gate (build rc 2), no post deferred')
+      } elseif ($deferAttempted) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board build FAILED (build rc ' + $deferBuildRc + '), so no post was deferred and the live post is NOT updated - see the publish-verdict lines above. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board build FAILED (build rc ' + $deferBuildRc + '), no post deferred')
+      } elseif ($postHeldForFeed) {
+        Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): the board post was HELD because the feed export was refused, so the live post is NOT updated - see the ERROR line above. INSPECT (advisory audits) starts now. ----')
+        $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - board post HELD, the feed export was refused')
       } else {
         Log ('---- SHIP PATH COMPLETE in ' + $shipSecs + ' s (' + $shipMin + ' min): no price change since the last publish, so the live page stands as last published. INSPECT (advisory audits) starts now. ----')
         $summary += ('SHIP      ship path completed in ' + $shipSecs + ' s (' + $shipMin + ' min) - no price change, live page stands as last published')

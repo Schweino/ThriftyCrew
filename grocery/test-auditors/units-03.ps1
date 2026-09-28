@@ -839,8 +839,9 @@ if (-not $ssSrcM.Success) {
   # hashtable and the second dot-sourced the string "System.Collections.Hashtable" - a command-not-found
   # that killed the suite mid-run with no FAIL line. Same trap as the $pS/$PS one in the gate-slot work.
   $ssRegionSrc = $ssSrcM.Groups[1].Value
-  function SsRun([bool]$blocked, [bool]$attempted, $rc) {
+  function SsRun([bool]$blocked, [bool]$attempted, $rc, [bool]$dAttempted = $false, $dRc = $null, [bool]$feedHeld = $false) {
     $guardsBlocked = $blocked; $pubAttempted = $attempted; $pubrc = $rc
+    $deferAttempted = $dAttempted; $deferBuildRc = $dRc; $postHeldForFeed = $feedHeld
     $shipSecs = 726; $summary = @()
     $logged = New-Object System.Collections.Generic.List[string]
     function Log($m) { [void]$logged.Add([string]$m) }
@@ -873,10 +874,108 @@ if (-not $ssSrcM.Success) {
     Ok 'ship summary: CLEAN TWIN - a run with no publish attempt says the page stands as last published'
   } else { Bad ('ship summary: the not-attempted branch is wrong - [' + $ss.log + ']') }
   # EVERY BRANCH STILL WRITES A SUMMARY LINE. A silent branch is the failure a five-way split invites.
-  $ssAll = @((SsRun $false $true 1), (SsRun $false $true 2), (SsRun $true $false $null), (SsRun $false $true 0), (SsRun $false $false $null))
+  # THE DEFERRED ROAD (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md W3). Every -DeferPost run said "no price
+  # change" because $pubAttempted is false on that road, on 09-28 over a board that moved on 24 of 577 commodities.
+  # MUST FIRE: the founding day - a deferred build that succeeded says the board was rebuilt and the post deferred.
+  $ss = SsRun $false $false $null $true 0
+  if ($ss.log -match 'post is DEFERRED' -and $ss.summary -match 'board rebuilt, post deferred to the caller' -and $ss.log -notmatch 'no price change') {
+    Ok 'ship summary: MUST FIRE - a -DeferPost run whose board was rebuilt says "board rebuilt, post deferred to the caller", never "no price change" (the 2026-09-28 summary)'
+  } else { Bad ('ship summary: a deferred rebuilt board still reads as no price change - [' + $ss.log + ' | ' + $ss.summary + ']') }
+  $ss = SsRun $false $false $null $true 2
+  if ($ss.log -match 'HELD by a publish gate \(build rc 2\)' -and $ss.log -notmatch 'no price change' -and $ss.log -notmatch 'post is DEFERRED') { Ok 'ship summary: MUST FIRE - a deferred build held rc 2 says HELD and that no post was deferred' }
+  else { Bad ('ship summary: the deferred rc-2 branch is wrong - [' + $ss.log + ']') }
+  $ss = SsRun $false $false $null $true 1
+  if ($ss.log -match 'build FAILED \(build rc 1\)' -and $ss.log -notmatch 'no price change') { Ok 'ship summary: MUST FIRE - a deferred build that exited 1 says FAILED with its rc' }
+  else { Bad ('ship summary: the deferred rc-1 branch is wrong - [' + $ss.log + ']') }
+  $ss = SsRun $false $false $null $false $null $true
+  if ($ss.log -match 'feed export was refused' -and $ss.log -notmatch 'no price change') { Ok 'ship summary: MUST FIRE - a post held for a refused feed says so, never "no price change"' }
+  else { Bad ('ship summary: the feed-refused hold still reads as no price change - [' + $ss.log + ']') }
+  # CLEAN TWIN: a -DeferPost run whose board did NOT change attempts no build and still says "no price change", truthfully.
+  $ss = SsRun $false $false $null $false $null $false
+  if ($ss.log -match 'no price change' -and $ss.log -notmatch 'DEFERRED') { Ok 'ship summary: CLEAN TWIN - with no deferred build and no publish, the no-price-change wording is kept' }
+  else { Bad ('ship summary: the no-change branch moved - [' + $ss.log + ']') }
+  $ssAll = @((SsRun $false $true 1), (SsRun $false $true 2), (SsRun $true $false $null), (SsRun $false $true 0), (SsRun $false $false $null), (SsRun $false $false $null $true 0), (SsRun $false $false $null $true 2), (SsRun $false $false $null $true 1), (SsRun $false $false $null $false $null $true))
   $ssEmpty = @($ssAll | Where-Object { -not $_.summary -or -not $_.log })
-  if ($ssEmpty.Count -eq 0) { Ok 'ship summary: every one of the five branches writes both a log line and a summary line - none is silent' }
-  else { Bad ('ship summary: ' + $ssEmpty.Count + ' of 5 branches wrote no summary or no log line - the run would report nothing about what shipped') }
+  if ($ssAll.Count -eq 9 -and $ssEmpty.Count -eq 0) { Ok 'ship summary: every one of the nine branches writes both a log line and a summary line - none is silent' }
+  else { Bad ('ship summary: ' + $ssEmpty.Count + ' of ' + $ssAll.Count + ' branches wrote no summary or no log line - the run would report nothing about what shipped') }
+}
+# ---- DEFER-POST: THE BOARD THE DEFERRAL NAMES IS THE BOARD TODAY'S COMPARISON BUILDS (2026-09-28, design/PLAN-deferpost-
+# builds-board-2026-09-28.md W4). The region is extracted from the live source and run in a per-run temp tree whose
+# publish-deals-page.ps1 is a stub builder: it writes public\board.json from the newest comparison and prints the BUILT line.
+# The stub stands in for the builder so the case proves the WIRING the region owns (build first, then hash what was built);
+# the builder's own determinism was measured separately (two builds over comparison-2026-09-28, one SHA-256).
+$dpSrcM = [regex]::Match($cacSrc, '(?s)<<DEFER-POST-BEGIN>>[^\r\n]*\r?\n(.*?)\r?\n[ \t]*# <<DEFER-POST-END>>')
+if (-not $dpSrcM.Success) {
+  Bad 'DEFER-POST region is GONE from check-ad-cycles.ps1 - this check EXAMINED NOTHING, the deferred board build is untested'
+} else {
+  $dpRegionSrc = $dpSrcM.Groups[1].Value
+  function DpRun([string]$regionSrc, [string]$tree) {
+    $root = Join-Path $tree 'grocery'; $OutDir = Join-Path $root 'out'
+    $asofS = '2026-09-28'; $sigAfter = 'SIG-0928'; $sigFile = Join-Path $OutDir 'published-board.sig'; $flips = @(); $guardsRc = 0; $NoAlert = $true
+    $summary = @(); $deferAttempted = $false; $deferBuildRc = $null
+    $logged = New-Object System.Collections.Generic.List[string]
+    function Log($m) { [void]$logged.Add([string]$m) }
+    function Get-PublishHeldGate($lines) { [pscustomobject]@{ gate = 'fixture'; why = ''; held = '' } }
+    . ([scriptblock]::Create($regionSrc))
+    return @{ rc = $deferBuildRc; log = ($logged -join "`n"); summary = (@($summary) -join "`n") }
+  }
+  function DpSha([string]$f) { $h = [System.Security.Cryptography.SHA256]::Create(); try { return ([BitConverter]::ToString($h.ComputeHash([IO.File]::ReadAllBytes($f))) -replace '-', '') } finally { $h.Dispose() } }
+  function New-DpTree {
+    $t = Join-Path ([System.IO.Path]::GetTempPath()) ('dpb-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    New-Item -ItemType Directory -Path (Join-Path $t 'grocery\out') -Force -ErrorAction Stop | Out-Null
+    New-Item -ItemType Directory -Path (Join-Path $t 'public') -Force -ErrorAction Stop | Out-Null
+    # yesterday's served board, and today's comparison that moved bacon at Fareway (2.99 -> 1.596, the 09-28 founding row)
+    [IO.File]::WriteAllText((Join-Path $t 'public\board.json'), '{"bacon":{"Fareway":2.99}}')
+    [IO.File]::WriteAllText((Join-Path $t 'grocery\out\comparison-2026-09-28.json'), '{"bacon":{"Fareway":1.596}}')
+    $stub = @(
+      'param([switch]$BuildOnly)',
+      '$c = Get-ChildItem (Join-Path $PSScriptRoot ''out\comparison-*.json'') | Sort-Object Name -Descending | Select-Object -First 1',
+      '$b = Join-Path (Split-Path $PSScriptRoot -Parent) ''public\board.json''',
+      '[IO.File]::WriteAllText($b, [IO.File]::ReadAllText($c.FullName))',
+      '$h = [System.Security.Cryptography.SHA256]::Create(); $s = ([BitConverter]::ToString($h.ComputeHash([IO.File]::ReadAllBytes($b))) -replace ''-'', '''')',
+      'Write-Output (''BUILT board.json sha256='' + $s + '' compare='' + $c.FullName)',
+      'exit 0')
+    [IO.File]::WriteAllText((Join-Path $t 'grocery\publish-deals-page.ps1'), ($stub -join "`n"))
+    return $t
+  }
+  # the checker: is the served board today's comparison, and does the deferral name exactly that board?
+  function Test-DeferBuiltBoard([string]$tree) {
+    $f = New-Object System.Collections.Generic.List[string]
+    $board = Join-Path $tree 'public\board.json'
+    $cmp = Join-Path $tree 'grocery\out\comparison-2026-09-28.json'
+    if (-not [string]::Equals([IO.File]::ReadAllText($board), [IO.File]::ReadAllText($cmp), [StringComparison]::Ordinal)) { $f.Add('public\board.json was not rebuilt from today''s comparison - the caller would commit yesterday''s board') }
+    $pdF = Join-Path $tree 'grocery\out\post-deferred.json'
+    if (-not (Test-Path -LiteralPath $pdF)) { $f.Add('no post-deferred.json was written') }
+    else {
+      $pd = Get-Content -LiteralPath $pdF -Raw -Encoding UTF8 | ConvertFrom-Json
+      if (-not [string]::Equals([string]$pd.board_sha256, (DpSha $board), [StringComparison]::OrdinalIgnoreCase)) { $f.Add('post-deferred.json board_sha256 does not name the board on disk') }
+      if (-not [string]::Equals([string]$pd.compare_file, $cmp, [StringComparison]::OrdinalIgnoreCase)) { $f.Add('post-deferred.json compare_file is not the file the build used') }
+    }
+    return ,$f.ToArray()
+  }
+  $dpTrees = @()
+  try {
+    # CLEAN TWIN: the live region builds first, so the board is today's and the deferral names that board and its input.
+    $dpT = New-DpTree; $dpTrees += $dpT
+    $dpR = DpRun $dpRegionSrc $dpT
+    $dpF = Test-DeferBuiltBoard $dpT
+    if ($dpR.rc -eq 0 -and $dpF.Count -eq 0 -and $dpR.summary -match 'board rebuilt') {
+      Ok 'defer-post: CLEAN TWIN - under -DeferPost the board is rebuilt from today''s comparison and post-deferred.json board_sha256 names exactly that board and its compare_file'
+    } else { Bad ('defer-post: the live region does not defer the board it built (rc=' + $dpR.rc + '): [' + ($dpF -join '; ') + '] log=[' + $dpR.log + ']') }
+    # MUST FIRE: the 2026-09-28 defect, made by deleting the build call from the LIVE region (a literal .Replace). The
+    # checker must see that a changed comparison under -DeferPost left public\board.json at yesterday's board.
+    $dpNeedle = '& powershell -ExecutionPolicy Bypass -File (Join-Path $root ''publish-deals-page.ps1'') -Build' + 'Only'
+    $dpBroke = $dpRegionSrc.Replace($dpNeedle, '''BUILT board.json sha256=0 compare=''; $global:LASTEXITCODE = 0')
+    if ([string]::Equals($dpBroke, $dpRegionSrc, [StringComparison]::Ordinal)) { Bad 'defer-post: the MUST FIRE mutant could not be made - the build call in the DEFER-POST region no longer reads as the needle, so this case examined nothing' }
+    else {
+      $dpT2 = New-DpTree; $dpTrees += $dpT2
+      $null = DpRun $dpBroke $dpT2
+      $dpF2 = Test-DeferBuiltBoard $dpT2
+      if (($dpF2 -join ' ') -match 'was not rebuilt') { Ok 'defer-post: MUST FIRE - with the build removed, a changed comparison under -DeferPost leaves public\board.json at yesterday''s board and the check names it (the 2026-09-28 defect)' }
+      else { Bad ('defer-post: the checker did NOT fire on the build-less region: [' + ($dpF2 -join '; ') + ']') }
+    }
+  } catch { Bad ('defer-post: the fixture threw - ' + $_.Exception.Message) }
+  finally { foreach ($d in $dpTrees) { Remove-Item -LiteralPath $d -Recurse -Force -ErrorAction SilentlyContinue } }
 }
 # THE PUBLISH VERDICT LINES: the one line that named the failing stage was being discarded.
 if ($cacSrc -match "publish-verdict: ") { Ok 'check-ad-cycles logs publish-deals-page''s own verdict lines, so a failed publish names its stage in the log' }

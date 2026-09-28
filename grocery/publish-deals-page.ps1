@@ -9,11 +9,16 @@
                2 = HELD (a publish gate failed; caller should alert)   1 = error
   Params: -CompareFile <path> (default newest)  -MinCommodities 25  -MinPerStore 15  -Draft
           -Force (skips the coverage gate AND the change gate)
+          -BuildOnly (the BUILD half only: every gate up to category-coverage and the board build, which writes
+                      public\board.json and public\price-history.json; no Ghost key, no Ghost call. Exit 0 prints
+                      'BUILT board.json sha256=<HEX> compare=<path>'. check-ad-cycles -DeferPost runs it so the served
+                      data the caller commits is today's board, not yesterday's; plan
+                      design/PLAN-deferpost-builds-board-2026-09-28.md W1)
           -SelfTest (hermetic fixture for the change gate; touches no data, publishes nothing)
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
 # gate-inputs: grocery\publish-deals-page.ps1, grocery\feed-served-lib.ps1, lib\git-blob-lib.ps1, lib\json-io.ps1
-param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$SelfTest)
+param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$BuildOnly, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -44,6 +49,14 @@ function Invoke-Timed {
   try { & $Body } finally {
     $sw.Stop()
     $script:StageTimes[$Name] = [math]::Round($sw.Elapsed.TotalSeconds, 1)
+  }
+}
+# One line, always, listing every child that ran and what it cost (the full run's tail and the -BuildOnly exit share it).
+function Write-StageTimes {
+  if ($script:StageTimes.Count) {
+    $__tot = 0; foreach ($__v in $script:StageTimes.Values) { $__tot += [double]$__v }
+    Write-Output ("publish-deals-page timings ({0:n1} s total): " -f $__tot)
+    foreach ($__k in $script:StageTimes.Keys) { Write-Output ("    {0,-24} {1,6} s" -f $__k, $script:StageTimes[$__k]) }
   }
 }
 $slug   = 'omaha-grocery-prices'
@@ -104,6 +117,13 @@ if ($SelfTest) {
   elseif ($builtAt -lt 0 -or $servedAt -lt $builtAt) { $fails += 'the served-board check runs before the page is built, so it would check a stale embed' }
   elseif ($firstWrite -lt $servedAt) { $fails += 'MUST-FIRE: a Ghost write stands BEFORE the served-board check, so an unserved board can still be posted' }
   elseif ($refuseAt -lt 0 -or $refuseAt -gt $firstWrite) { $fails += 'MUST-FIRE: the served-board refusal does not exit before the first Ghost write' }
+  # -BuildOnly (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md W1): its exit must stand AFTER the board build
+  # (or the deferred chain hashes yesterday's board again) and BEFORE the served check, so it can never reach a Ghost write.
+  $boAt = $pdpSrc.IndexOf('$boBoard' + ' = Join-Path')
+  $boExitAt = if ($boAt -ge 0) { $pdpSrc.IndexOf('exit ' + '0', $boAt) } else { -1 }
+  if ($boAt -lt 0) { $fails += 'MUST-FIRE: -BuildOnly has no exit branch, so the deferred chain cannot build the board without publishing' }
+  elseif ($builtAt -lt 0 -or $boAt -lt $builtAt) { $fails += 'MUST-FIRE: -BuildOnly exits before the board is built, so the deferred chain would hash the stale public\board.json (the 2026-09-28 defect)' }
+  elseif ($boExitAt -lt 0 -or $boExitAt -gt $servedAt -or $boExitAt -gt $firstWrite) { $fails += 'MUST-FIRE: -BuildOnly does not exit before the served check and the first Ghost write' }
   $fslFile = Join-Path $PSScriptRoot 'feed-served-lib.ps1'
   $fslOut = & powershell -NoProfile -ExecutionPolicy Bypass -File $fslFile -SelfTest
   $fslRc = $LASTEXITCODE
@@ -117,11 +137,11 @@ if ($SelfTest) {
   if ($msJudgeAt -lt 0 -or $msJudgeAt -gt $msNextGate) { $fails += 'MUST-FIRE: the soundness gate no longer asks Get-SoundnessPublishVerdict which changes touch a published cell' }
   elseif ($msHoldAt -lt 0 -or $msHoldAt -gt $msNextGate) { $fails += 'MUST-FIRE: the soundness gate judges the report but cannot exit 2 on a published cell''s winner' }
   if ($fails.Count) { Write-Output ('SELFTEST FAIL - ' + ($fails -join ' | ')); exit 1 }
-  Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass; the served-board check stands before every Ghost write and its decision passed its own fixtures.'
+  Write-Output 'SELFTEST PASS - change gate: unchanged board skips; one-byte and visibility changes publish; missing, empty or unreadable stamp publishes; unread live post publishes; -Force/-Draft bypass; the served-board check stands before every Ghost write and its decision passed its own fixtures; -BuildOnly exits after the build and before the served check.'
   exit 0
 }
 # Ghost admin key: env var (CI secret) or gitignored .ghostkey; apiUrl stays the ghost.io admin host.
-$adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
+$adminKey = if ($BuildOnly) { '' } elseif ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() }
   elseif (Test-Path (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey')) { (Get-Content (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey') -Raw).Trim() }
   else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
@@ -275,6 +295,24 @@ $__sw = [Diagnostics.Stopwatch]::StartNew()
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-category-coverage.ps1') -OutDir $OutDir
 $__sw.Stop(); $script:StageTimes['audit-category-coverage'] = [math]::Round($__sw.Elapsed.TotalSeconds, 1)
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).'; exit 2 }
+
+# ---- -BuildOnly STOPS HERE, BEFORE THE SERVED CHECK AND EVERY GHOST WRITE (2026-09-28, plan
+# design/PLAN-deferpost-builds-board-2026-09-28.md W1). check-ad-cycles -DeferPost used to hash whatever public\board.json
+# was already on disk, so capture-run committed and edge-verified YESTERDAY's board and then this script, run for the post,
+# rebuilt today's, named a ?v= the edge did not serve, and held (2026-09-23 and 2026-09-28). The board is the POINTED-TO
+# object: it is built here, first, by the one writer, and the post that points at it stays with the caller.
+# The build is byte-deterministic over one comparison (measured 2026-09-28: two builds over comparison-2026-09-28 gave one
+# SHA-256, a build over comparison-2026-09-27 another), so the caller's later full run over the SAME -CompareFile names
+# this same board. Any input that moved in between makes the served check below hold: a leak, never a wrong post.
+if ($BuildOnly) {
+  $boBoard = Join-Path (Split-Path $root -Parent) 'public\board.json'
+  $boSha = ''
+  if (Test-Path -LiteralPath $boBoard) { $boH = [System.Security.Cryptography.SHA256]::Create(); try { $boSha = ([BitConverter]::ToString($boH.ComputeHash([IO.File]::ReadAllBytes($boBoard))) -replace '-', '') } finally { $boH.Dispose() } }
+  Write-StageTimes
+  if (-not $boSha) { Write-Output 'ERROR: -BuildOnly built the page but public\board.json is missing - nothing to defer'; exit 1 }
+  Write-Output ('BUILT board.json sha256=' + $boSha + ' compare=' + $CompareFile)
+  exit 0
+}
 
 # ---- THE POST SHIPS AFTER ITS DATA, WHOEVER RUNS THIS (2026-09-23) -------------------------------------------------
 # The post names board.json?v=<SHA-1 of the board this build just wrote>, and public\board.json reaches readers only when
@@ -434,9 +472,5 @@ try {
 
 # One line, always, listing every child that ran and what it cost. Printed even when a stage was
 # skipped, because "which stages ran at all" is half the question this answers.
-if ($script:StageTimes.Count) {
-  $__tot = 0; foreach ($__v in $script:StageTimes.Values) { $__tot += [double]$__v }
-  Write-Output ("publish-deals-page timings ({0:n1} s total): " -f $__tot)
-  foreach ($__k in $script:StageTimes.Keys) { Write-Output ("    {0,-24} {1,6} s" -f $__k, $script:StageTimes[$__k]) }
-}
+Write-StageTimes
 exit 0
