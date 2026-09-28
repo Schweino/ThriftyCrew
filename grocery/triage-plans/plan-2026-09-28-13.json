@@ -1,0 +1,164 @@
+{
+  "generated": "2026-09-28T18:10:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28 (built 17:28), flagged-2026-09-28.json 17:28, match-worklist.json 08:39",
+  "lane": "ops",
+  "scope_note": "RETURN items of 2026-09-28 (ops lane, continuing session): three ids triage-due.ps1 routed straight to the developer, each seeded with a committed prior item in plan-2026-09-25-6.json and re-measured against today's board before anything was changed. No reviewer diagnosis.",
+  "queue_ids_seen": ["2026-09-26-564dc6", "2026-09-26-7ed369", "2026-09-27-c744ba"],
+  "routing_artifact": "",
+  "knowledge_consulted": [
+    "dispatch: machinery grocery/price-table-lib.ps1, grocery/discovery-lib.ps1, graph/agentic/verifier.py (none bore on these three)",
+    "searched \"page once alert only when board changes\" (knowledge-search --estate): reliability-craft/MAP.md section 4 'An alert is not a check that fired' (alert only where a human has to act): used for 7ed369, a refused row that cannot move a cell is a log line, not a page",
+    "grocery/resolve-match-worklist.ps1 header (-Decide -Verdict ad-line, reused for c744ba as plan-2026-09-25-6 did for b2850b)"
+  ],
+  "ship_sequence": [
+    "2026-09-26-7ed369: grocery/audit-band-refusals.ps1 pages a refused row only when it could move a cell (no standing cell at its store, a unit that does not line up, or cheaper than the cell), once, recorded as paged_on; -SelfTest 26 of 26",
+    "2026-09-27-c744ba: ten 'X or Y' ad-line contested arrivals of 2026-09-28 decided through resolve-match-worklist.ps1 -Decide (grocery/match-verdicts.json)",
+    "2026-09-26-564dc6: measured, bounced (every repair is a grocery/commodities.json rule; the executor it names has no runner, a ruling)",
+    "one pathspec commit; the orchestrator lands through triage-land.ps1 (full_suite: deferred-to-land)"
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-coverage-worklist-executor",
+      "question": "The daily 'store(s) dropped from a commodity they carry' page tells the reader the weekly lane applies classifier-decided widenings and releases through apply-coverage-batch -FromWorklist, but nothing runs that step (no task, script or agent names it) and the weekly lane may not edit commodities.json. Should the money lane run apply-coverage-batch -FromWorklist on a schedule (weekly, gated by its crown diff), or should the page stop naming it?",
+      "why_it_matters": "The type was closed 8 times in 30 days and returns every day new store products arrive: 9 coverage rows stand today (6 from 09-27, 3 new), all undecided, each a store missing from a commodity it sells.",
+      "recommendation": "A weekly money-lane run of apply-coverage-batch -FromWorklist over rows the classifier decided, through its existing crown-diff gate."
+    }
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-26-7ed369",
+      "subject": "Grocery: a price band refused rows it cannot explain - 2026-09-26 (absorbed 09-27, 09-28)",
+      "classification": "code",
+      "lane": "ops",
+      "est_tool_calls": 20,
+      "evidence": [
+        "grocery/out/band-refusals-open.json (main, 08:45 run): 197 open rows, first_seen 2026-09-26 53, 2026-09-27 93, 2026-09-28 51; 0 decided; the type paged every day 2026-09-23 to 2026-09-28",
+        "against comparison-2026-09-28 (17:28): 177 of 197 open rows are priced at or above their own store's standing cell for the same commodity (cannot move the board), 3 are cheaper than it (bleach FF 0.0066 < 0.074, breakfast-sausage Fareway 0.5225 < 5.32, pears Walmart 0.124 < 2.4779), 17 have no cell at that store; of today's 51 first-day rows 45 were at or above their cell",
+        "7ed369's own row: 'apple-cider-vinegar | Baker's | Bragg Organic Apple Cider Vinegar with the Mother | 0.3119 against reference 0.0546', Baker's cell 0.0546 from another row",
+        "check-ad-cycles.ps1 changes after the alert (f2e6f1bd8, 58136b287, 788d3782c, 5ad77211a, 1457d5444) move the deferred post and split the script; none touches the band-refusal page (lines 3255-3262 unchanged in meaning)"
+      ],
+      "root_cause": "The band audit pages every refused row outside the backlog on its first day, whatever its board effect. A store's cell is its cheapest admitted row, so a refused row at or above that cell can never change the published price whether it is a wrong product (the band did its job) or a real premium price; 90% of the open set is that shape, so every day's catalogue growth paged a list nobody had to act on, and the six rows that could move a cell arrived buried in it.",
+      "root_fix": {
+        "what": "A band-refused row outside the backlog pages only when it could move a cell (no standing cell at its store for that commodity, a cell unit that does not match, or a price below the cell), and then once, recorded as paged_on in the open file. A shadowed row still counts, stays in the open set and on the worklist, and pages the first run its cell goes or gets dearer. No board beside the flagged file shadows nothing, so it fails toward paging.",
+        "files": ["grocery/audit-band-refusals.ps1"],
+        "exact_change": "Get-TcBoardCells (id|store -> per_unit, unit from comparison[].stores[]), Get-TcShadowingCell, Set-TcBandPageState (shadowed_by, paged_on, page); the main flow reads comparison-<date>.json beside flagged-<date>.json, pages on .page, prints SHADOWED lines and shadowed= in the COMPLETE marker, and writes paged_on and shadowed_by per open row. An open row written before this rule (no paged_on field, first seen before today) counts as paged."
+      },
+      "prior_closes": ["2026-09-23-57b66b"],
+      "prevention": {
+        "source": ["grocery/audit-band-refusals.ps1"],
+        "what": "the emitter itself: it decided what pages, and it paged rows with no possible board effect",
+        "exact_change": "page = open, not shadowed by a cheaper-or-equal standing cell at the row's own store, and never paged before (paged_on)"
+      },
+      "blast_radius": {
+        "measured_as": "live run, main grocery/out with a scratch -OpenFile copy (main band-refusals-open.json hash unchanged)",
+        "measured_by": "audit-band-refusals.ps1 -OpenFile <scratch copy> on flagged-2026-09-28.json / comparison-2026-09-28.json",
+        "affected_now": 50,
+        "risk": "a shadowed row that is a hidden cheaper real price cannot exist by construction (it is at or above the cell); a row shadowed today whose cell later disappears pages on that day, fixtured. The page body and subject in check-ad-cycles are unchanged; it counts UNEXPLAINED lines, which are now only the rows that could move a cell.",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/audit-band-refusals.ps1 -SelfTest (26 of 26, exit 0)",
+        "must_fire_case": "Fareway breakfast sausage 0.5225 against its store's cell 5.32 pages; Hy-Vee cat food with no Hy-Vee cat-food cell pages; a cell in 'each' on a 'dozen' commodity shadows nothing and pages; one step past the bar (0.0545 against 0.0546) pages; the shadowed Bragg row pages once the day its cell is gone",
+        "clean_twin": "the 7ed369 Bragg ACV at Baker's (0.3119 against the 0.0546 cell) is SHADOWED and does not page, and stays in the open set with paged_on empty; exactly at the bar (0.0546) is shadowed; the day after it paged it stays quiet; a pre-rule open row does not re-page",
+        "fixture_occurrences": ["2026-09-23-57b66b", "2026-09-26-7ed369"]
+      },
+      "rollback": "git revert of the commit; the open file's extra fields (paged_on, shadowed_by) are ignored by the old code",
+      "freshness": "measured 2026-09-28 18:00 against comparison-2026-09-28 17:28 and the main open file of 08:45",
+      "leaves_open": "the 6 rows that could move a cell today (cat-food Hy-Vee, fresh-mint Hy-Vee, popsicles Fareway x2, ramen Hy-Vee, toothbrushes Hy-Vee) and the 3 cheaper-than-cell rows of 09-27 stay undecided on the worklist; deciding them is an exclude (grocery/commodities.json) or the band derivation, both the money lane",
+      "leaves_open_occurrences": 9,
+      "leaves_open_followup": "2026-09-22-0c812e",
+      "status": "done",
+      "premise_verified": "yes, re-measured: still live (51 new rows paged 08:45 today); the script changes after it fired do not touch the page",
+      "deviation": "the prior item's seed (57b66b) had already made the page first-day-only; this narrows it further to rows that can move a cell",
+      "shipped_commit": null,
+      "close_disposition": "confirmed",
+      "resolution_note": "Real, and fixed at the emitter: the band page now fires only on a refused row that could change a published price, once. Before: today's run would page 50 first-day rows. After (live, today's board): 6 page, the rest are shadowed by a cheaper-or-equal cell at their own store and wait on the worklist.",
+      "actual_tool_calls": 22
+    },
+    {
+      "queue_id": "2026-09-27-c744ba",
+      "subject": "Grocery matching soundness: NEW CONTESTED (absorbed 2026-09-28)",
+      "classification": "wrong-product",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "evidence": [
+        "match-worklist.json 2026-09-28 08:39: contested rows first_seen 2026-09-27 13, 2026-09-28 13, all undecided",
+        "the 13 of 09-28: 10 are one ad line naming several products joined by 'or' (e.g. 'Fresh blackberries or raspberries, 6 oz. pkg., $2.99', suggestion ad-line), 1 release ('Flour & Forge sourdough crackers' claimed by flour), 2 undecided ('Hy-Vee mixed vegetables, 24 oz.', 'Pero Family Farms snipped green beans'); none of the 13 is the item of any cell on comparison-2026-09-28",
+        "seed plan-2026-09-25-6 item 2026-09-23-b2850b: 'two rules admit a product and array order picks the winner, so each capture brings new contested names'"
+      ],
+      "root_cause": "a weekly ad prints several products on one line ('X or Y'), the ingest keeps it as one row, and two include rules each admit it; the per-product ingest split waits on Brad's ruling Q-adline-two-products, so each ad week brings new contested ad lines",
+      "root_fix_none_because": "the class's fix is the per-product ingest split (a ruling); this lane decided today's ten ad-line arrivals so they stop waiting, and the other three need a commodities.json release or a reading",
+      "prior_closes": ["2026-09-22-2dae07", "2026-09-23-b2850b"],
+      "prevention": {"source": ["grocery/audit-match-soundness.ps1", "grocery/match-worklist-lib.ps1"], "what": "the emitting check pages every NEW contested name, including ones the worklist classifier already calls ad-line (10 of 13 today, all correct by reading); the upstream producer of the rows is the ad ingest keeping one row per ad line, whose split is Brad's open ruling Q-adline-two-products", "exact_change": "not shipped here (budget; its classifier accuracy needs a measured bar first, as plan-2026-09-25-6 measured 2 of 11 wrong on contested): Select-UnknownContestedConditions would also drop a NEW CONTESTED name the worklist classifier suggests as ad-line and that holds no cell. Owned by 2026-09-27-c744ba staying with the money lane."},
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "match-worklist.json 08:39 against comparison-2026-09-28",
+        "affected_now": 10,
+        "risk": "none on the board: no decided name is on a cell; an ad-line verdict only takes the row off the undecided list",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "resolve-match-worklist.ps1 -Decide exit 0 for each of the 10 keys; grocery/match-verdicts.json +130 lines, LF",
+        "must_fire_case": "not built: no code changed",
+        "clean_twin": "not built: no code changed",
+        "fixture_occurrences": ["2026-09-22-2dae07", "2026-09-23-b2850b", "2026-09-27-c744ba"]
+      },
+      "rollback": "revert the grocery/match-verdicts.json hunk",
+      "freshness": "measured 2026-09-28 against match-worklist.json 08:39",
+      "leaves_open": "16 contested arrivals undecided: 13 of 2026-09-27 and 3 of 2026-09-28 (crackers release, Hy-Vee mixed vegetables, Pero green beans); releases edit grocery/commodities.json (money lane); the class returns each ad week until the per-product split",
+      "leaves_open_occurrences": 16,
+      "leaves_open_followup": "2026-09-27-c744ba",
+      "status": "bounced",
+      "premise_verified": "yes, re-measured: still live, 13 new contested names today",
+      "deviation": "decided the 10 ad-line arrivals in this lane (match-verdicts.json is not on THE LINE) before bouncing the rest",
+      "shipped_commit": null,
+      "close_disposition": "confirmed",
+      "resolution_note": "Still live: 13 new contested names today. Ten are single ad lines naming several products ('blackberries or raspberries') and are decided as ad-line here; none sits on a board cell. Three new plus the 13 from 09-27 need a rule release or a reading, bounced to the money lane.",
+      "actual_tool_calls": 6
+    },
+    {
+      "queue_id": "2026-09-26-564dc6",
+      "subject": "Grocery: 2 store(s) dropped from a commodity they carry - 2026-09-26 (absorbed 09-27, 09-28)",
+      "classification": "rule-gap",
+      "lane": "ops",
+      "est_tool_calls": 8,
+      "evidence": [
+        "match-worklist.json 2026-09-28 08:39: coverage rows first_seen 2026-09-27 6, 2026-09-28 3, all undecided; today's: canned-mixed-vegetables @ Hy-Vee (claimed by frozen-vegetables), fresh-basil @ Hy-Vee (McCormick dried basil, claimed by dried-basil, correctly), fresh-basil @ Sam's Club (charcuterie bites, a wrong candidate)",
+        "564dc6's own rows (Walmart paper-towels and toilet-paper widen rows) were already gone on 09-27 (plan-2026-09-27-3)",
+        "the check-ad-cycles.ps1 changes after it fired (f2e6f1bd8, 58136b287, 788d3782c, 5ad77211a, 1457d5444) move the deferred post and split the script; lines 2228-2250, the coverage page, are unchanged in meaning",
+        "FromWorklist: named in apply-coverage-batch, check-ad-cycles, match-worklist-lib, resolve-match-worklist, audit-band-refusals and match-verdicts.json; in no scheduled task, runner or agent definition (0 in ~/.claude/agents)"
+      ],
+      "root_cause": "matching is first-match-wins over hand-written include lists, so each week's new product names either match no include or are claimed by an earlier commodity; the page hands them to 'the weekly lane' via apply-coverage-batch -FromWorklist, which nothing runs, and the ops lane may not edit commodities.json, so the rows never apply and the type returns",
+      "root_fix_none_because": "bounced: every repair is a grocery/commodities.json rule (THE LINE); who runs apply-coverage-batch -FromWorklist is a ruling, Q-coverage-worklist-executor",
+      "prior_closes": ["2026-08-31-ad3b81", "2026-09-01-4a481e", "2026-09-02-995502", "2026-09-06-39933e", "2026-09-07-0e9482", "2026-09-19-2a0748", "2026-09-21-b96f21", "2026-09-23-d493dd"],
+      "prevention": {"source": ["grocery/check-ad-cycles.ps1", "grocery/apply-coverage-batch.ps1"], "what": "the emitting check hands every coverage row to apply-coverage-batch -FromWorklist, which no task, runner or agent runs, so no row ever applies and the type returns with each week's catalogue growth", "exact_change": "not shipped here (bounced; the executor edits grocery/commodities.json): a scheduled money-lane run of apply-coverage-batch -FromWorklist over classifier-decided rows through its crown-diff gate, or the page stops naming a step nothing runs. Ruling Q-coverage-worklist-executor."},
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "match-worklist.json 08:39, coverage rows",
+        "affected_now": 9,
+        "risk": "none from this lane: nothing changed",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/check-ad-cycles.ps1 COVERAGE-GAP-ALERT region (unchanged)",
+        "must_fire_case": "not built in this lane (bounced)",
+        "clean_twin": "not built in this lane (bounced)",
+        "fixture_occurrences": ["2026-08-31-ad3b81", "2026-09-01-4a481e", "2026-09-02-995502", "2026-09-06-39933e", "2026-09-07-0e9482", "2026-09-19-2a0748", "2026-09-21-b96f21", "2026-09-23-d493dd", "2026-09-26-564dc6"]
+      },
+      "rollback": "nothing to roll back",
+      "freshness": "measured 2026-09-28 against match-worklist.json 08:39",
+      "leaves_open": "9 coverage rows undecided (6 of 09-27, 3 of 09-28), each a commodities.json widen or release for the money lane; the class returns until something runs apply-coverage-batch -FromWorklist",
+      "leaves_open_occurrences": 9,
+      "leaves_open_followup": "Q-coverage-worklist-executor",
+      "status": "bounced",
+      "premise_verified": "yes, re-measured: its own rows are gone, the condition is live with 9 other rows",
+      "deviation": null,
+      "shipped_commit": null,
+      "close_disposition": "confirmed",
+      "resolution_note": "Still live: 9 coverage rows stand today, none decided. Every repair is a commodities.json rule, and the step the page says applies them (apply-coverage-batch -FromWorklist) has no runner, so the type returns daily. Bounced to the money lane; the runner is a question for Brad.",
+      "actual_tool_calls": 6
+    }
+  ]
+}
+

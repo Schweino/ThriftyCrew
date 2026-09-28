@@ -30,7 +30,9 @@
   A RATCHET, not a gate red on day one: the unexplained rows on the first measured board are the backlog
   (band-refusals-backlog.json, keyed by row, may only shrink; see the note above Get-TcRefusalKey). Exit 0 = no
   unexplained row outside the backlog first seen today, 2 = at least one such row (each printed by name; since 2026-09-25 a
-  row pages on its first day only and then waits on the worklist via out/band-refusals-open.json), 3 = BLIND (no flagged file, none
+  row pages on its first day only and then waits on the worklist via out/band-refusals-open.json; since 2026-09-28 a row
+  priced at or above its own store's standing cell on the same-date comparison board is SHADOWED and pages only on the first
+  run it is not, because until then it cannot move the board), 3 = BLIND (no flagged file, none
   carrying band_ref, or no backlog recorded). What it does when the producer STOPS: no flagged file, or one built with
   no derived bands, is exit 3 and pages as could-not-evaluate, never as clean.
   SCOPE OF A CLEAN REPORT: UNSOUND - a wrong product whose price happens to reproduce a unit conversion is read as a
@@ -78,6 +80,48 @@ function Get-TcBandOpenRows($Rows, [hashtable]$Prev, [hashtable]$Verdicts, [stri
     [void]$out.Add([pscustomobject]@{ key = $k; first_seen = $fs; new = ($fs -eq $Today); row = $u })
   }
   return ,($out.ToArray())
+}
+# A REFUSAL THAT CANNOT MOVE A CELL DOES NOT PAGE (2026-09-28, queue 2026-09-26-7ed369, a RETURN of 2026-09-23-57b66b).
+# A store's cell is its cheapest admitted row, so a refused row priced AT or ABOVE that store's standing cell for the same
+# commodity and unit can never change the published price, whether it is a wrong product (the band did its job) or a real
+# premium price. Measured on the main open set 2026-09-28 against comparison-2026-09-28: 197 open rows, 177 SHADOWED like
+# that, 3 cheaper than their cell, 17 with no cell; of today's 51 first-day rows 45 were shadowed, and the type paged on
+# every day 09-23 to 09-28. A shadowed row still counts, still sits in the open set and on the worklist; it pages the
+# first run it is NOT shadowed (its cell went, or got dearer), once, recorded as paged_on. No board, or a unit that does
+# not line up, is never shadowed: that fails toward paging.
+function Get-TcBoardCells($Board) {
+  $cells = @{}
+  if ($null -eq $Board) { return $cells }
+  foreach ($e in @($Board.comparison)) {
+    if ($null -eq $e) { continue }
+    foreach ($s in @($e.stores)) { if ($null -ne $s -and $null -ne $s.per_unit) { $cells[([string]$e.id) + '|' + ([string]$s.store)] = [pscustomobject]@{ per_unit = [double]$s.per_unit; unit = [string]$s.unit; commodity_unit = [string]$e.unit } } }
+  }
+  return $cells
+}
+function Get-TcShadowingCell($Row, [hashtable]$Cells) {
+  # The standing cell that makes this refused row unable to move the board, or $null when it could move it.
+  $k = ([string]$Row.id) + '|' + ([string]$Row.store)
+  if (-not $Cells.ContainsKey($k)) { return $null }
+  $c = $Cells[$k]
+  if ($c.unit -and $c.commodity_unit -and $c.unit -ne $c.commodity_unit) { return $null }
+  if ($Row.PSObject.Properties['unit'] -and [string]$Row.unit -and [string]$Row.unit -ne $c.unit) { return $null }
+  if ($null -eq $Row.unit_price) { return $null }
+  if ([double]$Row.unit_price -ge $c.per_unit) { return $c }
+  return $null
+}
+function Set-TcBandPageState($Open, [hashtable]$PrevPaged, [hashtable]$Cells, [string]$Today) {
+  # Adds shadowed_by, paged_on and page to each open row. A key pages once: on the first run it is open and not shadowed.
+  # An open row from before this rule (no paged_on field, first_seen before today) paged on its first day and stays paged.
+  foreach ($o in @($Open)) {
+    if ($null -eq $o) { continue }
+    $sh = Get-TcShadowingCell $o.row $Cells
+    $prior = if ($PrevPaged.ContainsKey($o.key)) { [string]$PrevPaged[$o.key] } elseif (-not $o.new) { [string]$o.first_seen } else { '' }
+    $pg = (-not $prior) -and ($null -eq $sh)
+    $o | Add-Member -NotePropertyName shadowed_by -NotePropertyValue $(if ($sh) { $sh.per_unit } else { $null }) -Force
+    $o | Add-Member -NotePropertyName paged_on -NotePropertyValue $(if ($pg) { $Today } else { $prior }) -Force
+    $o | Add-Member -NotePropertyName page -NotePropertyValue $pg -Force
+  }
+  return ,(@($Open))
 }
 $BasisTol = 0.25
 # Unit conversions a basis error can produce, BY THE COMMODITY'S UNIT: a 12x ratio on an ounce commodity is not a dozen.
@@ -158,8 +202,38 @@ if ($SelfTest) {
   Bc 'CLEAN TWIN  the next day''s open row still carries its first_seen and its row, so the worklist and the OPEN line can name it' ($o2[0].first_seen -eq '2026-09-23' -and $o2[0].row.name -eq $juice.name)
   $o3 = Get-TcBandOpenRows @($juice, $popcorn) @{} @{ ('band|' + $jk) = $true } '2026-09-25'
   Bc 'MUST NOT FIRE  a key decided in match-verdicts.json (band|id|store|name) leaves the open set; an undecided sibling stays and pages' (@($o3).Count -eq 1 -and $o3[0].row.name -eq $popcorn.name -and $o3[0].new)
-  Write-Output ('band-refusals self-test ' + $(if ($bad -eq 0 -and $cases -eq 15) { 'pass' } else { 'FAIL' }) + ': ' + ($cases - $bad) + ' of ' + $cases + ' case(s) (15 expected)')
-  exit $(if ($bad -eq 0 -and $cases -eq 15) { 0 } else { 1 })
+  # A REFUSAL THAT CANNOT MOVE A CELL DOES NOT PAGE (queue 2026-09-26-7ed369). Rows and cells frozen from the 7ed369 page and
+  # from comparison-2026-09-28 / band-refusals-open.json on 2026-09-28.
+  $fxBoard = [pscustomobject]@{ comparison = @(
+      [pscustomobject]@{ id = 'apple-cider-vinegar'; unit = 'floz'; stores = @([pscustomobject]@{ store = "Baker's"; per_unit = 0.0546; unit = 'floz' }) },
+      [pscustomobject]@{ id = 'breakfast-sausage'; unit = 'oz'; stores = @([pscustomobject]@{ store = 'Fareway'; per_unit = 5.32; unit = 'oz' }) },
+      [pscustomobject]@{ id = 'eggs'; unit = 'dozen'; stores = @([pscustomobject]@{ store = 'Hy-Vee'; per_unit = 1.0; unit = 'each' }) }) }
+  $fxCells = Get-TcBoardCells $fxBoard
+  Bc 'MECHANISM  Get-TcBoardCells keys each board cell id|store with its per_unit from comparison[].stores[]' ($fxCells.Count -eq 3 -and $fxCells["apple-cider-vinegar|Baker's"].per_unit -eq 0.0546)
+  $bragg = [pscustomobject]@{ id = 'apple-cider-vinegar'; store = "Baker's"; name = 'Bragg Organic Apple Cider Vinegar with the Mother'; unit_price = 0.3119; band_ref = 0.0546 }
+  $saus = [pscustomobject]@{ id = 'breakfast-sausage'; store = 'Fareway'; name = 'Johnsonville Cooked Original Breakfast Pork Sausage Links - 20oz package'; unit_price = 0.5225; band_ref = 2.88 }
+  $cat = [pscustomobject]@{ id = 'cat-food'; store = 'Hy-Vee'; name = 'Sheba cat food, 2.6 or 2.64 oz., 10/ $10.00'; unit_price = 6.1538; band_ref = 1.13225 }
+  $egg = [pscustomobject]@{ id = 'eggs'; store = 'Hy-Vee'; name = 'Deli egg protein sliders, 3 ct.'; unit_price = 3.96; band_ref = 1.9 }
+  $sp = Set-TcBandPageState (Get-TcBandOpenRows @($bragg, $saus, $cat, $egg) @{} @{} '2026-09-28') @{} $fxCells '2026-09-28'
+  $spBy = @{}; foreach ($o in $sp) { $spBy[$o.row.id] = $o }
+  Bc 'MUST NOT FIRE  the 7ed369 Bragg ACV at Baker''s (0.3119, dearer than Baker''s own standing cell 0.0546) is SHADOWED: it cannot move the board, so it does not page' ((-not $spBy['apple-cider-vinegar'].page) -and $spBy['apple-cider-vinegar'].shadowed_by -eq 0.0546)
+  Bc 'CLEAN TWIN  the shadowed Bragg row stays in the open set, first seen today, never paged (paged_on empty), so the worklist still carries it' (@($sp).Count -eq 4 -and $spBy['apple-cider-vinegar'].new -and $spBy['apple-cider-vinegar'].paged_on -eq '')
+  Bc 'MUST FIRE  a refused row CHEAPER than its store''s cell (Fareway breakfast sausage 0.5225 against 5.32) could move the cell and pages' ($spBy['breakfast-sausage'].page -and $spBy['breakfast-sausage'].paged_on -eq '2026-09-28')
+  Bc 'MUST FIRE  a refused row at a store with NO cell for the commodity (Hy-Vee cat food) could put the store on the board and pages' ($spBy['cat-food'].page -and $null -eq $spBy['cat-food'].shadowed_by)
+  Bc 'MUST FIRE  a cell whose unit is not the commodity''s (eggs cell in each against dozen) shadows nothing: fail toward paging' ($spBy['eggs'].page)
+  $atBar = Set-TcBandPageState (Get-TcBandOpenRows @([pscustomobject]@{ id = 'apple-cider-vinegar'; store = "Baker's"; name = 'at'; unit_price = 0.0546 }) @{} @{} '2026-09-28') @{} $fxCells '2026-09-28'
+  Bc 'BAR  a row exactly AT its store''s cell (0.0546 against 0.0546) is shadowed: a tie cannot move the price' (-not $atBar[0].page)
+  $pastBar = Set-TcBandPageState (Get-TcBandOpenRows @([pscustomobject]@{ id = 'apple-cider-vinegar'; store = "Baker's"; name = 'past'; unit_price = 0.0545 }) @{} @{} '2026-09-28') @{} $fxCells '2026-09-28'
+  Bc 'BAR  one step past it (0.0545 against 0.0546, one unit of the 4-place price) pages' ($pastBar[0].page)
+  $bk = Get-TcRefusalKey $bragg
+  $d2 = Set-TcBandPageState (Get-TcBandOpenRows @($bragg) @{ $bk = '2026-09-28' } @{} '2026-09-29') @{ $bk = '' } @{} '2026-09-29'
+  Bc 'MUST FIRE  the shadowed row pages ONCE the day its cell is gone (never paged, no longer shadowed)' ($d2[0].page -and $d2[0].paged_on -eq '2026-09-29')
+  $d3 = Set-TcBandPageState (Get-TcBandOpenRows @($bragg) @{ $bk = '2026-09-28' } @{} '2026-09-30') @{ $bk = '2026-09-29' } @{} '2026-09-30'
+  Bc 'MUST NOT FIRE  the day after it paged, the same unshadowed row stays quiet (paged_on 2026-09-29)' (-not $d3[0].page)
+  $d4 = Set-TcBandPageState (Get-TcBandOpenRows @($cat) @{ (Get-TcRefusalKey $cat) = '2026-09-26' } @{} '2026-09-28') @{} $fxCells '2026-09-28'
+  Bc 'MUST NOT FIRE  an open row written before this rule (no paged_on field, first seen 2026-09-26) paged on its first day and does not page again' ((-not $d4[0].page) -and $d4[0].paged_on -eq '2026-09-26')
+  Write-Output ('band-refusals self-test ' + $(if ($bad -eq 0 -and $cases -eq 26) { 'pass' } else { 'FAIL' }) + ': ' + ($cases - $bad) + ' of ' + $cases + ' case(s) (26 expected)')
+  exit $(if ($bad -eq 0 -and $cases -eq 26) { 0 } else { 1 })
 }
 
 . (Join-Path $repo 'lib\guard-contract.ps1')
@@ -191,16 +265,25 @@ if (-not $OpenFile) { $OpenFile = Join-Path $OutDir 'band-refusals-open.json' }
 if (-not $VerdictFile) { $VerdictFile = Join-Path $root 'match-verdicts.json' }
 $today = (Get-Date).ToString('yyyy-MM-dd')
 $prevOpen = @{}
-if (Test-Path -LiteralPath $OpenFile) { foreach ($o in @((Read-JsonFile $OpenFile).rows)) { if ($o -and $o.key) { $prevOpen[[string]$o.key] = [string]$o.first_seen } } }
+$prevPaged = @{}
+if (Test-Path -LiteralPath $OpenFile) { foreach ($o in @((Read-JsonFile $OpenFile).rows)) { if ($o -and $o.key) { $prevOpen[[string]$o.key] = [string]$o.first_seen; if ($o.PSObject.Properties['paged_on']) { $prevPaged[[string]$o.key] = [string]$o.paged_on } } } }
 $verd = @{}
 if (Test-Path -LiteralPath $VerdictFile) { foreach ($v in @((Read-JsonFile $VerdictFile).verdicts)) { if ($v -and $v.key) { $verd[[string]$v.key] = $true } } }
 $open = Get-TcBandOpenRows $new $prevOpen $verd $today
-$page = @($open | Where-Object { $_.new })
-$odoc = [ordered]@{ note = 'Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages on its first day only; a match-verdicts.json verdict (band|key) removes it.'; from = $ff.Name; written = $today; count = @($open).Count
-  rows = @($open | Sort-Object key | ForEach-Object { [ordered]@{ key = $_.key; first_seen = $_.first_seen; id = [string]$_.row.id; store = [string]$_.row.store; name = [string]$_.row.name; unit_price = $_.row.unit_price; band_ref = $_.row.band_ref } }) }
+# The board built with this flagged file (same date). Absent: no row is shadowed, so every first-day row pages as before.
+$boardFile = Join-Path $OutDir (($ff.BaseName -replace '^flagged-', 'comparison-') + '.json')
+$haveBoard = Test-Path -LiteralPath $boardFile
+$cells = if ($haveBoard) { Get-TcBoardCells (Read-JsonFile $boardFile) } else { @{} }
+$open = Set-TcBandPageState $open $prevPaged $cells $today
+$page = @($open | Where-Object { $_.page })
+$shadowed = @($open | Where-Object { $null -ne $_.shadowed_by })
+$odoc = [ordered]@{ note = 'Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages once, on the first run it is open and not shadowed by a cheaper-or-equal standing cell at its own store (paged_on; shadowed_by names that cell''s price); a match-verdicts.json verdict (band|key) removes it.'; from = $ff.Name; written = $today; count = @($open).Count
+  rows = @($open | Sort-Object key | ForEach-Object { [ordered]@{ key = $_.key; first_seen = $_.first_seen; id = [string]$_.row.id; store = [string]$_.row.store; name = [string]$_.row.name; unit_price = $_.row.unit_price; band_ref = $_.row.band_ref; paged_on = [string]$_.paged_on; shadowed_by = $_.shadowed_by } }) }
 $null = Write-TcLfFile -Path $OpenFile -Text ($odoc | ConvertTo-Json -Depth 5) -NoBom
-Write-Output ('band-refusals: ' + $res.examined + ' band-refused row(s) in ' + $ff.Name + ': ' + $res.explained + ' explained as a basis error, ' + $un.Count + ' unexplained, of which ' + $new.Count + ' NEW (not in the backlog of ' + $backlog.Count + '): ' + $page.Count + ' first seen today, ' + (@($open).Count - $page.Count) + ' still open from earlier days, ' + ($new.Count - @($open).Count) + ' decided in match-verdicts.json; ' + $gone + ' backlog key(s) no longer occur' + $(if ($gone -gt 0) { ' (ratchet CAN tighten: -Tighten)' } else { '' }))
+Write-Output ('band-refusals: ' + $res.examined + ' band-refused row(s) in ' + $ff.Name + ': ' + $res.explained + ' explained as a basis error, ' + $un.Count + ' unexplained, of which ' + $new.Count + ' NEW (not in the backlog of ' + $backlog.Count + '): ' + $page.Count + ' page (open and able to move a cell, never paged), ' + @($open | Where-Object { $_.new }).Count + ' first seen today, ' + $shadowed.Count + ' shadowed by a cheaper-or-equal standing cell (cannot move the board; board ' + $(if ($haveBoard) { 'read' } else { 'MISSING, nothing shadowed' }) + '), ' + (@($open).Count - @($open | Where-Object { $_.new }).Count) + ' still open from earlier days, ' + ($new.Count - @($open).Count) + ' decided in match-verdicts.json; ' + $gone + ' backlog key(s) no longer occur' + $(if ($gone -gt 0) { ' (ratchet CAN tighten: -Tighten)' } else { '' }))
 foreach ($o in ($page | Sort-Object { $_.row.id })) { $u = $o.row; Write-Output ('  UNEXPLAINED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' against reference ' + $u.band_ref + ' | ' + $u.name + '   resolver: lane:grocery/resolve-match-worklist.ps1 (a wrong product -> an exclude via apply-coverage-batch -FromWorklist) or the band derivation (a real price)') }
+foreach ($o in (@($open | Where-Object { $_.new -and -not $_.page -and $null -ne $_.shadowed_by }) | Sort-Object { $_.row.id })) { $u = $o.row; Write-Output ('  SHADOWED  ' + $u.id + ' | ' + $u.store + ' | ' + ('{0:0.####}' -f [double]$u.unit_price) + ' at or above the standing cell ' + $o.shadowed_by + ' | ' + $u.name) }
 foreach ($o in (@($open | Where-Object { -not $_.new }) | Sort-Object { $_.row.id })) { $u = $o.row; Write-Output ('  OPEN since ' + $o.first_seen + '  ' + $u.id + ' | ' + $u.store + ' | ' + $u.name) }
-Write-GuardComplete -Name 'band-refusals' -Summary ('scanned=' + $res.examined + ' explained=' + $res.explained + ' unexplained=' + $un.Count + ' findings=' + $page.Count + ' open=' + @($open).Count + ' backlog=' + $backlog.Count)
+Write-GuardComplete -Name 'band-refusals' -Summary ('scanned=' + $res.examined + ' explained=' + $res.explained + ' unexplained=' + $un.Count + ' findings=' + $page.Count + ' open=' + @($open).Count + ' shadowed=' + $shadowed.Count + ' backlog=' + $backlog.Count)
 exit $(if ($page.Count -gt 0) { 2 } else { 0 })
+

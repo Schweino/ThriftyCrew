@@ -15,6 +15,32 @@
                          "reason":  "A multisurface cleaner, not a wood polish: all-purpose-cleaner is right. Its aerosol oz vs the floz unit is the engine\u0027s withhold (WITHHELD-UNPROVEN-CHANNEL), not a route question."
                      },
                      {
+                         "key":  "contested|almonds||Bella Maria almonds, pecans or walnuts, 10% off regular price,",
+                         "kind":  "contested",
+                         "commodity":  "walnuts",
+                         "claimer":  "almonds",
+                         "store":  "",
+                         "name":  "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Bella Maria almonds, pecans or walnuts, 10% off regular price,); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
+                         "key":  "contested|aluminum-foil||Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
+                         "kind":  "contested",
+                         "commodity":  "parchment-paper",
+                         "claimer":  "aluminum-foil",
+                         "store":  "",
+                         "name":  "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
                          "key":  "contested|block-cheese||Kroger Orange Rind Muenster Block Cheese",
                          "kind":  "contested",
                          "commodity":  "oranges",
@@ -67,6 +93,19 @@
                          "reason":  "One ad line offering two products (lentil-chickpea or harvest potato); split per product at ingest (Q-adline-two-products)."
                      },
                      {
+                         "key":  "contested|crackers||Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
+                         "kind":  "contested",
+                         "commodity":  "sandwich-cookies",
+                         "claimer":  "crackers",
+                         "store":  "",
+                         "name":  "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
                          "key":  "contested|deli-ham||Di Lusso deli sliced ham, turkey, chicken or cheese, FREE King\u0027s Hawaiian slider buns 9 ct. with 1 lb. purchase of Di Lusso deli sliced ham, turkey or chicken,",
                          "kind":  "contested",
                          "commodity":  "sliced-cheese",
@@ -78,6 +117,19 @@
                          "by":  "weekly lane plan-2026-09-25-8 (2026-09-23-b2850b)",
                          "date":  "2026-09-25",
                          "reason":  "One ad line offering four products (ham, turkey, chicken or cheese) plus a free-buns offer; split per product at ingest (Q-adline-two-products)."
+                     },
+                     {
+                         "key":  "contested|garlic||Gustare Vita capers or chopped garlic, 3 oz., $2.49",
+                         "kind":  "contested",
+                         "commodity":  "minced-garlic",
+                         "claimer":  "garlic",
+                         "store":  "",
+                         "name":  "Gustare Vita capers or chopped garlic, 3 oz., $2.49",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Gustare Vita capers or chopped garlic, 3 oz., $2.49); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
                      },
                      {
                          "key":  "contested|honey||Lay\u0027s Honey Barbecue Potato Chips",
@@ -93,6 +145,19 @@
                          "reason":  "Honey barbecue flavoured potato chips are potato chips, never honey (Baker\u0027s regular 2026-09-25, 7.75 oz). The honey rule claims them by array order; the weekly batch applies this exclude through apply-coverage-batch."
                      },
                      {
+                         "key":  "contested|ice-cream||Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
+                         "kind":  "contested",
+                         "commodity":  "popsicles",
+                         "claimer":  "ice-cream",
+                         "store":  "",
+                         "name":  "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
                          "key":  "contested|oatmeal||Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
                          "kind":  "contested",
                          "commodity":  "walnuts",
@@ -104,6 +169,71 @@
                          "by":  "resolve-match-worklist -Decide",
                          "date":  "2026-09-27",
                          "reason":  "Quaker Instant Oatmeal packets are oatmeal; Raisin, Date \u0026 Walnut is the flavour, not a bag of walnuts. Reviewed in triage 2026-09-27-c989c6 when the late Fareway capture put it on the oatmeal cell."
+                     },
+                     {
+                         "key":  "contested|paper-towels||Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
+                         "kind":  "contested",
+                         "commodity":  "toilet-paper",
+                         "claimer":  "paper-towels",
+                         "store":  "",
+                         "name":  "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
+                         "key":  "contested|raspberries||Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
+                         "kind":  "contested",
+                         "commodity":  "blackberries",
+                         "claimer":  "raspberries",
+                         "store":  "",
+                         "name":  "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Fresh blackberries or raspberries, 6 oz. pkg., $2.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
+                         "key":  "contested|strawberries||Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
+                         "kind":  "contested",
+                         "commodity":  "blueberries,frozen-fruit",
+                         "claimer":  "strawberries",
+                         "store":  "",
+                         "name":  "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
+                         "key":  "contested|taco-seasoning||McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
+                         "kind":  "contested",
+                         "commodity":  "brown-gravy-mix",
+                         "claimer":  "taco-seasoning",
+                         "store":  "",
+                         "name":  "McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
+                     },
+                     {
+                         "key":  "contested|tortillas||Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
+                         "kind":  "contested",
+                         "commodity":  "bagels",
+                         "claimer":  "tortillas",
+                         "store":  "",
+                         "name":  "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
+                         "verdict":  "ad-line",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-28",
+                         "reason":  "one ad line names several products joined by or (Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
                      },
                      {
                          "key":  "coverage|apple-juice|Fareway|Musselman\u0027s 100% Apple Cider or Juice",
