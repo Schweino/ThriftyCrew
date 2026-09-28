@@ -120,8 +120,13 @@
       "leaves_open_occurrences": "(a) 1 known literal, already a standing ruling for Brad. (b) not measured; this welcome post is the 1 known occurrence.",
       "leaves_open_followup": "watch:meal-prep/pipeline/monitor-live-recipe-prices.ps1",
       "publish_batch": 2,
-      "status": "planned",
-      "resolution_note": "Journal half closed by d05680d91: main's published-hashes.json holds all 577, including the four legacy rebuilds. Welcome half: the feed now carries free-chicken-alfredo everyday_ps 2.00, but /welcome/ still read '$2.40 a plate' with no live span on 2026-09-28. Landed the prepared edit (-Land dry run WOULD PUT, then -Apply) and verified live at 375px. The homepage's $2.40 in code injection remains Brad's standing ruling."
+      "status": "shipped",
+      "resolution_note": "Journal half closed by d05680d91 (main published-hashes.json holds all 577, including the four legacy rebuilds). Welcome half landed 2026-09-28: prepare-article-price-edits.ps1 -Land -Slugs welcome exit 0 'WOULD PUT pages welcome (2 replacement(s))', then -Land -Apply exit 0 'LANDED welcome', ARTICLE-PRICE-EDITS-COMPLETE ok=1 refused=0 applied=True. Live /welcome/?cb=<guid> now reads 'Free recipe: Chicken Alfredo. 14 dinners at <span data-tc-live-price data-tc-slug=free-chicken-alfredo data-tc-field=cost_ps data-tc-fallback=2.00>~$2.00</span> a plate' (1 span, tc-live-price.js present). The one '$2.40' left on the page is the site-wide code-injection quote 'Fourteen servings at about $2.40 each', Brad's standing ruling in .claude/rules/site-and-publish.md. 375px look not verified (see deviation).",
+      "premise_verified": "Served feed https://feed.thriftycrew.com/smp-feed.json?cb=<guid> read 2026-09-28: generated 2026-09-28T09:04:43, free-chicken-alfredo everyday_ps 2, per_serving 2. Unchanged after 602457.",
+      "deviation": "375px look NOT verified: headless Chrome at --window-size=375 renders under the Windows minimum window width, so the 375-wide capture clips the right edge of every block (a capture artifact, not evidence of overflow), and the triage read guard refused the tile holding the list (36 KB). Verified instead by a cache-busted read of the live DOM. Brad or the next attended session should look at /welcome/ on a phone.",
+      "shipped_commit": null,
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 15
     },
     {
       "queue_id": "2026-09-26-62b170",

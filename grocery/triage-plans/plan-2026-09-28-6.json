@@ -92,8 +92,14 @@
       "publish_batch": "ops-1: this item alone, a normal ops/push-main.ps1 landing (no file in the chain manifest's derived set, so no chain rehearsal)",
       "lane": "ops",
       "est_tool_calls": 32,
-      "status": "planned",
-      "resolution_note": "The 09-20 withhold f50b7a could not explain is now explained: a session committed a commodities.json change (5d42fb944) in the production checkout at 11:40, mid-run. The scheduled half is fixed at its source: every scheduled pull of the production checkout goes through ops/sync-production-checkout.ps1, which reads capture-run-status.json lock-free and skips the pull while a capture-run is in flight (it never takes the capture-run mutex: the chain waits only 60 s for it and depends on its abandoned state). Call sites moved: grocery-alert-triage, grocery-fareway-daily-check, grocery-recipe-everyday-refresh and grocery-bakers-daily-flash-check prompts (live and mirror) and grocery/bakers-daily-scan.ps1. walmart-headed-probe-once was a disabled one-shot, not a live puller. The session half stays with PLAN-bot-dedicated-checkout Stage 2 W2.1."
+      "status": "shipped",
+      "resolution_note": "The 09-20 withhold f50b7a could not explain is now explained: a session committed a commodities.json change (5d42fb944) in the production checkout at 11:40, mid-run. The scheduled half is fixed at its source: every scheduled pull of the production checkout goes through ops/sync-production-checkout.ps1, which reads capture-run-status.json lock-free and skips the pull while a capture-run is in flight (it never takes the capture-run mutex: the chain waits only 60 s for it and depends on its abandoned state). Call sites moved: grocery-alert-triage, grocery-fareway-daily-check, grocery-recipe-everyday-refresh and grocery-bakers-daily-flash-check prompts (live and mirror) and grocery/bakers-daily-scan.ps1. walmart-headed-probe-once was a disabled one-shot, not a live puller. The session half stays with PLAN-bot-dedicated-checkout Stage 2 W2.1.",
+      "premise_verified": "Re-read 2026-09-28: the four prompts (live and mirror, byte-identical) each carried 'powershell -Command \"git -C C:\\Codex\\ThriftyCrew pull --rebase --autostash origin main\"' exactly once, and grocery/bakers-daily-scan.ps1:78 the bare pull. capture-run.ps1 Write-RunStatus call sites: terminal complete, skipped-locked, blocked-checkout, handoff-failed; in flight syncing, synced-handoff, started, capturing, downstream, publishing.",
+      "deviation": "None to scope. The script's pid check also rejects a live pid whose process started more than 5 minutes after the record's run (pid reuse), and the self-test adds must-fire cases for the ad kind and the publishing stage and a clean twin for a failing git. W2.1 follow-up: PLAN-bot-dedicated-checkout-2026-09-25 already tracks W2.1 as a staged build (W1.1 warn, then W2.1 block; baseline row B6), so no weekly-lane item was minted.",
+      "shipped_commit": "b0e5abee8",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 13
     },
     {
       "queue_id": "2026-09-28-f7e441",
