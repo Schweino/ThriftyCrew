@@ -109,7 +109,7 @@
       "root_fix_none_because": "the fix is f50b7a's (verdict fingerprint measures content; STALE-INPUTS names moved paths and pages as itself); this alert is the watchdog correctly reporting that withhold",
       "leaves_open": "as f50b7a: a real mid-run content change by a foreign writer still withholds (correct), owned by design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2",
       "leaves_open_occurrences": 1,
-      "leaves_open_followup": "2026-09-27-f50b7a",
+      "leaves_open_followup": "2026-09-28-90a544",
       "prior_closes": [
         "2026-09-22-972de2",
         "2026-09-24-a4b7c1"
