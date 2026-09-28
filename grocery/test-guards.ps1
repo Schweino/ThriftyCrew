@@ -652,11 +652,54 @@ RestoreNow $of
 $pf = Join-Path $root 'product-urls.json'
 $pbak = Backup $pf
 $p = $pbak | ConvertFrom-Json
-# halve a link's recorded size -> its per-unit doubles vs the board = the 2x pack bug
-$target = $p.items.'white-vinegar'.'Sam''s Club'
-if ($target) { $target.size = '1 gal' }   # the truth is "2 pk 1 gal"
-($p | ConvertTo-Json -Depth 8) | Set-Content $pf -Encoding UTF8
-Check 'factor mismatch: Sam''s 2-pack vinegar recorded as ONE gallon (2x)' 2 'x factor\s+white-vinegar'
+# halve a link's recorded size -> its per-unit doubles vs the board = the 2x pack bug.
+# THE TARGET IS CHOSEN FROM THE BOARD GUARDS WILL READ, AND MUST BE A CELL GUARD 4 GRADES (2026-09-28, queue
+# 2026-09-27-69b343). Guard 4 compares EVERYDAY cells only. From the 2026-09-23 board, 46 Sam's cells, white-vinegar
+# among them, came out typed `sale` (ad_basis ttl), so the hard-coded white-vinegar mutation landed on a cell guard 4
+# skips by design; tile-integrity failed instead and this case read red for a reason that said nothing about guard 4.
+# So: take white-vinegar/Sam's (the founding 2-pack) while it is an everyday cell, else the first unpinned,
+# unquarantined everyday cell whose link agrees with the board and whose size is "<number> <unit>". Then prove the
+# mutation FORMED the bug with the same pu-lib arithmetic guard 4 uses, and refuse loudly if it did not: a targeting
+# that resolves to nothing is a result, never a silent no-op (the old `if ($target)` would have been one).
+. (Join-Path $root 'pu-lib.ps1')
+$fcBoardF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$fcBoard = Read-JsonFile $fcBoardF
+$fcPins = @{}
+$fcPinF = Join-Path $root 'board-price-overrides.json'   # read fresh, never case 3's mutated $o
+$fcPinDoc = if (Test-Path $fcPinF) { Read-JsonFile $fcPinF } else { $null }
+foreach ($x in @($fcPinDoc.cells)) { if ($null -eq $x) { continue }; $fcPins[([string]$x.id + '|' + [string]$x.store)] = 1 }
+$fcCands = New-Object System.Collections.ArrayList
+foreach ($row in $fcBoard.comparison) {
+  $lk = $p.items.($row.id)
+  if (-not $lk) { continue }
+  foreach ($s in $row.stores) {
+    if (([string]$s.type) -ne 'everyday') { continue }
+    if ($fcPins.ContainsKey([string]$row.id + '|' + [string]$s.store)) { continue }
+    $qp = $s.PSObject.Properties['quarantine']; if ($qp -and $qp.Value) { continue }
+    $e = $lk.($s.store); if (-not $e -or -not $e.price) { continue }
+    $sm = [regex]::Match(([string]$e.size).Trim(), '^([0-9]+(?:\.[0-9]+)?)\s+([a-z. ]+)$')
+    if (-not $sm.Success) { continue }
+    $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
+    $bpu = [double]$s.per_unit
+    $lpu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
+    if ($null -eq $lpu -or $bpu -le 0 -or [math]::Abs(($lpu / $bpu) - 1) -gt 0.02) { continue }
+    $half = ([double]$sm.Groups[1].Value / 2).ToString([Globalization.CultureInfo]::InvariantCulture) + ' ' + $sm.Groups[2].Value
+    $mpu = Get-LinkPerUnit -size $half -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
+    if ($null -eq $mpu -or ($mpu / $bpu) -lt 1.5) { continue }
+    $c4 = [pscustomobject]@{ id = [string]$row.id; store = [string]$s.store; link = $e; from = [string]$e.size; to = $half; ratio = $mpu / $bpu }
+    if ($c4.id -eq 'white-vinegar' -and $c4.store -eq "Sam's Club") { [void]$fcCands.Insert(0, $c4) } else { [void]$fcCands.Add($c4) }
+  }
+}
+if ($fcCands.Count -eq 0) {
+  Write-Output ('  FAIL  factor mismatch: NO everyday linked cell on {0} could be halved into a 2x mismatch - the fixture could not form, so guard 4 went untested' -f (Split-Path $fcBoardF -Leaf))
+  $script:failed++
+} else {
+  $t4 = $fcCands[0]
+  $t4.link.size = $t4.to
+  ($p | ConvertTo-Json -Depth 8) | Set-Content $pf -Encoding UTF8
+  Write-Output ('  ..... factor-mismatch target: {0} / {1}  size "{2}" -> "{3}"  (link/board {4:N2}x, {5} candidate cells)' -f $t4.id, $t4.store, $t4.from, $t4.to, $t4.ratio, $fcCands.Count)
+  Check ('factor mismatch: a link recorded at HALF its pack ({0} / {1}, 2x)' -f $t4.id, $t4.store) 2 ('x factor\s+' + [regex]::Escape($t4.id) + '\s+/\s+' + [regex]::Escape($t4.store))
+}
 RestoreNow $pf
 
 # ---- 5. multipack size -------------------------------------------------------------
