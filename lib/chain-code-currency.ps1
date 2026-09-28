@@ -67,6 +67,11 @@ function Get-TcCccManifest([string]$Repo, [string]$Rev) {
 
 function Test-TcCccExcluded([string]$Path, [string[]]$ExcludeRx) {
   if ($Path -match '(^|/)archive/') { return $true }   # retired one-offs never run in the chain
+  # NEVER SCAN ITSELF (ops-and-gates og-03): this file's self-test writes artifacts and names real scripts on '& $put'
+  # lines, so it was a root of the feed and costed.json and pulled audit-flag-verification back in (measured
+  # 2026-09-28 at 3c6053b94). It builds no served artifact. Excluded HERE, not in the manifest, which would also hide
+  # a change to it from the chain rehearsal.
+  if ($Path -eq 'lib/chain-code-currency.ps1') { return $true }
   foreach ($x in $ExcludeRx) { if ($Path -match $x) { return $true } }
   return $false
 }
@@ -240,13 +245,14 @@ if ($__cccSelfTest) {
     & $put $w 'grocery/verify-price-flags.ps1' ('. (Join-Path $PSScriptRoot ''flag-verify-lib.ps1'')' + "`n")
     & $put $w 'grocery/flag-verify-lib.ps1' ('$usage = ''the lib that audit-flag-verification.ps1 reads''' + "`n")
     & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 1' + "`n")
+    & $put $w 'lib/chain-code-currency.ps1' ('[IO.File]::WriteAllText((Join-Path $db ''costed.json''), $x)' + "`n" + '& $put $w ''grocery/audit-flag-verification.ps1'' x' + "`n")
     & $put $w 'meal-prep/pipeline/audit-recipe-costed.ps1' ('$rcf = Join-Path $tmp ''recipe-costed.json''' + "`n" + 'Set-Content $rcf x' + "`n")
     & $put $w 'meal-prep/db/costed.json' '{}'
     $null = & $g $w 'add', '-A'; $null = & $g $w 'commit', '-q', '-m', 'D: cost builder'
     $tipD = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
     $pc = Get-TcArtifactProducers -Repo $w -Rev 'HEAD' -Artifacts @('meal-prep/db/costed.json')
     $cset = @($pc['meal-prep/db/costed.json'])
-    CcT 'MECHANISM  costed.json''s producers are its path-variable WRITER (a dataflow root) and the two libs it dot-sources, never a script named only inside a string literal, nor a writer of recipe-costed.json (a longer file name ending in the leaf)'($cset.Count -eq 3 -and $cset -contains $costRel -and $cset -contains 'lib/cost-lib.ps1' -and $cset -contains 'lib/alert-lib.ps1') ($cset -join ',')
+    CcT 'MECHANISM  costed.json''s producers are its path-variable WRITER (a dataflow root) and the two libs it dot-sources, never a script named only inside a string literal, nor a writer of recipe-costed.json (a longer file name ending in the leaf), nor this detector''s own fixture'($cset.Count -eq 3 -and $cset -contains $costRel -and $cset -contains 'lib/cost-lib.ps1' -and $cset -contains 'lib/alert-lib.ps1') ($cset -join ',')
     # MUST NOT FIRE: the 09-28 range changed only the audit and its lib.
     & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 2' + "`n")
     & $put $w 'grocery/flag-verify-lib.ps1' ('$usage = ''the lib that audit-flag-verification.ps1 reads, v2''' + "`n")
