@@ -19,9 +19,9 @@
   A page with no record and a live edit is a CONFLICT, never a save-back: without the base we cannot tell a Ghost edit
   on top of our last publish from a Ghost edit on top of something older, and guessing wrong deletes local work.
 
-  SAFETY. Dry run by default: it prints the verdict per page and writes nothing. -Apply acts. It never acts on a page
-  whose working-tree source differs from HEAD (someone's uncommitted work is not this lane's to publish or overwrite):
-  those are BLIND for that page. It never publishes without re-reading live afterwards and checking it now matches.
+  SAFETY. Dry run by default: it prints the verdict per page and writes nothing. -Apply acts. It never publishes or
+  overwrites a page's uncommitted working-tree source (someone's uncommitted work is not this lane's): on such a page
+  only a republish of HEAD's COMMITTED text, from a temp copy, is allowed; a save-back or conflict there is BLIND. It never publishes without re-reading live afterwards and checking it now matches.
   SCOPE OF A CLEAN REPORT: the 16 tool pages in grocery\ghost-tool-manifest.json only. Recipe cards are republished
   by meal-prep\engine\publish.ps1 from the publish ledger and are out of reach here.
   Exit 0 = every page matches or was reconciled, 1 = a conflict remains (alerted), 3 = could not evaluate.
@@ -55,6 +55,22 @@ function Get-TcReconcileVerdict {
   }
   if ($PublishedHash -and ($PublishedHash -eq (Get-BodyHash (Get-CanonicalBody $Head)))) { return 'save-back' }
   return 'conflict'
+}
+
+# ---- pure: what a page whose WORKING-TREE source differs from HEAD may do (2026-09-28-c29f06) --------------------
+# The daily chain rewrites the data-bearing tool sources (cheap-dinners, dinner-tonight) and commits them AFTER
+# check-ad-cycles runs this lane, so on every weekly sweep those pages were dirty and BLIND, the week's stamp was
+# written anyway, and the drift paged instead of being repaired. Only a republish of HEAD's committed text is safe
+# on a dirty page: every byte live holds is in git and the uncommitted work is neither published nor overwritten.
+# A save-back would overwrite the working tree and a conflict needs a person, so both stay BLIND.
+function Get-TcDirtyPageAction { param([string]$Verdict)
+  switch ($Verdict) {
+    'match'     { return 'match' }
+    'republish' { return 'publish-head' }
+    'save-back' { return 'blind' }
+    'conflict'  { return 'blind' }
+    default     { throw "unknown reconcile verdict: $Verdict" }
+  }
 }
 
 # ---- pure: alert once per slug and live body --------------------------------------------------------------------
@@ -104,6 +120,17 @@ if ($SelfTest.IsPresent) {
   T 'MUST FIRE  a conflict nobody was told about alerts' (Test-TcConflictAlertDue $al 'freezer-math' 'bbbb') 'false'
   T 'MUST NOT FIRE  the same slug and the same live body already alerted stays quiet' (-not (Test-TcConflictAlertDue $al 'my-crew' 'aaaa')) 'true'
   T 'CLEAN TWIN  a NEW live body on an already-alerted slug alerts again' (Test-TcConflictAlertDue $al 'my-crew' 'cccc') 'false'
+  # 2026-09-28-c29f06: cheap-dinners-right-now, source rewritten by the daily chain and not yet committed, live an older commit.
+  $r = Get-TcDirtyPageAction (Get-TcReconcileVerdict -Live $v1 -Head $v3 -History @($v2, $v1) -PublishedHash $h3)
+  T 'MUST FIRE  a dirty source whose live equals an OLDER committed version republishes HEAD (was BLIND, 2026-09-28-c29f06)' ($r -eq 'publish-head') $r
+  $r = Get-TcDirtyPageAction (Get-TcReconcileVerdict -Live $edited -Head $v3 -History @($v2, $v1) -PublishedHash $h3)
+  T 'CLEAN TWIN  a dirty source with a Ghost edit on top of our last publish stays BLIND (a save-back would overwrite local work)' ($r -eq 'blind') $r
+  $r = Get-TcDirtyPageAction (Get-TcReconcileVerdict -Live $edited -Head $v3 -History @($v2, $v1) -PublishedHash '')
+  T 'MUST NOT FIRE  a dirty source in conflict is never published' ($r -eq 'blind') $r
+  $r = Get-TcDirtyPageAction (Get-TcReconcileVerdict -Live $v3Live -Head $v3 -History @($v2, $v1) -PublishedHash '')
+  T 'CLEAN TWIN  a dirty source whose live equals HEAD reads match' ($r -eq 'match') $r
+  $thrown = $false; try { $null = Get-TcDirtyPageAction 'surprise' } catch { $thrown = $true }
+  T 'MUST FIRE  an unknown verdict refuses loudly' $thrown 'no throw'
   if ($script:fl -eq 0) { Write-Output ("reconcile-ghost-drift self-test PASS ($script:n cases)"); exit 0 }
   Write-Output ("reconcile-ghost-drift self-test FAIL ($script:fl of $script:n)"); exit 1
 }
@@ -132,9 +159,8 @@ foreach ($t in $manifest) {
   $head = Get-TcGitText $repo ('show HEAD:' + $rel)
   if ($null -eq $head -or -not (Test-Path $lf)) { Write-Output ("  BLIND      {0,-28} {1} is not committed" -f $t.slug, $rel); $counts.blind++; continue }
   $work = [IO.File]::ReadAllText($lf)
-  if (-not [string]::Equals((Get-CanonicalBody $work), (Get-CanonicalBody $head), [StringComparison]::Ordinal)) {
-    Write-Output ("  BLIND      {0,-28} {1} has uncommitted local changes; not this lane's to publish or overwrite" -f $t.slug, $t.file); $counts.blind++; continue
-  }
+  # A dirty source is judged against HEAD, not refused outright (2026-09-28-c29f06): see Get-TcDirtyPageAction.
+  $dirty = -not [string]::Equals((Get-CanonicalBody $work), (Get-CanonicalBody $head), [StringComparison]::Ordinal)
   $live = $null
   try { $live = Get-GhostCardBody -Api $API -Key $key -Slug $t.slug } catch { Write-Output ("  BLIND      {0,-28} {1}" -f $t.slug, $_.Exception.Message); $counts.blind++; continue }
   if ($null -eq $live) { Write-Output ("  BLIND      {0,-28} no html card on the live post" -f $t.slug); $counts.blind++; continue }
@@ -144,6 +170,9 @@ foreach ($t in $manifest) {
   $pubP = $ledger.published.PSObject.Properties[$t.slug]
   $pub = if ($pubP) { [string]$pubP.Value } else { '' }
   $verdict = Get-TcReconcileVerdict -Live $live -Head $head -History $history -PublishedHash $pub
+  if ($dirty -and ((Get-TcDirtyPageAction $verdict) -eq 'blind')) {
+    Write-Output ("  BLIND      {0,-28} {1} has uncommitted local changes and live is '{2}'; not this lane's to publish or overwrite" -f $t.slug, $t.file, $verdict); $counts.blind++; continue
+  }
   $counts[$verdict]++
   $headHash = Get-BodyHash (Get-CanonicalBody $head); $liveHash = Get-BodyHash (Get-CanonicalBody $live)
   switch ($verdict) {
@@ -154,7 +183,14 @@ foreach ($t in $manifest) {
     'republish' {
       Write-Output ("  republish  {0,-28} live equals an older committed {1} ({2} older version(s) searched)" -f $t.slug, $t.file, $history.Count)
       if ($Apply) {
-        $o = & powershell -NoProfile -File $publisher -Slug $t.slug -File $lf -Force
+        # A dirty page publishes HEAD's COMMITTED text from a temp copy: the uncommitted working tree is never read or written.
+        $src = $lf; $tmpSrc = $null
+        if ($dirty) {
+          $tmpSrc = Join-Path ([IO.Path]::GetTempPath()) ('tc-reconcile-' + [guid]::NewGuid().ToString('N').Substring(0, 12) + '-' + $t.file)
+          [IO.File]::WriteAllText($tmpSrc, $head, (New-Object System.Text.UTF8Encoding($false))); $src = $tmpSrc
+        }
+        try { $o = & powershell -NoProfile -File $publisher -Slug $t.slug -File $src -Force }
+        finally { if ($tmpSrc) { Remove-Item -LiteralPath $tmpSrc -Force -ErrorAction SilentlyContinue } }
         $again = Get-GhostCardBody -Api $API -Key $key -Slug $t.slug
         if (-not [string]::Equals((Get-CanonicalBody $again), (Get-CanonicalBody $head), [StringComparison]::Ordinal)) {
           Write-Output ("             REPUBLISH DID NOT LAND: live still differs from HEAD after the PUT. " + (@($o) -join ' ')); $counts.blind++; continue
