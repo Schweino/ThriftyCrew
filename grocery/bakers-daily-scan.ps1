@@ -71,12 +71,12 @@ try {
   # entries across the pull instead of trusting the log. Same fix as run-daily-local.ps1.
   $repoRoot = Split-Path $root -Parent
   $stashBefore = @(git -C $repoRoot stash list).Count
-  # The pull goes through ops\sync-production-checkout.ps1 (triage 2026-09-28-90a544), which SKIPS it while a
+  # The pull goes through grocery\sync-production-checkout.ps1 (triage 2026-09-28-90a544), which SKIPS it while a
   # capture-run is in flight, so this scan never moves the chain's verdict inputs mid-run. It runs git through
   # Invoke-Native itself; here the child's output is piped with NO redirect (legal shape 1 in native-lib.ps1),
   # under Continue as RunChild does. The catch stays for anything else. Watched by grocery\test-native-stderr-eap.ps1.
   $prevEap = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
-  try { & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'ops\sync-production-checkout.ps1') -Repo $repoRoot | ForEach-Object { Log ('sync: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) } finally { $ErrorActionPreference = $prevEap }
+  try { & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $repoRoot 'grocery\sync-production-checkout.ps1') -Repo $repoRoot | ForEach-Object { Log ('sync: ' + $_) } } catch { Log ('git pull warn: ' + $_.Exception.Message) } finally { $ErrorActionPreference = $prevEap }
   $stashAfter = @(git -C $repoRoot stash list).Count
   if ($stashAfter -gt $stashBefore) {
     $smsg = "git pull --rebase --autostash could not restore local changes: " +

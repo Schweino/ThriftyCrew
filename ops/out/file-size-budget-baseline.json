@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Per-file marks for the file-size budget (B2 of design/PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27). Lines as git stores them, of every tracked .ps1/.py file over the limit. No NEW file may exceed the limit; each mark may only go DOWN; a deliberate growth is recorded with -Accept and its reason in the commit.",
-    "generated":  "2026-09-27T17:07:54",
+    "generated":  "2026-09-28T13:50:29",
     "limit":  1000,
     "files":  [
                   {
@@ -41,11 +41,11 @@
                   },
                   {
                       "path":  "grocery/capture-watchdog.ps1",
-                      "lines":  2210
+                      "lines":  2213
                   },
                   {
                       "path":  "grocery/check-ad-cycles.ps1",
-                      "lines":  3723
+                      "lines":  3712
                   },
                   {
                       "path":  "grocery/compare-deals.ps1",
@@ -53,7 +53,7 @@
                   },
                   {
                       "path":  "grocery/guards.ps1",
-                      "lines":  1746
+                      "lines":  1739
                   },
                   {
                       "path":  "grocery/health-heartbeat.ps1",
@@ -89,11 +89,11 @@
                   },
                   {
                       "path":  "grocery/test-guards.ps1",
-                      "lines":  1289
+                      "lines":  1209
                   },
                   {
                       "path":  "grocery/validate-triage-plan.ps1",
-                      "lines":  1530
+                      "lines":  1514
                   },
                   {
                       "path":  "lib/checkout-sync.ps1",

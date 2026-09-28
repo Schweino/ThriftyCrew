@@ -13,7 +13,7 @@ STEP 0 - GUARD (still first, but it now only decides TWO things): run
     window log can only see ADVERTISED boundaries, and the daily API scan exists precisely for the
     unadvertised ones. The guard's DUE/IDLE distinction is informational now - include it in the report.
 
-STEP 0.5 - SYNC REPO: run  powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\ops\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)  so you recompute on top of the cloud's latest committed prices. A second or two; "Already up to date" is fine.
+STEP 0.5 - SYNC REPO: run  powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)  so you recompute on top of the cloud's latest committed prices. A second or two; "Already up to date" is fine.
 
 FIRST read these two memory files for the exact tested procedures + gotchas: grocery-deal-comparison.md (Baker's pull method) and grocery-product-urls.md (the product-URL layer). TWO HARD RULES for every price: (a) current shelf price from Kroger/Baker's OWN first-party source (the developer API for the scan; bakersplus.com for the flyer), and (b) the OMAHA store - the API is pinned to locationId 61500319 = Saddlecreek, and any browser step's store selector must read "Pickup at Saddlecreek" (888 S Saddle Creek Rd, Omaha 68106). NEVER fabricate a price - skip anything you cannot verify.
 

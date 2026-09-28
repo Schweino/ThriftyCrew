@@ -7,7 +7,7 @@ Monthly refresh of the recipe-ingredient EVERYDAY (non-sale) floor prices behind
 
 WHY THIS IS NOW DERIVED, NOT BROWSED (2026-07-23): since R100 put every recipe ingredient on the 7-store staple board, the weekly/daily pulls already capture everyday prices for these commodities. candidates-<date>.json records every matched row WITH price_type, so the floor per store is simply the cheapest everyday-typed candidate. Hand-browsing 158 items x 6 stores duplicates work the automation already did. Your job is the RESIDUE the derivation honestly refuses.
 
-STEP 0 - SYNC: run  powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\ops\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)
+STEP 0 - SYNC: run  powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)
 
 STEP 1 - DRY RUN: run  powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\derive-recipe-floors.ps1  and read out\recipe-floors-report.json. It updates nothing yet; it proposes.
 

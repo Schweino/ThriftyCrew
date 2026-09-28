@@ -29,6 +29,7 @@
 
   Last line: SYNC-PRODUCTION-CHECKOUT-COMPLETE outcome=<skipped|pulled|failed>
 #>
+# gate-inputs: grocery\sync-production-checkout.ps1, grocery\native-lib.ps1
 param(
   [string]$Repo = '',
   [string]$StatusFile = '',

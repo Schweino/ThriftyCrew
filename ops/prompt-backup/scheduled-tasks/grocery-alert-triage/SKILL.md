@@ -229,7 +229,7 @@ TWO LANES (2026-09-10). The guard lists the daily lane under `DUE` and weekly-la
 they never go to the reviewer. Throughout STEPS 0.75 to 5, "every open id" means the ids under `DUE` plus any
 weekly item you pulled forward; the weekly lane's ids belong to STEP 3.5's own plan.
 
-STEP 0.5 - SYNC: powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\ops\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)
+STEP 0.5 - SYNC: powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)
 Then capture the current HEAD and `git status --porcelain`. Keep the list of FOREIGN uncommitted files:
 you pass it to both agents so neither reverts, commits or fights another session's in-flight work.
 
