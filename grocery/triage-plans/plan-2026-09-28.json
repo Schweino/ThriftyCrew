@@ -250,7 +250,7 @@
         ],
         "exact_change": "not designed here (money lane, THE LINE): measure every Hy-Vee ad line on comparison-2026-09-28 carrying both 'PERKS PRICE' and 'NON-MEMBER PRICE', count which price the engine took and which the guard reads, then decide"
       },
-      "leaves_open": "the bare-oz half of the seed (follow-up 2026-09-25-17c0da) is untouched by this item",
+      "leaves_open": "unmeasured until the money developer works it: how many other Hy-Vee Perks/non-member lines on comparison-2026-09-28 the engine reads differently from the provenance guard (the seed's bare-oz half was owned by 2026-09-25-17c0da, which the queue records resolved)",
       "leaves_open_occurrences": 1,
       "prior_closes": [
         "2026-09-21-de4f72",
@@ -304,7 +304,7 @@
       "shipped_commit": null,
       "resolution_note": "Money lane, not yet worked: Hy-Vee celery withheld 09-28 because the engine took the $1.98 Perks price where the line's non-member price is $2.48; fix the ad-line reading at the engine after checking the member-price ruling.",
       "close_disposition": null,
-      "leaves_open_followup": "2026-09-25-17c0da"
+      "leaves_open_followup": null
     },
     {
       "queue_id": "2026-09-28-c81a9f",
