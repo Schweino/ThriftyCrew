@@ -369,6 +369,9 @@ function Test-HyVeeAskParked {
   if ($null -eq $Entry) { return '' }
   $lo = [string]$Entry['last_outcome']
   if ($lo -eq $script:HvSizeConflictReason) {
+    # A size that "conflicts" with itself is not a conflict (2026-09-25-1b7001): the entry recorded a sibling
+    # work entry's size, not the refused one's, so it would park the row that does NOT conflict. Never parked.
+    if ([string]::Equals(([string]$Entry['size']).Trim(), ([string]$Entry['theirs']).Trim(), [StringComparison]::Ordinal)) { return '' }
     if ([string]::Equals([string]$Entry['size'], $WorkSize, [StringComparison]::Ordinal)) { return 'size-conflict' }
     return ''
   }
@@ -398,6 +401,9 @@ function Update-HyVeeAskLedger {
   foreach ($k in @($Ledger.Keys)) { $la = [string]$Ledger[$k]['last_asked']; if ($la -and [string]::CompareOrdinal($la, $Today) -lt 0 -and [string]::CompareOrdinal($la, $prevRun) -gt 0) { $prevRun = $la } }
   $sizeByPid = @{}; foreach ($w in @($Work)) { $p = [string][int]$w.pid; if (-not $sizeByPid.ContainsKey($p)) { $sizeByPid[$p] = [string]$w.size } }
   $theirs = @{}; foreach ($s in @($SizeConflictRows)) { if ($s) { $theirs[[string][int]$s['product_id']] = [string]$s['theirs'] } }
+  # The REFUSED entry's own size (2026-09-25-1b7001): two work entries can share one product id, and the first
+  # one's size is not the size Hy-Vee refused.
+  $oursByPid = @{}; foreach ($s in @($SizeConflictRows)) { if ($s -and $s['ours']) { $oursByPid[[string][int]$s['product_id']] = [string]$s['ours'] } }
   $repeat = 0
   foreach ($t in @($CaptureTerms)) {
     if ($null -eq $t) { continue }
@@ -414,12 +420,63 @@ function Update-HyVeeAskLedger {
       $streak = 1
       if ($old) { $streak = [int]$old['streak'] + $(if ([string]$old['last_asked'] -eq $Today) { 0 } else { 1 }) }
     }
-    $e = @{ last_asked = $Today; last_outcome = $outc; streak = $streak; size = [string]$sizeByPid[$p] }
+    $eSize = [string]$sizeByPid[$p]
+    if ($outc -eq $script:HvSizeConflictReason -and $oursByPid.ContainsKey($p)) { $eSize = $oursByPid[$p] }
+    $e = @{ last_asked = $Today; last_outcome = $outc; streak = $streak; size = $eSize }
     if ($outc -eq $script:HvSizeConflictReason -and $theirs.ContainsKey($p)) { $e['theirs'] = $theirs[$p] }
     elseif ($outc -eq $script:HvSizeConflictReason -and $old -and $old['theirs']) { $e['theirs'] = [string]$old['theirs'] }
     $new[$p] = $e
   }
   return [pscustomobject]@{ Ledger = $new; RepeatOfPrevious = $repeat; PreviousRun = $prevRun }
+}
+
+function New-HyVeePrevWork {
+  <#
+    .SYNOPSIS The work entries for the previous file's rows: .Work (ArrayList) and .SeenName (lower-cased names). Pure.
+    .DESCRIPTION
+      DEDUPE ON NAME **AND SIZE**, NOT NAME. $seen used to hold the bare name, so when Hy-Vee sells one name in two
+      sizes the SECOND row was `continue`d straight out of the work list and never re-priced - it simply vanished
+      from the next file. That is what collapsed 14 multi-size variants on the 2026-07-16 run (Dinty Moore Beef
+      Stew 38oz -> only 15oz survived; Hy-Vee Mild Green Chiles 7oz -> only 4oz). Sixth instance of the name-keyed
+      collapse family - see memory board-data-integrity.
+      NO NAME-ONLY BIND ONTO A PRODUCT THAT ALREADY HAS ITS OWN ROW (2026-09-25-1b7001). A stale no-id row of an
+      old size (Hy-Vee Ground Ginger 0.55 oz, July) used to take its same-name sibling's product id by name alone
+      when that sibling (2 oz, pid 2925188) was itself a row at the link's size: two work entries then shared one
+      id, the stale one was refused as a size conflict, and the ledger parked the CORRECT row. It keeps pid 0 now,
+      is carried unasked and ages out at as_of+90.
+  #>
+  param($PrevRows, [hashtable]$IdByName)
+  $work = New-Object System.Collections.ArrayList
+  $seen = @{}; $seenName = @{}
+  $prevKeys = @{}
+  foreach ($r in @($PrevRows)) { if ($r) { $prevKeys[([string]$r.item).ToLower().Trim() + '|' + ([string]$r.size).Trim()] = $true } }
+  foreach ($r in @($PrevRows)) {
+    if ($null -eq $r) { continue }
+    $nm = [string]$r.item
+    $kn = $nm.ToLower().Trim()
+    $k = $kn + '|' + ([string]$r.size).Trim()
+    if ($seen.ContainsKey($k)) { continue }
+    $seen[$k] = $true; $seenName[$kn] = $true
+    # PowerShell 5.1 has no `if` EXPRESSION - "pid=(if(...){..}else{..})" is a parse error, not a ternary.
+    $wpid = 0; $wcid = ''
+    # THE ROW ALREADY KNOWS ITS OWN PRODUCT - USE IT. This only ever read the id back out of $idByName, i.e. out
+    # of product-urls, so a row whose commodity has no stored link was re-priced as if we had never identified it:
+    # 808 rows carried a product_id on 2026-07-15 but only 440 were refreshable today. The link is not the only
+    # place a product identity lives; the row stamped one when it was last priced.
+    $wfrom = ''
+    if ($r.product_id) { $wpid = [int]$r.product_id; $wfrom = 'row' }
+    # a stored link still WINS: it is the product we publish a "See item" chip for, so it is what the price must
+    # describe. Only the exact name+size link, or an unambiguous name, may override the row's own id.
+    if ($IdByName.ContainsKey($k)) { $wpid = [int]$IdByName[$k].pid; $wcid = [string]$IdByName[$k].cid; $wfrom = 'link' }
+    else {
+      $byNm = @($IdByName.Values | Where-Object { $_.nm -eq $kn })
+      if ($byNm.Count -eq 1 -and -not $prevKeys.ContainsKey($kn + '|' + [string]$byNm[0].sz)) {
+        $wpid = [int]$byNm[0].pid; $wcid = [string]$byNm[0].cid; $wfrom = 'link'
+      }
+    }
+    [void]$work.Add([pscustomobject]@{ name=$nm; size=[string]$r.size; prow=$r; pid=$wpid; cid=$wcid; pidFrom=$wfrom; pidFile='' })
+  }
+  return [pscustomobject]@{ Work = $work; SeenName = $seenName }
 }
 
 function Read-HyVeeAskLedger([string]$Path) {
@@ -781,7 +838,7 @@ function Invoke-HyVeeWorkPass {
               $mismatch++
               $workReason = 'source product size conflicts with the worklist variant'
               [void]$sizeConflicts.Add(('{0}  ours=[{1}] hy-vee=[{2}]  qty {3} vs {4}  (productId {5})' -f $w.name, $size, $theirSize, [math]::Round($ourQty,2), [math]::Round($theirQty,2), $w.pid))
-              [void]$sizeConflictRows.Add([ordered]@{ product_id = [int]$w.pid; theirs = [string]$theirSize })
+              [void]$sizeConflictRows.Add([ordered]@{ product_id = [int]$w.pid; theirs = [string]$theirSize; ours = [string]$size })
               $got = $null   # refuse the refresh; fall through to "could not re-verify"
             }
           }
@@ -877,7 +934,7 @@ function Invoke-HyVeeWorkPass {
       if (Test-HyVeeCarryExpired -AsOf $asOf -Today $Today -MaxCarryDays $MaxCarryDays) {
         # AGE EXPIRY (2026-09-19). Every other lane drops a carried row past MaxCarryDays; this one never did,
         # so rows read 2026-07-14 were still written on 2026-09-18. Dropped, counted, and named in
-        # capture_terms. A product still holding an id is asked long before this under the 14-day rotation,
+        # capture_terms. A product still holding an id is asked long before this under the 90-day rotation,
         # so what reaches here is a product the store stopped answering for, or one with no id to ask with.
         $expired++
         [void]$captureTerms.Add([ordered]@{ term = $workKey; ordinal = $workOrdinal; outcome = 'expired'; row_count = 0
@@ -1329,6 +1386,27 @@ if ($SelfTest) {
   $lpk = Get-HyVeeSizeConflictParked -Ledger $lu.Ledger -Work $lw
   _T "size_conflict_parked lists the 12 size-conflict products with ours and theirs" ((@($lpk).Count -eq 12) -and ([string]$lpk[0]['ours'] -eq '38 oz') -and ([string]$lpk[0]['theirs'] -eq '25 oz'))
 
+  # --- A STALE SAME-NAME ROW NEVER TAKES ITS SIBLING'S PRODUCT ID BY NAME (2026-09-25-1b7001) ---------------
+  # Frozen from hyvee-regular-2026-09-28.json: the current 2 oz row with pid 2925188 and a July 0.55 oz row with
+  # no id, and the product-urls link at 2 oz. Ten such stale twins parked the CORRECT row under the shared id.
+  $snIdx = @{
+    'hy-vee ground ginger|2 oz'   = [pscustomobject]@{ pid = 2925188; cid = 'ground-ginger'; nm = 'hy-vee ground ginger'; sz = '2 oz' }
+    'hy-vee mild green chiles|4 oz' = [pscustomobject]@{ pid = 700001; cid = 'green-chiles'; nm = 'hy-vee mild green chiles'; sz = '4 oz' } }
+  $snPrev = @(
+    [pscustomobject]@{ item = 'Hy-Vee Ground Ginger'; size = '2 oz'; product_id = 2925188; store_id = '1465'; as_of = '2026-08-21' },
+    [pscustomobject]@{ item = 'Hy-Vee Ground Ginger'; size = '0.55 oz'; product_id = $null; store_id = '1465'; as_of = '2026-07-18' },
+    [pscustomobject]@{ item = 'Hy-Vee Mild Green Chiles'; size = '7 oz'; product_id = $null; store_id = '1465'; as_of = '2026-07-15' })
+  $snW = New-HyVeePrevWork -PrevRows $snPrev -IdByName $snIdx
+  $snWa = @($snW.Work)
+  _T "MUST FIRE: the stale 0.55 oz Hy-Vee Ground Ginger row (no id) gets pid 0 and the 2 oz row keeps 2925188" (($snWa.Count -eq 3) -and ([int]$snWa[0].pid -eq 2925188) -and ([int]$snWa[1].pid -eq 0) -and ([string]$snWa[1].size -eq '0.55 oz'))
+  _T "CLEAN TWIN: a lone no-id Hy-Vee Mild Green Chiles 7 oz, whose name matches a link with no prev row of its own, still binds the link's pid" (([int]$snWa[2].pid -eq 700001) -and ([string]$snWa[2].pidFrom -eq 'link'))
+  _T "MUST FIRE: a size-conflict ledger entry of '2 oz' against theirs '2 oz' is NOT parked (a size cannot conflict with itself)" ((Test-HyVeeAskParked -Entry @{ last_outcome = $script:HvSizeConflictReason; size = '2 oz'; theirs = '2 oz'; last_asked = '2026-09-28' } -WorkSize '2 oz' -HasRow $true -Today '2026-09-28') -eq '')
+  _T "CLEAN TWIN at the bar: {size '2.5 oz', theirs '2.38 oz'} (ratio 1.050, one step past 0.05) with WorkSize '2.5 oz' stays parked" ((Test-HyVeeAskParked -Entry @{ last_outcome = $script:HvSizeConflictReason; size = '2.5 oz'; theirs = '2.38 oz'; last_asked = '2026-09-28' } -WorkSize '2.5 oz' -HasRow $true -Today '2026-09-28') -eq 'size-conflict')
+  $scW = @([pscustomobject]@{ name = 'Dinty Moore Beef Stew'; size = '38 oz'; pid = 11342 }, [pscustomobject]@{ name = 'Dinty Moore Beef Stew'; size = '15 oz'; pid = 11342 })
+  $scT = @([ordered]@{ term = 'product-0000-11342'; outcome = 'success' }, [ordered]@{ term = 'product-0001-11342'; outcome = 'rejected'; reason = $script:HvSizeConflictReason })
+  $scU = Update-HyVeeAskLedger -Ledger @{} -CaptureTerms $scT -Work $scW -Today '2026-09-28' -SizeConflictRows @([ordered]@{ product_id = 11342; theirs = '38 oz'; ours = '15 oz' })
+  _T "MUST FIRE: two work entries of pid 11342 (38 oz answered first, 15 oz refused second) record size 15 oz from SizeConflictRows ours, not 38 oz" (([string]$scU.Ledger['11342']['size'] -eq '15 oz') -and ([string]$scU.Ledger['11342']['theirs'] -eq '38 oz'))
+
   # --- THE LOOKUP BODY NAMES ITS STORE AS A JSON NUMBER, WHOEVER CALLS IT (2026-09-21) ----------------------
   # FOUNDING BODY, the variables exactly as the lane sent them from 9f5059eec to this fix (asked 93, answered 0
   # on 2026-09-21): "storeId":"1466" is HTTP 400; the same body with "storeId":1466 is HTTP 200.
@@ -1576,7 +1654,7 @@ foreach ($p in $pd.PSObject.Properties) {
   # 32 oz/$8.99 and 4.5 oz/$3.49), and two commodities can legitimately link to those two different products.
   # Keyed by name alone, the first one won and the other product became invisible to this pull.
   $k = ([string]$e.name).ToLower().Trim() + '|' + ([string]$e.size).Trim()
-  if (-not $idByName.ContainsKey($k)) { $idByName[$k] = [pscustomobject]@{ pid = $prodId; cid = [string]$p.Name; nm = ([string]$e.name).ToLower().Trim() } }
+  if (-not $idByName.ContainsKey($k)) { $idByName[$k] = [pscustomobject]@{ pid = $prodId; cid = [string]$p.Name; nm = ([string]$e.name).ToLower().Trim(); sz = ([string]$e.size).Trim() } }
 }
 
 $prevF = Get-ChildItem (Join-Path $regDir 'hyvee-regular-*.json') -EA SilentlyContinue |
@@ -1589,40 +1667,9 @@ $prevDate = ''
 if ($prevF -and ($prevF.BaseName -match '(\d{4}-\d{2}-\d{2})$')) { $prevDate = $Matches[1] }
 
 # every product we want a price for: existing rows first (they carry the verified size), then link-only products
-$work = New-Object System.Collections.ArrayList
-$seen = @{}
-# DEDUPE ON NAME **AND SIZE**, NOT NAME. $seen used to hold the bare name, so when Hy-Vee sells one name in two
-# sizes the SECOND row was `continue`d straight out of the work list and never re-priced - it simply vanished
-# from the next file. That is what collapsed 14 multi-size variants on the 2026-07-16 run (Dinty Moore Beef
-# Stew 38oz -> only 15oz survived; Hy-Vee Mild Green Chiles 7oz -> only 4oz). A product the board prices
-# silently disappearing from the catalogue is the "partial pull is an overwrite" failure wearing a new hat.
-# Sixth instance of the name-keyed collapse family - see memory board-data-integrity.
-$seenName = @{}
-foreach ($r in $prevRows) {
-  $nm = [string]$r.item
-  $kn = $nm.ToLower().Trim()
-  $k = $kn + '|' + ([string]$r.size).Trim()
-  if ($seen.ContainsKey($k)) { continue }
-  $seen[$k] = $true; $seenName[$kn] = $true
-  # PowerShell 5.1 has no `if` EXPRESSION - "pid=(if(...){..}else{..})" is a parse error, not a ternary.
-  $wpid = 0; $wcid = ''
-  # THE ROW ALREADY KNOWS ITS OWN PRODUCT - USE IT. This only ever read the id back out of $idByName, i.e. out
-  # of product-urls, so a row whose commodity has no stored link was re-priced as if we had never identified it:
-  # 808 rows carried a product_id on 2026-07-15 but only 440 were refreshable today, and the other 368 were
-  # written out not_reverified - carrying yesterday's price with no way to check it. The link is not the only
-  # place a product identity lives; the row stamped one when it was last priced. Absence of a link is not
-  # absence of knowledge (same lesson as the Family Fare carry-forward).
-  $wfrom = ''
-  if ($r.product_id) { $wpid = [int]$r.product_id; $wfrom = 'row' }
-  # a stored link still WINS: it is the product we publish a "See item" chip for, so it is what the price must
-  # describe. Only the exact name+size link, or an unambiguous name, may override the row's own id.
-  if ($idByName.ContainsKey($k)) { $wpid = [int]$idByName[$k].pid; $wcid = [string]$idByName[$k].cid; $wfrom = 'link' }
-  else {
-    $byNm = @($idByName.Values | Where-Object { $_.nm -eq $kn })
-    if ($byNm.Count -eq 1) { $wpid = [int]$byNm[0].pid; $wcid = [string]$byNm[0].cid; $wfrom = 'link' }
-  }
-  [void]$work.Add([pscustomobject]@{ name=$nm; size=[string]$r.size; prow=$r; pid=$wpid; cid=$wcid; pidFrom=$wfrom; pidFile='' })
-}
+$pw = New-HyVeePrevWork -PrevRows $prevRows -IdByName $idByName
+$work = $pw.Work
+$seenName = $pw.SeenName
 foreach ($k in $idByName.Keys) {
   if ($seenName.ContainsKey($idByName[$k].nm)) { continue }
   $seenName[$idByName[$k].nm] = $true
