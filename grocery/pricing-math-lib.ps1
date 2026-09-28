@@ -768,7 +768,7 @@ function Get-PackCount($text) {
 #     Fareway 'Bright Essentials Storage Bags' $3.99 size '25-42 ct' (storage-bags, comparison-2026-09-23)
 # priced 0.095/bag against a least-favourable 0.1596. ASCENDING pairs only, the same guard the weight path uses:
 # '24-12 ct' is not a range. Used ONLY where Get-UnitPrice reads an each-commodity pack count; Get-PackCount itself is
-# unchanged, because the multibuy resolver and Get-EachCountConflict read it and neither prices a range. A '31-40 ct'
+# unchanged, because Get-EachCountConflict reads it; the multibuy resolver reads THIS since 2026-09-28 (633d2b). A '31-40 ct'
 # shrimp grade never reaches this: shrimp is per-lb, and the weight branch never reads a count.
 function Get-EachPackCount($text) {
   if (-not $text) { return $null }
@@ -1118,13 +1118,16 @@ function Get-UnitPrice($deal, $cat) {
     # the way build-aldi-regular resolves a pack basis: every party that states a count (price text, size field,
     # name) must state the SAME one, and two different counts are a conflict that is REFUSED, never guessed. An
     # either/or line is not a party (the same Test-NameOffersTwoSizes refusal the plain path uses).
-    # SCOPED TO BUY-N-GET-K (Test-IsMultibuy), NOT EVERY NON-PLAIN PRICE: an "N for $M" deal is non-plain too and has
-    # the same per-pack defect (18 each-unit Family Fare rows on candidates-2026-09-23: Eggo 10 Ea, Bomb Pop 12 Ea,
-    # Little Bites 5 Ea ...), but those move cells the plan never measured, so they are left for their own item.
-    if ((-not $plain) -and (Test-IsMultibuy ([string]$deal.price_text))) {
+    # EVERY NON-PLAIN PRICE, NOT ONLY BUY-N-GET-K (2026-09-28, queue 2026-09-25-633d2b, plan-2026-09-28-9). An "N for $M"
+    # deal ('2 for $6.00', '2/ $5.00', '(2/$5)' in a name) is non-plain too and had the same per-pack defect: 18
+    # each-unit rows on candidates-2026-09-28 shipped a package price as one unit, e.g. Family Fare 'Pillsbury Toaster
+    # Pastries, Apple 6 Ea' 2 for $6.00 at 3.00 against a true 0.50. The count reader is Get-EachPackCount (see
+    # Resolve-MultibuyPackCount), so a range ('6 to 12 ct') takes its least favourable end on this path as on the plain
+    # one; widening this line on Get-PackCount would have read the HIGH end and understated three rows.
+    if (-not $plain) {
       $mbPack = Resolve-MultibuyPackCount $deal
       if ($mbPack.conflict) { return $null }
-      if ($mbPack.count) { return @{ unit_price=($pr.per_item/$mbPack.count); basis=('per-' + $mbPack.count + '-pack (multibuy, count from ' + $mbPack.from + ')'); note=$pr.note; pieces=$mbPack.count } }
+      if ($mbPack.count) { return @{ unit_price=($pr.per_item/$mbPack.count); basis=('per-' + $mbPack.count + '-pack (non-plain, count from ' + $mbPack.from + ')'); note=$pr.note; pieces=$mbPack.count } }
     }
     if ((-not $plain) -or ($deal.size_text -match ('(?i)^\s*(1\s*)?(' + (Get-TcWholePurchaseTokens) + ')\.?\s*$')) -or ([string]$deal.price_text -match '(?i)perks\s*price')) { return @{ unit_price=$pr.per_item; basis='per-each'; note=$pr.note; pieces=1 } }
     return $null   # bare package price with unknown count -> not confident, drop
@@ -1134,14 +1137,16 @@ function Get-UnitPrice($deal, $cat) {
 function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t)) -match '(?i)buy\s*\d+\s*,?\s*get\s*\d+') }
 
 # THE PACK COUNT A MULTIBUY ROW PROVES (2026-09-25, queue 2026-09-23-9459a1). Each party that states a count - the
-# price text and the name unless they offer two sizes, and the size field always - is read with Get-PackCount.
+# price text and the name unless they offer two sizes, and the size field always - is read with Get-EachPackCount
+# (2026-09-28, queue 2026-09-25-633d2b: ONE count reader for the each branch, so a count range takes its least
+# favourable end here too; measured to change 0 Buy-N-Get-K rows on candidates-2026-09-28).
 # One distinct count: that is the pack. Two different counts: a CONFLICT, and the caller refuses the row (UNPRICED)
 # rather than choosing. None: no count, the caller keeps its old per-each answer.
 function Resolve-MultibuyPackCount($deal) {
   $seen = [ordered]@{}
-  if (-not (Test-NameOffersTwoSizes ([string]$deal.price_text))) { $n = Get-PackCount $deal.price_text; if ($n) { $seen['price'] = $n } }
-  $n = Get-PackCount $deal.size_text; if ($n) { $seen['size'] = $n }
-  if (-not (Test-NameOffersTwoSizes ([string]$deal.name))) { $n = Get-PackCount $deal.name; if ($n) { $seen['name'] = $n } }
+  if (-not (Test-NameOffersTwoSizes ([string]$deal.price_text))) { $n = Get-EachPackCount $deal.price_text; if ($n) { $seen['price'] = $n } }
+  $n = Get-EachPackCount $deal.size_text; if ($n) { $seen['size'] = $n }
+  if (-not (Test-NameOffersTwoSizes ([string]$deal.name))) { $n = Get-EachPackCount $deal.name; if ($n) { $seen['name'] = $n } }
   $distinct = @($seen.Values | Sort-Object -Unique)
   if ($distinct.Count -gt 1) { return @{ count = $null; conflict = $true; from = (@($seen.Keys | ForEach-Object { $_ + '=' + $seen[$_] }) -join ' ') } }
   if ($distinct.Count -eq 1) { return @{ count = [int]$distinct[0]; conflict = $false; from = (@($seen.Keys) -join '+') } }

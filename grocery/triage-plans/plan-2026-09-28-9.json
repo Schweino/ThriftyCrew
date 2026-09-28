@@ -1,221 +1,225 @@
 {
- "generated": "2026-09-28",
- "round": 1,
- "board_week": "comparison-2026-09-28",
- "board_generation_note": "triage-due printed BOARD comparison-2026-09-28 built 08:17:56 (459 min ago) at the start of this run; not MID-BUILD, not JUST LANDED. Read from HEAD c349cbd77 in the main checkout.",
- "routing_artifact": "plan-2026-09-28-9.routing.json",
- "queue_ids_seen": [
-  "2026-09-25-1b7001",
-  "2026-09-25-bf2c6f",
-  "2026-09-25-633d2b",
-  "2026-09-25-0cefa4"
- ],
- "untrusted_input_note": "No fetched page or tool result in this run addressed the agent; nothing to quote.",
- "collision_note": "THIS REVIEWER OVERWROTE A SIBLING FILE. At about 16:08 it wrote its routing artifact to grocery/triage-plans/plan-2026-09-28-8.routing.json after listing plan-2026-09-28* several calls earlier, when -8 did not exist. The ls in the same command showed that a parallel spawn had created -8.routing.json in between. The file was untracked and never committed, so its original content is lost. This reviewer removed its own overwrite (so the owner of -8 fails loudly on a missing artifact instead of passing on this plan's positive control) and moved to -9 with exclusive-create writes. The owner of plan-2026-09-28-8 must regenerate its routing artifact.",
- "knowledge_consulted": [
-  "searched --estate --multi 'hyvee retired store carried rows' 'N for M multibuy each price' 'Sams pack total pieces weight' 'hyvee size conflict relink': hits were data-quality-craft/applies-here.md (silent semantic change; first-match-wins) and memories board-basis-ambiguity, grocery-engine-guards, board-data-integrity; none opened beyond the hook, so none is claimed as used",
-  "used .claude/rules/grocery.md gr-08 (an Aldi multipack card is one unit or the pack total; resolve by arithmetic proof only, a name size equal to the card proves nothing, no plausibility bar): it rules out a piece-weight plausibility test for 0cefa4 and shapes the recommended option D, refuse on disagreement",
-  "used .claude/rules/grocery.md gr-11 (Hy-Vee asks rows withheld only for its store first): matched against Get-HyVeeAskOrder rank 1 in pull-regular-hyvee.ps1 for bf2c6f",
-  "used the dispatch's pasted machinery:grocery/pricing-math-lib.ps1 (dot-source it, never cut functions from compare-deals): the 633d2b harness dot-sources the real lib rather than copying Get-UnitPrice",
-  "used .claude/rules/ops-and-gates.md og-06 (a threshold detector carries a case at its bar and a step past it): the 1b7001 proof asks for the 2.5 vs 2.38 oz case (ratio 1.050) as the at-bar clean twin"
- ],
- "items": [
-  {
-   "queue_id": "2026-09-25-1b7001",
-   "subject": "Triage residual: Hy-Vee size-conflict links the size-first relink could not re-point (residual of 2026-09-25-c2a750)",
-   "classification": "capture-gap",
-   "lane": "ops",
-   "est_tool_calls": 40,
-   "evidence": [
-    "grocery/out/regular/hyvee-regular-2026-09-28.json size_conflict_parked: 13 pids. 7 record ours EQUAL to theirs: 2925188 Hy-Vee Ground Ginger 2 oz/2 oz, 2918306 Hy-Vee Dill Weed 0.75 oz/0.75 oz, 37443 Poblano Peppers lb/lb, 37464 Tomatillos lb/lb, 444508 Hy-Vee Sloppy Joe Sauce 15 oz/15 oz, 19478 Spice World Minced Garlic 32 oz/32 oz, 55979 Hy-Vee Ground Cloves 2 oz/2 oz. A size conflict of a size against itself is impossible (ratio 1.0 always passes the 0.05 test at pull-regular-hyvee.ps1 line 772).",
-    "The same file holds TWO rows of one name for each of those 7 plus 11342, 47144, 1334638: the current row with a stored product_id at Hy-Vee's size, and a stale July row with product_id null at the old size. Examples: 'Hy-Vee Ground Ginger' 2 oz pid 2925188 store 1465 as_of 2026-08-21 AND 'Hy-Vee Ground Ginger' 0.55 oz no id store 1465 as_of 2026-07-18; 'Dinty Moore Beef Stew' 38 oz pid 11342 AND 15 oz no id (2026-07-15); 'Hy-Vee Select Cheese Tortellini' 42 oz pid 1334638 store 1466 AND 19 oz no id (2026-07-18). Measured: exactly 10 stale no-id twins of a pid-owning row at another size, one for each of the 10 non-genuine parked pids.",
-    "capture_terms in hyvee-regular-2026-09-28.json carry pid 2925188 TWICE: product-0642-2925188 and product-1266-2925188, i.e. two work entries share one product id.",
-    "grocery/logs-archive/ad-cycle-log-2026-08.txt: 'Hy-Vee Ground Ginger  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2' and 'Hy-Vee Ground Cloves  ours=[0.55 oz] hy-vee=[2 oz]': the refused entry is the stale twin.",
-    "grocery/product-urls.json line 13035 links Hy-Vee 'https://www.hy-vee.com/aisles-online/p/2925188/hy-vee-ground-ginger'. The stale 0.55 oz row misses the exact name+size key and is bound to 2925188 by the name-only match at pull-regular-hyvee.ps1 lines 1621-1622 ($byNm.Count -eq 1).",
-    "pull-regular-hyvee.ps1 line 399 builds $sizeByPid from the FIRST work entry per pid and line 417 records size = $sizeByPid[$p]; Test-HyVeeAskParked (line 372) parks any entry whose work size equals that recorded size. So the correct 2 oz row is parked and the stale 0.55 oz row, whose size never matches, is re-asked and refused (444508 streak 2, last_asked 2026-09-28).",
-    "Board comparison-2026-09-28: 3 live Hy-Vee cells rest on a parked pid and are never re-read while parked: sloppy-joe-sauce (444508, as_of 2026-09-22), ground-cloves (55979, 2026-08-24), tomatillos (37464, 2026-08-24). They age out at as_of+90: 2026-11-22, 2026-11-22, 2026-12-21.",
-    "The other 3 parked pids are genuine size drifts: 2950925 That's Smart Ground Cinnamon 2.5 oz vs 2.38 oz (ratio 1.050), 332699 Johnson Family Farm Fresh Basil and 269490 Fresh Mint 0.75 oz vs 0.8 oz."
-   ],
-   "root_cause": "The ask ledger and its size-conflict park are keyed by product id alone, while a refusal belongs to one work entry (name+size). The work list binds a stale no-id row to its same-name sibling's product id by the name-only link match (lines 1621-1622), so one pid carries two work entries of different sizes; Update-HyVeeAskLedger then records the first entry's size, not the refused entry's, and Test-HyVeeAskParked parks the entry that does NOT conflict. Any product Hy-Vee re-sized since July, whose old-size row is still carried, lands in this state.",
-   "surface_fix": {
-    "what": "Test-HyVeeAskParked returns '' (not parked) for a size-conflict entry whose recorded size equals its recorded theirs (ordinal, trimmed): that entry is self-contradictory. Unparks the 7 persisted entries with no data edit.",
-    "files": [
-     "grocery/pull-regular-hyvee.ps1"
-    ],
-    "exact_change": "in Test-HyVeeAskParked, inside the size-conflict branch and before the ordinal size compare: if ([string]::Equals(([string]$Entry['size']).Trim(), ([string]$Entry['theirs']).Trim(), [StringComparison]::Ordinal)) { return '' }"
-   },
-   "root_fix": {
-    "what": "(1) The work list never binds a no-id row to a product id by NAME ALONE when that link's exact name+size key is itself a row in the previous file: the product already has its own row at the link's size, so the stale twin keeps pid 0, is carried unasked and ages out at as_of+90 (2026-10-13 to 2026-10-18 for the 10 twins). (2) Update-HyVeeAskLedger records the REFUSED entry's own size: Invoke-HyVeeWorkPass adds ours = $size to each SizeConflictRows entry (line 784) and line 417 prefers it over $sizeByPid for a size-conflict outcome. (3) Correct the stale comment at line 880 ('under the 14-day rotation'; RotationDays is the 90-day quarter).",
-    "where": "grocery/pull-regular-hyvee.ps1: work-list build lines 1601-1625 (collect the prev-row name|size keys first, then skip the $byNm bind when $idByName holds that name at a size that is itself a prev-row key); Invoke-HyVeeWorkPass line 784; Update-HyVeeAskLedger line 417; comment line 880",
-    "exact_change": "before the foreach at 1601 build $prevKeys = @{} of name|size for every prev row; in the else branch at 1620-1623, bind from $byNm[0] only when -not $prevKeys.ContainsKey($byNm[0].nm + '|' + <that link's size key>) (the developer reads the size half of the $idByName key it matched); line 784 adds ours = [string]$size; line 417: size = if ($outc -eq $script:HvSizeConflictReason -and $oursByPid.ContainsKey($p)) { $oursByPid[$p] } else { [string]$sizeByPid[$p] }"
-   },
-   "leaves_open": "3 genuine Hy-Vee size drifts stay parked by design (2950925 ground cinnamon 2.5 vs 2.38 oz, 332699 fresh basil and 269490 fresh mint 0.75 vs 0.8 oz); resolve-hyvee-links will not re-point them because it only relinks to a product AT the link's size, so they need a rule for re-binding to Hy-Vee's own size. None backs a board cell (ground-cinnamon, fresh-basil, fresh-mint have no Hy-Vee cell on comparison-2026-09-28).",
-   "leaves_open_occurrences": 3,
-   "leaves_open_occurrences_window": "parked on every run 2026-09-26 to 2026-09-28 (3 runs)",
-   "leaves_open_followup": null,
-   "blast_radius": {
-    "measured_as": "routing",
-    "corpus": "grocery/out/regular/hyvee-regular-2026-09-28.json (1,546 rows) and grocery/out/hyvee-ask-ledger.json after the 2026-09-28 run; no matching rule changes, so commodity routing is identical before and after for every row",
-    "affected_now": 10,
-    "names": "work entries whose product id changes: the 10 stale no-id twins lose their name-bound pid (Hy-Vee Ground Ginger 0.55 oz, Hy-Vee Dill Weed 0.25 oz, Poblano Peppers 0.25 lbs, Tomatillos 0.15 lbs, Hy-Vee Sloppy Joe Sauce 24 oz, Spice World Minced Garlic 4.5 oz, Hy-Vee Ground Cloves 0.55 oz, Dinty Moore Beef Stew 15 oz, Hormel Mary Kitchen Corned Beef Hash 14 oz, Hy-Vee Select Cheese Tortellini 19 oz). All are store 1465, as_of 2026-07-15 to 2026-07-20, and the board already refuses them as wrong-store, so no cell reads them. Ledger entries unparked: 7.",
-    "cell_effects": [
-     {
-      "commodity": "sloppy-joe-sauce",
-      "store": "Hy-Vee",
-      "before": "carried, parked, never re-read",
-      "after": "re-read in rotation at Hy-Vee's live price; value unknown until read"
-     },
-     {
-      "commodity": "ground-cloves",
-      "store": "Hy-Vee",
-      "before": "carried, parked, never re-read",
-      "after": "re-read in rotation; value unknown until read"
-     },
-     {
-      "commodity": "tomatillos",
-      "store": "Hy-Vee",
-      "before": "carried, parked, never re-read",
-      "after": "re-read in rotation; value unknown until read"
-     },
-     {
-      "commodity": "ground-ginger, dried-dill, poblano-peppers, minced-garlic",
-      "store": "Hy-Vee",
-      "before": "no Hy-Vee cell (row read at retired 1465, parked)",
-      "after": "a Hy-Vee cell appears once the row is re-read at 1466 in rank-1 rotation; value unknown until read"
-     }
-    ],
-    "developer_check": "run pull-regular-hyvee.ps1 -DryRun against a SCRATCH -OutDir seeded with copies of hyvee-regular-2026-09-28.json and hyvee-ask-ledger.json: expect 10 fewer pid-bound work entries, capture_terms with exactly one term per pid for the 10 pids, and size_conflict_parked down from 13 to 3",
-    "measured_by": "scratch python over hyvee-regular-2026-09-28.json deals (1,546 rows): no-id rows whose lowercased name matches a row holding a product_id at a different size (10 found), cross-checked against size_conflict_parked (13) and hyvee-ask-ledger.json size-conflict entries (13, of which 7 have size == theirs); capture_terms grepped for duplicate pid suffixes"
-   },
-   "proof": {
-    "must_fire_case": "pull-regular-hyvee.ps1 -SelfTest, frozen from hyvee-regular-2026-09-28.json: prev rows 'Hy-Vee Ground Ginger' 2 oz product_id 2925188 and 'Hy-Vee Ground Ginger' 0.55 oz no product_id, link 'Hy-Vee Ground Ginger' 2 oz pid 2925188: MUST FIRE the 0.55 oz work entry has pid 0 and the 2 oz entry keeps 2925188. Second: ledger entry {size '2 oz', theirs '2 oz', last_outcome size-conflict} with WorkSize '2 oz': MUST FIRE Test-HyVeeAskParked returns ''. Third: Update-HyVeeAskLedger over two work entries of pid 11342, the 38 oz entry FIRST (answered) and the 15 oz entry second (refused as a size conflict): MUST FIRE the recorded size is 15 oz, taken from SizeConflictRows ours, not 38 oz from the first entry.",
-    "clean_twin": "CLEAN TWIN: a lone no-id row 'Hy-Vee Mild Green Chiles' 7 oz whose name uniquely matches a link with no prev row of its own still binds the link's pid (the 2026-07-15 recovery the comment at line 1609 protects). CLEAN TWIN at the bar: ledger {size '2.5 oz', theirs '2.38 oz'} with WorkSize '2.5 oz' stays 'size-conflict' (ratio 1.050, one step past the 0.05 tolerance). The existing 90de7b parking fixtures stay green.",
-    "guard_or_fixture": "grocery/pull-regular-hyvee.ps1 -SelfTest (run-gates discovers it); read its exit code and its own last verdict line"
-   },
-   "rollback": "Revert the commit. The ledger is not rewritten by the fix, so the 7 entries simply read as parked again.",
-   "freshness": "measured 2026-09-28 afternoon at HEAD c349cbd77 against hyvee-regular-2026-09-28.json (written 08:01), hyvee-ask-ledger.json from the 2026-09-28 run, product-urls.json at HEAD, board comparison-2026-09-28 (08:17:56)",
-   "publish_batch": null,
-   "status": "planned",
-   "resolution_note": "Of 13 parked Hy-Vee size conflicts, 10 were not conflicts of the row being parked: a stale July row of the same name (old size, no stored id) was bound to the product id by name, was the one refused, and the ledger then parked the CORRECT row under the shared id. Fix: no name-only id bind when the product already has its own row at the link size; the ledger records the refused entry's size; a size conflict of a size against itself is never parked. 3 cells (sloppy-joe-sauce, ground-cloves, tomatillos) resume re-reads. Residual: 3 genuine size drifts (ground cinnamon, fresh basil, fresh mint) need a re-bind-to-Hy-Vee-size rule; none is on the board."
-  },
-  {
-   "queue_id": "2026-09-25-bf2c6f",
-   "subject": "Triage residual: 957 Hy-Vee rows still carried from the retired store 1465 (Omaha #01)",
-   "classification": "no-code-change",
-   "lane": "ops",
-   "est_tool_calls": 5,
-   "evidence": [
-    "store_id counts in grocery/out/regular/hyvee-regular-*.json: 09-25 1465=957 1466=327, 09-26 957/327, 09-27 945/339, 09-28 885/399 (ask_budget 20, 20, 20, 111; the 111 is sale expiries taking room under the cap, Get-HyVeeProductBudget lines 238-251; the rotation floor is ceil(1287 askable / 90) = 15).",
-    "Of the 885 on 09-28: 839 hold a product_id, 46 do not (never askable; they age out by design, the 2026-09-22-3366e4 class). as_of range 2026-07-14 to 2026-08-21, so age-outs fall 2026-10-12 to 2026-11-19 (291 in October, 594 in November).",
-    "Get-HyVeeAskOrder (pull-regular-hyvee.ps1 lines 272-296) already asks rank 1 first: any row whose store_id is not the pinned 1466, oldest of max(as_of, last_asked) first. All 839 id-bearing 1465 rows are rank 1. Ask ledger: 812 never asked, 21 last outcome 'no usable offer', 6 size conflict.",
-    "Simulation of that order from 2026-09-29 (scratch, ledger keys applied): at 20 asks a day no never-asked row reaches its turn after its age-out (the 21 late rows are the ones already asked at 1466 and refused, which is the designed outcome); at the 15-a-day floor about 32 never-asked rows would be 1 to 4 days late (59 late minus the 27 already refused). The daily budget has not been below 20 on any day 2026-09-25 to 2026-09-28.",
-    "Board comparison-2026-09-28: 0 of 323 Hy-Vee cells rest on a 1465 row (3 name overlaps carry as_of 2026-08-24 and 2026-09-22, later than any 1465 row). No wrong price is served and none is at risk from the age-outs."
-   ],
-   "root_cause": "The question was whether rotation re-asks the 1465 rows at 1466 before their 90-day age-out. It does: the rank-1 off-target-first order (shipped 2026-09-19 and 2026-09-25) makes the whole migration finish around 2026-11-09 at the observed 20 a day. Only at the 15-a-day floor, on days with no sale expiries, would about 32 products miss their turn by 1 to 4 days.",
-   "root_fix_none_because": "The mechanism the item asked for (an owed-terms queue like Get-WalmartRulingOwed) already exists in effect as Get-HyVeeAskOrder rank 1, and at the observed budget it reaches every never-asked row in time. A deadline term would pay for a worst case that has not happened on any measured day.",
-   "leaves_open": "At the 15-a-day floor, about 32 never-asked 1465 products (as_of 2026-08-21) would reach their ask after their age-out on 2026-11-19 and drop out of the lane unless product-urls links them. Separately, 46 no-id 1465 rows can never be re-asked and age out by design. 10 more are stale twins that 2026-09-25-1b7001's fix leaves unasked on purpose.",
-   "leaves_open_occurrences": 0,
-   "leaves_open_occurrences_window": "no id-bearing 1465 row has aged out yet: expired_past_carry = 0 on every file 2026-09-25 to 2026-09-28; the first age-out date is 2026-10-12",
-   "leaves_open_followup": null,
-   "status": "planned",
-   "resolution_note": "No code change. The 885 Hy-Vee rows still stamped at the retired store are already asked first (rank 1 of Get-HyVeeAskOrder). At the observed 20+ asks a day, every never-asked one is re-read at 1466 before its 90-day age-out; the migration ends about 2026-11-09. None backs a board cell today. Watch: if the daily ask_budget sits at the 15 floor through November, about 32 products could age out 1 to 4 days early; expired_past_carry in the Hy-Vee file is the counter to read."
-  },
-  {
-   "queue_id": "2026-09-25-633d2b",
-   "subject": "Triage residual: N-for-M deals on each-unit commodities priced per pack (18 rows, from 9459a1)",
-   "classification": "parse-basis-bug",
-   "lane": "money",
-   "est_tool_calls": 45,
-   "evidence": [
-    "Corpus changed since the item was written: the 09-23 Eggo, Bomb Pop and Little Bites rows are gone from candidates-2026-09-28. Today, over 8,141 each-unit candidate rows, 48 carry a non-plain price and 18 of those state a pack count and fall to 'per-each' (routing artifact per_unit_changes).",
-    "Family Fare | toaster-pastries | 'Pillsbury Toaster Pastries, Apple 6 Ea' | '2 for $6.00' | size '6 ea' | today 3.00 per-each; true 0.50 a pastry",
-    "Family Fare | granola-bars | 'Nature Valley Chewy Peanut Granola Bars 6 Ea' (and 10 more Nature Valley / Fiber One rows) | '2 for $5.00' | '6 ea' or '5 ea' | today 2.50 per-each; true 0.4167 or 0.50",
-    "Family Fare | bottled-water | 'Ice Mountain Spring Water 12 Ea' | '2 for $9.00 with purchase' | '12 ea' | today 4.50 per-each; true 0.375",
-    "Hy-Vee | tortillas | 'La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00' | per_item 2.50 | today 2.50 per-each",
-    "Hy-Vee | dinner-rolls | 'King's Hawaiian rolls, 6 to 12 ct., 2/ $8.00' | per_item 4.00 | today 4.00 per-each",
-    "Fareway | granola-bars | 'Sunbelt Bakery Granola Bars (2/$5)' | '$2.50' | size '8-10 ct' | today 2.50 per-each",
-    "THE TRAP IN THE QUEUE'S OWN FIX SHAPE: widening the 9459a1 branch as written calls Resolve-MultibuyPackCount, which reads counts with Get-PackCount and takes the HIGH end of a range, while the plain each path reads Get-EachPackCount and takes the least favourable LOW end (aa28983df). Measured: tortillas would read /30 (0.0833, not 0.125), King's Hawaiian /12 (0.3333, not 0.6667), Sunbelt /10 (0.25, not 0.3125), and two of those would take their store's cell at an understated price (dinner-rolls|Hy-Vee 0.4158 -> 0.3333, granola-bars|Fareway 0.288 -> 0.25)."
-   ],
-   "root_cause": "The each branch of Get-UnitPrice has two count readers and a price-shape allow-list. The plain path divides with Get-EachPackCount; the multibuy path (9459a1) divides with Resolve-MultibuyPackCount, which reads Get-PackCount and so ignores the least-favourable-range rule; and only a Buy-N-Get-K price text (Test-IsMultibuy) reaches the dividing path at all. Every other non-plain shape ('N for $M', '2/ $5.00', '(2/$5)' in a name) with a stated count falls to 'per-each' and ships the package price as one unit.",
-   "surface_fix": {
-    "what": "divide a stated pack count for every non-plain price on an each-unit commodity, not only Buy-N-Get-K",
-    "files": [
-     "grocery/pricing-math-lib.ps1"
-    ],
-    "exact_change": "line 1124: if ((-not $plain) -and (Test-IsMultibuy ([string]$deal.price_text))) becomes if (-not $plain); the basis string at 1127 names the shape: 'per-N-pack (non-plain, count from ...)'. Update the comment block at 1113-1123 to drop the 'left for their own item' paragraph."
-   },
-   "root_fix": {
-    "what": "ONE count reader for the each branch: Resolve-MultibuyPackCount reads each party with Get-EachPackCount instead of Get-PackCount, so a count range ('6 to 12 ct', '8-10 ct', '20 or 30 ct') takes its least favourable end on every path and a conflict between parties is still refused. Measured: this changes the count of 0 existing Buy-N-Get-K rows on candidates-2026-09-28.",
-    "where": "grocery/pricing-math-lib.ps1 Resolve-MultibuyPackCount lines 1142-1144",
-    "exact_change": "replace the three Get-PackCount calls in Resolve-MultibuyPackCount with Get-EachPackCount. Before shipping, run ops/count-source-lifters.ps1 -Script grocery/pricing-math-lib.ps1 and grep Resolve-MultibuyPackCount across grocery/ and ops/ (compare-deals.ps1 holds 1 reference): every caller must want the each reading, or gets its own function."
-   },
-   "leaves_open": "30 of the 48 non-plain each-unit rows on candidates-2026-09-28 state no count at all and still price per-each. That is right when the deal unit is one piece (2 avocados for $3) and unknowable when it is a package of unstated count; Get-MultibuyRefusalHalf already labels those 'unresolved'. They were not classified one by one in this run.",
-   "leaves_open_occurrences": 30,
-   "leaves_open_occurrences_window": "candidate rows on one board, candidates-2026-09-28; candidates of the class, not confirmed defects",
-   "leaves_open_followup": null,
-   "blast_radius": {
-    "measured_as": "routing",
-    "corpus": "grocery/out/candidates-2026-09-28.json (built 08:07), all 593 commodities, each-unit rows replayed through the real pricing-math-lib.ps1 at HEAD c349cbd77; one corpus for every section, no skipped files",
-    "routing_changes": 0,
-    "affected_now": 18,
-    "names": "the 18 rows in plan-2026-09-28-9.routing.json per_unit_changes: 11 Family Fare granola-bars (Nature Valley, Fiber One), 2 Family Fare bottled-water (Ice Mountain 24 pk and 12 Ea), 1 Family Fare toaster-pastries (Pillsbury Apple 6 Ea), 1 Hy-Vee tortillas (La Banderita), 1 Hy-Vee dinner-rolls (King's Hawaiian), 1 Fareway granola-bars (Sunbelt 2/$5). 0 are refused as count conflicts. No commodity loses a cell.",
-    "cell_effects": [
-     {
-      "commodity": "tortillas",
-      "store": "Hy-Vee",
-      "before": 0.5612,
-      "after": 0.125,
-      "row": "La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00 read at its least favourable 20",
-      "crown": "Aldi 0.0925, unmoved"
-     }
-    ],
-    "cells_unmoved_note": "the other 17 rows lose to their store's existing cell: toaster-pastries|Family Fare 0.2325 vs 0.50, bottled-water|Family Fare 0.1662 vs 0.1875 and 0.375, granola-bars|Family Fare 0.279 vs 0.4167 and 0.50, dinner-rolls|Hy-Vee 0.4158 vs 0.6667, granola-bars|Fareway 0.288 vs 0.3125",
-    "method_caveat": "cell effects are predicted as the minimum per-unit over the store's candidate rows; the developer confirms with a scratch rebuild, never the live out/",
-    "positive_control": {
-     "name": "Pillsbury Toaster Pastries, Apple 6 Ea",
-     "expected": "6",
-     "observed": "6"
+  "generated": "2026-09-28",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "triage-due printed BOARD comparison-2026-09-28 built 08:17:56 (459 min ago) at the start of this run; not MID-BUILD, not JUST LANDED. Read from HEAD c349cbd77 in the main checkout.",
+  "routing_artifact": "plan-2026-09-28-9.routing.json",
+  "queue_ids_seen": [
+    "2026-09-25-1b7001",
+    "2026-09-25-bf2c6f",
+    "2026-09-25-633d2b",
+    "2026-09-25-0cefa4"
+  ],
+  "untrusted_input_note": "No fetched page or tool result in this run addressed the agent; nothing to quote.",
+  "collision_note": "THIS REVIEWER OVERWROTE A SIBLING FILE. At about 16:08 it wrote its routing artifact to grocery/triage-plans/plan-2026-09-28-8.routing.json after listing plan-2026-09-28* several calls earlier, when -8 did not exist. The ls in the same command showed that a parallel spawn had created -8.routing.json in between. The file was untracked and never committed, so its original content is lost. This reviewer removed its own overwrite (so the owner of -8 fails loudly on a missing artifact instead of passing on this plan's positive control) and moved to -9 with exclusive-create writes. The owner of plan-2026-09-28-8 must regenerate its routing artifact.",
+  "knowledge_consulted": [
+    "searched --estate --multi 'hyvee retired store carried rows' 'N for M multibuy each price' 'Sams pack total pieces weight' 'hyvee size conflict relink': hits were data-quality-craft/applies-here.md (silent semantic change; first-match-wins) and memories board-basis-ambiguity, grocery-engine-guards, board-data-integrity; none opened beyond the hook, so none is claimed as used",
+    "used .claude/rules/grocery.md gr-08 (an Aldi multipack card is one unit or the pack total; resolve by arithmetic proof only, a name size equal to the card proves nothing, no plausibility bar): it rules out a piece-weight plausibility test for 0cefa4 and shapes the recommended option D, refuse on disagreement",
+    "used .claude/rules/grocery.md gr-11 (Hy-Vee asks rows withheld only for its store first): matched against Get-HyVeeAskOrder rank 1 in pull-regular-hyvee.ps1 for bf2c6f",
+    "used the dispatch's pasted machinery:grocery/pricing-math-lib.ps1 (dot-source it, never cut functions from compare-deals): the 633d2b harness dot-sources the real lib rather than copying Get-UnitPrice",
+    "used .claude/rules/ops-and-gates.md og-06 (a threshold detector carries a case at its bar and a step past it): the 1b7001 proof asks for the 2.5 vs 2.38 oz case (ratio 1.050) as the at-bar clean twin"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-25-1b7001",
+      "subject": "Triage residual: Hy-Vee size-conflict links the size-first relink could not re-point (residual of 2026-09-25-c2a750)",
+      "classification": "capture-gap",
+      "lane": "ops",
+      "est_tool_calls": 40,
+      "evidence": [
+        "grocery/out/regular/hyvee-regular-2026-09-28.json size_conflict_parked: 13 pids. 7 record ours EQUAL to theirs: 2925188 Hy-Vee Ground Ginger 2 oz/2 oz, 2918306 Hy-Vee Dill Weed 0.75 oz/0.75 oz, 37443 Poblano Peppers lb/lb, 37464 Tomatillos lb/lb, 444508 Hy-Vee Sloppy Joe Sauce 15 oz/15 oz, 19478 Spice World Minced Garlic 32 oz/32 oz, 55979 Hy-Vee Ground Cloves 2 oz/2 oz. A size conflict of a size against itself is impossible (ratio 1.0 always passes the 0.05 test at pull-regular-hyvee.ps1 line 772).",
+        "The same file holds TWO rows of one name for each of those 7 plus 11342, 47144, 1334638: the current row with a stored product_id at Hy-Vee's size, and a stale July row with product_id null at the old size. Examples: 'Hy-Vee Ground Ginger' 2 oz pid 2925188 store 1465 as_of 2026-08-21 AND 'Hy-Vee Ground Ginger' 0.55 oz no id store 1465 as_of 2026-07-18; 'Dinty Moore Beef Stew' 38 oz pid 11342 AND 15 oz no id (2026-07-15); 'Hy-Vee Select Cheese Tortellini' 42 oz pid 1334638 store 1466 AND 19 oz no id (2026-07-18). Measured: exactly 10 stale no-id twins of a pid-owning row at another size, one for each of the 10 non-genuine parked pids.",
+        "capture_terms in hyvee-regular-2026-09-28.json carry pid 2925188 TWICE: product-0642-2925188 and product-1266-2925188, i.e. two work entries share one product id.",
+        "grocery/logs-archive/ad-cycle-log-2026-08.txt: 'Hy-Vee Ground Ginger  ours=[0.55 oz] hy-vee=[2 oz]  qty 0.55 vs 2' and 'Hy-Vee Ground Cloves  ours=[0.55 oz] hy-vee=[2 oz]': the refused entry is the stale twin.",
+        "grocery/product-urls.json line 13035 links Hy-Vee 'https://www.hy-vee.com/aisles-online/p/2925188/hy-vee-ground-ginger'. The stale 0.55 oz row misses the exact name+size key and is bound to 2925188 by the name-only match at pull-regular-hyvee.ps1 lines 1621-1622 ($byNm.Count -eq 1).",
+        "pull-regular-hyvee.ps1 line 399 builds $sizeByPid from the FIRST work entry per pid and line 417 records size = $sizeByPid[$p]; Test-HyVeeAskParked (line 372) parks any entry whose work size equals that recorded size. So the correct 2 oz row is parked and the stale 0.55 oz row, whose size never matches, is re-asked and refused (444508 streak 2, last_asked 2026-09-28).",
+        "Board comparison-2026-09-28: 3 live Hy-Vee cells rest on a parked pid and are never re-read while parked: sloppy-joe-sauce (444508, as_of 2026-09-22), ground-cloves (55979, 2026-08-24), tomatillos (37464, 2026-08-24). They age out at as_of+90: 2026-11-22, 2026-11-22, 2026-12-21.",
+        "The other 3 parked pids are genuine size drifts: 2950925 That's Smart Ground Cinnamon 2.5 oz vs 2.38 oz (ratio 1.050), 332699 Johnson Family Farm Fresh Basil and 269490 Fresh Mint 0.75 oz vs 0.8 oz."
+      ],
+      "root_cause": "The ask ledger and its size-conflict park are keyed by product id alone, while a refusal belongs to one work entry (name+size). The work list binds a stale no-id row to its same-name sibling's product id by the name-only link match (lines 1621-1622), so one pid carries two work entries of different sizes; Update-HyVeeAskLedger then records the first entry's size, not the refused entry's, and Test-HyVeeAskParked parks the entry that does NOT conflict. Any product Hy-Vee re-sized since July, whose old-size row is still carried, lands in this state.",
+      "surface_fix": {
+        "what": "Test-HyVeeAskParked returns '' (not parked) for a size-conflict entry whose recorded size equals its recorded theirs (ordinal, trimmed): that entry is self-contradictory. Unparks the 7 persisted entries with no data edit.",
+        "files": [
+          "grocery/pull-regular-hyvee.ps1"
+        ],
+        "exact_change": "in Test-HyVeeAskParked, inside the size-conflict branch and before the ordinal size compare: if ([string]::Equals(([string]$Entry['size']).Trim(), ([string]$Entry['theirs']).Trim(), [StringComparison]::Ordinal)) { return '' }"
+      },
+      "root_fix": {
+        "what": "(1) The work list never binds a no-id row to a product id by NAME ALONE when that link's exact name+size key is itself a row in the previous file: the product already has its own row at the link's size, so the stale twin keeps pid 0, is carried unasked and ages out at as_of+90 (2026-10-13 to 2026-10-18 for the 10 twins). (2) Update-HyVeeAskLedger records the REFUSED entry's own size: Invoke-HyVeeWorkPass adds ours = $size to each SizeConflictRows entry (line 784) and line 417 prefers it over $sizeByPid for a size-conflict outcome. (3) Correct the stale comment at line 880 ('under the 14-day rotation'; RotationDays is the 90-day quarter).",
+        "where": "grocery/pull-regular-hyvee.ps1: work-list build lines 1601-1625 (collect the prev-row name|size keys first, then skip the $byNm bind when $idByName holds that name at a size that is itself a prev-row key); Invoke-HyVeeWorkPass line 784; Update-HyVeeAskLedger line 417; comment line 880",
+        "exact_change": "before the foreach at 1601 build $prevKeys = @{} of name|size for every prev row; in the else branch at 1620-1623, bind from $byNm[0] only when -not $prevKeys.ContainsKey($byNm[0].nm + '|' + <that link's size key>) (the developer reads the size half of the $idByName key it matched); line 784 adds ours = [string]$size; line 417: size = if ($outc -eq $script:HvSizeConflictReason -and $oursByPid.ContainsKey($p)) { $oursByPid[$p] } else { [string]$sizeByPid[$p] }"
+      },
+      "leaves_open": "3 genuine Hy-Vee size drifts stay parked by design (2950925 ground cinnamon 2.5 vs 2.38 oz, 332699 fresh basil and 269490 fresh mint 0.75 vs 0.8 oz); resolve-hyvee-links will not re-point them because it only relinks to a product AT the link's size, so they need a rule for re-binding to Hy-Vee's own size. None backs a board cell (ground-cinnamon, fresh-basil, fresh-mint have no Hy-Vee cell on comparison-2026-09-28).",
+      "leaves_open_occurrences": 3,
+      "leaves_open_occurrences_window": "parked on every run 2026-09-26 to 2026-09-28 (3 runs)",
+      "leaves_open_followup": null,
+      "blast_radius": {
+        "measured_as": "routing",
+        "corpus": "grocery/out/regular/hyvee-regular-2026-09-28.json (1,546 rows) and grocery/out/hyvee-ask-ledger.json after the 2026-09-28 run; no matching rule changes, so commodity routing is identical before and after for every row",
+        "affected_now": 10,
+        "names": "work entries whose product id changes: the 10 stale no-id twins lose their name-bound pid (Hy-Vee Ground Ginger 0.55 oz, Hy-Vee Dill Weed 0.25 oz, Poblano Peppers 0.25 lbs, Tomatillos 0.15 lbs, Hy-Vee Sloppy Joe Sauce 24 oz, Spice World Minced Garlic 4.5 oz, Hy-Vee Ground Cloves 0.55 oz, Dinty Moore Beef Stew 15 oz, Hormel Mary Kitchen Corned Beef Hash 14 oz, Hy-Vee Select Cheese Tortellini 19 oz). All are store 1465, as_of 2026-07-15 to 2026-07-20, and the board already refuses them as wrong-store, so no cell reads them. Ledger entries unparked: 7.",
+        "cell_effects": [
+          {
+            "commodity": "sloppy-joe-sauce",
+            "store": "Hy-Vee",
+            "before": "carried, parked, never re-read",
+            "after": "re-read in rotation at Hy-Vee's live price; value unknown until read"
+          },
+          {
+            "commodity": "ground-cloves",
+            "store": "Hy-Vee",
+            "before": "carried, parked, never re-read",
+            "after": "re-read in rotation; value unknown until read"
+          },
+          {
+            "commodity": "tomatillos",
+            "store": "Hy-Vee",
+            "before": "carried, parked, never re-read",
+            "after": "re-read in rotation; value unknown until read"
+          },
+          {
+            "commodity": "ground-ginger, dried-dill, poblano-peppers, minced-garlic",
+            "store": "Hy-Vee",
+            "before": "no Hy-Vee cell (row read at retired 1465, parked)",
+            "after": "a Hy-Vee cell appears once the row is re-read at 1466 in rank-1 rotation; value unknown until read"
+          }
+        ],
+        "developer_check": "run pull-regular-hyvee.ps1 -DryRun against a SCRATCH -OutDir seeded with copies of hyvee-regular-2026-09-28.json and hyvee-ask-ledger.json: expect 10 fewer pid-bound work entries, capture_terms with exactly one term per pid for the 10 pids, and size_conflict_parked down from 13 to 3",
+        "measured_by": "scratch python over hyvee-regular-2026-09-28.json deals (1,546 rows): no-id rows whose lowercased name matches a row holding a product_id at a different size (10 found), cross-checked against size_conflict_parked (13) and hyvee-ask-ledger.json size-conflict entries (13, of which 7 have size == theirs); capture_terms grepped for duplicate pid suffixes"
+      },
+      "proof": {
+        "must_fire_case": "pull-regular-hyvee.ps1 -SelfTest, frozen from hyvee-regular-2026-09-28.json: prev rows 'Hy-Vee Ground Ginger' 2 oz product_id 2925188 and 'Hy-Vee Ground Ginger' 0.55 oz no product_id, link 'Hy-Vee Ground Ginger' 2 oz pid 2925188: MUST FIRE the 0.55 oz work entry has pid 0 and the 2 oz entry keeps 2925188. Second: ledger entry {size '2 oz', theirs '2 oz', last_outcome size-conflict} with WorkSize '2 oz': MUST FIRE Test-HyVeeAskParked returns ''. Third: Update-HyVeeAskLedger over two work entries of pid 11342, the 38 oz entry FIRST (answered) and the 15 oz entry second (refused as a size conflict): MUST FIRE the recorded size is 15 oz, taken from SizeConflictRows ours, not 38 oz from the first entry.",
+        "clean_twin": "CLEAN TWIN: a lone no-id row 'Hy-Vee Mild Green Chiles' 7 oz whose name uniquely matches a link with no prev row of its own still binds the link's pid (the 2026-07-15 recovery the comment at line 1609 protects). CLEAN TWIN at the bar: ledger {size '2.5 oz', theirs '2.38 oz'} with WorkSize '2.5 oz' stays 'size-conflict' (ratio 1.050, one step past the 0.05 tolerance). The existing 90de7b parking fixtures stay green.",
+        "guard_or_fixture": "grocery/pull-regular-hyvee.ps1 -SelfTest (run-gates discovers it); read its exit code and its own last verdict line"
+      },
+      "rollback": "Revert the commit. The ledger is not rewritten by the fix, so the 7 entries simply read as parked again.",
+      "freshness": "measured 2026-09-28 afternoon at HEAD c349cbd77 against hyvee-regular-2026-09-28.json (written 08:01), hyvee-ask-ledger.json from the 2026-09-28 run, product-urls.json at HEAD, board comparison-2026-09-28 (08:17:56)",
+      "publish_batch": null,
+      "status": "planned",
+      "resolution_note": "Of 13 parked Hy-Vee size conflicts, 10 were not conflicts of the row being parked: a stale July row of the same name (old size, no stored id) was bound to the product id by name, was the one refused, and the ledger then parked the CORRECT row under the shared id. Fix: no name-only id bind when the product already has its own row at the link size; the ledger records the refused entry's size; a size conflict of a size against itself is never parked. 3 cells (sloppy-joe-sauce, ground-cloves, tomatillos) resume re-reads. Residual: 3 genuine size drifts (ground cinnamon, fresh basil, fresh mint) need a re-bind-to-Hy-Vee-size rule; none is on the board."
     },
-    "measured_by": "scratch nform2.ps1 dot-sourcing grocery/pricing-math-lib.ps1 at HEAD c349cbd77: Get-UnitPrice (before), Resolve-MultibuyPackCount as shipped (naive) and the same resolver on Get-EachPackCount (fix) over every each-unit candidate row of candidates-2026-09-28.json, joined to comparison-2026-09-28 cells by commodity|store; output frozen in plan-2026-09-28-9.routing.json"
-   },
-   "proof": {
-    "must_fire_case": "compare-deals/selftest-1.ps1 section 5b (compare-deals.ps1 -SelfTest), frozen from candidates-2026-09-28: MUST FIRE Get-UnitPrice of 'Pillsbury Toaster Pastries, Apple 6 Ea' | '2 for $6.00' | size '6 ea' on an each commodity is 0.50 (today 3.00); MUST FIRE 'King's Hawaiian rolls, 6 to 12 ct., 2/ $8.00' is 0.6667, the least favourable 6 (the naive widening gives 0.3333, so this case kills the reader-swap mutant); MUST FIRE Fareway 'Sunbelt Bakery Granola Bars (2/$5)' | '$2.50' | '8-10 ct' is 0.3125.",
-    "clean_twin": "CLEAN TWIN: a single-piece 'N for $M' with no count anywhere (name 'Hass Avocado', price '2 for $3.00', size '') stays per-each 1.50; the existing Dove BOGO 6 Ea cases stay 1.812 and the 6 Ea vs 4 ct conflict stays null; a plain '$2.99' 12 ct row still reads per-12-pack; a pack_is_package commodity (garlic-bread 8 Ea, '2 for $5.00') still prices per package.",
-    "guard_or_fixture": "compare-deals.ps1 -SelfTest (reaches pricing-math-lib's each branch directly through Get-UnitPrice); then test-auditors.ps1 and test-guards.ps1 in the gated chain"
-   },
-   "rollback": "Revert the commit; the next daily build restores per-each on those rows. No data file is written by the change.",
-   "freshness": "measured 2026-09-28 afternoon at HEAD c349cbd77 against candidates-2026-09-28.json (08:07) and board comparison-2026-09-28 (08:17:56). The ad week turns over, so the developer re-runs the replay against the newest candidates file before shipping and diffs against plan-2026-09-28-9.routing.json.",
-   "publish_batch": "money-1",
-   "status": "planned",
-   "resolution_note": "An 'N for $M' deal on an each-unit commodity with a stated pack count now divides by the count, like a plain price and a Buy-N-Get-K already did, and every each path reads a count range at its least favourable end. On candidates-2026-09-28: 18 rows re-based, 0 refused, 1 cell moves (tortillas at Hy-Vee 0.5612 -> 0.125, La Banderita 20 ct 2/$5; crown unmoved). The queue's own widening shape would have understated three rows and moved two cells the wrong way; the reader swap is what prevents that. Residual: 30 non-plain rows with no count stay per-each."
-  },
-  {
-   "queue_id": "2026-09-25-0cefa4",
-   "subject": "Triage residual: Sam's weight-first pack total vs pieces needs a reading rule (dc1b5b residual 6)",
-   "classification": "needs-brad",
-   "lane": "money",
-   "evidence": [
-    "Over 24 Sam's deal files (grocery/out/sams/sams-deals-2026-09-*.json), 993 distinct names carry the weight-first shape '<weight>, N pk/ct'; 966 carry Sam's own unit price (field sams_unit_price). Of the 639 whose unit price is per weight: 616 (96%) reproduce the PIECES reading the engine uses, 23 reproduce the TOTAL reading, 27 have no unit price, the rest are '/ea'.",
-    "Sam's own unit price is NOT a sound oracle, which rules out options A and C as written: among the 23 TOTAL matches are rows where Sam's divided by ONE piece, e.g. 'Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk.' $8.52 at 53.3 cents/oz (six 1 lb boxes are 8.9 cents/oz), 'Sunlee Coconut Milk 13.5 oz., 6 pk.' $11.48 at 85.0 cents/fl oz, 'Nate's Honey ... 16 oz., 2 pk.' $9.98 at $0.62/oz. Others are genuine totals: 'Cafe Bustelo Ground Coffee, 40 oz., 4 ct.' $21.18 at $0.53/oz, 'Hormel Black Label Fully Cooked Bacon (10.5 oz., 72 ct.)', 'Ball Park Tailgaters Brat Buns 32 oz., 12 ct.'.",
-    "Live exposure on comparison-2026-09-28 and candidates-2026-09-28 is ZERO: every genuine-total row on a weight commodity is withheld (Cafe Bustelo 40 oz 4 ct: WITHHELD-SHIP-ONLY and WITHHELD-UNPROVEN-CHANNEL); each-unit rows price by count, which is right per piece (Red Baron 12 PK 1.2483 per-12-pack on frozen-pizza, Thomas' English Muffins 0.49 per-12-pack); the Red Baron row is held by known-wrong key frozen-pizza|SamsClub|red-baron-pepperoni-four-cheese-deep-dish-single (ruled 2026-09-19, 69.60 oz = 5.8 oz each, under the 12 oz piece floor)."
-   ],
-   "root_cause": "The name '<weight>, N pk' is written both ways by Sam's (N pieces of that weight, 616 of 639 measurable rows, or a pack total, at least Cafe Bustelo, Hormel bacon, Ball Park buns, Red Baron), and neither the row nor Sam's own unit price can say which, because Sam's own unit price carries the same ambiguity. Only a reading that uses the weight is exposed: a weight-unit commodity's per-oz price and the frozen-pizza piece-size floor.",
-   "resolution_note": "Parked for Brad's reading rule. Measured: Sam's own unit price cannot decide it (it is itself computed per piece on some rows), so options A and C would admit wrong readings. Recommendation D: where the weight is used (weight-unit commodities and the piece-size floor), a weight-first pack row whose Sam's unit price agrees with neither reading, or agrees with the reading we did NOT take, is withheld as a basis conflict, never guessed; count-priced each rows are untouched. Zero live cells are exposed today and known-wrong holds the one row that was, so B is the holding position until the ruling."
-  }
- ],
- "open_questions_for_brad": [
-  {
-   "id": "2026-09-25-0cefa4",
-   "question": "Sam's writes '69.60 oz., 12 PK' both as twelve 69.6 oz items and as a 69.6 oz box of twelve. Sam's own per-ounce price is no help, because it has the same mix-up on some rows. How should the board read these?",
-   "why_it_matters": "Today nothing on the board is wrong because of it (the one bad row is held by hand). But a coffee or bacon row read the wrong way would show a price about 4 times too cheap if its store channel is ever proven.",
-   "options": "A: trust Sam's per-ounce price (measured unsafe). B: keep today's reading and hold each bad row by hand. C: read Sam's product page (same unsafe number). D: where the weight matters, if Sam's number disagrees with our reading, leave that row off the board instead of guessing.",
-   "recommendation": "D. It never guesses, touches only rows where the weight is used, and needs no hand-holding per row."
-  }
- ],
- "ship_sequence": [
-  "1. money-1: 2026-09-25-633d2b. Branch, then pricing-math-lib.ps1 (Resolve-MultibuyPackCount reads Get-EachPackCount; each branch divides for every non-plain price) plus compare-deals/selftest-1.ps1 section 5b cases. Gated chain: compare-deals.ps1 -SelfTest, test-auditors.ps1, test-guards.ps1; replay candidates of the newest date in a scratch dir and diff against plan-2026-09-28-9.routing.json; scratch rebuild to confirm tortillas|Hy-Vee 0.5612 -> about 0.125 and no other cell move. Land through ops/push-main.ps1 (chain change; never git push origin HEAD:main). The next daily build publishes it; verify the tortillas Hy-Vee chip on the live board with a cache-busting query parameter.",
-  "2. ops: 2026-09-25-1b7001. Separate commit, pull-regular-hyvee.ps1 only (name-only bind skip, refused-entry size in the ledger, self-contradictory park returns '', line 880 comment). Proof: pull-regular-hyvee.ps1 -SelfTest exit 0 with its verdict line; -DryRun against a scratch -OutDir seeded with copies of the 09-28 file and ledger shows size_conflict_parked 13 -> 3. Land through ops/push-main.ps1. Live check after the next 08:00 Hy-Vee pull: size_conflict_parked lists only 2950925, 332699, 269490 and capture_terms carry one term per pid.",
-  "3. no code: 2026-09-25-bf2c6f closes with its resolution note.",
-  "4. no code: 2026-09-25-0cefa4 stays open as needs-brad; B (known-wrong hold) stands until the ruling."
- ]
+    {
+      "queue_id": "2026-09-25-bf2c6f",
+      "subject": "Triage residual: 957 Hy-Vee rows still carried from the retired store 1465 (Omaha #01)",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 5,
+      "evidence": [
+        "store_id counts in grocery/out/regular/hyvee-regular-*.json: 09-25 1465=957 1466=327, 09-26 957/327, 09-27 945/339, 09-28 885/399 (ask_budget 20, 20, 20, 111; the 111 is sale expiries taking room under the cap, Get-HyVeeProductBudget lines 238-251; the rotation floor is ceil(1287 askable / 90) = 15).",
+        "Of the 885 on 09-28: 839 hold a product_id, 46 do not (never askable; they age out by design, the 2026-09-22-3366e4 class). as_of range 2026-07-14 to 2026-08-21, so age-outs fall 2026-10-12 to 2026-11-19 (291 in October, 594 in November).",
+        "Get-HyVeeAskOrder (pull-regular-hyvee.ps1 lines 272-296) already asks rank 1 first: any row whose store_id is not the pinned 1466, oldest of max(as_of, last_asked) first. All 839 id-bearing 1465 rows are rank 1. Ask ledger: 812 never asked, 21 last outcome 'no usable offer', 6 size conflict.",
+        "Simulation of that order from 2026-09-29 (scratch, ledger keys applied): at 20 asks a day no never-asked row reaches its turn after its age-out (the 21 late rows are the ones already asked at 1466 and refused, which is the designed outcome); at the 15-a-day floor about 32 never-asked rows would be 1 to 4 days late (59 late minus the 27 already refused). The daily budget has not been below 20 on any day 2026-09-25 to 2026-09-28.",
+        "Board comparison-2026-09-28: 0 of 323 Hy-Vee cells rest on a 1465 row (3 name overlaps carry as_of 2026-08-24 and 2026-09-22, later than any 1465 row). No wrong price is served and none is at risk from the age-outs."
+      ],
+      "root_cause": "The question was whether rotation re-asks the 1465 rows at 1466 before their 90-day age-out. It does: the rank-1 off-target-first order (shipped 2026-09-19 and 2026-09-25) makes the whole migration finish around 2026-11-09 at the observed 20 a day. Only at the 15-a-day floor, on days with no sale expiries, would about 32 products miss their turn by 1 to 4 days.",
+      "root_fix_none_because": "The mechanism the item asked for (an owed-terms queue like Get-WalmartRulingOwed) already exists in effect as Get-HyVeeAskOrder rank 1, and at the observed budget it reaches every never-asked row in time. A deadline term would pay for a worst case that has not happened on any measured day.",
+      "leaves_open": "At the 15-a-day floor, about 32 never-asked 1465 products (as_of 2026-08-21) would reach their ask after their age-out on 2026-11-19 and drop out of the lane unless product-urls links them. Separately, 46 no-id 1465 rows can never be re-asked and age out by design. 10 more are stale twins that 2026-09-25-1b7001's fix leaves unasked on purpose.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "no id-bearing 1465 row has aged out yet: expired_past_carry = 0 on every file 2026-09-25 to 2026-09-28; the first age-out date is 2026-10-12",
+      "leaves_open_followup": null,
+      "status": "planned",
+      "resolution_note": "No code change. The 885 Hy-Vee rows still stamped at the retired store are already asked first (rank 1 of Get-HyVeeAskOrder). At the observed 20+ asks a day, every never-asked one is re-read at 1466 before its 90-day age-out; the migration ends about 2026-11-09. None backs a board cell today. Watch: if the daily ask_budget sits at the 15 floor through November, about 32 products could age out 1 to 4 days early; expired_past_carry in the Hy-Vee file is the counter to read."
+    },
+    {
+      "queue_id": "2026-09-25-633d2b",
+      "subject": "Triage residual: N-for-M deals on each-unit commodities priced per pack (18 rows, from 9459a1)",
+      "classification": "parse-basis-bug",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "evidence": [
+        "Corpus changed since the item was written: the 09-23 Eggo, Bomb Pop and Little Bites rows are gone from candidates-2026-09-28. Today, over 8,141 each-unit candidate rows, 48 carry a non-plain price and 18 of those state a pack count and fall to 'per-each' (routing artifact per_unit_changes).",
+        "Family Fare | toaster-pastries | 'Pillsbury Toaster Pastries, Apple 6 Ea' | '2 for $6.00' | size '6 ea' | today 3.00 per-each; true 0.50 a pastry",
+        "Family Fare | granola-bars | 'Nature Valley Chewy Peanut Granola Bars 6 Ea' (and 10 more Nature Valley / Fiber One rows) | '2 for $5.00' | '6 ea' or '5 ea' | today 2.50 per-each; true 0.4167 or 0.50",
+        "Family Fare | bottled-water | 'Ice Mountain Spring Water 12 Ea' | '2 for $9.00 with purchase' | '12 ea' | today 4.50 per-each; true 0.375",
+        "Hy-Vee | tortillas | 'La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00' | per_item 2.50 | today 2.50 per-each",
+        "Hy-Vee | dinner-rolls | 'King's Hawaiian rolls, 6 to 12 ct., 2/ $8.00' | per_item 4.00 | today 4.00 per-each",
+        "Fareway | granola-bars | 'Sunbelt Bakery Granola Bars (2/$5)' | '$2.50' | size '8-10 ct' | today 2.50 per-each",
+        "THE TRAP IN THE QUEUE'S OWN FIX SHAPE: widening the 9459a1 branch as written calls Resolve-MultibuyPackCount, which reads counts with Get-PackCount and takes the HIGH end of a range, while the plain each path reads Get-EachPackCount and takes the least favourable LOW end (aa28983df). Measured: tortillas would read /30 (0.0833, not 0.125), King's Hawaiian /12 (0.3333, not 0.6667), Sunbelt /10 (0.25, not 0.3125), and two of those would take their store's cell at an understated price (dinner-rolls|Hy-Vee 0.4158 -> 0.3333, granola-bars|Fareway 0.288 -> 0.25)."
+      ],
+      "root_cause": "The each branch of Get-UnitPrice has two count readers and a price-shape allow-list. The plain path divides with Get-EachPackCount; the multibuy path (9459a1) divides with Resolve-MultibuyPackCount, which reads Get-PackCount and so ignores the least-favourable-range rule; and only a Buy-N-Get-K price text (Test-IsMultibuy) reaches the dividing path at all. Every other non-plain shape ('N for $M', '2/ $5.00', '(2/$5)' in a name) with a stated count falls to 'per-each' and ships the package price as one unit.",
+      "surface_fix": {
+        "what": "divide a stated pack count for every non-plain price on an each-unit commodity, not only Buy-N-Get-K",
+        "files": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "exact_change": "line 1124: if ((-not $plain) -and (Test-IsMultibuy ([string]$deal.price_text))) becomes if (-not $plain); the basis string at 1127 names the shape: 'per-N-pack (non-plain, count from ...)'. Update the comment block at 1113-1123 to drop the 'left for their own item' paragraph."
+      },
+      "root_fix": {
+        "what": "ONE count reader for the each branch: Resolve-MultibuyPackCount reads each party with Get-EachPackCount instead of Get-PackCount, so a count range ('6 to 12 ct', '8-10 ct', '20 or 30 ct') takes its least favourable end on every path and a conflict between parties is still refused. Measured: this changes the count of 0 existing Buy-N-Get-K rows on candidates-2026-09-28.",
+        "where": "grocery/pricing-math-lib.ps1 Resolve-MultibuyPackCount lines 1142-1144",
+        "exact_change": "replace the three Get-PackCount calls in Resolve-MultibuyPackCount with Get-EachPackCount. Before shipping, run ops/count-source-lifters.ps1 -Script grocery/pricing-math-lib.ps1 and grep Resolve-MultibuyPackCount across grocery/ and ops/ (compare-deals.ps1 holds 1 reference): every caller must want the each reading, or gets its own function."
+      },
+      "leaves_open": "30 of the 48 non-plain each-unit rows on candidates-2026-09-28 state no count at all and still price per-each. That is right when the deal unit is one piece (2 avocados for $3) and unknowable when it is a package of unstated count; Get-MultibuyRefusalHalf already labels those 'unresolved'. They were not classified one by one in this run.",
+      "leaves_open_occurrences": 30,
+      "leaves_open_occurrences_window": "candidate rows on one board, candidates-2026-09-28; candidates of the class, not confirmed defects",
+      "leaves_open_followup": "2026-09-28-7c3a24",
+      "blast_radius": {
+        "measured_as": "routing",
+        "corpus": "grocery/out/candidates-2026-09-28.json (built 08:07), all 593 commodities, each-unit rows replayed through the real pricing-math-lib.ps1 at HEAD c349cbd77; one corpus for every section, no skipped files",
+        "routing_changes": 0,
+        "affected_now": 18,
+        "names": "the 18 rows in plan-2026-09-28-9.routing.json per_unit_changes: 11 Family Fare granola-bars (Nature Valley, Fiber One), 2 Family Fare bottled-water (Ice Mountain 24 pk and 12 Ea), 1 Family Fare toaster-pastries (Pillsbury Apple 6 Ea), 1 Hy-Vee tortillas (La Banderita), 1 Hy-Vee dinner-rolls (King's Hawaiian), 1 Fareway granola-bars (Sunbelt 2/$5). 0 are refused as count conflicts. No commodity loses a cell.",
+        "cell_effects": [
+          {
+            "commodity": "tortillas",
+            "store": "Hy-Vee",
+            "before": 0.5612,
+            "after": 0.125,
+            "row": "La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00 read at its least favourable 20",
+            "crown": "Aldi 0.0925, unmoved"
+          }
+        ],
+        "cells_unmoved_note": "the other 17 rows lose to their store's existing cell: toaster-pastries|Family Fare 0.2325 vs 0.50, bottled-water|Family Fare 0.1662 vs 0.1875 and 0.375, granola-bars|Family Fare 0.279 vs 0.4167 and 0.50, dinner-rolls|Hy-Vee 0.4158 vs 0.6667, granola-bars|Fareway 0.288 vs 0.3125",
+        "method_caveat": "cell effects are predicted as the minimum per-unit over the store's candidate rows; the developer confirms with a scratch rebuild, never the live out/",
+        "positive_control": {
+          "name": "Pillsbury Toaster Pastries, Apple 6 Ea",
+          "expected": "6",
+          "observed": "6"
+        },
+        "measured_by": "scratch nform2.ps1 dot-sourcing grocery/pricing-math-lib.ps1 at HEAD c349cbd77: Get-UnitPrice (before), Resolve-MultibuyPackCount as shipped (naive) and the same resolver on Get-EachPackCount (fix) over every each-unit candidate row of candidates-2026-09-28.json, joined to comparison-2026-09-28 cells by commodity|store; output frozen in plan-2026-09-28-9.routing.json"
+      },
+      "proof": {
+        "must_fire_case": "compare-deals/selftest-1.ps1 section 5b (compare-deals.ps1 -SelfTest), frozen from candidates-2026-09-28: MUST FIRE Get-UnitPrice of 'Pillsbury Toaster Pastries, Apple 6 Ea' | '2 for $6.00' | size '6 ea' on an each commodity is 0.50 (today 3.00); MUST FIRE 'King's Hawaiian rolls, 6 to 12 ct., 2/ $8.00' is 0.6667, the least favourable 6 (the naive widening gives 0.3333, so this case kills the reader-swap mutant); MUST FIRE Fareway 'Sunbelt Bakery Granola Bars (2/$5)' | '$2.50' | '8-10 ct' is 0.3125.",
+        "clean_twin": "CLEAN TWIN: a single-piece 'N for $M' with no count anywhere (name 'Hass Avocado', price '2 for $3.00', size '') stays per-each 1.50; the existing Dove BOGO 6 Ea cases stay 1.812 and the 6 Ea vs 4 ct conflict stays null; a plain '$2.99' 12 ct row still reads per-12-pack; a pack_is_package commodity (garlic-bread 8 Ea, '2 for $5.00') still prices per package.",
+        "guard_or_fixture": "compare-deals.ps1 -SelfTest (reaches pricing-math-lib's each branch directly through Get-UnitPrice); then test-auditors.ps1 and test-guards.ps1 in the gated chain"
+      },
+      "rollback": "Revert the commit; the next daily build restores per-each on those rows. No data file is written by the change.",
+      "freshness": "measured 2026-09-28 afternoon at HEAD c349cbd77 against candidates-2026-09-28.json (08:07) and board comparison-2026-09-28 (08:17:56). The ad week turns over, so the developer re-runs the replay against the newest candidates file before shipping and diffs against plan-2026-09-28-9.routing.json.",
+      "publish_batch": "money-1",
+      "status": "done",
+      "resolution_note": "An 'N for $M' deal on an each-unit commodity with a stated pack count now divides by the count, like a plain price and a Buy-N-Get-K already did, and every each path reads a count range at its least favourable end (Resolve-MultibuyPackCount now reads Get-EachPackCount). On candidates-2026-09-28: 18 rows re-based, 0 refused, 0 Buy-N-Get-K rows changed, 1 cell moves (tortillas at Hy-Vee 0.5612 -> 0.125, La Banderita 20 ct 2/$5; crown Aldi 0.0925 unmoved). Proof: compare-deals.ps1 -SelfTest exit 0, SELF-TEST PASS, with section 5b-ii (4 MUST FIRE incl. the King's Hawaiian reader-swap killer, 3 CLEAN TWIN). Residual: 30 non-plain rows with no count stay per-each.",
+      "premise_verified": "true: newest candidates is still candidates-2026-09-28 (plan freshness holds). Replayed all 8,141 each-unit candidate rows through HEAD pricing-math-lib and the changed lib (scratch replay633.ps1 + diff633.py): 18 rows re-based, exactly the 18 of plan-2026-09-28-9.routing.json per_unit_changes with identical values, 0 outside the artifact, 0 missing, 0 refused, 0 Buy-N-Get-K rows changed. Board comparison-2026-09-28: tortillas|Hy-Vee is 0.5612 (Mission Carb Balance 8Ct) and La Banderita sits OUT-OF-BAND at per-each 2.50; at 0.125 it lies between published values, crown Aldi 0.0925 unmoved (Sam's 0.123 also stays below). No full scratch compare-deals rebuild was run; the cell move is confirmed by replay plus bracket, not by a rebuilt board.",
+      "live_check": "tortillas | Hy-Vee | 0.125 (La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00), cheapest stays Aldi 0.0925; visible after the next daily build",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 34
+    },
+    {
+      "queue_id": "2026-09-25-0cefa4",
+      "subject": "Triage residual: Sam's weight-first pack total vs pieces needs a reading rule (dc1b5b residual 6)",
+      "classification": "needs-brad",
+      "lane": "money",
+      "evidence": [
+        "Over 24 Sam's deal files (grocery/out/sams/sams-deals-2026-09-*.json), 993 distinct names carry the weight-first shape '<weight>, N pk/ct'; 966 carry Sam's own unit price (field sams_unit_price). Of the 639 whose unit price is per weight: 616 (96%) reproduce the PIECES reading the engine uses, 23 reproduce the TOTAL reading, 27 have no unit price, the rest are '/ea'.",
+        "Sam's own unit price is NOT a sound oracle, which rules out options A and C as written: among the 23 TOTAL matches are rows where Sam's divided by ONE piece, e.g. 'Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk.' $8.52 at 53.3 cents/oz (six 1 lb boxes are 8.9 cents/oz), 'Sunlee Coconut Milk 13.5 oz., 6 pk.' $11.48 at 85.0 cents/fl oz, 'Nate's Honey ... 16 oz., 2 pk.' $9.98 at $0.62/oz. Others are genuine totals: 'Cafe Bustelo Ground Coffee, 40 oz., 4 ct.' $21.18 at $0.53/oz, 'Hormel Black Label Fully Cooked Bacon (10.5 oz., 72 ct.)', 'Ball Park Tailgaters Brat Buns 32 oz., 12 ct.'.",
+        "Live exposure on comparison-2026-09-28 and candidates-2026-09-28 is ZERO: every genuine-total row on a weight commodity is withheld (Cafe Bustelo 40 oz 4 ct: WITHHELD-SHIP-ONLY and WITHHELD-UNPROVEN-CHANNEL); each-unit rows price by count, which is right per piece (Red Baron 12 PK 1.2483 per-12-pack on frozen-pizza, Thomas' English Muffins 0.49 per-12-pack); the Red Baron row is held by known-wrong key frozen-pizza|SamsClub|red-baron-pepperoni-four-cheese-deep-dish-single (ruled 2026-09-19, 69.60 oz = 5.8 oz each, under the 12 oz piece floor)."
+      ],
+      "root_cause": "The name '<weight>, N pk' is written both ways by Sam's (N pieces of that weight, 616 of 639 measurable rows, or a pack total, at least Cafe Bustelo, Hormel bacon, Ball Park buns, Red Baron), and neither the row nor Sam's own unit price can say which, because Sam's own unit price carries the same ambiguity. Only a reading that uses the weight is exposed: a weight-unit commodity's per-oz price and the frozen-pizza piece-size floor.",
+      "resolution_note": "Parked for Brad's reading rule. Measured: Sam's own unit price cannot decide it (it is itself computed per piece on some rows), so options A and C would admit wrong readings. Recommendation D: where the weight is used (weight-unit commodities and the piece-size floor), a weight-first pack row whose Sam's unit price agrees with neither reading, or agrees with the reading we did NOT take, is withheld as a basis conflict, never guessed; count-priced each rows are untouched. Zero live cells are exposed today and known-wrong holds the one row that was, so B is the holding position until the ruling."
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "2026-09-25-0cefa4",
+      "question": "Sam's writes '69.60 oz., 12 PK' both as twelve 69.6 oz items and as a 69.6 oz box of twelve. Sam's own per-ounce price is no help, because it has the same mix-up on some rows. How should the board read these?",
+      "why_it_matters": "Today nothing on the board is wrong because of it (the one bad row is held by hand). But a coffee or bacon row read the wrong way would show a price about 4 times too cheap if its store channel is ever proven.",
+      "options": "A: trust Sam's per-ounce price (measured unsafe). B: keep today's reading and hold each bad row by hand. C: read Sam's product page (same unsafe number). D: where the weight matters, if Sam's number disagrees with our reading, leave that row off the board instead of guessing.",
+      "recommendation": "D. It never guesses, touches only rows where the weight is used, and needs no hand-holding per row."
+    }
+  ],
+  "ship_sequence": [
+    "1. money-1: 2026-09-25-633d2b. Branch, then pricing-math-lib.ps1 (Resolve-MultibuyPackCount reads Get-EachPackCount; each branch divides for every non-plain price) plus compare-deals/selftest-1.ps1 section 5b cases. Gated chain: compare-deals.ps1 -SelfTest, test-auditors.ps1, test-guards.ps1; replay candidates of the newest date in a scratch dir and diff against plan-2026-09-28-9.routing.json; scratch rebuild to confirm tortillas|Hy-Vee 0.5612 -> about 0.125 and no other cell move. Land through ops/push-main.ps1 (chain change; never git push origin HEAD:main). The next daily build publishes it; verify the tortillas Hy-Vee chip on the live board with a cache-busting query parameter.",
+    "2. ops: 2026-09-25-1b7001. Separate commit, pull-regular-hyvee.ps1 only (name-only bind skip, refused-entry size in the ledger, self-contradictory park returns '', line 880 comment). Proof: pull-regular-hyvee.ps1 -SelfTest exit 0 with its verdict line; -DryRun against a scratch -OutDir seeded with copies of the 09-28 file and ledger shows size_conflict_parked 13 -> 3. Land through ops/push-main.ps1. Live check after the next 08:00 Hy-Vee pull: size_conflict_parked lists only 2950925, 332699, 269490 and capture_terms carry one term per pid.",
+    "3. no code: 2026-09-25-bf2c6f closes with its resolution note.",
+    "4. no code: 2026-09-25-0cefa4 stays open as needs-brad; B (known-wrong hold) stands until the ruling."
+  ]
 }

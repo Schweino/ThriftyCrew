@@ -53,6 +53,21 @@
   # CLEAN TWIN: a multibuy with no stated count keeps its per-each answer (case 4 above), and a pack_is_package
   # commodity still prices the PACKAGE, because that declaration answers before the multibuy division.
   _Near 'CLEAN TWIN  multibuy on a pack_is_package commodity stays per package' (Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Texas Toast 6 ct' 3.00 '6 ct') (_CP 'each')).unit_price 2.40 0.001
+  # 5b-ii. EVERY NON-PLAIN PRICE DIVIDES ITS PACK COUNT, READ AT THE RANGE'S LEAST FAVOURABLE END (2026-09-28, queue
+  # 2026-09-25-633d2b, plan-2026-09-28-9). Frozen from candidates-2026-09-28: an "N for $M" deal on an each commodity
+  # shipped its per-PACKAGE price as one unit. The King's Hawaiian case kills the reader-swap mutant: Get-PackCount
+  # reads '6 to 12 ct' as 12 (0.3333, understated); the each reader takes 6.
+  _Near 'MUST FIRE  Pillsbury 6 Ea 2 for $6.00 prices per pastry' (Get-UnitPrice (_D '2 for $6.00' 'Pillsbury Toaster Pastries, Apple 6 Ea' $null '6 ea') (_C 'each')).unit_price 0.50 0.0005
+  $khName = 'King''s Hawaiian rolls, 6 to 12 ct., 2/ $8.00'
+  _Near 'MUST FIRE  King''s Hawaiian 6 to 12 ct 2/$8 reads the least favourable 6' (Get-UnitPrice (_D $khName $khName $null '') (_C 'each')).unit_price 0.6667 0.0005
+  _Near 'MUST FIRE  Sunbelt (2/$5) 8-10 ct reads the least favourable 8' (Get-UnitPrice (_D '$2.50' 'Sunbelt Bakery Granola Bars (2/$5)' $null '8-10 ct') (_C 'each')).unit_price 0.3125 0.0005
+  $lbName = 'La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00'
+  _Near 'MUST FIRE  La Banderita 20 or 30 ct 2/$5 reads the least favourable 20' (Get-UnitPrice (_D $lbName $lbName $null '') (_C 'each')).unit_price 0.125 0.0005
+  # CLEAN TWIN: a single-piece N-for-$M with no count anywhere stays per-each; a plain price still divides its count;
+  # a pack_is_package commodity still prices per package under an N-for-$M.
+  _Near 'CLEAN TWIN  Hass Avocado 2 for $3.00 with no count stays 1.50 each' (Get-UnitPrice (_D '2 for $3.00' 'Hass Avocado' $null '') (_C 'each')).unit_price 1.50 0.0005
+  _Near 'CLEAN TWIN  plain $2.99 12 ct still per-12-pack' (Get-UnitPrice (_D '$2.99' 'Dinner Rolls 12 ct' $null '12 ct') (_C 'each')).unit_price 0.2492 0.0005
+  _Near 'CLEAN TWIN  garlic-bread 8 Ea 2 for $5.00 on pack_is_package stays per package' (Get-UnitPrice (_D '2 for $5.00' 'Garlic Bread 8 Ea' $null '8 ea') (_CP 'each')).unit_price 2.50 0.001
   # CLEAN TWIN: the real premium sale on a complete basis still prices exactly as before (Dove Hand Wash 12 fl oz,
   # BOGO 40% at reg 5.99 = 4.792 / 12 = 0.3993/fl oz), and is filed on the COMPLETE-BASIS half, not the unresolved one.
   $hw = Get-UnitPrice (_D 'Buy 1 get 1 40% off' 'Dove Hand Wash, Antibacterial 12 Fl Oz' 5.99 '12 oz') (_C 'floz')
