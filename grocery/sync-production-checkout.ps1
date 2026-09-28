@@ -40,6 +40,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $Repo) { $Repo = Split-Path -Parent $here }
 if (-not $StatusFile) { $StatusFile = Join-Path $Repo 'grocery\out\logs\capture-run-status.json' }
 . (Join-Path (Split-Path -Parent $here) 'grocery\native-lib.ps1')
+. (Join-Path (Split-Path -Parent $here) 'lib\hook-refresh.ps1')   # Update-TcInstalledHooks (2026-09-27-78df57)
 
 function Test-TcCaptureStageInFlight([string]$Stage) {
   switch ($Stage) {
@@ -90,7 +91,10 @@ function Test-TcCaptureRunInFlight([string]$Path, [datetime]$Now) {
   return @{ state = 'idle' }
 }
 
-function Invoke-TcSyncProductionCheckout([string]$RepoPath, [string]$Status, [scriptblock]$GitRunner, [datetime]$Now) {
+function Invoke-TcSyncProductionCheckout([string]$RepoPath, [string]$Status, [scriptblock]$GitRunner, [datetime]$Now, [scriptblock]$HeadReader = $null, [scriptblock]$HookRefresh = $null) {
+  # HeadReader param($repo) -> sha and HookRefresh param($repo, $from, $to) -> Update-TcInstalledHooks' result: a pull
+  # that moved HEAD across an ops\hooks change reinstalls the hooks now, not at the 10:30 watchdog repair (2026-09-27-78df57).
+  # Either seam null skips it; a throw from either is a line, never a changed outcome.
   # Returns @{ outcome; rc; lines = [string[]] }
   $lines = New-Object System.Collections.Generic.List[string]
   $s = Test-TcCaptureRunInFlight $Status $Now
@@ -104,15 +108,23 @@ function Invoke-TcSyncProductionCheckout([string]$RepoPath, [string]$Status, [sc
     'idle'       { $lines.Add('sync: no capture-run in flight, pulling') }
     default      { throw "unknown in-flight state: $($s.state)" }
   }
+  $h0 = ''
+  if ($HeadReader -and $HookRefresh) { try { $h0 = [string](& $HeadReader $RepoPath) } catch { $h0 = '' } }
   $g = & $GitRunner $RepoPath
   $rc = [int]$g.ExitCode
   $last = @($g.Lines | Where-Object { [string]$_ }) | Select-Object -Last 1
   if ($last) { $lines.Add('git: ' + [string]$last) }
   $outcome = 'pulled'; if ($rc -ne 0) { $outcome = 'failed' }
+  if ($outcome -eq 'pulled' -and $h0) {
+    try { $h1 = [string](& $HeadReader $RepoPath); $hr = & $HookRefresh $RepoPath $h0 $h1; if ($hr -and $hr.line) { $lines.Add([string]$hr.line) } }
+    catch { $lines.Add('hook-refresh: threw (' + $_.Exception.Message + '); the 10:30 watchdog -Repair will retry') }
+  }
   return @{ outcome = $outcome; rc = $rc; lines = $lines.ToArray() }
 }
 
 $defaultGit = { param($r) Invoke-Native git -C $r pull --rebase --autostash origin main }
+$defaultHead = { param($r) $h = Invoke-Native git -C $r rev-parse HEAD; if ($h.ExitCode -ne 0) { return '' }; return [string](@($h.Output) | Select-Object -Last 1) }
+$defaultHookRefresh = { param($r, $from, $to) Update-TcInstalledHooks -Repo $r -From $from -To $to }
 
 if ($SelfTest) {
   $fail = 0; $cases = 0
@@ -172,14 +184,28 @@ if ($SelfTest) {
     $script:cases++
     if (([string]$defaultGit).Contains('pull --rebase --autostash origin main')) { Write-Output '  ok    CLEAN TWIN: the default runner is the same pull the prompts ran' }
     else { $script:fail++; Write-Output '  FAIL  CLEAN TWIN: the default runner is the same pull the prompts ran' }
+    # HOOK REFRESH AFTER A PULL (2026-09-27-78df57): the seam receives the repo and HEAD before and after the pull.
+    $script:hrCalls = New-Object System.Collections.Generic.List[string]
+    $script:headSeq = 0
+    $headSeam = { param($r) $script:headSeq++; if ($script:headSeq -eq 1) { 'aaa111' } else { 'bbb222' } }
+    $hrSeam = { param($r, $f, $t) $script:hrCalls.Add(($r + '|' + $f + '|' + $t)); [pscustomobject]@{ line = 'hook-refresh: reinstalled pre-commit (install-hooks exit 0)' } }
+    $script:cases++
+    $hres = Invoke-TcSyncProductionCheckout 'C:\fixture-repo' $sDone $okGit $now $headSeam $hrSeam
+    if (($hres.outcome -eq 'pulled') -and ($hres.rc -eq 0) -and ($script:hrCalls.Count -eq 1) -and ($script:hrCalls[0] -eq 'C:\fixture-repo|aaa111|bbb222') -and (($hres.lines -join "`n").Contains('hook-refresh: reinstalled pre-commit'))) { Write-Output '  ok    MUST FIRE: a pull that moved HEAD aaa111 -> bbb222 calls the hook refresh once with that range and prints its line, outcome still pulled' }
+    else { $script:fail++; Write-Output ('  FAIL  MUST FIRE: hook refresh after a pull, calls=' + ($script:hrCalls -join ',') + ' outcome=' + $hres.outcome) }
+    $script:cases++
+    $script:hrCalls.Clear(); $script:headSeq = 0
+    $hbad = Invoke-TcSyncProductionCheckout 'C:\fixture-repo' $sDone $badGit $now $headSeam $hrSeam
+    if (($hbad.outcome -eq 'failed') -and ($hbad.rc -eq 128) -and ($script:hrCalls.Count -eq 0)) { Write-Output '  ok    CLEAN TWIN: a failed pull never calls the hook refresh and keeps its rc 128' }
+    else { $script:fail++; Write-Output ('  FAIL  CLEAN TWIN: failed pull and hook refresh, calls=' + $script:hrCalls.Count + ' rc=' + $hbad.rc) }
   } catch { $fail++; Write-Output ('  FAIL  self-test harness threw: ' + $_.Exception.Message) }
   finally { Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue }
-  if ($cases -ne 12) { $fail++; Write-Output ('  FAIL  expected 12 cases, ran ' + $cases) }
+  if ($cases -ne 14) { $fail++; Write-Output ('  FAIL  expected 14 cases, ran ' + $cases) }
   if ($fail -eq 0) { Write-Output ('sync-production-checkout self-test pass (' + $cases + ' cases)'); exit 0 }
   Write-Output ('sync-production-checkout self-test FAIL (' + $fail + ' of ' + $cases + ' failed)'); exit 1
 }
 
-$res = Invoke-TcSyncProductionCheckout $Repo $StatusFile $defaultGit (Get-Date)
+$res = Invoke-TcSyncProductionCheckout $Repo $StatusFile $defaultGit (Get-Date) $defaultHead $defaultHookRefresh
 foreach ($l in $res.lines) { Write-Output $l }
 Write-Output ('SYNC-PRODUCTION-CHECKOUT-COMPLETE outcome=' + $res.outcome)
 exit $res.rc

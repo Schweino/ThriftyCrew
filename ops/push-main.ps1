@@ -218,6 +218,10 @@ $script:TcPushMainPath = if ($PSCommandPath) { $PSCommandPath } else { $MyInvoca
 . (Join-Path $repo 'lib\push-ledger.ps1')
 . (Join-Path $repo 'lib\seed-hint.ps1')     # Get-TcSeedDirs: which directories ops\seed-worktree.ps1 seeds, read off its own source
 . (Join-Path $repo 'lib\chain-queue.ps1')    # W9.2: the chain queue (also loads lib\gate-slots.ps1 and lib\atomic-write.ps1)
+# Update-TcInstalledHooks (2026-09-27-78df57): loaded only when present, so a copy running beside an older lib\ lands
+# exactly as before and only the hook refresh is skipped.
+$__pmHookRefresh = Join-Path $repo 'lib\hook-refresh.ps1'
+if (Test-Path -LiteralPath $__pmHookRefresh) { . $__pmHookRefresh }
 
 function Invoke-TcGit {
   <# git, with its exit code and its TWO STREAMS KEPT APART: Out is stdout and is the only thing any caller parses,
@@ -1601,6 +1605,15 @@ function Invoke-TcPushMainViaWorktree {
         return 'manual'
       }
       Say ("push-main: the main checkout's local main now carries the landed tip {0} (git reset --keep: its uncommitted files are untouched, and a staged entry keeps its content, unstaged)." -f $landed.Substring(0, 9))
+      # A LANDED ops\hooks CHANGE IS INSTALLED NOW, not at the 10:30 watchdog repair (2026-09-27-78df57). Outside the
+      # push lock (AfterLanded runs after Exit-TcPushLock). The result is assigned, never emitted, so this block still
+      # returns exactly 'reset-keep'; a missing or throwing helper costs the refresh, never the landing.
+      try {
+        if (Get-Command Update-TcInstalledHooks -ErrorAction SilentlyContinue) {
+          $hr = Update-TcInstalledHooks -Repo $vwMainDir -From $vwStartHead -To $landed
+          if ($hr.line) { Say ('push-main: ' + $hr.line) }
+        }
+      } catch { Say ('push-main: hook-refresh threw (' + $_.Exception.Message + '); the 10:30 watchdog -Repair will retry.') }
       return 'reset-keep'
     }
     $call = @{ Dir = $wtDir; Remote = $Remote; Branch = $Branch; LockWaitSec = $LockWaitSec; DryRun = $DryRun; ExtraRowFields = ([ordered]@{ via_worktree = $true }); AfterLanded = $landedSync }

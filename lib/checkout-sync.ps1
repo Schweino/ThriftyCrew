@@ -158,13 +158,14 @@
 # it loads is this file, the suite, and the four libraries they dot-source (each walked for what IT loads). capture-run
 # is read as TEXT - copied and AST-scanned, never loaded or run - so it is hashed and not walked: walking it put 2,968
 # files in this key, 1,202 of them gitignored boards and cards, and the key moved on 201 of 287 commits (2026-09-24).
-# gate-inputs: lib\checkout-sync.ps1, lib\test-checkout-sync.ps1, lib\git-repo-env.ps1, lib\git-blob-lib.ps1, lib\atomic-write.ps1, lib\append-line.ps1
+# gate-inputs: lib\checkout-sync.ps1, lib\test-checkout-sync.ps1, lib\git-repo-env.ps1, lib\git-blob-lib.ps1, lib\atomic-write.ps1, lib\append-line.ps1, lib\hook-refresh.ps1
 # gate-inputs-text: grocery\capture-run.ps1
 $__csSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 . (Join-Path $PSScriptRoot 'git-blob-lib.ps1')   # Invoke-GitCaptured, Get-CommittedBlobBytes, ConvertTo-GitArgString
 . (Join-Path $PSScriptRoot 'atomic-write.ps1')   # Write-TcAtomicFile: the state file is read lock-free
 . (Join-Path $PSScriptRoot 'append-line.ps1')    # Add-TcLine: the log row is one unbuffered append
+. (Join-Path $PSScriptRoot 'hook-refresh.ps1')   # Update-TcInstalledHooks: a moved range that changed ops\hooks reinstalls them (2026-09-27-78df57)
 $script:TcCsLibFile = $PSCommandPath
 $script:TcCsLibBlob = ''
 
@@ -1104,6 +1105,11 @@ function Invoke-TcCheckoutSync {
       $rec.cas_recovered = $h1; $plan.new = $rp2.tip; $rec.NEW = $rp2.tip
     }
     $stage = 'ref'
+    # 9f2. A LANDED ops\hooks CHANGE IS INSTALLED NOW, not at the 10:30 watchdog repair (2026-09-27-78df57): the tree is
+    # at NEW and the ref names it. The helper never throws and never writes to the pipeline; its one line is a note, and
+    # a failed install changes no outcome here. No lock, no wait: nothing nests inside the capture-run mutex (og-27).
+    $hr = Update-TcInstalledHooks -Repo $Repo -From $rec.H0 -To $plan.new
+    if ($hr.line) { $rec.notes = @($rec.notes) + @($hr.line) }
     # 9g. The only file this writes that it did not just restore is the pipeline's own vouched output.
     foreach ($e in $byCls['own-merge']) { [IO.File]::WriteAllBytes((Get-TcCsFullPath $Repo $e.path), [byte[]]$e.merged); $rec.merged = @($rec.merged) + @($e.path) }
     $rec.already_upstream = @($au); $rec.own_deleted = @($byCls['own-deleted'] | ForEach-Object { $_.path })
