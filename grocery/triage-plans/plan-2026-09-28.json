@@ -85,12 +85,12 @@
       },
       "lane": "ops",
       "est_tool_calls": 15,
-      "status": "promote",
+      "status": "superseded",
       "premise_verified": "false: the brief grouped it under b1efed (ad-run push refused over a stray root artifact); the 09-27 DAILY log says served files were withheld for a tree/verdict mismatch and its push landed on attempt 3",
       "deviation": "promoted instead of superseded",
       "shipped_commit": null,
-      "resolution_note": "PROMOTED: not the b1efed push refusal. The 09-27 daily run withheld its served files because the tree moved off the guards verdict's input fingerprint (aac533354fdcc3b7 -> f80049acb9261b1b); same family as Class A d70062/c98dec. Reviewer owns it.",
-      "close_disposition": null,
+      "resolution_note": "Promoted by the cheap lane to Class A and diagnosed in plan-2026-09-28-2.json (f50b7a planned and shipped there as the verdict line-ending fingerprint fix; fd7a80 superseded by f50b7a). This item is the transcription only; its outcome lives in plan-2026-09-28-2.json.",
+      "close_disposition": "confirmed",
       "actual_tool_calls": 3,
       "blast_radius": {
         "measured_as": "routing",
@@ -101,7 +101,9 @@
         "cell_effects": []
       },
       "rollback": "nothing shipped by this lane",
-      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired"
+      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired",
+      "superseded_by": "grocery/triage-plans/plan-2026-09-28-2.json",
+      "leaves_open_followup": "2026-09-28-90a544"
     },
     {
       "queue_id": "2026-09-27-fd7a80",
@@ -139,12 +141,12 @@
       },
       "lane": "ops",
       "est_tool_calls": 15,
-      "status": "promote",
+      "status": "superseded",
       "premise_verified": "false: not the b1efed condition (see f50b7a)",
       "deviation": "promoted instead of superseded",
       "shipped_commit": null,
-      "resolution_note": "PROMOTED with f50b7a: the served files the 09-27 daily run built were withheld for a tree/verdict mismatch, not by the b1efed push refusal. Reviewer owns it with d70062/c98dec.",
-      "close_disposition": null,
+      "resolution_note": "Promoted by the cheap lane to Class A and diagnosed in plan-2026-09-28-2.json (f50b7a planned and shipped there as the verdict line-ending fingerprint fix; fd7a80 superseded by f50b7a). This item is the transcription only; its outcome lives in plan-2026-09-28-2.json.",
+      "close_disposition": "confirmed",
       "actual_tool_calls": 1,
       "blast_radius": {
         "measured_as": "routing",
@@ -155,7 +157,9 @@
         "cell_effects": []
       },
       "rollback": "nothing shipped by this lane",
-      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired"
+      "freshness": "measured 2026-09-28 about 10:20 against grocery/out/logs/capture-run-daily-2026-09-27.log and capture-watchdog-2026-09-27.log; capture-watchdog.ps1 changed 08:20 today, after both fired",
+      "superseded_by": "grocery/triage-plans/plan-2026-09-28-2.json",
+      "leaves_open_followup": "2026-09-28-90a544"
     },
     {
       "queue_id": "2026-09-28-c1f48a",
