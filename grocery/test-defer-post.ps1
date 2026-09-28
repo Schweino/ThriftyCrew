@@ -15,6 +15,7 @@
   SCOPE OF A CLEAN REPORT: unsound for the real builder (a stub stands in); sound for the order build-then-hash.
   Run: test-defer-post.ps1 -SelfTest     (exit 0 clean, 1 on any failure; the switch is declared so run-gates finds it)
 #>
+[CmdletBinding()]
 param([switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
