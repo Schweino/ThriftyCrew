@@ -95,8 +95,14 @@
       "rollback": "Revert the commit. The ledger is not rewritten by the fix, so the 7 entries simply read as parked again.",
       "freshness": "measured 2026-09-28 afternoon at HEAD c349cbd77 against hyvee-regular-2026-09-28.json (written 08:01), hyvee-ask-ledger.json from the 2026-09-28 run, product-urls.json at HEAD, board comparison-2026-09-28 (08:17:56)",
       "publish_batch": null,
-      "status": "planned",
-      "resolution_note": "Of 13 parked Hy-Vee size conflicts, 10 were not conflicts of the row being parked: a stale July row of the same name (old size, no stored id) was bound to the product id by name, was the one refused, and the ledger then parked the CORRECT row under the shared id. Fix: no name-only id bind when the product already has its own row at the link size; the ledger records the refused entry's size; a size conflict of a size against itself is never parked. 3 cells (sloppy-joe-sauce, ground-cloves, tomatillos) resume re-reads. Residual: 3 genuine size drifts (ground cinnamon, fresh basil, fresh mint) need a re-bind-to-Hy-Vee-size rule; none is on the board."
+      "status": "done",
+      "resolution_note": "Of 13 parked Hy-Vee size conflicts, 10 were not conflicts of the row being parked: a stale July row of the same name (old size, no stored id) was bound to the product id by name, was the one refused, and the ledger then parked the CORRECT row under the shared id. Fix: no name-only id bind when the product already has its own row at the link size; the ledger records the refused entry's size; a size conflict of a size against itself is never parked. 3 cells (sloppy-joe-sauce, ground-cloves, tomatillos) resume re-reads. Residual: 3 genuine size drifts (ground cinnamon, fresh basil, fresh mint) need a re-bind-to-Hy-Vee-size rule; none is on the board.",
+      "premise_verified": "yes: pull-regular-hyvee.ps1 at HEAD 58fbaa796 still bound a no-id row by name alone ($byNm.Count -eq 1, old line 1622), built $sizeByPid from the first work entry (line 399) and recorded size = $sizeByPid[$p] (line 417); Test-HyVeeAskParked had no size==theirs guard; line 880 still said 14-day rotation.",
+      "deviation": "The prev-row work-list loop moved into a pure function New-HyVeePrevWork (behaviour otherwise unchanged) so the self-test reaches the name-bind rule; $idByName entries now carry sz. The developer_check -DryRun against a scratch -OutDir was not run (it makes live Hy-Vee lookups); the live check after the next 08:00 Hy-Vee pull stands as the proof on real data: size_conflict_parked should list only 2950925, 332699, 269490.",
+      "shipped_commit": "7c418be50",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 16
     },
     {
       "queue_id": "2026-09-25-bf2c6f",
