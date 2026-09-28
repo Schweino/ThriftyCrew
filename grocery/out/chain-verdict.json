@@ -1,22 +1,22 @@
 ﻿{
-    "date":  "2026-09-27",
-    "written":  "2026-09-27T08:20:29",
+    "date":  "2026-09-28",
+    "written":  "2026-09-28T08:21:11",
     "written_by":  "check-ad-cycles",
-    "guards_rc":  0,
+    "guards_rc":  4,
     "guards_blocked":  false,
-    "verdict":  "pass",
-    "quarantined":  0,
+    "verdict":  "quarantine",
+    "quarantined":  1,
     "feed_refreshed":  true,
     "feed_refused":  "",
-    "inputs_fingerprint":  "aac533354fdcc3b7",
+    "inputs_fingerprint":  "1f77ab8adc8776a9",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-27.json":  "4b12b9a6c62c46bbc0d90d2a30a59134ff8afd38192c972a5c4bf8f6210323bc",
+                   "grocery\\out\\comparison-2026-09-28.json":  "653ba31217e7c4d338de6e551c6462c46efbf41018b457834c47e588e7c70785",
                    "grocery\\commodities.json":  "3af894aeefe397c069b30a3b9fe558b1c46cd6092fab8a08a21905f7d6db78d5",
                    "grocery\\known-wrong.json":  "6cbbadf679b884318e52f60e877bc5f05cb4872da708031e3f6e766513210213",
-                   "grocery\\board-price-overrides.json":  "025815cbc384f22b09bcd407c0b3080f27aabc2c7d074492ec4ccac76a44a1ca",
-                   "grocery\\product-urls.json":  "0ef5f86c0739dc2e411e2d5c7044d487b2e0d4f68620614454338dcda6457325",
-                   "grocery\\out\\recipe-board.json":  "5c9c200b09f7d6fd158542c9e0debbeff1888a13ae5b879b5ff218d9ab84873f",
-                   "grocery\\out\\name-drift.json":  "db7f1f718a311604d9ec75e411368c013572676f4184979bf1f445e4c35541bd"
+                   "grocery\\board-price-overrides.json":  "92a98447daa44b6865936f61127187e2c4c8d7b919b3ea7f25a0b5e753dcf5ef",
+                   "grocery\\product-urls.json":  "8a49468da0fb1add4e82f2e3fc0205d3317d12fcad9aebba105331f8e8944e04",
+                   "grocery\\out\\recipe-board.json":  "8c476c043e4e1983144d4f0da0077d77892a820b83040f9d6bf76709b167c00a",
+                   "grocery\\out\\name-drift.json":  "7b64e43bd19542842d16236e9ac367bf1be0d823f7eef2faf366dd9a381f3d86"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

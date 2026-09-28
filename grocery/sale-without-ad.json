@@ -1,14 +1,14 @@
 {
-    "updated":  "2026-09-27T08:23:59",
-    "board":  "comparison-2026-09-27.json",
-    "week_of":  "2026-09-27",
-    "judged_on":  "2026-09-27",
+    "updated":  "2026-09-28T08:24:13",
+    "board":  "comparison-2026-09-28.json",
+    "week_of":  "2026-09-28",
+    "judged_on":  "2026-09-28",
     "note":  "Cells published as a SALE that match no row in any ad we hold. Not automatically wrong - a store may cut a shelf price without advertising it (Fareway\u0027s own product page reports on_sale:true with retailer:false and no promotionGroupId) - but this is the class we cannot DATE, so it is the class that cannot expire on its own. first_seen is written once and never re-stamped; days_unexplained is only meaningful because of that.",
-    "sale_cells":  353,
-    "dated_by_the_store":  233,
-    "traced_to_an_ad":  41,
-    "untraceable":  79,
-    "ad_rows_available":  "Aldi=110 Baker\u0027s=629 Family Fare=1312 Fareway=1594 Hy-Vee=839",
+    "sale_cells":  373,
+    "dated_by_the_store":  259,
+    "traced_to_an_ad":  32,
+    "untraceable":  82,
+    "ad_rows_available":  "Aldi=110 Baker\u0027s=629 Family Fare=1309 Fareway=1594 Hy-Vee=513",
     "items":  [
                   {
                       "key":  "Fareway|flour",
@@ -20,8 +20,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386425-all-purpose-flour",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  37
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  38
                   },
                   {
                       "key":  "Fareway|frozen-fries",
@@ -33,8 +33,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389279-crinkle-fries",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  37
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  38
                   },
                   {
                       "key":  "Fareway|frozen-lasagna",
@@ -46,8 +46,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42112-on-cor-lasagna-with-meat-sauce-28-oz",
                       "first_seen":  "2026-08-21",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  37
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  38
                   },
                   {
                       "key":  "Fareway|frozen-corn",
@@ -59,21 +59,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20633954-fareway-corn-cut-32-oz",
                       "first_seen":  "2026-09-09",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  18
-                  },
-                  {
-                      "key":  "Hy-Vee|cocoa-powder",
-                      "id":  "cocoa-powder",
-                      "store":  "Hy-Vee",
-                      "item":  "Hy-Vee Baking Cocoa",
-                      "price":  "$4.49",
-                      "per_unit":  0.5612,
-                      "unit":  "oz",
-                      "url":  "https://www.hy-vee.com/aisles-online/p/22891/hy-vee-baking-cocoa",
-                      "first_seen":  "2026-09-09",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  18
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  19
                   },
                   {
                       "key":  "Hy-Vee|tomatoes-green-chilies",
@@ -85,8 +72,8 @@
                       "unit":  "oz",
                       "url":  "https://www.hy-vee.com/aisles-online/p/58149/hy-vee-diced-tomatoes-with-green-chilies",
                       "first_seen":  "2026-09-14",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  13
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  14
                   },
                   {
                       "key":  "Fareway|canned-pinto-beans",
@@ -98,8 +85,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3240907-browns-best-pinto-beans-10-oz",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Fareway|evaporated-milk",
@@ -111,8 +98,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69095-carnation-vitamin-d-added-evaporated-milk-5-fl-oz",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Fareway|frozen-lima-beans",
@@ -124,8 +111,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24281048-fareway-baby-lima-beans-16-oz",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Fareway|garlic-powder",
@@ -137,8 +124,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258054-badia-spices-garlic-granulated-1-5-lb",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Fareway|hand-soap",
@@ -150,8 +137,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19613282-softsoap-aquarium-liquid-hand-soap-refill-50-fl-oz",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Hy-Vee|razors",
@@ -163,21 +150,8 @@
                       "unit":  "each",
                       "url":  "https://www.hy-vee.com/aisles-online/p/3688713/bic-soleil-razors-lavender-eucalyptus-scented-4-blades",
                       "first_seen":  "2026-09-17",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  10
-                  },
-                  {
-                      "key":  "Hy-Vee|cheese-crackers",
-                      "id":  "cheese-crackers",
-                      "store":  "Hy-Vee",
-                      "item":  "Cheez-It Cheese Crackers Original",
-                      "price":  "$4.29",
-                      "per_unit":  0.346,
-                      "unit":  "oz",
-                      "url":  "https://www.hy-vee.com/aisles-online/p/914864/cheez-it-cheese-crackers-original",
-                      "first_seen":  "2026-09-21",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  6
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  11
                   },
                   {
                       "key":  "Hy-Vee|relish",
@@ -189,8 +163,8 @@
                       "unit":  "oz",
                       "url":  "https://www.hy-vee.com/aisles-online/p/3250254/hy-vee-sweet-relish-10-oz",
                       "first_seen":  "2026-09-21",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  6
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  7
                   },
                   {
                       "key":  "Fareway|blackberries",
@@ -202,8 +176,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17327025-blackberries-6-oz",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|lotion",
@@ -215,8 +189,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24778669-johnson-s-baby-lotion-13-6-fl-oz",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|powdered-sugar",
@@ -228,8 +202,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17316010-c-h-premium-cane-powdered-sugar-2-lb",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|razors",
@@ -241,8 +215,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39381-gillette-sensor2-plus-pivot-men-s-disposable-razor-10-ct",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|rice",
@@ -254,8 +228,8 @@
                       "unit":  "lb",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18015756-par-excellence-premium-long-grain-rice-10-lb",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|shampoo",
@@ -267,8 +241,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91212697-suave-ess-strwb-shmp",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|spinach",
@@ -280,8 +254,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24281076-fareway-spinach-chopped-10-oz",
                       "first_seen":  "2026-09-23",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  4
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  5
                   },
                   {
                       "key":  "Fareway|all-purpose-cleaner",
@@ -293,8 +267,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39547-fabuloso-multi-purpose-cleaner-lavender-56-fl-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|baby-wipes",
@@ -306,8 +280,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18311864-huggies-simply-clean-unscented-baby-wipes-1-flip-top-pack-64-ea",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|baking-soda",
@@ -319,8 +293,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24227952-fareway-baking-soda-16-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|cajun-seasoning",
@@ -332,8 +306,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41256-tony-chachere-s-it-s-spicy-more-spice-seasoning-7-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|canned-pumpkin",
@@ -345,8 +319,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/38030-libby-s-pumpkin-100-pure-pumpkin-29-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|dried-oregano",
@@ -358,8 +332,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258046-badia-spices-oregano-0-5-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|ground-allspice",
@@ -371,8 +345,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/257996-badia-spices-allspice-ground-2-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|oat-milk",
@@ -384,8 +358,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19502584-planet-oat-original-oatmilk-52-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|oven-cleaner",
@@ -397,8 +371,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16408565-easy-off-oven-cleaner-fresh-scent-heavy-duty-14-5-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|steak-sauce",
@@ -410,8 +384,8 @@
                       "unit":  "floz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71550-giorgio-steak-sauce-mushroom-6-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|toaster-pastries",
@@ -423,8 +397,8 @@
                       "unit":  "each",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2626014-toast-em-pop-ups-real-fruit-pastries-frosted-cherry-11-oz",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Fareway|yeast",
@@ -436,8 +410,8 @@
                       "unit":  "oz",
                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/31882-red-star-yeast-active-dry-2-lb",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|batteries",
@@ -449,8 +423,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/4AEP4Z7AGMAA",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|bell-peppers",
@@ -462,8 +436,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/206QFTWNWXV2",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|breakfast-sandwiches",
@@ -475,8 +449,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/78AI0G905O3P",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|caesar-salad-kit",
@@ -488,8 +462,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/431LVYHN5ABP",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|canned-chicken",
@@ -501,8 +475,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/795G1EHKATYB",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|canned-tuna",
@@ -514,8 +488,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/2S73WU5YUXI8",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|cereal",
@@ -527,8 +501,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/38UZO5X9WY77",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|chicken-nuggets",
@@ -540,8 +514,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/6UW46W29I5IE",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|chicken-thighs",
@@ -553,8 +527,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/6OTZLEIQJDT2",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|coffee-pods",
@@ -566,8 +540,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/1MEOEGWMHTCX",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|conditioner",
@@ -579,8 +553,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/1KB7ZR5AYWLC",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|cooked-jasmine-rice",
@@ -592,21 +566,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/6L8AKVBEBA3R",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Sam\u0027s Club|cooking-spray",
-                      "id":  "cooking-spray",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "PAM Original Cooking Spray, 12 oz., 2 pk.",
-                      "price":  "$7.48",
-                      "per_unit":  0.3117,
-                      "unit":  "oz",
-                      "url":  "https://www.samsclub.com/ip/5JMG8TC1T6CK",
-                      "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|deli-ham",
@@ -618,21 +579,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/4POJC00HFA8K",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Sam\u0027s Club|diapers",
-                      "id":  "diapers",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "Huggies Little Snugglers Plus Baby Diapers, Size 1-2",
-                      "price":  "$37.98",
-                      "per_unit":  0.1978,
-                      "unit":  "each",
-                      "url":  "https://www.samsclub.com/ip/42HF6X4UIZDZ",
-                      "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|drain-cleaner",
@@ -644,8 +592,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/2JX7ULVJFDDG",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|dryer-sheets",
@@ -657,8 +605,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/5GOY5VCGLP51",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|evaporated-milk",
@@ -670,8 +618,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/2GN38CMH3MPJ",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|fish-sticks",
@@ -683,21 +631,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/4UFAGU9IU135",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Sam\u0027s Club|garlic-herb-seasoning",
-                      "id":  "garlic-herb-seasoning",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "Mrs. Dash Garlic and Herb Seasoning, 10 oz.",
-                      "price":  "$6.98",
-                      "per_unit":  0.698,
-                      "unit":  "oz",
-                      "url":  "https://www.samsclub.com/ip/2T1C8H8IFMH5",
-                      "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|hand-soap",
@@ -709,8 +644,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/4M0H38I5DM1K",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|instant-coffee",
@@ -722,8 +657,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/4RAAYI8VQ2T1",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|laundry-detergent",
@@ -735,8 +670,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/2V2PPWS8ONHV",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|lotion",
@@ -748,8 +683,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/4A5QW4YBK7N8",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|mac-and-cheese",
@@ -761,8 +696,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/6ZF9ZGIS7WAW",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|mouthwash",
@@ -774,8 +709,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/39K15I3U1KFS",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|mustard",
@@ -787,8 +722,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/67I7U5OZ8MLK",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|oatmeal",
@@ -800,21 +735,21 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/5PKB1SJ68EYQ",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|olive-oil",
                       "id":  "olive-oil",
                       "store":  "Sam\u0027s Club",
-                      "item":  "Bertolli Extra Light Olive Oil, 67.6 fl. oz.",
-                      "price":  "$12.98",
-                      "per_unit":  0.192,
+                      "item":  "Member\u0027s Mark Pure Olive Oil, 101 fl. oz.",
+                      "price":  "$18.98",
+                      "per_unit":  0.1879,
                       "unit":  "floz",
-                      "url":  "https://www.samsclub.com/ip/2960KUU1ZZX9",
+                      "url":  "https://www.samsclub.com/ip/4O8ZK5SMFSR7",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|peaches",
@@ -826,21 +761,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/17HCK6CQYPY4",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Sam\u0027s Club|ramen",
-                      "id":  "ramen",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "Nissin Top Ramen, Chicken, 24 pk.",
-                      "price":  "$5.98",
-                      "per_unit":  0.2492,
-                      "unit":  "each",
-                      "url":  "https://www.samsclub.com/ip/3F8RQZGYQ248",
-                      "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|razors",
@@ -852,8 +774,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/6LZFO70IIM6C",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|rice",
@@ -865,8 +787,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/24R9RMHHLLCP",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|shampoo",
@@ -878,8 +800,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/5ALC787VBFS8",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|shrimp",
@@ -891,8 +813,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/1UDQOKS7B1HK",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|soda",
@@ -904,8 +826,8 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/7D8BMH3DJZPC",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|storage-bags",
@@ -917,21 +839,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/2LD9LRCWCFBS",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
-                  },
-                  {
-                      "key":  "Sam\u0027s Club|stuffing-mix",
-                      "id":  "stuffing-mix",
-                      "store":  "Sam\u0027s Club",
-                      "item":  "Kraft Stove Top Turkey Stuffing Mix, 6 oz., 6 pk.",
-                      "price":  "$7.98",
-                      "per_unit":  0.2217,
-                      "unit":  "oz",
-                      "url":  "https://www.samsclub.com/ip/157FFNTJ2DL3",
-                      "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|taco-seasoning",
@@ -943,8 +852,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/71KGUICUCTT4",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|tilapia",
@@ -956,8 +865,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/1CB2QRZSX1CE",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|tomatoes",
@@ -969,8 +878,8 @@
                       "unit":  "lb",
                       "url":  "https://www.samsclub.com/ip/4WQ0DM58Y18Y",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|toothpaste",
@@ -982,8 +891,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/7JS25KS50F0O",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|trash-bags",
@@ -995,8 +904,8 @@
                       "unit":  "each",
                       "url":  "https://www.samsclub.com/ip/4I22QN117A0I",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|turkey-lunchmeat",
@@ -1008,8 +917,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/48E80PXXD6VQ",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|whipped-cream",
@@ -1021,8 +930,8 @@
                       "unit":  "oz",
                       "url":  "https://www.samsclub.com/ip/6157AXG57W6I",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
-                      "days_unexplained":  0
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
                   },
                   {
                       "key":  "Sam\u0027s Club|white-vinegar",
@@ -1034,7 +943,137 @@
                       "unit":  "floz",
                       "url":  "https://www.samsclub.com/ip/60JHSKP6738J",
                       "first_seen":  "2026-09-27",
-                      "last_seen":  "2026-09-27",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  1
+                  },
+                  {
+                      "key":  "Fareway|disinfecting-wipes",
+                      "id":  "disinfecting-wipes",
+                      "store":  "Fareway",
+                      "item":  "Lysol Brand New Day Disinfecting Wipes",
+                      "price":  "$5.94",
+                      "per_unit":  0.0743,
+                      "unit":  "each",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17352267-lysol-disinfecting-wipes-tropical-17-7-oz",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|egg-noodles",
+                      "id":  "egg-noodles",
+                      "store":  "Fareway",
+                      "item":  "Fareway Wide Egg Noodles",
+                      "price":  "$2.79",
+                      "per_unit":  0.2325,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25446742-fareway-enriched-egg-noodle-product-wide-12-oz",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|jelly",
+                      "id":  "jelly",
+                      "store":  "Fareway",
+                      "item":  "Fareway Concord Grape Jelly",
+                      "price":  "$2.98",
+                      "per_unit":  0.0931,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24229193-fareway-jelly-concord-grape-32-oz",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Fareway|pasta",
+                      "id":  "pasta",
+                      "store":  "Fareway",
+                      "item":  "Fareway Linguine",
+                      "price":  "$1.24",
+                      "per_unit":  0.0775,
+                      "unit":  "oz",
+                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20542246-fareway-linguine-enriched-macaroni-product-16-oz",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Hy-Vee|cereal",
+                      "id":  "cereal",
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Whole Grain Raisin Bran",
+                      "price":  "$1.99",
+                      "per_unit":  0.1199,
+                      "unit":  "oz",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/3938994/hy-vee-whole-grain-raisin-bran",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Hy-Vee|chocolate-milk",
+                      "id":  "chocolate-milk",
+                      "store":  "Hy-Vee",
+                      "item":  "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz",
+                      "price":  "$1",
+                      "per_unit":  0.0625,
+                      "unit":  "floz",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/55167/hiland-premium-chocolate-milk-pint-16-fl-oz",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Hy-Vee|green-onions",
+                      "id":  "green-onions",
+                      "store":  "Hy-Vee",
+                      "item":  "Green Onions (Scallions)",
+                      "price":  "$0.99",
+                      "per_unit":  0.99,
+                      "unit":  "each",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/8652/green-onions-scallions",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Hy-Vee|soda",
+                      "id":  "soda",
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Cola 12Pk",
+                      "price":  "$4.49",
+                      "per_unit":  0.0312,
+                      "unit":  "floz",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/3993381/hy-vee-cola-12pk",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Hy-Vee|tortillas",
+                      "id":  "tortillas",
+                      "store":  "Hy-Vee",
+                      "item":  "Mission Carb Balance Tortillas, Sundried Tomato Basil, 8Ct",
+                      "price":  "$4.49",
+                      "per_unit":  0.5612,
+                      "unit":  "each",
+                      "url":  "https://www.hy-vee.com/aisles-online/p/3171035/mission-carb-balance-tortillas-sundried-tomato-basil-8ct",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
+                      "days_unexplained":  0
+                  },
+                  {
+                      "key":  "Sam\u0027s Club|cucumbers",
+                      "id":  "cucumbers",
+                      "store":  "Sam\u0027s Club",
+                      "item":  "Seedless English Cucumbers, 3 ct.",
+                      "price":  "$3.27",
+                      "per_unit":  1.09,
+                      "unit":  "each",
+                      "url":  "https://www.samsclub.com/ip/0W15U5SZQ7L3",
+                      "first_seen":  "2026-09-28",
+                      "last_seen":  "2026-09-28",
                       "days_unexplained":  0
                   }
               ]

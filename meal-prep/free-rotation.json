@@ -1,63 +1,63 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
-    "week_of":  "2026-09-23",
-    "rotated_at":  "2026-09-23T09:56:58",
+    "week_of":  "2026-09-28",
+    "rotated_at":  "2026-09-28T08:21:37",
     "free":  [
+                 {
+                     "slug":  "slow-cooker-crack-chicken-bowls",
+                     "protein":  "chicken",
+                     "rank":  1,
+                     "name":  "Slow Cooker Crack Chicken Bowls",
+                     "per_serving":  1.74
+                 },
+                 {
+                     "slug":  "chicken-pot-pie-biscuit-casserole",
+                     "protein":  "chicken",
+                     "rank":  2,
+                     "name":  "Chicken Pot Pie Casserole with Biscuits",
+                     "per_serving":  1.91
+                 },
                  {
                      "slug":  "chicken-fried-rice-skillet",
                      "protein":  "chicken",
-                     "rank":  1,
+                     "rank":  3,
                      "name":  "Chicken Fried Rice",
                      "per_serving":  1.99
                  },
                  {
                      "slug":  "free-chicken-alfredo",
                      "protein":  "chicken",
-                     "rank":  2,
+                     "rank":  4,
                      "name":  "Budget Chicken Alfredo Meal Prep",
                      "per_serving":  2
                  },
                  {
                      "slug":  "poppy-seed-chicken-and-rice-casserole",
                      "protein":  "chicken",
-                     "rank":  3,
-                     "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  2.01
-                 },
-                 {
-                     "slug":  "creamy-tuscan-chicken-skillet",
-                     "protein":  "chicken",
-                     "rank":  4,
-                     "name":  "Creamy Tuscan Chicken Skillet",
-                     "per_serving":  2.02
-                 },
-                 {
-                     "slug":  "buffalo-chicken-pasta-bake",
-                     "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Buffalo Chicken Pasta Bake",
-                     "per_serving":  2.04
-                 },
-                 {
-                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
-                     "protein":  "turkey",
-                     "rank":  1,
-                     "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
-                     "per_serving":  2.14
+                     "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "per_serving":  2
                  },
                  {
                      "slug":  "turkey-biscuit-pot-pie-casserole",
                      "protein":  "turkey",
-                     "rank":  2,
+                     "rank":  1,
                      "name":  "Turkey Biscuit Pot Pie Casserole",
-                     "per_serving":  2.16
+                     "per_serving":  2.1
+                 },
+                 {
+                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
+                     "protein":  "turkey",
+                     "rank":  2,
+                     "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
+                     "per_serving":  2.12
                  },
                  {
                      "slug":  "turkey-maqluba-upside-down-rice-bake",
                      "protein":  "turkey",
                      "rank":  3,
                      "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.17
+                     "per_serving":  2.15
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",
@@ -67,59 +67,59 @@
                      "per_serving":  2.23
                  },
                  {
-                     "slug":  "turkey-huevos-rancheros-rice-bowls",
+                     "slug":  "scalloped-potato-turkey-casserole",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Turkey Huevos Rancheros Rice Bowls",
-                     "per_serving":  2.37
+                     "name":  "Scalloped Potato Turkey Casserole",
+                     "per_serving":  2.33
                  },
                  {
-                     "slug":  "low-carb-taco-cabbage-beef-skillet",
+                     "slug":  "keto-cheeseburger-skillet",
                      "protein":  "beef",
                      "rank":  1,
-                     "name":  "Low Carb Taco Cabbage Beef Skillet",
-                     "per_serving":  2.16
+                     "name":  "Keto Cheeseburger Casserole Skillet",
+                     "per_serving":  2.14
                  },
                  {
                      "slug":  "beef-potato-au-gratin-casserole",
                      "protein":  "beef",
                      "rank":  2,
                      "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.31
+                     "per_serving":  2.15
+                 },
+                 {
+                     "slug":  "low-carb-taco-cabbage-beef-skillet",
+                     "protein":  "beef",
+                     "rank":  3,
+                     "name":  "Low Carb Taco Cabbage Beef Skillet",
+                     "per_serving":  2.16
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
-                     "rank":  3,
+                     "rank":  4,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.38
+                     "per_serving":  2.35
                  },
                  {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  4,
-                     "name":  "Million Dollar Baked Spaghetti",
-                     "per_serving":  2.41
-                 },
-                 {
-                     "slug":  "pakistani-chapli-kebab-rice-bowls",
-                     "protein":  "beef",
                      "rank":  5,
-                     "name":  "Pakistani Chapli Kebab Rice Bowls",
-                     "per_serving":  2.41
-                 },
-                 {
-                     "slug":  "orecchiette-italian-sausage-broccoli",
-                     "protein":  "pork",
-                     "rank":  1,
-                     "name":  "Orecchiette with Italian Sausage and Broccoli",
-                     "per_serving":  1.56
+                     "name":  "Million Dollar Baked Spaghetti",
+                     "per_serving":  2.39
                  },
                  {
                      "slug":  "bratwurst-sauerkraut-potatoes-bake",
                      "protein":  "pork",
-                     "rank":  2,
+                     "rank":  1,
                      "name":  "Bratwurst and Sauerkraut with Potatoes",
+                     "per_serving":  1.6
+                 },
+                 {
+                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "protein":  "pork",
+                     "rank":  2,
+                     "name":  "Orecchiette with Italian Sausage and Broccoli",
                      "per_serving":  1.61
                  },
                  {
@@ -130,18 +130,18 @@
                      "per_serving":  1.81
                  },
                  {
-                     "slug":  "no-peek-pork-chop-rice-casserole",
+                     "slug":  "cowboy-pork-and-beans-biscuit-bake",
                      "protein":  "pork",
                      "rank":  4,
-                     "name":  "No-Peek Pork Chop and Rice Casserole",
-                     "per_serving":  1.89
+                     "name":  "Cowboy Pork and Beans Biscuit Bake",
+                     "per_serving":  1.86
                  },
                  {
-                     "slug":  "asado-de-puerco-red-chile-pork-bowls",
+                     "slug":  "no-peek-pork-chop-rice-casserole",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "Asado de Puerco (Mexican Red Chile Pork Stew) Bowls",
-                     "per_serving":  1.94
+                     "name":  "No-Peek Pork Chop and Rice Casserole",
+                     "per_serving":  1.89
                  }
              ]
 }

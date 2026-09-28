@@ -36,6 +36,15 @@
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
     },
     {
+        "id":  "ground-allspice",
+        "store":  "Family Fare",
+        "product":  "Sugar \u0027N Spice Allspice Ground Pp",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "almond-milk",
         "store":  "Family Fare",
         "product":  "Unsweetened Almond Milk",
@@ -250,6 +259,15 @@
         "aisle":  "household/electrical",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "bay-leaves",
+        "store":  "Family Fare",
+        "product":  "Sugar \u0027N Spice Bay Leaves",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027bay-leaves\u0027"
     },
     {
         "id":  "bbq-sauce",
@@ -754,6 +772,15 @@
         "aisle":  "fresh_fruits_vegetables/fresh_spices_herbs",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "ground-cloves",
+        "store":  "Family Fare",
+        "product":  "Our Family Cloves, Ground 2 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "cocktail-sauce",
@@ -1287,6 +1314,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "ground-ginger",
+        "store":  "Family Fare",
+        "product":  "Full Circle Market Ground Ginger 1.6 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
         "id":  "fresh-ginger",
         "store":  "Family Fare",
         "product":  "Ginger Root",
@@ -1771,6 +1807,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027bakery\u0027"
+    },
+    {
+        "id":  "ground-nutmeg",
+        "store":  "Family Fare",
+        "product":  "Our Family Nutmeg, Ground 2.12 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "oatmeal",

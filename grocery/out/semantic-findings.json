@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-27 21:33",
-    "board":  "comparison-2026-09-27.json",
-    "sidecar_generated":  "2026-09-27 21:33:37",
+    "generated":  "2026-09-28 08:29",
+    "board":  "comparison-2026-09-28.json",
+    "sidecar_generated":  "2026-09-28 08:29:23",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,24 +9,24 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2822,
-                     "corpus":  44238,
-                     "rule_invisible":  9072
+                     "board_pairs":  2871,
+                     "corpus":  44265,
+                     "rule_invisible":  9082
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  3,
     "identity":  [
 
                  ],
     "coverage":  [
                      {
                          "kind":  "coverage",
-                         "id":  "taco-seasoning",
-                         "commodity":  "Taco Seasoning (packet)",
-                         "store":  "Walmart",
-                         "product":  "McCormick Street Taco Carne Asada Seasoning Mix, 0.87 oz Packet",
-                         "cos":  0.6829,
-                         "score":  0.944192,
+                         "id":  "cooking-spray",
+                         "commodity":  "Cooking Spray",
+                         "store":  "Hy-Vee",
+                         "product":  "Hy Vee Canola Oil No Stick Spray",
+                         "cos":  0.6611,
+                         "score":  0.946701,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      },
                      {
@@ -38,22 +38,20 @@
                          "cos":  0.7808,
                          "score":  0.926476,
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "garlic-herb-seasoning",
+                         "commodity":  "Garlic Herb Seasoning",
+                         "store":  "Family Fare",
+                         "product":  "Mc Cormick Grill Mates Garlic \u0026 Crushed Herbs Seasoning, 5.47 Oz",
+                         "cos":  0.6821,
+                         "score":  0.902959,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
     "coverage_excluded_count":  10,
     "coverage_excluded":  [
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "pork-tenderloin",
-                                  "commodity":  "Pork Tenderloin",
-                                  "store":  "Walmart",
-                                  "product":  "Smithfield Roasted Garlic \u0026 Herb Fresh Seasoned Pork Loin Filet, 1.98 - 2.5lb, 20 Grams of Protein per 4 oz Serving",
-                                  "cos":  0.7535,
-                                  "score":  0.94709,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "REFUSED-BY-EXCLUDE",
-                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
-                              },
                               {
                                   "kind":  "coverage",
                                   "id":  "corn-dogs",
@@ -77,6 +75,18 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027corn\\s*dogs?\u0027 matched, exclude \u0027\\bmini\\b\u0027 killed it"
+                              },
+                              {
+                                  "kind":  "coverage",
+                                  "id":  "pork-tenderloin",
+                                  "commodity":  "Pork Tenderloin",
+                                  "store":  "Walmart",
+                                  "product":  "Smithfield Roasted Garlic \u0026 Herb Fresh Seasoned Pork Loin Filet, 1.98 - 2.5lb, 20 Grams of Protein per 4 oz Serving",
+                                  "cos":  0.7538,
+                                  "score":  0.937553,
+                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
+                                  "verdict":  "REFUSED-BY-EXCLUDE",
+                                  "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"
                               },
                               {
                                   "kind":  "coverage",
@@ -120,8 +130,8 @@
                                   "commodity":  "Pork Tenderloin",
                                   "store":  "Walmart",
                                   "product":  "Smithfield Roasted Garlic \u0026 Cracked Black Pepper Fresh Seasoned Pork Tenderloin, 0.5–2.5 lb, 19 Grams of Protein per 4 oz Serving",
-                                  "cos":  0.8234,
-                                  "score":  0.915407,
+                                  "cos":  0.8246,
+                                  "score":  0.914244,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027pork\\s+tenderloin\u0027 matched, exclude \u0027seasoned\u0027 killed it"
@@ -156,8 +166,8 @@
                                   "commodity":  "Pork Tenderloin",
                                   "store":  "Walmart",
                                   "product":  "Marketside Roasted Garlic and Herb Fresh Seasoned Pork Loin Filet, 1.4 - 1.9 lbs., 21g of Protein per 4 oz Serving",
-                                  "cos":  0.7321,
-                                  "score":  0.906988,
+                                  "cos":  0.7311,
+                                  "score":  0.905036,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "REFUSED-BY-EXCLUDE",
                                   "detail":  "no admit pattern matches, and exclude \u0027seasoned\u0027 would refuse it anyway"

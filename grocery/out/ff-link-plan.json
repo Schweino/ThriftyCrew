@@ -1,254 +1,267 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "mandarin-oranges",
+                         "fault":  "NO-LINK",
+                         "board":  "Dole Mandarin Oranges In Juice",
+                         "board_pu":  0.2327,
+                         "name":  "Dole Mandarin Oranges In Juice",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/fruit_single_serve/dole_mandarin_oranges_in_juice/p/1764405684715494152",
+                         "price":  "$3.49",
+                         "size":  "15 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "energy-drinks",
+                         "fault":  "NO-LINK",
+                         "board":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
+                         "board_pu":  0.1353,
+                         "name":  "V8® Pomegranate Blueberry Energy Drink 96.000 Fl Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/juice_boxes_pouches/v8_pomegranate_blueberry_energy_drink_96_000_fl_oz/p/8134906",
+                         "price":  "$12.99",
+                         "size":  "96.000 fl oz",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
+                        "id":  "ground-beef-8020",
+                        "why":  "match found but per-unit disagrees: board $5.99 vs link $7.99 (25%)"
+                    },
+                    {
                         "id":  "flour",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.5596 vs link $0.598 (6.4%)"
                     },
                     {
                         "id":  "aluminum-foil",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "apples",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 ea\" gives no per-unit in sq_ft"
                     },
                     {
                         "id":  "avocados",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "no confident match (best 0)"
                     },
                     {
-                        "id":  "bratwurst",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "id":  "baked-beans",
+                        "why":  "match found but per-unit disagrees: board $0.0893 vs link $0.1068 (16.4%)"
                     },
                     {
                         "id":  "bread",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"20 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "broccoli",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "cereal",
+                        "why":  "match found but per-unit disagrees: board $0.1559 vs link $0.1684 (7.4%)"
                     },
                     {
                         "id":  "brownie-mix",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10.25 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "butter",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "caesar-salad-kit",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0.667)"
                     },
                     {
                         "id":  "cake-mix",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "canned-butter-beans",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"9 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "hominy",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
-                        "id":  "mandarin-oranges",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "canned-tuna",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "canned-white-beans",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "cantaloupe",
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
+                    },
+                    {
+                        "id":  "clementines",
+                        "why":  "match found but per-unit disagrees: board $1.885 vs link $2.995 (37.1%)"
                     },
                     {
                         "id":  "coffee",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.1706 vs link $0.4775 (64.3%)"
                     },
                     {
-                        "id":  "cooked-jasmine-rice",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "coffee-creamer",
+                        "why":  "match found but per-unit disagrees: board $0.1092 vs link $0.1497 (27%)"
+                    },
+                    {
+                        "id":  "coffee-pods",
+                        "why":  "match found but per-unit disagrees: board $0.5 vs link $0.799 (37.4%)"
                     },
                     {
                         "id":  "cooked-shredded-chicken",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "cookies",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.3328 vs link $0.3883 (14.3%)"
                     },
                     {
                         "id":  "croissants",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
+                    },
+                    {
+                        "id":  "sponges",
+                        "why":  "match found but per-unit disagrees: board $2.6633 vs link $2.8633 (7%)"
                     },
                     {
                         "id":  "donuts",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "energy-drinks",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "fish-sticks",
+                        "why":  "match found but per-unit disagrees: board $0.2841 vs link $0.3654 (22.3%)"
                     },
                     {
                         "id":  "french-bread",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "frosting",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.125 vs link $0.2306 (45.8%)"
                     },
                     {
                         "id":  "frozen-broccoli",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.0833 vs link $0.1158 (28.1%)"
+                    },
+                    {
+                        "id":  "frozen-burritos",
+                        "why":  "match found but its size \"32 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "frozen-fries",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "hash-browns",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "frozen-lasagna",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "frozen-pizza",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "garden-salad",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "garlic-bread",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "iced-tea",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "jumbo-pasta-shells",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "kielbasa",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "eggs",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "laundry-detergent",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "lemons",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "mac-and-cheese",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "orange-juice",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "pasta",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "pasta-sauce",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "pepperoni",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "pomegranates",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "popsicles",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "potato-chips",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "queso",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "refrigerated-biscuits",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "shrimp",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "sirloin-steak",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "smoked-turkey-sausage",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "soda",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "sour-cream",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "sports-drinks",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "strawberries",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "sun-dried-tomatoes",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "taco-seasoning",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "tomatoes",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "trash-bags",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
-                        "id":  "vegetable-soup",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "yukon-gold-potatoes",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "yellow-squash",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "yogurt",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "zucchini",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
     "worked":  61,
-    "generated":  "2026-09-27 08:17",
-    "board":  "comparison-2026-09-27.json"
+    "generated":  "2026-09-28 08:15",
+    "board":  "comparison-2026-09-28.json"
 }

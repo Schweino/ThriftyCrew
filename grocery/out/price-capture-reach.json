@@ -1,6 +1,6 @@
 {
-    "updated":  "2026-09-27T08:23:57",
-    "price_table":  "price-table-2026-09-27.json",
+    "updated":  "2026-09-28T08:24:11",
+    "price_table":  "price-table-2026-09-28.json",
     "note":  "Prices captured somewhere in the codebase that do not appear in the price table. compare-deals reads six input classes and the table is derived from the same rows the ranker uses, so a capture path either writes into one of those six or its prices do not exist. Advisory: \"captured, adjudicated, waiting on a commodity id\" is a legitimate state; \"captured and forgotten because nothing counts it\" is not.",
     "stores":  [
                    {
@@ -8,8 +8,8 @@
                        "what":  "Recipe Hunter pricing agent (ingredient-queue.ps1 -Record -Price)",
                        "expected":  "reach",
                        "captured":  520,
-                       "reached":  11,
-                       "missing":  509,
+                       "reached":  12,
+                       "missing":  508,
                        "missing_rows":  [
                                             {
                                                 "key":  "cumin-seeds",
@@ -25,14 +25,6 @@
                                                 "price":  14.49,
                                                 "size":  "2.3 oz",
                                                 "item":  "Spice Islands Ground Chipotle Chile",
-                                                "commodity_known":  false
-                                            },
-                                            {
-                                                "key":  "fennel",
-                                                "store":  "Baker\u0027s",
-                                                "price":  3.99,
-                                                "size":  "1 ct",
-                                                "item":  "Fresh Fennel",
                                                 "commodity_known":  false
                                             },
                                             {
@@ -1609,6 +1601,14 @@
                                                 "price":  3.49,
                                                 "size":  "8 oz",
                                                 "item":  "Hy Vee Grated Parmesan Cheese",
+                                                "commodity_known":  false
+                                            },
+                                            {
+                                                "key":  "parmesan cheese",
+                                                "store":  "Sam\u0027s Club",
+                                                "price":  7.42,
+                                                "size":  "24 oz",
+                                                "item":  "Member\u0027s Mark Grated Parmesan Cheese, 24 oz.",
                                                 "commodity_known":  false
                                             }
                                         ]

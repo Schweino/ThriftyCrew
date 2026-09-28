@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-27 08:27",
+    "generated":  "2026-09-28 08:26",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -12,10 +12,19 @@
                 ],
     "new_contested":  [
                           {
-                              "name":  "Campbell\u0027s cream of mushroom, cream of chicken, tomato or chicken noodle soup, SALE, $0.99",
-                              "chain":  "chicken-noodle-soup (oz) \u003e cream-of-mushroom-soup (oz) \u003e cream-of-chicken-soup (oz)",
+                              "name":  "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
+                              "chain":  "almonds (oz) \u003e walnuts (oz)",
                               "form":  false,
-                              "winner":  "chicken-noodle-soup",
+                              "winner":  "almonds",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
+                              "chain":  "paper-towels (each) \u003e toilet-paper (each)",
+                              "form":  false,
+                              "winner":  "paper-towels",
                               "verdict":  "UNPRICED",
                               "cell":  "",
                               "crown":  false
@@ -39,11 +48,29 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Deli egg protein sliders, bacon \u0026 colby jack, tomato \u0026 spinach or ham \u0026 provolone, 3 ct., $0.99 per slider",
-                              "chain":  "bacon (lb) \u003e eggs (dozen) \u003e deli-ham (oz) \u003e tomatoes (lb) \u003e spinach (oz)",
+                              "name":  "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
+                              "chain":  "flour (lb) \u003e crackers (oz)",
                               "form":  true,
-                              "winner":  "bacon",
+                              "winner":  "flour",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
+                              "chain":  "raspberries (oz) \u003e blackberries (oz)",
+                              "form":  false,
+                              "winner":  "raspberries",
                               "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
+                              "chain":  "ice-cream (floz) \u003e popsicles (each)",
+                              "form":  true,
+                              "winner":  "ice-cream",
+                              "verdict":  "UNPRICED",
                               "cell":  "",
                               "crown":  false
                           },
@@ -57,20 +84,38 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Hy-Vee sloppy joe or pizza sauce, 15 oz., $0.99 SALE",
-                              "chain":  "pizza-sauce (oz) \u003e sloppy-joe-sauce (oz)",
-                              "form":  false,
-                              "winner":  "pizza-sauce",
+                              "name":  "Gustare Vita capers or chopped garlic, 3 oz., $2.49",
+                              "chain":  "garlic (each) \u003e minced-garlic (oz)",
+                              "form":  true,
+                              "winner":  "garlic",
                               "verdict":  "not in the newest candidates file",
                               "cell":  "",
                               "crown":  false
                           },
                           {
-                              "name":  "Hy-Vee Worcestershire, soy or teriyaki sauce, SALE, $0.99",
-                              "chain":  "worcestershire (floz) \u003e teriyaki-sauce (floz)",
+                              "name":  "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
+                              "chain":  "tortillas (each) \u003e bagels (each)",
                               "form":  false,
-                              "winner":  "worcestershire",
-                              "verdict":  "UNPRICED",
+                              "winner":  "tortillas",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
+                              "chain":  "aluminum-foil (sq_ft) \u003e parchment-paper (each)",
+                              "form":  true,
+                              "winner":  "aluminum-foil",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Hy-Vee mixed vegetables, 24 oz., $2.48",
+                              "chain":  "frozen-vegetables (oz) \u003e canned-mixed-vegetables (oz)",
+                              "form":  false,
+                              "winner":  "frozen-vegetables",
+                              "verdict":  "size 24 oz = 0.1033/oz",
                               "cell":  "",
                               "crown":  false
                           },
@@ -102,6 +147,15 @@
                               "crown":  false
                           },
                           {
+                              "name":  "McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
+                              "chain":  "taco-seasoning (oz) \u003e brown-gravy-mix (oz)",
+                              "form":  false,
+                              "winner":  "taco-seasoning",
+                              "verdict":  "not in the newest candidates file",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Muscle Milk Cookies \u0027N Creme High Protein Shake With Ultra Filtered Milk 4 Ea",
                               "chain":  "milk (gallon) \u003e cookies (oz)",
                               "form":  true,
@@ -111,11 +165,29 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
+                              "chain":  "crackers (oz) \u003e sandwich-cookies (oz)",
+                              "form":  false,
+                              "winner":  "crackers",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "New York Bakery Cheesy Focaccia Pesto \u0026 Garlic",
                               "chain":  "garlic (each) \u003e pesto (oz)",
                               "form":  true,
                               "winner":  "garlic",
                               "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
+                              "chain":  "strawberries (oz) \u003e blueberries (oz) \u003e frozen-fruit (oz)",
+                              "form":  true,
+                              "winner":  "strawberries",
+                              "verdict":  "not in the newest candidates file",
                               "cell":  "",
                               "crown":  false
                           },
@@ -138,12 +210,21 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Pero Family Farms snipped green beans, 12 oz. pkg., $2.99",
+                              "chain":  "fresh-green-beans (lb) \u003e canned-green-beans (oz)",
+                              "form":  true,
+                              "winner":  "fresh-green-beans",
+                              "verdict":  "size 0.75 lb = 3.9867/lb",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
                               "chain":  "oatmeal (oz) \u003e walnuts (oz)",
                               "form":  false,
                               "winner":  "oatmeal",
                               "verdict":  "size 10.4 oz = 0.2875/oz ; size 10.4 oz = 0.4788/oz",
-                              "cell":  "oatmeal @ Fareway 0.2875/oz",
+                              "cell":  "",
                               "crown":  false
                           },
                           {
@@ -166,30 +247,34 @@
                           }
                       ],
     "new_contested_names":  [
-                                "Campbell\u0027s cream of mushroom, cream of chicken, tomato or chicken noodle soup, SALE, $0.99",
+                                "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
+                                "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
                                 "Del Monte Peas And Carrots 8.5 Oz",
                                 "Del Monte Whole Green Beans No Soy Teriyaki 14.5 Oz",
-                                "Deli egg protein sliders, bacon \u0026 colby jack, tomato \u0026 spinach or ham \u0026 provolone, 3 ct., $0.99 per slider",
+                                "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
+                                "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
+                                "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
                                 "Gatorade Chocolate Caramel Protein Bar 2.8 Oz",
-                                "Hy-Vee sloppy joe or pizza sauce, 15 oz., $0.99 SALE",
-                                "Hy-Vee Worcestershire, soy or teriyaki sauce, SALE, $0.99",
+                                "Gustare Vita capers or chopped garlic, 3 oz., $2.49",
+                                "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
+                                "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
+                                "Hy-Vee mixed vegetables, 24 oz., $2.48",
                                 "Kodiak Protein Packed Chocolate Chip Oatmeal 6 Ea",
                                 "Kraft Flavor Fusions Garlic \u0026 Herb Cheddar Cheese 7 Oz Block",
                                 "Kraft Parmesan Pesto Mac \u0026 Cheese 9.5 Oz",
+                                "McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
                                 "Muscle Milk Cookies \u0027N Creme High Protein Shake With Ultra Filtered Milk 4 Ea",
+                                "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
                                 "New York Bakery Cheesy Focaccia Pesto \u0026 Garlic",
+                                "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
                                 "Oikos Remix Vanilla Cookies And Creme High Protein Mixin Nonfat Greek Yogurt 4.5 Oz",
                                 "Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
+                                "Pero Family Farms snipped green beans, 12 oz. pkg., $2.99",
                                 "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
                                 "Sartori Cheese Sriracha Cheddar 5 OZ",
                                 "Screamin\u0027 Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea"
                             ],
     "cell_by_contest":  [
-                            {
-                                "name":  "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
-                                "cell":  "oatmeal @ Fareway 0.2875/oz",
-                                "crown":  false,
-                                "claimed_by":  "oatmeal \u003e walnuts"
-                            }
+
                         ]
 }
