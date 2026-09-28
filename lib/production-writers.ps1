@@ -134,6 +134,31 @@ function Add-TcProductionCensusRow {
   return 'written'
 }
 
+$script:TcD4CleanDays = 7   # Brad's ruling D4 (2026-09-25): set-aside switches on after 7 clean census days. Ruled, not tuned.
+
+function Get-TcProductionCleanStreak {
+  <# Consecutive CALENDAR days ending on -Date whose census row reads 0 unregistered. A day with no row breaks the
+     streak (an unrecorded day was never judged clean), and the first row of a date is the one read. Triage residual
+     2026-09-26-86a27b: nothing paged when D4's 7 days were reached, so the flip waited on someone remembering. #>
+  param([Parameter(Mandatory)][string]$CommonDir, [Parameter(Mandatory)][string]$Date)
+  $log = Join-Path $CommonDir $script:TcProductionCensusLogName
+  if (-not (Test-Path -LiteralPath $log)) { return 0 }
+  $byDate = @{}
+  foreach ($ln in [IO.File]::ReadAllLines($log)) {
+    if (-not $ln.Trim()) { continue }
+    try { $o = $ln | ConvertFrom-Json } catch { continue }
+    $d = [string]$o.date
+    if ($d -and -not $byDate.ContainsKey($d)) { $byDate[$d] = [int]$o.unregistered }
+  }
+  $n = 0; $day = [datetime]::ParseExact($Date, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+  while ($true) {
+    $k = $day.ToString('yyyy-MM-dd')
+    if (-not $byDate.ContainsKey($k) -or $byDate[$k] -ne 0) { break }
+    $n++; $day = $day.AddDays(-1)
+  }
+  return $n
+}
+
 function Get-TcSyncIntruderArgs {
   <# W2.2 (D4): what the capture bot passes lib\checkout-sync.ps1: -IntruderPolicy from the registry's intruder_policy,
      and -IsRegisteredPath, true when the bot or a registry writer owns the path. A registry that cannot be read gives
@@ -156,7 +181,7 @@ function Invoke-TcProductionCensusCheck {
   try {
     $reg = Read-TcProductionRegistry -Path $RegistryPath
     $c = Get-TcProductionCensus -Repo $Repo -Registry $reg
-    $rec = 'not recorded'
+    $rec = 'not recorded'; $streak = 0
     if ($Record) {
       if (-not $CommonDir) {
         $g = Invoke-GitCaptured -Repo $Repo -GitArgs @('rev-parse', '--path-format=absolute', '--git-common-dir')
@@ -165,8 +190,12 @@ function Invoke-TcProductionCensusCheck {
       }
       if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
       $rec = 'day row ' + (Add-TcProductionCensusRow -CommonDir $CommonDir -Census $c -Date $Date)
+      $streak = Get-TcProductionCleanStreak -CommonDir $CommonDir -Date $Date
+      $rec += ('; clean streak ' + $streak + ' of ' + $script:TcD4CleanDays)
     }
-    return [pscustomobject]@{ blind = $false; census = $c
+    # d4_ready is the one actionable state: the ruled bar is met and the switch still reads wait. The watchdog pages it.
+    $ready = ($Record -and ($streak -ge $script:TcD4CleanDays) -and ([string]$c.policy -eq 'wait'))
+    return [pscustomobject]@{ blind = $false; census = $c; d4_ready = $ready
       line = ('production intruders (report only, W0.3): ' + $c.summary + '; policy ' + $c.policy + '; ' + $rec) }
   } catch {
     return [pscustomobject]@{ blind = $true; census = $null
@@ -255,12 +284,37 @@ if ($__pwSelfTest) {
     PwT 'CLEAN TWIN: the classifier vouches for a registered writer''s stamp (grocery/x-weekly-stamp.txt -> true)' ([bool](& $sa.test 'grocery/x-weekly-stamp.txt')) ($sa.note)
     $sb = Get-TcSyncIntruderArgs -RegistryPath $bad
     PwT 'MUST NOT FIRE: an unreadable registry gives wait and no classifier, never set-aside' (($sb.policy -eq 'wait') -and ($null -eq $sb.test) -and ($sb.note -match 'could not be read')) ($sb.note)
+    # Residual 2026-09-26-86a27b: D4's bar is 7 clean days, and reaching it must page. Founding rows: 12, 12, 8 unregistered.
+    $sd = Join-Path $tmp 'streak'; New-Item -ItemType Directory -Path $sd | Out-Null
+    $slog = Join-Path $sd 'tc-production-intruders.jsonl'
+    $srows = @('{"date":"2026-09-26","unregistered":12}', '{"date":"2026-09-27","unregistered":12}', '{"date":"2026-09-28","unregistered":8}')
+    for ($i = 1; $i -le 7; $i++) { $srows += ('{"date":"2026-10-0' + $i + '","unregistered":0}') }
+    [IO.File]::WriteAllLines($slog, [string[]]$srows)
+    $s7 = Get-TcProductionCleanStreak -CommonDir $sd -Date '2026-10-07'
+    PwT 'MUST FIRE: seven clean days in a row read a streak of 7, AT the D4 bar of 7' ($s7 -eq 7) ([string]$s7)
+    $s6 = Get-TcProductionCleanStreak -CommonDir $sd -Date '2026-10-06'
+    PwT 'CLEAN TWIN: six clean days read 6, one step below the D4 bar of 7' ($s6 -eq 6) ([string]$s6)
+    $s0 = Get-TcProductionCleanStreak -CommonDir $sd -Date '2026-09-28'
+    PwT 'MUST NOT FIRE: the founding day (8 unregistered) reads a streak of 0' ($s0 -eq 0) ([string]$s0)
+    $sgap = Get-TcProductionCleanStreak -CommonDir $sd -Date '2026-10-09'
+    PwT 'MUST NOT FIRE: a day with no census row breaks the streak (10-08 unrecorded, 10-09 unrecorded)' ($sgap -eq 0) ([string]$sgap)
+    # The wiring: the check reports d4_ready only with the streak met AND policy still wait.
+    $cd7 = Join-Path $tmp 'c7'; New-Item -ItemType Directory -Path $cd7 | Out-Null
+    $clean = @(1..6 | ForEach-Object { '{"date":"2026-10-0' + $_ + '","unregistered":0}' })
+    [IO.File]::WriteAllLines((Join-Path $cd7 'tc-production-intruders.jsonl'), [string[]]$clean)
+    $chk7 = Invoke-TcProductionCensusCheck -Repo $repo -RegistryPath $regPath -Record -CommonDir $cd7 -Date '2026-10-07'
+    PwT 'MUST NOT FIRE: a dirty 7th day (4 unregistered today) is not D4-ready after six clean days' ((-not $chk7.d4_ready) -and ($chk7.line -match 'clean streak 0 of 7')) $chk7.line
+    $cd8 = Join-Path $tmp 'c8'; New-Item -ItemType Directory -Path $cd8 | Out-Null
+    $clean7 = @(1..7 | ForEach-Object { '{"date":"2026-10-0' + $_ + '","unregistered":0}' })
+    [IO.File]::WriteAllLines((Join-Path $cd8 'tc-production-intruders.jsonl'), [string[]]$clean7)
+    $chk8 = Invoke-TcProductionCensusCheck -Repo $repo -RegistryPath $regPath -Record -CommonDir $cd8 -Date '2026-10-07'
+    PwT 'MUST FIRE: seven clean recorded days under policy wait report d4_ready' ($chk8.d4_ready -and ($chk8.line -match 'clean streak 7 of 7')) $chk8.line
   } catch {
     $script:pwFail++; Write-Output ('  FAIL  the fixture threw: ' + $_.Exception.Message)
   } finally {
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
   }
-  $want = 17
+  $want = 23
   if ($script:pwCases -ne $want) { Write-Output ("PRODUCTION-WRITERS SELF-TEST FAIL: ran $script:pwCases cases, the literal list holds $want"); exit 1 }
   if ($script:pwFail) { Write-Output "PRODUCTION-WRITERS SELF-TEST FAIL ($script:pwFail of $script:pwCases)"; exit 1 }
   Write-Output "PRODUCTION-WRITERS SELF-TEST PASS ($script:pwCases of $script:pwCases cases)"

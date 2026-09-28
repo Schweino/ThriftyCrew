@@ -1820,6 +1820,9 @@ try {
   . (Join-Path $flRepo 'lib\production-writers.ps1')
   $piChk = Invoke-TcProductionCensusCheck -Repo $flRepo -RegistryPath (Join-Path $flRepo 'ops\production-writers.json') -Record -Date $todayS
   [void]$ok.Add($piChk.line)
+  # The one exception to "never a finding" (triage residual 2026-09-26-86a27b): D4's ruled bar met while the switch
+  # still reads wait is actionable, and before this nothing paged when the 7 clean days arrived.
+  if ($piChk.d4_ready) { [void]$findings.Add('D4 READY: the production census has read 0 unregistered paths for 7 clean days and ops/production-writers.json intruder_policy is still wait. Ruling D4 (design/PLAN-bot-dedicated-checkout-2026-09-25.md) switches the set-aside on now.') }
 } catch { [void]$ok.Add('production intruders: BLIND - the check threw (' + $_.Exception.Message + ')') }
 
 
