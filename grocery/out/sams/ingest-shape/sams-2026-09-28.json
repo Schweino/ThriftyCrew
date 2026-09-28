@@ -1,0 +1,23 @@
+{
+    "store":  "sams",
+    "date":  "2026-09-28",
+    "rows_in":  269,
+    "rows_out":  181,
+    "rejects":  44,
+    "rejects_by_reason":  {
+                              "no unitprice":  18,
+                              "name conflict: name states # oz but none reproduces sam\u0027s #/oz (lp/up derives #)":  8,
+                              "name conflict: name states # lb but none reproduces sam\u0027s #/lb (lp/up derives #)":  2,
+                              "unknown unit \"piece\"":  1,
+                              "name conflict: name states # ct but none reproduces sam\u0027s #/ct (lp/up derives #)":  9,
+                              "name conflict: name states #, # fl oz but none reproduces sam\u0027s #/fl oz (lp/up derives #)":  1,
+                              "name conflict: name states #, # oz but none reproduces sam\u0027s #/oz (lp/up derives #)":  1,
+                              "name conflict: name states # fl oz but none reproduces sam\u0027s #/fl oz (lp/up derives #)":  2,
+                              "unknown unit \"ft\"":  1,
+                              "density conflict: the name states # lbs = # g but the derived size is # fl oz = # ml, an implied density of # g/ml - outside #-# g/ml, which no grocery liquid is - sam\u0027s # ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable":  1
+                          },
+    "unknown_unit_spellings":  {
+                                   "piece":  1,
+                                   "ft":  1
+                               }
+}
