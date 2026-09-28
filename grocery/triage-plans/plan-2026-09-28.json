@@ -301,12 +301,13 @@
       "status": "deviated",
       "premise_verified": true,
       "deviation": "Premise held, and the side at fault is the GUARD, not the engine. Standing ruling found BEFORE code: commit b3afe6953 (2026-07-27) 'Hy-Vee PERKS dual-price: publish the member price, gate the cell (Brad decision c)', cited in pricing-math-lib's Get-ItemPrice and compare-deals' per-cell membership label 'Perks membership required'. So the engine's $1.98 is the ruled price; guard 10b's 'price is the LAST money token' invariant read the non-member $2.48. Measured on the 09-28 Hy-Vee ad (out/ads-2026-09-28.json): 5 Perks rows of 1932 (4 dual-price, 1 Perks-only); only celery reached a board cell (comparison-2026-09-28 carries 0 Perks cells, the one candidate withheld). Fixed the CLASS: one reader, Get-TcPerksPrice in pricing-math-lib, used by Get-ItemPrice AND by guards.ps1 10b (which now dot-sources the side-effect-free lib); 10b also now fails a Perks price published WITHOUT the membership gate (the ruling's other half, previously unchecked). DEVIATION FROM THE CHAIN: the board was NOT rebuilt or republished in this spawn. The fix is to a guard, the cell's safe state is WITHHELD (fails closed), the ad runs 2026-09-28 to 2026-10-04, and a mid-day rebuild reads late captures no plan measured (memory triage-rebuild-reads-late-captures); the next daily chain after landing publishes celery/Hy-Vee at the Perks price, gated. full_suite: deferred-to-land (test-guards carries the new cases).",
-      "shipped_commit": null,
+      "shipped_commit": "b4b3ad726",
       "resolution_note": "Guard fixed to the ruling, engine unchanged in behaviour. pricing-math-lib.ps1: new Get-TcPerksPrice (the one Perks reading), Get-ItemPrice calls it. guards.ps1 10b: reads a Perks line with Get-TcPerksPrice, counts Perks lines in its ok line, and HARD FAILs a Perks price on a cell without membership. test-guards.ps1 8d: MUST FIRE celery published at non-member $2.48; MUST FIRE celery at $1.98 with no membership gate; CLEAN TWIN celery at $1.98 gated, asserted as read ('N of them Perks lines'), beside the existing bananas/storage-bags twins. Proof: scratch harness over all five frozen 09-28 Perks rows plus two single-price lines, 7 of 7 ok (shared function AND engine read the member price); compare-deals -SelfTest exit 0 'SELF-TEST PASS' (its 11b Perks cases); parse of all three files 0 errors. test-guards full run deferred-to-land. Board not republished: celery/Hy-Vee stays WITHHELD until the next daily chain after landing.",
       "close_disposition": null,
       "leaves_open_followup": "watch:grocery/guards.ps1",
       "live_check": "after the next daily chain following landing: public/board.json celery / Hy-Vee = 1.98 per each, member_label 'Perks membership required' (valid while the 2026-09-28 to 2026-10-04 ad runs); guards 10b ok line reports '1 of them Perks lines'",
-      "republished": false
+      "republished": false,
+      "actual_tool_calls": 41
     },
     {
       "queue_id": "2026-09-28-c81a9f",
