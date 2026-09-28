@@ -1,0 +1,177 @@
+{
+  "generated": "2026-09-28T13:45:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "Orchestrator brief: comparison-2026-09-28 built 08:17:56, not MID-BUILD. None of these three items changes a matching or pricing rule, so no product name routes differently and no routing artifact is written. Measurements taken against the main checkout at HEAD 30015ad86 (local, 2 commits ahead of origin per the brief).",
+  "queue_ids_seen": [
+    "2026-09-27-ae8b7a",
+    "2026-09-28-90a544",
+    "2026-09-28-f7e441"
+  ],
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "searched \"scheduled task git pull autostash\", \"producer closure dataflow edge\", \"regex timeout under load\" (knowledge-search --estate --multi): used machinery entries for lib/chain-code-currency.ps1, grocery/match-lib.ps1 and grocery/run-log-lib.ps1",
+    ".claude/rules/ops-and-gates.md og-27 (lock order: capture-run mutex is 0, outermost; holding it while waiting on the remote is a nesting) and og-53 (a lock-free reader sampling one key once survives every anomaly): decided 90a544 reads the status record and never takes the mutex",
+    ".claude/rules/ops-and-gates.md og-04 (a catch around a native redirect is not a guard; use Invoke-Native) and og-16 (a switch on data carries a refusing default): the new sync script",
+    ".claude/rules/ops-and-gates.md og-22 (SCOPE OF A CLEAN REPORT: unsound proves nothing) and og-13 (every threshold is an upper bound): f7e441 leaves_open is written as a floor",
+    "memory:prompt-backup-audit-red-for-agent-edits-from-a-worktree (edit the mirror too): the four SKILL prompt edits in 90a544"
+  ],
+  "family_note": "90a544 and f7e441 are both residuals of the 2026-09-28-2 chain-A batch (f50b7a, d70062) and both concern what the daily chain can trust about code and inputs that move under it mid-run. They share no file. ae8b7a is unrelated (test-match-lib under chain load).",
+  "items": [
+    {
+      "queue_id": "2026-09-27-ae8b7a",
+      "subject": "Triage residual: test-match-lib load reds and unexplained non-blind divergences (06cd9b)",
+      "classification": "needs-more-time",
+      "status": "needs-more-time",
+      "evidence": [
+        "grocery/ad-cycle-log.txt:42329 [2026-09-28T08:59:06] 'test-auditors: 684 s (rc=0)' and :42330 'RECORDED 0 known failing case(s) of 805': the first chain-time run after 2e83fb11f passed, so nothing is red today (the brief's 'a guard/self-test is red' describes 09-27, not now)",
+        "grocery/out/test-auditors-fail-2026-09-27.txt:724 'MATCH-LIB FAILED (3915 divergence(s): 1641 fast-path, 0 detail-winner, 0 detail-no-include-hit, 2274 could-not-look, 0 Get-MatchTexts)'; every blind name quoted on that line carries '[fallback]'. No matchlib-relook-*.json exists in %TEMP%: the 09-27 rows were produced by the pre-2e83fb11f harness, which never kept them",
+        "Two candidate mechanisms for the 1,641 non-blind rows REFUTED by reading: (1) quarantined looks are named, not silent: grocery/match-lib.ps1:108 a dead regex returns -1 and a -1 before the winner goes through NoteBlind (:155-157) in C#, and :556 in the PowerShell twin; (2) the blind-text-to-name map is sound: the recorded text is Get-MatchTexts[0] (match-lib.ps1:672-673, :633-634) and test-match-lib.ps1:625-629 maps back through the same function"
+      ],
+      "root_cause": "Unproven, and not provable from what is on disk: the 1,641 non-blind divergences of 2026-09-27 09:11 were never written down by the harness that saw them, controlled load (cpu-load -Cores 20, per 06cd9b) does not reproduce them, and the two code paths that could produce a silent answer under timeout pressure were read and ruled out. Part (b) (a chain-peak load storm pages as WATCHERS FAILED) is a cadence question whose fix depends on (a): if the next loaded red is still-blind only, moving early:match-lib off the chain peak is the fix; if it prints UNRECORDED rows, it is a money-lane matcher defect and moving it would hide it.",
+      "resolution_note": "Parked needs-more-time, not closed. Learned today: 0 recurrences since 2e83fb11f (09-28 chain-time test-auditors rc=0); quarantined looks and the blind-text map are both sound, so the 09-27 non-blind rows came from somewhere else, and the 09-27 row lists do not exist. The shipped classing harness is the instrument: the next loaded red names DRIFT / UNRECORDED / still-blind on its FAILED line and writes %TEMP%/matchlib-relook-<stamp>-<id>.json. Next step for whoever picks this up: when that red lands, copy the relook json out of %TEMP% the same day (it is not kept), then split by path (compiled vs powershell-fallback): UNRECORDED rows open a money-lane item; still-blind-only decides (b) as a cadence move of early:match-lib out of the prune-out test-auditors run. Until a loaded red happens there is nothing new to diagnose, so re-triaging this daily buys nothing."
+    },
+    {
+      "queue_id": "2026-09-28-90a544",
+      "subject": "Triage residual: foreign writers change chain verdict inputs mid-run (from 2026-09-27-f50b7a)",
+      "classification": "infra",
+      "evidence": [
+        "grocery/out/logs/capture-run-daily-2026-09-20.log:140 'publish: staging INPUTS only - the chain verdict scored inputs 82171e4b061cb73a but the tree is now 90ccefbc3bfcb149' (the withhold f50b7a called 'cause not reconstructed')",
+        "RECONSTRUCTED here: main reflog 'main@{2026-09-20 11:40:06}: commit: The board publishes again: a coffee beverage and a coffee syrup leave the ground-coffee row' = 5d42fb944, and 'git show --stat 5d42fb944' -> 'grocery/commodities.json | 2 ++'. commodities.json is a verdict input (lib/chain-verdict-lib.ps1:44) and that day's chain ran 08:00 to 13:19, so the 09-20 withhold was a SESSION committing a content change in the production checkout mid-run, followed by 'reset: moving to HEAD~2' (11:43:10) and a fast-forward merge (11:45:50)",
+        "main reflog pulls inside a daily chain window, all 26 capture-run-daily logs 2026-09-01..09-28: 2 of 52 pull entries: '09-27 09:51:09 pull --rebase --autostash origin main (finish)' (the triage STEP 0.5 EOL round-trip f50b7a fixed) and '09-20 08:23:19 pull -q --rebase --autostash origin main (finish)' (unattributed: the '-q' form matches none of the five prompt lines)",
+        "Live scheduled autostash pullers of the production checkout (grep of ops/prompt-backup/scheduled-tasks/**/SKILL.md and grocery/*.ps1): grocery-alert-triage SKILL.md:232 STEP 0.5, grocery-fareway-daily-check SKILL.md:17, grocery-recipe-everyday-refresh SKILL.md:10, grocery-bakers-daily-flash-check SKILL.md:16, grocery/bakers-daily-scan.ps1:78. CORRECTION to the residual's list: walmart-headed-probe-once is a disabled one-shot ('a one-time probe (Brad ruling R12, 2026-09-10) that disables itself after its single run on 2026-09-11', capture-run-daily-2026-09-20.log prompt-backup EXEMPT line), and grocery-bakers-daily-flash-check was missing from it",
+        "design/PLAN-bot-dedicated-checkout-2026-09-25.md:7 'Status: RULED 2026-09-25 ... building in stage order'; Stage 2 W2.1 'The barrier refuses' covers SESSIONS writing the production checkout. The plan never names these scheduled pull lines (grep for autostash and the four task names hits only history rows 140-186 about the bots' own old tail, and the inventory row 272)",
+        "grocery/capture-run.ps1:605 the chain asks for Global\\tc-capture-run with -WaitSec 60 and :615-621 SKIPs its whole day if it cannot get it; :610 relies on the mutex's ABANDONED state to detect an orphaned child. grocery/out/logs/capture-run-status.json carries per-kind {date, pid, started, updated, stage}"
+      ],
+      "surface_fix": {
+        "what": "none needed: 09-27's withheld board was superseded by 09-28's chain; the EOL half shipped in 863bbdd14 (f50b7a)",
+        "files": []
+      },
+      "root_cause": "Nothing tells a scheduled task that the daily chain is in flight, so five scheduled pulls of the production checkout run on a clock that assumes the chain has finished (the chain ran past 09:45 on 7 of the 26 days on disk: 09-09, 09-12, 09-20, 09-23, 09-24, 09-26, 09-27). A pull that brings an upstream change to commodities.json, known-wrong.json, board-price-overrides.json or product-urls.json after guards moves the verdict fingerprint and withholds a board guards passed. Separately, sessions commit in the production checkout mid-run (09-20, proven), which Stage 2 W2.1 of the ruled dedicated-checkout plan already owns.",
+      "root_fix": {
+        "what": "One sync entry point for every scheduled pull of the production checkout, which SKIPS the pull while a capture-run is in flight, read lock-free from the run status record; the four SKILL prompts and bakers-daily-scan.ps1 call it instead of a bare 'git pull --rebase --autostash'.",
+        "files": [
+          "ops/sync-production-checkout.ps1 (new)",
+          "grocery/bakers-daily-scan.ps1",
+          "ops/prompt-backup/scheduled-tasks/grocery-alert-triage/SKILL.md (+ live copy under C:/Users/Owner/.claude/scheduled-tasks)",
+          "ops/prompt-backup/scheduled-tasks/grocery-fareway-daily-check/SKILL.md (+ live copy)",
+          "ops/prompt-backup/scheduled-tasks/grocery-recipe-everyday-refresh/SKILL.md (+ live copy)",
+          "ops/prompt-backup/scheduled-tasks/grocery-bakers-daily-flash-check/SKILL.md (+ live copy)"
+        ],
+        "exact_change": "1) ops/sync-production-checkout.ps1 [-Repo C:/Codex/ThriftyCrew] [-StatusFile <repo>/grocery/out/logs/capture-run-status.json] [-SelfTest]: Test-TcCaptureRunInFlight reads the status json ONCE (og-53: one sample of one record survives every read anomaly), and returns in-flight when ANY kind (daily, ad) has date = today, a stage that is not terminal (read the terminal set from capture-run.ps1's Write-RunStatus call sites; at least complete, failed and skipped-locked; a switch on stage carries a default that treats an unknown stage as IN FLIGHT, fail closed, og-16), and a pid that is alive. In flight -> print 'SYNC-SKIPPED capture-run <kind> in stage <stage> (pid <n>, started <t>) - the production checkout is not pulled while the chain runs' and exit 0. Otherwise run 'git -C <repo> pull --rebase --autostash origin main' through Invoke-Native (grocery/native-lib.ps1, og-04), print its last line, exit its rc. Unreadable or absent status file -> pull as today and say 'status unreadable, pulling' (degrade to the day before, never to a refusal). Last line 'SYNC-PRODUCTION-CHECKOUT-COMPLETE outcome=<skipped|pulled|failed>'. DO NOT take Global\\tc-capture-run: capture-run waits only 60 s (capture-run.ps1:605) so a sync holding it across a slow network pull makes the chain skip its day, and a WaitOne on an abandoned mutex consumes the abandoned state capture-run.ps1:610 relies on to detect an orphaned child. Self-contained on purpose, not a function in lib/checkout-sync.ps1: that lib is in the chain's derived set, so extending it would force a chain rehearsal for a change the chain never runs; cost is one small script, 0 seconds per push beyond its self-test. 2) grocery/bakers-daily-scan.ps1:78: replace the bare git pull (the shape test-native-stderr-eap.ps1:425 already names) with a call to the script, keeping its existing log and its could-not-restore page. 3) The four SKILL prompts: replace the 'git -C C:\\Codex\\ThriftyCrew pull --rebase --autostash origin main' command with 'powershell -NoProfile -ExecutionPolicy Bypass -File C:\\Codex\\ThriftyCrew\\ops\\sync-production-checkout.ps1' and one sentence: 'SYNC-SKIPPED means the daily chain is running: carry on with the checkout as it is'. Edit the live copy AND the ops/prompt-backup mirror in the same change, then run ops/audit-prompt-backup.ps1."
+      },
+      "leaves_open": "Sessions and hand commands that write the production checkout mid-run (the 09-20 shape: a session commit to commodities.json at 11:40:06): not touched here, owned by design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2 W2.1 (the barrier refuses a session write to the production checkout; ruled 2026-09-25, not yet built). Also any future scheduled task that adds its own bare pull: nothing stops a sixth copy (the new script's header says so).",
+      "leaves_open_occurrences": "1 proven content move by a session (2026-09-20 5d42fb944) over 26 daily runs 2026-09-01..2026-09-28; 1 unattributed pull inside a window (2026-09-20 08:23:19)",
+      "leaves_open_followup": null,
+      "leaves_open_followup_note": "owner: design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2 W2.1 (ruled plan, not a queue id). At close the developer checks whether that plan's build already tracks W2.1 and, if not, mints a weekly-lane item naming it (1 occurrence, so watch: is not allowed)",
+      "blast_radius": {
+        "measured_as": "routing",
+        "affected_now": 5,
+        "names": [
+          "grocery-alert-triage SKILL.md:232",
+          "grocery-fareway-daily-check SKILL.md:17",
+          "grocery-recipe-everyday-refresh SKILL.md:10",
+          "grocery-bakers-daily-flash-check SKILL.md:16",
+          "grocery/bakers-daily-scan.ps1:78"
+        ],
+        "risk": "a task that fires inside the chain window works on an unpulled checkout for that run; nothing is written or skipped beyond the pull itself",
+        "measured_by": "Not a matching or pricing change: no product name routes differently and no board cell can move. Measured instead: the call sites (5: four SKILL prompts, grocery/bakers-daily-scan.ps1:78) and the behaviour change at each, which is only 'no pull while a capture-run is in flight'. Days that change: those where one of the five tasks fires inside the chain window; on disk the chain ran past 09:45 (the triage STEP 0.5 time) on 7 of 26 days. On such a day the task works on the checkout as the chain left it at start, which is also what the chain itself publishes from; the next task run after the chain pulls normally.",
+        "corpus": "main reflog (52 pull entries) against 26 capture-run-daily logs 2026-09-01..2026-09-28; grep of the scheduled SKILL prompts under ops/prompt-backup and grocery/*.ps1 for 'pull --rebase --autostash'",
+        "claimed_by_earlier": [],
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "ops/sync-production-checkout.ps1 -SelfTest (opened as 'if ($SelfTest) { ... exit }' so ops/audit-mustfire-census finds it; run-gates runs it on every push), with a -GitRunner scriptblock seam that records calls instead of running git, and a temp status file per run (og-38); plus ops/audit-prompt-backup.ps1 for the four prompt edits",
+        "must_fire_case": "MUST FIRE (the 09-27 shape): status file with daily {date: today, stage: 'guards', pid: $PID} -> exit 0, 'SYNC-SKIPPED capture-run daily in stage guards', GitRunner called 0 times",
+        "must_not_fire_case": "MUST NOT FIRE: daily {date: today, stage: 'guards', pid: <pid of a child started and already exited>} (a killed chain's stale record) -> the pull runs once and the line says the record is stale",
+        "clean_twin": "CLEAN TWIN: daily {date: today, stage: 'complete', pid: $PID} -> GitRunner called exactly once with 'pull --rebase --autostash origin main', outcome=pulled; and an absent status file -> pulled with 'status unreadable'. Plus: an unknown stage 'zzz' with a live pid -> SKIPPED (the fail-closed default)",
+        "reaches_new_code": "every case drives Test-TcCaptureRunInFlight and the entry point through the seam; no case reads the real status file"
+      },
+      "rollback": "revert the script and the five call-site edits (live SKILL copies included); the tasks go back to the bare autostash pull, and the fingerprint's CR-stripping from f50b7a still covers the EOL half",
+      "freshness": "measured 2026-09-28 13:00 to 13:35 against the main checkout at HEAD 30015ad86, the main reflog, grocery/out/logs/capture-run-daily-2026-09-*.log (26 files) and capture-run-status.json as of the 09-28 run (stage complete, updated 09:22:37); board comparison-2026-09-28 (built 08:17:56) is not an input to this item",
+      "publish_batch": "ops-1: this item alone, a normal ops/push-main.ps1 landing (no file in the chain manifest's derived set, so no chain rehearsal)",
+      "lane": "ops",
+      "est_tool_calls": 32,
+      "status": "planned",
+      "resolution_note": "The 09-20 withhold f50b7a could not explain is now explained: a session committed a commodities.json change (5d42fb944) in the production checkout at 11:40, mid-run. The scheduled half is fixed at its source: every scheduled pull of the production checkout goes through ops/sync-production-checkout.ps1, which reads capture-run-status.json lock-free and skips the pull while a capture-run is in flight (it never takes the capture-run mutex: the chain waits only 60 s for it and depends on its abandoned state). Call sites moved: grocery-alert-triage, grocery-fareway-daily-check, grocery-recipe-everyday-refresh and grocery-bakers-daily-flash-check prompts (live and mirror) and grocery/bakers-daily-scan.ps1. walmart-headed-probe-once was a disabled one-shot, not a live puller. The session half stays with PLAN-bot-dedicated-checkout Stage 2 W2.1."
+    },
+    {
+      "queue_id": "2026-09-28-f7e441",
+      "subject": "Triage residual: chain stale-artifact check unsound for parameter-passed artifact paths and computed script names",
+      "classification": "infra",
+      "evidence": [
+        "lib/chain-code-currency.ps1:28 'SCOPE OF A CLEAN ANSWER: unsound - a producer whose artifact path arrives as a parameter or is assembled in another ...'; :148-153 an edge is followed only when a literal *.ps1/*.js name sits on a line that also matches the invocation token; :158 hubs (more than CccHubNames names) are never walked, by design",
+        "Measured at HEAD 30015ad86 with the shipped Get-TcArtifactProducers (positive controls: cost-recipes.ps1 in costed.json's set = True, build-deals-page.ps1 in board.json's set = True): smp-feed.json 17, board.json 48, costed.json 36, recipes-db.json 45, price-history.json 14",
+        "PARAMETER-PASSED WRITERS, measured: every non-test script line (705 scripts) that both invokes and names one of the five artifacts: 21 rows. Outside the set and a real call: only grocery/check-ad-cycles.ps1:1286 '& powershell ... -File (Join-Path ... 'meal-prep\\pipeline\\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json')', and compute-v2-perserving READS it (param at :21, 'Resolve-AndCheckFeed -Explicit $FeedPath' at :218). The other 20: 3 already in the set, 11 are chain-code-currency's own fixture text (:211-249), the rest name the artifact on a line invoking git or a reader (capture-run.ps1:2293, send-alert.ps1:694/696, capture-watchdog.ps1:1421, feed-served-lib.ps1:87, git-blob-lib.ps1:8, cost-recipes.ps1:407 a self-test CChk). Real missed parameter-passed WRITERS found: 0",
+        "COMPUTED NAMES, measured: the class is mostly NOT computed. Inside producer-set scripts, 46 site-by-artifact invocations go through a VARIABLE that the same file assigns a literal script name ('$b = Join-Path ... 'x.ps1'' then '-File $b' / 'Invoke-NativeScript $b' / '& $b'); 41 of them name a target the set does not hold. Truly unresolvable variable invocations: 8 sites (capture-run.ps1:920, :1131, both inside a hub the closure never walks; wave-preaudit.ps1:1036, :1352, :1362; hunt-run.ps1:611 '$QueuePath'; stamp-live-price-fallback.ps1:120, :124 re-invoking itself in its self-test). 5 further regex hits were Out-File lines, not invocations, and are excluded",
+        "PROTOTYPE of the root fix, run on a scratch copy of the lib over the same HEAD (the shipped lib first, then the copy, same process): smp-feed.json 17 -> 27 (+ lib/carriage-lib.ps1, lib/design-tokens.ps1, meal-prep/lib/allergen-lib.ps1, meal-prep/lib/json-db-io.ps1, meal-prep/lib/package-cost-lib.ps1, meal-prep/lib/price-literal-gate.ps1, meal-prep/lib/render-tokens.ps1, meal-prep/pipeline/batch-ledger.ps1, meal-prep/pipeline/build-card2.ps1, meal-prep/pipeline/guard-lib.ps1); costed.json 36 -> 43 (+ grocery/native-lib.ps1, meal-prep/lib/json-db-io.ps1, meal-prep/pipeline/audit-blocker-lib.ps1, meal-prep/pipeline/batch-ledger.ps1, meal-prep/pipeline/hold-recipe.ps1, meal-prep/pipeline/hunt-run.ps1, meal-prep/pipeline/selftest-names-lib.ps1); recipes-db.json 45 -> 52 (+ grocery/native-lib.ps1, lib/carriage-lib.ps1, meal-prep/pipeline/audit-blocker-lib.ps1, meal-prep/pipeline/batch-ledger.ps1, meal-prep/pipeline/hold-recipe.ps1, meal-prep/pipeline/hunt-run.ps1, meal-prep/pipeline/selftest-names-lib.ps1); board.json 48 -> 48; price-history.json 14 -> 14; 0 scripts removed from any set"
+      ],
+      "root_cause": "Get-TcArtifactProducers already accepts DATAFLOW for roots (a variable assigned the artifact's leaf and written elsewhere in the file, :125-133) but not for EDGES: it follows a script only when its literal name sits on the invoking line. So every script a producer launches through a variable holding a literal name is outside the set (46 such invocations today), and whatever that script writes or loads can change mid-run without a stale-artifact page. The residual's two named classes measured differently from how they were written: parameter-passed writers 0 real instances among invocation lines, and computed names 8 sites of which 2 are in never-walked hubs.",
+      "root_fix": {
+        "what": "Dataflow edges, the same rule the dataflow roots already use: inside a walked script, a line that invokes $<var> adds the literal script leaf that the same script assigns to $<var>.",
+        "files": [
+          "lib/chain-code-currency.ps1"
+        ],
+        "exact_change": "In Get-TcArtifactProducers' closure loop (:138-164), before the per-line name scan: build one map per script, $<var> (lower-cased) -> the literal *.ps1/*.js leaf on a line '^\\s*\\$<var>\\s*=' (last assignment wins, as the prototype did). Then for each code line matching '(-File\\s+|Invoke-NativeScript\\s+(-\\w+\\s+)?|&\\s*|\\.\\s+)\\$<var>\\b' where the map holds <var>, add the leaf to BOTH $invNamed and $allNamed (so the hub count at :158 still sees it). $PSCommandPath and $self-style self re-invocations never enter the map (no literal leaf). Update the header's SCOPE OF A CLEAN ANSWER line: unsound now only for a script path assembled at run time or passed in as a parameter, and for an artifact path assembled in another function, and say that its 2026-09-28 measure was 8 such invocation sites, 2 inside hubs. BEFORE landing, read each of the 15 distinct additions' invoking line in the producer that reaches it and say in the commit which are self-test-only invocations (hold-recipe, selftest-names-lib, audit-blocker-lib and hunt-run are the suspects): d70062's founding bug was over-inclusion that paged falsely, so if a self-test-only edge would add a false page, skip lines inside a '$SelfTest' block the same way the comment strip skips doc text, and re-measure."
+      },
+      "leaves_open": "8 invocation sites whose script name is not a literal in the same file (2 in hubs never walked: capture-run.ps1:920, :1131; 6 elsewhere: wave-preaudit.ps1:1036, :1352, :1362, hunt-run.ps1:611, stamp-live-price-fallback.ps1:120, :124), plus any artifact path assembled in another function (unmeasured, not zero), plus self-test blocks not shaped 'if ($<flag>SelfTest) {' still contribute edges",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "0 known stale artifacts shipped unpaged since the check shipped (2026-09-23..2026-09-28, 6 days); an unsound check cannot report its own misses, so this is a floor, and no existing check would page on the first one, so a watch: owner would be a false claim",
+      "leaves_open_followup": "2026-09-28-871301",
+      "blast_radius": {
+        "measured_as": "routing",
+        "affected_now": 15,
+        "names": [
+          "lib/carriage-lib.ps1",
+          "lib/design-tokens.ps1",
+          "meal-prep/lib/allergen-lib.ps1",
+          "meal-prep/lib/json-db-io.ps1",
+          "meal-prep/lib/package-cost-lib.ps1",
+          "meal-prep/lib/price-literal-gate.ps1",
+          "meal-prep/lib/render-tokens.ps1",
+          "meal-prep/pipeline/batch-ledger.ps1",
+          "meal-prep/pipeline/build-card2.ps1",
+          "meal-prep/pipeline/guard-lib.ps1",
+          "grocery/native-lib.ps1",
+          "meal-prep/pipeline/audit-blocker-lib.ps1",
+          "meal-prep/pipeline/hold-recipe.ps1",
+          "meal-prep/pipeline/hunt-run.ps1",
+          "meal-prep/pipeline/selftest-names-lib.ps1"
+        ],
+        "risk": "15 distinct scripts, 24 set entries across smp-feed.json, costed.json and recipes-db.json; a mid-run landing touching one now reports its artifact stale. hold-recipe, selftest-names-lib, audit-blocker-lib and hunt-run may be self-test-only invocations (false-page risk, the d70062 shape): the developer reads each invoking line before landing",
+        "measured_by": "Not a matching or pricing rule: no product name routes differently and no board cell's per-unit moves. The analogue measured is the producer-set outcome per served artifact, before and after, from the shipped function and a scratch prototype of the change over the same HEAD in one process: +10 smp-feed.json, +7 costed.json, +7 recipes-db.json, 0 board.json, 0 price-history.json, 0 removals (names in evidence). Effect on the chain: a mid-run landing that touches one of those 15 distinct scripts (24 set entries) now reports its artifact stale; for smp-feed.json that decides whether the feed ships on the push-retry path (grocery/capture-run.ps1:531-541), which is why this is money lane. d70062 measured the pre-fix sets at 116 to 183; the post-change sets stay at 14 to 52.",
+        "corpus": "git ls-tree of HEAD 30015ad86 under the manifest's derive_dirs (the shipped function's own corpus); 705 non-test *.ps1/*.js under grocery, lib, meal-prep/engine, meal-prep/lib, meal-prep/pipeline, ops for the call-site scans",
+        "positive_control": {
+          "name": "meal-prep/engine/cost-recipes.ps1 in costed.json's producer set",
+          "expected": "True",
+          "observed": "True"
+        },
+        "claimed_by_earlier": [],
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "lib/chain-code-currency.ps1 -SelfTest (its existing fixture repo, which already carries the founding 09-23 feed case and the 09-28 audit-flag-verification case), run by run-gates; the chain rehearsal via ops/push-main.ps1 because lib/ is in the chain manifest's derive_dirs",
+        "must_fire_case": "MUST FIRE: fixture producer 'build-feed.ps1' writes smp-feed.json and holds '$helper = Join-Path $PSScriptRoot 'feed-helper.ps1'' then '& powershell -NoProfile -File $helper'; feed-helper.ps1 names no artifact -> feed-helper.ps1 IS in smp-feed.json's producer set, and a range that changes only feed-helper.ps1 reports smp-feed.json stale",
+        "must_not_fire_case": "MUST NOT FIRE: the same producer holds '$doc = 'feed-helper.ps1'' and only 'Write-Output $doc' (assigned, never invoked) -> feed-helper.ps1 is NOT in the set",
+        "clean_twin": "CLEAN TWIN: the existing 09-28 case still holds (audit-flag-verification.ps1 and flag-verify-lib.ps1 in no set) and the founding 09-23 feed case still fires; plus a hub fixture that invokes through a variable still is not walked through",
+        "reaches_new_code": "the fixture repo is walked by Get-TcArtifactProducers itself, so the new map and edge are the path under test"
+      },
+      "rollback": "revert the lib hunk; sets return to 14 to 48 and the header's scope line to its 09-28 wording",
+      "freshness": "measured 2026-09-28 13:10 to 13:30 against HEAD 30015ad86 of the main checkout (git ls-tree for the function, the working tree for the call-site scan; lib/chain-code-currency.ps1 had no uncommitted change); board comparison-2026-09-28 is not an input",
+      "publish_batch": "chain-B (money): this item alone, ops/push-main.ps1 with the chain rehearsal",
+      "lane": "money",
+      "est_tool_calls": 38,
+      "status": "deviated",
+      "resolution_note": "Measured the two unsound classes the check's header named: parameter-passed writers 0 real, and computed names mostly not computed: invocations inside producers went through a variable holding a literal script name, which the closure could not follow. Fixed in lib/chain-code-currency.ps1: dataflow EDGES (same rule as the dataflow roots) plus a self-test-block skip for edges, so smp-feed.json 17 -> 25, costed.json 36 -> 41, recipes-db.json 45 -> 49, board.json 48 -> 45, price-history.json 14 -> 14 at 7d11a7bdc; additions are the plan's 15 minus selftest-names-lib, removals are 6 self-test-only loads, each read. Self-test 13 of 13 PASS (5 new cases: dataflow edge must-fire, printed-only must-not-fire, self-test-block must-not-fire, hub clean twin, stale range must-fire). Still unsound for 8 invocation sites with no literal name in the file (2 inside hubs never walked) and for artifact paths built in another function; header says so; owned by weekly queue item 2026-09-28-871301. full_suite: deferred-to-land.",
+      "premise_verified": "true: re-measured with the shipped lib at HEAD 7d11a7bdc (same process, positive control cost-recipes in costed.json True): smp-feed 17, board 48, costed 36, recipes-db 45, price-history 14, identical to the evidence row; the dataflow-edge change alone gave 27/48/43/52/14 with the same 15 additions and 0 removals, identical to the prototype row",
+      "deviation": "Read the invoking line of each suspect before landing. hold-recipe, hunt-run and audit-blocker-lib are LIVE edges, not self-test-only: unpriced-takedown.ps1:258 New-UtdRealSeams assigns $hr = hold-recipe.ps1 and invokes it with -Apply; hold-recipe.ps1:322 runs hunt-run.ps1 -Advance after its self-test exits at :239; hunt-run.ps1:133 dot-sources audit-blocker-lib at top level. Kept. selftest-names-lib IS self-test-only (hunt-run.ps1:726 inside 'if ($runSelfTest) {'), a d70062-shape false page for costed/recipes-db, so per exact_change added the self-test skip: an invocation inside 'if ($<flag>SelfTest) {' up to the '}' at the if's own indent is no edge (names still count for the hub test; a block with no closing brace at that indent is not skipped). Re-measured: smp-feed 17->25, board 48->45, costed 36->41, recipes-db 45->49, price-history 14->14. The skip also REMOVED 6 entries outside the plan's list, each read and each reached only from inside a self-test block: lib/git-repo-env.ps1 (main-checkout:77 in if($__mcSelfTest) :73, publish-journal:108 in :101, git-blob-lib:342 in :339, gate-input-key:1740 in :1177), lib/tree-walk.ps1 (ratchet:357 in :252), selftest-names-lib from the feed, grocery/compare-deals/selftest-1.ps1 and selftest-2.ps1 (compare-deals:396-397 in if($SelfTest) :394), lib/selftest-lib.ps1 (compare-deals/selftest-2:619). All 65 self-test flag names in the tree end in SelfTest or start with it (no $NoSelfTest-style live branch).",
+      "actual_tool_calls": 36
+    }
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. ops (triage-ops-developer), publish batch ops-1: 2026-09-28-90a544. New ops/sync-production-checkout.ps1 with its -SelfTest, grocery/bakers-daily-scan.ps1:78, the four SKILL prompts live and mirror. Proof: the script's -SelfTest exit 0 with its verdict line, ops/audit-prompt-backup.ps1 exit 0, grocery/test-native-stderr-eap.ps1 exit 0 (its :425 case names the old bakers line), run-gates exit 0. Land through ops/push-main.ps1.",
+    "2. money (triage-developer), publish batch chain-B: 2026-09-28-f7e441. lib/chain-code-currency.ps1 dataflow edges and header scope line; -SelfTest cases. Proof: lib/chain-code-currency.ps1 -SelfTest exit 0 with its verdict line, re-run the before/after set counts at the landed commit and compare with this plan's evidence (17/48/36/45/14 -> 27/48/43/52/14 at 30015ad86), run-gates exit 0. Land ONLY through ops/push-main.ps1 (lib/ is in the chain manifest, so the chain rehearsal runs), never git push origin HEAD:main.",
+    "3. Live verification: the next daily chain's capture-run-daily log shows no chain-code BLIND line and, if a scheduled task fired inside its window, that task's log shows SYNC-SKIPPED; 2026-09-27-ae8b7a stays open (needs-more-time) until a loaded test-match-lib red supplies its row lists."
+  ]
+}

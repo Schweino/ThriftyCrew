@@ -25,9 +25,13 @@
 # feed-everyday-ps.ps1 and its live-price-fill.js, the change that was missed. Until 2026-09-28 the closure followed
 # EVERY name in code, string literals and fixtures included, and 116 to 183 of 650 scripts were producers of each
 # served file; with invocation edges and dataflow roots the prototype measured 19 to 82 (queue 2026-09-28-d70062).
-# SCOPE OF A CLEAN ANSWER: unsound - a producer whose artifact path arrives as a parameter or is assembled in another
-# function (cost-recipes -OutFile), or a script named through a computed string, is outside the set, and a clean answer
-# then proves nothing about it. It is also incomplete: a name on a line that happens to carry an invocation token is
+# A script run through a variable the same file assigns a literal name ('$b = Join-Path $here ''x.ps1''' then
+# '-File $b') is followed too (DATAFLOW EDGES, 2026-09-28, queue f7e441); an invocation inside an 'if ($SelfTest) {'
+# block is not.
+# SCOPE OF A CLEAN ANSWER: unsound - a script whose path is assembled at run time or passed in as a parameter, and an
+# artifact path assembled in another function (cost-recipes -OutFile), are outside the set, and a clean answer then
+# proves nothing about them. Measured 2026-09-28: 8 invocation sites with no literal script name in their file, 2 of
+# them inside hubs never walked (capture-run.ps1); the artifact-path-in-another-function class is unmeasured, not zero. It is also incomplete: a name on a line that happens to carry an invocation token is
 # followed whether or not that line calls it, so a finding is a candidate to read, never a proof the artifact changed. Reading an INPUT (the board a builder consumes) is out of scope by design: this asks
 # whether the WRITER's code moved.
 #
@@ -145,8 +149,41 @@ function Get-TcArtifactProducers {
       # below still counts ALL names, as before.
       $allNamed = New-Object 'Collections.Generic.HashSet[string]'
       $invNamed = New-Object 'Collections.Generic.HashSet[string]'
+      # DATAFLOW EDGES, the same rule as the dataflow roots above: '$b = Join-Path $here ''x.ps1''' then '-File $b',
+      # 'Invoke-NativeScript $b', '& $b' or '. $b' calls x.ps1 though no line both names and invokes it. One map per
+      # script, $<var> -> the literal leaf on its assignment line, last assignment wins. $PSCommandPath and other
+      # self re-invocations hold no literal leaf and never enter it. Measured 2026-09-28 (queue 2026-09-28-f7e441):
+      # 46 such invocations inside producer scripts, 41 naming a script the set did not hold.
+      $varLeaf = @{}
       foreach ($l in $lines) {
+        $am = [regex]::Match($l, '^\s*\$([A-Za-z_][A-Za-z0-9_]*)\s*=')
+        if (-not $am.Success) { continue }
+        $lm = [regex]::Matches($l, '[A-Za-z0-9_.-]+\.(ps1|js)\b')
+        if ($lm.Count) { $varLeaf[$am.Groups[1].Value.ToLowerInvariant()] = $lm[$lm.Count - 1].Value.ToLowerInvariant() }
+      }
+      # A SELF-TEST BLOCK CALLS NOTHING LIVE: an invocation inside 'if ($SelfTest) {' / 'if ($runSelfTest) {' up to the
+      # '}' at the if's own indent is no edge (its names still count toward the hub test). hunt-run.ps1's self-test
+      # dot-sources selftest-names-lib.ps1, which would otherwise make costed.json and recipes-db.json page stale for a
+      # test-only lib (d70062's over-inclusion shape; measured 2026-09-28, queue 2026-09-28-f7e441). A block whose
+      # closing brace is not found at that indent is NOT skipped: over-inclusion pages, a lost edge is silent.
+      $inTest = New-Object 'bool[]' $lines.Count
+      for ($i = 0; $i -lt $lines.Count; $i++) {
+        $sm = [regex]::Match([string]$lines[$i], '^(\s*)if\s*\(\s*\$(script:)?[A-Za-z_]*SelfTest[A-Za-z_]*\s*\)\s*\{\s*$')
+        if (-not $sm.Success) { continue }
+        $endRx = '^' + [regex]::Escape($sm.Groups[1].Value) + '\}'
+        for ($j = $i + 1; $j -lt $lines.Count; $j++) { if ([string]$lines[$j] -match $endRx) { break } }
+        if ($j -lt $lines.Count) { for ($x = $i; $x -le $j; $x++) { $inTest[$x] = $true }; $i = $j }
+      }
+      for ($i = 0; $i -lt $lines.Count; $i++) {
+        $l = [string]$lines[$i]
         $ms = [regex]::Matches($l, '[A-Za-z0-9_.-]+\.(ps1|js)\b')
+        if ($inTest[$i]) { foreach ($mm in $ms) { [void]$allNamed.Add($mm.Value.ToLowerInvariant()) }; continue }
+        if ($varLeaf.Count) {
+          foreach ($vm in [regex]::Matches($l, '(-File\s+|Invoke-NativeScript\s+(-\w+\s+)?|&\s*|(^|\s)\.\s+)\$([A-Za-z_][A-Za-z0-9_]*)\b')) {
+            $vk = $vm.Groups[4].Value.ToLowerInvariant()
+            if ($varLeaf.ContainsKey($vk)) { [void]$allNamed.Add($varLeaf[$vk]); [void]$invNamed.Add($varLeaf[$vk]) }
+          }
+        }
         if ($ms.Count -eq 0) { continue }
         $isInv = ($l -match $script:CccInvokeToken)
         foreach ($mm in $ms) { $v = $mm.Value.ToLowerInvariant(); [void]$allNamed.Add($v); if ($isInv) { [void]$invNamed.Add($v) } }
@@ -273,10 +310,34 @@ if ($__cccSelfTest) {
     $tipG = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
     $s6 = Get-TcStaleArtifacts -Repo $w -Base $tipF -Tip $tipG -Artifacts @($costedArt)
     CcT 'CLEAN TWIN  a range changing a lib the builder dot-sources still names costed.json' (-not $s6.Blind -and @($s6.Rows).Count -eq 1 -and (@(@($s6.Rows)[0].Changed) -contains 'lib/cost-lib.ps1')) (($s6 | ConvertTo-Json -Depth 4 -Compress))
+    # DATAFLOW EDGES (queue 2026-09-28-f7e441): the builder calls its helper through a variable holding a literal name.
+    $cardArt = 'public/cards.json'
+    $cardV1 = '[IO.File]::WriteAllText((Join-Path $pub ''cards.json''), $j, $enc)' + "`n" +
+      '$helper = Join-Path $PSScriptRoot ''card-helper.ps1''' + "`n" + '& powershell -NoProfile -File $helper' + "`n" +
+      '$doc = ''card-doc.ps1''' + "`n" + 'Write-Output $doc' + "`n" +
+      '$tst = Join-Path $PSScriptRoot ''card-test-lib.ps1''' + "`n" + 'if ($SelfTest) {' + "`n" + '  . $tst' + "`n" +
+      '  . (Join-Path $PSScriptRoot ''card-test-lib2.ps1'')' + "`n" + '}' + "`n"
+    & $put $w 'grocery/build-cards.ps1' $cardV1
+    foreach ($n in 'card-helper', 'card-doc', 'card-test-lib', 'card-test-lib2', 'hub-child') { & $put $w ('grocery/' + $n + '.ps1') ('$z = 1' + "`n") }
+    $hubNames = (1..26 | ForEach-Object { '''n' + $_ + '.ps1''' }) -join ', '
+    $hubText = '$names = @(' + $hubNames + ')' + "`n" + '$hc = Join-Path $PSScriptRoot ''hub-child.ps1''' + "`n" + '& $hc' + "`n" + 'Set-Content (Join-Path $pub ''cards.json'') x' + "`n"
+    & $put $w 'grocery/card-hub.ps1' $hubText
+    & $put $w $cardArt '{}'
+    $null = & $g $w 'add', '-A'; $null = & $g $w 'commit', '-q', '-m', 'H: card builder'
+    $tipH = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
+    $kset = @((Get-TcArtifactProducers -Repo $w -Rev 'HEAD' -Artifacts @($cardArt))[$cardArt])
+    CcT 'MUST FIRE  a helper the builder runs as ''$helper = Join-Path ... ''''card-helper.ps1'''''' then ''-File $helper'' is a producer (a DATAFLOW EDGE)' ($kset -contains 'grocery/build-cards.ps1' -and $kset -contains 'grocery/card-helper.ps1') ($kset -join ',')
+    CcT 'MUST NOT FIRE  a variable assigned a script name and only printed (''Write-Output $doc'') adds no edge' ($kset -notcontains 'grocery/card-doc.ps1') ($kset -join ',')
+    CcT 'MUST NOT FIRE  a lib loaded only inside ''if ($SelfTest) {'' (through a variable or a literal) is no producer' ($kset -notcontains 'grocery/card-test-lib.ps1' -and $kset -notcontains 'grocery/card-test-lib2.ps1') ($kset -join ',')
+    CcT 'CLEAN TWIN  a hub that writes the artifact is a producer, and what it runs through a variable is still not walked' ($kset -contains 'grocery/card-hub.ps1' -and $kset -notcontains 'grocery/hub-child.ps1' -and $kset.Count -eq 3) ($kset -join ',')
+    & $put $w 'grocery/card-helper.ps1' ('$z = 2' + "`n")
+    $null = & $g $w 'commit', '-q', '-am', 'I: card helper changes'
+    $s7 = Get-TcStaleArtifacts -Repo $w -Base $tipH -Tip ((& $g $w 'rev-parse', 'HEAD').Out.Trim()) -Artifacts @($cardArt)
+    CcT 'MUST FIRE  a range changing only the variable-invoked helper names cards.json stale' (-not $s7.Blind -and @($s7.Rows).Count -eq 1 -and (@(@($s7.Rows)[0].Changed) -contains 'grocery/card-helper.ps1')) (($s7 | ConvertTo-Json -Depth 4 -Compress))
   } catch {
     CcT ('the suite ran to the end without throwing') $false $_.Exception.Message
   } finally { Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue }
-  $want = 8
+  $want = 13
   if ($script:cn -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:cn, $want); $script:cf++ }
   if ($script:cf) { Write-Output ('chain-code-currency self-test FAIL: {0} of {1}' -f $script:cf, $script:cn); exit 1 }
   Write-Output ('chain-code-currency self-test PASS: {0} of {0} cases - led by the feed-everyday-ps change of cec9779a3 being named as a stale producer' -f $script:cn)
