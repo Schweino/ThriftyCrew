@@ -2307,14 +2307,7 @@ if ($shipServed -and $pushed) {
 # ---- THE DEFERRED POST (2026-09-22, queue 2026-09-22-81d955): the pointer is written only after the object is live -----
 $postDecision = Get-DeferredPostDecision -Deferred ([bool]$postDeferred) -ObjectLanded ([bool]($shipServed -and $botCommitted -and $pushed)) -EdgeBoard ([string]$bv) -EdgeFeed ([string]$fv)
 if ($postDecision -eq 'publish') {
-  # THE SAME INPUT AS THE BUILD THE DEFERRAL HASHED (2026-09-28, design/PLAN-deferpost-builds-board-2026-09-28.md W2).
-  # check-ad-cycles -DeferPost now builds the board and records the compare file that build USED; the build is
-  # byte-deterministic over one input (two builds over comparison-2026-09-28 gave one SHA-256), so rebuilding from that
-  # same file names the board this run committed and the edge serves. Without it, a verified-<week>.json written in
-  # between would be preferred and name another board, which the served check holds. The held-post road below already did this.
-  $pdArgs = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $root 'publish-deals-page.ps1'))
-  if ($postDeferredDoc -and [string]$postDeferredDoc.compare_file -and (Test-Path -LiteralPath ([string]$postDeferredDoc.compare_file))) { $pdArgs += @('-CompareFile', [string]$postDeferredDoc.compare_file) }
-  $pdOut = & powershell @pdArgs
+  $pdOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')
   $pdRc = $LASTEXITCODE
   foreach ($l in @(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED)' })) { Write-Output ('  publish-verdict: ' + ([string]$l).Trim()) }
   if ($pdRc -eq 0) {
