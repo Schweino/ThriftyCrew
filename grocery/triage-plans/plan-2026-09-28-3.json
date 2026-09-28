@@ -1,0 +1,72 @@
+{
+  "generated": "2026-09-28T11:55:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "Ops-lane RETURN only. Nothing in this plan reads or changes a board, a matching rule or a price, so no routing artifact is written.",
+  "routing_artifact": null,
+  "queue_ids_seen": ["2026-09-27-07ed53"],
+  "knowledge_consulted": [
+    "searched --estate 'automation silent death task stale': nothing applicable (top hits were agent-workflow and toil sections, none on Task Scheduler repetition)",
+    "searched --estate 'scheduled task repetition stopped trigger': used machinery entries ops/audit-task-registration.ps1 (every TC task has a committed definition, so the candidate change goes through ops/scheduled-tasks/tc-boot-watch.xml and the registrar) and grocery/run-log-lib.ps1 (Stop-RunLog stamps rc as the last line; read that line in the boot-watch logs to count runs)",
+    "orchestrator brief: memory automation-inventory (read Get-ScheduledTask for the live set; done here), memory late-fired-task-collides-with-takeover (late-fired tasks are a known shape; this one is the opposite, never fired), ops/audit-task-registration.ps1 description (every TC task has a committed definition: ops/scheduled-tasks/tc-boot-watch.xml is it)",
+    "seed: grocery/triage-plans/plan-2026-09-26-4.json item 2026-09-26-b2f93f (planned_end in grocery/expected-automations.json, read by grocery/health-heartbeat.ps1 Test-HbPlannedEnd)"
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. ops: 2026-09-27-07ed53, no code change. Close confirmed from resolution_note after landing; residual 2026-09-28-37406f stays open on the weekly lane."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-27-07ed53",
+      "subject": "Automation silent-death: TASK STALE",
+      "lane": "ops",
+      "est_tool_calls": 14,
+      "classification": "no-code-change",
+      "evidence": [
+        "queue 2026-09-27-07ed53 body: \"TASK STALE: 'TC Boot Watch' last ran 5.9h ago (> 2h) - did its trigger stop? at logon and every 15 min (ops/boot-watch.ps1 -Lock -Alert -Beat)\", ts 2026-09-27T10:30:11",
+        "Microsoft-Windows-TaskScheduler/Operational 2026-09-27 04:30..23:59: '\\TC Boot Watch' event 107 (launched by time trigger) n=1, at 04:35:01; next launch 2026-09-28 00:05:01. No 322, 140, 141, 142 or 111 event for the task in the span.",
+        "Same log, same window: '\\TC Process Reaper' 107 n=78 and '\\TC Sidecar Watchdog' 107 n=78, first 04:30 last 23:45. Both carry the identical DailyTrigger (Rep=PT15M/P1D, StartWhenAvailable, InteractiveToken, UseUnifiedSchedulingEngine true). TC Boot Watch alone also carries a LogonTrigger.",
+        "System log Kernel-Power 42 (sleep): 2026-09-26 22:40:20 and 2026-09-28 00:12:03 only; wake 2026-09-27 02:16:59 (Power-Troubleshooter 1). No sleep covers 04:35..00:05, and other TC tasks (Grocery Daily Capture 0800, Capture Watchdog 1030, Ad Pulls 0700) launched through it.",
+        "ops/out/logs/boot-watch-2026-09-27.log: 11 runs 02:17..04:35, every one 'BOOT-WATCH-COMPLETE ... findings=0' then 'run-log: finished ... rc=0'. The job never failed; it was not started.",
+        "Re-measure 2026-09-28 11:49: Get-ScheduledTask 'TC Boot Watch' State Ready, LastRunTime 2026-09-28 11:35:01, LastTaskResult 0, NextRunTime 11:50:00; boot-watch-2026-09-28.log 34 runs 00:05..11:35, one gap 00:05..03:43 matching the 00:12 sleep. It no longer reproduces.",
+        "grocery/health-heartbeat.ps1 b2f93f fix (planned_end) held: TC Recipe Harvest Crawl has not paged since 2026-09-26; this RETURN is a different task and a different cause."
+      ],
+      "root_cause": "Windows Task Scheduler silently stopped starting TC Boot Watch's 15-minute repetition for the rest of a daily window (04:35 to the next 00:05 StartBoundary, 19.5h) while the box was awake, with no event saying why. The class above the instance: a repetition-based TC task depends on the scheduler keeping a repetition alive inside a P1D window, and nothing in the task definition or the job can notice the scheduler dropping it; only health-heartbeat's age bar can, and it did. The job (ops/boot-watch.ps1) and the heartbeat both behaved correctly. The prior close of this type (2026-09-26-b2f93f) was a different mechanism, a finite trigger window ending as ruled, fixed by planned_end, and that fix held.",
+      "root_fix_none_because": "One occurrence in the 3.5 days since the task was registered, with no scheduler event naming a cause. The only structural difference from two identically-scheduled tasks that ran 78 times through the same span is the extra LogonTrigger, and that is a hypothesis, not a measurement. Re-registering a live task's triggers on one unexplained occurrence would be a guess; the stall is self-limiting (the next daily StartBoundary restarts the repetition) and is detected by the existing heartbeat at the 2h bar. Owned as residual 2026-09-28-37406f with the measurement and the candidate change.",
+      "prevention_none_because": "Not a fix that failed to hold: the prior close (b2f93f, planned_end) is a different task and mechanism and it held; this occurrence's producer (Task Scheduler dropping a repetition) has no measured cause yet, so there is no source change to make, and its recurrence pages through health-heartbeat.",
+      "prior_closes": ["2026-09-26-b2f93f"],
+      "prevention": {
+        "source": "ops/scheduled-tasks/tc-boot-watch.xml",
+        "what": "Names where this occurrence's class is produced: the registered trigger set of TC Boot Watch (a LogonTrigger beside the PT15M/P1D CalendarTrigger), read by Windows Task Scheduler.",
+        "exact_change": "None shipped in this item (see prevention_none_because). Candidate if residual 2026-09-28-37406f records a second occurrence: split the logon half into its own task definition, or replace the CalendarTrigger repetition with a TimeTrigger of indefinite duration, then re-register through the ops registrar."
+      },
+      "blast_radius": {
+        "measured_as": "tasks",
+        "measured_by": "Operational-log launch counts 2026-09-27 04:30..23:59 for every TC task with a PT15M repetition: 3 such tasks, 1 stalled",
+        "affected_now": 0,
+        "names": "TC Boot Watch only, 2026-09-27 04:35..2026-09-28 00:05. Its 15-minute work in that span was a no-op in practice: the off-box heartbeat answers 503 not-configured (no BOX_KV binding) and AutoAdminLogon is not set, so the lock and beat halves had nothing to do."
+      },
+      "proof": {
+        "must_fire_case": "Existing, not new: health-heartbeat.ps1 paged TASK STALE for TC Boot Watch at 5.9h against its 2h bar on 2026-09-27 10:30:11 (queue 2026-09-27-07ed53). No code changed, so no new fixture.",
+        "clean_twin": "Existing: the same heartbeat left TC Process Reaper and TC Sidecar Watchdog silent that morning; both launched every 15 minutes.",
+        "fixture_occurrences": ["2026-09-26-b2f93f", "2026-09-27-07ed53"],
+        "ran": "measurement only: Get-ScheduledTask/Get-ScheduledTaskInfo, Get-WinEvent TaskScheduler/Operational and System, boot-watch run logs; no self-test, since nothing changed"
+      },
+      "rollback": "Nothing to roll back: no code or task definition changed.",
+      "freshness": "measured 2026-09-28 11:35..11:55 in the main checkout C:\\Codex\\ThriftyCrew against the live scheduler",
+      "leaves_open": "Why Task Scheduler dropped TC Boot Watch's repetition at 04:35 on 2026-09-27 (cause unmeasured; LogonTrigger hypothesis).",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-28-37406f",
+      "leaves_open_followup_note": "send-alert.ps1 -Force -Lane weekly, 2026-09-28 11:53:24, subject 'Triage residual: TC Boot Watch 15-minute repetition dropped by Task Scheduler'; queued as REVIEW under registry entry triage-residual.",
+      "leaves_open_note": "Owner: residual 2026-09-28-37406f (send-alert -Lane weekly, measurement in its body). Recurrence also pages through grocery/health-heartbeat.ps1.",
+      "status": "done",
+      "premise_verified": "Partly. The alert was true (a real 19.5h stall of a 15-minute task). The RETURN premise (prior prevention did not hold) is false: this is a different task and mechanism, and the planned_end fix for b2f93f held.",
+      "deviation": null,
+      "shipped_commit": null,
+      "full_suite": "not-applicable: no code changed",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real stall, one occurrence, no code defect: Task Scheduler stopped starting TC Boot Watch's 15-minute repetition after 2026-09-27 04:35 until the next daily start at 09-28 00:05 (19.5h) with no event naming why, while two identically-scheduled TC tasks launched 78 times each through the same span. Job ran rc=0 every time it was started; healthy again (34 runs today, last 11:35). Not a failed prevention: the prior close b2f93f was a different task (harvest crawl planned end) and that fix held. Cause left open as residual 2026-09-28-37406f.",
+      "actual_tool_calls": 15
+    }
+  ]
+}
