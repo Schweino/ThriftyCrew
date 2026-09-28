@@ -51,6 +51,7 @@ $ALLOW = @{
   'grocery\test-push-data.ps1'        = 'builds fixture repos in %TEMP% to drive push-data''s commit lane'
   'ops\test-precommit-hook.ps1'       = 'builds fixture repos in %TEMP% to drive the pre-commit hook'
   'grocery\triage-due.ps1'            = 'its -SelfTest builds a one-file repo in %TEMP% to date an emitter commit'
+  'lib\hook-refresh.ps1'              = 'its -SelfTest builds a throwaway repo in %TEMP% to drive the hook-reinstall-on-move fixture (queue 2026-09-27-78df57)'
 }
 
 function Remove-ScriptComments {
