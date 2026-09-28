@@ -1,0 +1,39 @@
+{
+  "plan": "plan-2026-09-28-8.json",
+  "item": "2026-09-27-8161ce",
+  "generated": "2026-09-28",
+  "board_week": "comparison-2026-09-28.json (built_at 2026-09-28T08:07:59, file 08:17:56); recipe-board.json 08:12:10",
+  "head_read": "c349cbd77 (a8147dae5, the c989c6 exclude, landed on origin/main first-parent at 2026-09-28 08:20:28, AFTER this board was built)",
+  "note": "No item in this plan changes a matching rule. The routing below is recorded because 8161ce's diagnosis rests on it (the Tony Chachere row on today's board is a landing-order artifact, not a rule that fails), and the fold section is the finding-outcome contract for the one code item.",
+  "corpus": "3,075 distinct (commodity, store, product) cell names: every store cell on comparison-2026-09-28.json (2,871 cells, 577 commodities) plus every store cell on recipe-board.json; and 354 item names in meal-prep/db/ingredients.json. No capture file was skipped for the fold section because the identity check reads only these two boards.",
+  "positive_control": { "name": "Louisiana Fish Fry Products Original Cajun Seasoning 8 Oz", "expected": "cajun-seasoning", "observed": "cajun-seasoning" },
+  "routing_live_rules": [
+    { "name": "Tony Chachere's It's Spicy! More Spice Seasoning", "engine_0809_identity_table": "cajun-seasoning (include_hit tony\\s+chachere, excludes_tested 108, rules_hash b63008974d10)", "live_rules_now": "(none) (cajun-seasoning excludes 109, rules_hash 5b78d89bb900)" },
+    { "name": "Tony Chachere's Original Creole Seasoning", "live_rules_now": "(none)" },
+    { "name": "Seasoning, Cajun, More Spice", "live_rules_now": "cajun-seasoning" },
+    { "name": "Kroger Olive Oil Mayo", "live_rules_now": "mayonnaise" },
+    { "name": "Our Family Mayo, Real 30 Fl Oz", "live_rules_now": "mayonnaise" },
+    { "name": "California Sun Dry Sun Dried Tomatoes Julienne Ct", "live_rules_now": "sun-dried-tomatoes" },
+    { "name": "Hy-Vee Sun-Dried Tomatoes Halves", "live_rules_now": "sun-dried-tomatoes" },
+    { "name": "Tuscan Garden Sundried Tomatoes 8 OZ", "live_rules_now": "sun-dried-tomatoes" },
+    { "name": "Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99", "live_rules_now": "gruyere" },
+    { "name": "S&B Golden Curry Medium Hot Sauce Mix", "live_rules_now": "japanese-curry-roux" }
+  ],
+  "fold_before_after": {
+    "names_with_non_ascii": 37,
+    "names_whose_tokens_change": 6,
+    "vocabulary_names_with_accents": 0,
+    "rows": [
+      { "cell": "gruyere|Hy-Vee", "name": "Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99", "before": "emmi le gruy re cheese 6 oz 9 99", "after": "emmi le gruyere cheese 6 oz 9 99", "finding_before": "CELL Gruyere Cheese does not name gruyere", "finding_after": "none" },
+      { "cell": "RB:gruyere-cheese|Hy-Vee", "name": "Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99", "before": "emmi le gruy re cheese 6 oz 9 99", "after": "emmi le gruyere cheese 6 oz 9 99", "finding_before": "same key as above", "finding_after": "none" },
+      { "cell": "pickled-jalapenos|Sam's Club", "name": "La Coste\u00f1a Pickled Jalape\u00f1o Nacho Slices, 64 oz.", "before": "la coste a pickled jalape o nacho slices 64 oz", "after": "la costena pickled jalapeno nacho slices 64 oz", "finding_before": "none (no costed line prices from this cell today)", "finding_after": "none" },
+      { "cell": "pickled-jalapenos|Walmart", "name": "La Coste\u00f1a Pickled Sliced Jalapenos, 28 oz", "before": "la coste a pickled sliced jalapenos 28 oz", "after": "la costena pickled sliced jalapenos 28 oz", "finding_before": "none", "finding_after": "none" },
+      { "cell": "pickled-jalapenos|Fareway", "name": "La Coste\u00f1a Pickled Jalapeno Peppers", "before": "la coste a pickled jalapeno peppers", "after": "la costena pickled jalapeno peppers", "finding_before": "none", "finding_after": "none" },
+      { "cell": "sandwich-cookies|Walmart", "name": "Great Value Duplex Sandwich Cr\u00e8me Cookies, 25 oz", "before": "great value duplex sandwich cr me cookies 25 oz", "after": "great value duplex sandwich creme cookies 25 oz", "finding_before": "none", "finding_after": "none" }
+    ],
+    "identity_findings_that_change": 1,
+    "identity_findings_that_appear": 0,
+    "fold_control": { "name": "Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99", "expected": "tokens contain gruyere", "observed": "tokens contain gruyere (folded with FormD, NonSpacingMark dropped)" }
+  },
+  "cell_effects": []
+}

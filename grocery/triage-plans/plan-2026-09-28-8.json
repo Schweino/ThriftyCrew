@@ -1,0 +1,116 @@
+{
+  "generated": "2026-09-28",
+  "round": 1,
+  "board_week": "comparison-2026-09-28.json (built_at 2026-09-28T08:07:59, file written 08:17:56). NOT mid-build when read (15:xx). HEAD read: c349cbd77.",
+  "board_generation_note": "The c989c6 commit a8147dae5 reached origin/main first-parent at 2026-09-28 08:20:28, twelve minutes AFTER this board was built, so today's board is the last one built without the Tony Chachere exclude. Every 8161ce measurement is stated against this board and says which half heals on the 2026-09-29 build.",
+  "queue_ids_seen": ["2026-09-26-a7dbb1", "2026-09-27-8161ce", "2026-09-25-f9c8ce"],
+  "routing_artifact": "plan-2026-09-28-8.routing.json",
+  "knowledge_consulted": {
+    "searched": ["diacritic accent fold product name (knowledge-search --estate): skills and memory legs nothing applicable; machinery grep found the one existing fold, grocery/pull-regular-bakers-api.ps1:359-362 (FormD, drop NonSpacingMark), written for 'Starbucks Cr me Br l e', which is the pattern 8161ce reuses"],
+    "used": [
+      "rules:grocery.md gr-04 (pasted by the dispatch): compare-deals is not standalone, a mid-day rebuild needs identity emission AND link repair, so this plan waits for the daily build instead of asking for a rebuild",
+      "grocery/identity-lib.ps1 header (read): the identity table records rules_hash per run, which is how the 08:09 routing of the Tony row was proven to predate the exclude",
+      "meal-prep/pipeline/audit-ingredient-identity.ps1 header (read): check (d) keys, RISE semantics, -Tighten is the only writer of the mark",
+      "memory the-board-has-three-dates (pasted by the dispatch): ages and freshness here are stated from built_at and the landing time, never week_of",
+      "design/ready-for-brad/Q-2026-09-26-form-style.md (read): Brad's 2026-09-26 ruling 'B: shape same, style own' and the whole-grain ruling, which answer f9c8ce part B"
+    ]
+  },
+  "family_note": "All three ids are one family: the recipe ingredient identity check (audit-ingredient-identity check (d)) and the leftovers of the runs that fed it. a7dbb1 (09-26) and 8161ce (09-27) name the same mayonnaise and sun-dried keys; 8161ce is the newer and owns them, and it is also the only open id carrying today's RISE (5 new keys), because today's identity alert body was filed against the resolved 2026-09-27-c989c6.",
+  "items": [
+    {
+      "queue_id": "2026-09-27-8161ce",
+      "subject": "Today's identity RISE (5 keys): one detector defect (an accented letter is a word break), one landing-order artifact that heals on the 09-29 build, three right-cell products whose names omit a qualifier no capture records",
+      "classification": "detector-defect",
+      "status": "planned",
+      "lane": "ops",
+      "est_tool_calls": 32,
+      "evidence": [
+        "audit-ingredient-identity -BoardFile comparison-2026-09-28.json -RecipeBoardFile recipe-board.json -AliasMapFile recipe-floor-id-map.json (scratch marks) exit 2: 'check (d) 11 finding key(s) over 1439 store cell(s)'; 'RISE: 5 cell finding(s) not in the mark of 2026-09-26 (mark 86)'",
+        "NEW CELL 'Gruyere Cheese' ... at Hy-Vee by 'Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99' in cell gruyere-cheese, which does not name gruyere (the name DOES say Gruyere, with an accent)",
+        "meal-prep/lib/ingredient-identity-lib.ps1:50 Get-IdentityTokens: $t = ($Text.ToLower() -replace '[^a-z0-9 ]', ' ') turns 'gruy\u00e8re' into 'gruy re'; line 103 the joined test -replace '[^a-z0-9]','' gives 'gruyre'; neither contains 'gruyere'",
+        "NEW CELL 'Cajun Seasoning' (13 lines, 13 recipes) at Fareway by 'Tony Chachere's It's Spicy! More Spice Seasoning': board row sale $2.49 / 7 oz = 0.3557/oz, as_of 2026-09-27, source_ad shop.fareway.com. graph/identity/staple/fareway.jsonl (08:09:10) routed it cajun-seasoning via include_hit tony\\s+chachere with excludes_tested 108 and rules_hash b63008974d10; the live rules now have 109 cajun excludes incl. '^(?!.*\\bcajun\\b).*\\bchachere' (commodities.json:55144), rules_hash 5b78d89bb900, and route the name to (none). a8147dae5 landed on main 08:20:28, after the 08:07:59 build. Cajun crown unaffected (Walmart holds it; Fareway is not the cheapest).",
+        "NEW CELL 'Mayonnaise' (10 lines) at Baker's by 'Kroger Olive Oil Mayo' $3.99 / 30 fl oz = 0.133/oz; mayonnaise cheapest is Aldi 'Burman S Real Mayonnaise 30 FL OZ' 0.0963, so no recipe cost uses the olive-oil jar. Kroger product page fetch (kroger.com/p/.../0001111001968) timed out at 60 s: no label read was possible from here.",
+        "NEW CELL 'Sun-Dried Tomatoes (Oil-Packed)' at Family Fare 'California Sun Dry Sun Dried Tomatoes Julienne Ct' $5.99/8 oz = 0.7488 and at Hy-Vee 'Hy-Vee Sun-Dried Tomatoes Halves' $6.99/8.5 oz = 0.8224; standing key Aldi 'Tuscan Garden Sundried Tomatoes 8 OZ' 0.4738. Cheapest is Sam's 'Terra Verde Italian Sundried Tomatoes in Oil, 24 oz.' 0.4158, an oil-packed jar, so the one costed line prices from the right product today.",
+        "ops/out/ingredient-identity-cell-baseline.json: recorded 2026-09-26, count 86, never tightened since; today's findings are 11 keys, so 75 stale keys sit in the mark where a returning wrong product would be silent."
+      ],
+      "root_cause": "Check (d) asks whether a product name carries the ingredient's head word, and three different things make a right product fail that test: (1) the tokenizer is ASCII-only, so an accented letter becomes a word break and 'Gruy\u00e8re' never equals 'gruyere' (the same defect class pull-regular-bakers-api.ps1 fixed for its own names on 'Cr\u00e8me Br\u00fbl\u00e9e'); (2) a product name omits a qualifier that no capture field records (fat level of an olive oil mayo, oil vs dry pack of sun-dried tomatoes), so no word test can ever decide it and only a label read or a standing key can; (3) the keyed mark is written only by an explicit -Tighten that c989c6 owed after landing, and the landing came after the daily build, so the owed tighten never ran and every right-cell finding re-pages as a RISE. The Tony Chachere key is not a rule defect: the exclude works on the live rules and today's board simply predates it.",
+      "surface_fix": {
+        "what": "none on the board. The Tony Chachere Fareway row leaves cajun-seasoning on the 2026-09-29 build by the rule already on main.",
+        "files": []
+      },
+      "root_fix": {
+        "what": "Fold diacritics in the identity tokenizer before the ASCII strip, so a name that spells the ingredient with an accent names it; leave the finding KEY functions untouched so every existing mark key stays byte-identical.",
+        "files": ["meal-prep/lib/ingredient-identity-lib.ps1", "meal-prep/pipeline/audit-ingredient-identity.ps1 (self-test cases only)"],
+        "exact_change": "In meal-prep/lib/ingredient-identity-lib.ps1 add function ConvertTo-IdentityFoldedText([string]$Text): return $Text.Normalize([Text.NormalizationForm]::FormD) with every char whose [Globalization.CharUnicodeInfo]::GetUnicodeCategory is NonSpacingMark removed, then .Normalize(FormC) (the same shape as grocery/pull-regular-bakers-api.ps1:359-362). Call it in Get-IdentityTokens line 50 before .ToLower() and in Test-PricingRowNamesIngredient line 103 before .ToLower(). Do NOT call it in ConvertTo-IdentityStoreKey (line 123) or ConvertTo-IdentityProductKey (line 208): the keys must not move, or every accented standing key re-pages as a RISE. Build accented fixture strings from [char]0x00E8 / [char]0x00F1, never a literal, because a BOM-less .ps1 is read as ANSI under PS 5.1."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "Not a matching rule: no product routes differently and no price can move. Measured the FINDING outcome instead: every one of the 3,075 cell names on comparison-2026-09-28 + recipe-board.json tokenized before and after the fold, and the 354 vocabulary names checked for accents (0). 37 names carry a non-ASCII character, 6 change tokens (Emmi Gruy\u00e8re x2 boards, La Coste\u00f1a jalape\u00f1o x3, Great Value Cr\u00e8me cookies); 1 finding key clears (Gruyere Cheese | Hy-Vee | Emmi), 0 appear. The live routing of the 11 founding names is recorded with a positive control.",
+        "corpus": "comparison-2026-09-28.json (2,871 cells) + grocery/out/recipe-board.json (08:12:10) = 3,075 distinct cell names; meal-prep/db/ingredients.json 354 items",
+        "affected_now": 1,
+        "names": ["Emmi Le Gruy\u00e8re cheese, 6 oz., $9.99"],
+        "risk": "A fold can only ADD ASCII letters to a product's tokens, so it can only silence findings, never create one; the one it silences is the real Emmi Le Gruy\u00e8re AOP block. No vocabulary name carries an accent, so no head word moves. Keys unchanged by construction.",
+        "claimed_by_earlier": [],
+        "cell_effects": []
+      },
+      "leaves_open": "Part of the class stays open. (a) The same ASCII-only strip, -replace '[^a-z0-9...]', sits at 59 sites in 43 files; 36 files are live code outside archive/ and 35 of them are untouched here (known-wrong-lib, link-identity-lib, verdict-lib, build-deals-page, identity-lib and others); none is measured today as misreading an accented name. (b) Olive-oil mayo and sun-dried packing stay findings on purpose: Kroger Olive Oil Mayo (Baker's), California Sun Dry Julienne Ct (Family Fare), Hy-Vee Sun-Dried Tomatoes Halves (Hy-Vee), Tuscan Garden (Aldi, standing): 4 keys, 0 recipe cost effect today, recorded as standing keys by the -Tighten in ship_sequence step 4; a label read could later turn each into an identity_same_as or an exclude. (c) Walmart's Tony's 'Seasoning, Cajun, More Spice' stays in cajun-seasoning while Fareway's name leaves (c989c6 (c), name-based ruling): 0 cell effects.",
+      "leaves_open_occurrences": "(a) 2 occurrences over 2026-09-01..2026-09-28: Baker's 'Cr\u00e8me Br\u00fbl\u00e9e' (fixed in pull-regular-bakers-api) and today's Gruy\u00e8re; (b) 4 keys, 0 wrong recipe costs in 30 days; (c) 0 cell effects",
+      "leaves_open_occurrences_window": "2026-09-01..2026-09-28",
+      "leaves_open_followup": "watch:meal-prep/pipeline/audit-ingredient-identity.ps1 for (b) and (c) (a new product in either cell is a new key and a RISE); (a) converts on touch, no sweep",
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (run by run-gates on every push; its Test-PricingRowNamesIngredient cases reach the changed lines directly)",
+        "must_fire_case": "MUST FIRE (the founding row, the bug): Test-PricingRowNamesIngredient -Ingredient 'Gruyere Cheese' -ProductName ('Emmi Le Gruy' + [char]0x00E8 + 're cheese, 6 oz., $9.99') returns $true after the fix (it returns $false on the pre-edit lib; verify by running the case against the pre-edit copy in a temp mirror)",
+        "must_not_fire_case": "MUST NOT FIRE on a real wrong product: -Ingredient 'Gruyere Cheese' -ProductName ('Smoked Gouda Cr' + [char]0x00E8 + 'me Cheese') returns $false, so the fold cannot silence a product that does not name the food",
+        "clean_twin": "CLEAN TWIN (keys stable): ConvertTo-IdentityProductKey of the accented Emmi name returns exactly what it returns on the pre-edit lib ('emmilegruyrecheese6oz999'), so no standing key re-pages; and the ASCII name 'Happy Farms Preferred Specialty Shredded Swiss Gruyere Cheese 8 OZ' still returns $true",
+        "reaches_new_code": "all three cases call the lib functions whose lines 50 and 103 change; no case reads a live board",
+        "fixture_occurrences": ["Gruyere Cheese | Hy-Vee | Emmi Le Gruy\u00e8re (2026-09-28 RISE)"]
+      },
+      "rollback": "git revert of the single commit: the lib change is two call sites and one function, the marks are untouched by the code change, and the -Tighten of step 4 is a separate record that can be reverted on its own (ops/out/ingredient-identity-cell-baseline.json from git).",
+      "freshness": "Measured against comparison-2026-09-28 (built 08:07:59) and recipe-board.json (08:12:10), HEAD c349cbd77, at about 15:30. The Tony key is expected to vanish on the 2026-09-29 build; if it is still there, the exclude is not reaching the engine and step 4 must NOT run.",
+      "publish_batch": "none: no board, rule or price change. The code rides a normal push-main landing.",
+      "resolution_note": "Today's five new identity keys were three different things. Gruy\u00e8re with an accent was a detector defect: the check's tokenizer threw accented letters away, so the real Emmi Le Gruy\u00e8re read as not naming gruyere. Fixed by folding accents before the word test (6 of 3,075 board names change tokens, 1 finding clears, 0 appear, keys unchanged), fixtured with the founding row, a wrong product that must stay a finding, and a key-stability twin. The Tony Chachere row at Fareway was on today's board only because c989c6's exclude landed at 08:20, after the 08:07 build; it left on the 09-29 build. Olive-oil mayo at Baker's and three sun-dried jars whose names never say oil are in the right cells and price no recipe today (Aldi and Sam's hold both cheapest cells); they were recorded as standing keys with -Tighten on the 09-29 board, which also cut the stale mark from 86 keys to the real list.",
+      "resumes": "2026-09-27-c989c6 (plan-2026-09-27-2.json, deviated): its owed steps were the publish and the -Tighten; the publish is the daily chain's, the -Tighten is step 4 here"
+    },
+    {
+      "queue_id": "2026-09-26-a7dbb1",
+      "subject": "09-26 integration leftovers: every part is now owned elsewhere or measured as by-design",
+      "classification": "superseded",
+      "status": "superseded",
+      "evidence": [
+        "Part 1 (identity RISE, 4 keys): today's check (d) on comparison-2026-09-28 no longer lists Family Fare 'Our Family Mayo, Real 30 Fl Oz' or Baker's 'California Sun Dry ... in Oil with Herbs' (c989c6 added 'mayo' and 'in oil' to the vocabulary); the other two keys are 2026-09-27-8161ce's",
+        "Part 2 (food-category coverage): coverage-ledger 2026-09-28 16:04 'eligible 3075, examined 2718, skipped 357' against baseline 3037 set 2026-09-02 (a557e63f9); log trend 2655 (09-26) -> 2670 (09-27) -> 2718 (09-28). Main-board store cells 3,142 on comparison-2026-09-02 vs 2,871 on comparison-2026-09-28 (8.6 percent fewer): most of the 10.5 percent fall is the board holding fewer priced cells, not the audit looking at a smaller share (examined/eligible 88.4 percent today vs 83.3 percent in the 07-30 measurement)",
+        "Part 3 (8 stale PRICE-DRIFT link snapshots): plan-2026-09-26 item 2026-09-22-817976 leaves_open 'Done in the integration run: -Tighten -AcceptDrop recorded the PRICE-DRIFT marks (Aldi 13->4, Walmart 2->1, Sam's Club 67->2)'; links ride with the price since PLAN-link-rides-with-price-2026-09-27 L1",
+        "Part 4 (contested classifier 2 of 11 wrong): 2026-09-22-2dae07 leaves_open 'the contested kind stays docket-only ... every arrival waits for a hand -Decide' (by design)",
+        "Part 5 (177835 residuals): (e) the identity mark is still 86 keys recorded 2026-09-26; (a) the -RoutesOnly union blindness is exactly what the daily check (d) exists to see; (f) one cache miss, no price effect; (d) the propagate backlog and (g) the de-duped pepperoncini floor row are meal-prep recipe-publish work, not a grocery alert"
+      ],
+      "root_cause": "A bundle of residuals from one integration run. Its only live grocery condition, the identity keys and the untightened mark, is the same condition 2026-09-27-8161ce carries; the rest were closed in that run, are by-design docket behaviour, or are board-size movement read through an absolute-count coverage mark.",
+      "resolution_note": "Superseded by 2026-09-27-8161ce, which owns the two identity keys still open and the untightened mark (its -Tighten after the 09-29 build). The other two of the four keys were fixed by c989c6's vocabulary. The stale link snapshots were recorded in the 09-26 integration run and links now ride with the price. The contested classifier is docket-only by design. The food-category coverage fall (3037 -> 2718, recovering day by day) is mostly the board holding fewer priced cells (3,142 -> 2,871 main cells since 09-02), not the audit going blind: the share it examines rose. The recipe-publish leftovers of 177835 belong to the meal-prep backlog."
+    },
+    {
+      "queue_id": "2026-09-25-f9c8ce",
+      "subject": "Recipe identity union rows: the ruling it waited on was given, the substitutes shipped; one line waits on a first capture",
+      "classification": "no-code-change",
+      "status": "planned",
+      "evidence": [
+        "design/ready-for-brad/Q-2026-09-26-form-style.md: 'Ruling (2026-09-26, Brad in chat) ... \"B: shape same, style own\" - a different pasta SHAPE is the same commodity; a different STYLE (cajun vs creole, salsa verde vs green chile, sauce styles, chili oil etc.) is its own.' and whole grain 'Separate food'",
+        "meal-prep/db/ingredients.json: 'Pasta Shells' identity_same_as covers every pasta shape word incl. angel hair (reason cites the 09-26 ruling); 'Pineapple Chunks' identity_same_as '\\bcrushed\\s+pineapple\\b'; 'Enchilada Sauce' bid enchilada-sauce; 'Chili Crisp' bid chili-crisp. None of part B's pairs appears in today's check (d) findings",
+        "Part A shipped under 2026-09-26-177835 (zucchini/yellow squash and pepperoncini/banana peppers split, glass noodles and blackened rebid, Egg Yolk a yield row, Fresh Red Chili recorded)",
+        "Left: 'Green Chile Sauce' bid salsa-verde, 1 line, 4 standing CELL keys priced by Herdez/Specially Selected salsa verde; green-chile-sauce is registered (commodities.json:51790, include green\\s+chil[ei]s?\\s+sauce) with 0 cells on comparison-2026-09-28. Its term is not yet read: bakers-regular-2026-09-28.json 'term_key green-chile-sauce ... outcome not_asked ... outside today's capture-policy slice'; family-fare-regular-2026-09-28.json 'green chile sauce ... outcome not_attempted ... term budget reached before request'",
+        "Also standing: 'Japanese Curry Roux' at Baker's by 'S&B Golden Curry Medium Hot Sauce Mix' (the roux, spelled 'Sauce Mix'), a key already in the mark"
+      ],
+      "root_cause": "The pasta-shape half was a genuine category question and Brad answered it on 2026-09-26; it has been executed (shape words recorded as same food, styles given their own commodities). What remains is capture cadence: green-chile-sauce was minted with a capture term that neither Baker's rotation slice nor Family Fare's term budget has reached yet, so the Green Chile Sauce line cannot move off salsa verde until a store fetch prices it.",
+      "resolution_note": "No longer a ruling: Brad ruled 'shape same, style own' on 09-26 and it is executed (pasta shapes and crushed pineapple recorded as the same food, enchilada sauce and chili crisp on their own commodities, whole grain excluded). The substitutes shipped under 177835. One line is left: Green Chile Sauce still prices from salsa verde because its new commodity has not been captured yet (the term is queued at Baker's and Family Fare). When green-chile-sauce shows its first priced cell, rebid Green Chile Sauce onto it with rebid-ingredient and recost that one recipe. Nothing pages when that capture lands, so the orchestrator should re-check this line on 2026-10-05 if it has not moved.",
+      "leaves_open_occurrences": "1 line, 1 recipe, since green-chile-sauce was minted 2026-09-26 (5001c8cb9); 0 other minted-but-uncaptured rebids measured today",
+      "leaves_open_followup": "watch:meal-prep/pipeline/audit-ingredient-identity.ps1 (the 4 Green Chile Sauce / salsa verde keys stay CELL findings in every daily run until the rebid; orchestrator re-check on 2026-10-05)",
+      "leaves_open": "Green Chile Sauce (1 line, 1 recipe) prices from salsa verde until green-chile-sauce is captured; no detector fires when it is (an intention with no exit code). Japanese Curry Roux 'Sauce Mix' spelling is a standing key."
+    }
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "1. Developer (8161ce, ops lane): branch, change meal-prep/lib/ingredient-identity-lib.ps1 as root_fix.exact_change states, add the three self-test cases to audit-ingredient-identity.ps1 -SelfTest, prove the MUST FIRE fails against the pre-edit lib in a temp mirror, run audit-ingredient-identity.ps1 -SelfTest and ops\\run-gates.ps1 (read the exit code), land through ops\\push-main.ps1 (never git push origin HEAD:main). Commit carries a Store: line.",
+    "2. Wait for the 2026-09-29 daily build. Verify on comparison-2026-09-29: cajun-seasoning has no Fareway 'Tony Chachere's It's Spicy! More Spice Seasoning' row, and graph/identity/staple/fareway.jsonl routes it to no commodity. If the row is still there, STOP: do not run step 4, reopen 8161ce as a rule that does not reach the engine.",
+    "3. Run meal-prep\\pipeline\\audit-ingredient-identity.ps1 -BoardFile comparison-2026-09-29.json -RecipeBoardFile grocery\\out\\recipe-board.json -AliasMapFile grocery\\recipe-floor-id-map.json (plain run). Expect no Gruyere and no Cajun/Fareway key; expected remaining RISE keys are only Kroger Olive Oil Mayo (Baker's), California Sun Dry Julienne Ct (Family Fare), Hy-Vee Sun-Dried Tomatoes Halves (Hy-Vee). Any other new key is a new condition: do not tighten over it, queue it.",
+    "4. Orchestrator: run the same command with -Tighten so the cell mark records the real list (86 -> about 11 keys); commit ops/out/ingredient-identity-cell-baseline.json with a pathspec commit and land through push-main.",
+    "5. Close with triage-close.ps1: 8161ce done (resolution note), a7dbb1 superseded by 8161ce, f9c8ce no-code-change (resolution note, with the 2026-10-05 re-check of Green Chile Sauce)."
+  ]
+}

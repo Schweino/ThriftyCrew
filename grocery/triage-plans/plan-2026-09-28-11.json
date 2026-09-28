@@ -1,0 +1,154 @@
+{
+  "generated": "2026-09-28T16:25:00-05:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "triage-due printed 'BOARD comparison-2026-09-28 built 08:17:56 (460 min ago)'; comparison-2026-09-28.json built_at 2026-09-28T08:07:59. Not MID-BUILD. Every board figure below is against that file. HEAD read from: c349cbd77, equal to origin/main at read time.",
+  "scope_note": "Small batch R6, 4 ids, diagnose only. Only 2026-09-27-78df57 is a code item. The other three are one-lined: two no-code-change, one needs-brad.",
+  "queue_ids_seen": ["2026-09-22-0c812e", "2026-09-26-203892", "2026-09-26-6b8ce9", "2026-09-27-78df57"],
+  "untrusted_input_note": "No fetched or read content in this run addressed the agent or carried an instruction. No web tool was used.",
+  "knowledge_consulted": [
+    "searched \"band refusals backlog tighten\", \"reject share spike detector\", \"install hooks after push\" (knowledge-search --estate --multi): the returned skill sections (claude-code-automation/hooks-measured-payloads.md 5, data-quality-craft/checks-and-thresholds.md 7, data-quality-craft/detecting-anomalies.md 6) were offered, not opened, and none was used; nothing applicable beyond the rules below",
+    "orchestrator-pasted machinery: grocery/ingest-shape-lib.ps1 Get-RejectReasonKey, USED to tally Walmart rejects by normalised reason key for 6b8ce9; grocery/derived-band-lib.ps1 and rules grocery.md gr-10 (no hard-coded bands), used as the frame for 0c812e (the ruling is about the derived ceiling, never a typed band)",
+    ".claude/rules/grocery.md gr-12 (every everyday price re-read about once per 90 days; never shorten the rotation): used for 203892, the new green chile sauce term waits its rotation turn by design",
+    ".claude/rules/ops-and-gates.md og-13 (a threshold must say what it does when the producer's volume changes): used for 6b8ce9, a share over a slice whose size swings 7 to 384 terms is a slice-composition signal",
+    ".claude/rules/ops-and-gates.md og-25 (replace a file something else reads through Write-TcAtomicFile) and og-27 (lock order, capture-run mutex is 0): used for 78df57; install-hooks already replaces atomically (ops/install-hooks.ps1:68) and takes no lock",
+    ".claude/rules/ops-and-gates.md og-23 (a fixture that builds a temp repo clears the repository environment) and og-38 (per-run temp names): written into 78df57's proof"
+  ],
+  "routing_artifact": null,
+  "routing_artifact_note": "No item changes a matching rule, include, exclude, class token or engine branch, so no routing artifact is owed. The 0c812e board-exposure join (1,284 band keys against comparison-2026-09-28 cells) is at the reviewer's scratch path C:/Users/Owner/AppData/Local/Temp/claude/C--Codex-ThriftyCrew/652e5660-9662-42e1-9e18-2b9835ae0237/scratchpad/band-exposure.json with its script band-exposure.ps1; it is evidence for a ruling, not a routing contract.",
+  "items": [
+    {
+      "queue_id": "2026-09-27-78df57",
+      "subject": "A landed ops/hooks change waits up to about a day to install, because no road that moves the main checkout reinstalls",
+      "classification": "infra",
+      "status": "planned",
+      "lane": "ops",
+      "est_tool_calls": 50,
+      "premise_verified": "yes: 'git log origin/main --since=2026-08-29 -- ops/hooks' lists 27 commits (the prior spawn's figure holds). The installed hooks are full copies: ops/install-hooks.ps1:68 writes the bytes with Write-TcAtomicFile. ops/push-main.ps1 does not call install-hooks (grep 'install-hooks|audit-hook-installed' in push-main.ps1: 0 hits). At read time all 4 installed hooks were byte-identical to the tree.",
+      "evidence": [
+        "queue body: 'a landed ops\\hooks change sits uninstalled in the main checkout's .git\\hooks until the next 10:30 capture-watchdog runs audit-hook-installed -Repair, up to about 24 h. MEASURED: 1 occurrence (2026-09-26, pre-commit stale after b06a3628e until the watchdog's repair)'",
+        "27 ops/hooks commits on origin/main 2026-08-29..2026-09-28 (7 of them dated 09-23). Files touched: pre-push 16, commit-msg 5, pre-commit 5, post-commit 1, claude/production_barrier.py 2. 26 of 27 touch a top-level hook that install-hooks copies; 15d574651 touches only ops/hooks/claude/production_barrier.py, which install-hooks does not copy (it walks Get-ChildItem $src -File, top level only)",
+        "MODEL, not a measurement (it ignores hand installs, so it is an upper bound): for each of the 27 committer times, hours until the first 10:30 watchdog repair after the next ~08:00 bot sync: median 18 h, max 25.9 h (a6e724f36 and 71275d638, 09-12 08:34), sum 448 h over 30 days. 69659bab4 (09-24 10:45, a pre-push change) sat about 23.7 h in this model",
+        "the three roads that move the main checkout's HEAD to a landed tip, none of which reinstalls: lib/checkout-sync.ps1 (the ~07:00/~08:00 bots; refs/heads/main moved by update-ref at lines 828, 1070, 1076), grocery/sync-production-checkout.ps1 (the four scheduled tasks and bakers-daily-scan pull through it since b0e5abee8, moved to grocery/ by 13593fe79; 'git -C <repo> pull --rebase --autostash origin main'), ops/push-main.ps1 $landedSync ('git reset --keep <landed>' near line 1603, main checkout only). A reset or update-ref fires no git post-merge or post-checkout hook, so a git-hook trigger cannot cover the first and third",
+        "grocery/capture-watchdog.ps1:1579-1581: '-Repair (2026-09-26, queue 2026-09-26-4b6616): a hook left stale by a landed ops\\hooks change is re-installed and re-checked here, on the main checkout only'. No REPAIRED line is persisted anywhere under grocery/ (grep of *.log, *.txt, *.jsonl), so the item's 1 occurrence cannot be independently recounted"
+      ],
+      "root_cause": "The hooks git runs for EVERY checkout are copies in the common .git/hooks, refreshed only by an explicit ops/install-hooks.ps1 or by the 10:30 watchdog's daily -Repair. None of the three roads that move the main checkout's HEAD to a landed tip (the bots' lib/checkout-sync.ps1, the scheduled tasks' grocery/sync-production-checkout.ps1, push-main's reset --keep) reinstalls, so the main checkout and every worktree run the previous hook for hours after an ops/hooks change lands: 26 of the last 27 such landings, modeled median 18 h.",
+      "root_fix": {
+        "what": "One helper, Update-TcInstalledHooks, called by each of the three HEAD movers right after a successful move. It reinstalls only when the moved range changed a top-level ops/hooks file, never throws, and never changes its caller's outcome; the watchdog's daily -Repair stays as the backstop.",
+        "files": [
+          "lib/hook-refresh.ps1 (new): Update-TcInstalledHooks -Repo <dir> -From <sha> -To <sha> [-Installer <scriptblock seam>]",
+          "lib/checkout-sync.ps1: Invoke-TcCheckoutSync, after the update-ref that moved refs/heads/main (the ~1070/1076 swap and the ~828 interrupted-move finish), with H0 and the new tip",
+          "grocery/sync-production-checkout.ps1: record HEAD before the pull; after a pull that exited 0 and moved HEAD, call the helper",
+          "ops/push-main.ps1: $landedSync, after the 'reset-keep' branch succeeds (never on 'manual'), against $vwMainDir with $vwStartHead..$landed",
+          "lib/test-checkout-sync.ps1, the ops/push-main selftest case files, grocery/sync-production-checkout.ps1 -SelfTest block"
+        ],
+        "exact_change": "Update-TcInstalledHooks: run 'git -C <Repo> diff --name-only <From> <To> -- ops/hooks' under Clear-TcGitRepoEnv; keep only paths with no further slash below ops/hooks/ (the files install-hooks copies). If none: return @{ ran=$false }. Else invoke ops/install-hooks.ps1 (plain install and verify, which already writes through Write-TcAtomicFile) through Invoke-NativeScript (og-04), print one line 'hook-refresh: reinstalled <files> (install-hooks exit N)', and return @{ ran=$true; rc=N; files=... }. A non-zero rc prints 'hook-refresh: install exited N; the 10:30 watchdog -Repair will retry' and returns; it never throws and never alters the caller's exit or outcome. It takes no lock and makes no blocking wait, so running inside checkout-sync's capture-run mutex (lock order 0) nests nothing (og-27). In push-main, prefer calling it after the push lock is released; if $landedSync runs inside the lock it is still a sub-second copy with no wait, but say which in the commit. ALTERNATIVES REJECTED: (1) installed hook as a shim that execs the tree file: it would arm whatever sits uncommitted in the main checkout for every worktree's commit and push, the main tree itself lags origin until a sync so the lag only moves, and install-hooks' verify-by-bytes plus audit-hook-installed would both need redesign; (2) core.hooksPath=ops/hooks: each worktree then runs its own tree's hooks, so a worktree that edits pre-push weakens its own gate; (3) a git post-merge or post-rewrite hook: reset and update-ref fire neither."
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "corpus": "not a matching or pricing change: no product name routes differently and no board cell can move. Measured instead: the 27 ops/hooks commits on origin/main since 2026-08-29 and the 3 call sites that move the main checkout's HEAD",
+        "measured_by": "git log origin/main --since=2026-08-29 -- ops/hooks (27 commits, each commit's file list via git show --name-only) and a grep of the three HEAD movers (lib/checkout-sync.ps1, grocery/sync-production-checkout.ps1, ops/push-main.ps1) plus grocery/capture-watchdog.ps1 for install-hooks or audit-hook-installed calls, at HEAD c349cbd77",
+        "affected_now": 3,
+        "names": ["lib/checkout-sync.ps1 Invoke-TcCheckoutSync", "grocery/sync-production-checkout.ps1", "ops/push-main.ps1 $landedSync"],
+        "newly_matched": "26 of 27 recent ops/hooks landings would have reinstalled at the first move instead of the next 10:30 repair; 1 (15d574651, claude/production_barrier.py only) triggers nothing, correctly",
+        "risk": "a hook replaced while a push is executing it: already the case for the watchdog's daily repair, and install-hooks' atomic replace retries a held name; a failed install is spoken and changes nothing else",
+        "cell_effects": []
+      },
+      "proof": {
+        "guard_or_fixture": "lib/hook-refresh.ps1 -SelfTest (opened in a shape ops/audit-mustfire-census finds: an 'if ($SelfTest) { ... exit }' block), plus one case each in lib/test-checkout-sync.ps1 (via lib/checkout-sync.ps1 -SelfTest), ops/push-main.ps1 -SelfTest and grocery/sync-production-checkout.ps1 -SelfTest. Every scratch repo clears the repository environment first (Clear-TcGitRepoEnv, og-23) and names its temp dir per run (og-38). run-gates runs all four on every push.",
+        "must_fire_case": "MUST FIRE (the b06a3628e shape, 2026-09-25 10:58): scratch repo whose installed .git/hooks/pre-commit holds the OLD bytes; upstream commit changes ops/hooks/pre-commit; after Invoke-TcCheckoutSync moves main, the installed pre-commit hashes equal to the new tree blob (without the fix it still equals the old bytes) and the output carries 'hook-refresh: reinstalled pre-commit'",
+        "must_not_fire_case": "MUST NOT FIRE: the moved range changes only ops/hooks/claude/production_barrier.py (the 15d574651 shape): the installer seam is called 0 times and .git/hooks is byte-identical",
+        "clean_twin": "CLEAN TWIN: an upstream commit touching only grocery/commodities.json moves main exactly as today (same outcome, same exit, same log line), the installer seam is called 0 times and .git/hooks is byte-identical; and in push-main, a 'manual' landedSync (HEAD moved while it ran) calls the seam 0 times",
+        "degrade_case": "an installer seam that exits 1: the caller's outcome and exit code are unchanged and exactly one 'hook-refresh: install exited 1' line is printed",
+        "fixture_source": "the real founding commit b06a3628e (ops/hooks/pre-commit change, 2026-09-25) as the shape; bytes are synthetic in the scratch repo and frozen in the test, never read from the live .git/hooks"
+      },
+      "rollback": "revert lib/hook-refresh.ps1 and the three call-site edits; the 10:30 watchdog -Repair (grocery/capture-watchdog.ps1 5a3a2) keeps repairing within a day, as it does today",
+      "freshness": "measured 2026-09-28 about 15:30 to 16:20 against HEAD c349cbd77 (= origin/main at read time) and the main checkout's .git/hooks (4 of 4 installed hooks byte-identical to the tree at read time); board comparison-2026-09-28 is not an input to this item. A parallel spawn was landing chain-verdict/chain-code-currency changes; none touched ops/hooks, lib/checkout-sync.ps1, push-main.ps1 or sync-production-checkout.ps1 at read time, so the developer re-reads those three call sites before editing",
+      "publish_batch": "ops-1: this item alone, landed ONLY through ops/push-main.ps1, never 'git push origin HEAD:main'. If lib/checkout-sync.ps1 or ops/push-main.ps1 is in the chain manifest's derived set, push-main rehearses the chain itself; let it",
+      "leaves_open": "Moves of the main checkout by hand (a session's own git pull, merge or reset there) and any fourth mover added later still wait for the 10:30 repair; and ops/hooks/claude/* (2 of the 27 commits, 1 of them only that) is outside install-hooks altogether, and how it reaches Claude Code was not measured here.",
+      "leaves_open_occurrences": "not measured: no log records a hand move of the main checkout, so the count is unknown, not zero. The one recorded stale-hook occurrence (2026-09-26, pre-commit after b06a3628e) came through an automated road this fix covers.",
+      "leaves_open_owner_suggestion": "watch:grocery/capture-watchdog.ps1 only if the developer can show 0 hand-move occurrences; otherwise the watchdog's -Repair is still the backstop and this sentence is the record",
+      "resolution_note": "A landed ops/hooks change now reinstalls at the first move of the main checkout (bot sync, scheduled-task pull, or push-main's reset --keep) instead of waiting for the 10:30 watchdog repair. 26 of the last 27 hook landings would have been live at once instead of after a modeled median of 18 h. Hand moves still wait for the daily repair."
+    },
+    {
+      "queue_id": "2026-09-22-0c812e",
+      "subject": "1,284 band-refused rows on the matching worklist: a ruling about the derived ceiling, not a defect",
+      "classification": "needs-brad",
+      "status": "needs-brad",
+      "lane": "money",
+      "premise_verified": "RESUME of 2026-09-21-6b17b1 (plan-2026-09-22-5, deviated: leaves_open '1,165 band-refused rows no basis error explains (the matching worklist)') and 2026-09-21-b96f21 (plan-2026-09-22-9, deviated: 'the band-refusal docket ... docket-only because the band classifier missed its bar'). Later handling: plan-2026-09-25-6 bounced, plan-2026-09-25-15 needs-brad (Q-derived-ceiling), plan-2026-09-27-3 bounced, plan-2026-09-27-4 deferred-budget. What those plans started is finished here as a measurement; the rest waits on the ruling.",
+      "evidence": [
+        "out/match-worklist.json (08:39:50): by_kind band 1,284, deciding_kinds 'coverage,semantic', so every band row is 'undecided' by design; grocery/band-refusals-backlog.json keys 1,091 (last written 1429d3944, 2026-09-25); out/band-refusals-open.json count 197 (from flagged-2026-09-28.json)",
+        "JOIN of the 1,284 band keys to flagged-2026-09-28.json prices and comparison-2026-09-28 cells (2,871 store cells): 1,120 are DEAR rows at a store that already holds a cheaper cell for that commodity, so admitting them cannot move any cell; 22 are dear rows at a store with NO cell (the only rows the ceiling ruling can put on the board); 8 are cheap rows below the store's cell; 4 cheap rows with no cell; 130 keys are no longer flagged today",
+        "dear-no-cell samples: 'shampoo|Aldi|Head Shoulders Classic Clean Daily Shampoo 12.5 FL OZ' 0.5576 against band 0.01882-0.4705 (real price, Aldi has no shampoo cell); 'dried-basil|Family Fare|Litehouse Herb, Freeze Dried Basil 0.28 Oz' 21.3929 against 0.664-16.6; 'dog-treats|Hy-Vee|Milk-Bone Soft & Chewy Chicken Recipe Dog Treats' 0.8196 against 0.02057-0.51425; 5 Walmart paper-towel rows carry band 'count-conflict: size count 246 is a sub-unit count (123 sheets per r)' (a basis refusal, correctly held)",
+        "cheap-side samples are basis errors or wrong products the band correctly blocks: 'bread|Walmart|Rotella's Italian Bakery Enriched Italian Sandwich Bread Loaf, 17 oz, 18 Count' 0.1628 (slices read as loaves) against cell 1.48; 'bleach|Family Fare|Glad Drawstring Bags, Kitchen, Tall, Max Strength, Lemon Fresh Bleach Scent, 13 Gallon 34 Ea' 0.0066 against cell 0.074",
+        "Q-derived-ceiling (plan-2026-09-25-15 open_questions_for_brad, recommendation A) has no recorded answer: a grep of the repo outside grocery/out for 'Q-derived-ceiling' finds only plan-2026-09-25-15.json and plan-2026-09-25-16.json, and design/ready-for-brad holds no file for it, so it may never have reached Brad"
+      ],
+      "root_cause": "The derived band's ceiling refuses dear rows that are a mix of wrong products and real premium prices, and which of those the board should admit is a ruling about what a cell MEANS (Q-derived-ceiling), not a code fact. The worklist cannot decide band rows because the classifier missed its bar (plan-2026-09-22-9), so the rows sit undecided by design, and the question was only ever written into a plan file, never into design/ready-for-brad.",
+      "root_fix_none_because": "Nothing is wrong on the board today: of 1,284 keys, 1,120 cannot move any cell and 12 cheap-side refusals are basis errors or wrong products the band correctly blocks. The only open effect is 22 real dear rows at stores with no cell, and admitting them is Brad's call.",
+      "resolution_note": "Needs Brad (Q-derived-ceiling-2026-09-28). Measured on comparison-2026-09-28: 1,120 of 1,284 band rows cannot change any cell, and the ruling affects only 22 rows at stores with no cell (Aldi shampoo, Family Fare dried basil, Hy-Vee dog treats and the like). Recommendation A: keep the ceiling and record the backlog as by-design. On A this id closes no-code-change and audit-band-refusals -Tighten drops the 130 keys no longer flagged. Developer: write the question as its own file design/ready-for-brad/Q-2026-09-28-derived-ceiling.md (og-48), because the 09-25 version exists only in a plan file."
+    },
+    {
+      "queue_id": "2026-09-26-203892",
+      "subject": "Form/style residual: both rulings given and executed; green chile sauce waits for its first store fetch",
+      "classification": "no-code-change",
+      "status": "planned",
+      "lane": "money",
+      "premise_verified": "yes: design/ready-for-brad/Q-2026-09-26-form-style.md records both rulings ('B: shape same, style own' and whole grain 'Separate food'), and 5001c8cb9 'Whole-grain pasta is its own food; green-chile-sauce minted with a capture term (form/style residuals)' is on origin/main. The dispatch expected a possible Brad ruling; none is owed.",
+      "evidence": [
+        "ruling file lines 83-84: 'The green chile sauce style from the ruling above now has its own commodity, green-chile-sauce, with the capture term \"green chile sauce\". The recipe line stays on salsa verde until a store fetch prices it.'",
+        "whole-grain half holds on comparison-2026-09-28: pasta | Baker's 0.0831 'Kroger Penne Rigate Pasta' (not the whole-grain penne)",
+        "green-chile-sauce is ABSENT from comparison-2026-09-28. Term status: Baker's 'not_asked ... outside today's capture-policy slice' on 09-27 and 09-28 (ordinal 315 of 641, cursor 246 -> 254 on 09-28, about 8 to 10 terms a day, so about a week away); Family Fare 'not_attempted ... term budget reached before request' (ordinal 606 on 09-27, 597 on 09-28); the 09-28 Aldi, Fareway, Hy-Vee, Walmart and Sam's files carry no such term",
+        "the 4 green chile keys stand in ops/out/ingredient-identity-cell-baseline.json (recorded 2026-09-26, 86 keys); meal-prep/pipeline/audit-ingredient-identity.ps1 pages only a RISE, so a standing key is never re-raised; no file under meal-prep names green-chile-sauce"
+      ],
+      "root_cause": "Brad's rulings are given and executed. What is left is data: no Omaha store has yet answered the new 'green chile sauce' term, which waits its turn in the 90-day rotation (gr-12, by design), and rebidding the line before a price exists would leave a live recipe NO PRICE BASIS.",
+      "root_fix_none_because": "the class fix (style is its own commodity) shipped at 763c001e2 and 5001c8cb9; the remaining step is a store fetch and then a one-line rebid, neither of which is code",
+      "leaves_open": "The rebid has no trigger: when green-chile-sauce first prices, nothing pages, because the 4 keys stand in the cell mark and no meal-prep file names the new commodity. 1 recipe line (slow-cooker-pork-green-chili-bowls).",
+      "leaves_open_occurrences": 1,
+      "resolution_note": "Both rulings executed (763c001e2, 5001c8cb9): whole-grain penne left the Baker's pasta cell, which is now Kroger Penne Rigate at $0.0831/oz. Green chile sauce is its own commodity, but no store has priced it yet. Baker's reaches the term in about a week of rotation, and Family Fare ran out of term budget before reaching it on 09-27 and 09-28. Developer: close no-code-change and mint one weekly residual, 'green-chile-sauce rebid owed on first Omaha price (slow-cooker-pork-green-chili-bowls)', as the owner of the rebid."
+    },
+    {
+      "queue_id": "2026-09-26-6b8ce9",
+      "subject": "Known-reject-reason share check: the share tracks the day's slice, the real class has not happened, and its consequence is already watched",
+      "classification": "no-code-change",
+      "status": "planned",
+      "lane": "ops",
+      "premise_verified": "partly. The prior spawn's share figures hold (Sam's no-unitPrice 6.7% to 16.6%). Its second claim does NOT hold as a defect: Sam's rows_in 1,011 (09-26) -> 209 (09-27) -> 269 (09-28) is real, but pull_terms was 45, 9 and 12, and 7 to 10 terms is Sam's ordinary daily slice (09-01..09-12 all 7 to 10). 09-26 was a catch-up day like 09-19 (384), 09-21 (94), 09-23 (71) and 09-25 (69). Rows per term held at about 22 to 23, and Sam's cells were 321 on both the 09-27 and 09-28 boards.",
+      "evidence": [
+        "out/sams/ingest-shape: 09-23 in 1459 no-unitprice 206 (14.1%); 09-24 887/127 (14.3%); 09-25 1645/273 (16.6%); 09-26 1011/101 (10.0%); 09-27 209/29 (13.9%); 09-28 269/18 (6.7%): no step up",
+        "out/ingest-shape Walmart no-unitprice share: 09-23 44%, 09-24 39%, 09-25 39%, 09-26 36%, 09-27 24% (207 of 858), 09-28 54% (342 of 630): a 30-point swing on consecutive days",
+        "the swing is slice composition, not a shape change: 0 of the 342 no-unitprice names on 09-28, and 0 of the 207 on 09-27, appear among the 1,849 names Walmart priced in regular/walmart-regular-2026-09-21..27; Walmart cells 518 (09-27) -> 519 (09-28)",
+        "grocery/audit-coverage-regression.ps1 header: 'On 2026-07-16 a bare compare-deals.ps1 re-run cut Sam's Club from 251 priced cells to 116' and 'This is the only guard that can see the Sam's' loss; audit-cell-drops excludes Sam's ('the fullpull watch owns that') and covers every other store at cell level"
+      ],
+      "root_cause": "The share of a known reject reason is driven by which terms a day's slice asked (Sam's asks 7 to 384 terms a day; Walmart's share moved 24% -> 54% overnight with no product changing shape). So the requested share check would fire on slice composition. The real class, a product that carried a unit price and now rejects for lacking one, happened 0 times in the window, and what it would cost (lost cells) is already watched.",
+      "root_fix_none_because": "the consequence is covered by existing checks (audit-cell-drops at cell level for every store but Sam's, audit-coverage-regression on per-store totals including Sam's), the class has 0 occurrences, and the detector as asked would false-fire on normal days",
+      "leaves_open": "A Sam's shape change shows first as a per-store total loss, not per cell (audit-cell-drops excludes Sam's), and blank rows that carry a proof keep pricing at today's shelf price with a proven size.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-coverage-regression.ps1",
+      "resolution_note": "No code. The Sam's drop in row count is its normal 7-to-12-term daily slice after a 45-term catch-up day, and its cells held at 321. A share check would have fired falsely: Walmart's share went 24% to 54% overnight, yet none of the 342 blank rows had ever carried a unit price. If this is ever built, it must key on names that priced before and now reject, never on the share. The consequence is owned by audit-coverage-regression and audit-cell-drops."
+    }
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-derived-ceiling-2026-09-28",
+      "item": "2026-09-22-0c812e",
+      "question": "Each grocery item has a price ceiling worked out from real prices. Items above it stay off the board. Today that blocks 1,284 products. For 1,262 of them it changes nothing a shopper sees, because the same store already shows a cheaper one, or the row has since dropped out. Only 22 matter: a real product at a store that has nothing else in that aisle, such as Head and Shoulders at Aldi or freeze-dried basil at Family Fare. Should those 22 stay off?",
+      "options": [
+        "A: keep the ceiling. Those 22 stores show no price for that item, and a wrong product priced above the ceiling (like candy on peanut butter) also stays off.",
+        "B: let full-priced real rows through above the ceiling. The 22 stores gain a price, but every wrong product above the ceiling then needs its own exclusion first. That is weeks of matching work.",
+        "C: keep the ceiling but list those rows for review instead of silently blocking them. Same result as A on the board, plus a review list."
+      ],
+      "recommendation": "A. The board's job is the cheapest real price per store, and a premium brand at a store with nothing cheaper almost never changes where a shopper should go. B trades a quiet protection for weeks of exclusion work.",
+      "consequence_of_no_answer": "Nothing on the board moves. 0c812e stays open as a record, and the 22 gaps stay gaps."
+    }
+  ],
+  "ship_sequence": [
+    "1. ops (triage-ops-developer), publish batch ops-1: 2026-09-27-78df57. New lib/hook-refresh.ps1 with its -SelfTest, plus call sites in lib/checkout-sync.ps1, grocery/sync-production-checkout.ps1 and ops/push-main.ps1, with a case in each of their self-tests. Proof: all four self-tests exit 0 with their verdict lines, run-gates green. Land ONLY through ops/push-main.ps1, which rehearses the chain itself if any file is in the chain's derived set.",
+    "2. Queue housekeeping, no code: close 2026-09-26-6b8ce9 no-code-change (followup watch:grocery/audit-coverage-regression.ps1) and 2026-09-26-203892 no-code-change through triage-close.ps1; mint the weekly residual 'green-chile-sauce rebid owed on first Omaha price' with send-alert.ps1 -Lane weekly. 2026-09-22-0c812e stays OPEN as needs-brad; write design/ready-for-brad/Q-2026-09-28-derived-ceiling.md from open_questions_for_brad.",
+    "3. Live verification for 78df57: on the first bot sync or push-main landing after ops-1 that carries an ops/hooks change, run 'powershell -File ops/install-hooks.ps1 -Check' in the main checkout before 10:30 and read exit 0 plus the 'hook-refresh: reinstalled' line in that run's log. Until such a landing happens the fix is proven by fixture only; say so in the close."
+  ],
+  "lane_budget": {
+    "ops": "50 of 100 (78df57)",
+    "money": "0 of 200 (0c812e is needs-brad, 203892 is no-code-change)"
+  }
+}
