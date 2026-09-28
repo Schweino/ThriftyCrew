@@ -66,7 +66,7 @@
       "full_suite": "not-applicable: no code changed",
       "close_disposition": "confirmed",
       "resolution_note": "Real stall, one occurrence, no code defect: Task Scheduler stopped starting TC Boot Watch's 15-minute repetition after 2026-09-27 04:35 until the next daily start at 09-28 00:05 (19.5h) with no event naming why, while two identically-scheduled TC tasks launched 78 times each through the same span. Job ran rc=0 every time it was started; healthy again (34 runs today, last 11:35). Not a failed prevention: the prior close b2f93f was a different task (harvest crawl planned end) and that fix held. Cause left open as residual 2026-09-28-37406f.",
-      "actual_tool_calls": 15
+      "actual_tool_calls": 22
     }
   ]
 }
