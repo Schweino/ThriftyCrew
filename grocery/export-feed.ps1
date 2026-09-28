@@ -154,6 +154,21 @@ function Get-TcHeldSlugs {
   return ,$set
 }
 
+function Get-TcFeedPerServing {
+  <# A recipe's feed per_serving, read from its OWNER (2026-09-28, queue 2026-09-25-602457). meal-prep\pipeline\
+     v2-perserving.json cheapest_ps is the number the hub bakes; recipe-costs.json carries top5-weekly's COPY of it, and
+     check-ad-cycles runs this export BEFORE top5-weekly writes that copy, so every first feed of the day shipped the
+     previous run's value (246 of 577 off by more than a cent at 812fad5b3). Round(cheapest_ps, 2) when the map holds the
+     slug with a value > 0, else the row's own per_serving: the same fallback top5-weekly.ps1 uses. Pure. #>
+  param($RecipeCostRow, [hashtable]$CheapestBySlug)
+  $slug = [string]$RecipeCostRow.slug
+  if ($null -ne $CheapestBySlug -and $CheapestBySlug.ContainsKey($slug)) {
+    $v = [double]$CheapestBySlug[$slug]
+    if ($v -gt 0) { return [math]::Round($v, 2) }
+  }
+  return [double]$RecipeCostRow.per_serving
+}
+
 . (Join-Path $PSScriptRoot 'feed-served-lib.ps1')   # Get-TcServedFeedDoc: the one served-feed read
 function Get-TcPriorFeed {
   <# The feed this build is compared with: -PriorFeedPath when given, else the SERVED feed, else the last committed
@@ -323,7 +338,18 @@ if ($SelfTest) {
   Test-EfCase ($kMF + '  a window whose end is our 30-day TTL (end_basis ttl) gets no "sale ends" badge') (-not $bm.ContainsKey('black-olives|Fareway')) (($bm.Keys | Sort-Object) -join ',')
   Test-EfCase ($kCT + '  a store-stated end on its last day, and an end recorded before end_basis existed, still badge with their date') ([string]$bm['avocado-oil|Fareway'] -eq '2026-09-26' -and [string]$bm['rice|Hy-Vee'] -eq '2026-09-30') (($bm.GetEnumerator() | ForEach-Object { $_.Key + '=' + $_.Value }) -join ',')
   Test-EfCase ($kMNF + '  a window that ended yesterday gets no badge') (-not $bm.ContainsKey('eggs|Hy-Vee')) (($bm.Keys | Sort-Object) -join ',')
-  $want = 24
+  # ---- per_serving READ FROM v2-perserving.json, not top5-weekly's lagging copy (2026-09-28, 2026-09-25-602457) -------
+  # Rows frozen from 812fad5b3 (public/smp-feed.json 08:19:57 against meal-prep/pipeline/v2-perserving.json at that commit).
+  $v2m = @{ 'slow-cooker-balsamic-pork-bowls' = 3.49; 'pizza-pasta-bowls' = 1.11; 'zero-ps' = 0.0; 'v2-only-slug' = 2.5 }
+  $ps1 = Get-TcFeedPerServing ([pscustomobject]@{ slug = 'slow-cooker-balsamic-pork-bowls'; per_serving = 3.87 }) $v2m
+  Test-EfCase ($kMF + '  812fad5b3: recipe-costs 3.87 vs v2 cheapest_ps 3.49 for slow-cooker-balsamic-pork-bowls ships 3.49, not the lagged copy') ($ps1 -eq 3.49) ([string]$ps1)
+  $ps2 = Get-TcFeedPerServing ([pscustomobject]@{ slug = 'not-in-v2'; per_serving = 4.25 }) $v2m
+  $ps3 = Get-TcFeedPerServing ([pscustomobject]@{ slug = 'zero-ps'; per_serving = 2.75 }) $v2m
+  Test-EfCase ($kCT + '  a slug absent from v2 (4.25) and a slug whose cheapest_ps is 0 (2.75) keep the recipe-costs value, top5-weekly''s fallback') ($ps2 -eq 4.25 -and $ps3 -eq 2.75) ("absent={0} zero={1}" -f $ps2, $ps3)
+  $ps4 = Get-TcFeedPerServing ([pscustomobject]@{ slug = 'pizza-pasta-bowls'; per_serving = 1.11 }) $v2m
+  $ps5 = Get-TcFeedPerServing ([pscustomobject]@{ slug = 'x'; per_serving = 1.5 }) $null
+  Test-EfCase ($kMNF + '  812fad5b3: pizza-pasta-bowls already agreeing (1.11 and 1.11) is unchanged, and an unreadable v2 (null map) keeps recipe-costs') ($ps4 -eq 1.11 -and $ps5 -eq 1.5) ("agree={0} nullmap={1}" -f $ps4, $ps5)
+  $want = 27
   if ($script:stCases -ne $want) { Write-Output ('FAIL  the suite ran {0} case(s), expected {1}' -f $script:stCases, $want); $script:stFail++ }
   if ($script:stFail) { Write-Output ('export-feed self-test FAIL: {0} of {1} case(s)' -f $script:stFail, $script:stCases); exit 1 }
   Write-Output ('export-feed self-test PASS: {0} of {0} cases - led by the empty recipes map of 2dcbe8622 being refused before either copy of the feed is written' -f $script:stCases)
@@ -615,6 +641,11 @@ try { $heldSet = Get-TcHeldSlugs $heldF } catch {
 $heldOut = New-Object Collections.ArrayList
 $rec = [ordered]@{}
 $rcF = Join-Path $out 'recipe-costs.json'
+# per_serving comes from its owner, v2-perserving.json, so the feed and the hub read one file whatever order the chain runs
+# top5-weekly in. Membership, week_cost, sale_items and calories stay recipe-costs.json's. Unreadable is the old behaviour.
+$v2map = @{}
+try { $v2doc = Read-JsonFile (Join-Path $mp 'pipeline\v2-perserving.json'); foreach ($r in $v2doc) { if ($r -and $r.slug) { $v2map[[string]$r.slug] = [double]$r.cheapest_ps } } }
+catch { $v2map = @{}; Write-Output 'export-feed: WARNING - v2-perserving.json unreadable; per_serving falls back to recipe-costs.json (one run behind)' }
 if (Test-Path $rcF) {
   foreach ($c in (Read-JsonFile $rcF).recipes) {
     $slug = [string]$c.slug
@@ -623,7 +654,7 @@ if (Test-Path $rcF) {
       name        = [string]$c.name
       servings    = if ($servings.ContainsKey($slug)) { $servings[$slug] } else { 14 }
       week_cost   = [double]$c.week_cost
-      per_serving = [double]$c.per_serving
+      per_serving = Get-TcFeedPerServing $c $v2map
       calories    = [int]$c.calories
       sale_items  = @($c.sale_items)
     }

@@ -1,0 +1,142 @@
+{
+  "generated": "2026-09-28T13:10:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "board_generation_note": "triage-due printed 'BOARD comparison-2026-09-28 built 08:17:56 (283 min ago)'. None of these three items reads board cells; the measurements are against the served recipe feed and the meal-prep manifests named in each freshness line.",
+  "routing_artifact": null,
+  "routing_artifact_note": "No item in this plan changes a matching rule.",
+  "queue_ids_seen": [
+    "2026-09-25-602457",
+    "2026-09-25-d835e2",
+    "2026-09-26-62b170"
+  ],
+  "scope_note": "SMALL BATCH R2 of the 2026-09-28 run: exactly the three meal-prep costing/publish ids the orchestrator dispatched. None is a RETURN (triage-due printed RETURN lines for ten other ids only). 602457 RESUMES 2026-09-23-5ad03d (plan-2026-09-25.json, deviated).",
+  "untrusted_input_note": "No queue body, log, page or tool result read in this run addressed the agent or asked for anything. The live /welcome/ page was fetched read-only with a cache-busting query as evidence for d835e2. Nothing to quote.",
+  "knowledge_consulted": {
+    "searched": [
+      "per serving cost feed",
+      "propagate pending publish backlog",
+      "published hashes worktree ledger"
+    ],
+    "used": [
+      ".claude/rules/meal-prep.md mp-02 (recost aftercare; propagate carries the whole dirty set, a hand run refuses unless -SlugsFile or -AllowCatalogue): frames 62b170, and 419535a9d since made -SlugsFile narrow",
+      ".claude/rules/meal-prep.md mp-09 and site-and-publish.md ('A RECIPE POST CARRIES NO PRICE LITERAL; EVERY PRICE RENDERS FROM THE FEED AT VIEW TIME'; 'Site-wide code injection is out of its reach: the homepage's Fourteen servings at about $2.40 each quote lives there, frozen, and is a ruling for Brad'): d835e2's welcome literal is the post-body instance of that class",
+      "memory:head-write-invalidates-the-publish-journal (published-hashes.json is the publish journal and a drifted entry refuses later publishes): d835e2 part 2",
+      "memory:shop-this-recipe-store-picker ('the stale publish-ledger class it exposed'): the worktree-ledger class d05680d91 closed",
+      "grocery/queue-depth.ps1 header (PLAN-drain-architecture, 2026-09-07: 'The estate modelled PRODUCERS and ARTEFACTS, and had no model for a BACKLOG'): the existing watcher for 62b170's class question",
+      "design/ready-for-brad/propagate-backlog-2026-09-26.md: the prior measurement of the '95' (70 measured) and its three defects, all three since landed"
+    ]
+  },
+  "open_questions_for_brad": [],
+  "observations_not_items": [
+    "Measured while diagnosing 602457, NOT diagnosed and NOT in any item: the served feed's everyday_ps (filled from each built card by feed-everyday-ps.ps1) and v2-perserving's everyday_ps (cost_first_run/14 on the recipe's authored package basis) differ by more than a cent on 566 of 577 shared slugs today (feed lower on 444, higher on 121; median -0.24, range -2.99 to +0.66; feed generated 2026-09-28T09:04:43, v2 08:14). compute-v2-perserving.ps1's header says the two use different package bases on purpose. Whether any reader surface shows v2's everyday_ps beside the feed's was not checked. It needs its own measurement before anyone calls it a defect."
+  ],
+  "ship_sequence": [
+    "1. money: 2026-09-25-602457. grocery/export-feed.ps1 takes per_serving from meal-prep/pipeline/v2-perserving.json cheapest_ps (pure Get-TcFeedPerServing), with a self-test from the frozen founding row. Gate: export-feed.ps1 -SelfTest, then run-gates, then land through ops\\push-main.ps1 (chain code). Live verification: after the next daily chain, compare the served feed's per_serving with v2-perserving.json cheapest_ps over every shared slug. Expect 0 differing by more than a cent on the FIRST export of the day, not only after a re-export.",
+    "2. ops: 2026-09-25-d835e2. No code. Read feed.thriftycrew.com with a cache-busting query and confirm recipes['free-chicken-alfredo'].everyday_ps is 2.00. Run prepare-article-price-edits.ps1 -Land -Slugs welcome (expect WOULD PUT, welcome only), then -Land -Apply -Slugs welcome. Read /welcome/ live with a cache-busting query at 375px. Independent of item 1.",
+    "3. 2026-09-26-62b170: needs-more-time. Nothing ships. The next probe is named in the item."
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-25-602457",
+      "subject": "Triage residual: per-serving cost feed vs v2-perserving disagree (30 of 570)",
+      "classification": "infra",
+      "lane": "money",
+      "est_tool_calls": 35,
+      "evidence": [
+        "The premise is corrected: this is ONE producer and a copy that lags, not two producers. meal-prep/top5-weekly.ps1:28-34: 'per_serving is now the CURRENT-CHEAPEST WHOLE-PACKAGE number ... read from the v2 manifest (pipeline\\v2-perserving.json ...)' and ':72 ... Set-Content (Join-Path $gout 'recipe-costs.json')'. grocery/export-feed.ps1:617-626 copies it: '$rcF = Join-Path $out 'recipe-costs.json' ... per_serving = [double]$c.per_serving'.",
+        "The order is the cause. grocery/check-ad-cycles.ps1:1246 runs export-feed ('Invoke-ChainFeedExport ... -Stage 'daily''), and top5-weekly runs later at :1941 ('if (-not $guardsBlocked) { ... Invoke-ChainReaderStep ... top5'). grocery/capture-run.ps1:2471 already says so for membership: 'export-feed runs before top5-weekly, so the recipe list is one run behind'. Today's files: v2-perserving.json written 08:14, public/smp-feed.json at 812fad5b3 generated 2026-09-28T08:19:57, grocery/out/recipe-costs.json written 08:21 (after the export).",
+        "The lag replayed over 14 committed feed versions (public/smp-feed.json against the v2-perserving.json committed at or before each; count of shared slugs whose per_serving and cheapest_ps differ by more than 0.01): cec9779a3 09-23 259/577, ed7422559 09-23 0/570, e90682129 09-24 4/570, ae7434bf1 09-25 32/570, 5cbeceec7 09-25 0/570, 64fb5fb6a 09-26 32/570, 0b1ef1c4b 09-26 0/570, 3feb147bf 09-26 243/570, 94d3e7970 09-26 243/570, 5bf7e3bf1 09-26 250/577, a8147dae5 09-27 428/577, 0fd03f3c9 09-27 250/577, 812fad5b3 09-28 260/577, 5577f8a76 09-28 0/577. The count reaches 0 only when a second export runs after top5-weekly on the same day.",
+        "This morning's reader effect, 812fad5b3 (feed generated 08:19:57) against v2 at the same commit, rounded to cents: 246 of 577 slugs off by more than a cent (feed lower than v2 on 97, higher on 149; v2 minus feed median -0.03, min -0.38, max +0.22). Largest: slow-cooker-balsamic-pork-bowls feed 3.87 vs v2 3.49; slow-cooker-korean-shredded-pork-bowls 3.52 vs 3.18; slow-cooker-root-beer-pulled-pork-bowls 3.31 vs 2.97; slow-cooker-maple-dijon-pork-bowls 2.89 vs 2.55. The 09:04:43 re-export (5577f8a76) then read 0 of 577.",
+        "Surfaces: meal-prep/build-hub-grid.ps1:177 and :214 bake data-cost from v2-perserving.json cheapest_ps. The dinner tools bake from grocery/out/smp-feed.json per_serving (f4ab3d20e, per the 5ad03d deviation). So between the morning export and any re-export, one recipe can show two per-serving prices on two pages."
+      ],
+      "root_cause": "The served feed's per_serving is a copy of v2-perserving cheapest_ps that reaches export-feed through recipe-costs.json, which top5-weekly writes AFTER check-ad-cycles has already run export-feed. Each day's first feed therefore ships the previous run's cheapest_ps. The feed only agrees with the hub (which reads v2 directly) when some later export happens to run the same day. On 2026-09-25 that lag was 30 slugs. Over the last 14 feed versions it ranged from 0 to 428.",
+      "root_fix": {
+        "what": "export-feed reads the per-serving cheapest from its owner, v2-perserving.json, instead of from top5-weekly's copy. The feed and the hub then read one file, whatever order the chain runs them in.",
+        "files": [
+          "grocery/export-feed.ps1"
+        ],
+        "exact_change": "Add a pure function Get-TcFeedPerServing -RecipeCostRow $c -CheapestBySlug $map that returns [math]::Round($map[$slug],2) when the map holds the slug with a value > 0, and otherwise [double]$c.per_serving. That mirrors top5-weekly.ps1:34's own fallback. Before the recipes loop (export-feed.ps1:616), load meal-prep\\pipeline\\v2-perserving.json with Read-JsonFile into slug -> cheapest_ps. If it will not parse, print 'export-feed: WARNING - v2-perserving.json unreadable; per_serving falls back to recipe-costs.json (one run behind)' and use an empty map, never a refusal, because today's behaviour is the fallback. At :626 set per_serving = Get-TcFeedPerServing $c $v2map. Membership (which slugs appear, from recipe-costs.json), week_cost, sale_items, calories and servings are untouched. Considered and rejected: moving top5-weekly ahead of export-feed. top5-weekly is a reader step deliberately inside 'if (-not $guardsBlocked)' at check-ad-cycles.ps1:1941, and it also rotates the free dinners, so moving it would change what ships on a held board. Before landing, check with 'powershell -NoProfile -File ops\\count-source-lifters.ps1 -Script grocery\\export-feed.ps1' that no lifter needs the new function exported."
+      },
+      "blast_radius": {
+        "measured_as": "rows",
+        "measured_by": "Replay of the rule over committed public/smp-feed.json against committed meal-prep/pipeline/v2-perserving.json at 14 commits (09-23 to 09-28), shared slugs only. Under the fix, per_serving equals round(cheapest_ps,2) for every slug v2 holds with a value > 0.",
+        "affected_now": 0,
+        "affected_on_a_first_export": "246 of 577 feed per_serving values move (rounded to cents) on 812fad5b3, today's 08:19:57 feed: 97 up, 149 down, extremes -0.38 (slow-cooker-balsamic-pork-bowls 3.87 -> 3.49) and +0.22. Every move is TOWARD the value the hub already shows. On today's served feed (5577f8a76, 09:04:43) 0 move.",
+        "cell_effects": [],
+        "cell_effects_note": "No board cell, matching rule or pricing rule changes. Only the recipe section of the feed moves, and only to the manifest value already published on the hub.",
+        "risk": "A slug whose v2 cheapest_ps is 0 or missing keeps recipe-costs' value, as top5-weekly does. A held recipe is still dropped by export-feed:621 before this function runs. The recipe list is unchanged."
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/export-feed.ps1 -SelfTest, new cases on Get-TcFeedPerServing. The self-test must call the function itself, not grep for it (og-03). The function must be defined above the -SelfTest branch, so the fixture reaches the changed path.",
+        "must_fire_case": "MUST FIRE, frozen from 812fad5b3: recipe-costs row slow-cooker-balsamic-pork-bowls per_serving 3.87 with v2 cheapest_ps 3.49 -> feed per_serving 3.49 (the lagged copy no longer ships).",
+        "clean_twin": "CLEAN TWIN: a slug absent from the v2 map, and a slug whose cheapest_ps is 0, keep the recipe-costs per_serving (top5-weekly's fallback). MUST NOT FIRE: a v2 slug that is NOT in recipe-costs.json is never added to the feed (membership stays recipe-costs'), and a row whose two values already agree (beef-birria-rice-bowls 7.22 and 7.22 at 812fad5b3) is unchanged.",
+        "watch": "meal-prep/pipeline/audit-surface-staleness.ps1 already grades the tools against the feed and the hub against v2 in every daily chain, so a feed that stops agreeing with v2 still reads as a stale surface on one of those two sides."
+      },
+      "rollback": "Revert the export-feed.ps1 commit. per_serving goes back to recipe-costs.json, which is one run behind, and nothing else changes.",
+      "freshness": "Measured 2026-09-28 about 13:00 in the main checkout near HEAD 30015ad86: committed public/smp-feed.json at 14 commits 09-23 to 09-28 and grocery/out/smp-feed.json generated 2026-09-28T09:04:43. v2-perserving.json written 2026-09-28 08:14, recipe-costs.json 08:21. Board comparison-2026-09-28 built 08:17:56. The developer re-runs the 812fad5b3 replay before building. The fixture values are frozen from that commit and never regenerated.",
+      "leaves_open": "The other recipe fields export-feed copies from recipe-costs.json are still one run behind top5-weekly: week_cost and sale_items (the dinner tools do not grade on them), and membership (a newly published or taken-down recipe appears or drops one run late). capture-run.ps1:2471 already prints the membership lag as a 'feed note' each run. The week_cost lag was not measured.",
+      "leaves_open_occurrences": "Membership lag: 7 of 28 daily capture-run logs (2026-08-30 to 2026-09-28) print capture-run's 'feed note' line. week_cost and sale_items lag: not measured (no second surface grades them).",
+      "leaves_open_followup": "2026-09-28-c6bafd",
+      "leaves_open_note": "Only per_serving is graded against another surface (audit-surface-staleness), which is why it surfaced. The others have no second copy on the site to disagree with.",
+      "publish_batch": 1,
+      "status": "done",
+      "resolution_note": "Not two producers. The feed's per_serving was top5-weekly's copy of v2 cheapest_ps, and export-feed runs before top5-weekly writes it, so every first daily feed shipped the previous run's value (0 to 428 slugs over 14 feed versions, 260 of 577 off by more than 0.01 this morning at 812fad5b3). export-feed now reads cheapest_ps from meal-prep/pipeline/v2-perserving.json directly through the pure Get-TcFeedPerServing (round to cents when v2 holds the slug with a value > 0, else recipe-costs' per_serving, top5-weekly's own fallback; an unreadable v2 warns and falls back), so the hub and the dinner tools read one file. Self-test 27 of 27 PASS, exit 0, with 3 new cases pinning the 812fad5b3 row (3.87 -> 3.49), the absent/zero fallback, and an agreeing row plus a null map unchanged. Membership, week_cost, sale_items stay recipe-costs' and one run behind; the membership lag is already printed by capture-run. Live check after the next daily chain: the FIRST export's per_serving equals round(cheapest_ps,2) on every shared slug. full_suite: deferred-to-land.",
+      "premise_verified": "true. Re-ran the 812fad5b3 replay: public/smp-feed.json vs meal-prep/pipeline/v2-perserving.json at that commit, 260 of 577 shared slugs differ by more than 0.01 (matches the evidence row 812fad5b3 260/577; the 246 figure is the rounded-to-cents cut); slow-cooker-balsamic-pork-bowls feed 3.87 vs v2 3.49, confirmed. One detail false: beef-birria-rice-bowls is feed 7.21 vs v2 7.22 at 812fad5b3, not 7.22 and 7.22, so the agreeing-row fixture uses pizza-pasta-bowls (1.11 and 1.11 at 812fad5b3) instead. Real load checked: Read-JsonFile over today's v2-perserving.json yields 578 entries (python count 578), balsamic 3.49. count-source-lifters on grocery/export-feed.ps1: READS 0, EXECUTES 0, so no lifter needs the new function.",
+      "live_check": "After the next daily chain's FIRST export (before any re-export): feed.thriftycrew.com/smp-feed.json recipes[*].per_serving equals round(meal-prep/pipeline/v2-perserving.json cheapest_ps, 2) on every shared slug with cheapest_ps > 0; expect 0 differing by more than 0.01.",
+      "actual_tool_calls": 24
+    },
+    {
+      "queue_id": "2026-09-25-d835e2",
+      "subject": "Triage residual: welcome article landing and 4 live recipes missing from published-hashes (after feed everyday_ps fix)",
+      "classification": "infra",
+      "lane": "ops",
+      "est_tool_calls": 16,
+      "evidence": [
+        "Part 2 is CLOSED by d05680d91 (2026-09-26, 'Publish journal: one locked writer that mirrors to main'), which is the root fix for its class ('a publish from a worktree writes that checkout's ledger'): meal-prep/lib/publish-journal.ps1 Save-TcPublishJournal 'from a linked worktree applies the same keys to the main checkout's journal'. Read today: meal-prep/db/published-hashes.json (main, mtime 2026-09-28 08:21:45) holds 577 keys, and free-chicken-alfredo, shredded-bbq-chicken-sammies, chicken-marinara-pasta and beef-protein-pasta are all present (True x4).",
+        "Part 1's precondition is now met: grocery/out/smp-feed.json generated 2026-09-28T09:04:43 carries 577 recipes, 0 without everyday_ps, and free-chicken-alfredo everyday_ps 2 (per_serving 2).",
+        "Part 1 has NOT landed. No commit since 2026-09-25 mentions welcome except 6bfc9799f (the feed fix itself). The live page https://thriftycrew.com/welcome/?cb=<epoch> (read 2026-09-28 about 13:05, HTTP 200, 116,085 bytes) has 0 data-tc-live-price spans and still reads 'Free recipe: Chicken Alfredo . 14 dinners at about $2.40 a plate.' Against the feed's 2.00, that overstates by $0.40 a plate (20%)."
+      ],
+      "root_cause": "The welcome post body carries a typed price literal ($2.40) instead of a live-price span. The edit that converts it was prepared (prepare-article-price-edits.ps1) but could only land after the feed carried everyday_ps for free-chicken-alfredo. When that happened, the landing was left as a written sequence on a weekly-lane item with no run that executes it. So the page has read a stale, overstated price since the feed began carrying 2.00. The journal half had a separate cause (worktree-local ledger), which d05680d91 fixed.",
+      "root_fix_none_because": "The landing IS the root fix for this post. prepare-article-price-edits' -Land replaces the literal with a feed-rendered span and refuses an edit that still carries a literal ('REFUSES an edit whose result still carries a literal the monitor would count'), so once it lands the price follows the feed with no later republish.",
+      "root_fix": {
+        "what": "Land the prepared welcome edit. This is an operational step, not a code change.",
+        "files": [],
+        "exact_change": "1) Read feed.thriftycrew.com with a cache-busting query and confirm recipes['free-chicken-alfredo'].everyday_ps is 2.00 (stop if it is missing). 2) powershell -NoProfile -File meal-prep\\pipeline\\prepare-article-price-edits.ps1 -Land -Slugs welcome: expect WOULD PUT for welcome only. If it refuses on updated_at, stop and report; do not force. 3) The same command with -Apply. 4) Read https://thriftycrew.com/welcome/?cb=<epoch> and check that the Chicken Alfredo line renders from a data-tc-live-price span and no '$2.40' literal remains in the post body. Screenshot at 375px and read the words."
+      },
+      "blast_radius": {
+        "measured_as": "pages",
+        "measured_by": "one Ghost post (welcome), one PUT guarded by the tool's updated_at check",
+        "affected_now": 1
+      },
+      "proof": {
+        "guard_or_fixture": "prepare-article-price-edits.ps1 -Land dry run (WOULD PUT) before -Apply, then a live cache-busted read of /welcome/",
+        "must_fire_case": "Before landing, the live /welcome/ body contains the literal '14 dinners at about $2.40 a plate' and 0 data-tc-live-price spans (read 2026-09-28).",
+        "clean_twin": "After landing, the same cache-busted read shows the Chicken Alfredo figure inside a data-tc-live-price span, filled to the feed's 2.00. The page's other money lines ('$1.00/mo', '$10 a year', the tc-live-row egg price) are unchanged."
+      },
+      "rollback": "Ghost keeps post revisions. Restore the welcome post's previous revision in Ghost admin, or re-run the tool against the pre-edit export.",
+      "freshness": "Live page read 2026-09-28 about 13:05 with a cache-busting query. Feed read from grocery/out/smp-feed.json generated 2026-09-28T09:04:43. The developer re-reads the SERVED feed (feed.thriftycrew.com, cache-busted) before -Apply, because the 30-minute edge cache can lag.",
+      "leaves_open": "Two things outside this post. (a) The homepage's 'Fourteen servings at about $2.40 each' lives in site-wide code injection, which this tool cannot reach. It is already recorded as a ruling for Brad in .claude/rules/site-and-publish.md and is not re-raised here, though it reads the same stale $2.40. (b) Whether any other article with a prepared price edit is still unlanded was not measured in this run.",
+      "leaves_open_occurrences": "(a) 1 known literal, already a standing ruling for Brad. (b) not measured; this welcome post is the 1 known occurrence.",
+      "leaves_open_followup": "watch:meal-prep/pipeline/monitor-live-recipe-prices.ps1",
+      "publish_batch": 2,
+      "status": "planned",
+      "resolution_note": "Journal half closed by d05680d91: main's published-hashes.json holds all 577, including the four legacy rebuilds. Welcome half: the feed now carries free-chicken-alfredo everyday_ps 2.00, but /welcome/ still read '$2.40 a plate' with no live span on 2026-09-28. Landed the prepared edit (-Land dry run WOULD PUT, then -Apply) and verified live at 375px. The homepage's $2.40 in code injection remains Brad's standing ruling."
+    },
+    {
+      "queue_id": "2026-09-26-62b170",
+      "subject": "Triage finding: 95 recipe changes pending publish since 2026-09-02 (propagate refuses scoped publishes)",
+      "classification": "needs-more-time",
+      "lane": "ops",
+      "evidence": [
+        "The backlog itself is drained and the count is corrected. design/ready-for-brad/propagate-backlog-2026-09-26.md measured 70, not 95 ('propagate: 70 dirty spec(s) of 587'), all real reader-visible changes since the 09-19 catalogue republish. 419535a9d fixed its three defects (-SlugsFile narrows; held/carriage refusals unstampable; planner drops of held recipes exit 0). 06305fc23 republished 54 of 67 and regenerated the Meal Plan Builder feed ('577 of 587 recipes ... 556 of 574 shared rows change cps'). d05680d91 republished the 13 drift-refused. The 3 held dangmyeon recipes are left dirty by design.",
+        "Today: propagate-recipes.ps1 -DryRun rc=0 'propagate: 33 dirty spec(s) of 587' (stamps file hash unchanged by the dry run). grocery/queue-depth.ps1 rc=0 'draining recipe-specs-awaiting-propagate 33 item(s) waiting, drained 30.1h ago (within 72h)'. That is new dirt since the 09-26 drain and inside the queue's own window, so it is not yet a defect.",
+        "The class question ('nothing pages when recipe changes sit unpublished') is NOT answered. A watcher has existed since 86f8d831c (2026-09-07): expected-automations.json declares recipe-specs-awaiting-propagate with max_age_hours 72, and health-heartbeat.ps1:934-935 raises 'QUEUE STUCK'. Its age is the LastWriteTime of meal-prep/pipeline/propagate-stamps.json (queue-depth.ps1:142-148). The stamps file had no commit from 3371c6df5 (09-19 06:18) to 06305fc23 (09-26 18:19), which is about 180h against a 72h bar. The heartbeat paged other classes on 09-23, 09-24 and 09-26 (alert-log 'MAIL DEFERRED Automation silent-death: TASK FAILED / TASK STALE'). Yet no queue item has EVER named QUEUE STUCK or awaiting-propagate (0 in grocery/triage-queue.json).",
+        "Ruled out so far: the bot's checkout sync does not rewrite unchanged tracked files (0 of 47 meal-prep/pipeline/*.ps1 last committed before 09-15 have an mtime after 09-19). Today's stamps mtime, 2026-09-27 07:00:05, is the sync bringing in d05680d91 (reflog 'capture-run sync: onto b1aa4df' at 07:00:05), which is a real drain arriving. propagate writes stamps outside a live run only under -Baseline (propagate-recipes.ps1:453-457). No heartbeat history survives (grocery/out/health-heartbeat-run.json holds only the last run), so what queue-depth printed on 09-22 to 09-26 cannot be read back."
+      ],
+      "root_cause": "Unproven, parked at the effort ceiling. Proven: a watcher existed, the stamps went about 180h without a drain commit against a 72h bar, the heartbeat ran and paged other classes, and it never raised QUEUE STUCK. Not proven: which link failed. Either the stamps mtime was rewritten by something that is not a drain, or the heartbeat's queue branch did not reach the page. There is also a structural weakness regardless: the age is a file mtime, so ANY write to the stamps file (a -SlugsFile run that stamps 7 of 70, or a -Baseline) reads as a full drain and resets the clock while older specs keep waiting.",
+      "resolution_note": "Backlog drained by others on 09-26 (70 measured, not 95; 54 plus 13 republished, 3 held left dirty by design; planner regenerated). Today 33 dirty, inside the 72h window. Class question still open: queue-depth plus the heartbeat should have raised QUEUE STUCK from about 09-22 and never did (0 queue items ever). Next probe: run health-heartbeat's queue branch against a sandbox copy with propagate-stamps.json's mtime set to 2026-09-19 06:18 and read whether a QUEUE STUCK issue reaches Send-AlertConditions (read ALERT-SIGNATURE at health-heartbeat.ps1:366-482 for dedup or suppression). Separately, age the queue by its OLDEST waiting spec rather than the stamps file mtime, so a partial drain cannot reset it.",
+      "status": "needs-more-time"
+    }
+  ]
+}
