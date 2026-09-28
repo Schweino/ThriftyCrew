@@ -237,6 +237,7 @@ if ($__cccSelfTest) {
     # The 2026-09-28 shape (queue 2026-09-28-d70062), frozen: the real builder writes costed.json only through a path
     # VARIABLE, dot-sources its lib and an alert lib; the alert lib's self-test holds a JSON string literal naming
     # verify-price-flags.ps1, which dot-sources flag-verify-lib, whose doc text names audit-flag-verification.ps1.
+    $costedArt = 'meal-prep/db/costed.json'   # reach-fixture-ok: a seed file inside a %TEMP% throwaway repo, never this repo's meal-prep
     $costRel = 'meal-prep/pipeline/cost-recipes.ps1'
     $costV1 = '$costedPath = Join-Path $db ''costed.json''' + "`n" + '. (Join-Path $here ''cost-lib.ps1'')' + "`n" + '. (Join-Path $here ''alert-lib.ps1'')' + "`n" + '[IO.File]::WriteAllText($costedPath, $json, $enc)' + "`n"
     & $put $w $costRel $costV1
@@ -247,30 +248,30 @@ if ($__cccSelfTest) {
     & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 1' + "`n")
     & $put $w 'lib/chain-code-currency.ps1' ('[IO.File]::WriteAllText((Join-Path $db ''costed.json''), $x)' + "`n" + '& $put $w ''grocery/audit-flag-verification.ps1'' x' + "`n")
     & $put $w 'meal-prep/pipeline/audit-recipe-costed.ps1' ('$rcf = Join-Path $tmp ''recipe-costed.json''' + "`n" + 'Set-Content $rcf x' + "`n")
-    & $put $w 'meal-prep/db/costed.json' '{}'
+    & $put $w $costedArt '{}'
     $null = & $g $w 'add', '-A'; $null = & $g $w 'commit', '-q', '-m', 'D: cost builder'
     $tipD = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
-    $pc = Get-TcArtifactProducers -Repo $w -Rev 'HEAD' -Artifacts @('meal-prep/db/costed.json')
-    $cset = @($pc['meal-prep/db/costed.json'])
+    $pc = Get-TcArtifactProducers -Repo $w -Rev 'HEAD' -Artifacts @($costedArt)
+    $cset = @($pc[$costedArt])
     CcT 'MECHANISM  costed.json''s producers are its path-variable WRITER (a dataflow root) and the two libs it dot-sources, never a script named only inside a string literal, nor a writer of recipe-costed.json (a longer file name ending in the leaf), nor this detector''s own fixture'($cset.Count -eq 3 -and $cset -contains $costRel -and $cset -contains 'lib/cost-lib.ps1' -and $cset -contains 'lib/alert-lib.ps1') ($cset -join ',')
     # MUST NOT FIRE: the 09-28 range changed only the audit and its lib.
     & $put $w 'grocery/audit-flag-verification.ps1' ('$q = 2' + "`n")
     & $put $w 'grocery/flag-verify-lib.ps1' ('$usage = ''the lib that audit-flag-verification.ps1 reads, v2''' + "`n")
     $null = & $g $w 'commit', '-q', '-am', 'E: an unverified new-product crown quarantines itself'
     $tipE = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
-    $s4 = Get-TcStaleArtifacts -Repo $w -Base $tipD -Tip $tipE -Artifacts @('meal-prep/db/costed.json', 'public/smp-feed.json')
+    $s4 = Get-TcStaleArtifacts -Repo $w -Base $tipD -Tip $tipE -Artifacts @($costedArt, 'public/smp-feed.json')
     CcT 'MUST NOT FIRE  a range changing only an audit reached through a string literal and doc text (the 2026-09-28 page) names no artifact' (-not $s4.Blind -and @($s4.Rows).Count -eq 0) (($s4 | ConvertTo-Json -Depth 4 -Compress))
     # MUST FIRE: a change to the path-variable writer itself (the old same-line root rule missed it).
     & $put $w $costRel ($costV1 + '$v = 2' + "`n")
     $null = & $g $w 'commit', '-q', '-am', 'F: cost builder changes'
     $tipF = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
-    $s5 = Get-TcStaleArtifacts -Repo $w -Base $tipE -Tip $tipF -Artifacts @('meal-prep/db/costed.json')
+    $s5 = Get-TcStaleArtifacts -Repo $w -Base $tipE -Tip $tipF -Artifacts @($costedArt)
     CcT 'MUST FIRE  a range changing a builder that writes costed.json only through ''$p = Join-Path $db ''''costed.json'''''' names costed.json' (-not $s5.Blind -and @($s5.Rows).Count -eq 1 -and (@(@($s5.Rows)[0].Changed) -contains $costRel)) (($s5 | ConvertTo-Json -Depth 4 -Compress))
     # CLEAN TWIN: a lib the builder DOT-SOURCES changes, and the artifact is still named (the invocation filter kept a real edge).
     & $put $w 'lib/cost-lib.ps1' ('function Get-Cost { 2 }' + "`n")
     $null = & $g $w 'commit', '-q', '-am', 'G: cost lib changes'
     $tipG = (& $g $w 'rev-parse', 'HEAD').Out.Trim()
-    $s6 = Get-TcStaleArtifacts -Repo $w -Base $tipF -Tip $tipG -Artifacts @('meal-prep/db/costed.json')
+    $s6 = Get-TcStaleArtifacts -Repo $w -Base $tipF -Tip $tipG -Artifacts @($costedArt)
     CcT 'CLEAN TWIN  a range changing a lib the builder dot-sources still names costed.json' (-not $s6.Blind -and @($s6.Rows).Count -eq 1 -and (@(@($s6.Rows)[0].Changed) -contains 'lib/cost-lib.ps1')) (($s6 | ConvertTo-Json -Depth 4 -Compress))
   } catch {
     CcT ('the suite ran to the end without throwing') $false $_.Exception.Message

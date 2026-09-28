@@ -54,7 +54,7 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
 . (Join-Path $root 'multipack-lib.ps1')   # THE multipack math - the same one build-walmart-deals pre-filters with
-. (Join-Path $root 'pricing-math-lib.ps1')   # Get-TcPerksPrice: guard 10b reads a Perks line with the ENGINE'S function (no load side effects)
+. (Join-Path $root 'ad-line-price-lib.ps1')   # guard 10b's ad-line readers and Get-TcPerksPrice, the ENGINE'S Perks reading (no load side effects)
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
@@ -1513,30 +1513,6 @@ foreach ($st in $partial) {
   Zero false positives over 77 checked cells, so it is a hard invariant on day one rather than a ratchet.
 #>
 $alSources = @('Weekly Ad', 'DEALS GOOD ALL MONTH LONG')
-function Get-AdLineLastMoney([string]$t) {
-  # THE GLYPH RIDES AS \u00XX ESCAPES, NEVER A LITERAL - same rule as compare-deals' own cents branch.
-  # "N cents OFF PER GALLON" is excluded here for the same reason it is excluded there: it is a fuel
-  # reward, not a price, so it must not be able to satisfy this guard either.
-  $rx = '(?:(\d+)\s*(?:/|for)\s*\$\s*(\d+(?:\.\d{1,2})?))|(?:\$\s*(\d+(?:\.\d{1,2})?))|(?:(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON))'
-  $last = $null
-  foreach ($m in [regex]::Matches(("" + $t), $rx, [Text.RegularExpressions.RegexOptions]::IgnoreCase)) {
-    if ($m.Groups[1].Success) { $n = [double]$m.Groups[1].Value; if ($n -gt 0) { $last = [double]$m.Groups[2].Value / $n } }
-    elseif ($m.Groups[3].Success) { $last = [double]$m.Groups[3].Value }
-    elseif ($m.Groups[4].Success) { $last = [double]$m.Groups[4].Value / 100.0 }
-  }
-  return $last
-}
-function Get-AdLineBasisMultiplier([string]$basis) {
-  # The engine's own basis string, read back. Anything not listed returns $null and the cell is SKIPPED.
-  $b = ("" + $basis)
-  if ($b -eq 'per-lb marker (converted to oz)') { return 16.0 }           # a per-lb RATE published per oz
-  $m = [regex]::Match($b, '^per-(\d+(?:\.\d+)?)-pack$');      if ($m.Success) { return [double]$m.Groups[1].Value }
-  $m = [regex]::Match($b, '^per-(\d+(?:\.\d+)?)-lb pkg$');    if ($m.Success) { return [double]$m.Groups[1].Value }
-  $m = [regex]::Match($b, '^size\s+(\d+(?:\.\d+)?)\s');       if ($m.Success) { return [double]$m.Groups[1].Value }
-  if ($b -eq 'per-each' -or $b -eq 'per-lb marker' -or $b -eq 'per-lb rate in size') { return 1.0 }
-  if ($b -like 'per-package*' -or $b -like 'per-each (*') { return 1.0 }
-  return $null
-}
 $alTotal = 0; $alChecked = 0; $alSkipBasis = 0; $alSkipNote = 0; $alSkipToken = 0; $alBad = 0; $alPerks = 0
 foreach ($row in $cmp.comparison) {
   foreach ($s in @($row.stores)) {

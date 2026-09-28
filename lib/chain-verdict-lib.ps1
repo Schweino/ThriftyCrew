@@ -298,3 +298,26 @@ function Read-ChainVerdictRecord {
   if (-not (Test-Path -LiteralPath $vf)) { return $null }
   try { return (Read-JsonFile $vf) } catch { return $null }
 }
+function Invoke-ChainVerdictWithheldLane($Verdict, [string]$Kind, [string]$TodayS) {
+  <# capture-run.ps1 ONLY: books the failed lane for a board it withheld. Calls capture-run's Add-FailedLane,
+     Set-FailedLanePaged and Send-Alert through the caller's scope, so it must be called from there. #>
+  # A STALE VERDICT IS NOT A BLOCKED BOARD (2026-09-28, queue 2026-09-27-f50b7a). Guards may well have passed; what
+  # withholds the board is that an input moved after they ran. Filed under guards-blocked it paged nothing of its own
+  # and capture-watchdog's RUN RECORD fold named the wrong cause, so it books its own lane, names the moved paths, and
+  # pages once as itself. BLOCKED, OTHER-DAY, ABSENT and FEED-REFUSED keep 'guards-blocked' exactly as before.
+  $why = $Verdict.why
+if ([string]$verdict.status -eq 'STALE-INPUTS') {
+  Add-FailedLane 'verdict-stale'
+  $vsMoved = @($verdict.moved)
+  $vsWhat = 'the verdict fingerprint (no single path named)'
+  if ($vsMoved.Count) { $vsWhat = ($vsMoved -join ', ') }
+  Write-Output ('publish: verdict-stale - moved since guards ran: ' + $vsWhat)
+  try {
+    $vsSubj = 'Daily chain withheld its board: ' + $vsWhat + ' changed after guards ran - ' + $todayS
+    Send-Alert -Subject $vsSubj -Body ("capture-run.ps1 [$Kind]: guards scored today's board, but by publish time an input it read had changed, so the served paths were NOT shipped and readers keep the last good board. Moved: " + $vsWhat + ". Verdict: " + $why + ". A foreign write to the production checkout mid-run (a session edit, a pull) is the usual cause; the next chain run re-scores it. Log: grocery\out\logs\capture-run-$Kind-$todayS.log") | Out-Null
+    Set-FailedLanePaged 'verdict-stale' $vsSubj $LASTEXITCODE
+  } catch { Write-Output ('verdict-stale alert threw: ' + $_.Exception.Message) }
+} else {
+  Add-FailedLane 'guards-blocked'
+}
+}
