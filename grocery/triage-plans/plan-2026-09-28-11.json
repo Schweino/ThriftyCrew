@@ -4,7 +4,12 @@
   "board_week": "comparison-2026-09-28",
   "board_generation_note": "triage-due printed 'BOARD comparison-2026-09-28 built 08:17:56 (460 min ago)'; comparison-2026-09-28.json built_at 2026-09-28T08:07:59. Not MID-BUILD. Every board figure below is against that file. HEAD read from: c349cbd77, equal to origin/main at read time.",
   "scope_note": "Small batch R6, 4 ids, diagnose only. Only 2026-09-27-78df57 is a code item. The other three are one-lined: two no-code-change, one needs-brad.",
-  "queue_ids_seen": ["2026-09-22-0c812e", "2026-09-26-203892", "2026-09-26-6b8ce9", "2026-09-27-78df57"],
+  "queue_ids_seen": [
+    "2026-09-22-0c812e",
+    "2026-09-26-203892",
+    "2026-09-26-6b8ce9",
+    "2026-09-27-78df57"
+  ],
   "untrusted_input_note": "No fetched or read content in this run addressed the agent or carried an instruction. No web tool was used.",
   "knowledge_consulted": [
     "searched \"band refusals backlog tighten\", \"reject share spike detector\", \"install hooks after push\" (knowledge-search --estate --multi): the returned skill sections (claude-code-automation/hooks-measured-payloads.md 5, data-quality-craft/checks-and-thresholds.md 7, data-quality-craft/detecting-anomalies.md 6) were offered, not opened, and none was used; nothing applicable beyond the rules below",
@@ -21,10 +26,10 @@
       "queue_id": "2026-09-27-78df57",
       "subject": "A landed ops/hooks change waits up to about a day to install, because no road that moves the main checkout reinstalls",
       "classification": "infra",
-      "status": "planned",
+      "status": "done",
       "lane": "ops",
       "est_tool_calls": 50,
-      "premise_verified": "yes: 'git log origin/main --since=2026-08-29 -- ops/hooks' lists 27 commits (the prior spawn's figure holds). The installed hooks are full copies: ops/install-hooks.ps1:68 writes the bytes with Write-TcAtomicFile. ops/push-main.ps1 does not call install-hooks (grep 'install-hooks|audit-hook-installed' in push-main.ps1: 0 hits). At read time all 4 installed hooks were byte-identical to the tree.",
+      "premise_verified": "yes: at HEAD 126052d7c none of lib/checkout-sync.ps1 (update-ref at 1070/1076), grocery/sync-production-checkout.ps1 (pull --rebase --autostash) or ops/push-main.ps1 $landedSync (reset --keep) called install-hooks; AfterLanded runs after Exit-TcPushLock (push-main.ps1 ~2274-2283), so the push-main call is outside the lock.",
       "evidence": [
         "queue body: 'a landed ops\\hooks change sits uninstalled in the main checkout's .git\\hooks until the next 10:30 capture-watchdog runs audit-hook-installed -Repair, up to about 24 h. MEASURED: 1 occurrence (2026-09-26, pre-commit stale after b06a3628e until the watchdog's repair)'",
         "27 ops/hooks commits on origin/main 2026-08-29..2026-09-28 (7 of them dated 09-23). Files touched: pre-push 16, commit-msg 5, pre-commit 5, post-commit 1, claude/production_barrier.py 2. 26 of 27 touch a top-level hook that install-hooks copies; 15d574651 touches only ops/hooks/claude/production_barrier.py, which install-hooks does not copy (it walks Get-ChildItem $src -File, top level only)",
@@ -49,7 +54,11 @@
         "corpus": "not a matching or pricing change: no product name routes differently and no board cell can move. Measured instead: the 27 ops/hooks commits on origin/main since 2026-08-29 and the 3 call sites that move the main checkout's HEAD",
         "measured_by": "git log origin/main --since=2026-08-29 -- ops/hooks (27 commits, each commit's file list via git show --name-only) and a grep of the three HEAD movers (lib/checkout-sync.ps1, grocery/sync-production-checkout.ps1, ops/push-main.ps1) plus grocery/capture-watchdog.ps1 for install-hooks or audit-hook-installed calls, at HEAD c349cbd77",
         "affected_now": 3,
-        "names": ["lib/checkout-sync.ps1 Invoke-TcCheckoutSync", "grocery/sync-production-checkout.ps1", "ops/push-main.ps1 $landedSync"],
+        "names": [
+          "lib/checkout-sync.ps1 Invoke-TcCheckoutSync",
+          "grocery/sync-production-checkout.ps1",
+          "ops/push-main.ps1 $landedSync"
+        ],
         "newly_matched": "26 of 27 recent ops/hooks landings would have reinstalled at the first move instead of the next 10:30 repair; 1 (15d574651, claude/production_barrier.py only) triggers nothing, correctly",
         "risk": "a hook replaced while a push is executing it: already the case for the watchdog's daily repair, and install-hooks' atomic replace retries a held name; a failed install is spoken and changes nothing else",
         "cell_effects": []
@@ -65,10 +74,16 @@
       "rollback": "revert lib/hook-refresh.ps1 and the three call-site edits; the 10:30 watchdog -Repair (grocery/capture-watchdog.ps1 5a3a2) keeps repairing within a day, as it does today",
       "freshness": "measured 2026-09-28 about 15:30 to 16:20 against HEAD c349cbd77 (= origin/main at read time) and the main checkout's .git/hooks (4 of 4 installed hooks byte-identical to the tree at read time); board comparison-2026-09-28 is not an input to this item. A parallel spawn was landing chain-verdict/chain-code-currency changes; none touched ops/hooks, lib/checkout-sync.ps1, push-main.ps1 or sync-production-checkout.ps1 at read time, so the developer re-reads those three call sites before editing",
       "publish_batch": "ops-1: this item alone, landed ONLY through ops/push-main.ps1, never 'git push origin HEAD:main'. If lib/checkout-sync.ps1 or ops/push-main.ps1 is in the chain manifest's derived set, push-main rehearses the chain itself; let it",
-      "leaves_open": "Moves of the main checkout by hand (a session's own git pull, merge or reset there) and any fourth mover added later still wait for the 10:30 repair; and ops/hooks/claude/* (2 of the 27 commits, 1 of them only that) is outside install-hooks altogether, and how it reaches Claude Code was not measured here.",
+      "leaves_open": "Moves of the main checkout by hand (a session's own pull, merge or reset there), checkout-sync's interrupted-move finish (~line 828), and any fourth mover added later still wait for the 10:30 watchdog -Repair; ops/hooks/claude/* is outside install-hooks altogether. No call-site case in lib/test-checkout-sync.ps1 or the push-main suites: a regression that drops those two call lines would be caught only by the watchdog repair.",
       "leaves_open_occurrences": "not measured: no log records a hand move of the main checkout, so the count is unknown, not zero. The one recorded stale-hook occurrence (2026-09-26, pre-commit after b06a3628e) came through an automated road this fix covers.",
       "leaves_open_owner_suggestion": "watch:grocery/capture-watchdog.ps1 only if the developer can show 0 hand-move occurrences; otherwise the watchdog's -Repair is still the backstop and this sentence is the record",
-      "resolution_note": "A landed ops/hooks change now reinstalls at the first move of the main checkout (bot sync, scheduled-task pull, or push-main's reset --keep) instead of waiting for the 10:30 watchdog repair. 26 of the last 27 hook landings would have been live at once instead of after a modeled median of 18 h. Hand moves still wait for the daily repair."
+      "resolution_note": "A landed ops/hooks change now reinstalls at the first move of the main checkout (bot sync, scheduled-task pull, or push-main's reset --keep) instead of waiting for the 10:30 watchdog repair. 26 of the last 27 hook landings would have been live at once instead of after a modeled median of 18 h. Hand moves still wait for the daily repair.",
+      "deviation": "(1) The helper does not use Invoke-NativeScript: lib/hook-refresh.ps1 is dot-sourced into checkout-sync and push-main, which do not load grocery/native-lib.ps1, so it runs git and the install-hooks child under a local EAP=Continue with no stderr capture (og-04's second form), and saves and RESTORES the GIT_* variables rather than clearing them for the caller's process (og-23). (2) It returns its line instead of printing it, because push-main's AfterLanded return is main_sync and any output would join it; each caller prints through its own logger (Say, rec.notes, lines). (3) checkout-sync is wired at the normal swap only (after stage 'ref', covering the CAS-recovered path), not at the ~828 interrupted-move finish. (4) Call-site cases: sync-production-checkout gained 2 (MUST FIRE moved pull reinstalls once with the range; CLEAN TWIN failed pull never calls it), 12 -> 14; lib/test-checkout-sync.ps1 and the push-main case files gained none: their existing suites were run to confirm the wiring breaks nothing, and the mechanism (real install-hooks in a scratch repo) is fixtured in lib/hook-refresh.ps1 -SelfTest.",
+      "shipped_commit": "e27d0aba3",
+      "close_disposition": "confirmed",
+      "full_suite": "deferred-to-land",
+      "land_via": "ops/push-main.ps1 only (touches push-main.ps1 and checkout-sync, a chain change)",
+      "actual_tool_calls": 27
     },
     {
       "queue_id": "2026-09-22-0c812e",
