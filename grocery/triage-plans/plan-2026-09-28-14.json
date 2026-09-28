@@ -1,0 +1,143 @@
+{
+  "generated": "2026-09-28T18:20:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28 (not read by these items: they read sams-rejects-2026-09-28.json, the live Ghost tool pages and the recall-sleep log)",
+  "lane": "ops",
+  "scope_note": "RETURN items of 2026-09-28 (ops lane, continuing session): three ids triage-due.ps1 routed straight to the developer, each seeded with a committed prior plan item and re-measured today before anything was changed. No reviewer diagnosis. Written as plan-2026-09-28-13 first; a sibling ops session wrote that name at the same time, so this plan took -14.",
+  "queue_ids_seen": ["2026-09-28-c5ad9d", "2026-09-28-c29f06", "2026-09-28-536bd3"],
+  "routing_artifact": "",
+  "knowledge_consulted": [
+    "dispatch: machinery grocery/ingest-shape-lib.ps1 (Get-RejectUnitSpelling), ops/audit-capture-ingest-reporting.ps1, grocery/discovery-lib.ps1",
+    "searched \"republish uncommitted source reconcile ghost\": nothing applicable",
+    "searched \"publish committed text temp copy dirty working tree\": nothing applicable",
+    "grocery/build-sams-deals.ps1 Resolve-Unit and its aluminum-foil square-foot note (why a length unit is not aliased)"
+  ],
+  "ship_sequence": [
+    "2026-09-28-c29f06: grocery/reconcile-ghost-drift.ps1 Get-TcDirtyPageAction + live-loop use + 5 self-test cases (72b0d0ae2). Chain change: land through ops\\push-main.ps1 (triage-land.ps1), never a plain push.",
+    "2026-09-28-c5ad9d: no code, by-design (same class as 2026-09-23-ff21e2)",
+    "2026-09-28-536bd3: no code, confirmed and already cleared outside the repo (memory store beb2ef6 05:48)",
+    "full_suite: deferred-to-land; nothing pushed from this lane"
+  ],
+  "open_questions_for_brad": [],
+  "items": [
+    {
+      "queue_id": "2026-09-28-c5ad9d",
+      "subject": "Grocery: ingest shape - new unit spelling unproved - 2026-09-28",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 7,
+      "evidence": [
+        "queue body: UNPROVED Sam's Club unit \"piece\" x1 'Mentos Pure Fresh Sugar-Free Chewing Gum, Mint, 50 pcs., 6 pk. | $18.98 | 38.0 c/piece'; UNPROVED unit \"ft\" x1 'Shea Moisture 100% Virgin Coconut Oil Daily Hydration Conditioner, 34 fl. oz. | $17.98 | 52.9 c/ft'",
+        "sams-rejects-2026-09-10..27 (11 files): 0 rows per 'piece', 0 per 'ft'; 2026-09-28: 1 and 1. Both spellings are one day old",
+        "capture-run.ps1 changed today only in chain-verdict and deferred-post work (1cb27d9e8, c718a638d, 39c135480, 58136b287, f2e6f1bd8), none of it ingest shape, so the finding still stands",
+        "arithmetic: 17.98 / 0.529 = 33.99, the name's 34 fl oz, so Sam's 'ft' on that row means fluid ounce; 18.98 / 0.38 = 49.9, which is neither the 300 pieces nor the 6 packs the name states, so 'piece' is inconsistent with its own row",
+        "grocery/build-sams-deals.ps1 Resolve-Unit header: a square-foot unit was deliberately NOT added (aluminum-foil), so aliasing 'ft' to fluid ounce at Sam's would misread any per-foot row"
+      ],
+      "root_cause": "Sam's printed a unit-price spelling its own unit table has no family for; audit-ingest-shape can prove a spelling only inside a known family, so it refuses the rows and pages the new key once, as designed (the key is prior from tomorrow)",
+      "root_fix_none_because": "refusing an unprovable unit is the designed outcome of audit-ingest-shape; 'ft' cannot be aliased to fluid ounce without misreading real per-foot rows, and 'piece' contradicts its own row's arithmetic, so neither row should reach the board",
+      "prior_closes": ["2026-09-23-ff21e2"],
+      "prevention_none_because": "no code change: each new unproved spelling pages exactly once by design and then reads as a prior key; the prior close (Sam's per-litre frying oil) was a different spelling of the same designed refusal",
+      "proof": {
+        "must_fire_case": "n/a (no code change): the page itself was the designed must-fire of audit-ingest-shape for a new spelling",
+        "clean_twin": "n/a (no code change)",
+        "fixture_occurrences": ["2026-09-23-ff21e2 (unit \"l\", Member's Mark Frying Oil)", "2026-09-28-c5ad9d (units \"piece\" and \"ft\")"]
+      },
+      "leaves_open": "the Shea Moisture conditioner row (34 fl oz, a candidate for the conditioner commodity) stays refused at Sam's for as long as Sam's prints it per 'ft'",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "watch:grocery/audit-ingest-shape.ps1",
+      "status": "done",
+      "premise_verified": "yes: both spellings are present in sams-rejects-2026-09-28 and absent from every prior file; today's capture-run changes do not touch ingest",
+      "deviation": "",
+      "shipped_commit": "",
+      "close_disposition": "by-design",
+      "resolution_note": "Re-measured 2026-09-28: 'piece' 1 row and 'ft' 1 row, both first seen today (0 of 11 prior files). Same designed refusal as 2026-09-23-ff21e2. 'ft' arithmetic means fluid ounce on the conditioner row but cannot be aliased without misreading per-foot products; 'piece' contradicts its own row. No code change."
+    },
+    {
+      "queue_id": "2026-09-28-c29f06",
+      "subject": "Tools: a live page has drifted from its local source",
+      "classification": "code-defect",
+      "lane": "ops",
+      "est_tool_calls": 20,
+      "actual_tool_calls": 14,
+      "evidence": [
+        "queue body: 'DRIFT cheap-dinners-right-now live is -400 byte(s) ... cheap-dinners-tool.html is UNCOMMITTED' and 'DRIFT whats-for-dinner-tonight live is -547 byte(s) ... dinner-tonight-tool.html is UNCOMMITTED', live updated_at 2026-09-23",
+        "grocery/ad-cycle-log.txt: '[2026-09-28T08:59:19] ghost-drift weekly: reconcile rc=3' then '[2026-09-28T09:01:19] ghost-drift weekly rc=1'",
+        "git log site/tools/cheap-dinners-tool.html: 812fad5b3 2026-09-28 09:03:13 'Daily pipeline: refresh prices + feed', two minutes after the alert",
+        "re-measured 2026-09-28 after that commit: audit-ghost-drift exit 1 'clean=14 drift=2'; reconcile-ghost-drift dry run exit 0 'match=14 republish=2 saveback=0 conflict=0 blind=0'",
+        "reconcile-ghost-drift.ps1 before the fix, line 135-136: a page whose working tree differs from HEAD is 'BLIND ... not this lane's to publish or overwrite' before live is even read; watchers.ps1 line 297 stamps the week 'even on failure'"
+      ],
+      "root_cause": "the daily chain rewrites the data-bearing tool sources and commits them after check-ad-cycles runs the weekly ghost-drift sweep, and the reconciler refused every dirty page outright, so on every weekly sweep those pages were BLIND, the week was stamped anyway, and a drift the repair lane exists to fix paged instead",
+      "root_fix": {
+        "what": "a dirty page is judged against HEAD instead of refused: a republish verdict (live equals an older committed version) publishes HEAD's committed text from a temp copy; save-back and conflict on a dirty page stay BLIND",
+        "files": ["grocery/reconcile-ghost-drift.ps1"],
+        "exact_change": "new pure Get-TcDirtyPageAction (match->match, republish->publish-head, save-back->blind, conflict->blind, default throws); the live loop sets $dirty instead of continuing, applies the action after the verdict, and on -Apply writes $head to a per-run temp file for publish-tool-post.ps1 -File, removed in finally"
+      },
+      "prior_closes": ["2026-09-07-e7286e", "2026-09-21-115180"],
+      "prevention": {
+        "source": "grocery/reconcile-ghost-drift.ps1",
+        "what": "the repair lane can now act in the window the daily chain always leaves (sources rewritten, not yet committed), which is the window every weekly sweep runs in",
+        "exact_change": "Get-TcDirtyPageAction and its use in the live loop; the uncommitted working tree is never read into Ghost or overwritten"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "git grep reconcile-ghost-drift -- *.ps1: one caller, grocery/check-ad-cycles/watchers.ps1 line 282 (weekly, -Apply); dry run over the 16 manifest pages today",
+        "affected_now": 2,
+        "names": ["cheap-dinners-right-now", "whats-for-dinner-tonight"],
+        "risk": "a dirty page now publishes HEAD's committed text, which lags the working tree by at most the uncommitted day; nothing uncommitted reaches Ghost and no save-back or conflict path changed"
+      },
+      "proof": {
+        "must_fire_case": "reconcile-ghost-drift -SelfTest 'MUST FIRE a dirty source whose live equals an OLDER committed version republishes HEAD (was BLIND, 2026-09-28-c29f06)', frozen from cheap-dinners-right-now; plus 'an unknown verdict refuses loudly'",
+        "clean_twin": "'CLEAN TWIN a dirty source with a Ghost edit on top of our last publish stays BLIND (a save-back would overwrite local work)', 'a dirty source whose live equals HEAD reads match'; 'MUST NOT FIRE a dirty source in conflict is never published'",
+        "fixture_occurrences": ["2026-09-07-e7286e (predates the reconciler; not re-read here: a lag of that kind is the existing 'live equal to an OLDER committed version' case)", "2026-09-21-115180 (a republish lag, live per-serving 2.54 vs committed 2.48: the existing republish case)", "2026-09-28-c29f06 (the new dirty-source MUST FIRE)"],
+        "ran": "reconcile-ghost-drift.ps1 -SelfTest exit 0 'reconcile-ghost-drift self-test PASS (14 cases)' (9 before); dry run exit 0 'match=14 republish=2 ... blind=0'",
+        "guard_or_fixture": "grocery/reconcile-ghost-drift.ps1 -SelfTest"
+      },
+      "rollback": "git revert 72b0d0ae2 restores the refuse-every-dirty-page behaviour; no data or ledger migrates",
+      "freshness": "re-measured 2026-09-28 after the 09:03 daily commit; the two pages stay drifted until a reconcile -Apply runs (next weekly sweep 2026-10-05, or by hand)",
+      "leaves_open": "a page whose source is dirty AND whose live is a Ghost edit (save-back or conflict) stays BLIND, and the weekly watcher pages it as drift (0 occurrences: both 09-28 pages are republish). The two drifted pages themselves are the instance, repaired by the fixed lane at an -Apply after landing or the 2026-10-05 sweep",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/check-ad-cycles/watchers.ps1",
+      "status": "done",
+      "premise_verified": "yes: rc=3 at 08:59:19 in ad-cycle-log, both sources committed at 09:03:13, dry run on the clean tree reads republish for both",
+      "deviation": "",
+      "shipped_commit": "72b0d0ae2",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "resolution_note": "Fixed at the repair lane: reconcile-ghost-drift now republishes HEAD's committed text for a page the daily chain left dirty (72b0d0ae2). The 09-28 weekly sweep ran at 08:59 before the 09:03 daily commit and was BLIND on both pages. The orchestrator may run 'powershell -File grocery\\reconcile-ghost-drift.ps1 -Apply' after landing to repair the two pages now; otherwise the 2026-10-05 sweep does."
+    },
+    {
+      "queue_id": "2026-09-28-536bd3",
+      "subject": "Automation silent-death: TASK FAILED ('TC Recall Sleep 0435' last result 1)",
+      "classification": "no-code-change",
+      "lane": "ops",
+      "est_tool_calls": 10,
+      "actual_tool_calls": 6,
+      "evidence": [
+        "ops/out/logs/run-once/recall-sleep-2026-09-2*.stamp: rc=1 09-20..09-26, rc=0 09-27 (the night after d21fb2's fix), rc=1 09-28",
+        "recall-sleep-2026-09-28.out.log: 'RED: 2 of 36 step(s) failed - memory clusters (exit 1), gate (exit 1)'",
+        "recall-sleep-latest.md: 'memory clusters (exit 1): waiting on a judgement'; 'gate (exit 1): BROKEN'; gate FAIL lines 'recall-consolidate: the unruled cluster count moved off its mark' and 'C--Codex-ThriftyCrew: 3 memory file(s) uncommitted, 1 past the 48 h bar, oldest 64 h'",
+        "memory store git log: beb2ef6 2026-09-28 05:48:32 'memory: commit three edits left uncommitted since 09-25 to 09-27'; status of the memory directory now: 0 uncommitted files",
+        "prior residual 2026-09-26-d21fb2 resolved: in-flight uncommitted memory under 48 h is a warning, 'stale, missing or committed = fail as before'"
+      ],
+      "root_cause": "a session left three memory-store edits uncommitted for up to 64 hours, past the 48 h bar d21fb2 deliberately kept as a failure, so the gate's break was real; the other red (2 unruled clusters) is a judgement, which alone maps to the review exit 3",
+      "root_fix_none_because": "the fault was outside this repo (the memory store under ~/.claude) and was repaired at 05:48 today by beb2ef6; the gate that failed is doing what d21fb2 designed it to do, and this lane may not write the memory store",
+      "prior_closes": ["2026-09-23-4f9842", "2026-09-26-ef3d50"],
+      "prevention_none_because": "no code change: the 48 h stale bar is the prevention and it fired correctly; d21fb2's split held (09-27 rc=0), and today's rc=1 was a real stale memory, not a judgement misread as broken",
+      "proof": {
+        "must_fire_case": "n/a (no code change in this repo): recall-sleep's own gate failed on a 64 h uncommitted memory, the designed must-fire",
+        "clean_twin": "n/a (no code change): 09-27 rc=0 with no stale memory",
+        "fixture_occurrences": ["2026-09-23-4f9842 (daily ratchets, fixed on origin/main via 110a8f)", "2026-09-26-ef3d50 (recall-sleep judgements read as broken, fixed by d21fb2 in the store)", "2026-09-28-536bd3 (a real stale memory, cleared by beb2ef6)"]
+      },
+      "leaves_open": "2 unruled memory clusters wait on Brad's judgement; alone they give recall-sleep's review exit 3, not a failure",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1",
+      "status": "done",
+      "premise_verified": "yes: today's log and report read; the stale memory was committed at 05:48 and the memory directory is clean now",
+      "deviation": "",
+      "shipped_commit": "",
+      "close_disposition": "confirmed",
+      "resolution_note": "Real failure, already cleared: the 04:35 run's gate failed on a memory edit left uncommitted 64 h (bar 48 h), which beb2ef6 committed at 05:48. d21fb2's fix held (09-27 rc=0). Remaining: 2 unruled clusters for Brad, which alone exit 3 (review). Tomorrow's stamp should read rc=3 or 0; health-heartbeat pages again on a 1."
+    }
+  ]
+}
