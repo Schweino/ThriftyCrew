@@ -48,16 +48,42 @@ function Get-ChainVerdictInputPaths {
   return $paths.ToArray()
 }
 
+# THE HASH MEASURES CONTENT, NOT LINE ENDINGS (2026-09-28, queue 2026-09-27-f50b7a). Every input above is JSON, and
+# git owns their line endings (eol=lf) while the chain's PS 5.1 writers leave some of them CRLF (product-urls.json held
+# 25,892 CR bytes on 2026-09-28). Any git round-trip of a dirty input (stash, checkout, an autostash pull) rewrote those
+# bytes LF with the content unchanged, the raw-byte fingerprint moved, and on 2026-09-27 the chain withheld a board
+# guards had passed. In JSON a raw CR can only be whitespace between tokens (a CR inside a string must be escaped), so
+# dropping every 0x0D byte cannot change the parsed value, and any real content change still moves the hash. A file
+# with no CR hashes exactly as Get-FileHash does. The basis is recorded in the verdict and a reader on another basis
+# reads STALE-INPUTS: fail closed, never a comparison across bases.
+$script:ChainVerdictHashBasis = 'json-cr-stripped-v1'
+function Get-ChainVerdictContentHash {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  $b = [IO.File]::ReadAllBytes($Path)
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try {
+    $start = 0
+    while ($start -lt $b.Length) {
+      $i = [Array]::IndexOf([byte[]]$b, [byte]13, [int]$start)
+      if ($i -lt 0) { $i = $b.Length }
+      if ($i -gt $start) { [void]$sha.TransformBlock($b, $start, ($i - $start), $null, 0) }
+      $start = $i + 1
+    }
+    [void]$sha.TransformFinalBlock((New-Object byte[] 0), 0, 0)
+    return (($sha.Hash | ForEach-Object { $_.ToString('x2') }) -join '')
+  } finally { $sha.Dispose() }
+}
+
 function Get-ChainVerdictInputHashes {
-  # Returns an ORDERED map of repo-relative path -> sha256, with 'absent' for a file that is not there.
-  # 'absent' is a value, not a skip: a pins file that disappears between the guard run and the publish
-  # is exactly the change this is here to notice.
+  # Returns an ORDERED map of repo-relative path -> sha256 of the CR-stripped content (basis above), with 'absent' for
+  # a file that is not there. 'absent' is a value, not a skip: a pins file that disappears between the guard run and
+  # the publish is exactly the change this is here to notice.
   param([string]$Repo)
   $map = [ordered]@{}
   foreach ($p in (Get-ChainVerdictInputPaths -Repo $Repo)) {
     $rel = $p.Replace($Repo, '').TrimStart('\', '/')
     if (Test-Path -LiteralPath $p) {
-      try { $map[$rel] = (Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash.ToLower() }
+      try { $map[$rel] = Get-ChainVerdictContentHash -Path $p }
       catch { $map[$rel] = 'unreadable' }
     } else { $map[$rel] = 'absent' }
   }
@@ -124,6 +150,7 @@ function Write-ChainVerdict {
     quarantined     = $Quarantined
     feed_refreshed  = [bool](-not $FeedRefused)
     feed_refused    = $FeedRefused
+    inputs_hash_basis  = $script:ChainVerdictHashBasis
     inputs_fingerprint = (Get-ChainVerdictFingerprint -Repo $Repo -Hashes $hashes)
     inputs          = $hashes
     note            = 'Written after guards ran. Readers must go through lib\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\** or meal-prep\**.'
@@ -151,6 +178,7 @@ function Read-ChainVerdictStatus {
     status = 'ABSENT'; why = 'no chain verdict for today was found'
     guards_blocked = $true; ship_ok = $false; date = ''; written = ''
     fingerprint_recorded = ''; fingerprint_now = ''
+    moved = @()
   }
   $vf = Join-Path $OutDir 'chain-verdict.json'
   if (-not (Test-Path -LiteralPath $vf)) { return $res }
@@ -166,7 +194,8 @@ function Read-ChainVerdictStatus {
     $res.why = ('the newest chain verdict is for ' + $res.date + ', not today')
     return $res
   }
-  $now = Get-ChainVerdictFingerprint -Repo $Repo
+  $nowHashes = Get-ChainVerdictInputHashes -Repo $Repo
+  $now = Get-ChainVerdictFingerprint -Repo $Repo -Hashes $nowHashes
   $res.fingerprint_now = $now
   $recorded = ''
   if ($v.PSObject.Properties.Name -contains 'inputs_fingerprint') { $recorded = [string]$v.inputs_fingerprint }
@@ -178,10 +207,37 @@ function Read-ChainVerdictStatus {
     $res.why = 'the chain verdict records no input fingerprint, so nothing proves it is about this tree'
     return $res
   }
+  # A verdict hashed on another basis (a raw-byte verdict from before 2026-09-28, or a future basis) is not comparable:
+  # STALE, fail closed, exactly as a verdict with no fingerprint is.
+  $basis = ''
+  if ($v.PSObject.Properties['inputs_hash_basis']) { $basis = [string]$v.inputs_hash_basis }
+  if (-not [string]::Equals($basis, [string]$script:ChainVerdictHashBasis, [StringComparison]::Ordinal)) {
+    $res.status = 'STALE-INPUTS'
+    $res.why = ('the chain verdict hashed its inputs on basis ''' + $basis + ''' and this reader on ''' +
+                $script:ChainVerdictHashBasis + ''', so nothing proves it is about this tree')
+    return $res
+  }
   if ($recorded -ne $now) {
+    # NAME WHAT MOVED (2026-09-28): the verdict stores the per-path map, so the withhold says which input changed after
+    # guards ran. A path on one side only (a new newest comparison, say) counts as moved. Separators are written '/'.
+    $movedL = [Collections.Generic.List[string]]::new()
+    $recMap = @{}
+    if ($v.PSObject.Properties['inputs'] -and $v.inputs) {
+      foreach ($pp in $v.inputs.PSObject.Properties) { $recMap[[string]$pp.Name] = [string]$pp.Value }
+    }
+    foreach ($k in $nowHashes.Keys) {
+      $ks = [string]$k
+      if (-not $recMap.ContainsKey($ks) -or -not [string]::Equals($recMap[$ks], [string]$nowHashes[$k], [StringComparison]::Ordinal)) {
+        $movedL.Add($ks.Replace('\', '/'))
+      }
+    }
+    foreach ($k in $recMap.Keys) { if (-not $nowHashes.Contains($k)) { $movedL.Add(([string]$k).Replace('\', '/')) } }
+    $res.moved = $movedL.ToArray()
+    $movedTxt = 'no single path (the per-path map is missing or unreadable)'
+    if ($movedL.Count) { $movedTxt = ($movedL.ToArray() -join ', ') }
     $res.status = 'STALE-INPUTS'
     $res.why = ('the chain verdict scored inputs ' + $recorded + ' but the tree is now ' + $now +
-                ' - guards have not seen this board')
+                ' - moved since guards ran: ' + $movedTxt + ' - guards have not seen this board')
     return $res
   }
   if ([bool]$v.guards_blocked) {

@@ -278,6 +278,16 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "chain-verdict-stale-withheld",
+   "match": "prefix",
+   "key": "daily chain withheld its board",
+   "class": "page",
+   "condition": "1 board-or-feed-wrong-or-held",
+   "emitter": "grocery/capture-run.ps1",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "2026-09-28, queue 2026-09-27-f50b7a: the chain verdict read STALE-INPUTS at publish time, so a board guards scored was withheld because an input moved after they ran. The subject names the moved paths (lib/chain-verdict-lib.ps1 Read-ChainVerdictStatus .moved). Booked as lane verdict-stale, never guards-blocked."
+  },
+  {
    "id": "commit-refused",
    "match": "exact",
    "key": "daily pipeline commit refused",
