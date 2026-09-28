@@ -1,0 +1,315 @@
+{
+  "generated": "2026-09-28T17:40:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28 (flagged-2026-09-28.json 08:07, semantic-findings.json 08:29, sale-fallback-gaps.json 08:25)",
+  "lane": "money",
+  "scope_note": "RETURN items of 2026-09-28 (money lane, continuing session): four ids triage-due.ps1 routed straight to the developer, each seeded with a committed prior plan item and re-measured against today's board before anything was changed. No reviewer diagnosis.",
+  "queue_ids_seen": [
+    "2026-09-27-9a351a",
+    "2026-09-27-75f918",
+    "2026-09-27-ef1612",
+    "2026-09-27-ec5cac"
+  ],
+  "routing_artifact": "",
+  "knowledge_consulted": [
+    "dispatch: machinery grocery/ad-match-lib.ps1, grocery/price-table-lib.ps1, grocery/ff-price-lib.ps1; rules effort.md",
+    "searched \"ghost page census declare\": nothing applicable",
+    "grocery/apply-coverage-batch.ps1 header (the gated widening procedure, reused as the road for 9a351a)"
+  ],
+  "ship_sequence": [
+    "2026-09-27-ec5cac: declare welcome-all-access in ops/ghost-page-estate.json, audit-ghost-page-census -Export (14a772556)",
+    "2026-09-27-9a351a: three bounded widenings through apply-coverage-batch.ps1 (crown diff, coverage delta, known-wrong, tile integrity, guards), then audit-match-soundness review",
+    "2026-09-27-75f918 and 2026-09-27-ef1612: measured, no code; residuals enqueued weekly (2026-09-28-e40f92, 2026-09-28-6adf51)",
+    "commit with a pathspec; the orchestrator lands through triage-land.ps1 (full_suite: deferred-to-land)"
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-27-9a351a",
+      "subject": "Grocery: semantic sweep found 2 product(s) no rule can see - 2026-09-27",
+      "classification": "coverage-gap",
+      "lane": "money",
+      "publish_batch": 1,
+      "est_tool_calls": 20,
+      "evidence": [
+        "prior: plan-2026-09-25-6.json item 2026-09-23-3ba362 (bounced): laundry-detergent += liquid laundry, hot-sauce += bounded pepper sauce. Both are now in grocery/commodities.json (lines 6588, 32871-32872), and neither name is in today's sweep",
+        "the 09-27 alert named taco-seasoning @ Walmart 'McCormick Street Taco Carne Asada Seasoning Mix' and creamy-cilantro-lime-dressing @ Walmart 'Brianna's Home Style Creamy Cilantro Lime, 12 fl oz Bottle'",
+        "today: grocery/out/semantic-findings.json generated 2026-09-28 08:29 carries 3 coverage findings: cooking-spray @ Hy-Vee 'Hy Vee Canola Oil No Stick Spray' (score 0.9467), creamy-cilantro-lime-dressing @ Walmart (Brianna's, 0.9265), garlic-herb-seasoning @ Family Fare 'Mc Cormick Grill Mates Garlic & Crushed Herbs Seasoning, 5.47 Oz' (0.9030). The carne asada mix is not among them",
+        "rule text read: cooking-spray includes 'non\\s*-?\\s*stick\\s+spray' (misses 'No Stick'); creamy-cilantro-lime-dressing requires the word 'dressing'; garlic-herb-seasoning has no 'crushed herbs' form"
+      ],
+      "root_cause": "carried from 3ba362: commodity includes are enumerated word forms, so a name that says the same thing another way ('No Stick Spray', a dressing brand whose name omits 'dressing', 'Garlic & Crushed Herbs') matches nothing; the sweep is the detector and a rule edit is the only repair",
+      "root_fix": {
+        "what": "three bounded widenings, applied through the gated batch",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "cooking-spray.include += '\\bno[\\s-]?stick\\s+(?:cooking\\s+)?spray\\b'; creamy-cilantro-lime-dressing.include += \"\\bbrianna'?s\\b.*\\bcreamy\\s+cilantro[\\s-]+lime\\b\"; garlic-herb-seasoning.include += '\\bgarlic\\s*(?:&|and)\\s*crushed\\s+herbs?\\s+seasoning\\b'"
+      },
+      "prior_closes": [
+        "2026-08-31-550b2a",
+        "2026-09-01-ff9801",
+        "2026-09-02-fd3f29",
+        "2026-09-03-f2abdb",
+        "2026-09-05-b08e51",
+        "2026-09-06-796030",
+        "2026-09-07-abae06",
+        "2026-09-10-20430e",
+        "2026-09-18-37ac63",
+        "2026-09-19-4f01f6",
+        "2026-09-21-7d64a6",
+        "2026-09-23-3ba362"
+      ],
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "apply-coverage-batch.ps1: before/after compare-deals of the current board with the crown diff and coverage delta, plus audit-match-soundness moved/dropped over its corpus",
+        "affected_now": 3,
+        "names": [
+          "Hy Vee Canola Oil No Stick Spray",
+          "Brianna's Home Style Creamy Cilantro Lime, 12 fl oz Bottle",
+          "Mc Cormick Grill Mates Garlic & Crushed Herbs Seasoning, 5.47 Oz"
+        ],
+        "claimed_by_earlier": "none: the sweep records 'no rule matches it' for all three, so no commodity at a lower index admits any of them",
+        "cell_effects": [],
+        "risk": "the Brianna's form is bounded to the brand, and the No Stick form to 'spray'"
+      },
+      "proof": {
+        "must_fire_case": "each of the three names routes to its commodity after the edit",
+        "clean_twin": "the batch's theft gate: no other commodity loses a cell",
+        "guard_or_fixture": "grocery/apply-coverage-batch.ps1 gates; ops/audit-match-soundness.ps1",
+        "fixture_occurrences": [
+          "2026-08-31-550b2a",
+          "2026-09-01-ff9801",
+          "2026-09-02-fd3f29",
+          "2026-09-03-f2abdb",
+          "2026-09-05-b08e51",
+          "2026-09-06-796030",
+          "2026-09-07-abae06",
+          "2026-09-10-20430e",
+          "2026-09-18-37ac63",
+          "2026-09-19-4f01f6",
+          "2026-09-21-7d64a6",
+          "2026-09-23-3ba362",
+          "2026-09-27-9a351a"
+        ]
+      },
+      "rollback": "revert the commodities.json hunk",
+      "freshness": "semantic-findings.json 2026-09-28 08:29 over comparison-2026-09-28",
+      "do_not_touch": [
+        "grocery/pricing-math-lib.ps1 (sibling-held)",
+        "any band or guard threshold"
+      ],
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "status": "done",
+      "premise_verified": "true: the prior widening is in commodities.json and its two names are gone from the sweep; today's three findings read against each commodity's include list",
+      "deviation": "the batch printed 'BOARD NOT PUBLISHABLE YET' over 12 tile-integrity faults that sat on other commodities before the edit (its own baseline read 12). Nothing was republished from this run, and those faults are not this item's.",
+      "shipped_commit": null,
+      "resolution_note": "The prior bounce is resolved: 3ba362's laundry and hot-sauce widenings are in commodities.json and both names left the sweep. The 09-27 carne asada mix has also left today's sweep. Today's 3 findings (Hy-Vee No Stick spray, Walmart Brianna's Creamy Cilantro Lime, Family Fare Garlic & Crushed Herbs) are widened through apply-coverage-batch: BATCH ACCEPTED, 0 crown changes, theft check OK, 1+1+2 rows revealed, 0 tile faults on the batch's commodities. audit-match-soundness: MOVED=0 DROPPED=0 drift-vs-engine=0, and none of its 24 new-contested names involves these commodities. Accepted. The rows gain candidates on the next board build; no cell moved today.",
+      "actual_tool_calls": 22,
+      "claimed_by_earlier": "none: semantic-findings.json 2026-09-28 08:29 records 'no rule matches it' for all three names, so no commodity at a lower array index admits any of them; re-checked after the edit by the batch's crown diff",
+      "prevention": {
+        "source": [
+          "sidecar/sweep.py",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "what": "the emitting check. 3ba362's prevention (hand each finding its verdict and the unmatched phrase) is live in part: today's alert names a lane and the head noun per finding ('lane: widen - the head noun 'lime' names creamy-cilantro-lime-dressing'), and the findings sit on grocery/out/match-worklist.json for apply-coverage-batch -FromWorklist. The class recurs by design: every new product name that says a thing another way is a new instance, and the sweep is the detector that finds it",
+        "exact_change": "none further this run: the road (worklist, then a gated batch) exists and was used; each recurrence costs one batch, not a diagnosis"
+      },
+      "live_check": "none: no republish from this run; after the next daily build cooking-spray @ Hy-Vee may carry 'Hy Vee Canola Oil No Stick Spray' as a candidate"
+    },
+    {
+      "queue_id": "2026-09-27-75f918",
+      "subject": "Grocery: 6 on-sale item(s) have no everyday fallback and NO ONE IS WORKING THEM - 2026-09-27",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 10,
+      "evidence": [
+        "prior: plan-2026-09-25-4.json item 2026-09-19-c9f0f3 (done, 977ba3a0c): ownership was a label from a hard-coded store list and no owner's worklist held the gap",
+        "today: grocery/out/sale-fallback-gaps.json 2026-09-28 08:25 has 9 gaps, 5 owned, 4 escalated: chicken-drumsticks @ Hy-Vee, white-wine @ Hy-Vee, frozen-fries @ Family Fare, trash-bags @ Family Fare. All 4 have owner capture-plan:<store>, terms_attempted=true, first_seen 2026-09-23, 5d against a 3d grace",
+        "3 of the 09-27 six cleared (bar-soap, canned-pumpkin, red-wine @ Hy-Vee); trash-bags @ Family Fare is new",
+        "ff-term-ledger.json marks 'frozen french fries' and '13 gallon trash bags' asked 2026-09-28; family-fare-regular-2026-09-28.json has no row found by either term",
+        "out/throttled/family-fare-2026-09-23..28.throttled.json: deals 0, 1, 2, 11, 96, 70; empty terms 640, 631, 629, 630, 626, 630. No line in grocery/alert-log.txt mentions a throttle",
+        "hyvee-regular-2026-09-28.json has no drumstick row"
+      ],
+      "root_cause": "the prior cause (a gap nobody owns) no longer reproduces: every escalated cell is owned and its terms were asked. What stands is that the asks land nothing, and on Family Fare that coincides with six days of throttled everyday captures",
+      "root_fix": {
+        "what": "none from this lane: the capture is the repair, and grocery/pull-regular-hyvee.ps1 is held by a sibling session today",
+        "files": [],
+        "exact_change": "none"
+      },
+      "prior_closes": [
+        "2026-09-06-22b4dd",
+        "2026-09-19-c9f0f3"
+      ],
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "sale-fallback-gaps.json 2026-09-28 read directly; no rule changes",
+        "affected_now": 4,
+        "names": [],
+        "cell_effects": [],
+        "cell_effects_note": "no cell moves: each store drops off its commodity only when the sale ends, which understates coverage but prints no wrong price"
+      },
+      "freshness": "sale-fallback-gaps.json 2026-09-28 08:25; throttled files to 2026-09-28 10:34",
+      "leaves_open": "4 worked-but-unlanded fallback cells (2 Family Fare under a 6-day throttle, 2 Hy-Vee with no everyday row), since 2026-09-23",
+      "leaves_open_occurrences": 4,
+      "leaves_open_followup": "2026-09-28-e40f92",
+      "status": "done",
+      "premise_verified": "false for the prior class: all 4 escalated cells are owned with terms_attempted=true; the alert's 'NO ONE IS WORKING THEM' is wrong for them",
+      "deviation": "no code: the prior fix holds; the new mechanism (worked, nothing lands, FF throttled 6 days) is measured and enqueued weekly as 2026-09-28-e40f92",
+      "shipped_commit": null,
+      "resolution_note": "No longer reproduces as the prior class (977ba3a0c holds: every escalated gap has an owner and was searched). The 4 cells standing today are worked but land nothing: Family Fare's everyday capture wrote throttled records on 6 straight days (09-23 to 09-28, about 630 empty terms each) and Hy-Vee's regular pull has no drumsticks. Residual enqueued weekly as 2026-09-28-e40f92.",
+      "actual_tool_calls": 12,
+      "proof": {
+        "guard_or_fixture": "grocery/check-ad-cycles.ps1 (sale-fallback-gaps escalation, the emitter)",
+        "must_fire_case": "n/a: no code change",
+        "clean_twin": "n/a",
+        "fixture_occurrences": [
+          "2026-09-06-22b4dd",
+          "2026-09-19-c9f0f3",
+          "2026-09-27-75f918"
+        ]
+      },
+      "rollback": "nothing to roll back: no code or data changed",
+      "prevention_none_because": "no code change: the prior source fix (977ba3a0c, ownership from the store's own worklist) holds, measured today as owner set and terms_attempted=true on all 4 escalated cells; the standing cause is capture yield, enqueued as 2026-09-28-e40f92"
+    },
+    {
+      "queue_id": "2026-09-27-ef1612",
+      "subject": "Grocery: 44 NEW price flag(s) - 2026-09-27",
+      "classification": "no-code-change",
+      "lane": "money",
+      "est_tool_calls": 10,
+      "evidence": [
+        "prior: plan-2026-09-25-6.json item 2026-09-23-9459a1 (bounced): split out-of-band multibuys into 'arithmetic reproduces, band refuses' and 'unresolved'. Shipped in 614010d45 (compare-deals.ps1:895-901, Get-MultibuyRefusalHalf); hand-soap, shampoo and bar-soap are no longer in multibuy_unpriced",
+        "flagged-2026-09-28.json multibuy_unpriced has 55 rows: 44 Family Fare 'Buy 2 get 1 free' soda 12-packs with size '12 pack'/'12 pk' and no can volume (reason 'has regular but no unit basis'), which are the 44 NEW of 09-27; 6 '... Soda Cans 12 Fl Oz' at reg 10.99 (half=complete-basis, $0.6106/floz); 3 'Pepsi ... 16.9 Fl Oz, 6 Count 6 Ea' at reg 7.29 (half=complete-basis, $0.2876/floz); 1 Muscle Milk protein powder on Milk (gallon) ($102.70/gal); 1 Hy-Vee Ralston rice BOGO with no regular (the 1 NEW of 09-28)",
+        "none of those names is on comparison-2026-09-28.json",
+        "Pepsi on 6 x 16.9 = 101.4 floz: 7.29 x 2/3 / 101.4 = $0.0479/floz, inside the 0.00296-0.074 band, so it is a real sale refused on a missed count",
+        "milk (commodities.json id milk) has no protein powder or shake exclude"
+      ],
+      "root_cause": "the prior cause is fixed. What remains: Get-MultibuyRefusalHalf (grocery/pricing-math-lib.ps1) judges the half from the basis string and unit alone, so a pack count present in the name ('6 Count') but absent from the basis reads as a complete basis, and band review is handed parse errors as real prices",
+      "root_fix": {
+        "what": "none from this dispatch: pricing-math-lib.ps1 is held by a sibling today; measured and enqueued",
+        "files": [],
+        "exact_change": "none"
+      },
+      "prior_closes": [
+        "2026-08-31-8018b5",
+        "2026-09-01-b7da16",
+        "2026-09-02-19e1c3",
+        "2026-09-04-def37c",
+        "2026-09-05-521f1c",
+        "2026-09-06-24ac66",
+        "2026-09-07-05e4c3",
+        "2026-09-09-9b1f92",
+        "2026-09-10-b91a0a",
+        "2026-09-11-3b246c",
+        "2026-09-18-61f76c",
+        "2026-09-19-fccb69",
+        "2026-09-23-9459a1"
+      ],
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "flagged-2026-09-28.json multibuy_unpriced (55 rows) and comparison-2026-09-28.json read directly; no rule changes",
+        "affected_now": 10,
+        "names": [],
+        "cell_effects": [],
+        "cell_effects_note": "no refused row reaches the board; the Pepsi rows are a real sale withheld (understated), the rest correctly refused"
+      },
+      "freshness": "flagged-2026-09-28.json 08:07",
+      "leaves_open": "9 multibuy rows labelled complete-basis on a missed pack count (3 Pepsi 6-count, 6 12-fl-oz cans at a 12-pack price) plus 1 Muscle Milk powder routed to milk; 10 rows on 2026-09-28",
+      "leaves_open_occurrences": 10,
+      "leaves_open_followup": "2026-09-28-6adf51",
+      "status": "done",
+      "premise_verified": "true that the prior fix is live (614010d45 reason text in today's flags); false that the 44 NEW flags are a defect: they are correct refusals of an ad with no can volume",
+      "deviation": "no code: the 44 are right to refuse; the new detail (refusal half blind to a count in the name) sits in a sibling-held file and is enqueued weekly as 2026-09-28-6adf51",
+      "shipped_commit": null,
+      "resolution_note": "The prior class is fixed (614010d45). The 44 NEW flags of 09-27 are Family Fare's Buy 2 get 1 soda 12-packs with no can volume, refused correctly, and none reaches the board. Behind them: 9 rows labelled 'band refuses a real price' when a pack count was missed, and a Muscle Milk protein powder routed to milk. Enqueued weekly as 2026-09-28-6adf51.",
+      "actual_tool_calls": 10,
+      "proof": {
+        "guard_or_fixture": "grocery/compare-deals.ps1 multibuy_unpriced (flagged-*.json), paged by grocery/check-ad-cycles.ps1",
+        "must_fire_case": "n/a: no code change",
+        "clean_twin": "n/a",
+        "fixture_occurrences": [
+          "2026-08-31-8018b5",
+          "2026-09-01-b7da16",
+          "2026-09-02-19e1c3",
+          "2026-09-04-def37c",
+          "2026-09-05-521f1c",
+          "2026-09-06-24ac66",
+          "2026-09-07-05e4c3",
+          "2026-09-09-9b1f92",
+          "2026-09-10-b91a0a",
+          "2026-09-11-3b246c",
+          "2026-09-18-61f76c",
+          "2026-09-19-fccb69",
+          "2026-09-23-9459a1",
+          "2026-09-27-ef1612"
+        ]
+      },
+      "rollback": "nothing to roll back: no code or data changed",
+      "prevention_none_because": "no code change: the prior source fix (614010d45) holds and today's 44 NEW flags are correct refusals; the one new detail is in grocery/pricing-math-lib.ps1, held by a sibling today, and is enqueued as 2026-09-28-6adf51 with its measurement"
+    },
+    {
+      "queue_id": "2026-09-27-ec5cac",
+      "subject": "Ops: a live Ghost page is neither produced by the repo nor declared",
+      "classification": "ops",
+      "lane": "ops",
+      "est_tool_calls": 6,
+      "evidence": [
+        "prior: plan-2026-09-25-6.json item 2026-09-23-373ac2 (done, 1d9688964) was EDITED-SINCE-EXPORT from an article lander; this finding is UNDECLARED, a different kind",
+        "census 2026-09-27 09:52 and 2026-09-28: 'UNDECLARED page welcome-all-access (public)'",
+        "git grep at 0dfb03dcc^: only .claude/skills/lesson/dump-page-lexical.ps1:17 and fetch-onboarding.ps1:18 named it; 0dfb03dcc (2026-09-27 03:34, 'Retire 83 dead and one-off scripts on Brad's 2026-09-27 ruling') deleted both",
+        "export: title 'Welcome to All Access', page, public, published 2026-07-01T17:37:52Z, no dollar figure in its html"
+      ],
+      "root_cause": "retiring the last tracked file that names a live Ghost page turns it UNDECLARED: the census counts a page as produced when any tracked file names it, and the two onboarding helpers were its only namers",
+      "root_fix": {
+        "what": "declare the page and export it",
+        "files": [
+          "ops/ghost-page-estate.json",
+          "content/ghost-adopted/welcome-all-access.json",
+          "content/ghost-adopted/welcome-all-access.html"
+        ],
+        "exact_change": "pages += welcome-all-access {kind page, visibility public, published_at 2026-07-01T17:37:52.000Z, why}; audit-ghost-page-census.ps1 -Export"
+      },
+      "prior_closes": [
+        "2026-09-23-373ac2"
+      ],
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a board change: the census over 1,076 live pages",
+        "affected_now": 1,
+        "names": [
+          "welcome-all-access"
+        ],
+        "cell_effects": []
+      },
+      "proof": {
+        "must_fire_case": "census before: findings=1 UNDECLARED welcome-all-access",
+        "clean_twin": "census after: exit 0, findings=0, declared=197",
+        "guard_or_fixture": "ops/audit-ghost-page-census.ps1",
+        "fixture_occurrences": [
+          "2026-09-23-373ac2",
+          "2026-09-27-ec5cac"
+        ]
+      },
+      "freshness": "live census 2026-09-28",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": null,
+      "status": "done",
+      "premise_verified": "true: the census still read findings=1 UNDECLARED today; routing re-checked: the page carries no price, so it is ops, not money",
+      "deviation": null,
+      "shipped_commit": "14a772556",
+      "resolution_note": "Commit 0dfb03dcc retired the only two files naming welcome-all-access (the lesson onboarding helpers), so the census read it as UNDECLARED. Declared in ops/ghost-page-estate.json and exported; census exit 0, findings=0. No pricing content.",
+      "actual_tool_calls": 8,
+      "rollback": "git revert 14a772556 (one estate line and two exported files)",
+      "prevention": {
+        "source": [
+          "ops/audit-ghost-page-census.ps1"
+        ],
+        "what": "the census counts a page as produced when ANY tracked file names its slug, so a read-only helper that only fetched the page stood in as its producer, and retiring that helper orphaned it. The census itself caught it within about 6 hours, which is the prevention working; the prior close (373ac2) was a different finding kind (EDITED-SINCE-EXPORT) and its fix holds",
+        "exact_change": "none this run: declaring every Ghost-admin-made page in ops/ghost-page-estate.json, rather than relying on an incidental mention, is the durable form, and this page now has it"
+      }
+    }
+  ],
+  "open_questions_for_brad": []
+}
