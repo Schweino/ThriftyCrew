@@ -178,8 +178,9 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
      its own emitter, so nothing waits that should not.
   3. **Genuinely a ruling:** add it to `open_questions_for_brad` with an `id`.
   Write that owner into `leaves_open_followup`, then run
-  `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
-  and get exit 0. A residual with no owner is the to-Brad list of discovered defects he ruled out on
+  `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing -PreLanding`
+  and get exit 0. `-PreLanding` because you never push: without it, closing now refuses an item whose `shipped_commit`
+  is not on origin/main (2026-09-28), and the orchestrator's closing after `triage-land.ps1` is the one that judges that. A residual with no owner is the to-Brad list of discovered defects he ruled out on
   2026-09-07, and the gate names it.
 - If you republished, write the one cell to verify live into your item as `live_check` (commodity, store and
   the value you expect); the orchestrator checks it after landing.

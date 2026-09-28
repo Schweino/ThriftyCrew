@@ -47,6 +47,11 @@
   the same exit codes. Run it before a triage run reports itself done. A residual's owner is a queue id, a
   ruling id in open_questions_for_brad, or watch:<repo-relative path> for a residual whose
   leaves_open_occurrences is 0 (2026-09-10).
+  -Closing ALSO REQUIRES THE FIX ON origin/main (2026-09-28): a done or deviated item's shipped_commit must be on
+  origin/main or have a patch-equivalent there (a rebased landing passes), and a value naming no hash passes when
+  origin/main's copy of the plan carries the item as done. Closing FETCHES origin main first (-NoFetch to skip) and
+  prints whether it did. Refused for plans dated on or after $LandedCutoff, a WARN before. So the orchestrator runs
+  grocery\triage-land.ps1 (push-main) BEFORE its closing; a developer's pre-landing run passes -PreLanding.
   BOTH MODES READ THE QUEUE (2026-09-10, Brad's ruling 5, RETURNS ARE FAILURES). An item whose queue type was
   already closed as resolved inside the 30-day window is a RETURN, and that status comes from the QUEUE, never
   from the plan, so a plan that omits the fields cannot escape. A RETURN code item must carry prior_closes
@@ -74,6 +79,11 @@ param(
   # -Closing on a plan dated on or after $BudgetCutoff: the cost ledger that must name it (default: cost-ledger.jsonl
   # beside the plan). Rows are written by grocery\triage-cost.py --append, never typed (2026-09-24).
   [string]$LedgerFile = '',
+  # -Closing judges that each done/deviated item's shipped_commit is on origin/main (Test-PlanLanded, 2026-09-28).
+  # -PreLanding: the developer's own closing run, before triage-land.ps1 lands the run; it skips that check and says so.
+  # -NoFetch: judge against the local origin/main without fetching it first (a stale ref can only refuse, never pass).
+  [switch]$PreLanding,
+  [switch]$NoFetch,
   # -KcSurvey: the knowledge_consulted rule ALONE, with the cutoff lifted, over every plan whose file-name date is in
   # [-SurveySince, -SurveyUntil] in -SurveyDir (default grocery\triage-plans). A report, never a gate: it is how the
   # rule was measured over real plans before it could refuse any (W5.3), and how the next change to it is measured.
@@ -84,6 +94,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path $PSScriptRoot 'validate-triage-plan\closing-checks.ps1')  # -Closing's cost ledger and fix-on-main checks, and their cases
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # A [string[]] PARAM DOES NOT SURVIVE `powershell -File` (2026-08-01). Called as
@@ -237,20 +248,6 @@ function Get-EstimateHistoryWarnings {
   return ,$warn.ToArray()
 }
 
-function Test-PlanCostLedger {
-  param([string]$LedgerPath, [string]$PlanName)
-  if (-not (Test-Path -LiteralPath $LedgerPath)) { return @{ ok = $false; why = "no cost ledger at $LedgerPath" } }
-  $n = 0
-  foreach ($ln in [IO.File]::ReadAllLines($LedgerPath)) {
-    if (-not $ln.Trim()) { continue }
-    try { $r = $ln | ConvertFrom-Json } catch { continue }
-    if ([string]$r.schema -ne '2') { continue }
-    $names = @(@($r.plans) | ForEach-Object { [string]$_ })
-    if ($names -contains $PlanName) { $n++ }
-  }
-  if ($n -gt 0) { return @{ ok = $true; why = "$n schema-2 row(s) name $PlanName" } }
-  return @{ ok = $false; why = "no schema-2 row of $LedgerPath names $PlanName - run grocery\triage-cost.py --append --plan $PlanName (it derives the rows from the session transcripts)" }
-}
 # The two memory stores, in ops/store_citation.py MEMORY_PROJECTS order, and its NOTHING_RE text. Both are COPIES of
 # that file's constants, so the self-test reads that file and fails the day either copy drifts from it.
 $KcMemoryProjects = @('C--Codex-ThriftyCrew', 'C--Codex')
@@ -1324,24 +1321,6 @@ if ($SelfTest) {
       queue_id = 'q1'; classification = 'wrong-product'; status = 'deferred-budget'; evidence = @('lemons | Sam''s | soda row')
       root_cause = 'not diagnosed this run - deferred on budget'; resolution_note = 'deferred: the money lane was full; due tomorrow' }) }
   _Case 'CLEAN TWIN: a deferred-budget code item needs no root_fix, proof or rollback' $deferred 0 $null
-  $ldRoot = Join-Path $env:TEMP ('vtp-ledger-' + [guid]::NewGuid().ToString('N'))
-  New-Item -ItemType Directory -Path $ldRoot -ErrorAction Stop | Out-Null
-  try {
-    $ld = Join-Path $ldRoot 'cost-ledger.jsonl'
-    # a TYPED row, even one that copies the new plans field, is not a derived row: only schema 2 counts
-    [IO.File]::WriteAllText($ld, '{"date":"2026-09-25","plan":"plan-2026-09-25.json","plans":["plan-2026-09-25.json"],"agent":"triage-reviewer","tokens":317364}' + "`n", (New-Object Text.UTF8Encoding($false)))
-    $script:ran++
-    $c1 = Test-PlanCostLedger $ld 'plan-2026-09-25.json'
-    if (-not $c1.ok) { Write-Output 'ok    MUST FIRE: a plan named only by a typed row (final-context tokens, no schema 2) is not on the ledger' }
-    else { Write-Output ('FAIL  MUST FIRE: old-schema row accepted: ' + $c1.why); $script:fail++ }
-    [IO.File]::AppendAllText($ld, '{"schema":2,"agent_id":"orchestrator:s1","plans":["plan-2026-09-25.json"],"cost_units":582}' + "`n", (New-Object Text.UTF8Encoding($false)))
-    $script:ran++
-    $c2 = Test-PlanCostLedger $ld 'plan-2026-09-25.json'
-    $c3 = Test-PlanCostLedger $ld 'plan-2026-09-25-2.json'
-    if ($c2.ok -and -not $c3.ok) { Write-Output 'ok    CLEAN TWIN: a schema-2 row naming the plan puts it on the ledger, and names no other plan' }
-    else { Write-Output ('FAIL  CLEAN TWIN: ledger row c2=' + $c2.ok + ' c3=' + $c3.ok); $script:fail++ }
-  } finally { Remove-Item -LiteralPath $ldRoot -Recurse -Force -ErrorAction SilentlyContinue }
-
   # --- W4 (2026-09-25): an estimate under the median of finished items of its classification WARNS ----------------
   # History, relative to 2026-09-25: infra 30, 40, 50 (median 40) inside 21 days, plus infra 1000 on 2026-09-01, which
   # is outside it and would move the median to 45 if it were read. 'other' has only 2 finished items: no history.
@@ -1368,6 +1347,7 @@ if ($SelfTest) {
     else { Write-Output ('FAIL  MUST NOT FIRE: estimate-history thin  got: ' + (@($wOt) -join ' | ')); $script:fail++ }
   } finally { Remove-Item -LiteralPath $ehRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
+  Invoke-ClosingChecksSelfTest   # grocery\validate-triage-plan\closing-checks.ps1: the cost ledger (2) and the fix on main (8)
   # BLIND: zero items proves nothing
   _Case 'zero items reports BLIND (rc 3)' ([pscustomobject]@{ queue_ids_seen=@(); ship_sequence=@('x'); items=@() }) 3 'ZERO items'
   # MUST-FIRE: a comma-joined -OpenIds (what `powershell -File` does to a [string[]]) must be split, not
@@ -1379,7 +1359,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 108  # +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
+  $expectedRan = 116  # +8 on 2026-09-28: the fix is on main (Test-PlanLanded); +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }
@@ -1470,6 +1450,8 @@ if ($Closing -and $bud.judged) {
   $ledgerSaid = $cl.why
   if (-not $cl.ok) { $budExtra += $cl.why }
 }
+$landChk = if ($Closing) { Invoke-ClosingLandedCheck -Plan $Plan -Doc $doc -PlanLeaf $planLeaf -PreLanding:$PreLanding -NoFetch:$NoFetch } else { @{ problems = @(); warnings = @(); said = '' } }
+$budExtra += @($landChk.problems)
 if ($budExtra.Count) { $res.problems = @($res.problems) + $budExtra; if ($res.rc -eq 0) { $res.rc = 2 } }
 $items = @($doc.items)
 $mode = if ($Closing) { 'closing' } else { 'handoff' }
@@ -1481,6 +1463,8 @@ if ($bud.judged) {
 } else {
   Write-Output ("  BUDGET: not judged (dated before " + $BudgetCutoff + ")")
 }
+if ($landChk.said) { Write-Output ("  LANDED: " + $landChk.said) }
+foreach ($lw in @($landChk.warnings)) { if ($lw) { Write-Output ('  WARN  ' + $lw) } }
 if ($res.kc -and $res.kc.judged) {
   $kcVia = if ($res.kc.via -eq 'rca_document') { 'through its rca_document' } elseif ($res.kc.via) { [string]$res.kc.naming + ' of ' + $res.kc.entries + ' entr' + $(if ($res.kc.entries -eq 1) { 'y' } else { 'ies' }) + ' name something' } else { 'absent' }
   Write-Output ("  KNOWLEDGE CONSULTED: judged (dated on or after " + $KcCutoff + "), " + $kcVia)
@@ -1521,7 +1505,7 @@ if ($residuals.Count) {
   }
 }
 if ($res.rc -eq 0) {
-  if ($Closing) { Write-Output '  PLAN CLOSED OK - every item has an outcome and every open residual has an owner that resolves'; exit 0 }
+  if ($Closing) { Write-Output ('  PLAN CLOSED OK - every item has an outcome and every open residual has an owner that resolves' + $(if ($PreLanding) { ' (landing NOT judged: -PreLanding)' } else { '' })); exit 0 }
   Write-Output '  PLAN OK - complete, hand it to the developer'; exit 0
 }
 if ($Closing) { Write-Output ("  NOT CLOSED (" + @($res.problems).Count + " problem(s)) - do not report this run done until each is answered:") }

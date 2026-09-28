@@ -167,7 +167,8 @@ capture builders), or "none". The gate requires the line. When step 8 lands, thi
    free sequence number for the day, with `"lane": "weekly"` and `"round": 1`, one item per id, the same
    fields the README asks of any plan. Run the handoff gate on it yourself
    (`validate-triage-plan.ps1 -Plan <plan> -OpenIds <the ids>`, exit 0), then implement, then the closing
-   gate (`-Closing`, exit 0).
+   gate (`-Closing -PreLanding`, exit 0: you never push, and closing without `-PreLanding` refuses a `shipped_commit`
+   that is not on origin/main; the orchestrator's closing after `triage-land.ps1` judges that, 2026-09-28).
 
 ## RESIDUALS: THE CHEAPEST HONEST OWNER
 

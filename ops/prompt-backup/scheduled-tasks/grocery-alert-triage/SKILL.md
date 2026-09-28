@@ -385,7 +385,7 @@ blocking guard. Every other code item goes to the OPS lane. When in doubt, money
   or matching) goes to the money lane in this run, inside the money ceiling.
 Tell both that every residual in `leaves_open` gets the CHEAPEST HONEST owner (watch, weekly-lane queue item,
 or ruling, per COST CONTROLS) before it closes a single queue item, and that
-`validate-triage-plan.ps1 -Plan <plan> -Closing` must exit 0 first. After each spawn run `triage-cost.py --append
+`validate-triage-plan.ps1 -Plan <plan> -Closing -PreLanding` must exit 0 first (they never push, so they skip the landed check). After each spawn run `triage-cost.py --append
 --plan <plans>` (COST CONTROLS); `-Closing` refuses a plan dated 2026-09-25 or later that no derived row names.
 
 STEP 3.9 - LAND THE RUN ONCE, WITH NO MODEL WAITING ON IT (2026-09-24). After STEP 3 and, when due, STEP 3.5:
@@ -472,7 +472,9 @@ STEP 5 - VERIFY THE RUN, DO NOT TAKE ITS WORD FOR IT:
   output (out\*, board.json, feed, logs) is the pipeline's, not ours.
 - HEAD == origin/main.
 - `powershell -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing`
-  exits 0 for EVERY plan this run wrote, and its LEAVES OPEN lines go into the report VERBATIM with their
+  exits 0 for EVERY plan this run wrote, run AFTER STEP 3.9's `triage-land.ps1` reported `outcome=landed`: since 2026-09-28
+  closing requires each done or deviated item's `shipped_commit` on origin/main (or its rebased patch), so land
+  through push-main before closing, never after (2026-09-27: 8 fixes closed done on a branch that never landed). Its LEAVES OPEN lines go into the report VERBATIM with their
   owners. Never summarise them, and never write "nothing else is waiting" over them. Founding case
   2026-09-09: four items shipped a root fix covering a slice of their own root cause, the residuals sat in
   `deviation` prose, and this orchestrator's report called all eight closed. Brad found it by asking.

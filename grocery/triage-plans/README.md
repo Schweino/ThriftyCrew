@@ -320,7 +320,10 @@ developer and before a run reports itself done. It reads the same plan against `
 refuses an item still `planned` (dropped, not finished) and a `done` or `deviated` item whose `leaves_open`
 is not "nothing" but names no owner that resolves. It prints every residual verbatim so the report copies
 them instead of summarising them. The handoff gate stops a bad plan reaching the developer; this one stops
-a partial fix being reported as a whole one, which is what the 2026-09-09 report did.
+a partial fix being reported as a whole one, which is what the 2026-09-09 report did. Since 2026-09-28 it also
+refuses a `done` or `deviated` item whose `shipped_commit` is not on origin/main (a rebased patch counts; a value naming
+no hash is judged by origin/main's copy of the plan), so the run lands through `triage-land.ps1` (push-main) before
+it closes; a developer's own pre-landing run passes `-PreLanding`.
 
 **Both modes read the queue (2026-09-10, Brad's ruling 5, RETURNS ARE FAILURES).** Handoff mode now reads
 `triage-queue.json` (or `-QueueFile`) too, and an unreadable queue is BLIND (exit 3) there exactly as under
