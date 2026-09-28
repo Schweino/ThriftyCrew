@@ -1470,7 +1470,7 @@ $shipServed = $runDownstream -and $verdict.ship_ok
 if ($runDownstream -and -not $shipServed) {
   $why = $verdict.why
   Write-Output ("publish: staging INPUTS only - $why, so public\** and the recipe files are NOT shipped. Readers keep the last good board.")
-  Invoke-ChainVerdictWithheldLane -Verdict $verdict -Kind $Kind -TodayS $todayS   # STALE-INPUTS books its own lane 'verdict-stale' and pages as itself; the rest stay 'guards-blocked' (f50b7a)
+  Invoke-ChainVerdictWithheldLane -Verdict $verdict -Kind $Kind -TodayS $todayS -LogPath "grocery\out\logs\capture-run-$Kind-$todayS.log"   # STALE-INPUTS books its own lane 'verdict-stale' and pages as itself; the rest stay 'guards-blocked' (f50b7a)
 }
 $paths = @($inputPaths + $(if ($shipServed) { $servedPaths } else { @() })) | Where-Object { Test-Path (Join-Path $repo $_) }
 Write-RunStatus 'publishing'
