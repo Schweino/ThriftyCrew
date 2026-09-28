@@ -365,7 +365,7 @@
       "freshness": "measured 2026-09-28 about 10:35 against origin/main 3451de927",
       "lane": "money",
       "est_tool_calls": 60,
-      "status": "deviated",
+      "status": "done",
       "premise_verified": true,
       "deviation": "No code in this spawn: design W1..W4 had already LANDED on origin/main before this plan was generated (10:40), as 58136b287 (09:41) and f2e6f1bd8 (10:03). What landed: W1, publish-deals-page.ps1 -BuildOnly runs the build half (build-deals-page, which writes public/board.json and public/price-history.json) with no Ghost call, and the -DeferPost branch calls Invoke-DeferPostBuild (grocery/publish-outcome-lib.ps1) BEFORE it hashes board_sha256. W2: they chose determinism over a reuse path (four builds over comparison-2026-09-28 gave one SHA-256), and an input that moves between the two runs is held by the served check, which leaks and never mis-posts. W3: the ship summary names the deferred outcome. W4: grocery/test-defer-post.ps1. Coordination with d70062 needed no change: capture-run's stale-code check takes its artifacts from the served paths the commit changed ($servedPaths), so board.json and price-history.json enter it automatically on every run that now builds them, and 92bd45c81's real-writer producer sets keep that from paging on unrelated mid-run pushes. Re-verified here: test-defer-post -SelfTest exit 0 'SELF-TEST PASS (3 of 3)'; publish-deals-page -SelfTest exit 0 'SELFTEST PASS ... -BuildOnly exits after the build and before the served check'.",
       "shipped_commit": "58136b287 f2e6f1bd8",
@@ -376,7 +376,8 @@
       "actual_tool_calls": 14,
       "full_suite": "deferred-to-land",
       "republished": false,
-      "leaves_open_occurrences_window": "held-after-ship posts since f2e6f1bd8 landed, 2026-09-28 10:03 to spawn time; no daily chain has run on the fix yet"
+      "leaves_open_occurrences_window": "held-after-ship posts since f2e6f1bd8 landed, 2026-09-28 10:03 to spawn time; no daily chain has run on the fix yet",
+      "status_note": "Orchestrator 2026-09-28: re-labelled deviated -> done. The root fix (design/PLAN-deferpost-builds-board-2026-09-28.md W1-W4) is on origin/main as 58136b287 and f2e6f1bd8, landed before this plan was written; nothing of the class is unfinished beyond the watch residual. 'deviated' made triage-due list it as RESUME, which would have bought tomorrow a spawn to re-measure a landed fix."
     },
     {
       "queue_id": "discovered:planned-done-never-closed-2026-09-28",
