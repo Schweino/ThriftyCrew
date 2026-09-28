@@ -56,10 +56,12 @@ $script:LANES = @('hunt','select','extract','map','price','write','qa','audit','
 $script:PRICES = @{
   'claude-fable-5-1'  = @{ inp=10.0; out=50.0; cwrite=12.50; cread=0.25 }   # cread is a PUBLISHED override, not 0.1x
   'claude-fable-5'    = @{ inp=10.0; out=50.0; cwrite=12.50; cread=1.00 }
+  'claude-opus-5-5'   = @{ inp= 4.0; out=20.0; cwrite= 5.00; cread=0.20 }   # cread is a PUBLISHED override, not 0.1x; read 2026-09-28
   'claude-opus-5'     = @{ inp= 5.0; out=25.0; cwrite= 6.25; cread=0.50 }
   'claude-opus-4-8'   = @{ inp= 5.0; out=25.0; cwrite= 6.25; cread=0.50 }
   'claude-opus-4-7'   = @{ inp= 5.0; out=25.0; cwrite= 6.25; cread=0.50 }
   'claude-opus-4-6'   = @{ inp= 5.0; out=25.0; cwrite= 6.25; cread=0.50 }
+  'claude-sonnet-5-5' = @{ inp= 2.0; out=10.0; cwrite= 2.50; cread=0.20 }   # read 2026-09-28
   'claude-sonnet-5'   = @{ inp= 2.0; out=10.0; cwrite= 2.50; cread=0.20 }
   'claude-sonnet-4-6' = @{ inp= 3.0; out=15.0; cwrite= 3.75; cread=0.30 }
   'claude-haiku-4-5'  = @{ inp= 1.0; out= 5.0; cwrite= 1.25; cread=0.10 }
