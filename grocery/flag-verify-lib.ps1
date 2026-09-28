@@ -703,6 +703,7 @@ function Get-TcFlagQuarantineCells($Ledger, $Board) {
 }
 
 # The wow wording sanity-check.ps1 writes when the cheapest store's product itself changed and nothing explains the move.
+# Fixtured by test-flag-pending-pair.ps1 (founding cases: the Breadstix frozen-pizza crown and the Yolite raspberries).
 $script:TcNewCrownWowNeedle = 'unexplained: a NEW price at the cheapest store'
 
 function Get-TcPendingPairCells($Ledger, $Board, $Flags) {
