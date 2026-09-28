@@ -12543,7 +12543,14 @@
                                                                "price":  "$9.48",
                                                                "size":  "41.947 oz",
                                                                "verified":  "2026-09-23 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/olives/finest_reserve_greek_stuffed_green_garlic_olives_10_oz/p/1764405684715149032",
+                                                           "name":  "Finest Reserve Greek Stuffed Green Garlic Olives 10 Oz",
+                                                           "price":  "$5.49",
+                                                           "size":  "10 oz",
+                                                           "verified":  "2026-09-28 DERIVED from the price row (same record the board priced)"
+                                                       }
                                    },
                   "green-onions":  {
                                        "commodity":  "Green Onions",
@@ -22628,13 +22635,6 @@
                                                       "name":  "That\u0027s Smart Chicken Stuffing Mix",
                                                       "verified":  "2026-08-29 Hy-Vee search API (storeId 1466), price from the row the board priced"
                                                   },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72709-kraft-stove-top-everyday-stuffing-mix-for-chicken-12-oz",
-                                                       "name":  "Kraft Stove Top Everyday Stuffing Mix for Chicken",
-                                                       "price":  "$4.99",
-                                                       "size":  "12 oz",
-                                                       "verified":  "2026-08-29 DERIVED from the price row (same record the board priced)"
-                                                   },
                                        "Aldi":  {
                                                     "url":  "https://www.aldi.us/store/aldi/products/18647754-chef-s-cupboard-chicken-stuffing-mix-6-oz",
                                                     "name":  "Chef S Cupboard Chicken Stuffing Mix 6 OZ",
@@ -22669,7 +22669,14 @@
                                                                "price":  "$8.98",
                                                                "size":  "24 oz",
                                                                "verified":  "2026-09-28 DERIVED from the price row (same record the board priced)"
-                                                           }
+                                                           },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72698-pepperidge-farm-cubed-sage-onion-stuffing-12-oz",
+                                                       "name":  "Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
+                                                       "price":  "$3.79",
+                                                       "size":  "12 oz",
+                                                       "verified":  "2026-09-28 DERIVED from the price row (same record the board priced)"
+                                                   }
                                    },
                   "sugar":  {
                                 "commodity":  "Sugar",

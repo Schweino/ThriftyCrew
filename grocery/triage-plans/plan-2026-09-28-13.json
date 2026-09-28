@@ -1,6 +1,6 @@
 {
   "generated": "2026-09-28T18:10:00",
-  "round": 1,
+  "round": 2,
   "board_week": "comparison-2026-09-28 (built 17:28), flagged-2026-09-28.json 17:28, match-worklist.json 08:39",
   "lane": "ops",
   "scope_note": "RETURN items of 2026-09-28 (ops lane, continuing session): three ids triage-due.ps1 routed straight to the developer, each seeded with a committed prior item in plan-2026-09-25-6.json and re-measured against today's board before anything was changed. No reviewer diagnosis.",
@@ -9,7 +9,7 @@
     "2026-09-26-7ed369",
     "2026-09-27-c744ba"
   ],
-  "routing_artifact": "",
+  "routing_artifact": "plan-2026-09-28-13.routing.json",
   "knowledge_consulted": [
     "dispatch: machinery grocery/price-table-lib.ps1, grocery/discovery-lib.ps1, graph/agentic/verifier.py (none bore on these three)",
     "searched \"page once alert only when board changes\" (knowledge-search --estate): reliability-craft/MAP.md section 4 'An alert is not a check that fired' (alert only where a human has to act): used for 7ed369, a refused row that cannot move a cell is a log line, not a page",
@@ -116,33 +116,42 @@
       },
       "blast_radius": {
         "measured_as": "routing",
-        "measured_by": "match-worklist.json 08:39 against comparison-2026-09-28",
-        "affected_now": 10,
-        "risk": "none on the board: no decided name is on a cell; an ad-line verdict only takes the row off the undecided list",
-        "cell_effects": []
+        "measured_by": "audit-match-soundness before (MOVED=0 DROPPED=0) and after (MOVED=6 DROPPED=0) plus apply-coverage-batch crown diff; frozen in plan-2026-09-28-13.routing.json",
+        "affected_now": 7,
+        "risk": "two new cells, no crown change, theft check OK",
+        "cell_effects": [
+          {
+            "commodity": "stuffing-mix",
+            "store": "Fareway",
+            "before": "no cell",
+            "after": "$3.79 / 12 oz (Pepperidge Farm Cubed Sage & Onion Stuffing)"
+          }
+        ]
       },
       "proof": {
-        "guard_or_fixture": "resolve-match-worklist.ps1 -Decide exit 0 for each of the 10 keys; grocery/match-verdicts.json +130 lines, LF",
-        "must_fire_case": "not built: no code changed",
-        "clean_twin": "not built: no code changed",
+        "guard_or_fixture": "apply-coverage-batch -FromWorklist 5: crown changes 0, coverage +2 -0, theft check OK, 0 tile faults on batch commodities (12 pre-existing elsewhere, same 12 before the edit); audit-match-soundness -Accept exit 0 after reading the 6 MOVED names line by line, all intended",
+        "must_fire_case": "not built: rule-data change through the gated batch, no code changed",
+        "clean_twin": "negative controls routed after the change: 'Bananas, each' -> bananas, 'Yellow Onions 3 lb bag' -> onions",
         "fixture_occurrences": [
           "2026-09-22-2dae07",
           "2026-09-23-b2850b",
           "2026-09-27-c744ba"
         ]
       },
-      "rollback": "revert the grocery/match-verdicts.json hunk",
+      "rollback": "revert the grocery/commodities.json hunks (onions, flour excludes), grocery/match-verdicts.json hunks and grocery/out/audit/match-baseline.json",
       "freshness": "measured 2026-09-28 against match-worklist.json 08:39",
-      "leaves_open": "16 contested arrivals undecided: 13 of 2026-09-27 and 3 of 2026-09-28 (crackers release, Hy-Vee mixed vegetables, Pero green beans); releases edit grocery/commodities.json (money lane); the class returns each ad week until the per-product split",
-      "leaves_open_occurrences": 16,
-      "leaves_open_followup": "2026-09-27-c744ba",
-      "status": "bounced",
-      "premise_verified": "yes, re-measured: still live, 13 new contested names today",
-      "deviation": "decided the 10 ad-line arrivals in this lane (match-verdicts.json is not on THE LINE) before bouncing the rest",
+      "leaves_open": "3 contested arrivals of 2026-09-27 undecided (Del Monte Peas And Carrots, Muscle Milk shake, New York Bakery focaccia): each needs a two-rule fix, none on a cell; the ad-line class returns each ad week until Brad's Q-adline-two-products",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "2026-09-28-184b1d",
+      "status": "deviated",
+      "premise_verified": "yes, re-read match-worklist.json 08:39 on 2026-09-28 in round 2: the same 16 contested arrivals stood undecided (13 of 09-27, 3 of 09-28); none named on a cell of comparison-2026-09-28",
+      "deviation": "Round 2 (money lane). Decided 13 of 16: 9 confirm (Del Monte teriyaki-style green beans, Gatorade protein bar, Kodiak oatmeal, Kraft garlic cheddar, Kraft pesto mac, Oikos yogurt, Sartori sriracha cheddar, Hy-Vee mixed vegetables 24 oz as frozen, Pero fresh green beans), 1 moot (Screamin' Sicilian breadstix: no longer contested, routes to nothing), 2 release applied through apply-coverage-batch -FromWorklist (onions exclude \\bstuffing, flour exclude \\bcracker), 1 already confirmed in round 1 (Quaker). 3 left open: releasing each lands the product on another wrong commodity (simulated). The classifier suggested releasing the teriyaki green beans to teriyaki-sauce; that suggestion was wrong and is confirmed the other way.",
       "shipped_commit": "fd28b2f32",
       "close_disposition": "confirmed",
-      "resolution_note": "Still live: 13 new contested names today. Ten are single ad lines naming several products ('blackberries or raspberries') and are decided as ad-line here; none sits on a board cell. Three new plus the 13 from 09-27 need a rule release or a reading, bounced to the money lane.",
-      "actual_tool_calls": 6
+      "resolution_note": "13 of the 16 undecided product-matching questions are settled. Stuffing mix and sourdough crackers now reach their own commodities, which adds a Fareway stuffing-mix price. Three (canned peas and carrots, a Muscle Milk shake, a frozen focaccia) would only move from one wrong commodity to another, so they go to the weekly lane with the measurement.",
+      "actual_tool_calls": 34,
+      "knowledge_consulted": "searched 'unattended rule change executor schedule': agent-workflow-craft/agent-architecture.md (the executor is code behind a validated plan); brief's gr-04, gr-05 and discovery-lib applied as given",
+      "full_suite": "deferred-to-land"
     },
     {
       "queue_id": "2026-09-26-564dc6",
@@ -178,15 +187,28 @@
       },
       "blast_radius": {
         "measured_as": "routing",
-        "measured_by": "match-worklist.json 08:39, coverage rows",
-        "affected_now": 9,
-        "risk": "none from this lane: nothing changed",
-        "cell_effects": []
+        "measured_by": "audit-match-soundness before (MOVED=0 DROPPED=0) and after (MOVED=6 DROPPED=0) plus apply-coverage-batch crown diff; frozen in plan-2026-09-28-13.routing.json",
+        "affected_now": 7,
+        "risk": "two new cells, no crown change, theft check OK",
+        "cell_effects": [
+          {
+            "commodity": "green-olives",
+            "store": "Family Fare",
+            "before": "no cell",
+            "after": "$5.49 / 10 oz (Finest Reserve Greek Stuffed Green Garlic Olives)"
+          },
+          {
+            "commodity": "stuffing-mix",
+            "store": "Fareway",
+            "before": "no cell",
+            "after": "$3.79 / 12 oz (Pepperidge Farm Cubed Sage & Onion Stuffing)"
+          }
+        ]
       },
       "proof": {
-        "guard_or_fixture": "grocery/check-ad-cycles.ps1 COVERAGE-GAP-ALERT region (unchanged)",
-        "must_fire_case": "not built in this lane (bounced)",
-        "clean_twin": "not built in this lane (bounced)",
+        "guard_or_fixture": "apply-coverage-batch -FromWorklist 5: crown changes 0, coverage +2 -0, theft check OK, BATCH ACCEPTED (exit 1 only for 12 pre-existing tile faults elsewhere, the same 12 as its baseline); 5 keys recorded applied; audit-match-soundness -Accept exit 0",
+        "must_fire_case": "not built: rule-data change, no code changed",
+        "clean_twin": "not built: rule-data change, no code changed",
         "fixture_occurrences": [
           "2026-08-31-ad3b81",
           "2026-09-01-4a481e",
@@ -199,18 +221,27 @@
           "2026-09-26-564dc6"
         ]
       },
-      "rollback": "nothing to roll back",
+      "rollback": "revert the grocery/commodities.json hunks (bananas, honey excludes; green-olives include), grocery/match-verdicts.json, grocery/product-urls.json and grocery/out/audit/match-baseline.json",
       "freshness": "measured 2026-09-28 against match-worklist.json 08:39",
-      "leaves_open": "9 coverage rows undecided (6 of 09-27, 3 of 09-28), each a commodities.json widen or release for the money lane; the class returns until something runs apply-coverage-batch -FromWorklist",
-      "leaves_open_occurrences": 9,
-      "leaves_open_followup": "Q-coverage-worklist-executor",
-      "status": "bounced",
-      "premise_verified": "yes, re-measured: its own rows are gone, the condition is live with 9 other rows",
-      "deviation": null,
+      "leaves_open": "1 coverage row undecided (canned-pears@Fareway, 'Fareway Diced No Sugar Added Pears', no size to tell a can from fruit cups); and nothing runs apply-coverage-batch -FromWorklist until Brad rules Q-coverage-worklist-executor",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-28-184b1d",
+      "status": "deviated",
+      "premise_verified": "yes, re-read match-worklist.json 08:39 on 2026-09-28 in round 2: the same 9 coverage rows stood undecided; the verdict ledger shows apply-coverage-batch -FromWorklist ran only on 2026-09-23 (6 outcomes), never since",
+      "deviation": "Round 2 (money lane). Decided 8 of 9: stuffing-mix@Fareway, green-olives@Family Fare and banana-peppers@Hy-Vee applied through apply-coverage-batch -FromWorklist 5 (with Lay's Honey Barbecue chips, a release decided 2026-09-25 that had waited for the executor); canned-mixed-vegetables@Hy-Vee, walnuts@Fareway and fresh-basil@Hy-Vee confirmed (the claimer is right); fresh-basil@Sam's Club moot (a charcuterie pack); coleslaw-mix@Fareway ad-line. The batch ran from a scratch copy of the worklist without one stale key (Brianna's cilantro lime, already shipped in 52d262281, recorded applied), because Get-WorklistBatch does not skip ledger-decided worklist rows until the worklist is rebuilt. The executor question is written for Brad, not wired: an unattended run would change the file every price depends on unread, and any move holds the next daily board until a person accepts it.",
       "shipped_commit": null,
       "close_disposition": "confirmed",
-      "resolution_note": "Still live: 9 coverage rows stand today, none decided. Every repair is a commodities.json rule, and the step the page says applies them (apply-coverage-batch -FromWorklist) has no runner, so the type returns daily. Bounced to the money lane; the runner is a question for Brad.",
-      "actual_tool_calls": 6
+      "resolution_note": "8 of the 9 missing-store rows are settled: stuffed green olives now price at Family Fare, stuffing mix at Fareway, and banana peppers stop filing under bananas. One Fareway pears row needs a size reading first. The step that should apply these fixes has had no runner since 09-23; whether to schedule it is now a question for Brad with a recommendation.",
+      "actual_tool_calls": 18,
+      "open_questions_for_brad": [
+        {
+          "id": "Q-coverage-worklist-executor",
+          "file": "design/ready-for-brad/Q-2026-09-28-coverage-worklist-executor.md",
+          "question": "Should apply-coverage-batch -FromWorklist run on a schedule unattended (A), stay a hand step with a named owner (B), or run weekly as a dry run that pages the money lane (C, recommended)?"
+        }
+      ],
+      "knowledge_consulted": "searched 'unattended rule change executor schedule': agent-workflow-craft/agent-architecture.md (the executor is code behind a validated plan), which supports option C",
+      "full_suite": "deferred-to-land"
     }
   ]
 }

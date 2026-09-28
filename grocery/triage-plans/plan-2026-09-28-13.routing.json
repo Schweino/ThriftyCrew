@@ -1,0 +1,37 @@
+{
+  "plan": "plan-2026-09-28-13.json",
+  "board_week": "comparison-2026-09-28, rebuilt by apply-coverage-batch 2026-09-28 ~18:15 under the rules before and after the batch",
+  "corpus": "ONE corpus: audit-match-soundness.ps1's own routed set, 20,945 names seen today plus 18,135 carried forward (absent-not-gone), routed BEFORE (MOVED=0 DROPPED=0 new-contested=15) and AFTER (MOVED=6 DROPPED=0 new-contested=13) the batch. The board-level measurement is apply-coverage-batch's crown diff and coverage delta over the rebuilt comparison-2026-09-28.",
+  "harness": "grocery/audit-match-soundness.ps1 (blob 3fcbb75f524dd22df3d1c63677f0f5c34414351e) over grocery/commodities.json at blob 7976f046c84c8c363ac0c63af2d9a33d7fecae3f (before) and the batch's working-tree file hash-object c05b1afff450cab30a16bfe02f35597eec86088e (after); grocery/apply-coverage-batch.ps1 (blob 535d3fc9490f4d0c91577d8ecfb0b3a218006777) -FromWorklist 5; controls routed with New-CommodityMatcher/Resolve-CommodityDetail from grocery/match-lib.ps1 (blob d69a4823d6e6fa906bd0243728f2a08260601736) in a scratch one-off, not committed.",
+  "rule_changes": [
+    { "commodity": "onions", "kind": "exclude", "pattern": "\\bstuffing", "key": "contested|onions||Pepperidge Farm Cubed Sage & Onion Stuffing" },
+    { "commodity": "flour", "kind": "exclude", "pattern": "\\bcracker", "key": "contested|flour||Flour & Forge sourdough crackers, 6.5 oz., $5.99" },
+    { "commodity": "bananas", "kind": "exclude", "pattern": "\\bpepper", "key": "coverage|banana-peppers|Hy-Vee|Mezzetta Sweet Banana Peppers, Mild" },
+    { "commodity": "honey", "kind": "exclude", "pattern": "\\bpotato\\w*\\s+chip", "key": "contested|honey||Lay's Honey Barbecue Potato Chips (decided 2026-09-25, plan-2026-09-25-8)" },
+    { "commodity": "green-olives", "kind": "include", "pattern": "\\bstuffed.{0,30}\\bgreen.{0,30}\\bolive", "key": "coverage|green-olives|Family Fare|Finest Reserve Greek Stuffed Green Garlic Olives 10 Oz" }
+  ],
+  "names_routed": 39080,
+  "moved_count": 7,
+  "moved": [
+    { "name": "Mezzetta Sweet Banana Peppers, Mild", "before": "bananas", "after": "banana-peppers", "intended": true },
+    { "name": "Broken Taco Mild Banana Peppers", "before": "bananas", "after": "banana-peppers", "intended": true, "note": "same class as the decided key; banana peppers are never bananas" },
+    { "name": "Pepperidge Farm Cubed Sage & Onion Stuffing", "before": "onions", "after": "stuffing-mix", "intended": true },
+    { "name": "Pepperidge Farm Sage & Onion Cubed Stuffing", "before": "onions", "after": "stuffing-mix", "intended": true },
+    { "name": "Lay's Honey Barbecue Potato Chips", "before": "honey", "after": "potato-chips", "intended": true },
+    { "name": "Flour & Forge sourdough crackers, 6.5 oz., $5.99", "before": "flour", "after": "crackers", "intended": true },
+    { "name": "Delallo Garlic & Jalapeno Stuffed Green Greek Olives, 5.8 Oz", "before": "<unmatched>", "after": "green-olives", "intended": true, "note": "carried re-route reviewed at the -Accept" }
+  ],
+  "positive_control": { "name": "Flour & Forge sourdough crackers, 6.5 oz., $5.99", "expected": "crackers", "observed": "crackers" },
+  "negative_controls": [
+    { "name": "Bananas, each", "expected": "bananas", "observed": "bananas" },
+    { "name": "Yellow Onions 3 lb bag", "expected": "onions", "observed": "onions" }
+  ],
+  "variants_tried": "one rule set; three further releases (Del Monte Peas And Carrots from carrots, Muscle Milk shake from milk, New York Bakery focaccia from garlic) were simulated and NOT shipped: each lands on another wrong commodity (frozen-vegetables, cookies, pesto)",
+  "blind": "none: soundness routed every name with no could-not-look",
+  "cell_effects_estimated": [
+    { "commodity": "stuffing-mix", "store": "Fareway", "before": "no cell", "after": "Pepperidge Farm Cubed Sage & Onion Stuffing, $3.79, 12 oz" },
+    { "commodity": "green-olives", "store": "Family Fare", "before": "no cell", "after": "Finest Reserve Greek Stuffed Green Garlic Olives 10 Oz, $5.49" }
+  ],
+  "cells_checked_unchanged": "crown changes 0; banana-peppers 5, bananas 7, crackers 7, flour 7, honey 7, onions 7, potato-chips 7 cells before and after; theft check OK (no other commodity lost a cell or was re-priced)",
+  "caveat": "12 pre-existing tile-integrity faults on other commodities (the same 12 before the edit) keep the board not publishable until the daily chain heals them; the batch did not publish."
+}

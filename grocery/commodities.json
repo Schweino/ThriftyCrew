@@ -3061,7 +3061,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\bpepper"
                     ]
     },
     {
@@ -4692,7 +4693,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\bstuffing"
                     ]
     },
     {
@@ -13962,7 +13964,8 @@
                         "\\bsausages?\\b",
                         "\\bcascade\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bcracker"
                     ]
     },
     {
@@ -15248,7 +15251,8 @@
                         "\\bhoney\\s+crisp\\b",
                         "\\bhoney\\s+stinger\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bpotato\\w*\\s+chip"
                     ]
     },
     {
@@ -52624,7 +52628,8 @@
                         "green\\s+olives",
                         "manzanilla",
                         "spanish\\s+olives",
-                        "pimi?ento[\\s-]?stuffed"
+                        "pimi?ento[\\s-]?stuffed",
+                        "\\bstuffed.{0,30}\\bgreen.{0,30}\\bolive"
                     ],
         "exclude":  [
                         "tuscan\\s+garden\\s+manzanilla",
