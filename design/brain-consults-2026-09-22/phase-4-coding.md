@@ -253,6 +253,22 @@ of 62 contexts (8%); M3 main 0 of 2 and workflow 1 of 6 against the 25% bar; wou
 09-24. Refusals are Brad's call on 3 days of remind data, which the one-time task d3-first-write-remind-review-0928
 reports on 2026-09-28.
 
+**2026-09-28, the 3-day remind read (task d3-first-write-remind-review-0928; mode left at remind).** `first-write-report.py`
+exit 0, `FIRST-WRITE-REPORT-COMPLETE contexts=186 rows=5767 excluded=3 blind=0`, split at the mode flip (the last shadow row
+t=1790329634, the first remind row t=1790329676, 2026-09-25 04:47 local) by driving its own `run()` with an epoch cut:
+M1b shadow 5 of 62 (8%, the 09-25 figure reproduced), remind 6 of 124 (5%); the reminder did not raise it (one variant,
+no repeat). M3 under remind: main 2 of 8 (25%) and agent 7 of 28 (25%) HOLD at the bar, workflow 0 of 0 NOT JUDGED.
+Would-deny contexts per day under remind: 52, 41, 23, and 4 on 09-28 up to 10:00; median over the whole log 30. Bar (c)
+6 of 6 days. Bar (b), first read: the deterministic 50-row draw (`--draw 50`, all shadow rows) hand-labelled by this
+session: out-of-scope 3 of 50 (rows 9, 10, 23: a Bash `cd` into a temp dir then a write, resolved against the checkout
+root), 4 of 50 if row 47 (a byte-restored mutation probe on a brain skill, attributed to thriftycrew) counts, against at
+most 5 of 50: HELD; the labels are not yet a committed jsonl. W3.3 re-read, bars stated before the run: null cases at
+least 5 of 16, HELD at 10 of 16 (all ten 09-25 relevant cases still return the section named then; the six others not
+re-judged); machinery hit@3 at least 9 of 12, HELD at 9 of 12 again, exactly at the bar, same misses mp-01, mp-08, mp-12
+(index rebuilt first, `MACHINERY-INDEX-COMPLETE entries=325 gates=70 blind=0`; both `ESTATE-BARS-COMPLETE broken=0 rc=0`).
+Recommendation to Brad: switch to deny, after the Bash temp-dir resolution is fixed, with the 14-day keep-or-revise
+bars above as the check.
+
 **Traps.**
 - Keying the marker on session_id alone lets one parent's search back every subagent.
 - Writing the marker into shared state loses it.
