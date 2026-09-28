@@ -331,8 +331,8 @@
         ],
         "exact_change": "per the design plan: W1 run the build half of publish-deals-page into public\\ before capture-run commits; W2 the later publish-deals-page names the same board it finds at the edge"
       },
-      "leaves_open": "the reviewer's d70062/c98dec may reshape the fix; confirm before building",
-      "leaves_open_occurrences": 1,
+      "leaves_open": "the fixed road has not run in production yet: the first -DeferPost daily chain on it is 2026-09-29; 0 recurrences since the fix",
+      "leaves_open_occurrences": 0,
       "prior_closes": [
         "2026-09-23-80f302"
       ],
@@ -365,12 +365,18 @@
       "freshness": "measured 2026-09-28 about 10:35 against origin/main 3451de927",
       "lane": "money",
       "est_tool_calls": 60,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null,
-      "resolution_note": "Money lane, not yet worked: the deferred-post path shipped the on-disk board.json (v=a786679133) while the post was built from today's board (v=7f5bd2f7a2); build per design/PLAN-deferpost-builds-board-2026-09-28.md after the reviewer's d70062/c98dec design.",
-      "close_disposition": null
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "No code in this spawn: design W1..W4 had already LANDED on origin/main before this plan was generated (10:40), as 58136b287 (09:41) and f2e6f1bd8 (10:03). What landed: W1, publish-deals-page.ps1 -BuildOnly runs the build half (build-deals-page, which writes public/board.json and public/price-history.json) with no Ghost call, and the -DeferPost branch calls Invoke-DeferPostBuild (grocery/publish-outcome-lib.ps1) BEFORE it hashes board_sha256. W2: they chose determinism over a reuse path (four builds over comparison-2026-09-28 gave one SHA-256), and an input that moves between the two runs is held by the served check, which leaks and never mis-posts. W3: the ship summary names the deferred outcome. W4: grocery/test-defer-post.ps1. Coordination with d70062 needed no change: capture-run's stale-code check takes its artifacts from the served paths the commit changed ($servedPaths), so board.json and price-history.json enter it automatically on every run that now builds them, and 92bd45c81's real-writer producer sets keep that from paging on unrelated mid-run pushes. Re-verified here: test-defer-post -SelfTest exit 0 'SELF-TEST PASS (3 of 3)'; publish-deals-page -SelfTest exit 0 'SELFTEST PASS ... -BuildOnly exits after the build and before the served check'.",
+      "shipped_commit": "58136b287 f2e6f1bd8",
+      "resolution_note": "Fixed upstream of this spawn by 58136b287 + f2e6f1bd8 (on origin/main): under -DeferPost the chain now builds public/board.json (and price-history.json) through publish-deals-page -BuildOnly before post-deferred.json hashes it, so the committed board, the edge and the deferred post name one v=. Proof re-run 2026-09-28: test-defer-post -SelfTest exit 0 (3 of 3: WIRING, CLEAN TWIN, MUST FIRE on the 09-28 shape), publish-deals-page -SelfTest exit 0. Ratchets exit 0: audit-file-size-budget, audit-cross-module-reach, audit-conclusion-currency. full_suite: deferred-to-land. Not republished (no mid-day rebuild).",
+      "close_disposition": null,
+      "premise_note": "Verified 2026-09-28 in the main checkout (C:/Codex/ThriftyCrew, main): the design doc's cause holds, and 58136b287's own measurement (seeded scratch worktree from the stale board at 5577f8a76) found 51 of 576 examined best prices differing from comparison-2026-09-28 before the build and 577 of 577 equal after it. The plan's freshness (origin/main 3451de927, 09:27) predates the fix, so the item was written as not yet worked.",
+      "leaves_open_followup": "watch:grocery/audit-live-page-parity.ps1",
+      "actual_tool_calls": 14,
+      "full_suite": "deferred-to-land",
+      "republished": false,
+      "leaves_open_occurrences_window": "held-after-ship posts since f2e6f1bd8 landed, 2026-09-28 10:03 to spawn time; no daily chain has run on the fix yet"
     },
     {
       "queue_id": "discovered:planned-done-never-closed-2026-09-28",

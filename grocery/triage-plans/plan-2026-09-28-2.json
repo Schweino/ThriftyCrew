@@ -214,11 +214,16 @@
       ],
       "root_cause": "public/price-history.json is a served path with no pre-commit writer in the -DeferPost chain, so a session's leftover bytes on it survive the run and are held (correctly) as foreign; the chain rewrites it only in the deferred post, after the commit",
       "root_fix_none_because": "owned by 2026-09-28-c81a9f (plan-2026-09-28.json, money lane): design/PLAN-deferpost-builds-board-2026-09-28.md W1 runs build-deals-page inside the chain before capture-run commits, which makes price-history.json the chain's own output every run, so foreign dirt is overwritten and shipped as pipeline output; the session-writes-production-checkout half is design/PLAN-bot-dedicated-checkout-2026-09-25.md Stage 2",
-      "leaves_open": "until c81a9f W1 lands, any foreign dirt on price-history.json is held and paged the same way (correct behaviour, 1 occurrence)",
-      "leaves_open_occurrences": 1,
-      "leaves_open_followup": "2026-09-28-c81a9f",
-      "status": "planned",
-      "resolution_note": "No code of its own. The held public/price-history.json was a 09-27 triage rebuild's leftover in the production checkout; the -DeferPost chain never writes that file before its commit, so it could not replace it. 3451de927 shipped the bot's 09:20 bytes and the file is clean. The fix is c81a9f's W1 (build the board inside the chain before the commit), which makes the file chain-written every run."
+      "leaves_open": "nothing new: a held price-history.json after W1 would need the chain's rebuild to produce byte-identical history to a foreign edit; 0 occurrences",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/capture-run.ps1",
+      "status": "done",
+      "resolution_note": "No code of its own. The held public/price-history.json was a 09-27 triage rebuild's leftover; it was held because the -DeferPost chain never wrote that file before its commit. That is fixed by c81a9f's W1 as landed in 58136b287 (with f2e6f1bd8): the chain now builds the board, and with it price-history.json, before the commit, so the file is chain-written every run. 3451de927 already shipped clean bytes.",
+      "premise_verified": true,
+      "premise_note": "Verified 2026-09-28: build-deals-page.ps1:2484 is the writer of public/price-history.json, and since 58136b287 the -DeferPost road runs it (publish-deals-page -BuildOnly via Invoke-DeferPostBuild) before capture-run commits. capture-run's Get-ForeignHeldPaths (capture-run.ps1:1527-1531) counts a file whose bytes moved off its start-of-run blob as the run's own, so a session's leftover bytes on price-history.json are overwritten by the chain's build and staged, not held.",
+      "shipped_commit": "58136b287",
+      "actual_tool_calls": 3,
+      "leaves_open_occurrences_window": "since 58136b287 landed, 2026-09-28 09:41 to spawn time"
     }
   ],
   "open_questions_for_brad": [],
