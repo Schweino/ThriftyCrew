@@ -272,6 +272,17 @@ stays Brad's.
 
 ## Decisions for Brad
 
+**RULED 2026-09-29 by Brad** (the whole plan runs in this session, in parallel):
+- **D1: HOLD.** A patch whose only gold evidence is its own source case is held for a human, like the no-coverage hold.
+- **D2: STRICT.** A hillclimb round is kept only if false-merge does not rise at all on either arm and holdout
+  missed-merge falls by more than the noise floor W4 measured.
+- **D3: the agent drafts and Brad strikes.** The commodity-registrar agent drafts about 40 cases from the commodity
+  list alone, never from resolver output, and Brad crosses out the ones he disagrees with before they count.
+- **D4: YES, the extractor only, capped at $25 of API spend.** Four arms, N=3; it stops at the cap and reports cost
+  per case. The model pins stay Brad's call.
+- **D5: still open.** W0.f counted 28 reversals against 269 standing resolutions, above the "handful" line, so the
+  recommendation stands: a separate plan.
+
 - **D1. Circular-only patches: hold or apply?** W2 would hold a learning patch whose only gold evidence is the case
   it was written from. Recommendation: HOLD (it is "no evidence", the same as the existing no-coverage hold). Cost:
   some aliases wait for a human; W0.b says how many.
