@@ -390,6 +390,14 @@ if ($SelfTest) {
   $k = KeysOf (CellRun @(Rw 'Sun-Dried Tomatoes (Oil-Packed)' 'sun-dried-tomatoes' @{ identity_same_as = @(LiveSame 'Sun-Dried Tomatoes (Oil-Packed)') }) @(Ln 'Sun-Dried Tomatoes (Oil-Packed)' 'board:sun-dried-tomatoes:bakers') $sdx)
   Check 'MUST NOT FIRE  LIVE: the oil-packed record silences the Baker''s jar "in Oil with Herbs"' (@($k | Where-Object { $_ -like '*inoilwithherbs*' }).Count -eq 0) ($k -join ',')
   Check 'CLEAN TWIN  LIVE: the Family Fare "Julienne Ct" jar that never says oil stays a finding' (@($k | Where-Object { $_ -like '*juliennect*' }).Count -eq 1) ($k -join ',')
+  # 11. 2026-09-29 (queue 2026-09-29-59b8fc, folded into 2026-09-26-177835): the third RISE row of comparison-2026-09-29,
+  # frozen verbatim beside its dry-form twin. Neither name says oil, so the live record must not silence the Hy-Vee
+  # listing by name alone (its 8.5 oz at $0.8224/oz reads as a jar, but size is not a name word), and the dry halves bag
+  # stays a finding too.
+  $hvx = Ix @(Bd 'sun-dried-tomatoes' @('Hy-Vee', 'Hy-Vee Sun-Dried Tomatoes Halves', "Baker's", 'California Sun-Dry Sun-Dried Tomatoes Halves'))
+  $k = KeysOf (CellRun @(Rw 'Sun-Dried Tomatoes (Oil-Packed)' 'sun-dried-tomatoes' @{ identity_same_as = @(LiveSame 'Sun-Dried Tomatoes (Oil-Packed)') }) @(Ln 'Sun-Dried Tomatoes (Oil-Packed)' 'board:sun-dried-tomatoes:walmart') $hvx)
+  Check 'MUST FIRE  LIVE: "Hy-Vee Sun-Dried Tomatoes Halves" (no oil word) stays a finding on the oil-packed row' (@($k | Where-Object { $_ -like '*|hyvee|*' }).Count -eq 1) ($k -join ',')
+  Check 'MUST FIRE  LIVE: the dry 3 oz "California Sun-Dry Sun-Dried Tomatoes Halves" bag stays a finding on the oil-packed row' (@($k | Where-Object { $_ -like '*|bakers|*' }).Count -eq 1) ($k -join ',')
 
   # THE MAPPER'S WRITE: the standing REUSE bone-in skin-on chicken thighs -> chicken-thighs is refused while the
   # cell is won by a drumstick bag, and a term that routes elsewhere is refused outright.
@@ -496,7 +504,7 @@ if ($SelfTest) {
     Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
   } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 70) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 70 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 72) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 72 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
