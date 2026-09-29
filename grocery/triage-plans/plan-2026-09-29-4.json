@@ -253,11 +253,20 @@
         "any soundness or guard threshold",
         "audit-match-soundness -Force"
       ],
-      "resolution_note": "Wrong product: Aldi's roasted carrot and sweet potato medley ($0.29, 16 oz) held the carrots crown at $0.29/lb. Released from carrots and sweet-potatoes; Aldi carrots now 'Carrot 2 Lbs' $0.995/lb, crown Family Fare $0.458. Soundness clears and the post republishes (57bc1d and 9cea96 close with it).",
+      "resolution_note": "Wrong product: Aldi's roasted carrot and sweet potato medley ($0.29, 16 oz) held the carrots crown at $0.29/lb. The carrot + sweet potato pair shape is now excluded on carrots and sweet-potatoes (routing diff: 1 of 37,195 names moved, as planned). Aldi carrots now 'Carrot 2 Lbs' $0.995/lb, crown Family Fare $0.458. Board and feed rebuilt with guards green; the Ghost post publishes after landing (57bc1d and 9cea96 close with it).",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 35,
-      "status": "planned"
+      "status": "deviated",
+      "premise_verified": true,
+      "premise_check": "2026-09-29 10:47, before any change: out/comparison-2026-09-29.json (08:15) still carried 'Specially Selected Carrots Sweet Potatoes 16 OZ' as the carrots/Aldi cell. After the V1 excludes, a before/after routing diff (engine New-CommodityMatcher + Resolve-Commodity, 87 global excludes, HEAD vs working commodities.json) over 37,195 distinct names in the same 11 files dated 2026-09-29 moved exactly 1 name: the medley, carrots -> none. Identical to the frozen routing artifact; nothing outside it moved.",
+      "deviation": "Three details, none narrowing the fix. (1) The worklist key was recorded with -Verdict applied, not release: the excludes were already in commodities.json via add-commodity-rule.ps1, and resolve-match-worklist defines release as a pattern still waiting to be applied. (2) audit-match-soundness reported MOVED=0 DROPPED=0 (nothing to review), so -Accept only re-stamped the baseline under the new rules hash; committed with the rule. (3) publish-deals-page exited 2 HELD by design: the post names board.json?v=9030dce4d4 and the edge serves v=914ca8facf until the orchestrator lands, so the Ghost post publish (and audit-live-page-parity for 57bc1d) runs after triage-land.",
+      "shipped_commit": "0cf2cb927",
+      "republished": true,
+      "full_suite": "deferred-to-land",
+      "proof_run": "test-match-lib.ps1 exit 0, MATCH-LIB PASSED (new MUST FIRE medley -> none, 3 CLEAN TWINS, ratchet 99 -> 103). Chain over the batch (c70eb2, 177835, 754693): compare-deals rc 0, name-drift re-derived after prune, guards exit 0 'GUARDS OK' hard=0 warn=20, audit-basis-reconcile checked=51 findings=0, audit-pack-basis ok, soundness in publish MOVED=0 DROPPED=0 drift-vs-engine=0, export-feed exit 0 week 2026-09-29. Crowns vs HEAD board.json: 21 differ, 20 are same-price tie reorders, the one price change is carrots Aldi 0.29 -> Family Fare 0.458.",
+      "live_check": "carrots: feed p[0] Family Fare 0.458/lb (Aldi cell 0.995 'Carrot 2 Lbs', not 0.29); bacon: Fareway 3.988 present and not quarantined, crown Aldi 3.95. board.json v=9030dce4d4. After landing run publish-deals-page (it held pending the edge) then audit-live-page-parity.",
+      "actual_tool_calls": 47
     },
     {
       "queue_id": "2026-09-29-59b8fc",
