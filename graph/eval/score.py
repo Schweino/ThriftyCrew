@@ -221,12 +221,21 @@ def main() -> int:
     ap.add_argument("--json", action="store_true", help="emit metrics as JSON only")
     ap.add_argument("--split", choices=("train", "holdout", "all"), default="all",
                     help="score one side of the held-out split (graph/gold/gold_split.py)")
+    ap.add_argument("--health", action="store_true",
+                    help="W4 eval health: noise floor, arm ordering, saturation (graph/eval/score_health.py)")
+    ap.add_argument("--runs", type=int, default=3, help="repetitions per arm for --health")
     args = ap.parse_args()
 
     gold = filter_split(load_gold(), args.split)
     if not gold:
         print("no gold set — run: python graph/gold/seed_gold.py", file=sys.stderr)
         return 2
+
+    if args.health:
+        from score_health import run_health
+        hl = LocalLLM()
+        with open_db() as db:
+            return run_health(db, gold, hl if hl.health() else None, args.runs, score)
 
     llm = LocalLLM() if args.llm else None
     if args.llm and not llm.health():
