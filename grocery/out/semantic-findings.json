@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-28 21:33",
-    "board":  "comparison-2026-09-28.json",
-    "sidecar_generated":  "2026-09-28 21:33:39",
+    "generated":  "2026-09-29 08:28",
+    "board":  "comparison-2026-09-29.json",
+    "sidecar_generated":  "2026-09-29 08:28:23",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,17 +9,36 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2873,
-                     "corpus":  44266,
-                     "rule_invisible":  9082
+                     "board_pairs":  2880,
+                     "corpus":  44330,
+                     "rule_invisible":  9108
                  },
     "identity_count":  0,
-    "coverage_count":  0,
+    "coverage_count":  2,
     "identity":  [
 
                  ],
     "coverage":  [
-
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Baker\u0027s",
+                         "product":  "Progresso Vegetable Classics Lentil Soup",
+                         "cos":  0.6772,
+                         "score":  0.933508,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "vegetable-soup",
+                         "commodity":  "Vegetable / Vegetable Beef Soup (canned)",
+                         "store":  "Walmart",
+                         "product":  "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+                         "cos":  0.7193,
+                         "score":  0.923656,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     }
                  ],
     "coverage_excluded_count":  10,
     "coverage_excluded":  [

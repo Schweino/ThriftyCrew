@@ -1,0 +1,218 @@
+﻿[
+    {
+        "name":  "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+        "lp":  "$4.98",
+        "up":  "25.8 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 29 oz but none reproduces Sam\u0027s 0.258/oz (lp/up derives 19.302)"
+    },
+    {
+        "name":  "Kinder\u0027s Hickory Brown Sugar Seasoning, 22 oz.",
+        "lp":  "$11.98",
+        "up":  "63.5 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 22 oz but none reproduces Sam\u0027s 0.635/oz (lp/up derives 18.866)"
+    },
+    {
+        "name":  "Bolner\u0027s Fiesta Texas Style Steak Seasoning, 27 oz.",
+        "lp":  "$6.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Bolner\u0027s Fiesta Ground Comino, 16 oz.",
+        "lp":  "$6.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Great American Land \u0026 Cattle Co. Steak \u0027N\u0027 Meat Seasoning, 32 oz.",
+        "lp":  "$9.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Gold Peak Unsweetened Tea 16.9 fl. oz., 18 pk.",
+        "lp":  "$16.98",
+        "up":  "8.4 ¢/fl oz",
+        "reason":  "NAME CONFLICT: name states 16.9, 304.2 fl oz but none reproduces Sam\u0027s 0.084/fl oz (lp/up derives 202.143)"
+    },
+    {
+        "name":  "Member\u0027s Mark Extra Virgin Olive Oil, 101 fl. oz.",
+        "lp":  "$23.98",
+        "up":  "23.6 ¢/fl oz",
+        "reason":  "NAME CONFLICT: name states 101 fl oz but none reproduces Sam\u0027s 0.236/fl oz (lp/up derives 101.61)"
+    },
+    {
+        "name":  "NatureWell Coconut Oil Hydrating Body Wash, 33 fl. oz.",
+        "lp":  "$14.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Shea Moisture 100% Virgin Coconut Oil Daily Hydration Conditioner, 34 fl. oz.",
+        "lp":  "$17.98",
+        "up":  "52.9 ¢/ft",
+        "reason":  "unknown unit \"ft\""
+    },
+    {
+        "name":  "Johnson\u0027s Moisturizing Pink Baby Lotion with Coconut Oil, 33.8 fl. oz.",
+        "lp":  "$7.78",
+        "up":  "26.0 ¢/fl oz",
+        "reason":  "NAME CONFLICT: name states 33.8 fl oz but none reproduces Sam\u0027s 0.26/fl oz (lp/up derives 29.923)"
+    },
+    {
+        "name":  "Member\u0027s Mark Peanut Oil, 35 lbs.",
+        "lp":  "$55.96",
+        "up":  "6.6 ¢/fl oz",
+        "reason":  "DENSITY CONFLICT: the name states 35 lbs = 15876 g but the derived size is 847.879 fl oz = 25075 mL, an implied density of 0.633 g/mL - outside 0.75-1.65 g/mL, which no grocery liquid is - Sam\u0027s 6.6 ¢/fl oz was computed against a volume this package cannot hold, so no per-unit price from it is publishable"
+    },
+    {
+        "name":  "Superb Canola Clear Fry Oil, 35 lb.",
+        "lp":  "$40.98",
+        "up":  "6.7 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 560 oz but none reproduces Sam\u0027s 0.067/oz (lp/up derives 611.642)"
+    },
+    {
+        "name":  "Bonduelle Bistro Loaded Chicken \u0026 Guacamole Bowl, 8 oz., 2 pk.",
+        "lp":  "$7.12",
+        "up":  "45.6 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 8, 16 oz but none reproduces Sam\u0027s 0.456/oz (lp/up derives 15.614)"
+    },
+    {
+        "name":  "Member\u0027s Mark Shredded Rubber Mulch Pallet, Assorted Colors \u0026 25/1.5 cu. ft. Bags",
+        "lp":  "$539.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Shredded Rubber Mulch Pallet, Assorted Colors \u0026 25/1.5 cu. ft. Bags",
+        "lp":  "$539.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Shredded Rubber Mulch, Assorted Colors \u0026 50/1.5 cu. ft. Bags",
+        "lp":  "$899.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Shredded Rubber Mulch, Assorted Colors \u0026 50/1.5 cu. ft. Bags",
+        "lp":  "$899.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Rubber Mulch, Assorted Colors \u0026 25/1.5 cu ft Bags",
+        "lp":  "$449.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Taylor Farms Ultimate Caesar Salad Kit, 16.9 oz.",
+        "lp":  "$3.94",
+        "up":  "$3.72/lb",
+        "reason":  "NAME CONFLICT: name states 1.05625 lb but none reproduces Sam\u0027s 3.72/lb (lp/up derives 1.059)"
+    },
+    {
+        "name":  "Member\u0027s Mark Rubber Mulch, Assorted Colors \u0026 25/1.5 cu ft Bags",
+        "lp":  "$449.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Recycled Rubber Nugget Mulch, Assorted Colors \u0026 50/1.5 cu ft bags",
+        "lp":  "$699.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Greenery Combo, 15 stems",
+        "lp":  "$5.84",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Fresh Garland, Mixed Pine and Cedar, 25 ft.",
+        "lp":  "$49.98",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Garland, Cocculus \u0026 Italian Ruscus, Choose length",
+        "lp":  "$62.77",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Garland, Seeded Eucalyptus, Choose length",
+        "lp":  "$77.68",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Garland, Silver Dollar Eucalyptus, Choose length",
+        "lp":  "$77.68",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Tanimura and Antle Sweet Italian Red Onions, 6 lbs.",
+        "lp":  "$6.33",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member\u0027s Mark Granulated Onion, 6 lbs.",
+        "lp":  "$34.48",
+        "up":  "41.1 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 96 oz but none reproduces Sam\u0027s 0.411/oz (lp/up derives 83.893)"
+    },
+    {
+        "name":  "Hormel Black Label Fully Cooked Bacon (10.5 oz., 72 ct.)",
+        "lp":  "$15.87",
+        "up":  "",
+        "reason":  "no unitPrice (the 2026-09-19 proof no longer passes today\u0027s rules: NAME CONFLICT: per-piece unit price - the name states a multipack and Sam\u0027s 1.51/oz prices ONE piece (lp/up derives 10.51))"
+    },
+    {
+        "name":  "McCormick Grill Mates Montreal Steak Seasoning, 29 oz.",
+        "lp":  "$4.98",
+        "up":  "25.8 ¢/oz",
+        "reason":  "NAME CONFLICT: name states 29 oz but none reproduces Sam\u0027s 0.258/oz (lp/up derives 19.302)"
+    },
+    {
+        "name":  "Member\u0027s Mark Chopped Chives, 1.4 oz.",
+        "lp":  "$7.38",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Jurassic World Half Sheet Cake",
+        "lp":  "$23.84",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Bluey Half Sheet Cake",
+        "lp":  "$23.84",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Bluey Full Sheet Cake",
+        "lp":  "$42.94",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Member’s Mark Riced Cauliflower, Frozen, 12 oz., 4 pk.",
+        "lp":  "$6.73",
+        "up":  "",
+        "reason":  "no unitPrice"
+    },
+    {
+        "name":  "Cauliflower, 1 ct.",
+        "lp":  "$5.22",
+        "up":  "",
+        "reason":  "no unitPrice"
+    }
+]

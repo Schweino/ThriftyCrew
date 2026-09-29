@@ -1,1 +1,1 @@
-﻿celery|Hy-Vee|withheld
+﻿bacon|Fareway|withheld

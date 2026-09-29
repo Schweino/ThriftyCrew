@@ -5,21 +5,21 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "no weekly ad cycle",
-    "cursor_start":  234,
-    "cursor_next":  242,
+    "cursor_start":  242,
+    "cursor_next":  250,
     "total_terms":  641,
     "rotation_terms":  [
-                           "dried thyme",
-                           "dryer sheets",
-                           "dry green lentils",
-                           "egg noodles",
-                           "eggplant",
-                           "large eggs",
-                           "liquid egg whites",
-                           "red enchilada sauce"
+                           "energy drink",
+                           "english muffins",
+                           "evaporated milk",
+                           "liquid fabric softener",
+                           "facial tissues",
+                           "fajita seasoning packet",
+                           "fat free cheddar cheese",
+                           "fat free mozzarella"
                        ],
     "sale_terms":  [
-                       "pork baby back ribs"
+
                    ],
     "terms":  [
                   "baby wipes",
@@ -30,15 +30,14 @@
                   "popsicles",
                   "ice pops",
                   "rotisserie chicken",
-                  "dried thyme",
-                  "dryer sheets",
-                  "dry green lentils",
-                  "egg noodles",
-                  "eggplant",
-                  "large eggs",
-                  "liquid egg whites",
-                  "red enchilada sauce",
-                  "pork baby back ribs"
+                  "energy drink",
+                  "english muffins",
+                  "evaporated milk",
+                  "liquid fabric softener",
+                  "facial tissues",
+                  "fajita seasoning packet",
+                  "fat free cheddar cheese",
+                  "fat free mozzarella"
               ],
     "commodities":  [
                         "baby-wipes",
@@ -49,15 +48,14 @@
                         "popsicles",
                         "popsicles",
                         "rotisserie-chicken",
-                        "dried-thyme",
-                        "dryer-sheets",
-                        "dry-green-lentils",
-                        "egg-noodles",
-                        "eggplant",
-                        "eggs",
-                        "egg-whites",
-                        "enchilada-sauce",
-                        "baby-back-ribs"
+                        "energy-drinks",
+                        "english-muffins",
+                        "evaporated-milk",
+                        "fabric-softener",
+                        "facial-tissues",
+                        "fajita-seasoning",
+                        "fat-free-cheddar",
+                        "fat-free-mozzarella"
                     ],
     "ruling_terms":  [
 
@@ -83,6 +81,6 @@
     "call_cap":  45,
     "expiry_deferred":  0,
     "expiry_deferred_by_ruling":  0,
-    "expiry_oldest_owed":  "2026-09-29",
+    "expiry_oldest_owed":  "",
     "note":  "Fetch ONLY these terms today - the list is already capped at this store\u0027s call_cap so it cannot trip a rate limit. Advance the cursor with Save-CaptureCursor AFTER the capture lands - a run that fetched nothing must re-attempt this slice tomorrow, never skip it. expiry_deferred re-prices did NOT fit today; they are still recorded as owed in sale-windows.json and lead tomorrow\u0027s slice, oldest first - do NOT fetch them here. ruling_terms are a STANDING RULING\u0027s owed recaptures and lead this list; they leave it on their own once a built file proves them recaptured at the sanctioned store, so never edit a ruling file to discharge one. ruling_blind means this checkout could not read what has already landed and is reporting everything the ruling named."
 }

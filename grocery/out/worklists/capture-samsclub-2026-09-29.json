@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "no weekly ad cycle",
-    "cursor_start":  269,
-    "cursor_next":  277,
+    "cursor_start":  277,
+    "cursor_next":  285,
     "total_terms":  641,
     "rotation_terms":  [
-                           "fresh rosemary",
-                           "fresh sage",
-                           "fresh stir fry vegetables",
-                           "sweet Italian turkey sausage",
-                           "fresh thyme",
-                           "whole nutmeg",
-                           "vanilla frosting",
-                           "frozen broccoli florets"
+                           "frozen broccoli florets",
+                           "frozen burritos",
+                           "frozen cauliflower florets",
+                           "frozen sweet corn",
+                           "frozen french fries",
+                           "frozen mixed berries",
+                           "frozen cut green beans",
+                           "frozen lasagna"
                        ],
     "sale_terms":  [
 
@@ -24,26 +24,26 @@
     "terms":  [
                   "garden salad bag",
                   "hummus",
-                  "fresh rosemary",
-                  "fresh sage",
-                  "fresh stir fry vegetables",
-                  "sweet Italian turkey sausage",
-                  "fresh thyme",
-                  "whole nutmeg",
-                  "vanilla frosting",
-                  "frozen broccoli florets"
+                  "frozen broccoli florets",
+                  "frozen burritos",
+                  "frozen cauliflower florets",
+                  "frozen sweet corn",
+                  "frozen french fries",
+                  "frozen mixed berries",
+                  "frozen cut green beans",
+                  "frozen lasagna"
               ],
     "commodities":  [
                         "garden-salad",
                         "hummus",
-                        "fresh-rosemary",
-                        "fresh-sage",
-                        "fresh-stir-fry-blend",
-                        "fresh-sweet-italian-turkey-sausage",
-                        "fresh-thyme",
-                        "fresh-whole-nutmeg",
-                        "frosting",
-                        "frozen-broccoli"
+                        "frozen-broccoli-florets",
+                        "frozen-burritos",
+                        "frozen-cauliflower-florets",
+                        "frozen-corn",
+                        "frozen-fries",
+                        "frozen-fruit",
+                        "frozen-green-beans",
+                        "frozen-lasagna"
                     ],
     "ruling_terms":  [
 

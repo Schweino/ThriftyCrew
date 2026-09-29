@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-09-29; next_pull 2026-09-30",
-    "cursor_start":  234,
-    "cursor_next":  242,
+    "cursor_start":  242,
+    "cursor_next":  250,
     "total_terms":  641,
     "rotation_terms":  [
-                           "dried thyme",
-                           "dryer sheets",
-                           "dry green lentils",
-                           "egg noodles",
-                           "eggplant",
-                           "large eggs",
-                           "liquid egg whites",
-                           "red enchilada sauce"
+                           "energy drink",
+                           "english muffins",
+                           "evaporated milk",
+                           "liquid fabric softener",
+                           "facial tissues",
+                           "fajita seasoning packet",
+                           "fat free cheddar cheese",
+                           "fat free mozzarella"
                        ],
     "sale_terms":  [
 
@@ -45,14 +45,14 @@
                   "whole kernel corn",
                   "diced tomatoes canned",
                   "cut green beans can",
-                  "dried thyme",
-                  "dryer sheets",
-                  "dry green lentils",
-                  "egg noodles",
-                  "eggplant",
-                  "large eggs",
-                  "liquid egg whites",
-                  "red enchilada sauce"
+                  "energy drink",
+                  "english muffins",
+                  "evaporated milk",
+                  "liquid fabric softener",
+                  "facial tissues",
+                  "fajita seasoning packet",
+                  "fat free cheddar cheese",
+                  "fat free mozzarella"
               ],
     "commodities":  [
                         "cherries",
@@ -78,14 +78,14 @@
                         "canned-corn",
                         "diced-tomatoes",
                         "canned-green-beans",
-                        "dried-thyme",
-                        "dryer-sheets",
-                        "dry-green-lentils",
-                        "egg-noodles",
-                        "eggplant",
-                        "eggs",
-                        "egg-whites",
-                        "enchilada-sauce"
+                        "energy-drinks",
+                        "english-muffins",
+                        "evaporated-milk",
+                        "fabric-softener",
+                        "facial-tissues",
+                        "fajita-seasoning",
+                        "fat-free-cheddar",
+                        "fat-free-mozzarella"
                     ],
     "ruling_terms":  [
 

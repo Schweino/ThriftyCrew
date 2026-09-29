@@ -1,8 +1,8 @@
 {
     "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages once, on the first run it is open and not shadowed by a cheaper-or-equal standing cell at its own store (paged_on; shadowed_by names that cell\u0027s price); a match-verdicts.json verdict (band|key) removes it.",
-    "from":  "flagged-2026-09-28.json",
+    "from":  "flagged-2026-09-29.json",
     "written":  "2026-09-29",
-    "count":  157,
+    "count":  160,
     "rows":  [
                  {
                      "key":  "air-freshener|Family Fare|Febreze Plugs Single Refill Downy Calm",
@@ -181,28 +181,6 @@
                      "shadowed_by":  0.6584
                  },
                  {
-                     "key":  "cereal|Family Fare|Cheerios Cereal 8.9 Oz",
-                     "first_seen":  "2026-09-28",
-                     "id":  "cereal",
-                     "store":  "Family Fare",
-                     "name":  "Cheerios Cereal 8.9 Oz",
-                     "unit_price":  0.6169,
-                     "band_ref":  0.1155,
-                     "paged_on":  "2026-09-28",
-                     "shadowed_by":  0.1559
-                 },
-                 {
-                     "key":  "cereal|Walmart|Kellogg\u0027s Breakfast Cereal, Kids Cereal, Family Breakfast, Variety Pack, 8.56oz Tray (8 Boxes)",
-                     "first_seen":  "2026-09-28",
-                     "id":  "cereal",
-                     "store":  "Walmart",
-                     "name":  "Kellogg\u0027s Breakfast Cereal, Kids Cereal, Family Breakfast, Variety Pack, 8.56oz Tray (8 Boxes)",
-                     "unit_price":  0.6145,
-                     "band_ref":  0.1155,
-                     "paged_on":  "2026-09-28",
-                     "shadowed_by":  0.159
-                 },
-                 {
                      "key":  "conditioner|Baker\u0027s|Kristin Ess Hair Strengthening Conditioner",
                      "first_seen":  "2026-09-26",
                      "id":  "conditioner",
@@ -278,6 +256,17 @@
                      "band_ref":  0.1178,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1156
+                 },
+                 {
+                     "key":  "crackers|Family Fare|Kraft Cracker Cuts Sharp Cheddar Cheese, 24 Ct Tray",
+                     "first_seen":  "2026-09-29",
+                     "id":  "crackers",
+                     "store":  "Family Fare",
+                     "name":  "Kraft Cracker Cuts Sharp Cheddar Cheese, 24 Ct Tray",
+                     "unit_price":  0.7143,
+                     "band_ref":  0.1178,
+                     "paged_on":  "",
+                     "shadowed_by":  0.1556
                  },
                  {
                      "key":  "crackers|Fareway|Schar Gluten Free Table Crackers",
@@ -464,7 +453,7 @@
                      "unit_price":  19.9667,
                      "band_ref":  3.9867,
                      "paged_on":  "2026-09-28",
-                     "shadowed_by":  12.4875
+                     "shadowed_by":  6.76
                  },
                  {
                      "key":  "flour|Family Fare|Delimex Chkn \u0026 Cheese Flour Taquitos",
@@ -505,7 +494,7 @@
                      "id":  "frozen-fruit",
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
-                     "unit_price":  0.8738,
+                     "unit_price":  0.9362,
                      "band_ref":  0.1726,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.1561
@@ -516,7 +505,7 @@
                      "id":  "frozen-fruit",
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
-                     "unit_price":  0.9362,
+                     "unit_price":  0.8738,
                      "band_ref":  0.1726,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.1561
@@ -531,6 +520,39 @@
                      "band_ref":  0.1726,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.1561
+                 },
+                 {
+                     "key":  "fruit-snacks|Fareway|Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
+                     "first_seen":  "2026-09-29",
+                     "id":  "fruit-snacks",
+                     "store":  "Fareway",
+                     "name":  "Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
+                     "unit_price":  9.99,
+                     "band_ref":  0.2276,
+                     "paged_on":  "",
+                     "shadowed_by":  0.2112
+                 },
+                 {
+                     "key":  "fruit-snacks|Fareway|Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
+                     "first_seen":  "2026-09-29",
+                     "id":  "fruit-snacks",
+                     "store":  "Fareway",
+                     "name":  "Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
+                     "unit_price":  7.99,
+                     "band_ref":  0.2276,
+                     "paged_on":  "",
+                     "shadowed_by":  0.2112
+                 },
+                 {
+                     "key":  "gelatin|Family Fare|Jell O Strawberry Gelatin Snacks 13.5 Oz",
+                     "first_seen":  "2026-09-29",
+                     "id":  "gelatin",
+                     "store":  "Family Fare",
+                     "name":  "Jell O Strawberry Gelatin Snacks 13.5 Oz",
+                     "unit_price":  5,
+                     "band_ref":  0.98,
+                     "paged_on":  "2026-09-29",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "gelatin|Family Fare|Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
@@ -566,6 +588,17 @@
                      "shadowed_by":  0.3461
                  },
                  {
+                     "key":  "ground-allspice|Hy-Vee|McCormick Whole Allspice",
+                     "first_seen":  "2026-09-29",
+                     "id":  "ground-allspice",
+                     "store":  "Hy-Vee",
+                     "name":  "McCormick Whole Allspice",
+                     "unit_price":  9.32,
+                     "band_ref":  1.69,
+                     "paged_on":  "",
+                     "shadowed_by":  4.9889
+                 },
+                 {
                      "key":  "ground-cinnamon|Baker\u0027s|Tampico Cinnamon Ground",
                      "first_seen":  "2026-09-27",
                      "id":  "ground-cinnamon",
@@ -594,18 +627,7 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Green Pepper Sauce, Hot Sauce",
                      "unit_price":  0.898,
-                     "band_ref":  0.1375,
-                     "paged_on":  "2026-09-26",
-                     "shadowed_by":  0.1085
-                 },
-                 {
-                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "first_seen":  "2026-09-26",
-                     "id":  "hot-sauce",
-                     "store":  "Baker\u0027s",
-                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "unit_price":  0.898,
-                     "band_ref":  0.1375,
+                     "band_ref":  0.1442,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -616,7 +638,18 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
                      "unit_price":  1.095,
-                     "band_ref":  0.1375,
+                     "band_ref":  0.1442,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "unit_price":  0.898,
+                     "band_ref":  0.1442,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -627,7 +660,7 @@
                      "store":  "Baker\u0027s",
                      "name":  "Yellowbird Serrano Hot Sauce",
                      "unit_price":  0.7448,
-                     "band_ref":  0.1375,
+                     "band_ref":  0.1442,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -783,18 +816,7 @@
                      "unit_price":  0.7047,
                      "band_ref":  0.13285,
                      "paged_on":  "2026-09-28",
-                     "shadowed_by":  0.5392
-                 },
-                 {
-                     "key":  "milk|Family Fare|Milk Duds Milk Duds Theater Box 5 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "milk",
-                     "store":  "Family Fare",
-                     "name":  "Milk Duds Milk Duds Theater Box 5 Oz",
-                     "unit_price":  32,
-                     "band_ref":  3.025,
-                     "paged_on":  "2026-09-27",
-                     "shadowed_by":  3.49
+                     "shadowed_by":  0.29
                  },
                  {
                      "key":  "milk|Family Fare|Phillips\u0027 Milk Of Magnesia, Sugar Free, Fresh Mint 12 Fl Oz",
@@ -805,6 +827,17 @@
                      "unit_price":  73.4933,
                      "band_ref":  3.025,
                      "paged_on":  "2026-09-27",
+                     "shadowed_by":  3.49
+                 },
+                 {
+                     "key":  "milk|Family Fare|Whoppers Malted The Original Milk Balls 5 Oz",
+                     "first_seen":  "2026-09-29",
+                     "id":  "milk",
+                     "store":  "Family Fare",
+                     "name":  "Whoppers Malted The Original Milk Balls 5 Oz",
+                     "unit_price":  32,
+                     "band_ref":  3.025,
+                     "paged_on":  "",
                      "shadowed_by":  3.49
                  },
                  {

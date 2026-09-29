@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-09-28T08:19:55",
+    "generated":  "2026-09-29T08:16:59",
     "written_by":  "guards.ps1",
-    "board_file":  "comparison-2026-09-28.json",
-    "board_sha256":  "653ba31217e7c4d338de6e551c6462c46efbf41018b457834c47e588e7c70785",
+    "board_file":  "comparison-2026-09-29.json",
+    "board_sha256":  "c6d033e40e25b0166e038c6ba749c4e6c46ee671e17e8788c52352fa5a3e0179",
     "action":  "quarantined",
     "exit_code":  4,
     "reasons":  [
@@ -21,14 +21,14 @@
                     "tripped":  false,
                     "why":  "",
                     "quarantined":  1,
-                    "priced":  2872,
+                    "priced":  2881,
                     "board_pct_bar":  2,
                     "store_pct_bar":  10,
                     "stores":  [
                                    {
-                                       "store":  "Hy-Vee",
+                                       "store":  "Fareway",
                                        "quarantined":  1,
-                                       "priced":  324
+                                       "priced":  330
                                    }
                                ]
                 },

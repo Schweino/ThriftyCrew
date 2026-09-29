@@ -75,7 +75,7 @@
                               "commodity":  "Coconut Oil",
                               "unit":  "oz",
                               "store":  "Sam\u0027s Club",
-                              "per_unit":  0.2139,
+                              "per_unit":  0.1961,
                               "size":  "56 oz",
                               "item":  "Member\u0027s Mark Organic Virgin Coconut Oil, 56oz.",
                               "kind":  "weight",
@@ -183,20 +183,6 @@
                               "agrees_with_engine_divisor":  true
                           },
                           {
-                              "id":  "mayonnaise",
-                              "commodity":  "Mayonnaise",
-                              "unit":  "oz",
-                              "store":  "Fareway",
-                              "per_unit":  0.5392,
-                              "size":  "24 oz",
-                              "item":  "Chosen Foods Classic Mayo",
-                              "kind":  "weight",
-                              "row_kind":  "volume",
-                              "holds_crown":  false,
-                              "unit_kind":  "weight",
-                              "agrees_with_engine_divisor":  true
-                          },
-                          {
                               "id":  "pickled-jalapenos",
                               "commodity":  "Pickled Jalapenos (sliced)",
                               "unit":  "oz",
@@ -287,7 +273,7 @@
                               "store":  "Family Fare",
                               "per_unit":  0.104,
                               "size":  "1.5 qt",
-                              "item":  "Kemps Ff Vanilla Yogurt 48 Oz",
+                              "item":  "Kemps Moose Tracks Yogurt 48 Oz",
                               "kind":  "volume",
                               "row_kind":  "weight",
                               "holds_crown":  false,
@@ -295,7 +281,7 @@
                               "agrees_with_engine_divisor":  false
                           }
                       ],
-    "compare_file":  "comparison-2026-09-28.json",
+    "compare_file":  "comparison-2026-09-29.json",
     "min_stores":  4,
     "kind_mismatch_label_vs_declared_unit":  [
                                                  {
@@ -417,7 +403,7 @@
                                                      "store":  "Family Fare",
                                                      "per_unit":  0.104,
                                                      "size":  "1.5 qt",
-                                                     "item":  "Kemps Ff Vanilla Yogurt 48 Oz",
+                                                     "item":  "Kemps Moose Tracks Yogurt 48 Oz",
                                                      "kind":  "volume",
                                                      "row_kind":  "weight",
                                                      "holds_crown":  false,
@@ -534,33 +520,20 @@
                          "item":  "Mr. Clean Mr. Clean Magic Eraser Sponge, Shower \u0026 Tub Cleaner, Lemon, 3ct 3 Ct",
                          "peers_packed":  "4 of 4",
                          "size_shape_mismatch":  false
-                     },
-                     {
-                         "id":  "mayonnaise",
-                         "commodity":  "Mayonnaise",
-                         "unit":  "oz",
-                         "store":  "Fareway",
-                         "per_unit":  0.5392,
-                         "median":  0.1327,
-                         "mult":  4.06,
-                         "size":  "24 oz",
-                         "item":  "Chosen Foods Classic Mayo",
-                         "peers_packed":  "0 of 6",
-                         "size_shape_mismatch":  false
                      }
                  ],
     "kind_mismatch_crown":  [
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-28T08:18:20",
+    "generated":  "2026-09-29T08:15:41",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",
                                                        "commodity":  "Coconut Oil",
                                                        "unit":  "oz",
                                                        "store":  "Sam\u0027s Club",
-                                                       "per_unit":  0.2139,
+                                                       "per_unit":  0.1961,
                                                        "size":  "56 oz",
                                                        "item":  "Member\u0027s Mark Organic Virgin Coconut Oil, 56oz.",
                                                        "kind":  "weight",
@@ -647,20 +620,6 @@
                                                        "per_unit":  0.3773,
                                                        "size":  "9.25 oz",
                                                        "item":  "Silver Spring Sassy Horseradish Sauce 9.25 Oz",
-                                                       "kind":  "weight",
-                                                       "row_kind":  "volume",
-                                                       "holds_crown":  false,
-                                                       "unit_kind":  "weight",
-                                                       "agrees_with_engine_divisor":  true
-                                                   },
-                                                   {
-                                                       "id":  "mayonnaise",
-                                                       "commodity":  "Mayonnaise",
-                                                       "unit":  "oz",
-                                                       "store":  "Fareway",
-                                                       "per_unit":  0.5392,
-                                                       "size":  "24 oz",
-                                                       "item":  "Chosen Foods Classic Mayo",
                                                        "kind":  "weight",
                                                        "row_kind":  "volume",
                                                        "holds_crown":  false,

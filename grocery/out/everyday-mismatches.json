@@ -13,19 +13,6 @@
         "board_src":  "main"
     },
     {
-        "id":  "asparagus",
-        "store":  "Aldi",
-        "unit":  "lb",
-        "board":  2.95,
-        "link":  2.69,
-        "ratio":  0.91,
-        "price":  2.69,
-        "size":  "1 lb",
-        "boardItem":  "Freshire Farms Asparagus",
-        "linkItem":  "Asparagus, Package",
-        "board_src":  "main"
-    },
-    {
         "id":  "avocado-oil",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
@@ -36,32 +23,6 @@
         "size":  "34 fl oz",
         "boardItem":  "Member\u0027s Mark Avocado Oil Glass Bottle, 34 fl. oz.",
         "linkItem":  "Member\u0027s Mark Avocado Oil Glass Bottle, 34 fl. oz.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "cherry-tomatoes",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.3112,
-        "link":  0.2904,
-        "ratio":  0.93,
-        "price":  6.97,
-        "size":  "1.5 lb",
-        "boardItem":  "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
-        "linkItem":  "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
-        "board_src":  "main"
-    },
-    {
-        "id":  "coconut-oil",
-        "store":  "Sam\u0027s Club",
-        "unit":  "oz",
-        "board":  0.2139,
-        "link":  0.1961,
-        "ratio":  0.92,
-        "price":  10.98,
-        "size":  "56 oz",
-        "boardItem":  "Member\u0027s Mark Organic Virgin Coconut Oil, 56oz.",
-        "linkItem":  "Member\u0027s Mark Organic Virgin Coconut Oil, 56oz.",
         "board_src":  "main"
     },
     {

@@ -1,6 +1,6 @@
 ﻿{
-    "date":  "2026-09-28",
-    "written":  "2026-09-28T08:21:11",
+    "date":  "2026-09-29",
+    "written":  "2026-09-29T08:18:12",
     "written_by":  "check-ad-cycles",
     "guards_rc":  4,
     "guards_blocked":  false,
@@ -8,15 +8,16 @@
     "quarantined":  1,
     "feed_refreshed":  true,
     "feed_refused":  "",
-    "inputs_fingerprint":  "1f77ab8adc8776a9",
+    "inputs_hash_basis":  "json-cr-stripped-v1",
+    "inputs_fingerprint":  "7d51dd31200ec9a0",
     "inputs":  {
-                   "grocery\\out\\comparison-2026-09-28.json":  "653ba31217e7c4d338de6e551c6462c46efbf41018b457834c47e588e7c70785",
-                   "grocery\\commodities.json":  "3af894aeefe397c069b30a3b9fe558b1c46cd6092fab8a08a21905f7d6db78d5",
-                   "grocery\\known-wrong.json":  "6cbbadf679b884318e52f60e877bc5f05cb4872da708031e3f6e766513210213",
-                   "grocery\\board-price-overrides.json":  "92a98447daa44b6865936f61127187e2c4c8d7b919b3ea7f25a0b5e753dcf5ef",
-                   "grocery\\product-urls.json":  "8a49468da0fb1add4e82f2e3fc0205d3317d12fcad9aebba105331f8e8944e04",
-                   "grocery\\out\\recipe-board.json":  "8c476c043e4e1983144d4f0da0077d77892a820b83040f9d6bf76709b167c00a",
-                   "grocery\\out\\name-drift.json":  "7b64e43bd19542842d16236e9ac367bf1be0d823f7eef2faf366dd9a381f3d86"
+                   "grocery\\out\\comparison-2026-09-29.json":  "1fdb4d9665b4d24731e0235fcac35ba7b9b754a870439dca393755a388ac3ebe",
+                   "grocery\\commodities.json":  "333c975194aba22f8f42b4399c09cb0b86d69b6ddd71c395741dfb10456f4536",
+                   "grocery\\known-wrong.json":  "fc4da14eb537724c78c612d008aea0fadaabda2fa84004f24a6929944371ab09",
+                   "grocery\\board-price-overrides.json":  "696d8183631ca622c328083af8a1e1adf286bdaec76214dd37f0f2778be95cd0",
+                   "grocery\\product-urls.json":  "be7fc8f3629db238fb6049c86dc13c9bf772b5e39c35af854941b468f524356b",
+                   "grocery\\out\\recipe-board.json":  "0557308684286719bf1a90dbc35d3a45ba852b3fab317fc62a30c35cf6bd611d",
+                   "grocery\\out\\name-drift.json":  "05ddf34f003adef44142bcabca674f5aa4055e2c0946cf4b5101f695872dd8ae"
                },
     "note":  "Written after guards ran. Readers must go through lib\\chain-verdict-lib.ps1: a verdict for another day, or one whose inputs_fingerprint no longer matches the tree, is treated as ABSENT and never ships public\\** or meal-prep\\**."
 }

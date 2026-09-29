@@ -5,13 +5,13 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-10-03; next_pull 2026-10-04",
-    "cursor_start":  446,
-    "cursor_next":  449,
+    "cursor_start":  449,
+    "cursor_next":  452,
     "total_terms":  641,
     "rotation_terms":  [
-                           "pasta sauce marinara",
-                           "peaches",
-                           "peanut butter"
+                           "peanut oil",
+                           "dry roasted peanuts",
+                           "bartlett pears"
                        ],
     "sale_terms":  [
 
@@ -37,9 +37,9 @@
                   "brandy",
                   "brown gravy mix",
                   "butter",
-                  "pasta sauce marinara",
-                  "peaches",
-                  "peanut butter",
+                  "peanut oil",
+                  "dry roasted peanuts",
+                  "bartlett pears",
                   "frozen french fries",
                   "13 gallon trash bags",
                   "yukon gold potatoes"
@@ -65,9 +65,9 @@
                         "brandy",
                         "brown-gravy-mix",
                         "butter",
-                        "pasta-sauce",
-                        "peaches",
-                        "peanut-butter",
+                        "peanut-oil",
+                        "peanuts",
+                        "pears",
                         "frozen-fries",
                         "trash-bags",
                         "yukon-gold-potatoes"

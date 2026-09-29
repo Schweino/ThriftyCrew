@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-28 08:26",
+    "generated":  "2026-09-29 08:24",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -39,24 +39,6 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Del Monte Whole Green Beans No Soy Teriyaki 14.5 Oz",
-                              "chain":  "canned-green-beans (oz) \u003e teriyaki-sauce (floz)",
-                              "form":  true,
-                              "winner":  "canned-green-beans",
-                              "verdict":  "size 14.5 oz = 0.1379/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
-                              "chain":  "flour (lb) \u003e crackers (oz)",
-                              "form":  true,
-                              "winner":  "flour",
-                              "verdict":  "OUT-OF-BAND",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
                               "name":  "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
                               "chain":  "raspberries (oz) \u003e blackberries (oz)",
                               "form":  false,
@@ -71,15 +53,6 @@
                               "form":  true,
                               "winner":  "ice-cream",
                               "verdict":  "UNPRICED",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Gatorade Chocolate Caramel Protein Bar 2.8 Oz",
-                              "chain":  "protein-bars (each) \u003e sports-drinks (floz)",
-                              "form":  true,
-                              "winner":  "protein-bars",
-                              "verdict":  "per-each = 2.392/each",
                               "cell":  "",
                               "crown":  false
                           },
@@ -107,42 +80,6 @@
                               "form":  true,
                               "winner":  "aluminum-foil",
                               "verdict":  "not in the newest candidates file",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Hy-Vee mixed vegetables, 24 oz., $2.48",
-                              "chain":  "frozen-vegetables (oz) \u003e canned-mixed-vegetables (oz)",
-                              "form":  false,
-                              "winner":  "frozen-vegetables",
-                              "verdict":  "size 24 oz = 0.1033/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Kodiak Protein Packed Chocolate Chip Oatmeal 6 Ea",
-                              "chain":  "oatmeal (oz) \u003e chocolate-chips (oz)",
-                              "form":  false,
-                              "winner":  "oatmeal",
-                              "verdict":  "UNPRICED",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Kraft Flavor Fusions Garlic \u0026 Herb Cheddar Cheese 7 Oz Block",
-                              "chain":  "shredded-cheese (oz) \u003e garlic (each)",
-                              "form":  true,
-                              "winner":  "shredded-cheese",
-                              "verdict":  "size 7 oz = 0.7143/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Kraft Parmesan Pesto Mac \u0026 Cheese 9.5 Oz",
-                              "chain":  "mac-and-cheese (each) \u003e parmesan (oz) \u003e pesto (oz)",
-                              "form":  true,
-                              "winner":  "mac-and-cheese",
-                              "verdict":  "UNPRICED",
                               "cell":  "",
                               "crown":  false
                           },
@@ -192,89 +129,37 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Oikos Remix Vanilla Cookies And Creme High Protein Mixin Nonfat Greek Yogurt 4.5 Oz",
-                              "chain":  "yogurt (oz) \u003e cookies (oz)",
+                              "name":  "Specially Selected Carrots Sweet Potatoes 16 OZ",
+                              "chain":  "carrots (lb) \u003e sweet-potatoes (lb)",
                               "form":  false,
-                              "winner":  "yogurt",
-                              "verdict":  "size 4.5 oz = 0.2778/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
-                              "chain":  "onions (lb) \u003e stuffing-mix (oz)",
-                              "form":  true,
-                              "winner":  "onions",
-                              "verdict":  "OUT-OF-BAND",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Pero Family Farms snipped green beans, 12 oz. pkg., $2.99",
-                              "chain":  "fresh-green-beans (lb) \u003e canned-green-beans (oz)",
-                              "form":  true,
-                              "winner":  "fresh-green-beans",
-                              "verdict":  "size 0.75 lb = 3.9867/lb",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
-                              "chain":  "oatmeal (oz) \u003e walnuts (oz)",
-                              "form":  false,
-                              "winner":  "oatmeal",
-                              "verdict":  "size 10.4 oz = 0.2875/oz ; size 10.4 oz = 0.4788/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Sartori Cheese Sriracha Cheddar 5 OZ",
-                              "chain":  "shredded-cheese (oz) \u003e hot-sauce (floz)",
-                              "form":  true,
-                              "winner":  "shredded-cheese",
-                              "verdict":  "size 5 oz = 0.798/oz",
-                              "cell":  "",
-                              "crown":  false
-                          },
-                          {
-                              "name":  "Screamin\u0027 Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea",
-                              "chain":  "frozen-pizza (each) \u003e parmesan (oz)",
-                              "form":  true,
-                              "winner":  "frozen-pizza",
-                              "verdict":  "per-9-pack = 0.7767/each",
-                              "cell":  "",
-                              "crown":  false
+                              "winner":  "carrots",
+                              "verdict":  "size 1 lb = 0.29/lb",
+                              "cell":  "carrots @ Aldi 0.29/lb",
+                              "crown":  true
                           }
                       ],
     "new_contested_names":  [
                                 "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
                                 "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
                                 "Del Monte Peas And Carrots 8.5 Oz",
-                                "Del Monte Whole Green Beans No Soy Teriyaki 14.5 Oz",
-                                "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
                                 "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
                                 "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
-                                "Gatorade Chocolate Caramel Protein Bar 2.8 Oz",
                                 "Gustare Vita capers or chopped garlic, 3 oz., $2.49",
                                 "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
                                 "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
-                                "Hy-Vee mixed vegetables, 24 oz., $2.48",
-                                "Kodiak Protein Packed Chocolate Chip Oatmeal 6 Ea",
-                                "Kraft Flavor Fusions Garlic \u0026 Herb Cheddar Cheese 7 Oz Block",
-                                "Kraft Parmesan Pesto Mac \u0026 Cheese 9.5 Oz",
                                 "McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
                                 "Muscle Milk Cookies \u0027N Creme High Protein Shake With Ultra Filtered Milk 4 Ea",
                                 "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
                                 "New York Bakery Cheesy Focaccia Pesto \u0026 Garlic",
                                 "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
-                                "Oikos Remix Vanilla Cookies And Creme High Protein Mixin Nonfat Greek Yogurt 4.5 Oz",
-                                "Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
-                                "Pero Family Farms snipped green beans, 12 oz. pkg., $2.99",
-                                "Quaker Instant Oatmeal, Raisin, Date \u0026 Walnut",
-                                "Sartori Cheese Sriracha Cheddar 5 OZ",
-                                "Screamin\u0027 Sicilian Pizza Co. Garlic Parmesan Loaded Breadstix 9 Ea"
+                                "Specially Selected Carrots Sweet Potatoes 16 OZ"
                             ],
     "cell_by_contest":  [
-
+                            {
+                                "name":  "Specially Selected Carrots Sweet Potatoes 16 OZ",
+                                "cell":  "carrots @ Aldi 0.29/lb",
+                                "crown":  true,
+                                "claimed_by":  "carrots \u003e sweet-potatoes"
+                            }
                         ]
 }

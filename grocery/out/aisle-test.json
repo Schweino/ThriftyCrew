@@ -684,6 +684,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
     },
     {
+        "id":  "cheese-tortellini",
+        "store":  "Family Fare",
+        "product":  "Our Family Tortellini, Cheese, Classic Curls 19 Oz",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_pasta_plus",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is a reviewed exception department for \u0027cheese-tortellini\u0027"
+    },
+    {
         "id":  "cherry-tomatoes",
         "store":  "Family Fare",
         "product":  "Grape Tomatoes Our Family",
@@ -1161,6 +1170,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "fish-sticks",
+        "store":  "Family Fare",
+        "product":  "Van De Kamp\u0027s Wild Caught Crunchy Breaded Fish Sticks 24.6 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/seafood_fish",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is a reviewed exception department for \u0027fish-sticks\u0027"
+    },
+    {
         "id":  "storage-bags",
         "store":  "Family Fare",
         "product":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
@@ -1265,6 +1283,15 @@
         "product":  "Our Family Green Peas, Sweet, Fresh Frozen 12 Oz",
         "dept":  "freezer",
         "aisle":  "freezer/frozen_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
+    },
+    {
+        "id":  "frozen-pizza",
+        "store":  "Family Fare",
+        "product":  "Di Giorno Frozen Pizza, Rising Crust Sausage \u0026 Pepperoni Pizza, 27.3oz (Frozen)",
+        "dept":  "freezer",
+        "aisle":  "freezer/frozen_meals_more",
         "verdict":  "ALLOW",
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
@@ -1404,6 +1431,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "green-olives",
+        "store":  "Family Fare",
+        "product":  "Finest Reserve Greek Stuffed Green Garlic Olives 10 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "green-onions",
         "store":  "Family Fare",
         "product":  "Fresh Green Onions/Scallions",
@@ -1411,6 +1447,15 @@
         "aisle":  "fresh_fruits_vegetables/onions",
         "verdict":  "ALLOW",
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
+        "id":  "grits",
+        "store":  "Family Fare",
+        "product":  "Quaker Quick 5 Minute Grits 24 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/breakfast",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "ground-cinnamon",
@@ -1629,6 +1674,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
+        "id":  "jicama",
+        "store":  "Family Fare",
+        "product":  "Jicama",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/other_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
+    },
+    {
         "id":  "ketchup",
         "store":  "Family Fare",
         "product":  "Ketchup, Rich \u0026 Thick Our Family",
@@ -1690,6 +1744,15 @@
         "aisle":  "beverages/fruit_vegetable_beverages",
         "verdict":  "ALLOW",
         "reason":  "\u0027beverages\u0027 is a reviewed exception department for \u0027lemonade\u0027"
+    },
+    {
+        "id":  "lemons",
+        "store":  "Family Fare",
+        "product":  "Fresh Lemons, Large",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/citrus_fruits",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
         "id":  "lettuce",
@@ -2025,6 +2088,24 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
+        "id":  "poppy-seeds",
+        "store":  "Family Fare",
+        "product":  "Poppy Seeds Sugar \u0027N Spice",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
+    },
+    {
+        "id":  "potato-gnocchi",
+        "store":  "Family Fare",
+        "product":  "De Lallo Potato Gnocchi 16 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/pasta_sauces",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
         "id":  "powdered-sugar",
         "store":  "Family Fare",
         "product":  "Crystal Sugar Sugar, Confectioners Powdered 2 Lb",
@@ -2171,7 +2252,7 @@
     {
         "id":  "refrigerated-biscuits",
         "store":  "Family Fare",
-        "product":  "Pillsbury Southern Homestyle Buttermilk Biscuits 8 Ea",
+        "product":  "Pillsbury Flaky Layers Butter Tastin\u0027 Biscuits 8 Ea",
         "dept":  "dairy",
         "aisle":  "dairy/refrigerated_doughs_batters",
         "verdict":  "ALLOW",
@@ -2194,6 +2275,15 @@
         "aisle":  "pantry/snacks",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027snacks\u0027"
+    },
+    {
+        "id":  "rice-noodles",
+        "store":  "Family Fare",
+        "product":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/packaged_meals",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
     },
     {
         "id":  "rice-vinegar",
@@ -2392,6 +2482,15 @@
         "aisle":  "pantry/dry_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
+        "id":  "sun-dried-tomatoes",
+        "store":  "Family Fare",
+        "product":  "California Sun Dry Sun Dried Tomatoes Julienne Ct",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/tomatoes",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is a reviewed exception department for \u0027sun-dried-tomatoes\u0027"
     },
     {
         "id":  "sweet-corn",
@@ -2617,6 +2716,15 @@
         "aisle":  "pantry/broth_soups_stews_chili",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "walnuts",
+        "store":  "Family Fare",
+        "product":  "Our Family Chopped Walnuts 8 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/baking",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027oils\u0027"
     },
     {
         "id":  "whipped-cream",
