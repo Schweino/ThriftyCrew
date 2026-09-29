@@ -1,8 +1,8 @@
 {
-    "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages on its first day only; a match-verdicts.json verdict (band|key) removes it.",
+    "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages once, on the first run it is open and not shadowed by a cheaper-or-equal standing cell at its own store (paged_on; shadowed_by names that cell\u0027s price); a match-verdicts.json verdict (band|key) removes it.",
     "from":  "flagged-2026-09-28.json",
-    "written":  "2026-09-28",
-    "count":  197,
+    "written":  "2026-09-29",
+    "count":  157,
     "rows":  [
                  {
                      "key":  "air-freshener|Family Fare|Febreze Plugs Single Refill Downy Calm",
@@ -11,7 +11,9 @@
                      "store":  "Family Fare",
                      "name":  "Febreze Plugs Single Refill Downy Calm",
                      "unit_price":  4.5862,
-                     "band_ref":  0.21025
+                     "band_ref":  0.21025,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.3137
                  },
                  {
                      "key":  "apple-cider-vinegar|Baker\u0027s|Bragg Organic Apple Cider Vinegar with the Mother",
@@ -20,7 +22,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Bragg Organic Apple Cider Vinegar with the Mother",
                      "unit_price":  0.3119,
-                     "band_ref":  0.0546
+                     "band_ref":  0.0546,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0546
                  },
                  {
                      "key":  "apple-cider-vinegar|Family Fare|Bragg Apple Cider Vinegar, Organic 16 Oz",
@@ -29,7 +33,9 @@
                      "store":  "Family Fare",
                      "name":  "Bragg Apple Cider Vinegar, Organic 16 Oz",
                      "unit_price":  0.4181,
-                     "band_ref":  0.0546
+                     "band_ref":  0.0546,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "apple-cider-vinegar|Walmart|Bettergoods Hot Honey 12 oz Bottle with Habanero and Apple Cider Vinegar",
@@ -38,7 +44,9 @@
                      "store":  "Walmart",
                      "name":  "Bettergoods Hot Honey 12 oz Bottle with Habanero and Apple Cider Vinegar",
                      "unit_price":  0.4133,
-                     "band_ref":  0.0546
+                     "band_ref":  0.0546,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0738
                  },
                  {
                      "key":  "apple-juice|Baker\u0027s|Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz",
@@ -47,7 +55,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Evolution Fresh Cold Pressed Organic Apple Juice - 50 Fl Oz",
                      "unit_price":  0.1998,
-                     "band_ref":  0.0387
+                     "band_ref":  0.0387,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0358
                  },
                  {
                      "key":  "apples|Aldi|Specially Selected Apple Berry Blossom 8 OZ",
@@ -56,7 +66,9 @@
                      "store":  "Aldi",
                      "name":  "Specially Selected Apple Berry Blossom 8 OZ",
                      "unit_price":  6.98,
-                     "band_ref":  1.04
+                     "band_ref":  1.04,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.6633
                  },
                  {
                      "key":  "apples|Hy-Vee|Red Apple cheese, 7 or 8 oz., $4.87",
@@ -65,7 +77,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Red Apple cheese, 7 or 8 oz., $4.87",
                      "unit_price":  11.1314,
-                     "band_ref":  1.04
+                     "band_ref":  1.04,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  1.99
                  },
                  {
                      "key":  "baked-beans|Baker\u0027s|Kroger Beef Brisket BBQ Baked Beans",
@@ -74,7 +88,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Kroger Beef Brisket BBQ Baked Beans",
                      "unit_price":  0.3564,
-                     "band_ref":  0.0711
+                     "band_ref":  0.0711,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0782
                  },
                  {
                      "key":  "bay-leaves|Hy-Vee|Morton \u0026 Bassett Bay Leaves",
@@ -83,7 +99,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Morton \u0026 Bassett Bay Leaves",
                      "unit_price":  91.3571,
-                     "band_ref":  14.6471
+                     "band_ref":  14.6471,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  49.9167
                  },
                  {
                      "key":  "bleach|Family Fare|Glad Drawstring Bags, Kitchen, Tall, Max Strength, Lemon Fresh Bleach Scent, 13 Gallon 34 Ea",
@@ -92,7 +110,9 @@
                      "store":  "Family Fare",
                      "name":  "Glad Drawstring Bags, Kitchen, Tall, Max Strength, Lemon Fresh Bleach Scent, 13 Gallon 34 Ea",
                      "unit_price":  0.0066,
-                     "band_ref":  0.03505
+                     "band_ref":  0.03505,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "bleach|Walmart|Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
@@ -101,7 +121,9 @@
                      "store":  "Walmart",
                      "name":  "Clorox 2 for Colors Stain Remover and Laundry Additive, Free and Clear, Bleach Free, 66 Fl Oz",
                      "unit_price":  0.1965,
-                     "band_ref":  0.03505
+                     "band_ref":  0.03505,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0514
                  },
                  {
                      "key":  "bleach|Walmart|Clorox 2 For Colors Stain Remover, 2 in 1 Laundry + Fabric, Bleach Free, Fresh Scent, 88 Fl Oz.",
@@ -110,16 +132,9 @@
                      "store":  "Walmart",
                      "name":  "Clorox 2 For Colors Stain Remover, 2 in 1 Laundry + Fabric, Bleach Free, Fresh Scent, 88 Fl Oz.",
                      "unit_price":  0.1764,
-                     "band_ref":  0.03505
-                 },
-                 {
-                     "key":  "bottled-water|Family Fare|Ice Mountain Spring Water 12 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "bottled-water",
-                     "store":  "Family Fare",
-                     "name":  "Ice Mountain Spring Water 12 Ea",
-                     "unit_price":  4.5,
-                     "band_ref":  0.1637
+                     "band_ref":  0.03505,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0514
                  },
                  {
                      "key":  "breakfast-sandwiches|Fareway|Johnsonville Johnsonville Cooked Original Recipe Breakfast Sausage Sandwich Size Pork Patties -20oz package",
@@ -128,7 +143,9 @@
                      "store":  "Fareway",
                      "name":  "Johnsonville Johnsonville Cooked Original Recipe Breakfast Sausage Sandwich Size Pork Patties -20oz package",
                      "unit_price":  8.49,
-                     "band_ref":  1.3113
+                     "band_ref":  1.3113,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  1.2488
                  },
                  {
                      "key":  "breakfast-sausage|Fareway|Johnsonville Cooked Original Breakfast Pork Sausage Links - 20oz package",
@@ -137,7 +154,9 @@
                      "store":  "Fareway",
                      "name":  "Johnsonville Cooked Original Breakfast Pork Sausage Links - 20oz package",
                      "unit_price":  0.5225,
-                     "band_ref":  2.88
+                     "band_ref":  2.88,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "cat-food|Hy-Vee|Sheba cat food, 2.6 or 2.64 oz., 10/ $10.00",
@@ -146,7 +165,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Sheba cat food, 2.6 or 2.64 oz., 10/ $10.00",
                      "unit_price":  6.1538,
-                     "band_ref":  1.13225
+                     "band_ref":  1.13225,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "cat-food|Walmart|Blue Buffalo Wilderness Natural High-Protein, Grain-Free Dry Cat Food, Chicken, 4-lb. Bag",
@@ -155,7 +176,9 @@
                      "store":  "Walmart",
                      "name":  "Blue Buffalo Wilderness Natural High-Protein, Grain-Free Dry Cat Food, Chicken, 4-lb. Bag",
                      "unit_price":  5.745,
-                     "band_ref":  1.13225
+                     "band_ref":  1.13225,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.6584
                  },
                  {
                      "key":  "cereal|Family Fare|Cheerios Cereal 8.9 Oz",
@@ -164,7 +187,9 @@
                      "store":  "Family Fare",
                      "name":  "Cheerios Cereal 8.9 Oz",
                      "unit_price":  0.6169,
-                     "band_ref":  0.1155
+                     "band_ref":  0.1155,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1559
                  },
                  {
                      "key":  "cereal|Walmart|Kellogg\u0027s Breakfast Cereal, Kids Cereal, Family Breakfast, Variety Pack, 8.56oz Tray (8 Boxes)",
@@ -173,7 +198,9 @@
                      "store":  "Walmart",
                      "name":  "Kellogg\u0027s Breakfast Cereal, Kids Cereal, Family Breakfast, Variety Pack, 8.56oz Tray (8 Boxes)",
                      "unit_price":  0.6145,
-                     "band_ref":  0.1155
+                     "band_ref":  0.1155,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.159
                  },
                  {
                      "key":  "conditioner|Baker\u0027s|Kristin Ess Hair Strengthening Conditioner",
@@ -182,7 +209,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Kristin Ess Hair Strengthening Conditioner",
                      "unit_price":  1.249,
-                     "band_ref":  0.2137
+                     "band_ref":  0.2137,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "conditioner|Baker\u0027s|Kristin Ess Weightless Shine Leave In Conditioner Spray For Dry Hair - Moisture Repair + Detangler",
@@ -191,7 +220,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Kristin Ess Weightless Shine Leave In Conditioner Spray For Dry Hair - Moisture Repair + Detangler",
                      "unit_price":  1.4781,
-                     "band_ref":  0.2137
+                     "band_ref":  0.2137,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "conditioner|Baker\u0027s|Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
@@ -200,7 +231,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Mielle Kalahari Melon \u0026 Aloe VeraDeep Hydration 2-Minute Deep Conditioner",
                      "unit_price":  1.4158,
-                     "band_ref":  0.2137
+                     "band_ref":  0.2137,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "cookies|Baker\u0027s|Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
@@ -209,7 +242,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
                      "unit_price":  0.8681,
-                     "band_ref":  0.1533
+                     "band_ref":  0.1533,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1408
                  },
                  {
                      "key":  "cookies|Hy-Vee|Nothing But The Truth oat cookies, 5 oz., $3.99",
@@ -218,7 +253,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Nothing But The Truth oat cookies, 5 oz., $3.99",
                      "unit_price":  0.798,
-                     "band_ref":  0.1533
+                     "band_ref":  0.1533,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.3121
                  },
                  {
                      "key":  "cooking-spray|Family Fare|4th \u0026 Heart Ghee Cooking Spray With Avocado Oil 5 Fl Oz",
@@ -227,7 +264,9 @@
                      "store":  "Family Fare",
                      "name":  "4th \u0026 Heart Ghee Cooking Spray With Avocado Oil 5 Fl Oz",
                      "unit_price":  2.098,
-                     "band_ref":  0.4052
+                     "band_ref":  0.4052,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.4817
                  },
                  {
                      "key":  "crackers|Aldi|Savoritz Almond Flour Crackers Rosemary 4.25 OZ",
@@ -236,7 +275,9 @@
                      "store":  "Aldi",
                      "name":  "Savoritz Almond Flour Crackers Rosemary 4.25 OZ",
                      "unit_price":  0.8212,
-                     "band_ref":  0.1178
+                     "band_ref":  0.1178,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1156
                  },
                  {
                      "key":  "crackers|Fareway|Schar Gluten Free Table Crackers",
@@ -245,7 +286,20 @@
                      "store":  "Fareway",
                      "name":  "Schar Gluten Free Table Crackers",
                      "unit_price":  0.8095,
-                     "band_ref":  0.1178
+                     "band_ref":  0.1178,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1862
+                 },
+                 {
+                     "key":  "crackers|Hy-Vee|Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
+                     "first_seen":  "2026-09-29",
+                     "id":  "crackers",
+                     "store":  "Hy-Vee",
+                     "name":  "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
+                     "unit_price":  0.9215,
+                     "band_ref":  0.1178,
+                     "paged_on":  "",
+                     "shadowed_by":  0.1156
                  },
                  {
                      "key":  "crackers|Hy-Vee|Good Graces gluten free saltine crackers, 7 oz., $4.29",
@@ -254,7 +308,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Good Graces gluten free saltine crackers, 7 oz., $4.29",
                      "unit_price":  0.6129,
-                     "band_ref":  0.1178
+                     "band_ref":  0.1178,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1156
                  },
                  {
                      "key":  "crackers|Hy-Vee|Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
@@ -263,7 +319,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
                      "unit_price":  0.9943,
-                     "band_ref":  0.1178
+                     "band_ref":  0.1178,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1156
                  },
                  {
                      "key":  "deodorant|Walmart|Wild Refillable Deodorant Starter Pack  Aluminum Free. Love Heart Case + Fresh Cotton \u0026 Sea Salt Refill, for Women and Men, 1.4oz",
@@ -272,16 +330,9 @@
                      "store":  "Walmart",
                      "name":  "Wild Refillable Deodorant Starter Pack  Aluminum Free. Love Heart Case + Fresh Cotton \u0026 Sea Salt Refill, for Women and Men, 1.4oz",
                      "unit_price":  12.1214,
-                     "band_ref":  1.23165
-                 },
-                 {
-                     "key":  "dinner-rolls|Hy-Vee|King\u0027s Hawaiian rolls, 6 to 12 ct., 2/ $8.00",
-                     "first_seen":  "2026-09-28",
-                     "id":  "dinner-rolls",
-                     "store":  "Hy-Vee",
-                     "name":  "King\u0027s Hawaiian rolls, 6 to 12 ct., 2/ $8.00",
-                     "unit_price":  4,
-                     "band_ref":  0.2396
+                     "band_ref":  1.23165,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.7475
                  },
                  {
                      "key":  "disinfecting-wipes|Baker\u0027s|Clorox On the Go Travel Disinfecting Wipes Crisp Lemon",
@@ -290,7 +341,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Clorox On the Go Travel Disinfecting Wipes Crisp Lemon",
                      "unit_price":  0.3322,
-                     "band_ref":  0.0605
+                     "band_ref":  0.0605,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0467
                  },
                  {
                      "key":  "dog-food|Hy-Vee|Cesar dog food, 3.5 oz., $1.00 ea. with purchase of 10",
@@ -299,7 +352,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Cesar dog food, 3.5 oz., $1.00 ea. with purchase of 10",
                      "unit_price":  4.5714,
-                     "band_ref":  0.7918
+                     "band_ref":  0.7918,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.8638
                  },
                  {
                      "key":  "dog-treats|Baker\u0027s|Beggin\u0027 With Real Meat Dog Treats, Fun Size Original With Bacon Flavor",
@@ -308,7 +363,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Beggin\u0027 With Real Meat Dog Treats, Fun Size Original With Bacon Flavor",
                      "unit_price":  0.665,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1121
                  },
                  {
                      "key":  "dog-treats|Baker\u0027s|Blue Buffalo Soft \u0026 Chewy Health Bars Natural Dog Treats Chicken \u0026 Mixed Berries",
@@ -317,7 +374,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Blue Buffalo Soft \u0026 Chewy Health Bars Natural Dog Treats Chicken \u0026 Mixed Berries",
                      "unit_price":  0.6656,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1121
                  },
                  {
                      "key":  "dog-treats|Baker\u0027s|Pet Pride Chicken Jerky Dog Treats BIG DEAL!",
@@ -326,7 +385,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Pet Pride Chicken Jerky Dog Treats BIG DEAL!",
                      "unit_price":  0.6559,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1121
                  },
                  {
                      "key":  "dog-treats|Baker\u0027s|Pup-Peroni Original Beef Recipe Dog Treats",
@@ -335,7 +396,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Pup-Peroni Original Beef Recipe Dog Treats",
                      "unit_price":  0.6589,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1121
                  },
                  {
                      "key":  "dog-treats|Fareway|Nudges Dog Treats",
@@ -344,7 +407,9 @@
                      "store":  "Fareway",
                      "name":  "Nudges Dog Treats",
                      "unit_price":  0.899,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0936
                  },
                  {
                      "key":  "dog-treats|Walmart|Golden Rewards Duck Jerky Premium Treats for Dogs, 16 oz Bag",
@@ -353,7 +418,9 @@
                      "store":  "Walmart",
                      "name":  "Golden Rewards Duck Jerky Premium Treats for Dogs, 16 oz Bag",
                      "unit_price":  0.6231,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1658
                  },
                  {
                      "key":  "dog-treats|Walmart|Milk Bone Soft \u0026 Chewy Dog Treats, Made with Real Beef \u0026 Filet Mignon, 25 oz Canister",
@@ -362,7 +429,9 @@
                      "store":  "Walmart",
                      "name":  "Milk Bone Soft \u0026 Chewy Dog Treats, Made with Real Beef \u0026 Filet Mignon, 25 oz Canister",
                      "unit_price":  0.5792,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1658
                  },
                  {
                      "key":  "dog-treats|Walmart|Milk Bone Soft \u0026 Chewy Mini’s Graveyard Bones, Halloween Dog Treats, Beef \u0026 Filet Mignon Recipe, 3.7 oz Bag",
@@ -371,7 +440,9 @@
                      "store":  "Walmart",
                      "name":  "Milk Bone Soft \u0026 Chewy Mini’s Graveyard Bones, Halloween Dog Treats, Beef \u0026 Filet Mignon Recipe, 3.7 oz Bag",
                      "unit_price":  1.0757,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1658
                  },
                  {
                      "key":  "dog-treats|Walmart|Pup Peroni Original Bacon Flavor Dog Treats, 5.6 oz Bag",
@@ -380,7 +451,9 @@
                      "store":  "Walmart",
                      "name":  "Pup Peroni Original Bacon Flavor Dog Treats, 5.6 oz Bag",
                      "unit_price":  0.6214,
-                     "band_ref":  0.10285
+                     "band_ref":  0.10285,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1658
                  },
                  {
                      "key":  "dried-dill|Hy-Vee|McCormick Dill Weed\r\n",
@@ -389,7 +462,9 @@
                      "store":  "Hy-Vee",
                      "name":  "McCormick Dill Weed\r\n",
                      "unit_price":  19.9667,
-                     "band_ref":  3.9867
+                     "band_ref":  3.9867,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  12.4875
                  },
                  {
                      "key":  "flour|Family Fare|Delimex Chkn \u0026 Cheese Flour Taquitos",
@@ -398,16 +473,9 @@
                      "store":  "Family Fare",
                      "name":  "Delimex Chkn \u0026 Cheese Flour Taquitos",
                      "unit_price":  4.1667,
-                     "band_ref":  0.4775
-                 },
-                 {
-                     "key":  "flour|Hy-Vee|Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
-                     "first_seen":  "2026-09-28",
-                     "id":  "flour",
-                     "store":  "Hy-Vee",
-                     "name":  "Flour \u0026 Forge sourdough crackers, 6.5 oz., $5.99",
-                     "unit_price":  14.7446,
-                     "band_ref":  0.4775
+                     "band_ref":  0.4775,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.5596
                  },
                  {
                      "key":  "fresh-mint|Hy-Vee|McCormick Gourmet Organic Mint, 0.25 oz",
@@ -416,7 +484,9 @@
                      "store":  "Hy-Vee",
                      "name":  "McCormick Gourmet Organic Mint, 0.25 oz",
                      "unit_price":  27.96,
-                     "band_ref":  3.9867
+                     "band_ref":  3.9867,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "frozen-fruit|Baker\u0027s|Tru Fru Fresh Frozen Blueberries in Dark \u0026 White Chocolate",
@@ -425,7 +495,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Blueberries in Dark \u0026 White Chocolate",
                      "unit_price":  0.9362,
-                     "band_ref":  0.1726
+                     "band_ref":  0.1726,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1561
                  },
                  {
                      "key":  "frozen-fruit|Baker\u0027s|Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
@@ -434,7 +506,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
                      "unit_price":  0.8738,
-                     "band_ref":  0.1726
+                     "band_ref":  0.1726,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1561
                  },
                  {
                      "key":  "frozen-fruit|Baker\u0027s|Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
@@ -443,7 +517,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
                      "unit_price":  0.9362,
-                     "band_ref":  0.1726
+                     "band_ref":  0.1726,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1561
                  },
                  {
                      "key":  "frozen-fruit|Baker\u0027s|Tru Fru Fresh Frozen Strawberries in White \u0026 Milk Chocolate",
@@ -452,232 +528,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in White \u0026 Milk Chocolate",
                      "unit_price":  0.9717,
-                     "band_ref":  0.1726
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen 12 Veggie Cauliflower Crust Deli Pizza 17.6 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen 12 Veggie Cauliflower Crust Deli Pizza 17.6 OZ",
-                     "unit_price":  8.29,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen 16 Mega Meat Deli Pizza 30.5 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen 16 Mega Meat Deli Pizza 30.5 OZ",
-                     "unit_price":  7.19,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen Pepperoni Deli Pizza 44.5 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen Pepperoni Deli Pizza 44.5 OZ",
-                     "unit_price":  6.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen Pepperoni Singles Deep Dish 22.4 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen Pepperoni Singles Deep Dish 22.4 OZ",
-                     "unit_price":  6.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen Stuffed Crust Pepperoni Pizza 14 IN",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen Stuffed Crust Pepperoni Pizza 14 IN",
-                     "unit_price":  9.49,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen Supreme Deli Pizza 53 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen Supreme Deli Pizza 53 OZ",
-                     "unit_price":  7.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzi S Pizza Kitchen Wood Fired Sausage Pepperoni Deli Pizza 30.23 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzi S Pizza Kitchen Wood Fired Sausage Pepperoni Deli Pizza 30.23 OZ",
-                     "unit_price":  7.19,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Aldi|Mama Cozzis Pizza Kitchen Pepperoni Hatch Chile Deli Pizza 30.5 OZ",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Aldi",
-                     "name":  "Mama Cozzis Pizza Kitchen Pepperoni Hatch Chile Deli Pizza 30.5 OZ",
-                     "unit_price":  6.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Baker\u0027s|California Pizza Kitchen BBQ Recipe Chicken Frozen Pizza Chicken Pizza on a Crispy Thin Crust",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Baker\u0027s",
-                     "name":  "California Pizza Kitchen BBQ Recipe Chicken Frozen Pizza Chicken Pizza on a Crispy Thin Crust",
-                     "unit_price":  8.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Baker\u0027s|DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
-                     "first_seen":  "2026-09-26",
-                     "id":  "frozen-pizza",
-                     "store":  "Baker\u0027s",
-                     "name":  "DiGiorno Pepperoni Stuffed Crust Frozen Pizza",
-                     "unit_price":  9.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Baker\u0027s|Screamin Sicilian Holy Pepperoni Original Crust Frozen Pizza",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Baker\u0027s",
-                     "name":  "Screamin Sicilian Holy Pepperoni Original Crust Frozen Pizza",
-                     "unit_price":  7.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Hy-Vee|Home Run Inn, Gino\u0027s East, Screamin\u0027 Sicilian Pizza Co. pizza or breadstix, 14.45 to 33 oz., $6.99",
-                     "first_seen":  "2026-09-28",
-                     "id":  "frozen-pizza",
-                     "store":  "Hy-Vee",
-                     "name":  "Home Run Inn, Gino\u0027s East, Screamin\u0027 Sicilian Pizza Co. pizza or breadstix, 14.45 to 33 oz., $6.99",
-                     "unit_price":  6.99,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|bettergoods Italian Wood-Fired Mushroom and Truffle Pizza, 15.73 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "bettergoods Italian Wood-Fired Mushroom and Truffle Pizza, 15.73 oz (Frozen)",
-                     "unit_price":  6.92,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|Brew Pub Lotzza Motzza Cheese Frozen Pizza 20.00oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "Brew Pub Lotzza Motzza Cheese Frozen Pizza 20.00oz",
-                     "unit_price":  7.73,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|Daiya Dairy Free Gluten Free Cheese Pizza, Vegan, 15.7 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "Daiya Dairy Free Gluten Free Cheese Pizza, Vegan, 15.7 oz (Frozen)",
-                     "unit_price":  7.68,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza Stuffed Crust Five Cheese Pizza, 22.2 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza Stuffed Crust Five Cheese Pizza, 22.2 Oz",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza Stuffed Crust Pepperoni Pizza, 22.2 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza Stuffed Crust Pepperoni Pizza, 22.2 Oz",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza Stuffed Crust Veggie and Meat Supreme Pizza, 26.4 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza Stuffed Crust Veggie and Meat Supreme Pizza, 26.4 Oz",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza, Stuffed Crust Cheese and Pepperoni Pizza, 22.2 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza, Stuffed Crust Cheese and Pepperoni Pizza, 22.2 oz (Frozen)",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza, Stuffed Crust Cheese and Three Meat Pepperoni, Beef, and Sausage Pizza, 24.5 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza, Stuffed Crust Cheese and Three Meat Pepperoni, Beef, and Sausage Pizza, 24.5 oz (Frozen)",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza, Stuffed Crust Five Cheese Pizza, 22.2 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza, Stuffed Crust Five Cheese Pizza, 22.2 oz (Frozen)",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Frozen Pizza, Stuffed Crust Supreme Pizza, 26.4 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Frozen Pizza, Stuffed Crust Supreme Pizza, 26.4 oz (Frozen)",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|DiGiorno Gluten Free Crust Cheese and Pepperoni Pizza, 24.2 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "DiGiorno Gluten Free Crust Cheese and Pepperoni Pizza, 24.2 oz (Frozen)",
-                     "unit_price":  8.47,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|Great Value Stuffed Crust Supreme Pizza, 24.55 oz (Frozen)",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "Great Value Stuffed Crust Supreme Pizza, 24.55 oz (Frozen)",
-                     "unit_price":  7.66,
-                     "band_ref":  1.3725
-                 },
-                 {
-                     "key":  "frozen-pizza|Walmart|Red Baron Pepperoni Stuffed Crust Frozen Pizza, 22.75 oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "frozen-pizza",
-                     "store":  "Walmart",
-                     "name":  "Red Baron Pepperoni Stuffed Crust Frozen Pizza, 22.75 oz",
-                     "unit_price":  7.47,
-                     "band_ref":  1.3725
+                     "band_ref":  0.1726,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1561
                  },
                  {
                      "key":  "gelatin|Family Fare|Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
@@ -686,7 +539,9 @@
                      "store":  "Family Fare",
                      "name":  "Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
                      "unit_price":  5,
-                     "band_ref":  0.98
+                     "band_ref":  0.98,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "gelatin|Family Fare|Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
@@ -695,115 +550,9 @@
                      "store":  "Family Fare",
                      "name":  "Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
                      "unit_price":  5,
-                     "band_ref":  0.98
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Fiber One Oat \u0026 Chocolate Chewy Bars 5 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Fiber One Oat \u0026 Chocolate Chewy Bars 5 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Almond Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Almond Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Cashew Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Cashew Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Dark Chocolate Cherry Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Dark Chocolate Cherry Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Dark Chocolate, Peanut \u0026 Almond Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Dark Chocolate, Peanut \u0026 Almond Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Double Chocolate Granola Bars 5 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Double Chocolate Granola Bars 5 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy Peanut Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy Peanut Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Chewy S\u0027mores Granola Bars 5 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Chewy S\u0027mores Granola Bars 5 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Oats \u0027N Dark Chocolate Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Oats \u0027N Dark Chocolate Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Oats \u0027N Honey Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Oats \u0027N Honey Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Oats \u0027N Honey/Peanut Butter/Oats \u0027N Dark Chocolate Granola Bars Variety Pack 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Oats \u0027N Honey/Peanut Butter/Oats \u0027N Dark Chocolate Granola Bars Variety Pack 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
-                 },
-                 {
-                     "key":  "granola-bars|Family Fare|Nature Valley Peanut Butter Granola Bars 6 Ea",
-                     "first_seen":  "2026-09-27",
-                     "id":  "granola-bars",
-                     "store":  "Family Fare",
-                     "name":  "Nature Valley Peanut Butter Granola Bars 6 Ea",
-                     "unit_price":  2.5,
-                     "band_ref":  0.2506
+                     "band_ref":  0.98,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "green-olives|Hy-Vee|FreeStyle Lemon Garlic Green Olives",
@@ -812,7 +561,9 @@
                      "store":  "Hy-Vee",
                      "name":  "FreeStyle Lemon Garlic Green Olives",
                      "unit_price":  1.4975,
-                     "band_ref":  0.25775
+                     "band_ref":  0.28,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.3461
                  },
                  {
                      "key":  "ground-cinnamon|Baker\u0027s|Tampico Cinnamon Ground",
@@ -821,7 +572,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tampico Cinnamon Ground",
                      "unit_price":  2.29,
-                     "band_ref":  0.45625
+                     "band_ref":  0.45625,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.6443
                  },
                  {
                      "key":  "ground-coriander|Hy-Vee|McCormick Gourmet Organic Coriander Seed, 0.87 oz",
@@ -830,7 +583,9 @@
                      "store":  "Hy-Vee",
                      "name":  "McCormick Gourmet Organic Coriander Seed, 0.87 oz",
                      "unit_price":  8.8778,
-                     "band_ref":  1.69
+                     "band_ref":  1.69,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  5.592
                  },
                  {
                      "key":  "hot-sauce|Baker\u0027s|TABASCO Green Pepper Sauce, Hot Sauce",
@@ -839,7 +594,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Green Pepper Sauce, Hot Sauce",
                      "unit_price":  0.898,
-                     "band_ref":  0.1375
+                     "band_ref":  0.1375,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
                  },
                  {
                      "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
@@ -848,7 +605,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
                      "unit_price":  0.898,
-                     "band_ref":  0.1375
+                     "band_ref":  0.1375,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
                  },
                  {
                      "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
@@ -857,7 +616,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
                      "unit_price":  1.095,
-                     "band_ref":  0.1375
+                     "band_ref":  0.1375,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
                  },
                  {
                      "key":  "hot-sauce|Baker\u0027s|Yellowbird Serrano Hot Sauce",
@@ -866,7 +627,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Yellowbird Serrano Hot Sauce",
                      "unit_price":  0.7448,
-                     "band_ref":  0.1375
+                     "band_ref":  0.1375,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
                  },
                  {
                      "key":  "ice-cream|Baker\u0027s|Halo Top Low-Calorie Vanilla Bean Light Ice Cream",
@@ -875,7 +638,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Halo Top Low-Calorie Vanilla Bean Light Ice Cream",
                      "unit_price":  0.3431,
-                     "band_ref":  0.05645
+                     "band_ref":  0.05645,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0623
                  },
                  {
                      "key":  "ice-cream|Fareway|Haagen-Dazs Ice Cream",
@@ -884,7 +649,9 @@
                      "store":  "Fareway",
                      "name":  "Haagen-Dazs Ice Cream",
                      "unit_price":  0.3207,
-                     "band_ref":  0.05645
+                     "band_ref":  0.05645,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0545
                  },
                  {
                      "key":  "ice-cream|Walmart|Haagen Dazs Vanilla Ice Cream, Gluten Free, Kosher, 28oz",
@@ -893,7 +660,9 @@
                      "store":  "Walmart",
                      "name":  "Haagen Dazs Vanilla Ice Cream, Gluten Free, Kosher, 28oz",
                      "unit_price":  0.2843,
-                     "band_ref":  0.05645
+                     "band_ref":  0.05645,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0566
                  },
                  {
                      "key":  "instant-coffee|Baker\u0027s|Nescafe Gold Decaf Espresso Instant Coffee",
@@ -902,7 +671,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Nescafe Gold Decaf Espresso Instant Coffee",
                      "unit_price":  3.6246,
-                     "band_ref":  0.7129
+                     "band_ref":  0.7129,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.7129
                  },
                  {
                      "key":  "instant-coffee|Baker\u0027s|Simple Truth Organic Mushroom Instant Coffee",
@@ -911,7 +682,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Simple Truth Organic Mushroom Instant Coffee",
                      "unit_price":  5.184,
-                     "band_ref":  0.7129
+                     "band_ref":  0.7129,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.7129
                  },
                  {
                      "key":  "jelly|Hy-Vee|Stonewall Kitchen jam, 11.25 to 13 oz., $6.99",
@@ -920,7 +693,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Stonewall Kitchen jam, 11.25 to 13 oz., $6.99",
                      "unit_price":  0.6213,
-                     "band_ref":  0.0894
+                     "band_ref":  0.0894,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0891
                  },
                  {
                      "key":  "jelly|Hy-Vee|Stonewall Kitchen jelly, 11.25 to 13 oz., $6.99",
@@ -929,7 +704,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Stonewall Kitchen jelly, 11.25 to 13 oz., $6.99",
                      "unit_price":  0.6213,
-                     "band_ref":  0.0894
+                     "band_ref":  0.0894,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0891
                  },
                  {
                      "key":  "lotion|Baker\u0027s|Cerave, Cerave Daily Moisturizing Lotion 12Oz, 12 Fl Oz",
@@ -938,7 +715,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Cerave, Cerave Daily Moisturizing Lotion 12Oz, 12 Fl Oz",
                      "unit_price":  1.4992,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.2064
                  },
                  {
                      "key":  "lotion|Walmart|AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin Relief, Exfoliating, 14.1OZ",
@@ -947,7 +726,9 @@
                      "store":  "Walmart",
                      "name":  "AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin Relief, Exfoliating, 14.1OZ",
                      "unit_price":  1.67,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1244
                  },
                  {
                      "key":  "lotion|Walmart|AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin, Exfoliating, 7.9 oz",
@@ -956,7 +737,9 @@
                      "store":  "Walmart",
                      "name":  "AmLactin Daily Nourish Body Lotion, 12% Lactic Acid for Dry Skin, Exfoliating, 7.9 oz",
                      "unit_price":  1.5152,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1244
                  },
                  {
                      "key":  "lotion|Walmart|Aquaphor Daily Hydrating Face and Body Lotion, 3 fl oz Tube",
@@ -965,7 +748,9 @@
                      "store":  "Walmart",
                      "name":  "Aquaphor Daily Hydrating Face and Body Lotion, 3 fl oz Tube",
                      "unit_price":  1.66,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1244
                  },
                  {
                      "key":  "lotion|Walmart|Aquaphor Daily Hydrating Face and Body Lotion, 8 fl oz Pump Bottle",
@@ -974,7 +759,9 @@
                      "store":  "Walmart",
                      "name":  "Aquaphor Daily Hydrating Face and Body Lotion, 8 fl oz Pump Bottle",
                      "unit_price":  1.62,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1244
                  },
                  {
                      "key":  "lotion|Walmart|Gold Bond Age Renew Retinol Overnight Body and Face Lotion, Retinol Face and Body Lotion with Peptide Complex, 7 oz",
@@ -983,7 +770,9 @@
                      "store":  "Walmart",
                      "name":  "Gold Bond Age Renew Retinol Overnight Body and Face Lotion, Retinol Face and Body Lotion with Peptide Complex, 7 oz",
                      "unit_price":  1.71,
-                     "band_ref":  0.2943
+                     "band_ref":  0.2943,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1244
                  },
                  {
                      "key":  "mayonnaise|Fareway|Primal Kitchen Mayo",
@@ -992,7 +781,9 @@
                      "store":  "Fareway",
                      "name":  "Primal Kitchen Mayo",
                      "unit_price":  0.7047,
-                     "band_ref":  0.13285
+                     "band_ref":  0.13285,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.5392
                  },
                  {
                      "key":  "milk|Family Fare|Milk Duds Milk Duds Theater Box 5 Oz",
@@ -1001,7 +792,9 @@
                      "store":  "Family Fare",
                      "name":  "Milk Duds Milk Duds Theater Box 5 Oz",
                      "unit_price":  32,
-                     "band_ref":  3.025
+                     "band_ref":  3.025,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  3.49
                  },
                  {
                      "key":  "milk|Family Fare|Phillips\u0027 Milk Of Magnesia, Sugar Free, Fresh Mint 12 Fl Oz",
@@ -1010,25 +803,9 @@
                      "store":  "Family Fare",
                      "name":  "Phillips\u0027 Milk Of Magnesia, Sugar Free, Fresh Mint 12 Fl Oz",
                      "unit_price":  73.4933,
-                     "band_ref":  3.025
-                 },
-                 {
-                     "key":  "onions|Baker\u0027s|Pepperidge Farm Sage \u0026 Onion Cubed Stuffing",
-                     "first_seen":  "2026-09-27",
-                     "id":  "onions",
-                     "store":  "Baker\u0027s",
-                     "name":  "Pepperidge Farm Sage \u0026 Onion Cubed Stuffing",
-                     "unit_price":  5.0533,
-                     "band_ref":  0.98
-                 },
-                 {
-                     "key":  "onions|Fareway|Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
-                     "first_seen":  "2026-09-27",
-                     "id":  "onions",
-                     "store":  "Fareway",
-                     "name":  "Pepperidge Farm Cubed Sage \u0026 Onion Stuffing",
-                     "unit_price":  5.0533,
-                     "band_ref":  0.98
+                     "band_ref":  3.025,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  3.49
                  },
                  {
                      "key":  "onions|Hy-Vee|Hy-Vee crispy onions, 6 oz., $3.49",
@@ -1037,7 +814,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Hy-Vee crispy onions, 6 oz., $3.49",
                      "unit_price":  9.3067,
-                     "band_ref":  0.98
+                     "band_ref":  0.98,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  1.33
                  },
                  {
                      "key":  "onions|Hy-Vee|Nothing But The Truth crispy onions, 6 OZ., $4.29",
@@ -1046,7 +825,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Nothing But The Truth crispy onions, 6 OZ., $4.29",
                      "unit_price":  11.44,
-                     "band_ref":  0.98
+                     "band_ref":  0.98,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  1.33
                  },
                  {
                      "key":  "paper-towels|Baker\u0027s|Bounty Paper Towels Select-A-Size White 2 Triple Rolls",
@@ -1055,7 +836,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Bounty Paper Towels Select-A-Size White 2 Triple Rolls",
                      "unit_price":  4.645,
-                     "band_ref":  0.9133
+                     "band_ref":  0.9133,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  1.4483
                  },
                  {
                      "key":  "paper-towels|Family Fare|Bounty White 2 Ply Mega Rolls Paper Towels 2 Ea",
@@ -1064,7 +847,9 @@
                      "store":  "Family Fare",
                      "name":  "Bounty White 2 Ply Mega Rolls Paper Towels 2 Ea",
                      "unit_price":  5.495,
-                     "band_ref":  0.9133
+                     "band_ref":  0.9133,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.8333
                  },
                  {
                      "key":  "paper-towels|Walmart|Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
@@ -1073,7 +858,9 @@
                      "store":  "Walmart",
                      "name":  "Bounty Paper Towels Select-a-Size, 6 Triple Rolls",
                      "unit_price":  0.023,
-                     "band_ref":  0.9133
+                     "band_ref":  0.9133,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "paper-towels|Walmart|Great Value Ultra Strong Paper Towels, 2 Triple Rolls",
@@ -1082,7 +869,9 @@
                      "store":  "Walmart",
                      "name":  "Great Value Ultra Strong Paper Towels, 2 Triple Rolls",
                      "unit_price":  0.019,
-                     "band_ref":  0.9133
+                     "band_ref":  0.9133,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "pasta|Baker\u0027s|Barilla Oven-Ready Lasagne Kosher Certified Pasta Made with Durum Wheat Semolina",
@@ -1091,7 +880,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Barilla Oven-Ready Lasagne Kosher Certified Pasta Made with Durum Wheat Semolina",
                      "unit_price":  0.3544,
-                     "band_ref":  0.07
+                     "band_ref":  0.07,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0831
                  },
                  {
                      "key":  "pasta|Baker\u0027s|Carbe Diem! Penne Pasta",
@@ -1100,7 +891,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Carbe Diem! Penne Pasta",
                      "unit_price":  0.3575,
-                     "band_ref":  0.07
+                     "band_ref":  0.07,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0831
                  },
                  {
                      "key":  "pasta|Baker\u0027s|Rummo Gluten-Free Spaghetti Pasta",
@@ -1109,7 +902,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Rummo Gluten-Free Spaghetti Pasta",
                      "unit_price":  0.3742,
-                     "band_ref":  0.07
+                     "band_ref":  0.07,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0831
                  },
                  {
                      "key":  "pasta-sauce|Family Fare|Rao\u0027s Homemade Arrabbiata Spicy Marinara Sauce 24 Oz",
@@ -1118,7 +913,9 @@
                      "store":  "Family Fare",
                      "name":  "Rao\u0027s Homemade Arrabbiata Spicy Marinara Sauce 24 Oz",
                      "unit_price":  0.3746,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0625
                  },
                  {
                      "key":  "pasta-sauce|Family Fare|Rao\u0027s Homemade® Creamy Marinara With Marscapone Sauce 24.000 Oz",
@@ -1127,7 +924,9 @@
                      "store":  "Family Fare",
                      "name":  "Rao\u0027s Homemade® Creamy Marinara With Marscapone Sauce 24.000 Oz",
                      "unit_price":  0.3746,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0625
                  },
                  {
                      "key":  "pasta-sauce|Family Fare|Rao\u0027s Homemade® Marinara Sauce 24.000 Oz",
@@ -1136,7 +935,9 @@
                      "store":  "Family Fare",
                      "name":  "Rao\u0027s Homemade® Marinara Sauce 24.000 Oz",
                      "unit_price":  0.3746,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0625
                  },
                  {
                      "key":  "pasta-sauce|Family Fare|Smart Ones Three Cheese Ziti Marinara 9 Oz",
@@ -1145,7 +946,9 @@
                      "store":  "Family Fare",
                      "name":  "Smart Ones Three Cheese Ziti Marinara 9 Oz",
                      "unit_price":  0.5556,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0625
                  },
                  {
                      "key":  "pasta-sauce|Hy-Vee|Botticelli pasta sauce, 14.5 or 24 oz., $5.99",
@@ -1154,7 +957,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Botticelli pasta sauce, 14.5 or 24 oz., $5.99",
                      "unit_price":  0.4131,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0829
                  },
                  {
                      "key":  "pasta-sauce|Sam\u0027s Club|Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
@@ -1163,7 +968,9 @@
                      "store":  "Sam\u0027s Club",
                      "name":  "Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
                      "unit_price":  0.4088,
-                     "band_ref":  0.0683
+                     "band_ref":  0.0683,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.2218
                  },
                  {
                      "key":  "pears|Walmart|Fresh Organic Bartlett Pears, 2 lb Bag",
@@ -1172,7 +979,9 @@
                      "store":  "Walmart",
                      "name":  "Fresh Organic Bartlett Pears, 2 lb Bag",
                      "unit_price":  0.124,
-                     "band_ref":  1.735
+                     "band_ref":  1.735,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "popsicles|Fareway|Bomb Pop Original Cherry, Lime \u0026 Blue Raspberry Pops",
@@ -1181,7 +990,9 @@
                      "store":  "Fareway",
                      "name":  "Bomb Pop Original Cherry, Lime \u0026 Blue Raspberry Pops",
                      "unit_price":  7.99,
-                     "band_ref":  0.2241
+                     "band_ref":  0.2241,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "popsicles|Fareway|Bomb Pop Original Cherry, Lime \u0026 Blue Raspberry Pops",
@@ -1190,7 +1001,9 @@
                      "store":  "Fareway",
                      "name":  "Bomb Pop Original Cherry, Lime \u0026 Blue Raspberry Pops",
                      "unit_price":  6.99,
-                     "band_ref":  0.2241
+                     "band_ref":  0.2241,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "raisins|Fareway|Sun-Maid California Sun-Dried Raisins",
@@ -1199,7 +1012,9 @@
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
                      "unit_price":  0.0415,
-                     "band_ref":  0.22395
+                     "band_ref":  0.22395,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "raisins|Fareway|Sun-Maid California Sun-Dried Raisins",
@@ -1208,7 +1023,9 @@
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
                      "unit_price":  0.0346,
-                     "band_ref":  0.22395
+                     "band_ref":  0.22395,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "ramen|Hy-Vee|Snapdragon instant ramen cup, 2.2 oz., 2/ $5.00",
@@ -1217,7 +1034,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Snapdragon instant ramen cup, 2.2 oz., 2/ $5.00",
                      "unit_price":  2.5,
-                     "band_ref":  0.3325
+                     "band_ref":  0.3325,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "ranch-dressing|Hy-Vee|California Olive Ranch Caesar Vinaigrette Dressing 8 fl oz",
@@ -1226,7 +1045,9 @@
                      "store":  "Hy-Vee",
                      "name":  "California Olive Ranch Caesar Vinaigrette Dressing 8 fl oz",
                      "unit_price":  1.1238,
-                     "band_ref":  0.12805
+                     "band_ref":  0.12805,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1386
                  },
                  {
                      "key":  "razors|Family Fare|Gillette Fusion5 Shaving Razor For Men, Razor Handle, 2 Refills 1 Ea",
@@ -1235,7 +1056,9 @@
                      "store":  "Family Fare",
                      "name":  "Gillette Fusion5 Shaving Razor For Men, Razor Handle, 2 Refills 1 Ea",
                      "unit_price":  14.99,
-                     "band_ref":  0.5396
+                     "band_ref":  0.5396,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.3317
                  },
                  {
                      "key":  "red-wine|Walmart|Sartori Merlot BellaVitano Cheese Cubes, Specialty Cheese, Aged Cheese, Fruity, Savory, Wine Soaked Cheese, Refrigerated",
@@ -1244,7 +1067,9 @@
                      "store":  "Walmart",
                      "name":  "Sartori Merlot BellaVitano Cheese Cubes, Specialty Cheese, Aged Cheese, Fruity, Savory, Wine Soaked Cheese, Refrigerated",
                      "unit_price":  1.1604,
-                     "band_ref":  0.1958
+                     "band_ref":  0.1958,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1364
                  },
                  {
                      "key":  "red-wine|Walmart|Sartori Merlot BellaVitano Cheese, 5.3 oz Wedge, Specialty Cheese, Aged Cheese, Fruity, Savory, Wine Soaked Cheese, Refrigerated",
@@ -1253,7 +1078,9 @@
                      "store":  "Walmart",
                      "name":  "Sartori Merlot BellaVitano Cheese, 5.3 oz Wedge, Specialty Cheese, Aged Cheese, Fruity, Savory, Wine Soaked Cheese, Refrigerated",
                      "unit_price":  1.1208,
-                     "band_ref":  0.1958
+                     "band_ref":  0.1958,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.1364
                  },
                  {
                      "key":  "refried-beans|Hy-Vee|Old El Paso refried beans, 4 to 16 oz. 1.50 each, 2/ $3.00",
@@ -1262,7 +1089,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Old El Paso refried beans, 4 to 16 oz. 1.50 each, 2/ $3.00",
                      "unit_price":  0.375,
-                     "band_ref":  0.0622
+                     "band_ref":  0.0622,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0619
                  },
                  {
                      "key":  "rice|Baker\u0027s|Rice-A-Roni Cilantro Lime Rice",
@@ -1271,7 +1100,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Rice-A-Roni Cilantro Lime Rice",
                      "unit_price":  4.5429,
-                     "band_ref":  0.847
+                     "band_ref":  0.847,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.895
                  },
                  {
                      "key":  "rice|Family Fare|Smart Ones Santa Fe Rice \u0026 Beans 9 Oz",
@@ -1280,7 +1111,9 @@
                      "store":  "Family Fare",
                      "name":  "Smart Ones Santa Fe Rice \u0026 Beans 9 Oz",
                      "unit_price":  8.8889,
-                     "band_ref":  0.847
+                     "band_ref":  0.847,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  1
                  },
                  {
                      "key":  "rice|Hy-Vee|Old El Paso rice, 4.6 to 12 oz. 2.00 each, 2/ $4.00 each",
@@ -1289,7 +1122,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Old El Paso rice, 4.6 to 12 oz. 2.00 each, 2/ $4.00 each",
                      "unit_price":  6.9565,
-                     "band_ref":  0.847
+                     "band_ref":  0.847,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.938
                  },
                  {
                      "key":  "russet-potatoes|Baker\u0027s|Kroger Microwave-Ready Russet Potato",
@@ -1298,7 +1133,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Kroger Microwave-Ready Russet Potato",
                      "unit_price":  2.5,
-                     "band_ref":  0.495
+                     "band_ref":  0.495,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.5
                  },
                  {
                      "key":  "shampoo|Aldi|Herbal Essences Chamomile Shine Shampoo 13.5 OZ",
@@ -1307,7 +1144,9 @@
                      "store":  "Aldi",
                      "name":  "Herbal Essences Chamomile Shine Shampoo 13.5 OZ",
                      "unit_price":  0.5163,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "shampoo|Aldi|Herbal Essences Clarifying Tea Tree Shampoo 400 0 ML",
@@ -1316,7 +1155,9 @@
                      "store":  "Aldi",
                      "name":  "Herbal Essences Clarifying Tea Tree Shampoo 400 0 ML",
                      "unit_price":  0.5163,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "shampoo|Aldi|Herbal Essences Rose Hips Smooth Shampoo 13.5 OZ",
@@ -1325,7 +1166,9 @@
                      "store":  "Aldi",
                      "name":  "Herbal Essences Rose Hips Smooth Shampoo 13.5 OZ",
                      "unit_price":  0.5163,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "shampoo|Aldi|Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
@@ -1334,7 +1177,9 @@
                      "store":  "Aldi",
                      "name":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
                      "unit_price":  0.4775,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "shampoo|Aldi|Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
@@ -1343,7 +1188,9 @@
                      "store":  "Aldi",
                      "name":  "Pantene Pro V Daily Moisture Renewal Shampoo 12 OZ",
                      "unit_price":  0.4775,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|Aussie Miracle Curls Shampoo with Coconut Oil Paraben Free",
@@ -1352,7 +1199,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Aussie Miracle Curls Shampoo with Coconut Oil Paraben Free",
                      "unit_price":  0.4785,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|Garnier Whole Blends Smoothing Shampoo, Coconut Oil and Cocoa Butter, 12.5 fl oz",
@@ -1361,7 +1210,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Garnier Whole Blends Smoothing Shampoo, Coconut Oil and Cocoa Butter, 12.5 fl oz",
                      "unit_price":  0.4792,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|L\u0027Oreal Paris Elvive Glycolic Gloss Shine Boosting Shampoo, 12.6 fl oz",
@@ -1370,7 +1221,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "L\u0027Oreal Paris Elvive Glycolic Gloss Shine Boosting Shampoo, 12.6 fl oz",
                      "unit_price":  0.5151,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|MONDAY Haircare Gardenia Scented Smooth Shampoo",
@@ -1379,7 +1232,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "MONDAY Haircare Gardenia Scented Smooth Shampoo",
                      "unit_price":  0.6658,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|MONDAY Haircare Gardenia Volume + Collagen Shampoo for Thin \u0026 Fine Hair",
@@ -1388,7 +1243,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "MONDAY Haircare Gardenia Volume + Collagen Shampoo for Thin \u0026 Fine Hair",
                      "unit_price":  0.6658,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Baker\u0027s|Raw Sugar The Scalp Restore Shampoo Bottle",
@@ -1397,7 +1254,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Raw Sugar The Scalp Restore Shampoo Bottle",
                      "unit_price":  0.6869,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0889
                  },
                  {
                      "key":  "shampoo|Sam\u0027s Club|Nexxus Color Assure Shampoo and Conditioner Combo Pack, 32 fl. oz., 2 pk.",
@@ -1406,7 +1265,9 @@
                      "store":  "Sam\u0027s Club",
                      "name":  "Nexxus Color Assure Shampoo and Conditioner Combo Pack, 32 fl. oz., 2 pk.",
                      "unit_price":  0.5466,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1877
                  },
                  {
                      "key":  "shampoo|Sam\u0027s Club|Nexxus Therappe Moisture Shampoo, 43 fl. oz.",
@@ -1415,7 +1276,9 @@
                      "store":  "Sam\u0027s Club",
                      "name":  "Nexxus Therappe Moisture Shampoo, 43 fl. oz.",
                      "unit_price":  0.546,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.1877
                  },
                  {
                      "key":  "shampoo|Walmart|MONDAY Haircare Moisture Shampoo, Hydration Boost Dry Hair, Hyaluronic Acid Shea Butter 11.98 Fl Oz",
@@ -1424,7 +1287,9 @@
                      "store":  "Walmart",
                      "name":  "MONDAY Haircare Moisture Shampoo, Hydration Boost Dry Hair, Hyaluronic Acid Shea Butter 11.98 Fl Oz",
                      "unit_price":  0.4983,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.075
                  },
                  {
                      "key":  "shampoo|Walmart|Pantene Pro-V Shampoo, Volume and Body, All Hair Types, 10.4 fl oz",
@@ -1433,7 +1298,9 @@
                      "store":  "Walmart",
                      "name":  "Pantene Pro-V Shampoo, Volume and Body, All Hair Types, 10.4 fl oz",
                      "unit_price":  0.4779,
-                     "band_ref":  0.0941
+                     "band_ref":  0.0941,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.075
                  },
                  {
                      "key":  "shaving-cream|Baker\u0027s|Harry\u0027s Men\u0027s Shave Cream with Aloe Vera and Eucalyptus",
@@ -1442,7 +1309,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Harry\u0027s Men\u0027s Shave Cream with Aloe Vera and Eucalyptus",
                      "unit_price":  1.4983,
-                     "band_ref":  0.299
+                     "band_ref":  0.299,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.299
                  },
                  {
                      "key":  "shaving-cream|Family Fare|Gillette Intimate Pubic Shave Cream And Cleanser, 6oz 6 Oz",
@@ -1451,7 +1320,9 @@
                      "store":  "Family Fare",
                      "name":  "Gillette Intimate Pubic Shave Cream And Cleanser, 6oz 6 Oz",
                      "unit_price":  1.4983,
-                     "band_ref":  0.299
+                     "band_ref":  0.299,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.3557
                  },
                  {
                      "key":  "shredded-cheese|Hy-Vee|Carr Valley Cheese smoked pepperjack cheese, 5 or 7 oz., $7.99",
@@ -1460,7 +1331,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Carr Valley Cheese smoked pepperjack cheese, 5 or 7 oz., $7.99",
                      "unit_price":  1.598,
-                     "band_ref":  0.22165
+                     "band_ref":  0.22165,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.31
                  },
                  {
                      "key":  "shredded-cheese|Hy-Vee|Vermont Farmstead cheddar cheese, 7 oz., $8.98",
@@ -1469,7 +1342,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Vermont Farmstead cheddar cheese, 7 oz., $8.98",
                      "unit_price":  1.2829,
-                     "band_ref":  0.22165
+                     "band_ref":  0.22165,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.31
                  },
                  {
                      "key":  "soda|Baker\u0027s|Coca-Cola Zero Sugar Cherry Soda Cans",
@@ -1478,7 +1353,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Coca-Cola Zero Sugar Cherry Soda Cans",
                      "unit_price":  0.0833,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0148
                  },
                  {
                      "key":  "soda|Baker\u0027s|RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
@@ -1487,7 +1364,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "RC Cola Zero Sugar Soda, 12 fl oz cans, 12 pack",
                      "unit_price":  0.0833,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.0148
                  },
                  {
                      "key":  "soda|Family Fare|Coca Cola Cherry Float Soda Cans 12 Fl Oz",
@@ -1496,7 +1375,9 @@
                      "store":  "Family Fare",
                      "name":  "Coca Cola Cherry Float Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Coca Cola Zero Sugar Cherry Float Soda Cans 12 Fl Oz",
@@ -1505,7 +1386,9 @@
                      "store":  "Family Fare",
                      "name":  "Coca Cola Zero Sugar Cherry Float Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Diet Coke Caffeine Free Soda Cans 12 Fl Oz",
@@ -1514,7 +1397,9 @@
                      "store":  "Family Fare",
                      "name":  "Diet Coke Caffeine Free Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Mr. Pibb Cherry Cola Soda Cans 12 Fl Oz",
@@ -1523,7 +1408,9 @@
                      "store":  "Family Fare",
                      "name":  "Mr. Pibb Cherry Cola Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Mr. Pibb Zero Sugar Cherry Cola Soda Cans 12 Fl Oz",
@@ -1532,7 +1419,9 @@
                      "store":  "Family Fare",
                      "name":  "Mr. Pibb Zero Sugar Cherry Cola Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Pepsi Diet Soda Cola 16.9 Fl Oz, 6 Count 6 Ea",
@@ -1541,7 +1430,9 @@
                      "store":  "Family Fare",
                      "name":  "Pepsi Diet Soda Cola 16.9 Fl Oz, 6 Count 6 Ea",
                      "unit_price":  0.2876,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Pepsi Zero Sugar Soda Cola 16.9 Fl Oz, 6 Count 6 Ea",
@@ -1550,7 +1441,9 @@
                      "store":  "Family Fare",
                      "name":  "Pepsi Zero Sugar Soda Cola 16.9 Fl Oz, 6 Count 6 Ea",
                      "unit_price":  0.2876,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Pepsi Zero Sugar Soda Wild Cherry 16.9 Fl Oz, 6 Count 6 Ea",
@@ -1559,7 +1452,9 @@
                      "store":  "Family Fare",
                      "name":  "Pepsi Zero Sugar Soda Wild Cherry 16.9 Fl Oz, 6 Count 6 Ea",
                      "unit_price":  0.2876,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "soda|Family Fare|Sprite Zero Sugar Lemon Lime Tea Soda Cans 12 Fl Oz",
@@ -1568,7 +1463,9 @@
                      "store":  "Family Fare",
                      "name":  "Sprite Zero Sugar Lemon Lime Tea Soda Cans 12 Fl Oz",
                      "unit_price":  0.6106,
-                     "band_ref":  0.0148
+                     "band_ref":  0.0148,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0473
                  },
                  {
                      "key":  "sugar|Hy-Vee|Mann\u0027s sugar snow peas, 6 or 8 oz. pkg., $2.99",
@@ -1577,7 +1474,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Mann\u0027s sugar snow peas, 6 or 8 oz. pkg., $2.99",
                      "unit_price":  7.9733,
-                     "band_ref":  0.75105
+                     "band_ref":  0.75105,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.7725
                  },
                  {
                      "key":  "taco-seasoning|Family Fare|Siete Mild Taco Seasoning 1.31 Oz",
@@ -1586,7 +1485,9 @@
                      "store":  "Family Fare",
                      "name":  "Siete Mild Taco Seasoning 1.31 Oz",
                      "unit_price":  2.8931,
-                     "band_ref":  0.494
+                     "band_ref":  0.494,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.792
                  },
                  {
                      "key":  "taco-seasoning|Family Fare|Siete Spicy Taco Seasoning 1.31 Oz",
@@ -1595,7 +1496,9 @@
                      "store":  "Family Fare",
                      "name":  "Siete Spicy Taco Seasoning 1.31 Oz",
                      "unit_price":  2.8931,
-                     "band_ref":  0.494
+                     "band_ref":  0.494,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.792
                  },
                  {
                      "key":  "tater-tots|Baker\u0027s|Roots Farm Fresh World Famous Tater Tots",
@@ -1604,7 +1507,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Roots Farm Fresh World Famous Tater Tots",
                      "unit_price":  0.666,
-                     "band_ref":  0.1241
+                     "band_ref":  0.1241,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.5707
                  },
                  {
                      "key":  "tea-bags|Baker\u0027s|Stash Tea Double Spice Chai Black Tea Bags, 18 Ct",
@@ -1613,7 +1518,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Stash Tea Double Spice Chai Black Tea Bags, 18 Ct",
                      "unit_price":  0.2661,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0239
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Black Tea, Earl Grey, Decaffeinated, Tea Bags 20 Ea",
@@ -1622,7 +1529,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Black Tea, Earl Grey, Decaffeinated, Tea Bags 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Black Tea, Variety Pack, Tea Bags 20 Ea",
@@ -1631,7 +1540,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Black Tea, Variety Pack, Tea Bags 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Flavoured Black Tea, Chai, Ultra Spice, Tea Bags 20 Ea",
@@ -1640,7 +1551,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Flavoured Black Tea, Chai, Ultra Spice, Tea Bags 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Flavoured Black Tea, Lady Grey, Tea Bags 20 Ea",
@@ -1649,7 +1562,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Flavoured Black Tea, Lady Grey, Tea Bags 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Tea Bags Earl Grey Black Tea 20 Ea",
@@ -1658,7 +1573,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Tea Bags Earl Grey Black Tea 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "tea-bags|Family Fare|Twinings Tea Bags Pure English Breakfast Black Tea 20 Ea",
@@ -1667,7 +1584,9 @@
                      "store":  "Family Fare",
                      "name":  "Twinings Tea Bags Pure English Breakfast Black Tea 20 Ea",
                      "unit_price":  0.2645,
-                     "band_ref":  0.0524
+                     "band_ref":  0.0524,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0699
                  },
                  {
                      "key":  "toothbrushes|Baker\u0027s|Colgate 360 Soft Whitening Toothbrush Double Pack",
@@ -1676,7 +1595,9 @@
                      "store":  "Baker\u0027s",
                      "name":  "Colgate 360 Soft Whitening Toothbrush Double Pack",
                      "unit_price":  4.745,
-                     "band_ref":  0.9271
+                     "band_ref":  0.9271,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.9225
                  },
                  {
                      "key":  "toothbrushes|Hy-Vee|Oral-B toothbrush, EARN 6¢ OFF PER GALLON, $5.99 each",
@@ -1685,7 +1606,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Oral-B toothbrush, EARN 6¢ OFF PER GALLON, $5.99 each",
                      "unit_price":  5.99,
-                     "band_ref":  0.9271
+                     "band_ref":  0.9271,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  null
                  },
                  {
                      "key":  "tortilla-chips|Baker\u0027s|Siete Sea Salt Tortilla Chips",
@@ -1694,16 +1617,31 @@
                      "store":  "Baker\u0027s",
                      "name":  "Siete Sea Salt Tortilla Chips",
                      "unit_price":  1.098,
-                     "band_ref":  0.17315
+                     "band_ref":  0.17315,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1494
                  },
                  {
-                     "key":  "tortillas|Hy-Vee|La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00",
-                     "first_seen":  "2026-09-28",
+                     "key":  "tortillas|Family Fare|Mission Super Soft Soft Taco Flour Tortilla Wraps 8 Ea",
+                     "first_seen":  "2026-09-29",
+                     "id":  "tortillas",
+                     "store":  "Family Fare",
+                     "name":  "Mission Super Soft Soft Taco Flour Tortilla Wraps 8 Ea",
+                     "unit_price":  0.8238,
+                     "band_ref":  0.14655,
+                     "paged_on":  "",
+                     "shadowed_by":  0.199
+                 },
+                 {
+                     "key":  "tortillas|Hy-Vee|Mission Carb Balance Tortillas, Sundried Tomato Basil, 8Ct",
+                     "first_seen":  "2026-09-29",
                      "id":  "tortillas",
                      "store":  "Hy-Vee",
-                     "name":  "La Banderita flour tortillas, 20 or 30 ct., 2/ $5.00",
-                     "unit_price":  2.5,
-                     "band_ref":  0.18355
+                     "name":  "Mission Carb Balance Tortillas, Sundried Tomato Basil, 8Ct",
+                     "unit_price":  0.7488,
+                     "band_ref":  0.14655,
+                     "paged_on":  "",
+                     "shadowed_by":  0.125
                  },
                  {
                      "key":  "whipped-cream|Hy-Vee|Reddi-wip barista series, 6 or 13 oz. Select varieties included., $4.99",
@@ -1712,7 +1650,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Reddi-wip barista series, 6 or 13 oz. Select varieties included., $4.99",
                      "unit_price":  0.8317,
-                     "band_ref":  0.16465
+                     "band_ref":  0.16465,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.235
                  },
                  {
                      "key":  "whipped-cream|Hy-Vee|Reddi-wip non-dairy topping, 6 or 13 oz. Select varieties included., $4.99",
@@ -1721,7 +1661,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Reddi-wip non-dairy topping, 6 or 13 oz. Select varieties included., $4.99",
                      "unit_price":  0.8317,
-                     "band_ref":  0.16465
+                     "band_ref":  0.16465,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.235
                  },
                  {
                      "key":  "whipped-cream|Hy-Vee|Reddi-wip original, 6 or 13 oz. Select varieties included., $4.99",
@@ -1730,7 +1672,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Reddi-wip original, 6 or 13 oz. Select varieties included., $4.99",
                      "unit_price":  0.8317,
-                     "band_ref":  0.16465
+                     "band_ref":  0.16465,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.235
                  },
                  {
                      "key":  "white-wine|Sam\u0027s Club|Decoy Sauvignon Blanc Wine, 750 ml",
@@ -1739,7 +1683,9 @@
                      "store":  "Sam\u0027s Club",
                      "name":  "Decoy Sauvignon Blanc Wine, 750 ml",
                      "unit_price":  0.8075,
-                     "band_ref":  0.1571
+                     "band_ref":  0.1571,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.3734
                  },
                  {
                      "key":  "yogurt|Aldi|Choceur Strawberry Yogurt 7.05 OZ",
@@ -1748,7 +1694,9 @@
                      "store":  "Aldi",
                      "name":  "Choceur Strawberry Yogurt 7.05 OZ",
                      "unit_price":  0.4667,
-                     "band_ref":  0.09325
+                     "band_ref":  0.09325,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0809
                  },
                  {
                      "key":  "yogurt|Aldi|Friendly Farms 100 Calorie Tropical Fruit Greek Yogurt 5.3 OZ",
@@ -1757,7 +1705,9 @@
                      "store":  "Aldi",
                      "name":  "Friendly Farms 100 Calorie Tropical Fruit Greek Yogurt 5.3 OZ",
                      "unit_price":  0.5,
-                     "band_ref":  0.09325
+                     "band_ref":  0.09325,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.0809
                  },
                  {
                      "key":  "yogurt|Hy-Vee|Chobani Flip 20g protein yogurt, 6 oz., 2/ $4",
@@ -1766,7 +1716,9 @@
                      "store":  "Hy-Vee",
                      "name":  "Chobani Flip 20g protein yogurt, 6 oz., 2/ $4",
                      "unit_price":  2.835,
-                     "band_ref":  0.09325
+                     "band_ref":  0.09325,
+                     "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.065
                  },
                  {
                      "key":  "yogurt|Walmart|Welch\u0027s Fruit \u0027N Yogurt Snacks, Strawberry, Soft Kids Snacks, 0.7 oz, 20 Count",
@@ -1775,7 +1727,9 @@
                      "store":  "Walmart",
                      "name":  "Welch\u0027s Fruit \u0027N Yogurt Snacks, Strawberry, Soft Kids Snacks, 0.7 oz, 20 Count",
                      "unit_price":  0.5121,
-                     "band_ref":  0.09325
+                     "band_ref":  0.09325,
+                     "paged_on":  "2026-09-27",
+                     "shadowed_by":  0.0825
                  }
              ]
 }
