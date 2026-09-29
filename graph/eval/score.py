@@ -39,6 +39,7 @@ from ids import hash_obj                           # noqa: E402
 from llm import LocalLLM                           # noqa: E402
 from resolve import Resolver                       # noqa: E402
 from seed_gold import load_gold                    # noqa: E402
+from gold_split import filter_split, manifest_sha256  # noqa: E402
 
 # Phase-gate thresholds from the implementation plan §12.
 GATE_FALSE_MERGE = 0.02
@@ -147,8 +148,14 @@ def score(db, gold: list[dict], use_llm: bool = False,
     return metrics
 
 
+def split_detail(split: str) -> dict:
+    """What record() stamps into detail_json: which gold split was scored, and the manifest it was
+    derived under (graph/gold/gold_split.py). gold_version already hashes the ids scored."""
+    return {"split": split, "holdout_manifest_sha256": manifest_sha256()}
+
+
 def record(db, metrics: dict, model: str | None, prompt_version: str,
-           gold: list[dict], context: str, ts: str) -> str:
+           gold: list[dict], context: str, ts: str, split: str = "all") -> str:
     eid = "eval:" + hash_obj([ts, model, prompt_version, context])[:20]
     db.conn.execute(
         """INSERT INTO eval_runs
@@ -162,8 +169,8 @@ def record(db, metrics: dict, model: str | None, prompt_version: str,
          metrics["relation_precision"], metrics["relation_recall"],
          metrics["false_merge_rate"], metrics["missed_merge_rate"],
          len(gold), metrics["counts"]["tp"] + metrics["counts"]["fp"],
-         context, json.dumps({k: v for k, v in metrics.items() if k != "errors"},
-                             default=str)))
+         context, json.dumps({**{k: v for k, v in metrics.items() if k != "errors"},
+                              **split_detail(split)}, default=str)))
     db.conn.commit()
     # Mirror to tracked JSON immediately — eval history is irreplaceable and the
     # database is a deletable index (see graphdb.LEARNING_TABLES).
@@ -178,9 +185,11 @@ def main() -> int:
     ap.add_argument("--prompt-version", default="resolve.v1")
     ap.add_argument("--show-errors", type=int, default=8)
     ap.add_argument("--json", action="store_true", help="emit metrics as JSON only")
+    ap.add_argument("--split", choices=("train", "holdout", "all"), default="all",
+                    help="score one side of the held-out split (graph/gold/gold_split.py)")
     args = ap.parse_args()
 
-    gold = load_gold()
+    gold = filter_split(load_gold(), args.split)
     if not gold:
         print("no gold set — run: python graph/gold/seed_gold.py", file=sys.stderr)
         return 2
@@ -212,7 +221,7 @@ def main() -> int:
         }
         elapsed = time.time() - t0
         model = (llm.model if args.llm else "deterministic-only")
-        record(db, m, model, args.prompt_version, gold, args.context, ts)
+        record(db, m, model, args.prompt_version, gold, args.context, ts, split=args.split)
 
     if args.json:
         print(json.dumps(m, indent=2, default=str))

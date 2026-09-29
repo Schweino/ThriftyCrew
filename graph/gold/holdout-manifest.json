@@ -1,0 +1,1123 @@
+{
+ "at_build": {
+  "commodities": 542,
+  "commodities_holdout": 111,
+  "gold_rows": 2108,
+  "rows_holdout": 400,
+  "rows_train": 1708
+ },
+ "holdout_commodities": [
+  "adobo-seasoning",
+  "air-freshener",
+  "almonds",
+  "apple",
+  "apples",
+  "apricots",
+  "arugula",
+  "avocados",
+  "beef-broth",
+  "beef-chuck-roast",
+  "beef-jerky",
+  "body-wash",
+  "bouillon",
+  "brandy",
+  "bratwurst",
+  "breakfast-sandwiches",
+  "brown-gravy-mix",
+  "brown-lentils",
+  "brown-sugar",
+  "buffalo-wing-sauce",
+  "butternut-squash",
+  "cajun-seasoning",
+  "canned-chicken",
+  "canned-green-beans",
+  "canned-pasta",
+  "canned-peaches",
+  "canned-pumpkin",
+  "cashews",
+  "cheddar-cheese-curds",
+  "chili-powder",
+  "cinnamon-stick",
+  "cocktail-sauce",
+  "coconut",
+  "coconut-aminos",
+  "cottage-cheese",
+  "cranberry-sauce",
+  "crushed-thai-chili",
+  "cucumber",
+  "deodorant",
+  "dog-treats",
+  "donuts",
+  "dried-arbol-chiles",
+  "dried-basil",
+  "dried-oregano",
+  "dried-parsley",
+  "eggs",
+  "feminine-pads",
+  "fish-sauce",
+  "fresh-dill",
+  "fresh-ginger",
+  "fries",
+  "frozen-corn",
+  "frozen-waffles",
+  "fruit-punch",
+  "garlic",
+  "garlic-bread",
+  "garlic-powder",
+  "glass-cleaner",
+  "ground-cinnamon",
+  "ground-ginger",
+  "high-fiber-tortillas",
+  "hot-dogs",
+  "instant-coffee",
+  "kidney-beans",
+  "lemonade",
+  "lemons",
+  "mac-and-cheese",
+  "mandarin-oranges",
+  "marshmallows",
+  "masa-harina",
+  "microwave-popcorn",
+  "no-boil-lasagna-noodles",
+  "onion-soup-mix",
+  "oranges",
+  "paprika",
+  "parchment-paper",
+  "peanut-butter",
+  "pears",
+  "pepperoncini",
+  "pesto",
+  "plums",
+  "popsicles",
+  "pork-tenderloin",
+  "portobello-mushrooms",
+  "potato-gnocchi",
+  "prunes",
+  "radishes",
+  "raisins",
+  "ranch-dressing",
+  "raspberries",
+  "refrigerated-biscuits",
+  "sandwich-cookies",
+  "shallots",
+  "shampoo",
+  "shredded-carrots",
+  "spaghetti-squash",
+  "sparkling-water",
+  "sports-drinks",
+  "strawberries",
+  "string-cheese",
+  "taco-sauce",
+  "toasted-sesame-seeds",
+  "toilet-bowl-cleaner",
+  "toilet-paper",
+  "tomato-sauce",
+  "tomatoes",
+  "vegetable-soup",
+  "walnuts",
+  "white-miso-paste",
+  "whole-chicken",
+  "worcestershire"
+ ],
+ "near_twins": {
+  "containment": [
+   {
+    "holdout": "apple",
+    "train": "apple-cider-vinegar"
+   },
+   {
+    "holdout": "apple",
+    "train": "apple-juice"
+   },
+   {
+    "holdout": "apple",
+    "train": "apple-cider"
+   },
+   {
+    "holdout": "beef-chuck-roast",
+    "train": "chuck-roast"
+   },
+   {
+    "holdout": "brown-sugar",
+    "train": "sugar"
+   },
+   {
+    "holdout": "canned-green-beans",
+    "train": "green-beans"
+   },
+   {
+    "holdout": "canned-pasta",
+    "train": "pasta"
+   },
+   {
+    "holdout": "canned-peaches",
+    "train": "peaches"
+   },
+   {
+    "holdout": "cheddar-cheese-curds",
+    "train": "cheddar-cheese"
+   },
+   {
+    "holdout": "coconut",
+    "train": "coconut-oil"
+   },
+   {
+    "holdout": "coconut",
+    "train": "coconut-milk-canned"
+   },
+   {
+    "holdout": "coconut",
+    "train": "coconut-milk"
+   },
+   {
+    "holdout": "fresh-ginger",
+    "train": "ginger"
+   },
+   {
+    "holdout": "fries",
+    "train": "frozen-fries"
+   },
+   {
+    "holdout": "garlic",
+    "train": "chili-garlic-sauce"
+   },
+   {
+    "holdout": "garlic",
+    "train": "garlic-herb-seasoning"
+   },
+   {
+    "holdout": "garlic",
+    "train": "minced-garlic"
+   },
+   {
+    "holdout": "garlic",
+    "train": "garlic-herb-cheese-spread"
+   },
+   {
+    "holdout": "garlic-bread",
+    "train": "bread"
+   },
+   {
+    "holdout": "ground-ginger",
+    "train": "ginger"
+   },
+   {
+    "holdout": "high-fiber-tortillas",
+    "train": "tortillas"
+   },
+   {
+    "holdout": "instant-coffee",
+    "train": "coffee"
+   },
+   {
+    "holdout": "no-boil-lasagna-noodles",
+    "train": "lasagna-noodles"
+   },
+   {
+    "holdout": "paprika",
+    "train": "smoked-paprika"
+   },
+   {
+    "holdout": "peanut-butter",
+    "train": "butter"
+   },
+   {
+    "holdout": "pears",
+    "train": "canned-pears"
+   },
+   {
+    "holdout": "portobello-mushrooms",
+    "train": "mushrooms"
+   },
+   {
+    "holdout": "raisins",
+    "train": "golden-raisins"
+   },
+   {
+    "holdout": "sandwich-cookies",
+    "train": "cookies"
+   },
+   {
+    "holdout": "shredded-carrots",
+    "train": "carrots"
+   },
+   {
+    "holdout": "tomatoes",
+    "train": "sun-dried-tomatoes"
+   },
+   {
+    "holdout": "tomatoes",
+    "train": "crushed-tomatoes"
+   },
+   {
+    "holdout": "tomatoes",
+    "train": "diced-tomatoes"
+   },
+   {
+    "holdout": "tomatoes",
+    "train": "cherry-tomatoes"
+   },
+   {
+    "holdout": "tomatoes",
+    "train": "tomatoes-green-chilies"
+   }
+  ],
+  "token_sharing": [
+   {
+    "holdout": "adobo-seasoning",
+    "shared": {
+     "adobo": [
+      "chipotle-in-adobo"
+     ],
+     "seasoning": [
+      "berbere-seasoning",
+      "fajita-seasoning",
+      "garlic-herb-seasoning"
+     ]
+    }
+   },
+   {
+    "holdout": "apple",
+    "shared": {
+     "apple": [
+      "apple-cider",
+      "apple-cider-vinegar",
+      "apple-juice"
+     ]
+    }
+   },
+   {
+    "holdout": "beef-broth",
+    "shared": {
+     "beef": [
+      "93-7-ground-beef",
+      "beef-stew",
+      "corned-beef-brisket"
+     ],
+     "broth": [
+      "bone-broth",
+      "chicken-broth",
+      "vegetable-broth"
+     ]
+    }
+   },
+   {
+    "holdout": "beef-chuck-roast",
+    "shared": {
+     "beef": [
+      "93-7-ground-beef",
+      "beef-stew",
+      "corned-beef-brisket"
+     ],
+     "chuck": [
+      "chuck-roast"
+     ],
+     "roast": [
+      "chuck-roast"
+     ]
+    }
+   },
+   {
+    "holdout": "beef-jerky",
+    "shared": {
+     "beef": [
+      "93-7-ground-beef",
+      "beef-stew",
+      "corned-beef-brisket"
+     ]
+    }
+   },
+   {
+    "holdout": "breakfast-sandwiches",
+    "shared": {
+     "breakfast": [
+      "breakfast-sausage"
+     ]
+    }
+   },
+   {
+    "holdout": "brown-gravy-mix",
+    "shared": {
+     "brown": [
+      "brown-rice"
+     ],
+     "gravy": [
+      "au-jus-gravy-mix",
+      "jarred-gravy"
+     ],
+     "mix": [
+      "au-jus-gravy-mix",
+      "brownie-mix",
+      "cake-mix"
+     ]
+    }
+   },
+   {
+    "holdout": "brown-lentils",
+    "shared": {
+     "brown": [
+      "brown-rice"
+     ]
+    }
+   },
+   {
+    "holdout": "brown-sugar",
+    "shared": {
+     "brown": [
+      "brown-rice"
+     ],
+     "sugar": [
+      "powdered-sugar",
+      "sugar",
+      "sugar-free-bbq-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "buffalo-wing-sauce",
+    "shared": {
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "cajun-seasoning",
+    "shared": {
+     "seasoning": [
+      "berbere-seasoning",
+      "fajita-seasoning",
+      "garlic-herb-seasoning"
+     ]
+    }
+   },
+   {
+    "holdout": "canned-chicken",
+    "shared": {
+     "canned": [
+      "canned-beets",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "chicken": [
+      "boneless-skinless-chicken-thigh",
+      "breaded-chicken-breast-bites",
+      "chicken-breast"
+     ]
+    }
+   },
+   {
+    "holdout": "canned-green-beans",
+    "shared": {
+     "beans": [
+      "baked-beans",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "canned": [
+      "canned-beets",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "green": [
+      "canned-green-chilies",
+      "frozen-green-beans",
+      "frozen-green-peas"
+     ]
+    }
+   },
+   {
+    "holdout": "canned-pasta",
+    "shared": {
+     "canned": [
+      "canned-beets",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "pasta": [
+      "jumbo-pasta-shells",
+      "pasta",
+      "pasta-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "canned-peaches",
+    "shared": {
+     "canned": [
+      "canned-beets",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "peaches": [
+      "peaches"
+     ]
+    }
+   },
+   {
+    "holdout": "canned-pumpkin",
+    "shared": {
+     "canned": [
+      "canned-beets",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ],
+     "pumpkin": [
+      "hulled-pumpkin-seeds"
+     ]
+    }
+   },
+   {
+    "holdout": "cheddar-cheese-curds",
+    "shared": {
+     "cheddar": [
+      "cheddar-cheese",
+      "cheddar-cheese-shredded",
+      "fat-free-cheddar"
+     ],
+     "cheese": [
+      "1-3-fat-cream-cheese",
+      "blue-cheese-dressing",
+      "cheddar-cheese"
+     ]
+    }
+   },
+   {
+    "holdout": "chili-powder",
+    "shared": {
+     "chili": [
+      "canned-chili",
+      "chili-beans",
+      "chili-crisp"
+     ],
+     "powder": [
+      "baking-powder",
+      "cocoa-powder",
+      "curry-powder"
+     ]
+    }
+   },
+   {
+    "holdout": "cocktail-sauce",
+    "shared": {
+     "cocktail": [
+      "fruit-cocktail"
+     ],
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "coconut",
+    "shared": {
+     "coconut": [
+      "coconut-milk",
+      "coconut-milk-canned",
+      "coconut-oil"
+     ]
+    }
+   },
+   {
+    "holdout": "coconut-aminos",
+    "shared": {
+     "coconut": [
+      "coconut-milk",
+      "coconut-milk-canned",
+      "coconut-oil"
+     ]
+    }
+   },
+   {
+    "holdout": "cottage-cheese",
+    "shared": {
+     "cheese": [
+      "1-3-fat-cream-cheese",
+      "blue-cheese-dressing",
+      "cheddar-cheese"
+     ]
+    }
+   },
+   {
+    "holdout": "cranberry-sauce",
+    "shared": {
+     "cranberry": [
+      "cranberry-juice"
+     ],
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "crushed-thai-chili",
+    "shared": {
+     "chili": [
+      "canned-chili",
+      "chili-beans",
+      "chili-crisp"
+     ],
+     "crushed": [
+      "crushed-tomatoes"
+     ]
+    }
+   },
+   {
+    "holdout": "dog-treats",
+    "shared": {
+     "dog": [
+      "dog-food",
+      "hot-dog-buns"
+     ]
+    }
+   },
+   {
+    "holdout": "dried-arbol-chiles",
+    "shared": {
+     "chiles": [
+      "dried-guajillo-chiles"
+     ],
+     "dried": [
+      "dried-cranberries",
+      "dried-dill",
+      "dried-guajillo-chiles"
+     ]
+    }
+   },
+   {
+    "holdout": "dried-basil",
+    "shared": {
+     "basil": [
+      "fresh-basil"
+     ],
+     "dried": [
+      "dried-cranberries",
+      "dried-dill",
+      "dried-guajillo-chiles"
+     ]
+    }
+   },
+   {
+    "holdout": "dried-oregano",
+    "shared": {
+     "dried": [
+      "dried-cranberries",
+      "dried-dill",
+      "dried-guajillo-chiles"
+     ]
+    }
+   },
+   {
+    "holdout": "dried-parsley",
+    "shared": {
+     "dried": [
+      "dried-cranberries",
+      "dried-dill",
+      "dried-guajillo-chiles"
+     ]
+    }
+   },
+   {
+    "holdout": "fish-sauce",
+    "shared": {
+     "fish": [
+      "fish-sticks"
+     ],
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ]
+    }
+   },
+   {
+    "holdout": "fresh-dill",
+    "shared": {
+     "dill": [
+      "dried-dill"
+     ],
+     "fresh": [
+      "fresh-basil",
+      "fresh-mint",
+      "fresh-mozzarella"
+     ]
+    }
+   },
+   {
+    "holdout": "fresh-ginger",
+    "shared": {
+     "fresh": [
+      "fresh-basil",
+      "fresh-mint",
+      "fresh-mozzarella"
+     ],
+     "ginger": [
+      "ginger"
+     ]
+    }
+   },
+   {
+    "holdout": "fries",
+    "shared": {
+     "fries": [
+      "frozen-fries"
+     ]
+    }
+   },
+   {
+    "holdout": "frozen-corn",
+    "shared": {
+     "corn": [
+      "canned-corn",
+      "canned-sweet-corn",
+      "corn-chips"
+     ],
+     "frozen": [
+      "frozen-broccoli",
+      "frozen-broccoli-florets",
+      "frozen-brussels-sprouts"
+     ]
+    }
+   },
+   {
+    "holdout": "frozen-waffles",
+    "shared": {
+     "frozen": [
+      "frozen-broccoli",
+      "frozen-broccoli-florets",
+      "frozen-brussels-sprouts"
+     ]
+    }
+   },
+   {
+    "holdout": "fruit-punch",
+    "shared": {
+     "fruit": [
+      "frozen-fruit",
+      "fruit-cocktail",
+      "fruit-cups"
+     ]
+    }
+   },
+   {
+    "holdout": "garlic",
+    "shared": {
+     "garlic": [
+      "chili-garlic-sauce",
+      "garlic-herb-cheese-spread",
+      "garlic-herb-seasoning"
+     ]
+    }
+   },
+   {
+    "holdout": "garlic-bread",
+    "shared": {
+     "bread": [
+      "bread",
+      "bread-crumbs",
+      "french-bread"
+     ],
+     "garlic": [
+      "chili-garlic-sauce",
+      "garlic-herb-cheese-spread",
+      "garlic-herb-seasoning"
+     ]
+    }
+   },
+   {
+    "holdout": "garlic-powder",
+    "shared": {
+     "garlic": [
+      "chili-garlic-sauce",
+      "garlic-herb-cheese-spread",
+      "garlic-herb-seasoning"
+     ],
+     "powder": [
+      "baking-powder",
+      "cocoa-powder",
+      "curry-powder"
+     ]
+    }
+   },
+   {
+    "holdout": "glass-cleaner",
+    "shared": {
+     "cleaner": [
+      "all-purpose-cleaner",
+      "drain-cleaner",
+      "floor-cleaner"
+     ]
+    }
+   },
+   {
+    "holdout": "ground-cinnamon",
+    "shared": {
+     "ground": [
+      "93-7-ground-beef",
+      "93-7-ground-turkey",
+      "ground-allspice"
+     ]
+    }
+   },
+   {
+    "holdout": "ground-ginger",
+    "shared": {
+     "ginger": [
+      "ginger"
+     ],
+     "ground": [
+      "93-7-ground-beef",
+      "93-7-ground-turkey",
+      "ground-allspice"
+     ]
+    }
+   },
+   {
+    "holdout": "high-fiber-tortillas",
+    "shared": {
+     "tortillas": [
+      "corn-tortillas",
+      "tortillas"
+     ]
+    }
+   },
+   {
+    "holdout": "hot-dogs",
+    "shared": {
+     "dogs": [
+      "corn-dogs"
+     ],
+     "hot": [
+      "hot-cocoa",
+      "hot-dog-buns",
+      "hot-honey"
+     ]
+    }
+   },
+   {
+    "holdout": "instant-coffee",
+    "shared": {
+     "coffee": [
+      "coffee",
+      "coffee-creamer",
+      "coffee-pods"
+     ],
+     "instant": [
+      "instant-mashed-potatoes"
+     ]
+    }
+   },
+   {
+    "holdout": "kidney-beans",
+    "shared": {
+     "beans": [
+      "baked-beans",
+      "canned-black-beans",
+      "canned-butter-beans"
+     ]
+    }
+   },
+   {
+    "holdout": "mac-and-cheese",
+    "shared": {
+     "and": [
+      "half-and-half"
+     ],
+     "cheese": [
+      "1-3-fat-cream-cheese",
+      "blue-cheese-dressing",
+      "cheddar-cheese"
+     ]
+    }
+   },
+   {
+    "holdout": "no-boil-lasagna-noodles",
+    "shared": {
+     "lasagna": [
+      "frozen-lasagna",
+      "lasagna-noodles"
+     ],
+     "noodles": [
+      "egg-noodles",
+      "lasagna-noodles",
+      "rice-noodles"
+     ]
+    }
+   },
+   {
+    "holdout": "onion-soup-mix",
+    "shared": {
+     "mix": [
+      "au-jus-gravy-mix",
+      "brownie-mix",
+      "cake-mix"
+     ],
+     "onion": [
+      "condensed-french-onion-soup",
+      "onion-powder",
+      "red-onion"
+     ],
+     "soup": [
+      "chicken-noodle-soup",
+      "condensed-french-onion-soup",
+      "cream-of-chicken-soup"
+     ]
+    }
+   },
+   {
+    "holdout": "paprika",
+    "shared": {
+     "paprika": [
+      "smoked-paprika"
+     ]
+    }
+   },
+   {
+    "holdout": "parchment-paper",
+    "shared": {
+     "paper": [
+      "paper-napkins",
+      "paper-plates",
+      "paper-towels"
+     ]
+    }
+   },
+   {
+    "holdout": "peanut-butter",
+    "shared": {
+     "butter": [
+      "almond-butter",
+      "butter",
+      "canned-butter-beans"
+     ],
+     "peanut": [
+      "peanut-oil"
+     ]
+    }
+   },
+   {
+    "holdout": "pears",
+    "shared": {
+     "pears": [
+      "canned-pears"
+     ]
+    }
+   },
+   {
+    "holdout": "pork-tenderloin",
+    "shared": {
+     "pork": [
+      "boneless-pork-chops",
+      "ground-pork",
+      "pork-chops"
+     ]
+    }
+   },
+   {
+    "holdout": "portobello-mushrooms",
+    "shared": {
+     "mushrooms": [
+      "canned-mushrooms",
+      "mushrooms"
+     ]
+    }
+   },
+   {
+    "holdout": "potato-gnocchi",
+    "shared": {
+     "potato": [
+      "potato-chips"
+     ]
+    }
+   },
+   {
+    "holdout": "raisins",
+    "shared": {
+     "raisins": [
+      "golden-raisins"
+     ]
+    }
+   },
+   {
+    "holdout": "ranch-dressing",
+    "shared": {
+     "dressing": [
+      "blue-cheese-dressing",
+      "caesar-dressing",
+      "creamy-cilantro-lime-dressing"
+     ],
+     "ranch": [
+      "ranch-seasoning-mix"
+     ]
+    }
+   },
+   {
+    "holdout": "sandwich-cookies",
+    "shared": {
+     "cookies": [
+      "cookies"
+     ],
+     "sandwich": [
+      "sandwich-bags"
+     ]
+    }
+   },
+   {
+    "holdout": "shredded-carrots",
+    "shared": {
+     "carrots": [
+      "carrots"
+     ],
+     "shredded": [
+      "cheddar-cheese-shredded",
+      "shredded-cheese"
+     ]
+    }
+   },
+   {
+    "holdout": "sparkling-water",
+    "shared": {
+     "water": [
+      "bottled-water"
+     ]
+    }
+   },
+   {
+    "holdout": "sports-drinks",
+    "shared": {
+     "drinks": [
+      "energy-drinks"
+     ]
+    }
+   },
+   {
+    "holdout": "string-cheese",
+    "shared": {
+     "cheese": [
+      "1-3-fat-cream-cheese",
+      "blue-cheese-dressing",
+      "cheddar-cheese"
+     ]
+    }
+   },
+   {
+    "holdout": "taco-sauce",
+    "shared": {
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ],
+     "taco": [
+      "taco-seasoning"
+     ]
+    }
+   },
+   {
+    "holdout": "toasted-sesame-seeds",
+    "shared": {
+     "seeds": [
+      "hulled-pumpkin-seeds",
+      "poppy-seeds"
+     ],
+     "sesame": [
+      "sesame-oil"
+     ]
+    }
+   },
+   {
+    "holdout": "toilet-bowl-cleaner",
+    "shared": {
+     "cleaner": [
+      "all-purpose-cleaner",
+      "drain-cleaner",
+      "floor-cleaner"
+     ]
+    }
+   },
+   {
+    "holdout": "toilet-paper",
+    "shared": {
+     "paper": [
+      "paper-napkins",
+      "paper-plates",
+      "paper-towels"
+     ]
+    }
+   },
+   {
+    "holdout": "tomato-sauce",
+    "shared": {
+     "sauce": [
+      "alfredo-sauce",
+      "bbq-sauce",
+      "chili-garlic-sauce"
+     ],
+     "tomato": [
+      "tomato-soup"
+     ]
+    }
+   },
+   {
+    "holdout": "tomatoes",
+    "shared": {
+     "tomatoes": [
+      "cherry-tomatoes",
+      "crushed-tomatoes",
+      "diced-tomatoes"
+     ]
+    }
+   },
+   {
+    "holdout": "vegetable-soup",
+    "shared": {
+     "soup": [
+      "chicken-noodle-soup",
+      "condensed-french-onion-soup",
+      "cream-of-chicken-soup"
+     ],
+     "vegetable": [
+      "vegetable-broth",
+      "vegetable-oil"
+     ]
+    }
+   },
+   {
+    "holdout": "white-miso-paste",
+    "shared": {
+     "paste": [
+      "harissa-paste",
+      "red-curry-paste"
+     ],
+     "white": [
+      "canned-white-beans",
+      "white-onion",
+      "white-vinegar"
+     ]
+    }
+   },
+   {
+    "holdout": "whole-chicken",
+    "shared": {
+     "chicken": [
+      "boneless-skinless-chicken-thigh",
+      "breaded-chicken-breast-bites",
+      "chicken-breast"
+     ],
+     "whole": [
+      "whole-cloves"
+     ]
+    }
+   }
+  ]
+ },
+ "percent": 20,
+ "rule": "sha256(salt:bare_id)[:8] as int mod 100 < percent -> holdout; bare_id from commodity_node",
+ "salt": "tc-gold-holdout-2026-09-29"
+}

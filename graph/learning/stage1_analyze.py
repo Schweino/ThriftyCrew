@@ -40,6 +40,7 @@ sys.path.insert(0, os.path.join(HERE, "..", "gold"))
 from graphdb import open_db, GRAPH_DIR, REPO_ROOT       # noqa: E402
 from ids import hash_obj                                # noqa: E402
 from llm import LocalLLM                                # noqa: E402
+from gold_split import holdout_labels, is_holdout_name, load_gold as load_split_gold  # noqa: E402
 
 QUEUE = os.path.join(REPO_ROOT, "grocery", "learning-queue.json")
 
@@ -142,8 +143,14 @@ def gather_contested(db, limit: int) -> list[dict]:
     return [dict(r) for r in rows]
 
 
-def gather_gold_failures(db, limit: int) -> list[dict]:
-    """Most recent gold-set errors, from the last scored run."""
+def gather_gold_failures(db, limit: int, gold: list[dict] | None = None) -> list[dict]:
+    """Most recent gold-set errors, from the last scored run, with HELD-OUT commodities removed.
+
+    The latest eval_runs row may be a `score.py --split holdout` run, and its errors are held-out
+    failures. Handing them to the learner would close the held-out side (W1,
+    design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md). Filtered before the limit is applied.
+    """
+    labels = holdout_labels(load_split_gold() if gold is None else gold)
     row = db.conn.execute(
         "SELECT detail_json FROM eval_runs ORDER BY run_at DESC LIMIT 1").fetchone()
     if not row:
@@ -152,7 +159,17 @@ def gather_gold_failures(db, limit: int) -> list[dict]:
         d = json.loads(row["detail_json"])
     except (json.JSONDecodeError, TypeError):
         return []
-    return (d.get("errors") or [])[:limit]
+    errs = [e for e in (d.get("errors") or []) if not is_holdout_name(e.get("commodity"), labels)]
+    return errs[:limit]
+
+
+def holdout_refusal(s: dict, labels: set[str]) -> str | None:
+    """The spoken reason Stage 1 may not add gold for a held-out commodity, or None.
+    Humans may still hand-add gold rows; only the learner is refused (W1)."""
+    if s.get("kind") == "add_gold" and is_holdout_name(s.get("target"), labels):
+        return (f"refused add_gold for {s.get('target')}: a held-out commodity; the learner may not "
+                f"write holdout gold (graph/gold/gold_split.py)")
+    return None
 
 
 def build_prompt(queue: list, contested: list, failures: list) -> str:
@@ -213,10 +230,15 @@ def main() -> int:
         qhash = hash_obj([queue, contested, failures])
 
         kept = 0
+        labels = holdout_labels(load_split_gold())
         for s in suggestions:
             # Stage 1 is not trusted to police its own scope; enforce it here.
             if s.get("kind") not in ("add_alias", "add_known_wrong", "add_gold",
                                      "tighten_prompt"):
+                continue
+            why = holdout_refusal(s, labels)
+            if why:
+                print(f"  {why}")
                 continue
             pid = "lp:" + hash_obj([s.get("kind"), s.get("target"), s.get("payload")])[:20]
             db.conn.execute(
