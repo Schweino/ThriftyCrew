@@ -50,9 +50,19 @@ def _safe_div(a: float, b: float) -> float:
     return a / b if b else 0.0
 
 
+# Statuses that mean layer 5 (the local model) was asked. `escalated` is also layer 5's UNSURE, and
+# an llm error; both carry a reason starting "llm" (resolve.Resolver._llm_adjudicate).
+LLM_STATUSES = ("llm_rejected", "llm_match_unverified")
+
+
+def reached_llm(v) -> bool:
+    return v.status in LLM_STATUSES or (v.status == "escalated" and str(v.reason).startswith("llm"))
+
+
 def score(db, gold: list[dict], use_llm: bool = False,
           llm: LocalLLM | None = None, progress=None,
-          use_bank: bool = False) -> dict:
+          use_bank: bool = False, system_prompt: str | None = None,
+          case_rows: list | None = None) -> dict:
     """Run every gold case through the resolver and score the verdicts.
 
     TWO COVERAGES, MEASURED SEPARATELY (decision 2026-08-21, Brad).
@@ -75,8 +85,20 @@ def score(db, gold: list[dict], use_llm: bool = False,
     Scoring only deterministically was measuring the estate's homework rather
     than its answers; scoring only with the bank would measure its memory. Both
     are reported, and only `system` carries the gate.
+
+    THE ADJUDICATION PAIR (W5, 2026-09-29). is_match counts only include_hit and llm_confirmed, and the
+    local model can return neither, so false-merge and missed-merge above CANNOT MOVE when the layer-5
+    prompt changes. What a prompt moves is the model's own verdict on the cases that reach it:
+      adj_missed_merge_rate  gold MATCH cases the model reached and did NOT lead as MATCH
+                             (llm_match_unverified), over gold MATCH cases it reached;
+      adj_false_merge_rate   gold NO_MATCH cases the model led as MATCH, over gold NO_MATCH it reached.
+    `adj_rejected_true` (a gold MATCH the model REJECTED outright, which empties a cell) is counted apart.
+    system_prompt: a candidate layer-5 prompt (Resolver(system_prompt=...)); None is the live one.
+    case_rows: when a list, one dict per scored case is appended to it (ms-04).
     """
-    r = Resolver(db, llm=llm, use_llm=use_llm, use_bank=use_bank)
+    r = Resolver(db, llm=llm, use_llm=use_llm, use_bank=use_bank, system_prompt=system_prompt)
+    adj = {"adj_match_n": 0, "adj_no_match_n": 0, "adj_missed": 0, "adj_false": 0,
+           "adj_rejected_true": 0, "adj_error": 0}
 
     tp = fp = tn = fn = 0          # w.r.t. the MATCH class
     unsure = missing = 0
@@ -97,6 +119,24 @@ def score(db, gold: list[dict], use_llm: bool = False,
         predicted_match = v.is_match
         if v.status == "escalated":
             unsure += 1
+        asked = reached_llm(v)
+        led = v.status == "llm_match_unverified"
+        if asked:
+            if str(v.reason).startswith("llm error"):
+                adj["adj_error"] += 1
+            if g["label"] == "MATCH":
+                adj["adj_match_n"] += 1
+                adj["adj_missed"] += 0 if led else 1
+                adj["adj_rejected_true"] += 1 if v.status == "llm_rejected" else 0
+            else:
+                adj["adj_no_match_n"] += 1
+                adj["adj_false"] += 1 if led else 0
+        if case_rows is not None:
+            case_rows.append({"id": g.get("id"), "label": g["label"], "status": v.status,
+                              "predicted_match": predicted_match, "reached_llm": asked,
+                              "llm_led_match": led, "confidence": v.confidence,
+                              "llm_verdict": (v.meta or {}).get("llm_verdict"),
+                              "reason": str(v.reason)[:240]})
 
         if g["label"] == "MATCH":
             if predicted_match:
@@ -135,9 +175,11 @@ def score(db, gold: list[dict], use_llm: bool = False,
         "missed_merge_rate": _safe_div(fn, n_pos),
         "counts": {"tp": tp, "fp": fp, "tn": tn, "fn": fn,
                    "gold_match": n_pos, "gold_no_match": n_neg,
-                   "escalated": unsure, "missing_node": missing},
+                   "escalated": unsure, "missing_node": missing, **adj},
         "by_status": dict(r.stats),
     }
+    metrics["adj_missed_merge_rate"] = _safe_div(adj["adj_missed"], adj["adj_match_n"])
+    metrics["adj_false_merge_rate"] = _safe_div(adj["adj_false"], adj["adj_no_match_n"])
     metrics["f1"] = _safe_div(2 * metrics["entity_precision"] * metrics["entity_recall"],
                               metrics["entity_precision"] + metrics["entity_recall"])
     metrics["gates"] = {
@@ -224,6 +266,9 @@ def main() -> int:
     ap.add_argument("--health", action="store_true",
                     help="W4 eval health: noise floor, arm ordering, saturation (graph/eval/score_health.py)")
     ap.add_argument("--runs", type=int, default=3, help="repetitions per arm for --health")
+    ap.add_argument("--sample", type=int, default=0,
+                    help="--health on a FIXED KEYED sample of N uncertain rows per split "
+                         "(score_health.sample_rows); deterministic and llm arms, each split apart")
     args = ap.parse_args()
 
     gold = filter_split(load_gold(), args.split)
@@ -231,11 +276,28 @@ def main() -> int:
         print("no gold set — run: python graph/gold/seed_gold.py", file=sys.stderr)
         return 2
 
+    if args.sample and not args.health:
+        print("--sample applies to --health only", file=sys.stderr)
+        return 2
     if args.health:
-        from score_health import run_health
+        from score_health import run_health, sample_rows, print_sample_info
         hl = LocalLLM()
+        llm_h = hl if hl.health() else None
         with open_db() as db:
-            return run_health(db, gold, hl if hl.health() else None, args.runs, score)
+            if not args.sample:
+                return run_health(db, gold, llm_h, args.runs, score)
+            from gold_split import split_of
+            sample, info = sample_rows(gold, args.sample, split_of)
+            print_sample_info(info)
+            worst = 0
+            for sp in ("train", "holdout"):
+                if args.split not in ("all", sp) or not sample[sp]:
+                    continue
+                print(f"\n##### split={sp} SAMPLE ({len(sample[sp])} rows) #####")
+                worst = max(worst, run_health(db, sample[sp], llm_h, args.runs, score,
+                                              arms=("deterministic", "llm")))
+            print(f"SCORE-HEALTH-SAMPLE-COMPLETE fingerprint={info['fingerprint'][:16]} exit={worst}")
+            return worst
 
     llm = LocalLLM() if args.llm else None
     if args.llm and not llm.health():

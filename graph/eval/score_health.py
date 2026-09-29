@@ -2,6 +2,7 @@
 design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md).
 
     python graph/eval/score.py --health [--runs 3]
+    python graph/eval/score.py --health --sample 60 [--runs 3]   # fixed keyed sample, per split
     python graph/eval/score_health.py --selftest
 
 Three checks, run over the SAME gold blob:
@@ -37,10 +38,48 @@ import sys
 import time
 
 METRICS = ("entity_precision", "entity_recall", "f1",
-           "false_merge_rate", "missed_merge_rate")
+           "false_merge_rate", "missed_merge_rate",
+           # the layer-5 model's own verdicts (score.score docstring): the only pair a prompt moves
+           "adj_false_merge_rate", "adj_missed_merge_rate")
 DET = "deterministic"
 ORDER = (DET, "llm", "system")   # recall must be non-decreasing along this
 ZERO_SPREAD = 0.0                # the deterministic bar: exactly zero, no tolerance
+
+
+SAMPLE_SALT = "tc-eval-sample-2026-09-29"   # changing it draws a different sample; say so if you do
+SAMPLE_CLASS = "uncertain"                   # escalation-review rows (W3): where 16 of 17 holdout misses live
+
+
+def sample_rows(gold: list[dict], n: int, split_of, salt: str = SAMPLE_SALT,
+                selection: str = SAMPLE_CLASS) -> tuple[dict[str, list[dict]], dict]:
+    """A FIXED KEYED SAMPLE (Brad 2026-09-29; ms-08 samples by KEY, never at random).
+
+    Per split, the `selection` rows are ordered by sha256(salt + gold id) and the first n kept. The
+    same gold blob and salt give the same ids on every call, so the noise floor and every hillclimb
+    round score one case list. split_of is gold_split.split_of (injected so the self-test is hermetic).
+    Returns ({split: rows}, info) where info names the salt, the fingerprint (sha256 of the sorted
+    ids), and per split how many were available and whether n was CAPPED.
+    """
+    import hashlib
+    out: dict[str, list[dict]] = {}
+    info = {"salt": salt, "n": n, "selection": selection, "per_split": {}}
+    for sp in ("train", "holdout"):
+        pool = [g for g in gold if g.get("selection") == selection and split_of(g) == sp]
+        pool.sort(key=lambda g: hashlib.sha256((salt + str(g["id"])).encode("utf-8")).hexdigest())
+        out[sp] = pool[:n]
+        info["per_split"][sp] = {"available": len(pool), "taken": len(out[sp]), "capped": len(pool) < n}
+    ids = sorted(str(g["id"]) for sp in out for g in out[sp])
+    info["fingerprint"] = hashlib.sha256("\n".join(ids).encode("utf-8")).hexdigest()
+    return out, info
+
+
+def print_sample_info(info: dict) -> None:
+    print(f"SAMPLE salt={info['salt']} n={info['n']} per split, selection={info['selection']} "
+          f"fingerprint={info['fingerprint']}")
+    for sp, d in info["per_split"].items():
+        cap = f"  CAPPED: asked {info['n']}, only {d['available']} available" if d["capped"] else ""
+        print(f"  sample {sp}: {d['taken']} of {d['available']} {info['selection']} rows{cap}")
+    print("  every number below is a SAMPLE number, not a full-gold number")
 
 
 def spread(values: list[float]) -> float:
@@ -83,12 +122,16 @@ def report(res: dict, runs: dict[str, list[dict]]) -> None:
         print(f)
 
 
-def run_health(db, gold, llm, n: int, score_fn) -> int:
-    """Score each arm n times. score_fn is score.score (injected to avoid a cycle)."""
+def run_health(db, gold, llm, n: int, score_fn, arms=ORDER) -> int:
+    """Score each arm n times. score_fn is score.score (injected to avoid a cycle). `arms` limits
+    which of deterministic/llm/system run (the sample run skips system: its bank answers most cases)."""
+    want = set(arms)
     arms = {DET: dict(use_llm=False, use_bank=False)}
     if llm is not None:
-        arms["llm"] = dict(use_llm=True, use_bank=False)
-        arms["system"] = dict(use_llm=True, use_bank=True)
+        if "llm" in want:
+            arms["llm"] = dict(use_llm=True, use_bank=False)
+        if "system" in want:
+            arms["system"] = dict(use_llm=True, use_bank=True)
     else:
         print("BLIND llm arms: no model (deterministic arm only)")
     runs: dict[str, list[dict]] = {a: [] for a in arms}
@@ -101,6 +144,8 @@ def run_health(db, gold, llm, n: int, score_fn) -> int:
             c = m["counts"]
             print(f"  run {i+1}/{n} {arm}: recall={m['entity_recall']:.4f} "
                   f"fm={m['false_merge_rate']:.4f} mm={m['missed_merge_rate']:.4f} "
+                  f"adj_fm={c['adj_false']}/{c['adj_no_match_n']} adj_mm={c['adj_missed']}/{c['adj_match_n']} "
+                  f"adj_rejected_true={c['adj_rejected_true']} llm_errors={c['adj_error']} "
                   f"scored {c['gold_match'] + c['gold_no_match']} of {len(gold)} "
                   f"(missing_node={c['missing_node']}) {time.time()-t:.0f}s", flush=True)
     res = check(runs)
@@ -113,7 +158,41 @@ def run_health(db, gold, llm, n: int, score_fn) -> int:
 
 def _m(recall=0.5, fm=0.25, mm=0.5, p=0.75):
     return {"entity_precision": p, "entity_recall": recall, "f1": 0.5,
-            "false_merge_rate": fm, "missed_merge_rate": mm}
+            "false_merge_rate": fm, "missed_merge_rate": mm,
+            "adj_false_merge_rate": 0.25, "adj_missed_merge_rate": 0.5}
+
+
+def _sample_cases() -> list:
+    """(name, ok, detail) for the fixed keyed sample. Hermetic: split_of is a fake keyed on id."""
+    def fake_split(g):
+        return "holdout" if g["id"].startswith("h") else "train"
+    gold = ([{"id": f"t{i}", "selection": "uncertain"} for i in range(8)]
+            + [{"id": f"h{i}", "selection": "uncertain"} for i in range(3)]
+            + [{"id": f"s{i}", "selection": "success"} for i in range(4)])
+    out = []
+    a, ia = sample_rows(gold, 4, fake_split)
+    b, ib = sample_rows(list(reversed(gold)), 4, fake_split)
+    same = ([g["id"] for g in a["train"]] == [g["id"] for g in b["train"]]
+            and ia["fingerprint"] == ib["fingerprint"])
+    out.append(("CLEAN TWIN the same ids and fingerprint on every call, whatever the input order",
+                same, f"{[g['id'] for g in a['train']]} vs {[g['id'] for g in b['train']]}"))
+    leak = [g["id"] for g in a["train"] if fake_split(g) != "train"]
+    out.append(("MUST NOT FIRE no holdout row in the train sample", not leak, str(leak)))
+    # the leak detector itself, on a planted row: the check above must be able to see one
+    planted = a["train"] + [{"id": "h9", "selection": "uncertain"}]
+    caught = [g["id"] for g in planted if fake_split(g) != "train"]
+    out.append(("MUST FIRE a holdout row planted in the train sample is caught", caught == ["h9"], str(caught)))
+    out.append(("MUST NOT FIRE success rows never enter an uncertain sample",
+                all(g["selection"] == "uncertain" for sp in a for g in a[sp]), ""))
+    cap = ia["per_split"]["holdout"]
+    out.append(("MUST FIRE n=4 past the 3 available holdout rows is capped and SAID",
+                cap == {"available": 3, "taken": 3, "capped": True}, str(cap)))
+    at = sample_rows(gold, 3, fake_split)[1]["per_split"]["holdout"]
+    out.append(("MUST NOT FIRE n=3 exactly AT the 3 available is not capped",
+                at == {"available": 3, "taken": 3, "capped": False}, str(at)))
+    other = sample_rows(gold, 4, fake_split, salt="another-salt")[1]["fingerprint"]
+    out.append(("CLEAN TWIN a different salt draws a different fingerprint", other != ia["fingerprint"], ""))
+    return out
 
 
 def selftest() -> int:
@@ -156,6 +235,7 @@ def selftest() -> int:
          {DET: [_m(0.5, fm=0.0)], "llm": [_m(0.625, fm=0.25)]},
          False, [], ["SATURATED false_merge_rate"])
 
+    cases.extend(_sample_cases())
     fails = 0
     for name, ok, text in cases:
         print(f"  {'ok  ' if ok else 'FAIL'} {name}")
@@ -163,8 +243,8 @@ def selftest() -> int:
             fails += 1
             print(f"       findings: {text!r}")
     ran = len(cases)
-    if ran != 10:
-        print(f"score_health self-test FAIL: ran {ran} cases, expected 10")
+    if ran != 17:
+        print(f"score_health self-test FAIL: ran {ran} cases, expected 17")
         return 1
     print(f"score_health: {ran - fails} of {ran} cases passed")
     print(f"score_health self-test {'pass' if fails == 0 else 'FAIL'}")

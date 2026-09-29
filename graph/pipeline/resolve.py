@@ -244,9 +244,13 @@ class Resolver:
     def __init__(self, db: GraphDB, llm: LocalLLM | None = None,
                  use_llm: bool = True, escalate_below: float = 0.75,
                  use_bank: bool = True, adversarial: bool = False,
-                 reask: set | None = None):
+                 reask: set | None = None, system_prompt: str | None = None):
         self.db = db
         self.llm = llm
+        # A CANDIDATE layer-5 system prompt, for scoring only (W5 hillclimb). None is the live
+        # RESOLVE_SYSTEM. An override is stamped `override:<sha12>` in the verdict meta, never
+        # PROMPT_VERSION, so a trial verdict cannot be mistaken for the live prompt's.
+        self.system_prompt = system_prompt
         self.use_llm = use_llm
         self.escalate_below = escalate_below
         # Plan §3.3. Off by default because it doubles the model calls on the MATCH slice;
@@ -568,7 +572,8 @@ class Resolver:
         """Layer 5. The local model may REJECT a candidate or flag a probable
         match for review; it may never mint a price. See the module docstring
         for the bench decomposition that forced this asymmetry."""
-        system, user = build_resolve_prompt(cc, name, self.prior_rulings(cc, name))
+        system, user = build_resolve_prompt(cc, name, self.prior_rulings(cc, name),
+                                            system=self.system_prompt)
         try:
             # PER-REQUEST service time (backlog I61) is recorded by LocalLLM.chat now, for every
             # caller rather than for the two that happened to be interesting; all this site owes is
@@ -583,7 +588,8 @@ class Resolver:
         why = str(parsed.get("evidence", ""))[:400]
         meta = {
             "model": res.model,
-            "prompt_version": PROMPT_VERSION,
+            "prompt_version": (PROMPT_VERSION if self.system_prompt is None
+                               else "override:" + hash_obj([self.system_prompt])[:12]),
             "input_hash": hash_obj([system, user]),
             "output_hash": res.output_hash,
             "llm_verdict": verdict,
@@ -1010,8 +1016,9 @@ class Resolver:
 
 
 def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
-                         examples: dict | None = None) -> tuple[str, str]:
-    """Build the adjudication prompt.
+                         examples: dict | None = None,
+                         system: str | None = None) -> tuple[str, str]:
+    """Build the adjudication prompt. `system=None` is the live RESOLVE_SYSTEM.
 
     The system prompt carries this catalog's SEMANTICS, not just generic
     instructions. Phase 0 validation found that a naked prompt confidently
@@ -1020,7 +1027,16 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
     the abstract, wrong for this board, which prices exactly such packaged items.
     Stating the domain rules is what fixes that class of error.
     """
-    system = (
+    system = RESOLVE_SYSTEM if system is None else system
+    inc = cc.raw_include[:8]
+    return system, _resolve_user(cc, product_name, examples, inc)
+
+
+# The live layer-5 system prompt, PROMPT_VERSION above. A scorer may pass `system=` to
+# build_resolve_prompt (Resolver(system_prompt=...)) to try a CANDIDATE without editing this text
+# (graph/bench/hillclimb_prompt.py, W5 of design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md);
+# promoting one is a reviewed commit that edits THIS constant and bumps PROMPT_VERSION.
+RESOLVE_SYSTEM = (
         "You adjudicate whether a grocery store's product listing IS a given "
         "commodity on an Omaha price-comparison board.\n\n"
         "DOMAIN RULES (this board's semantics, not general knowledge):\n"
@@ -1036,8 +1052,11 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
         "BIAS: prefer a missed match over a false one. If the listing is ambiguous, "
         "answer UNSURE rather than guessing — a wrong MATCH publishes a wrong price.\n"
         "Cite the specific words that decide it. Output JSON only."
-    )
-    inc = cc.raw_include[:8]
+)
+
+
+def _resolve_user(cc: CompiledCommodity, product_name: str, examples: dict | None,
+                  inc: list) -> str:
     parts = [f"COMMODITY: {cc.label}",
              f"sold by: {cc.unit or 'unspecified'}",
              f"known surface patterns: {inc}"]
@@ -1084,7 +1103,7 @@ def build_resolve_prompt(cc: CompiledCommodity, product_name: str,
             parts += [f"  - probably IS this commodity: {c!r}" for c in t_confirmed]
     parts.append(f"\nSTORE PRODUCT LISTING: {product_name!r}\n")
     parts.append("Is this listing that commodity?")
-    return system, "\n".join(parts)
+    return "\n".join(parts)
 
 
 ADVERSARIAL_PROMPT_VERSION = "adversarial-v1-argue-no-match"
