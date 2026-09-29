@@ -61,6 +61,37 @@ read 2026-09-29. Its numbers are the author's single-benchmark results, not meas
 Counts above are from `graph/gold/gold.jsonl` in the working tree on 2026-09-29 (it is modified daily); W0 re-counts
 at a named blob.
 
+## W0 result
+
+Harness `graph/eval/audit_gold_circularity.py` (self-test 11 cases, exit 0), run 2026-09-29 read-only against the live
+index `graph/sqlite/graph.db` (715 Commodity nodes). Blobs read: gold.jsonl `83bf8294`, approved-patches.json
+`55fbd1bc`, proposals.json `65d417bb`, ingredient-resolutions.json `7ee3c359`, ingredient-events.jsonl `7f7ee310`.
+Exit 0.
+
+- **a.** Gold at that blob has 2,108 rows, not the 2,157 above (that count came from the main checkout's modified copy):
+  escalation-review 1,387, product-urls 388, known-wrong 313, allowlist 20. The failure-derived share is 1,700 of 2,108
+  (80.6%).
+- **b.** `approved_patches` has no provenance field, so circularity is **BLIND for all 159 applied patches** (of 256
+  approved rows). Proxy, needing no provenance: the gold cases each applied alias matches, using the resolver's own test
+  (raw name, case-insensitive `search`, `resolve.py` step 4). 155 matched **zero**, 2 matched one, 1 matched two or
+  more, and 1 was not an alias. 154 of the 159 target a commodity with **no gold case at all** in today's gold. All 159
+  were applied on 2026-08-20 and 08-21, and **nothing has been applied since**. The no-coverage hold shipped on
+  2026-08-20 in the same commit as the loop (`b42c6a672`).
+- **Reading.** The premise in finding 1 is circular evidence. For the patches that actually applied, the evidence was
+  mostly *absent*, not circular: the gate passed them on a delta of 0.0 over cases they never touched. Today 28 accepted
+  patches are pending: 19 on targets gold covers (`not_run`), 5 on uncovered targets, and 4 `requeued`. Those 19 are
+  W2's real population, so D1's "cost" is at most 19 patches, and zero until `--apply` runs again.
+- **c.** 0 of 353 proposals are `add_gold`, and 0 gold rows came from the learner. Finding 2 is a hole that has never
+  been used. W1's refusal is still worth its one case.
+- **f.** The immediate lane holds 269 resolutions. The event ledger has 523 events: 386 rulings dated 2026-08-26 to
+  **2026-09-04 only** (so rulings after 09-04 are not reaching this ledger, or none were made), and 19 reversal events
+  (13 `invalidate`, 6 `qa_mapper_fail`, 2026-08-27 to 09-26) that dropped 28 cached resolutions. There is no
+  `rejects_mapping` event kind: the daemon acts on that flag and records `invalidate`. The rate is 28 reversals against
+  269 resolutions standing today; the denominator is today's stock, not everything ever written. For D5 that is "more
+  than a handful".
+- **Open questions W0 raises, for Brad:** (1) Why has `stage2_review.py --apply` applied nothing since 08-21 with 19
+  covered patches waiting? (2) Why do the mapper's rulings stop reaching `ingredient-events.jsonl` after 09-04?
+
 ## Out of scope
 
 - The sidecar reranker / fine-tune holdouts (exist; see Knowledge consulted).
