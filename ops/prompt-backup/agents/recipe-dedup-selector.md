@@ -1,8 +1,8 @@
 ---
 name: recipe-dedup-selector
 description: OPUS-pinned dedup + selection stage of a recipe run. Receives a batch of mechanically pre-qualified candidate DOSSIERS (signature, band numbers, neighbour evidence, prior rulings, saturation) and returns a schema'd verdict ruling on every one of them. The gate between sourcing and everything downstream, and the sole author of acceptances and of the estate's dish-rulings ledger.
-model: claude-opus-4-8
-effort: high
+model: claude-opus-5-5
+effort: medium
 tools: Read, Grep, Glob
 ---
 

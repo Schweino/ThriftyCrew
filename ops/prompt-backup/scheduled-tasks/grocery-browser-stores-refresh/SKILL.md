@@ -38,7 +38,7 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
          promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
          task on 2026-09-13, and the stores went unread for six days.
-         MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5).
+         MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5.5, Medium effort; Brad, 2026-09-29).
          This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
          refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
          and the builders REFUSE a capture with no store line, the wrong store or a non-In-Store mode, so a
