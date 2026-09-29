@@ -113,6 +113,49 @@ def snapshot_page(text, url, cache_dir=None):
             "cache_key": harvest.cache_key(url or ""), "taken": time.strftime("%Y-%m-%dT%H:%M:%S")}
 
 
+def rung3_snapshot(contract, html, url, esc, cache_dir=None):
+    """Rung 3 (the Claude extractor, hunt-daemon.rung3): save the cached page its verification was
+    computed over into `contract`, BEFORE the daemon writes the contract (og-51). The agent reads the
+    page itself, so this is the text its lines were checked against; when rungs 1-2 read different
+    bytes, their snapshot is kept beside it as page_snapshot_local_rungs so a harness sees the drift.
+    Returns the problems to record as findings (none when there was no cached page at all: the
+    daemon already records that one)."""
+    problems = []
+    if html is not None:
+        try:
+            contract["page_snapshot"] = snapshot_page(html, url, cache_dir)
+        except Exception as e:                                    # noqa: BLE001
+            problems.append("the page could not be saved: %s" % e)
+    prior = (esc or {}).get("page_snapshot")
+    if isinstance(prior, dict) and prior.get("sha256") and \
+            prior["sha256"] != (contract.get("page_snapshot") or {}).get("sha256"):
+        contract["page_snapshot_local_rungs"] = prior
+    problem = snapshot_problem(contract, cache_dir) if html is not None else None
+    if problem and not problems:
+        problems.append(problem)
+    return problems
+
+
+def rung3_prompt(esc):
+    """The rung-3 dispatch prompt, moved here from hunt-daemon.py unchanged. The escalation's
+    page_snapshot is W6 bookkeeping and is left OUT, so the extractor sees exactly what it saw before."""
+    esc = {k: v for k, v in (esc or {}).items() if k != "page_snapshot"}
+    return (
+        "Transcribe ONE recipe page the local extraction pass could not settle.\n\n"
+        "DO NOT run the local script and do not try to re-earn the failure - everything it found\n"
+        "is below. The page is at the source URL; fetch it from the cache if you can reach it, and\n"
+        "if you cannot reach the page at all, say so: state \"unreadable\" is a complete and\n"
+        "correct answer. An invented recipe is the worst outcome in this flow.\n\n"
+        "TRANSCRIPTION ONLY. Convert no units, estimate no missing measurement, rewrite no prose.\n"
+        "The `raw` field of each ingredient is the page's own line, verbatim.\n\n"
+        "WHAT THE LOCAL PASS FOUND:\n%s\n\n"
+        "Return the extraction contract as JSON and nothing else: "
+        "{state, reason, title, source_url, servings, time_total, time_active, "
+        "ingredients:[{raw,item,qty,unit,prep,optional,section}], instructions:[], concerns:[]}.\n"
+        "Do not write `extracted_by` or `verification` - those are computed here, from the page.\n"
+        % json.dumps(esc, indent=1, ensure_ascii=False)[:12000])
+
+
 def snapshot_problem(doc, cache_dir=None):
     """None when the contract names a saved page whose bytes hash to the recorded sha256; otherwise
     the reason it cannot be paired offline. The MUST FIRE is an extraction that ran without saving."""
@@ -700,6 +743,15 @@ def selftest():
         fh.write(b"<html>page, rewritten by a later sanitize</html>")
     T("MUST FIRE  a saved page whose bytes no longer hash to the recorded sha256 is caught",
       "hashing to" in str(snapshot_problem(doc, tamper_dir)), str(snapshot_problem(doc, tamper_dir)))
+    T("CLEAN TWIN the rung-3 prompt is unchanged by the escalation's page_snapshot (the extractor "
+      "sees what it saw before)", rung3_prompt(esc) == rung3_prompt(
+          {k: v for k, v in esc.items() if k != "page_snapshot"}) and want_sha not in rung3_prompt(esc))
+    c3 = {}
+    p3 = rung3_snapshot(c3, "<html>page, fetched again</html>", u_esc, esc, cache)
+    T("MUST FIRE  rung 3 saves the page it verified against, and keeps the local rungs' snapshot "
+      "when the bytes moved", not p3 and snapshot_problem(c3, cache) is None
+      and (c3.get("page_snapshot_local_rungs") or {}).get("sha256") == want_sha
+      and c3["page_snapshot"]["sha256"] != want_sha, json.dumps(c3)[:240])
 
     # ---- an uncached page is could-not-run: this sweep NEVER fetches -----------------------------
     recs2, _ = run_sweep([tgt("missing", u_missing)], ladder, cache_dir=cache,

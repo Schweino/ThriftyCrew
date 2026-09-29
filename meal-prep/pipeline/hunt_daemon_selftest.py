@@ -285,11 +285,10 @@ LEARN_SCRATCH = scratch_dir(prefix="daemon-learn-seam-")
 SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
 
-# THE PAGE-SNAPSHOT SEAM, DEFAULTED THE SAME WAY (W6, 2026-09-29). Every extraction now saves the page
-# it read under <page-cache>\extracted\, and a dozen fixtures here stub harvest.cached_body with a
-# one-line page; without this the battery would write those into the checkout's real cache.
-SNAPSHOT_SCRATCH = scratch_dir(prefix="daemon-snap-seam-")
-os.environ["TC_PAGE_SNAPSHOT_ROOT"] = SNAPSHOT_SCRATCH
+# W6 (2026-09-29): extractions save their page; the seam keeps stubbed pages out of the real cache.
+os.environ["TC_PAGE_SNAPSHOT_ROOT"] = scratch_dir(prefix="daemon-snap-seam-")
+import hunt_daemon_rung3_cases as _R3                             # noqa: E402  rung-3 + W6 cases
+_R3.bind(globals())
 
 # THE FDC SHELF'S TWO SEAMS, DEFAULTED THE SAME WAY (2026-09-11). F1's fill_fdc_shelf calls the REAL
 # fdc_lookup.cache_fill in every map-lane fixture that does not stub it, and cache_fill writes
@@ -611,16 +610,16 @@ def run(names_out=None, names_ref=None):
       "Claude and never a pass",
       *_blocked_is_not_escalated())
     T("MUST FIRE  rung 3's verification is computed over page_text_from_html, never raw markup",
-      *_rung3_verifies_stripped_text())
+      *_R3.rung3_verifies_stripped_text())
     T("MUST FIRE  rung 3 deletes the escalation file on settle, or the lane double-dispatches a "
       "settled page",
-      *_rung3_cleans_up())
+      *_R3.rung3_cleans_up())
     T("MUST FIRE  a low rung-3 verified rate is RECORDED as a concern, not escalated to nowhere",
-      *_rung3_records_not_gates())
+      *_R3.rung3_records_not_gates())
     T("MUST FIRE  rung 3 saves the page it verified against and names it by sha256 (W6)",
-      *_rung3_saves_its_page())
+      *_R3.rung3_saves_its_page())
     T("MUST FIRE  a locally settled page is saved, and the seam keeps it out of the real cache (W6)",
-      *_local_settle_saves_its_page())
+      *_R3.local_settle_saves_its_page())
 
     # =================================================================================================
     H("B: the registrar is handed its evidence (2026-08-24)")
@@ -5558,161 +5557,6 @@ def _blocked_is_not_escalated():
                 and d.outcomes and d.outcomes[0]["status"] == "stuck"
                 and "BLOCKED" in d.outcomes[0]["detail"],
                 json.dumps(d.outcomes))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _rung3_daemon(tmp, returned):
-    """Drive rung 3 directly against a written escalation file."""
-    import harvest                                               # noqa: PLC0415
-    os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
-    esc = os.path.join(tmp, "extracted", "p1.escalation.json")
-    with open(esc, "w", encoding="utf-8") as f:
-        json.dump({"state": "escalate", "reason": "one line failed", "title": "P One",
-                   "source_url": "https://d/p", "ingredients": [], "instructions": [],
-                   "escalate": True, "escalate_reason": "one line failed"}, f)
-    fd = FakeDispatch({"recipe-hunter-extractor": [returned]})
-    d = daemon(run_dir=tmp, dispatcher=fd)
-    real = harvest.cached_body
-    # The page states the line WITH INLINE TAGS, which is the whole point: it substring-matches the
-    # stripped text and never matches raw markup.
-    harvest.cached_body = lambda u, cache_dir=None: (
-        "<html><body><li>1 lb <strong>chicken</strong> thighs</li>"
-        "<li>2 cups rice</li></body></html>")
-    try:
-        arun(d.rung3("p1"))
-    finally:
-        harvest.cached_body = real
-    return d, esc
-
-
-def _rung3_verifies_stripped_text():
-    tmp = scratch_dir(prefix="daemon-rung3-")
-    try:
-        d, _esc = _rung3_daemon(tmp, {
-            "state": "ok", "title": "P One", "servings": 4,
-            "ingredients": [{"raw": "1 lb chicken thighs", "item": "chicken thighs"},
-                            {"raw": "2 cups rice", "item": "rice"}],
-            "instructions": ["Cook."], "concerns": []})
-        with open(os.path.join(tmp, "extracted", "p1.json"), "r", encoding="utf-8") as f:
-            doc = json.load(f)
-        v = doc.get("verification") or {}
-        return (doc.get("extracted_by") == "claude" and v.get("verified") == 2
-                and v.get("unverified") == 0 and v.get("passed") is True,
-                json.dumps(v))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _rung3_cleans_up():
-    tmp = scratch_dir(prefix="daemon-rung3b-")
-    try:
-        d, esc = _rung3_daemon(tmp, {
-            "state": "ok", "title": "P One",
-            "ingredients": [{"raw": "1 lb chicken thighs", "item": "chicken thighs"},
-                            {"raw": "2 cups rice", "item": "rice"}],
-            "instructions": ["Cook."], "concerns": []})
-        return (not os.path.exists(esc) and os.path.exists(os.path.join(tmp, "extracted", "p1.json")),
-                "the escalation file survived a settle" if os.path.exists(esc)
-                else "no settled file was written")
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _rung3_records_not_gates():
-    tmp = scratch_dir(prefix="daemon-rung3c-")
-    try:
-        d, esc = _rung3_daemon(tmp, {
-            "state": "ok", "title": "P One",
-            "ingredients": [{"raw": "1 lb chicken thighs", "item": "chicken thighs"},
-                            {"raw": "3 tablespoons invented sauce", "item": "invented sauce"}],
-            "instructions": ["Cook."], "concerns": []})
-        p = os.path.join(tmp, "extracted", "p1.json")
-        with open(p, "r", encoding="utf-8") as f:
-            doc = json.load(f)
-        concerns = " ".join(doc.get("concerns") or [])
-        return (os.path.exists(p) and not os.path.exists(esc)
-                and doc["verification"]["unverified"] == 1 and "verified only" in concerns,
-                "concerns=%s verification=%s" % (concerns[:120], json.dumps(doc["verification"])))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _rung3_saves_its_page():
-    import extract_sweep                                         # noqa: PLC0415
-    import hashlib                                               # noqa: PLC0415
-    tmp = scratch_dir(prefix="daemon-rung3d-")
-    try:
-        d, _esc = _rung3_daemon(tmp, {
-            "state": "ok", "title": "P One",
-            "ingredients": [{"raw": "1 lb chicken thighs", "item": "chicken thighs"},
-                            {"raw": "2 cups rice", "item": "rice"}],
-            "instructions": ["Cook."], "concerns": []})
-        with open(os.path.join(tmp, "extracted", "p1.json"), "r", encoding="utf-8") as f:
-            doc = json.load(f)
-        page = ("<html><body><li>1 lb <strong>chicken</strong> thighs</li>"
-                "<li>2 cups rice</li></body></html>")
-        want = hashlib.sha256(page.encode("utf-8")).hexdigest()
-        snap = doc.get("page_snapshot") or {}
-        return (snap.get("sha256") == want and extract_sweep.snapshot_problem(doc) is None
-                and not any("not saved" in x for x in d.findings),
-                "snapshot=%s problem=%s" % (json.dumps(snap), extract_sweep.snapshot_problem(doc)))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _local_settle_saves_its_page():
-    """The daemon's own extract lane, one page, fake ladder: the contract names a saved page, the
-    file is under the suite's seam, and nothing new appears under the checkout's real cache."""
-    import extract_sweep                                         # noqa: PLC0415
-    import harvest                                               # noqa: PLC0415
-    tmp = scratch_dir(prefix="daemon-snap-local-")
-    real_dir = os.path.join(harvest.PAGE_CACHE, extract_sweep.SNAPSHOT_SUBDIR)
-    real_before = sorted(os.listdir(real_dir)) if os.path.isdir(real_dir) else []
-    try:
-        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
-        d = daemon(run_dir=tmp, dispatcher=FakeDispatch({}))
-        d.ch["extract"].push({"slug": "p1", "url": "https://d/p1", "name": "P One"})
-        d.ch["extract"].close()
-
-        class OneLadder:
-            allow_rung2 = True
-
-            def slot_ctx(self):
-                return 16384
-
-            def rung1(self, html, url):
-                return {"extraction": {"usable": True, "unusable_reason": None, "title": "P One",
-                                       "servings": 4, "total_time": None, "active_time": None,
-                                       "ingredients": [{"raw": "1 lb chicken", "item": "chicken",
-                                                        "qty": "1", "unit": "lb", "prep": None,
-                                                        "optional": False, "section": None}],
-                                       "instructions": ["Cook."]},
-                        "verification": {"lines": 1, "verified": 1, "unverified": 0,
-                                         "verified_rate": 1.0, "unverified_lines": [],
-                                         "passed": True},
-                        "model": "fake", "tokens": 0, "rung": 1, "extracted_by": "jsonld-local",
-                        "escalate": False, "escalate_reason": None}
-
-            def rung2(self, html, url):
-                return None, "unused"
-
-        real = harvest.cached_body
-        harvest.cached_body = lambda u, cache_dir=None: "<html><body>1 lb chicken</body></html>"
-        try:
-            arun(d.extract_lane(ladder=OneLadder()))
-        finally:
-            harvest.cached_body = real
-        p = os.path.join(tmp, "extracted", "p1.json")
-        doc = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {}
-        real_after = sorted(os.listdir(real_dir)) if os.path.isdir(real_dir) else []
-        return (bool((doc.get("page_snapshot") or {}).get("sha256"))
-                and extract_sweep.snapshot_problem(doc) is None
-                and real_after == real_before
-                and not any("not saved" in x for x in d.findings),
-                "doc=%s real-cache %d -> %d findings=%s"
-                % (json.dumps(doc.get("page_snapshot")), len(real_before), len(real_after),
-                   d.findings[:3]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

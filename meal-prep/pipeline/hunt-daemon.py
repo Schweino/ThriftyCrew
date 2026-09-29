@@ -1576,11 +1576,8 @@ class Daemon(object):
                     if rec.get("contract") is not None:
                         await loop.run_in_executor(
                             None, lambda r=rec, t=target: extract_sweep.write_record(r, t["dest"]))
-                        # W6: the page the ladder read is saved for the model-comparison corpus.
-                        # A miss is a finding, never a change to the extraction.
-                        if rec.get("snapshot_problem"):
-                            self.findings.append("%s: extraction page not saved - %s"
-                                                 % (rec["slug"], rec["snapshot_problem"]))
+                        if rec.get("snapshot_problem"):   # W6: an unsaved page is a finding only
+                            self.findings.append("%s: extraction page not saved - %s" % (rec["slug"], rec["snapshot_problem"]))
                     if rec["settled"]:
                         # Section 4.5's lane-log completeness rule: a locally settled page is WORK
                         # DONE. -By local, tokens 0, which is the point - it cost the run nothing.
@@ -1683,23 +1680,8 @@ class Daemon(object):
                "tokens": 0, "rung": 3, "extracted_by": "claude", "escalate": False,
                "escalate_reason": None}
         contract = local_extract.to_contract(out, url, payload.get("title"))
-        # W6: save the page this verdict was verified against, content-addressed, BEFORE the
-        # contract that cites it is written (og-51). The Claude extractor reads the page itself, so
-        # this is the cached text its lines were checked against; when rungs 1-2 saw different bytes
-        # the escalation's own snapshot is kept beside it, so a harness sees the drift.
-        import extract_sweep                                      # noqa: PLC0415
-        if html is not None:
-            try:
-                contract["page_snapshot"] = extract_sweep.snapshot_page(html, url)
-            except Exception as e:                                # noqa: BLE001
-                self.findings.append("%s: extraction page not saved - %s" % (slug, e))
-        prior = esc.get("page_snapshot")
-        if isinstance(prior, dict) and prior.get("sha256") and \
-                prior.get("sha256") != (contract.get("page_snapshot") or {}).get("sha256"):
-            contract["page_snapshot_local_rungs"] = prior
-        problem = extract_sweep.snapshot_problem(contract)
-        if problem and html is not None:
-            self.findings.append("%s: extraction page not saved - %s" % (slug, problem))
+        import extract_sweep                                      # noqa: PLC0415  W6, before the write (og-51)
+        self.findings.extend("%s: extraction page not saved - %s" % (slug, p) for p in extract_sweep.rung3_snapshot(contract, html, url, esc))
         # RECORDING, NOT GATING. Rung 3 is the last rung, so a low verified_rate is surfaced to
         # source-QA as a concern rather than escalated to nowhere.
         rate = check.get("verified_rate")
@@ -1719,20 +1701,8 @@ class Daemon(object):
         self.ch["map"].push(self.record(slug, {"state": "extracted"}))
 
     def rung3_prompt(self, esc):
-        return (
-            "Transcribe ONE recipe page the local extraction pass could not settle.\n\n"
-            "DO NOT run the local script and do not try to re-earn the failure - everything it found\n"
-            "is below. The page is at the source URL; fetch it from the cache if you can reach it, and\n"
-            "if you cannot reach the page at all, say so: state \"unreadable\" is a complete and\n"
-            "correct answer. An invented recipe is the worst outcome in this flow.\n\n"
-            "TRANSCRIPTION ONLY. Convert no units, estimate no missing measurement, rewrite no prose.\n"
-            "The `raw` field of each ingredient is the page's own line, verbatim.\n\n"
-            "WHAT THE LOCAL PASS FOUND:\n%s\n\n"
-            "Return the extraction contract as JSON and nothing else: "
-            "{state, reason, title, source_url, servings, time_total, time_active, "
-            "ingredients:[{raw,item,qty,unit,prep,optional,section}], instructions:[], concerns:[]}.\n"
-            "Do not write `extracted_by` or `verification` - those are computed here, from the page.\n"
-            % json.dumps(esc, indent=1, ensure_ascii=False)[:12000])
+        import extract_sweep                                      # noqa: PLC0415  (moved there for the size budget)
+        return extract_sweep.rung3_prompt(esc)
 
     # ---------------------------------------------------------------------------------------------
     # MAP - cap 2, micro-batches of up to 5 (section S4)
