@@ -1,0 +1,77 @@
+{
+  "generated": "2026-09-28T19:40:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28 (not read by this item: it reads propagate-stamps.json, the recipe specs and queue-depth's output)",
+  "lane": "ops",
+  "scope_note": "STEP 3/RESUME (ops lane, continuing session): 2026-09-26-62b170, parked needs-more-time in plan-2026-09-28-5 with the next probe named. This plan finishes that probe and ships the structural fix.",
+  "queue_ids_seen": [
+    "2026-09-26-62b170"
+  ],
+  "routing_artifact": "",
+  "knowledge_consulted": [
+    "dispatch: machinery ops/audit-arg-binding.ps1; rules meal-prep.md mp-02 (propagate has no -Slugs)",
+    "searched \"ConvertFrom-Json array collapse\": memory:ps-json-array-collapse (assign, then wrap) and software-craft/applies-here.md section 105 (5.1 ConvertFrom-Json sends an array as ONE object): the defect found here",
+    "searched \"ledger read modify write lock\": .claude/rules/ops-and-gates.md og-26 (the READ goes inside Enter-TcLedgerLock); lib/ledger-lock.ps1 and lib/atomic-write.ps1 reused",
+    "searched \"queue age oldest item\": nothing applicable beyond the above"
+  ],
+  "ship_sequence": [
+    "2026-09-26-62b170: grocery/health-heartbeat.ps1 Get-HbQueueIssues (assign-then-enumerate) + grocery/queue-depth.ps1 age-by-oldest-waiting-spec ledger (65dbb3466). Not chain code; land with the run through triage-land.ps1.",
+    "full_suite: deferred-to-land; nothing pushed from this lane"
+  ],
+  "open_questions_for_brad": [],
+  "items": [
+    {
+      "queue_id": "2026-09-26-62b170",
+      "subject": "Triage finding: 95 recipe changes pending publish since 2026-09-02 (propagate refuses scoped publishes)",
+      "classification": "code-defect",
+      "lane": "ops",
+      "est_tool_calls": 55,
+      "actual_tool_calls": 29,
+      "evidence": [
+        "Sandbox (scratchpad copy of queue-depth.ps1, expected-automations.json, propagate-stamps.json, propagate-recipes.ps1 and meal-prep/db/recipes; stamps mtime set to 2026-09-19T06:18:00): queue-depth printed 'STUCK     recipe-specs-awaiting-propagate    33 item(s) have been waiting 229.0h, past the 72h this queue tolerates' and 'queue-depth: 3 declared queue(s), 1 STUCK.' The age computation fires.",
+        "The heartbeat's own expression over that output, @(& powershell ... -File $qd -Json | ConvertFrom-Json): 'heartbeat-parse: qrows.Count=1' and \"[string]verdict='STUCK empty draining' isStuck=False isUnknown=False\". Assign-then-enumerate over the same output: 'Count=3 verdicts=STUCK,empty,draining'. The page was never suppressed or deduped: it was never raised, because the -eq 'STUCK' test at health-heartbeat.ps1:934 could not match a joined verdict.",
+        "The same collapse made QUEUE UNMEASURED unreachable, so from 86f8d831c (2026-09-07) to today the whole queue branch raised nothing, consistent with 0 queue items ever naming QUEUE STUCK or awaiting-propagate.",
+        "Structural: queue-depth.ps1 Get-TcLiveDrain aged the queue by (Get-Item propagate-stamps.json).LastWriteTime, so any stamps write (a -SlugsFile run stamping 7 of 70, a -Baseline) reset the age of every dirty spec."
+      ],
+      "root_cause": "The watcher's consumer parsed a JSON array with the PS 5.1 inline @(... | ConvertFrom-Json) shape, which yields one element, so every per-row verdict test compared a joined string and failed silently; nothing asserted that the branch could ever raise. Beside it, the queue's age was a proxy (the stamps file's mtime) rather than the thing it stands for (how long the oldest item has waited).",
+      "root_fix": {
+        "what": "The heartbeat raises queue issues through a pure Get-HbQueueIssues that parses assign-then-enumerate, with a self-test from the founding three-row output. queue-depth ages the propagate queue by the oldest still-dirty spec's first-seen time, kept in a gitignored ledger, so a partial drain cannot hide a stuck backlog.",
+        "files": [
+          "grocery/health-heartbeat.ps1",
+          "grocery/queue-depth.ps1",
+          ".gitignore"
+        ]
+      },
+      "prevention": {
+        "source": "grocery/health-heartbeat.ps1",
+        "what": "the queue branch's parse is now a pure function the heartbeat self-test drives with a multi-row array, a single-row object and an all-clean set, plus a wiring case; the propagate age is per spec",
+        "exact_change": "Get-HbQueueIssues -Text (ConvertFrom-Json assigned, then @($parsed | ForEach-Object { $_ })) replaces the inline @(... | ConvertFrom-Json) loop; queue-depth Update-TcWaitLedger + Get-TcPropagateOldestWait (grocery/out/queue-wait-ledger.json under Enter-TcLedgerLock, Write-TcAtomicFile) replace the stamps-file LastWriteTime for recipe-specs-awaiting-propagate"
+      },
+      "blast_radius": {
+        "measured_as": "callers",
+        "measured_by": "queue-depth.ps1 has one live caller, health-heartbeat.ps1's queue branch; queue-depth itself is otherwise run by hand. The other two declared queues keep their file-mtime age unchanged.",
+        "affected_now": 1,
+        "names": [
+          "recipe-specs-awaiting-propagate"
+        ]
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/health-heartbeat.ps1 -SelfTest (queue-issue cases) and grocery/queue-depth.ps1 -SelfTest (age-by-oldest cases); both run on every push via run-gates' self-test discovery",
+        "must_fire_case": "health-heartbeat -SelfTest 'MUST FIRE the 09-19 backlog: three rows, one STUCK, raises exactly one QUEUE STUCK' (frozen from the sandbox output) and queue-depth -SelfTest 'MUST FIRE A PARTIAL DRAIN DOES NOT RESET THE CLOCK: 7 of 70 stamped, the 63 left keep their 09-19 first-seen and the queue is STUCK', plus the past-bar case at 72.25h (bar 72h). Both self-tests exit 0: heartbeat 85 cases 0 failed; queue-depth 7 must-fire, 5 must-not-fire, 6 clean twins. Live sandbox: after rewriting the stamps file's mtime to now, queue-depth still printed '33 item(s) have been waiting 229.1h' (the old code would read 0h, draining).",
+        "clean_twin": "health-heartbeat 'CLEAN TWIN a single-row output (an object, not an array) still raises its QUEUE STUCK' and 'MUST NOT FIRE rows that are all draining or empty raise nothing'; queue-depth 'CLEAN TWIN a FULL drain followed by new dirt ... is draining', 'nothing dirty empties the ledger', and the at-bar 72h case stays draining."
+      },
+      "rollback": "git revert 65dbb3466 restores the inline parse and the stamps-mtime age; grocery/out/queue-wait-ledger.json is gitignored local state and may be deleted",
+      "freshness": "measured 2026-09-28 against the stamps and specs at HEAD 282d4a5ce. Today the queue has 33 dirty specs; the main checkout's first live run arms from the stamps mtime (2026-09-27 07:00:05), about 36h, so it reads draining until 72h, as before",
+      "leaves_open": "The same inline @(... | ConvertFrom-Json) shape is at 90 lines under grocery, ops, lib and meal-prep, and no gate reads it (audit-readjson-inline-wrap covers only Read-JsonFile). Each fails silently only where the JSON is a top-level array. Also: a spec's first-seen time has the heartbeat's cadence as its resolution, so a stuck queue can page up to one heartbeat interval late.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-09-28-3849bc",
+      "status": "done",
+      "premise_verified": "yes: the backlog of 09-19 to 09-26 was real (plan-2026-09-28-5 evidence) and the sandbox shows queue-depth computing STUCK and the heartbeat discarding it",
+      "deviation": "Step 1 answered in the parse, not in ALERT-SIGNATURE: the issue never reached Add-HbIssue, so nothing downstream (dedup, signature, Send-AlertConditions) was involved and I did not read it further.",
+      "shipped_commit": "65dbb3466",
+      "full_suite": "deferred-to-land",
+      "close_disposition": "confirmed",
+      "resolution_note": "Why nothing paged: queue-depth computed STUCK (sandbox, stamps backdated to 09-19: 33 items, 229h), but the heartbeat parsed its JSON array with @(... | ConvertFrom-Json), which PS 5.1 collapses into one element, so the verdict read 'STUCK empty draining' and never matched. QUEUE STUCK and QUEUE UNMEASURED could not be raised from 2026-09-07 onward. Fixed with Get-HbQueueIssues (assign-then-enumerate) and a self-test from the founding output. Separately, the propagate queue is now aged by its oldest still-dirty spec (a first-seen ledger) instead of the stamps file's mtime, so a partial drain no longer resets the clock. Commit 65dbb3466. The ungated class (90 inline sites) is 2026-09-28-3849bc."
+    }
+  ]
+}
