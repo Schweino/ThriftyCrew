@@ -533,19 +533,25 @@ def _append_gold(cases: list[dict]) -> int:
 
 
 def _file_alias_proposal(db, ts: str, reviewer: str, target: str,
-                         pattern: str, rationale: str | None) -> str:
+                         pattern: str, rationale: str | None,
+                         derived_from: list[str] | None = None) -> str:
     """File an include-alias learning proposal. It goes through the NORMAL
-    Stage-2 shadow gate (stage2_review.py --apply) — nothing here bypasses it."""
+    Stage-2 shadow gate (stage2_review.py --apply) — nothing here bypasses it.
+
+    `derived_from` names the gold case(s) the reviewed question became (W2 of
+    design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md), so the shadow gate can
+    refuse to count the alias's own source case as evidence for it."""
     pid = "lp:" + hash_obj(["add_alias", target, pattern])[:20]
     db.conn.execute(
         """INSERT INTO learning_proposals
              (id, created_at, model, queue_hash, kind, target_id,
-              payload_json, confidence, rationale, status)
-           VALUES (?,?,?,?,?,?,?,?,?, 'proposed')
+              payload_json, confidence, rationale, status, derived_from)
+           VALUES (?,?,?,?,?,?,?,?,?, 'proposed', ?)
            ON CONFLICT(id) DO NOTHING""",
         (pid, ts, reviewer, None, "add_alias", target,
          json.dumps({"payload": pattern}, ensure_ascii=False), 0.9,
-         rationale or "escalation-review: confirmed match shows an include-pattern gap"))
+         rationale or "escalation-review: confirmed match shows an include-pattern gap",
+         None if derived_from is None else json.dumps(sorted(derived_from))))
     return pid
 
 
@@ -678,7 +684,7 @@ def ingest(db, path: str) -> dict:
             if v.get("alias_proposal"):
                 proposals.append(_file_alias_proposal(
                     db, ts, reviewer, cid, v["alias_proposal"],
-                    v.get("alias_rationale")))
+                    v.get("alias_rationale"), derived_from=[gold_cases[-1]["id"]]))
         else:
             rejected.append({"observation": obs, "product": product,
                              "rows": cur.rowcount})
@@ -696,9 +702,12 @@ def ingest(db, path: str) -> dict:
         if entry is not None and entry in queue:
             queue.remove(entry)
 
+    # The gold rows are the POINTED-TO object (a proposal's derived_from names them), so they are written
+    # before the commit that makes the proposals durable (og-51): an interruption between the two leaves a
+    # gold case nothing names, never a proposal naming a gold case that does not exist.
+    gold_added = _append_gold(gold_cases)
     db.conn.commit()
     _save_queue(queue)
-    gold_added = _append_gold(gold_cases)
     if proposals:
         db.export_learning()
 

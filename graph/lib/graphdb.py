@@ -132,7 +132,20 @@ class GraphDB:
     def init_schema(self) -> None:
         with io.open(SCHEMA_PATH, encoding="utf-8") as fh:
             self.conn.executescript(fh.read())
+        # ADDED COLUMNS. `CREATE TABLE IF NOT EXISTS` never touches an existing table, so a column added
+        # to schema.sql reaches an existing index only through here. Nullable, no default: SQLite's
+        # ADD COLUMN is then a metadata change and rewrites no row. schema.sql lays the column out as the
+        # exact text this leaves behind, so fresh and migrated indexes share one schema fingerprint.
+        for table, column, decl in self.ADDED_COLUMNS:
+            have = {r[1] for r in self.conn.execute(f"PRAGMA table_info({table})")}
+            if column not in have:
+                self.conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
         self.conn.commit()
+
+    # (table, column, declaration). Append only; the schema-change record is docs/SCHEMA-CHANGES.md.
+    ADDED_COLUMNS = (
+        ("learning_proposals", "derived_from", "TEXT"),      # 2026-09-29, W2: gold ids a proposal came from
+    )
 
     # -- lifecycle ---------------------------------------------------------
     # ALL OR NOTHING IS A CLAIM ABOUT THE DATABASE, AND ITS UNIT IS THE UNIT OF CORRECTNESS (2026-09-18,
@@ -747,15 +760,56 @@ def _selftest() -> int:
         check("CLEAN TWIN analyze_full records the exact rows per type (300 100) and counts its rows",
               s.get("nodes.ix_nodes_type") == "300 100" and out["stat1_rows"] >= 1,
               (s.get("nodes.ix_nodes_type"), out))
-    except Exception as e:                                      # noqa: BLE001
+
+        # ---- added columns (2026-09-29, learning_proposals.derived_from) ----
+        # MUST FIRE: an index built before the column gains it on open, and keeps its rows.
+        old = os.path.join(root, "pre-column.db")
+        c = sqlite3.connect(old)
+        c.execute("CREATE TABLE learning_proposals (id TEXT PRIMARY KEY, created_at TEXT NOT NULL, model TEXT"
+                  " NOT NULL, queue_hash TEXT, kind TEXT NOT NULL, target_id TEXT, payload_json TEXT NOT NULL,"
+                  " confidence REAL NOT NULL, rationale TEXT, status TEXT NOT NULL DEFAULT 'proposed')")
+        c.execute("INSERT INTO learning_proposals (id, created_at, model, kind, payload_json, confidence)"
+                  " VALUES ('lp:old', 't', 'm', 'add_alias', '{}', 0.5)")
+        c.commit()
+        c.close()
+        GraphDB(old, restore_learning=False).close()
+        c = sqlite3.connect(old)
+        got = c.execute("SELECT id, derived_from FROM learning_proposals").fetchall()
+        c.close()
+        check("MUST FIRE  an index older than derived_from gains the column on open, its row kept and NULL",
+              got == [("lp:old", None)], got)
+
+        # CLEAN TWIN: the migrated table and a fresh one carry the same schema text once whitespace is
+        # collapsed (audit_schema_change.normalise), so one baseline fits both.
+        def lp_sql(path):
+            c = sqlite3.connect(path)
+            try:
+                return " ".join(c.execute("SELECT sql FROM sqlite_master WHERE name='learning_proposals'")
+                                .fetchone()[0].split())
+            finally:
+                c.close()
+        mig = os.path.join(root, "migrated.db")
+        c = sqlite3.connect(mig)
+        with io.open(SCHEMA_PATH, encoding="utf-8") as fh:
+            sql = fh.read()
+        c.executescript(sql.replace("\n, derived_from TEXT);", "\n);", 1))
+        c.commit()
+        c.close()
+        GraphDB(mig, restore_learning=False).close()
+        new, _ = fresh("fresh-schema")
+        new.close()
+        check("CLEAN TWIN a migrated learning_proposals and a fresh one normalise to the same schema text",
+              "\n, derived_from TEXT);" in sql and lp_sql(mig) == lp_sql(new.path), (lp_sql(mig)[-80:],
+                                                                              lp_sql(new.path)[-80:]))
+    except Exception as e:                                    # noqa: BLE001
         fails.append("harness: " + repr(e))
         print("  FAIL  harness raised " + repr(e))
     finally:
         shutil.rmtree(root, ignore_errors=True)
 
-    if cases != 10:
-        fails.append(f"ran {cases} of 10 case(s)")
-        print(f"  FAIL  ran {cases} of 10 case(s)")
+    if cases != 12:
+        fails.append(f"ran {cases} of 12 case(s)")
+        print(f"  FAIL  ran {cases} of 12 case(s)")
     verdict = "fail" if fails else "pass"
     print(f"GRAPHDB-SELFTEST-COMPLETE selftest={verdict} cases={cases} failures={len(fails)}")
     return 1 if fails else 0

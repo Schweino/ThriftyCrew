@@ -23,3 +23,13 @@ what changed and why. It does not help you undo it.
 Previous fingerprint: `(none - first record)`
 
 - **Added:** `index:ix_alias_alias`, `index:ix_alias_kind`, `index:ix_ap_verdict`, `index:ix_cell_adto`, `index:ix_cell_asof`, `index:ix_cell_store`, `index:ix_dlog_run`, `index:ix_dlog_type`, `index:ix_edges_pred`, `index:ix_edges_src`, `index:ix_edges_tgt`, `index:ix_eval_at`, `index:ix_lp_status`, `index:ix_nodes_name`, `index:ix_nodes_type`, `index:ix_nodes_type_name`, `index:ix_po_cell`, `index:ix_po_commodity`, `index:ix_po_cycle`, `index:ix_po_store`, `index:ix_prov_method`, `index:ix_prov_run`, `index:ix_prov_source`, `index:ix_qv_status`, `table:aliases`, `table:approved_patches`, `table:cell_state`, `table:decision_log`, `table:edges`, `table:eval_runs`, `table:learning_proposals`, `table:nodes`, `table:price_observations`, `table:provenance`, `table:question_verdicts`, `view:v_cell_crown`, `view:v_current_cell`, `view:v_current_rows`, `view:v_price_why`
+
+## 2026-09-29 - fingerprint `c67583485dc2bae6`
+
+**Why.** learning_proposals gains a nullable derived_from TEXT (JSON list of gold ids the proposal was derived from), W2 of design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md, so the Stage 2 shadow gate can exclude a patch's own source cases. Added by graphdb.init_schema (ALTER TABLE ADD COLUMN) on the next open of an existing index; schema.sql lays it out so a fresh and a migrated index share this fingerprint. Accepted against a migrated copy of the live index; the live file itself was not touched.
+
+**No backup taken.** Stated reason: The live index was not altered by this accept. The migration it records is a nullable ADD COLUMN, which SQLite applies as a metadata change rewriting no row, and it runs on the next open_db of the live file.
+
+Previous fingerprint: `014da3370767862b`
+
+- **Changed:** `table:learning_proposals`

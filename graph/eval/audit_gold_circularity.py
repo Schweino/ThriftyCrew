@@ -7,7 +7,8 @@ Read-only. Prints, each with its denominator:
   a. gold rows by source, and the failure-derived share (known-wrong + escalation-review over total).
   b. applied learning patches whose shadow evidence is ONLY their own source case. approved_patches has
      no field naming the gold case a patch was derived from, so every patch is classified BLIND
-     ("provenance absent") unless a `derived_from` list is present. A BLIND is counted, never zero.
+     ("provenance absent") unless its proposal's `derived_from` list is present (learning_proposals column,
+     2026-09-29; NULL on every older row, which stays BLIND). A BLIND is counted, never zero.
      Beside it, a PROXY that needs no provenance: how many gold cases each applied alias actually moves
      (its regex matches the case's product, for its own target). A patch that moves none passed the
      shadow gate on a delta of 0.0 with nothing watching it.
@@ -104,13 +105,42 @@ def classify_patch(patch: dict, gold: list[dict]) -> str:
     Needs patch['derived_from'], a list of gold ids. Absent means BLIND: the question cannot be asked,
     which is not the same as 'not circular'.
     """
-    if "derived_from" not in patch:
+    own = parse_derived_from(patch.get("derived_from"))
+    if own is None:
         return "BLIND"
-    own = set(patch["derived_from"] or [])
     covering = {g["id"] for g in gold if target_of(g.get("commodity_node")) == patch["target_id"]}
     if not covering:
         return "UNCOVERED"
     return "CIRCULAR" if covering <= own else "INDEPENDENT"
+
+
+def parse_derived_from(value) -> set[str] | None:
+    """The gold ids a proposal names, or None when it names none at all (absent, NULL, or unreadable).
+
+    The column is TEXT holding a JSON list, so a row read from the database or its tracked export carries a
+    string; a fixture may carry the list. NULL is BLIND and never the empty set: every row written before
+    the column existed is NULL, and reading those as 'derived from nothing' would call them independent.
+    """
+    if value is None:
+        return None
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except json.JSONDecodeError:
+            return None
+    if not isinstance(value, list):
+        return None
+    return {str(v) for v in value}
+
+
+def gold_ids_for_failures(failures: list[dict], gold: list[dict]) -> list[str]:
+    """Gold ids behind score.py error rows, which carry (commodity, product) and no id.
+
+    Every gold row with that bare commodity and exact product is named, across stores, so the answer is
+    over-inclusive, which is the SAFE direction: it can only make more patches read as circular.
+    """
+    keys = {(f.get("commodity"), f.get("product")) for f in failures}
+    return sorted({g["id"] for g in gold if (g.get("commodity"), g.get("product")) in keys and g.get("id")})
 
 
 def cases_moved(pattern: str, target: str, gold: list[dict]) -> int | None:
@@ -148,7 +178,7 @@ def measure(db_path: str) -> tuple[dict, int]:
     zero_moved = []
     for p in applied:
         prop = proposals.get(p["proposal_id"], {})
-        rec = dict(p, target_id=prop.get("target_id"))
+        rec = dict(p, target_id=prop.get("target_id"), derived_from=prop.get("derived_from"))
         classes[classify_patch(rec, gold)] += 1
         if prop.get("kind") != "add_alias":
             moved_hist["not-an-alias"] += 1
@@ -160,7 +190,8 @@ def measure(db_path: str) -> tuple[dict, int]:
         if n == 0:
             zero_moved.append(prop.get("target_id"))
     out["b"] = {"applied": len(applied), "approved_rows": len(patches), "classes": dict(classes),
-                "provenance_field_present": any("derived_from" in p for p in patches),
+                "provenance_field_present": any(parse_derived_from(p.get("derived_from")) is not None
+                                                for p in proposals.values()),
                 "proxy_cases_moved": dict(moved_hist), "zero_moved_targets": sorted(set(zero_moved))}
 
     kinds = collections.Counter(p.get("kind") for p in proposals.values())
@@ -226,6 +257,16 @@ def self_test() -> int:
          classify_patch({"target_id": "feta"}, gold), "BLIND"),
         ("CLEAN TWIN: an empty derived_from on a covered target is INDEPENDENT, not BLIND",
          classify_patch({"target_id": "feta", "derived_from": []}, gold), "INDEPENDENT"),
+        ("CLEAN TWIN: a NULL derived_from (a row older than the column) is BLIND, not INDEPENDENT",
+         classify_patch({"target_id": "feta", "derived_from": None}, gold), "BLIND"),
+        ("MUST FIRE: the TEXT column's JSON string is read as the list it holds",
+         classify_patch({"target_id": "ricotta", "derived_from": '["g3"]'}, gold), "CIRCULAR"),
+        ("MUST NOT FIRE: an unreadable derived_from is BLIND, never an empty list",
+         classify_patch({"target_id": "feta", "derived_from": "not json"}, gold), "BLIND"),
+        ("error rows map back to every gold id with that commodity and product",
+         gold_ids_for_failures([{"commodity": "feta", "product": "Athenos Feta Block"},
+                                {"commodity": "feta", "product": "Unknown"}],
+                               [dict(r, commodity=r["commodity_node"].split(":")[-1]) for r in gold]), ["g2"]),
         ("MUST FIRE: a target no gold case covers is UNCOVERED",
          classify_patch({"target_id": "tahini", "derived_from": []}, gold), "UNCOVERED"),
         ("MUST NOT FIRE: a bare id never matches another commodity's cases",

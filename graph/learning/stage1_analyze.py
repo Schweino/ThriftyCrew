@@ -36,11 +36,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "lib"))
 sys.path.insert(0, os.path.join(HERE, "..", "pipeline"))
 sys.path.insert(0, os.path.join(HERE, "..", "gold"))
+sys.path.insert(0, os.path.join(HERE, "..", "eval"))
 
 from graphdb import open_db, GRAPH_DIR, REPO_ROOT       # noqa: E402
 from ids import hash_obj                                # noqa: E402
 from llm import LocalLLM                                # noqa: E402
 from gold_split import holdout_labels, is_holdout_name, load_gold as load_split_gold  # noqa: E402
+from seed_gold import load_gold                         # noqa: E402
+from audit_gold_circularity import gold_ids_for_failures  # noqa: E402
 
 QUEUE = os.path.join(REPO_ROOT, "grocery", "learning-queue.json")
 
@@ -228,6 +231,13 @@ def main() -> int:
                                     max_tokens=args.max_tokens)
         suggestions = parsed.get("suggestions", []) or []
         qhash = hash_obj([queue, contested, failures])
+        # PROVENANCE (W2, design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md). The model was shown these
+        # gold failures, so every proposal from this run may have been derived from any of them, and the
+        # Stage 2 shadow gate must not count them as evidence for it. score.py's error rows carry no gold
+        # id (score.py is owned by W1/W3/W4), so they are mapped back by (commodity, product) here. Naming
+        # them on EVERY proposal of the run is over-inclusive, which is the safe direction: it can only
+        # make more patches read as circular. [] means shown no gold failure; NULL is left to old rows.
+        derived = json.dumps(gold_ids_for_failures(failures, load_gold()))
 
         kept = 0
         labels = holdout_labels(load_split_gold())
@@ -244,12 +254,12 @@ def main() -> int:
             db.conn.execute(
                 """INSERT INTO learning_proposals
                      (id, created_at, model, queue_hash, kind, target_id,
-                      payload_json, confidence, rationale, status)
-                   VALUES (?,?,?,?,?,?,?,?,?, 'proposed')
+                      payload_json, confidence, rationale, status, derived_from)
+                   VALUES (?,?,?,?,?,?,?,?,?, 'proposed', ?)
                    ON CONFLICT(id) DO NOTHING""",
                 (pid, ts, res.model, qhash, s["kind"], s.get("target"),
                  json.dumps({"payload": s.get("payload")}, ensure_ascii=False),
-                 float(s.get("confidence", 0) or 0), s.get("rationale")))
+                 float(s.get("confidence", 0) or 0), s.get("rationale"), derived))
             kept += 1
         db.conn.commit()
         # Write through to tracked JSON immediately. Proposals exist nowhere

@@ -208,7 +208,16 @@ CREATE TABLE IF NOT EXISTS learning_proposals (
                  -- hold five of them. A ninth status is a state-machine change and should cost a
                  -- deliberate edit here. Note the restore path (GraphDB.import_learning) inserts
                  -- OR IGNORE, so a refused row there is counted in restore_skipped, not raised.
-);
+, derived_from TEXT);
+-- derived_from (2026-09-29, W2 of design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md): a JSON list of the
+-- gold ids ("gold:<hash>") the proposal was derived from, so the Stage 2 shadow gate can exclude a patch's
+-- own source cases. NULL means the writer recorded nothing (every row before this column): BLIND, never
+-- "not circular". It lives HERE and not on approved_patches because the derivation is known when the
+-- proposal is written (stage1_analyze, review_escalations) and a patch reads it through proposal_id.
+-- LAID OUT ON PURPOSE: the line above is the exact text `ALTER TABLE ... ADD COLUMN derived_from TEXT`
+-- leaves in sqlite_master (graphdb.init_schema migrates an existing index that way), so a fresh index
+-- and a migrated one normalise to the same schema fingerprint (graph/audit_schema_change.py). Do not
+-- reformat it, and keep this comment outside the CREATE.
 CREATE INDEX IF NOT EXISTS ix_lp_status ON learning_proposals(status, created_at);
 
 CREATE TABLE IF NOT EXISTS approved_patches (
