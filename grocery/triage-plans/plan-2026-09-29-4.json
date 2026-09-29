@@ -64,7 +64,10 @@
         "audit-live-page-parity: post names board.json?v=a786679133, feed serves v=7f5bd2f7a2. Measured cause: publish-deals-page -BuildOnly wrote public/board.json (line 203), then the match-soundness gate HELD the post (line 285, exit 2, 08:20:59); publish-outcome-lib's rc=2 branch lets the caller commit that board ('the data ships, the post waits'), and 53d4e1da8 (08:59) shipped it. Live feed, cache-busted fetch 2026-09-29: carrots p[0] = [1,0.29,0,'$0.29/lb'] (Aldi)."
       ],
       "root_cause": "the post was held by the soundness gate while the board it was built from shipped anyway, so post and feed name different boards until the hold clears; the hold's cause is the contested carrots crown owned by 754693, and the design question (a post-only hold over a feed that ships) is ae5518",
-      "resolution_note": "Superseded by 2026-09-29-754693: the post is held on the carrots contested crown while the feed already serves that board. Clears when 754693 lands, soundness stops holding, and publish-deals-page republishes the post from the served board; re-run audit-live-page-parity (exit 0 closes it)."
+      "resolution_note": "Superseded by 2026-09-29-754693: the post is held on the carrots contested crown while the feed already serves that board. Clears when 754693 lands, soundness stops holding, and publish-deals-page republishes the post from the served board; re-run audit-live-page-parity (exit 0 closes it).",
+      "status": "superseded",
+      "close_disposition": "superseded",
+      "premise_verified": "754693 shipped 0cf2cb927 and closed deviated in this plan (3531c40f9: board and feed rebuilt locally); live page parity is checked after landing"
     },
     {
       "queue_id": "2026-09-29-ae5518",
@@ -76,7 +79,10 @@
       ],
       "root_cause": "Brad's ruling Q-2026-09-25-2-A was implemented as a hold on the Ghost POST, but reader-facing prices are chips in public/board.json, which the chain ships on a held build by design; so a contested crown reaches readers AND post and feed diverge (57bc1d). Fixing it changes what the ruled hold means, which is Brad's call.",
       "open_question": "Q-2026-09-29-4-A",
-      "resolution_note": "Needs Brad (Q-2026-09-29-4-A): the soundness hold holds only the post while the held board's chips ship in the feed, so the carrots contested crown is live at $0.29/lb. Today's instance clears via 754693."
+      "resolution_note": "Needs Brad (Q-2026-09-29-4-A): the soundness hold holds only the post while the held board's chips ship in the feed, so the carrots contested crown is live at $0.29/lb. Today's instance clears via 754693.",
+      "leaves_open_followup": "Q-2026-09-29-4-A",
+      "status": "needs-brad",
+      "premise_verified": "Q-2026-09-29-4-A is in this plan open_questions_for_brad with item 2026-09-29-ae5518 (README line 127: the ruling id is the owner). The HELD alert reached Brad at 2026-09-29T08:21:01 (alert-log, id 1a0ed535e330fcfd); no further send-alert, the README asks for none on needs-brad."
     },
     {
       "queue_id": "2026-09-29-c70eb2",
@@ -277,7 +283,13 @@
         "RISE 3 over mark 86: 'Sun-Dried Tomatoes (Oil-Packed)' priceable at Family Fare by 'California Sun Dry Sun Dried Tomatoes Julienne Ct' and at Hy-Vee by 'Hy-Vee Sun-Dried Tomatoes Halves' (no 'packed'); 'Mayonnaise' priceable at Baker's by 'Kroger Olive Oil Mayo' (does not name 'mayonnaise')."
       ],
       "root_cause": "the class 177835 owns (plan-2026-09-29-3, resumed today, money lane): a commodity's admitted shapes and the recipe vocabulary's form words are two records nothing reconciles, so each capture week brings new cell findings; these 3 rows are new instances, not a new cause",
-      "resolution_note": "Superseded by 2026-09-26-177835: same vocabulary-vs-commodity class. Its developer adds these 3 rows (sun-dried tomatoes oil-packed vs dry at Family Fare and Hy-Vee; olive-oil mayo at Baker's) to its fixture list and re-measures the mark."
+      "resolution_note": "Superseded by 2026-09-26-177835: same vocabulary-vs-commodity class. Its developer adds these 3 rows (sun-dried tomatoes oil-packed vs dry at Family Fare and Hy-Vee; olive-oil mayo at Baker's) to its fixture list and re-measures the mark.",
+      "leaves_open_followup": "2026-09-29-465acc",
+      "close_disposition": "superseded",
+      "leaves_open": "3 identity cells (olive oil mayo at Bakers, 2 sun-dried jars) await a store product-detail read",
+      "premise_verified": "177835 closed deviated in plan-2026-09-29-3 (efcfbc7e4 froze the 59b8fc identity rows as live must-fires, b92edf387); the 3 rows stay an open finding owned by weekly queue item 2026-09-29-465acc (open, lane weekly: 3 identity cells need a store product-detail read)",
+      "status": "superseded",
+      "leaves_open_occurrences": 3
     },
     {
       "queue_id": "2026-09-29-a77f8a",
@@ -303,7 +315,11 @@
         "2026-09-27-9a351a"
       ],
       "prevention_none_because": "the sweep is a by-design arrivals detector: each of the 13 prior closes decided different new products, so recurrence is the detector working (Phase 2 recalibration), not a fix that failed",
-      "resolution_note": "No rule change: both Progresso rows are lentil soup under the 'Vegetable Classics' line name, not vegetable soup. Decide both worklist rows as reject via resolve-match-worklist.ps1 -Decide so the weekly lane never widens on the Walmart 'widen' suggestion."
+      "resolution_note": "Both rows are Progresso lentil soup under the Vegetable Classics line name; the vegetable-soup rule is right not to see them. Both decided in match-verdicts.json (def8085a8), so the sweep and weekly lane never widen on them.",
+      "status": "done",
+      "close_disposition": "false-alarm",
+      "shipped_commit": "def8085a8",
+      "premise_verified": "grocery/match-verdicts.json carries semantic|vegetable-soup|Bakers|Progresso Vegetable Classics Lentil Soup and the Walmart Progresso Lentil Soup, Vegetable Classics key, each reasoned lentil soup not vegetable soup (Vegetable Classics is the product line), committed in def8085a8 by the b96f21 item (plan-2026-09-29-3)"
     },
     {
       "queue_id": "2026-09-29-d58f5d",
@@ -318,7 +334,11 @@
         "2026-09-26-7ed369"
       ],
       "prevention_none_because": "the band audit is the designed detector and its resolver lane (resolve-match-worklist -Decide exclude, applied and measured by the weekly apply-coverage-batch -FromWorklist) is the designed repair; the 2 prior closes were different rows",
-      "resolution_note": "Wrong product, already refused by the band (no cell effect). Decide the worklist band row as an exclude, pattern gelatin-snacks (3 Family Fare names in candidates-2026-09-29); the weekly apply-coverage-batch -FromWorklist measures and applies it."
+      "resolution_note": "Wrong product (ready-to-eat gelatin snack cups on gelatin mix), already refused by the band, no cell effect. All 3 keys decided release with pattern \\bgelatin snacks?\\b via resolve-match-worklist -Decide (0fa1eadde); the weekly apply-coverage-batch -FromWorklist measures and applies the exclude.",
+      "status": "done",
+      "close_disposition": "confirmed",
+      "shipped_commit": "0fa1eadde",
+      "premise_verified": "match-worklist carried 3 band|gelatin|Family Fare keys, all Jell O ... Gelatin Snacks (13.5 and 12.5 oz); the item authorises an exclude decision through the worklist tool, which writes only match-verdicts.json"
     },
     {
       "queue_id": "2026-09-29-f376d3",
@@ -387,11 +407,16 @@
         ]
       },
       "rollback": "delete the three mirror files in a follow-up commit (once pushed they have been public, so read before adopting)",
-      "resolution_note": "Three new scheduled-task SKILLs screened (no personal markers) and adopted into ops/prompt-backup; -Daily exit 0. The class (every new task pages a day late) waits on Q-2026-09-29-4-B.",
+      "resolution_note": "Three new scheduled-task SKILLs read (no personal markers) and adopted into ops/prompt-backup (0fa1eadde); -SelfTest exit 0 (81 cases), -Adopt run PROMPT-BACKUP-COMPLETE findings=0 on the working tree. -Daily judges origin/main (source=c1eda0fb3aeb), so it reads exit 2 until landing: re-run -Daily after triage-land (exit 0 closes it). No auto-adopt built; the class waits on Q-2026-09-29-4-B.",
       "publish_batch": 2,
       "lane": "ops",
       "est_tool_calls": 22,
-      "status": "planned"
+      "status": "done",
+      "actual_tool_calls": 7,
+      "full_suite": "deferred-to-land",
+      "shipped_commit": "0fa1eadde",
+      "close_disposition": "confirmed",
+      "premise_verified": "2026-09-29: -Daily exit 2 with NO BACKUP for link-rides-7-build-check (42.1h) and recall-cluster-rulings (29.4h), ff-flyer-gold-day-2 also unmirrored; all three read in full: no e-mail, phone, token, key or address markers."
     },
     {
       "queue_id": "2026-09-29-9cea96",
@@ -402,7 +427,10 @@
         "body names the same product and cell as 754693: 'CROWN-BY-CONTEST Specially Selected Carrots Sweet Potatoes 16 OZ | cell carrots @ Aldi 0.29/lb | claimed by: carrots > sweet-potatoes'"
       ],
       "root_cause": "one contested name emitted under two condition types by the soundness audit; not a distinct cause",
-      "resolution_note": "Superseded by 2026-09-29-754693 (same carrots medley, same cell); closes when that release lands and soundness reruns clean."
+      "resolution_note": "Superseded by 2026-09-29-754693 (same carrots medley, same cell); closes when that release lands and soundness reruns clean.",
+      "status": "superseded",
+      "close_disposition": "superseded",
+      "premise_verified": "same carrots medley and cell as 754693, fixed by 0cf2cb927 (carrot + sweet potato pair excluded on carrots and sweet-potatoes); soundness re-run after landing"
     }
   ]
 }

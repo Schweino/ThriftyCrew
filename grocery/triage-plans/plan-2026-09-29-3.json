@@ -72,17 +72,18 @@
       },
       "rollback": "revert the audit-prompt-backup.ps1 hunk",
       "freshness": "measured 2026-09-29 against origin/main 3edf1272aea4",
-      "leaves_open": "3 SKILLs unmirrored today; the class fix is not designed",
+      "leaves_open": "the class: every future new scheduled-task SKILL still pages after 24 h until Q-2026-09-29-4-B is ruled (plan-2026-09-29-4)",
       "leaves_open_occurrences": 2,
-      "leaves_open_followup": null,
+      "leaves_open_followup": "Q-2026-09-29-4-B",
       "lane": "ops",
       "est_tool_calls": 30,
-      "status": "promote",
+      "status": "superseded",
       "promote_reason": "premise substantive: 3 real NO BACKUP findings 28-40h old on a RETURN, and the class fix touches a public-repo mirroring decision the cheap lane should not design",
-      "resolution_note": "Promoted: 3 new scheduled-task SKILLs have no mirror; daily -SyncMirror only refreshes existing mirrors, so every new task pages. Return of 2026-09-14-2bb198.",
+      "resolution_note": "Superseded by the plan-2026-09-29-4 item for the same id: three SKILLs adopted in 0fa1eadde.",
       "premise_verified": "true: audit-prompt-backup.ps1 -Daily exit 2, findings=3, 2026-09-29",
-      "deviation": null,
-      "shipped_commit": null
+      "deviation": "This promote stub was taken by the reviewer into plan-2026-09-29-4.json (same queue id), where it shipped 0fa1eadde; that item carries the outcome.",
+      "shipped_commit": null,
+      "close_disposition": "superseded"
     },
     {
       "queue_id": "2026-09-29-af1fdd",
@@ -411,12 +412,12 @@
         "Ruled out so far: the bot's checkout sync does not rewrite unchanged tracked files (0 of 47 meal-prep/pipeline/*.ps1 last committed before 09-15 have an mtime after 09-19). Today's stamps mtime, 2026-09-27 07:00:05, is the sync bringing in d05680d91 (reflog 'capture-run sync: onto b1aa4df' at 07:00:05), which is a real drain arriving. propagate writes stamps outside a live run only under -Baseline (propagate-recipes.ps1:453-457). No heartbeat history survives (grocery/out/health-heartbeat-run.json holds only the last run), so what queue-depth printed on 09-22 to 09-26 cannot be read back."
       ],
       "root_cause": "Unproven, parked at the effort ceiling. Proven: a watcher existed, the stamps went about 180h without a drain commit against a 72h bar, the heartbeat ran and paged other classes, and it never raised QUEUE STUCK. Not proven: which link failed. Either the stamps mtime was rewritten by something that is not a drain, or the heartbeat's queue branch did not reach the page. There is also a structural weakness regardless: the age is a file mtime, so ANY write to the stamps file (a -SlugsFile run that stamps 7 of 70, or a -Baseline) reads as a full drain and resets the clock while older specs keep waiting.",
-      "resolution_note": "Backlog drained by others on 09-26 (70 measured, not 95; 54 plus 13 republished, 3 held left dirty by design; planner regenerated). Today 33 dirty, inside the 72h window. Class question still open: queue-depth plus the heartbeat should have raised QUEUE STUCK from about 09-22 and never did (0 queue items ever). Next probe: run health-heartbeat's queue branch against a sandbox copy with propagate-stamps.json's mtime set to 2026-09-19 06:18 and read whether a QUEUE STUCK issue reaches Send-AlertConditions (read ALERT-SIGNATURE at health-heartbeat.ps1:366-482 for dedup or suppression). Separately, age the queue by its OLDEST waiting spec rather than the stamps file mtime, so a partial drain cannot reset it.",
-      "status": "planned",
+      "resolution_note": "Fixed by 65dbb3466 (plan-2026-09-28-15): QUEUE STUCK could never page because health-heartbeat collapsed queue-depth -Json into one element; the propagate queue is now aged by its oldest waiting spec. Re-verified 2026-09-29: self-test exit 0, live 33 waiting, oldest 52.2h. Residual owned by 2026-09-28-3849bc.",
+      "status": "done",
       "est_tool_calls": 40,
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null,
+      "premise_verified": "2026-09-29: the root_fix carried here from plan-2026-09-28-5 already landed under plan-2026-09-28-15 as 65dbb3466 (on origin/main): queue-depth ages the propagate queue by the oldest still-dirty spec (grocery/out/queue-wait-ledger.json), and health-heartbeat parses queue-depth -Json assign-then-enumerate (the @(...|ConvertFrom-Json) collapse was why QUEUE STUCK never paged 09-19 to 09-26). queue-depth -SelfTest exit 0 (7 must-fire, 6 must-not-fire, 5 clean twins); live run exit 0: 33 waiting, oldest 52.2h, within 72h.",
+      "deviation": "No new code: the fix and its sandbox probe had already shipped in 65dbb3466 (plan-2026-09-28-15, same queue id); this transcription was made from plan-2026-09-28-5 without it. Verified, not rebuilt.",
+      "shipped_commit": "65dbb3466",
       "resumed_from": "grocery/triage-plans/plan-2026-09-28-5.json (status there: needs-more-time); transcribed 2026-09-29 with its root cause carried forward, no fresh diagnosis",
       "root_fix": {
         "what": "age the recipe-specs-awaiting-propagate queue by its OLDEST waiting dirty spec, not by the LastWriteTime of meal-prep/pipeline/propagate-stamps.json, so a partial drain (-SlugsFile, -Baseline) cannot reset the clock; and prove with a sandbox run that health-heartbeat.ps1 queue branch raises QUEUE STUCK through Send-AlertConditions when that age passes 72h",
@@ -445,9 +446,11 @@
       },
       "rollback": "revert the queue-depth.ps1 hunk",
       "freshness": "measured 2026-09-28 in plan-2026-09-28-5: 33 dirty specs, drained 30.1h ago; re-read queue-depth before building",
-      "leaves_open": "which link failed 09-19 to 09-26 (mtime rewrite vs heartbeat page) is unproven until the sandbox probe runs; 1 occurrence (about 180h unpaged)",
+      "leaves_open": "The inline @(... | ConvertFrom-Json) shape at 90 lines under grocery, ops, lib and meal-prep with no gate reading it, and first-seen resolution equal to the heartbeat cadence (plan-2026-09-28-15)",
       "leaves_open_occurrences": 1,
-      "leaves_open_followup": null
+      "leaves_open_followup": "2026-09-28-3849bc",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 6
     }
   ]
 }
