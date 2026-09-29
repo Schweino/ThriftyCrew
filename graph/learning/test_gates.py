@@ -1,6 +1,9 @@
 """MUST-FIRE tests for the Python gates. A gate that has only ever passed proves nothing.
 
-    sidecar/.venv/Scripts/python.exe graph/learning/test_gates.py
+    C:/Codex/Python312/python.exe graph/learning/test_gates.py --selftest
+
+Runs under the plain interpreter (no venv needed: measured 2026-09-29, 12 of 12, exit 0), which is
+how ops/run-gates.ps1 runs it; it finds the suite by its --selftest flag.
 
 WHY THIS EXISTS. `test-guards.ps1` breaks each hard invariant inside a scratch copy of the
 grocery tree and asserts `guards.ps1` fails with that guard's own text - so every PowerShell
@@ -32,6 +35,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
+
+# gate-inputs: graph\learning\test_gates.py, graph\learning\promote_aliases.py, graph\learning\lint_adjacency.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\durable_write.py, graph\lib\learning_reconcile.py, grocery\commodities.json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -176,10 +181,16 @@ def main() -> int:
         print(f"FAILED {len(FAILS)} of {len(FAILS) + PASSES}")
         for f in FAILS:
             print("   " + f)
+        print("TEST-GATES-SELFTEST-COMPLETE selftest=fail")
         return 1
     print(f"all {PASSES} assertions hold - every gate above was shown to FAIL when it should")
+    print("TEST-GATES-SELFTEST-COMPLETE selftest=pass")
     return 0
 
 
 if __name__ == "__main__":
+    # --selftest is how run-gates discovers and runs this suite; the suite IS the self-test.
+    if len(sys.argv) > 1 and sys.argv[1:] != ["--selftest"]:
+        print(f"usage: test_gates.py [--selftest]  (got {sys.argv[1:]})")
+        raise SystemExit(2)
     raise SystemExit(main())
