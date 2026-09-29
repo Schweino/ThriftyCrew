@@ -936,6 +936,32 @@
                          "by":  "apply-coverage-batch -FromWorklist",
                          "date":  "2026-09-23",
                          "reason":  "widen: batch kept; pre-existing link churn elsewhere"
+                     },
+                     {
+                         "key":  "semantic|vegetable-soup|Baker\u0027s|Progresso Vegetable Classics Lentil Soup",
+                         "kind":  "semantic",
+                         "commodity":  "vegetable-soup",
+                         "claimer":  "",
+                         "store":  "Baker\u0027s",
+                         "name":  "Progresso Vegetable Classics Lentil Soup",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "triage-developer plan-2026-09-29-3 b96f21",
+                         "date":  "2026-09-29",
+                         "reason":  "lentil soup, not vegetable soup: Vegetable Classics is the Progresso product LINE; the rule is right not to see it (lookalike, same shape as the Eggo pancakes key)"
+                     },
+                     {
+                         "key":  "semantic|vegetable-soup|Walmart|Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+                         "kind":  "semantic",
+                         "commodity":  "vegetable-soup",
+                         "claimer":  "",
+                         "store":  "Walmart",
+                         "name":  "Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "triage-developer plan-2026-09-29-3 b96f21",
+                         "date":  "2026-09-29",
+                         "reason":  "lentil soup, not vegetable soup: Vegetable Classics is the Progresso product LINE; the rule is right not to see it (lookalike, same shape as the Eggo pancakes key)"
                      }
                  ]
 }

@@ -147,6 +147,19 @@ try {
   _MT 'MECHANISM  without -Index the old reading stands (list, abstain), so a caller that passes no index is unchanged' ($h.list) ([string]$h.list)
   $h = Get-MwlHead 'Pictsweet Farms Vegetables for Roasting Halved Brussels Sprouts, Butternut Squash & Onions - 18 oz' $ix
   _MT 'CLEAN TWIN  Pictsweet Brussels Sprouts, Butternut Squash & Onions is still a list with the index' ($h.list) ([string]$h.list)
+
+  # plan-2026-09-29-3 b96f21: a widen whose head is MODIFIED by another food's word. FROZEN from match-worklist.json
+  # 2026-09-29 08:39: semantic vegetable-soup @ Walmart 'Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten
+  # Free, 19 oz' was decided widen (pattern \bsoup.{0,30}\bvegetable); 'Vegetable Classics' is the product line.
+  $vs = [pscustomobject]@{ id = 'vegetable-soup'; label = 'Vegetable Soup' }
+  $rw = [pscustomobject]@{ id = 'ready-to-serve-long-grain-wild-rice-pouch'; label = 'Ready to Serve Long Grain Wild Rice Pouch' }
+  $ix2 = Get-MwlTokenIndex (@($ixComs) + @($vs, $rw, [pscustomobject]@{ id = 'red-lentils'; label = 'Red Lentils' }))
+  $r = Get-MatchClassification -Kind 'semantic' -Name 'Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz' -Target $vs -Claimer $null -Index $ix2
+  _MT 'MUST FIRE  Progresso Lentil Soup (Vegetable Classics line) is NOT a widening of vegetable-soup' ($r.decision -ne 'widen' -and [string]$r.why -like '*lentil*') ($r.decision + ' ' + $r.why)
+  $r = Get-MatchClassification -Kind 'semantic' -Name 'Long Grain Wild Ready TO Serve Rice' -Target $rw -Claimer $null -Index $ix2
+  _MT 'CLEAN TWIN  Long Grain Wild Ready TO Serve Rice (applied 2026-09-23) still widens with the index' ($r.decision -eq 'widen') ($r.decision + ' ' + $r.why)
+  $r = Get-MatchClassification -Kind 'coverage' -Name 'Old Orchard 100% Juice, Apple, Value Size' -Target $C['apple-juice'] -Claimer $null -Index $ix2
+  _MT 'CLEAN TWIN  Old Orchard 100% Juice, Apple (the labelled WIDEN of the 24) still widens with the index' ($r.decision -eq 'widen') ($r.decision + ' ' + $r.why)
   $h = Get-MwlHead 'Hy-Vee Broccoli & Onions' $ix
   _MT 'CLEAN TWIN  Broccoli & Onions (both neighbours name a commodity, no comma) is still a list with the index' ($h.list) ([string]$h.list)
   $h = Get-MwlHead 'Betty Crocker Rich and Creamy Cherry Frosting' $ix

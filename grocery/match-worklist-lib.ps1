@@ -173,6 +173,12 @@ function Get-MatchClassification {
     # RULE-INVISIBLE: widen only when the head names the target and the target's FORM (canned, frozen...) is stated
     $formMissing = @($T.form.Keys | Where-Object { $Name -notmatch ('(?i)\b' + $_) })
     if ($inT -and $formMissing.Count -eq 0) {
+      # The head's own MODIFIER naming another food means the product is that food's version of the head: 'Progresso
+      # Lentil Soup, Vegetable Classics Canned Soup' (semantic, vegetable-soup @ Walmart, 2026-09-29) was decided widen
+      # because 'Vegetable' is the product LINE; the head phrase is 'Lentil Soup'. Out of sample, 1 of 1 widen decided
+      # that day was this lookalike (plan-2026-09-29-3 b96f21). Needs -Index (the resolver always passes it).
+      if ($Index -and $h.prehead -and -not $preT -and -not $script:MwlAdj.ContainsKey($h.prehead) -and (Test-MwlIndexed $h.prehead $Index)) {
+        $r.why = ("the head noun '" + $h.head + "' is modified by '" + $h.prehead + "', which names another food, so the product may be that food's " + $h.head + ', not ' + $Target.id); return $r }
       $toks = New-Object System.Collections.Generic.List[string]
       foreach ($w in (($Name -replace '[,()]', ' ') -split '\s+')) { $lw = $w.ToLowerInvariant().Trim('.', '!'); if ($lw -and (Test-MwlIn $lw $T.tokens) -and -not $toks.Contains((Get-MwlStem $lw))) { $toks.Add((Get-MwlStem $lw)) } }
       if ($toks.Count -lt 2) { $r.why = ("head noun '" + $h.head + "' names " + $Target.id + ' but only one of its words is in the name, so no widening narrower than the word itself can be derived'); return $r }
