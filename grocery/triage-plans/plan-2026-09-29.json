@@ -1,0 +1,71 @@
+{
+  "generated": "2026-09-29T10:30:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-28",
+  "queue_ids_seen": ["2026-09-25-0cefa4"],
+  "routing_artifact": null,
+  "ruling": "Brad, 2026-09-29, on queue 2026-09-25-0cefa4 (design/ready-for-brad/Q-2026-09-28-sams-weight-first-pack.md): Option D. He checked https://www.samsclub.com/ip/Barilla-Penne-Pasta-16-oz-6-pk/13566472367 himself: it IS six 16 oz boxes, so Sam's printed 53.3 cents/oz (one box) was wrong and Sam's own unit price cannot be a tiebreaker.",
+  "items": [
+    {
+      "queue_id": "2026-09-25-0cefa4",
+      "subject": "Triage residual: Sam's weight-first pack total vs pieces needs a reading rule (dc1b5b residual 6)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "Brad's ruling 2026-09-29: Option D. Barilla Penne 16 oz 6 pk checked on samsclub.com: six 16 oz boxes; Sam's 53.3 cents/oz prices ONE box.",
+        "Replay of the per-piece guard (HEAD vs working tree) over the 23 sams-deals-2026-09-*.json files: 1,576 package rows with a weight/volume size and a measure-first multipack name, 707 distinct names. Old guard fires on 54 rows, new on 57; the 3 new rows are ONE name, 'Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk.' $8.52 at 53.3 cents/oz sized 16 oz (09-25/09-26), which escaped because the name's measure is in lb and Sam's priced per oz. 0 rows stop firing.",
+        "The other 22 pack-total rows of the reviewer's 23 are already refused by the 2026-09-21 per-piece guard (Test-SamsPerPieceUnit): sams-rejects-2026-09-23..27 carry 'NAME CONFLICT: per-piece unit price' for Sunlee Coconut Milk, Sweet Baby Ray's 40 oz 2 pk, Carbone Alfredo, Krusteaz, Thomas' muffins, Ball Park Crustini buns, Hormel bacon (carried proof), poppi. Their deals-file rows date from before 2026-09-21 or from its first build.",
+        "Live exposure: Barilla Rotini is WITHHELD-UNPROVEN-CHANNEL in candidates-2026-09-28 and absent from public/board.json, so 0 live cells before and 0 after. Its sibling 'Barilla Pasta Thin Spaghetti 1 lb., 6 pk.' $8.52 at 8.9 cents/oz stays priced as 96 oz."
+      ],
+      "surface_fix": {
+        "what": "withhold the Barilla Rotini row (lb measure, per-oz price reproducing one piece) as a basis conflict",
+        "files": ["grocery/build-sams-deals.ps1"],
+        "exact_change": "Test-SamsPerPieceUnit converts the name's per-piece measure into the priced unit through $script:UnitFamily instead of requiring the same unit token"
+      },
+      "root_cause": "The name '<weight>, N pk' is written both ways by Sam's and Sam's own unit price carries the same ambiguity. The 2026-09-21 per-piece guard already withheld a row whose unit price reproduced ONE piece, but only when the name's measure was in the exact unit token Sam's priced by, so a cross-unit row (1 lb measure, per-oz price) was read as Sam's arithmetic said.",
+      "root_fix": {
+        "what": "Option D as the guard's rule: where the weight is used (Sam's priced by weight or volume), a measure-first multipack row whose unit price reproduces one piece is refused in ANY unit of the priced family; a row reproducing neither reading is the existing Sazon NAME CONFLICT; count-priced ($/ea) rows never reach the test. Count-first names keep their own 2026-09-22 rule.",
+        "files": ["grocery/build-sams-deals.ps1"],
+        "exact_change": "Test-SamsPerPieceUnit: $v = measure * $script:UnitFamily[$Tok][$mu]; abstain when $mu is outside the priced unit's family"
+      },
+      "leaves_open": "The per-piece guard falsely refuses correct rows whose count is pieces PER POUND or a count range beside the pack weight (shrimp 'N-M ct. per pound, 2 lbs.', cod '11-15 ct., 2 lbs.'): 5 distinct names in sams-rejects-2026-09-27. Pre-existing since 2026-09-21 (lb vs lb), not widened by this change.",
+      "leaves_open_occurrences": "5 distinct names on 2026-09-27 (sams-rejects-2026-09-23..27 counted; 0 on 09-23..26, not captured those days)",
+      "leaves_open_followup": "2026-09-29-1eac5a",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "builder-level replay, not commodity routing: no matching rule changed. Test-SamsPerPieceUnit at HEAD and at the working tree, AST-extracted, run over every package row of the 23 sams-deals-2026-09-*.json files (1,576 rows, 707 distinct names); scratch harness scan-perpiece.ps1 (one-off, not committed)",
+        "affected_now": 1,
+        "names": ["Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk."],
+        "risk": "none on the board: the one row is already WITHHELD-UNPROVEN-CHANNEL. A future cross-unit row whose unit price reproduces one piece is withheld instead of priced, which is the ruling.",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-09-29 against sams-deals files through 2026-09-28, sams-rejects through 2026-09-28, candidates-2026-09-28 and public/board.json at HEAD 1e211b0eb",
+      "proof": {
+        "guard_or_fixture": "build-sams-deals.ps1 -SelfTest, cases '0cefa4'",
+        "must_fire_case": "MUST FIRE: frozen row 'Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk.' $8.52 at 53.3 cents/oz is refused per-piece (the old guard emitted it at 16 oz)",
+        "clean_twin": "CLEAN TWIN: frozen row 'Barilla Pasta Thin Spaghetti 1 lb., 6 pk.' $8.52 at 8.9 cents/oz is priced as 96 oz at $8.52",
+        "commands": ["powershell -File grocery\\build-sams-deals.ps1 -SelfTest"]
+      },
+      "rollback": "revert the Test-SamsPerPieceUnit hunk and the two self-test cases; no data migration",
+      "do_not_touch": ["Get-SamsUnitPriceReading and its rounding-band table", "count-first name rule (Get-SamsCountFirstMeasure)", "count-priced ($/ea) rows"],
+      "resolution_note": "Brad ruled Option D on 2026-09-29 after checking the Barilla Penne 6 pk on samsclub.com. Shipped: the per-piece guard now converts the name's measure into Sam's priced unit, so a weight-first pack row whose unit price reproduces one piece is withheld as a basis conflict in any unit (the Barilla Rotini '1 lb., 6 pk.' at 53.3 cents/oz was the one row escaping). 1 name newly withheld over 707, 0 live cells moved. Residual (count-per-pound shrimp falsely refused) queued as 2026-09-29-1eac5a.",
+      "publish_batch": "next-round",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "done",
+      "premise_verified": "true, with a correction: the reviewer's 23 pack-total rows came from deals files; replaying today's guard shows 22 of them are already refused by the 2026-09-21 per-piece guard (seen in sams-rejects-2026-09-23..27), and only Barilla Rotini still reached a deals file. Zero live exposure re-confirmed (candidates-2026-09-28, public/board.json). The 639/616 split was not recounted; this replay counts 707 distinct measure-first multipack names on a package basis.",
+      "deviation": null,
+      "shipped_commit": null,
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 42
+    }
+  ],
+  "ship_sequence": [
+    "1. money: 2026-09-25-0cefa4. build-sams-deals.ps1 Test-SamsPerPieceUnit (unit-family conversion) plus two -SelfTest cases; re-read ledger rows for the two Sam's MEASURE docs. Proof: build-sams-deals.ps1 -SelfTest. No board rebuild: the one affected row is already withheld; the next daily Sam's build applies it. Land through ops/push-main.ps1."
+  ],
+  "knowledge_consulted": [
+    "searched \"Sam's unit price weight first pack basis conflict withhold\" and \"multipack per piece unit price conversion\"",
+    "design/MEASURE-sams-cents-unit-price-2026-09-20.md (harness chain; Get-SamsUnitPriceReading untouched, re-read row added via ops/add-reread.ps1)",
+    ".claude/rules/ops-and-gates.md ('Three fixture labels, three jobs')"
+  ],
+  "open_questions_for_brad": []
+}

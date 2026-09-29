@@ -331,14 +331,27 @@ function Get-NameStatedTotal([string]$name) {
 # row would publish a 15-pack at $1.67 per fluid ounce, 15x its true $0.111. The test: the name states N > 1 pieces of V
 # in the priced unit, and the size we settled on is ONE piece (within 1%, a first plausible bar, nothing else tried).
 # Such a row is refused, never guessed: whether Sam's meant per piece or the name is wrong cannot be told apart.
+# BRAD'S OPTION D (2026-09-29, queue 2026-09-25-0cefa4, design/ready-for-brad/Q-2026-09-28-sams-weight-first-pack.md).
+# A weight-first pack name ("<weight>, N pk/ct") is written both ways by Sam's, N pieces of that weight or a pack total,
+# and Sam's own printed unit price cannot decide it: Brad checked "Barilla Penne Pasta 16 oz 6 pk" on samsclub.com on
+# 2026-09-29 and it IS six 16 oz boxes, while Sam's printed 53.3 cents/oz as if it were one. So where the weight is
+# used, a row whose unit price reproduces ONE piece (the reading the engine does not take) is withheld as a basis
+# conflict, never guessed; a row agreeing with neither reading is the Sazon rule's NAME CONFLICT above; count-priced
+# rows ($/ea) never reach this test. The gap this closes: the guard compared the measure only when its unit token was
+# the priced one, so "1 lb., 6 pk." priced per OUNCE (the Barilla row) passed. The measure is now converted into the
+# priced unit through $script:UnitFamily, the table Get-NameQtyCandidates already reads, and a measure outside the
+# priced unit's family (ml against a per-oz weight) still abstains.
 function Test-SamsPerPieceUnit([string]$Name, [string]$Tok, [double]$Qty) {
   $np = Get-NamePack $Name
   if (-not $np -or [double]$np.count -le 1) { return $false }
   $mm = [regex]::Match([string]$np.measure, '^([0-9]+(?:\.[0-9]+)?)\s+(.+)$')
   if (-not $mm.Success) { return $false }
-  $v = [double]$mm.Groups[1].Value; $mu = $mm.Groups[2].Value
-  $same = (($Tok -eq 'fl oz' -and ($mu -eq 'fl oz' -or $mu -eq 'oz')) -or ($Tok -eq 'oz' -and $mu -eq 'oz') -or ($Tok -eq 'lb' -and $mu -eq 'lb'))
-  if (-not $same -or $v -le 0) { return $false }
+  $fam = $script:UnitFamily[$Tok]
+  if (-not $fam) { return $false }
+  $mu = $mm.Groups[2].Value
+  if (-not $fam.ContainsKey($mu)) { return $false }
+  $v = [double]$mm.Groups[1].Value * [double]$fam[$mu]
+  if ($v -le 0) { return $false }
   return ([math]::Abs($Qty - $v) -le (0.01 * $v))
 }
 # A COUNT-FIRST MULTIPACK NAME DOES NOT SAY WHETHER ITS MEASURE IS THE PACK TOTAL OR ONE PIECE (2026-09-22,
@@ -951,6 +964,13 @@ if ($SelfTest) {
   # dca1a1 (2026-09-21): the "(us)" spellings read, and the per-piece guard refuses the poppi shape. Frozen from sams-capture-2026-09-21.csv.
 $rP = Build-Row (_R 'poppi Prebiotic Soda Punch Pop 12 fl. oz., 15 pk.' '$19.98' '$1.67/fluid ounce (us)')
 if ($rP.err -and $rP.err -match 'per-piece') { Write-Output "ok    MUST FIRE poppi 15 pk at `$1.67/fluid ounce (us) is refused per-piece -> $($rP.err)" } else { Write-Output ("FAIL  poppi per-piece row was not refused: " + ($rP | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+# 0cefa4 (Brad's Option D, 2026-09-29): the per-piece guard converts the name's measure into the priced unit. Both rows
+# frozen from sams-deals-2026-09-26.json, same brand, same price, same "1 lb., 6 pk." shape, priced per OUNCE. Brad checked
+# the Rotini row on samsclub.com: six 16 oz boxes, so Sam's 53.3 cents/oz is the price of ONE box and the row is withheld.
+$rBx = Build-Row (_R 'Barilla Pasta Rotini & Farfalle, Variety Pack, 1 lb., 6 pk.' '$8.52' ('53.3 ' + [string][char]0x00A2 + '/oz'))
+if ($rBx.err -and $rBx.err -match 'per-piece') { Write-Output "ok    MUST FIRE Barilla 1 lb., 6 pk. at 53.3 c/oz prices ONE 16 oz box (lb measure, oz price) -> refused per-piece" } else { Write-Output ("FAIL  0cefa4 Barilla per-piece row across lb/oz was not refused: " + ($rBx | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
+$rBt = Build-Row (_R 'Barilla Pasta Thin Spaghetti 1 lb., 6 pk.' '$8.52' ('8.9 ' + [string][char]0x00A2 + '/oz'))
+if ($rBt.row -and [string]$rBt.row.size -eq '96 oz' -and [string]$rBt.row.ad_price -eq '$8.52') { Write-Output "ok    CLEAN TWIN Barilla Thin Spaghetti 1 lb., 6 pk. at 8.9 c/oz reproduces six boxes and prices normally -> 96 oz" } else { Write-Output ("FAIL  0cefa4 a whole-pack lb/oz row was not priced as 96 oz: " + ($rBt | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
 $rB = Build-Row (_R 'Bacardi Island Punch Rum Cocktail, 1.75 L' '$17.67' ('29.9 ' + [string][char]0x00A2 + '/fluid ounce (us)'))
 if ($rB.row -and [string]$rB.row.size -match 'fl oz') { Write-Output "ok    CLEAN TWIN 'fluid ounce (us)' now reads as fl oz (Bacardi 1.75 L -> $($rB.row.size))" } else { Write-Output ("FAIL  'fluid ounce (us)' still unread: " + ($rB | ConvertTo-Json -Compress -Depth 4)); $script:fail++ }
 # 7h THE PROVED-SPELLING FALLBACK (2026-09-22, queue 2026-09-22-20fecf). A spelling this builder's table does not know
