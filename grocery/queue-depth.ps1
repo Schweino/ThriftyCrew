@@ -276,10 +276,10 @@ if ($SelfTest) {
   T 'CLEAN TWIN  a FULL drain followed by new dirt: the old entries leave, the new ones start at now, and the queue is draining' `
     (($wFull.Ledger.Count -eq 2) -and ($wFull.Oldest -eq $wNow) -and (-not $wFull.Ledger.ContainsKey('spec-1'))) ("ledger=" + $wFull.Ledger.Count + " oldest=" + $wFull.Oldest)
   $wNone = Update-TcWaitLedger -Ledger $wL -Dirty @() -Now $wNow
-  T 'CLEAN TWIN  nothing dirty empties the ledger and names no oldest' (($wNone.Ledger.Count -eq 0) -and ($null -eq $wNone.Oldest)) ([string]$wNone.Ledger.Count)
+  T 'MUST NOT FIRE  nothing dirty empties the ledger and names no oldest' (($wNone.Ledger.Count -eq 0) -and ($null -eq $wNone.Oldest)) ([string]$wNone.Ledger.Count)
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 7 must-fire cases led by the five-day backlog this file was written for, a failed probe never reading as empty and a partial drain never resetting the clock, 5 must-not-fire cases including two inclusive boundaries, and 6 clean twins'
+  Write-Output 'SELF-TEST PASS: 7 must-fire cases led by the five-day backlog this file was written for, a failed probe never reading as empty and a partial drain never resetting the clock, 6 must-not-fire cases including two inclusive boundaries, and 5 clean twins'
   exit 0
 }
 
