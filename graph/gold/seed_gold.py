@@ -20,7 +20,30 @@ Output: graph/gold/gold.jsonl, one labelled case per line.
 
 A gold case is a JUDGEMENT, not a snapshot: it records that a given product name
 either is or is not an instance of a commodity. It stays valid as prices change.
+
+SELECTION (design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md W3). load_gold()
+gives every row a DERIVED `selection` value - failure / success / uncertain /
+designed - from ops/audit_corpus_provenance.py's selection(), the one classifier.
+It is NEVER written into gold.jsonl: graph/learning/verdict_expiry.py fingerprints
+whole gold rows, so a stored field would re-expire every verdict. An unclassified
+source makes load_gold RAISE rather than guess.
+
+EXPERT-HARD (graph/gold/expert-hard.jsonl). 40 to 60 cases a HUMAN picks for being
+intrinsically hard (near twins, form splits such as gruyere shredded vs block,
+pack-basis traps), written BEFORE looking at the resolver's output on them. A
+model-written case defeats the set (plan D3), so this file ships EMPTY and no
+script writes it. Schema: one JSON object per line, exactly case()'s shape:
+    {"kind": "match" | "do_not_merge", "commodity": <slug>,
+     "commodity_node": "commodity:staple:<slug>", "product": <name>,
+     "store": <store slug or null>, "label": "MATCH" | "NO_MATCH" | "DIFFERENT",
+     "source": "expert-hard", "evidence": <why it is hard, <= 500 chars>,
+     "id": "gold:" + hash_obj([kind, commodity, product, store])[:20]}
+Build a row with case(..., source="expert-hard") so the id recipe cannot drift.
+load_gold() on the default path appends these rows; they class as `designed`.
+
+    python graph/gold/seed_gold.py --selftest   # hermetic, temp files only
 """
+# gate-inputs: graph\gold\seed_gold.py, ops\audit_corpus_provenance.py, graph\learning\verdict_expiry.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\gold\expert-hard.jsonl
 
 from __future__ import annotations
 
@@ -37,6 +60,10 @@ from ids import commodity_id, hash_obj            # noqa: E402
 
 GOLD_DIR = os.path.dirname(os.path.abspath(__file__))
 GOLD_PATH = os.path.join(GOLD_DIR, "gold.jsonl")
+EXPERT_HARD_PATH = os.path.join(GOLD_DIR, "expert-hard.jsonl")
+
+sys.path.insert(0, os.path.join(REPO_ROOT, "ops"))
+from audit_corpus_provenance import selection, UnknownSourceError, SELECTION_CLASSES  # noqa: E402,F401
 GROCERY = os.path.join(REPO_ROOT, "grocery")
 
 
@@ -240,12 +267,108 @@ def main() -> int:
     return 0
 
 
-def load_gold(path: str = GOLD_PATH) -> list[dict]:
+def _read_rows(path: str) -> list[dict]:
     if not os.path.exists(path):
         return []
     with io.open(path, encoding="utf-8") as fh:
         return [json.loads(l) for l in fh if l.strip()]
 
 
+def load_gold(path: str = GOLD_PATH, expert_hard: str | None = None) -> list[dict]:
+    """Gold rows, each with a DERIVED `selection` (never stored). On the default path the
+    expert-hard rows are appended; pass expert_hard="" to leave them out."""
+    rows = _read_rows(path)
+    if expert_hard is None:
+        expert_hard = EXPERT_HARD_PATH if path == GOLD_PATH else ""
+    if expert_hard:
+        rows += _read_rows(expert_hard)
+    for r in rows:
+        r["selection"] = selection(r.get("source"))      # raises on an unknown source
+    return rows
+
+
+def selftest() -> int:
+    import shutil
+    import tempfile
+    sys.path.insert(0, os.path.join(REPO_ROOT, "graph", "learning"))
+    from verdict_expiry import gold_fingerprints
+    bad, ran = [], []
+
+    def T(label, name, ok, got=""):
+        ran.append(name)
+        print(("  ok    " if ok else "  X     ") + label + "  " + name + ("" if ok else "   got: %s" % (got,)))
+        if not ok:
+            bad.append(name)
+
+    print("seed_gold self-test")
+    tmp = tempfile.mkdtemp(prefix="seedgold-")
+    try:
+        g = os.path.join(tmp, "gold.jsonl")
+        eh = os.path.join(tmp, "expert-hard.jsonl")
+        rows = [case("match", "milk", "Whole Milk 1 gal", "MATCH", "product-urls.json", "aldi"),
+                case("match", "milk", "Milk Bone dog treats", "NO_MATCH", "known-wrong.json", "aldi"),
+                case("match", "rice", "Rice Krispies", "NO_MATCH", "escalation-review", None),
+                case("do_not_merge", "a", "b", "DIFFERENT", "commodity-dupe-allowlist.json")]
+        with io.open(g, "w", encoding="utf-8", newline="\n") as fh:
+            for r in rows:
+                fh.write(json.dumps(r, sort_keys=True) + "\n")
+        hard = case("match", "gruyere-cheese", "Gruyere shredded 6 oz", "NO_MATCH", "expert-hard", "hy-vee")
+        with io.open(eh, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(hard, sort_keys=True) + "\n")
+        with io.open(g, "rb") as fh:
+            before = fh.read()
+        fp_before = gold_fingerprints(_read_rows(g), {}, "2026-09-29T00:00:00")
+
+        got = load_gold(g, expert_hard=eh)
+        sel = [r["selection"] for r in got]
+        T("MUST FIRE", "every loaded row carries its derived selection, per source",
+          sel == ["success", "failure", "uncertain", "designed", "designed"], sel)
+        T("MUST FIRE", "an expert-hard row is loaded and classed designed",
+          got[-1]["source"] == "expert-hard" and got[-1]["selection"] == "designed", got[-1])
+        T("MUST FIRE", "an expert-hard row built by case() carries the gold id recipe",
+          hard["id"] == "gold:" + hash_obj(["match", "gruyere-cheese", "Gruyere shredded 6 oz", "hy-vee"])[:20],
+          hard["id"])
+
+        with io.open(g, "rb") as fh:
+            after = fh.read()
+        fp_after = gold_fingerprints(_read_rows(g), {}, "2026-09-29T00:00:00")
+        T("CLEAN TWIN", "load_gold writes nothing: gold.jsonl bytes and verdict_expiry's fingerprint "
+          "inputs are unchanged, and no stored row carries `selection`",
+          before == after and fp_before == fp_after and b'"selection"' not in after,
+          "bytes_same=%s fp_same=%s" % (before == after, fp_before == fp_after))
+
+        empty = os.path.join(tmp, "empty.jsonl")
+        io.open(empty, "w").close()
+        T("MUST NOT FIRE", "an EMPTY expert-hard file loads as zero extra rows, no throw",
+          len(load_gold(g, expert_hard=empty)) == 4, len(load_gold(g, expert_hard=empty)))
+        T("MUST NOT FIRE", "a non-default path does not pull in the real expert-hard file",
+          len(load_gold(g)) == 4, len(load_gold(g)))
+        T("CLEAN TWIN", "the tracked expert-hard.jsonl exists and is EMPTY (a human writes it, D3)",
+          os.path.exists(EXPERT_HARD_PATH) and _read_rows(EXPERT_HARD_PATH) == [],
+          os.path.exists(EXPERT_HARD_PATH))
+
+        badf = os.path.join(tmp, "bad.jsonl")
+        with io.open(badf, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(case("match", "x", "y", "MATCH", "some-new-source.json")) + "\n")
+        try:
+            load_gold(badf, expert_hard="")
+            refused = False
+        except UnknownSourceError:
+            refused = True
+        T("MUST FIRE", "a row whose source nobody classified makes load_gold REFUSE (og-16)", refused)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    if bad:
+        print("SELF-TEST FAIL: %d of %d case(s)" % (len(bad), len(ran)))
+        print("SEED-GOLD-SELFTEST-COMPLETE selftest=fail")
+        return 1
+    print("SELF-TEST PASS: %d of %d case(s)" % (len(ran), len(ran)))
+    print("SEED-GOLD-SELFTEST-COMPLETE selftest=pass")
+    return 0
+
+
 if __name__ == "__main__":
+    if "--selftest" in sys.argv[1:]:
+        raise SystemExit(selftest())
     raise SystemExit(main())

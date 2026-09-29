@@ -154,6 +154,40 @@ def split_detail(split: str) -> dict:
     return {"split": split, "holdout_manifest_sha256": manifest_sha256()}
 
 
+def print_by_selection(db, gold: list[dict], use_llm: bool = False,
+                       llm: LocalLLM | None = None) -> dict:
+    """Every metric per selection class beside the total, WITH DENOMINATORS (W3, ms-01).
+
+    `selection` is derived by seed_gold.load_gold from ops/audit_corpus_provenance.py's one
+    classifier. Only kind=match rows are scored, so a do_not_merge row (the dupe allowlist)
+    counts in `rows` and never in `examined`, and that gap is printed rather than hidden.
+    """
+    def r(num, den, fmt="{:.3f}"):
+        return fmt.format(num / den) if den else "n/a"     # a rate over zero cases is not 0
+
+    out = {}
+    classes = ["total"] + sorted({g.get("selection", "?") for g in gold})
+    print("\n  --- per selection class (system arm = bank on; det = rules alone) ---")
+    for cls in classes:
+        sub = gold if cls == "total" else [g for g in gold if g.get("selection") == cls]
+        sysm = score(db, sub, use_llm=use_llm, llm=llm, use_bank=True)
+        det = score(db, sub, use_llm=use_llm, llm=llm, use_bank=False)
+        c, dc = sysm["counts"], det["counts"]
+        n_match_rows = sum(1 for g in sub if g["kind"] == "match")
+        examined = c["gold_match"] + c["gold_no_match"]
+        out[cls] = {"rows": len(sub), "examined": examined, "system": c, "deterministic": dc}
+        print(f"  [{cls}] rows {len(sub)}; examined {examined} of {len(sub)} "
+              f"({len(sub) - n_match_rows} not kind=match, {c['missing_node']} missing node)")
+        print(f"      precision {r(c['tp'], c['tp'] + c['fp'])} ({c['tp']} of {c['tp'] + c['fp']} predicted MATCH)"
+              f"   recall {r(c['tp'], c['gold_match'])} ({c['tp']} of {c['gold_match']} gold MATCH)")
+        print(f"      false-merge {r(c['fp'], c['gold_no_match'], '{:.4f}')} ({c['fp']} of {c['gold_no_match']} gold NO_MATCH)"
+              f"   missed-merge {r(c['fn'], c['gold_match'], '{:.4f}')} ({c['fn']} of {c['gold_match']})"
+              f"   escalated {c['escalated']} of {examined}")
+        print(f"      det missed-merge {r(dc['fn'], dc['gold_match'], '{:.4f}')} ({dc['fn']} of {dc['gold_match']})"
+              f"   det false-merge {r(dc['fp'], dc['gold_no_match'], '{:.4f}')} ({dc['fp']} of {dc['gold_no_match']})")
+    return out
+
+
 def record(db, metrics: dict, model: str | None, prompt_version: str,
            gold: list[dict], context: str, ts: str, split: str = "all") -> str:
     eid = "eval:" + hash_obj([ts, model, prompt_version, context])[:20]
@@ -222,6 +256,8 @@ def main() -> int:
         elapsed = time.time() - t0
         model = (llm.model if args.llm else "deterministic-only")
         record(db, m, model, args.prompt_version, gold, args.context, ts, split=args.split)
+        if not args.json:
+            print_by_selection(db, gold, use_llm=args.llm, llm=llm)
 
     if args.json:
         print(json.dumps(m, indent=2, default=str))

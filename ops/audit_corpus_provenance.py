@@ -43,6 +43,7 @@ Read the verdict LINE, not the number (backlog E2).
 """
 # The self-test builds its own corpora and baseline in temp and runs this script over them; no tracked data is read.
 # gate-inputs: ops\audit_corpus_provenance.py
+# (selection() here is imported by graph\gold\seed_gold.py, whose own suite declares this file.)
 from __future__ import annotations
 
 import argparse
@@ -105,17 +106,63 @@ def classify(source: str) -> str:
     return "unknown"
 
 
+# THE SELECTION CLASS (design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md W3). A finer cut of
+# classify() for scoring: WHY a case was chosen for the set, so a score can be read per class.
+#   failure    - a recorded failure of a shipped answer (known-wrong)
+#   success    - a case the estate already handles (product-urls, hunter events)
+#   uncertain  - escalation-review: the model was unsure; neither a failure nor a success
+#   designed   - chosen on purpose to be hard or to pin a boundary: the dupe allowlist, expert-hard
+# classify() keeps its coarser answer for the report above (the allowlist stays "failure" there);
+# selection() is the one scorers read. graph/gold/seed_gold.py derives it at load time and never
+# stores it, because graph/learning/verdict_expiry.py fingerprints whole gold rows.
+DESIGNED_SOURCES = (
+    "commodity-dupe-allowlist",    # reviewed near-duplicate pairs, ruled DIFFERENT on purpose
+    "expert-hard",                 # human-picked hard cases, written before seeing resolver output
+)
+
+
+class UnknownSourceError(ValueError):
+    """A gold source this file has not classified. Refused, never read as a class (og-16)."""
+
+
+def selection(source: str) -> str:
+    """failure / success / uncertain / designed. An unclassified source RAISES."""
+    s = (source or "").strip()
+    for p in DESIGNED_SOURCES:
+        if p in s:
+            return "designed"
+    c = classify(s)
+    if c == "failure":
+        return "failure"
+    if c == "success":
+        return "success"
+    if c == "neither":
+        return "uncertain"
+    if c == "unknown":
+        raise UnknownSourceError("unknown gold source, not classified in "
+                                 "ops/audit_corpus_provenance.py: %r" % (source,))
+    raise UnknownSourceError("classify() returned an unhandled class %r for %r" % (c, source))
+
+
+SELECTION_CLASSES = ("failure", "success", "uncertain", "designed")
+
+
 def summarise(rows) -> dict:
     """Counts per class plus the label mix. Every share is reported WITH its denominator by the
     caller; this returns the raw counts so it cannot be otherwise."""
     out = {"n": 0, "failure": 0, "success": 0, "neither": 0, "unknown": 0,
-           "no_source": 0, "labels": {}}
+           "no_source": 0, "labels": {}, "selection": {}}
     for r in rows:
         out["n"] += 1
         src = r.get("source")
         if not src:
             out["no_source"] += 1
         out[classify(src)] += 1
+        try:
+            k = selection(src)
+        except UnknownSourceError:
+            k = "unclassified"      # the report counts it; load_gold is where it refuses
+        out["selection"][k] = out["selection"].get(k, 0) + 1
         lab = str(r.get("label", "?"))
         out["labels"][lab] = out["labels"].get(lab, 0) + 1
     return out
@@ -204,6 +251,27 @@ def selftest():
       not has_provenance(summarise([])), "empty read as answerable")
     T("MUST NOT FIRE  a hunter event is a SUCCESS, not a failure - the mapper got it right",
       classify("hunter-event:quinoa-casserole") == "success", classify("hunter-event:quinoa-casserole"))
+
+    # SELECTION (W3) - the finer class scorers read.
+    T("MUST FIRE  an escalation-review row is UNCERTAIN for selection - the model was unsure",
+      selection("escalation-review") == "uncertain", selection("escalation-review"))
+    T("MUST FIRE  a dupe-allowlist row is DESIGNED for selection, not a failure",
+      selection("commodity-dupe-allowlist.json") == "designed", selection("commodity-dupe-allowlist.json"))
+    T("MUST FIRE  an expert-hard row is DESIGNED", selection("expert-hard") == "designed",
+      selection("expert-hard"))
+    for src in ("some-new-file.json", "", None):
+        try:
+            got_sel = selection(src)
+            refused = False
+        except UnknownSourceError:
+            got_sel, refused = "raised", True
+        T("MUST FIRE  an unknown source %r REFUSES loudly (og-16), never silently classed" % (src,),
+          refused, got_sel)
+    T("MUST NOT FIRE  a known-wrong row is FAILURE and a product-urls row SUCCESS for selection",
+      selection("known-wrong.json") == "failure" and selection("product-urls.json") == "success",
+      "%s/%s" % (selection("known-wrong.json"), selection("product-urls.json")))
+    T("CLEAN TWIN the coarse report class of the allowlist is unchanged (still failure)",
+      classify("commodity-dupe-allowlist.json") == "failure", classify("commodity-dupe-allowlist.json"))
 
     # CLEAN TWIN - adjacent behaviour that still works.
     s = summarise([{"source": "known-wrong.json", "label": "NO_MATCH"},
@@ -360,6 +428,9 @@ def main() -> int:
               "%d neither, %d unclassified source"
               % (rel, s["n"], s["failure"], s["success"], s["neither"], s["unknown"]))
         print("  %-40s        labels: %s" % ("", ", ".join("%s %d" % kv for kv in sorted(s["labels"].items()))))
+        sel = s["selection"]
+        print("  %-40s        selection (of %d): %s" % ("", s["n"], ", ".join(
+            "%s %d" % (k, sel.get(k, 0)) for k in SELECTION_CLASSES + ("unclassified",))))
     for rel in blind:
         print("  %-40s not on disk (gitignored or not built here)" % rel)
 
