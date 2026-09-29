@@ -12817,23 +12817,22 @@ def _wc_probe_hit_cap():
 
 
 def _wc_writer_tier():
-    """MUST FIRE. The writer's model pin is a latency decision as well as a quality one: opus costs
-    27.9 s per API round trip against fable's 15.3, and wall clock is output tokens at ~81/sec."""
-    res = []
-    p = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents", "recipe-writer.md")
+    """MUST FIRE. Until 2026-09-29 this pinned the writer OFF opus (fable was 15.3 s a round trip to
+    opus's 27.9). Brad's ruling that day (f6197448d, 80d746246) put EVERY agent, the writer included,
+    on claude-opus-5-5 at effort medium, so this now pins each .claude/agents definition to it."""
+    base = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents")
     try:
-        with io.open(p, encoding="utf-8-sig") as f:
-            body = f.read()
+        names = sorted(n for n in os.listdir(base) if n.endswith(".md"))
+        bodies = [(n, io.open(os.path.join(base, n), encoding="utf-8-sig").read()) for n in names]
     except Exception as e:                                          # noqa: BLE001
-        return [("MUST FIRE  the recipe-writer agent definition is readable so its tier can be pinned",
-                 False, str(e))]
-    m = re.search(r"(?m)^model:\s*(\S+)", body)
-    res.append(("MUST FIRE  the writer is NOT on an opus tier - it cannot introduce a number "
-                "(apply_writer_fields patches the intake from its payload) and it is the only stage "
-                "with two independent fable gates behind it, source-qa per recipe and the auditor "
-                "per wave",
-                bool(m) and "opus" not in (m.group(1) or "").lower(),
-                m.group(1) if m else "(no model line)"))
+        return [("MUST FIRE  the agent definitions are readable so their tier can be pinned", False, str(e))]
+    res = [("MUST FIRE  the agent directory holds the recipe-writer, so the tier pin read something",
+            "recipe-writer.md" in names, "%d definitions" % len(names))]
+    for n, body in bodies:
+        got = tuple((re.search(r"(?m)^%s:\s*(\S+)" % k, body) or [None, ""])[1] for k in ("model", "effort"))
+        res.append(("MUST FIRE  %s is pinned to claude-opus-5-5 at effort medium (Brad's ruling, "
+                    "2026-09-29: every agent on Opus 5.5 Medium)" % n[:-3],
+                    got == ("claude-opus-5-5", "medium"), "model=%s effort=%s" % got))
     return res
 
 
