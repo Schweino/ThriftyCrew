@@ -116,6 +116,18 @@ Exit 0.
   259 mapper, 10 adjudication), so the event ledger is not dropping rulings. The mapper has recorded no new
   resolution since then.
 
+## Brad ruled 2026-09-29: fix the check, then apply. Done.
+
+- **W2, first half, landed** (`b0cf8aa02`): `stage2_review.untouched_hold` holds an alias that matches no gold case
+  of its own commodity, or whose pattern will not compile, reusing W0's `cases_moved`. The `--selftest` drives the
+  real `shadow_and_apply`: 9 cases, and a mutant with the hold disabled fails 4 of them.
+- **Apply run** (`8f195a2e2`, on a worktree copy of the index): 24 candidates. 14 applied (10 of Brad's 09-12
+  approvals). 6 held for a human: red-bell-pepper, liquid-smoke x2, hot-italian-sausage and zero-sugar-soda-2l match
+  no gold case, and cannellini-beans has no coverage (its pattern names Great Northern beans). 4 left retryable on
+  unresolvable targets.
+- **Still open from the original order:** W1 (held-out split), the rest of W2 (score both arms, exclude a patch's
+  source cases, which needs `derived_from`), W3, W4. D1 to D5 are unanswered.
+
 ## Out of scope
 
 - The sidecar reranker / fine-tune holdouts (exist; see Knowledge consulted).
