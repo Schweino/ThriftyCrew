@@ -2100,6 +2100,18 @@
     "target_id": "popsicles-ice-pops"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-09-28T21:36:38",
+    "id": "lp:7e1d5cab1065277978e7",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"ravioli.*canned\\\\s+pasta|canned\\\\s+pasta.*ravioli\"}",
+    "queue_hash": "9acbc8ca447d99409849cc35752005e98c59e1eeacb59f3f78b4ac169524acf2",
+    "rationale": "Matches 'Annie's Organic Cheesy Ravioli Tomato and Cheese Sauce Canned Pasta'. Anchors on 'ravioli' and 'canned pasta' to distinguish from fresh ravioli or other canned soups.",
+    "status": "proposed",
+    "target_id": "canned-pasta-ravioli-spaghettios"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "id": "lp:7e4bc0627f8a41dc7f36",
@@ -3070,6 +3082,18 @@
     "rationale": "the 'Milk, Lowfat, [milkfat,] Chocolate' comma order; almond/oat/soy/powder/mix/protein excludes remain",
     "status": "applied",
     "target_id": "commodity:staple:chocolate-milk"
+  },
+  {
+    "confidence": 0.85,
+    "created_at": "2026-09-28T21:36:38",
+    "id": "lp:b87398664a05b7b4d6c1",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"(amy's|simple truth).*chili\"}",
+    "queue_hash": "9acbc8ca447d99409849cc35752005e98c59e1eeacb59f3f78b4ac169524acf2",
+    "rationale": "Matches multiple 'Amy's' and 'Simple Truth' chili variants. Anchors on brand + food to ensure it's a canned/retort chili product, not fresh or frozen.",
+    "status": "proposed",
+    "target_id": "canned-chili"
   },
   {
     "confidence": 0.9,

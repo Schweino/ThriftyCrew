@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-28 08:29",
+    "generated":  "2026-09-28 21:33",
     "board":  "comparison-2026-09-28.json",
-    "sidecar_generated":  "2026-09-28 08:29:23",
+    "sidecar_generated":  "2026-09-28 21:33:39",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,46 +9,17 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2871,
-                     "corpus":  44265,
+                     "board_pairs":  2873,
+                     "corpus":  44266,
                      "rule_invisible":  9082
                  },
     "identity_count":  0,
-    "coverage_count":  3,
+    "coverage_count":  0,
     "identity":  [
 
                  ],
     "coverage":  [
-                     {
-                         "kind":  "coverage",
-                         "id":  "cooking-spray",
-                         "commodity":  "Cooking Spray",
-                         "store":  "Hy-Vee",
-                         "product":  "Hy Vee Canola Oil No Stick Spray",
-                         "cos":  0.6611,
-                         "score":  0.946701,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "creamy-cilantro-lime-dressing",
-                         "commodity":  "Creamy Cilantro Lime Dressing",
-                         "store":  "Walmart",
-                         "product":  "Brianna\u0027s Home Style Creamy Cilantro Lime, 12 fl oz Bottle",
-                         "cos":  0.7808,
-                         "score":  0.926476,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     },
-                     {
-                         "kind":  "coverage",
-                         "id":  "garlic-herb-seasoning",
-                         "commodity":  "Garlic Herb Seasoning",
-                         "store":  "Family Fare",
-                         "product":  "Mc Cormick Grill Mates Garlic \u0026 Crushed Herbs Seasoning, 5.47 Oz",
-                         "cos":  0.6821,
-                         "score":  0.902959,
-                         "why":  "no rule matches it, but it reads as an instance of this commodity"
-                     }
+
                  ],
     "coverage_excluded_count":  10,
     "coverage_excluded":  [
