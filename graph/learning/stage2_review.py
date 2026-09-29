@@ -39,6 +39,8 @@ BEFORE ANY CHANGE TO `resolve_target`. The invariant it protects: an approval
 granted under one target-resolution regime never applies under a different one.
 """
 
+# gate-inputs: graph\learning\stage2_review.py, graph\eval\audit_gold_circularity.py, graph\eval\score.py, graph\gold\seed_gold.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\learning_reconcile.py, graph\lib\supersede.py, graph\lib\units.py, graph\lib\authority.py, graph\lib\llm.py, graph\lib\service_time.py, graph\lib\placeholder_names.py, graph\pipeline\resolve.py, graph\pipeline\state.py, graph\sqlite\schema.sql, grocery\placeholder-name-patterns.json
+
 from __future__ import annotations
 
 import argparse
@@ -59,6 +61,7 @@ from graphdb import open_db, GRAPH_DIR                  # noqa: E402
 from ids import hash_obj                                # noqa: E402
 from score import score, GATE_FALSE_MERGE, GATE_MISSED_MERGE   # noqa: E402
 from seed_gold import load_gold                         # noqa: E402
+from audit_gold_circularity import cases_moved          # noqa: E402
 
 PACKET = os.path.join(GRAPH_DIR, "learning", "review-packet.json")
 
@@ -373,6 +376,24 @@ def requeue_stuck(db) -> dict:
     return {"candidates": len(rows), "requeued": requeued}
 
 
+def untouched_hold(kind: str, target: str, payload, gold: list[dict]) -> str | None:
+    """Why an add_alias patch cannot be shadow-proven because it matches no gold case, or None.
+
+    Matched the way resolve.py step 4 matches an include: the raw product name, case-insensitive
+    search, on gold rows of the patch's own commodity (staple and recipe twins share the bare id).
+    Other kinds return None and keep their existing road; nothing here measures them.
+    """
+    if kind != "add_alias":
+        return None
+    n = cases_moved(str(payload), (target or "").split(":")[-1], gold)
+    if n is None:
+        return "the alias pattern does not compile - nothing can be shadow-scored"
+    if n == 0:
+        return ("no gold case matches this pattern - a delta of 0.0 would be no evidence, "
+                "not safety")
+    return None
+
+
 def shadow_and_apply(db, dry_run: bool = False) -> dict:
     """Score every accepted patch against the gold set, apply only clean ones."""
     gold = load_gold()
@@ -451,6 +472,20 @@ def shadow_and_apply(db, dry_run: bool = False) -> dict:
                             "WHERE id=?", (r["id"],))
             continue
 
+        # Coverage of the TARGET is not coverage of the PATCH. An alias that matches no gold case
+        # changes no score, so it passes on a delta of exactly 0.0 with nothing watching it: W0 of
+        # design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md found 155 of the 159 applied aliases
+        # matched none, and a dry run on 2026-09-29 passed 19 of 24 waiting ones on 0.0 everywhere.
+        why = untouched_hold(kind, target, payload, gold)
+        if why:
+            held.append({"patch": r["id"], "target": target, "payload": payload,
+                         "why": why, "untouched": True})
+            db.conn.execute("UPDATE learning_proposals SET status='held_for_human' "
+                            "WHERE id=?", (r["proposal_id"],))
+            db.conn.execute("UPDATE approved_patches SET shadow_verdict='not_run' "
+                            "WHERE id=?", (r["id"],))
+            continue
+
         # Apply inside a savepoint so a regressing patch leaves no trace.
         db.conn.execute("SAVEPOINT shadow")
         try:
@@ -516,7 +551,10 @@ def main() -> int:
     ap.add_argument("--requeue-stuck", action="store_true",
                     help="demote approved-but-unresolvable patches back to "
                          "'proposed'; run BEFORE widening resolve_target")
+    ap.add_argument("--selftest", action="store_true")
     args = ap.parse_args()
+    if args.selftest:
+        return _selftest()
 
     if not (args.emit_packet or args.ingest or args.apply or args.requeue_stuck):
         ap.print_help()
@@ -555,8 +593,95 @@ def main() -> int:
                   f"unresolvable target)")
             for x in res["rejected"][:10]:
                 print(f"     {x.get('target')}  {x['why']}")
-            print(f"  held     {len(res['held'])}  (human review)")
+            untouched = sum(1 for h in res["held"] if h.get("untouched"))
+            print(f"  held     {len(res['held'])}  (human review; {untouched} of them "
+                  f"match no gold case, so the shadow score could not see them)")
     return 0
+
+
+def _selftest() -> int:
+    """Drives the REAL shadow_and_apply over an in-memory stub, so the hold is proven as wired, not
+    only as a helper. The graph, scorer and gold loader are swapped for fixtures and put back."""
+    import sqlite3
+    g = globals()
+    gold = [{"id": "g1", "commodity_node": "commodity:staple:feta", "product": "Athenos Feta Crumbles"},
+            {"id": "g2", "commodity_node": "commodity:staple:ricotta", "product": "Whole Milk Ricotta"}]
+
+    class Stub:
+        def __init__(self):
+            self.conn = sqlite3.connect(":memory:")
+            self.conn.row_factory = sqlite3.Row
+            self.conn.executescript(
+                "CREATE TABLE learning_proposals (id TEXT, kind TEXT, target_id TEXT, status TEXT);"
+                "CREATE TABLE approved_patches (id TEXT, proposal_id TEXT, verdict TEXT, payload_json TEXT,"
+                " applied_at TEXT, applied_by TEXT, shadow_verdict TEXT, shadow_before_json TEXT,"
+                " shadow_after_json TEXT);")
+
+        def add(self, pid, kind, target, pattern):
+            self.conn.execute("INSERT INTO learning_proposals VALUES (?,?,?, 'accepted')", (pid, kind, target))
+            self.conn.execute("INSERT INTO approved_patches (id, proposal_id, verdict, payload_json, shadow_verdict)"
+                              " VALUES (?,?, 'accept', ?, 'not_run')",
+                              ("ap-" + pid, pid, json.dumps({"payload": pattern})))
+
+        def get_node(self, node):
+            return True
+
+        def record_provenance(self, *a, **k):
+            return "prov:test"
+
+        def export_learning(self):
+            pass
+
+        def log_event(self, **k):
+            pass
+
+    applied_to = []
+    metrics = {"entity_precision": 1.0, "entity_recall": 0.5, "false_merge_rate": 0.0, "missed_merge_rate": 0.5}
+    saved = {k: g[k] for k in ("load_gold", "score", "resolve_target", "_apply_to_graph")}
+    g["load_gold"] = lambda: gold
+    g["score"] = lambda db, gs, use_llm=False: dict(metrics)
+    g["resolve_target"] = lambda db, t: f"commodity:staple:{t}" if t else None
+    g["_apply_to_graph"] = lambda db, kind, target, payload, ts, prov: applied_to.append(payload)
+    fails = 0
+    try:
+        db = Stub()
+        db.add("p1", "add_alias", "feta", r"athenos\s+feta")      # matches g1
+        db.add("p2", "add_alias", "feta", r"president\s+feta")    # target covered, pattern matches nothing
+        db.add("p3", "add_alias", "ricotta", r"ricotta(")         # does not compile
+        db.add("p4", "add_known_wrong", "ricotta", "Galbani Ricotta Dip")
+        res = shadow_and_apply(db)
+        held = {h["patch"]: h for h in res["held"]}
+        applied = {a["patch"] for a in res["applied"]}
+        cases = [
+            ("MUST FIRE: an alias whose target gold covers but which matches no gold case is held",
+             "ap-p2" in held and held["ap-p2"].get("untouched") is True),
+            ("MUST FIRE: the held alias is never applied to the graph, even inside the savepoint",
+             r"president\s+feta" not in applied_to and r"athenos\s+feta" in applied_to),
+            ("CLEAN TWIN: a recipe-namespaced target is judged on its staple twin's gold cases",
+             untouched_hold("add_alias", "commodity:recipe:feta", r"athenos\s+feta", gold) is None),
+            ("MUST FIRE: an alias that will not compile is held with that reason",
+             "ap-p3" in held and "compile" in held["ap-p3"]["why"]),
+            ("MUST NOT FIRE: an alias that matches a gold case of its own commodity is applied",
+             "ap-p1" in applied),
+            ("CLEAN TWIN: a known-wrong patch keeps its old road and is not held as untouched",
+             "ap-p4" in applied and "ap-p4" not in held),
+            ("CLEAN TWIN: a held patch's proposal is marked held_for_human",
+             db.conn.execute("SELECT status FROM learning_proposals WHERE id='p2'").fetchone()[0] == "held_for_human"),
+            ("at the bar: exactly one matching case is enough to be scored",
+             untouched_hold("add_alias", "commodity:staple:ricotta", "ricotta", gold) is None),
+            ("one step past it: zero matching cases is held",
+             untouched_hold("add_alias", "commodity:staple:ricotta", "mascarpone", gold) is not None),
+        ]
+    except Exception as e:                                        # noqa: BLE001
+        cases = [(f"the suite raised {type(e).__name__}: {e}", False)]
+    finally:
+        g.update(saved)
+    for name, ok in cases:
+        fails += not ok
+        print(f"{'ok  ' if ok else 'FAIL'} {name}")
+    print(f"cases={len(cases)} failed={fails}")
+    print(f"STAGE2-REVIEW-SELFTEST-COMPLETE selftest={'pass' if not fails else 'fail'}")
+    return 0 if not fails else 1
 
 
 if __name__ == "__main__":
