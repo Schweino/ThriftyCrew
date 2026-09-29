@@ -256,6 +256,42 @@ Why this target first: free (local model), programmatic grader (gold), large cor
 - The loop NEVER promotes. Output is a candidate prompt plus its evidence; promotion is a separate, reviewed
   commit that bumps `prompt_version`.
 
+## W1 to W4 and W6 results (2026-09-29, built in parallel; each verified on origin/main by the orchestrator)
+
+- **W1, landed `41a907e03`.** `graph/gold/gold_split.py`: keyed on the bare commodity id by salted sha256, 20%
+  holdout, staple and recipe twins together, a non-namespaced node raises. 111 of 542 commodities, 400 of 2,108 rows held
+  out. `holdout-manifest.json` is written once and verified after that (72 token-sharing near twins, 35 containment
+  pairs). Acceptance: train plus holdout equals all on 8 of 8 counters, 0 apart, gold blob `83bf8294`. Also closed: Stage
+  1's `gather_gold_failures` no longer feeds held-out failures to the learner, and Stage 1 `add_gold` refuses a held-out
+  commodity. Self-test 22 of 22 (re-run by the orchestrator, exit 0).
+- **W2 rest, landed `5f9a45066`, `5ace8c109`, `5209772ff`.** `derived_from` on `learning_proposals`, written by both
+  writers (review lane: the reviewed gold id; Stage 1: every failure shown, over-inclusive on purpose). NULL reads BLIND.
+  `shadow_and_apply` scores train and holdout separately with a patch's own source cases removed, rejects a false-merge
+  rise on either arm, and holds a patch whose only evidence is circular (D1). Self-test 23 of 23 (re-run, exit 0).
+  Dry run of the 24 waiting patches: 0 circular, 14 provenance-blind (they predate the column).
+- **W3, landed `aa8b9bd3f`.** A derived `selection` class per gold row via `ops/audit_corpus_provenance.py`: failure
+  313, success 388, uncertain 1,387, designed 20. Per-class scoring on the full gold set, one run: every false merge
+  (10 of 10) and 107 of 117 missed merges are in the uncertain class, which is itself 1,387 of the 2,080 scored rows. On
+  its own that class exceeds both gates (false-merge 10 of 444, missed-merge 107 of 943). `expert-hard.jsonl` exists
+  empty. **D3 draft** from the commodity-registrar agent: 47 cases (21 match, 17 no-match, 9 never-merge), every id
+  verified against the catalogue. It is with Brad to strike, and nothing counts until he has.
+- **W4, landed `b62da5b9d`.** `graph/eval/score_health.py` (`score.py --health`): per-arm spread, ORDERING-SUSPECT,
+  SATURATED. The full LLM noise floor could not be measured in session: one LLM pass is about 2 hours.
+- **Brad ruled on scale, 2026-09-29: a fixed keyed sample now and the full run overnight.** `--sample 60` per split
+  (`ae32013e5`). The overnight full `--health --runs 3` is running (PID 22488; log
+  `.claude/worktrees/overnight-eval-2026-09-29/graph/bench/out/overnight-eval-2026-09-29.log`, done at
+  `OVERNIGHT-COMPLETE`).
+- **Brad ruled after W5, 2026-09-29: confirm round 1 on full gold overnight, and promote nothing either way until he has
+  seen it.** It is queued behind PID 22488.
+- **W6: refused to score.** Only 20 of 48 source-QA-passed extractions had a saved page (bar 100), and those 20 were
+  rewritten in place by the 2026-09-17 cache sanitize. The other 28 came from runs dated 08-15, a day before the cache
+  existed. **Brad ruled: save pages going forward, then retry.** Landed `74d0e54f4`, `bcd2ee99e`: every extraction writes
+  an immutable `page-cache/extracted/<sha256>.html` before its record, and the record carries `page_snapshot`. $0 was
+  spent. Retry W6 once 100 cases have accumulated.
+- **Found in passing:** the nightly daemon battery is red on "the writer is NOT on an opus tier" since the 2026-09-29
+  Opus 5.5 move (a task was offered to Brad). `graph/learning/test_gates.py` now has a `--selftest` (`4a99d0e63`, another
+  session).
+
 ## W5 result (2026-09-29): SAMPLE numbers, no candidate kept, the loop stopped flat
 
 Harness `graph/bench/hillclimb_prompt.py`; rows `graph/bench/out/hillclimb-2026-09-29.jsonl` (420 rows, one per case
