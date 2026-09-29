@@ -256,6 +256,52 @@ Why this target first: free (local model), programmatic grader (gold), large cor
 - The loop NEVER promotes. Output is a candidate prompt plus its evidence; promotion is a separate, reviewed
   commit that bumps `prompt_version`.
 
+## W5 result (2026-09-29): SAMPLE numbers, no candidate kept, the loop stopped flat
+
+Harness `graph/bench/hillclimb_prompt.py`; rows `graph/bench/out/hillclimb-2026-09-29.jsonl` (420 rows, one per case
+per split per round, and every total below is derived from them by `--report`); gold blob
+83bf82949038938221a4d125cafd251b8a91f864; sample salt `tc-eval-sample-2026-09-29`, 60 uncertain rows per split,
+fingerprint 350165098f67fc0f4080c06a0f1bf055bd3436ab2d9160577d63d2d9a45bafba. Of those rows, 25 train and 31
+holdout reach layer 5. EVERY NUMBER HERE IS A SAMPLE NUMBER.
+
+**Finding that changed what is scored.** `Verdict.is_match` counts only include_hit and llm_confirmed, and the
+local model can return neither, so score.py's false-merge and missed-merge are the same under ANY prompt (the sample
+floor shows them flat on every arm: train fm 0.1304, mm 0.4324; holdout fm 0.0000, mm 0.3810). The D2 bar is applied
+to the model's own verdicts on the cases it reaches: `adj_false` (gold NO_MATCH the model led as MATCH) and
+`adj_missed` (gold MATCH it did not lead as MATCH). The arm is score.py's `llm` arm: bank off, no prior rulings shown.
+
+**Noise floor** (`score.py --health --sample 60 --runs 3`, live prompt; the deterministic arm had zero spread on every
+metric): train adj_false 9, 7, 7 of 13 (spread 2), train adj_missed 0, 0, 0 of 12 (spread 0); holdout adj_false 11,
+12, 12 of 17 (spread 1), holdout adj_missed 3, 3, 3 of 14 (spread 0). Three runs bound a spread from below only.
+
+**Bar.** Brad revised D2 on 2026-09-29, after the baseline reading and before any candidate was scored: keep if (a)
+holdout false falls by more than its spread, holdout missed does not rise by more than its spread, and train false
+does not rise by more than its spread; or (b) holdout missed falls by more than its spread and false rises on neither
+split. The reference is the median of the floor runs: train false 7, holdout false 12, holdout missed 3.
+
+| round | variant | train false | train missed | holdout false | holdout missed | verdict |
+|---|---|---|---|---|---|---|
+| floor | live | 9, 7, 7 of 13 | 0, 0, 0 of 12 | 11, 12, 12 of 17 | 3, 3, 3 of 14 | reference |
+| 1 | cand:01547b000f4c narrow reading | 2 | 3 | 1 | 5 | reverted: holdout missed +2 |
+| 2 | cand:be754e51e90d narrow + do not over-split | 2 | 3 | 1 | 4 | reverted: holdout missed +1 |
+| 3 | cand:1faf2fb2266d shopper test | 3 | 3 | 2 | 4 | reverted: holdout missed +1 |
+
+Three variants were tried and three rounds run, then FLAT-STOP. Every patch was written by the session from TRAIN
+failures only (`--train-failures`); no API model was used. All three passed the transcription ban.
+
+**Failure analysis.** The live prompt's error is almost all false leads: it widens the commodity into a category (a fig
+bar "is a type of granola bar", whipping cream "is the ingredient of whipped cream"). Every patch that narrows the
+reading cuts those leads by 10 to 11 of 17 on holdout, and every one also turns 1 or 2 true matches into outright
+rejections (`llm_rejected`, which empties a cell), on wording that only looks like a variety: platters vs plates,
+"sun-ripened dried" vs sun-dried, cream vs lotion. The two counterweights (rounds 2 and 3) recovered one holdout
+miss and no train miss. Branch (a) fails only on its third clause, because the holdout missed-merge spread measured
+0 in three runs, so any single extra miss exceeds it. That makes three things for Brad, not for another round:
+1. Whether the trade is worth it: roughly 10 fewer false leads for 1 more lost true match per 31 holdout cases. A
+   local MATCH can never price a cell (it is a lead for the reviewer), while a local NO_MATCH is final, so at this
+   layer the missed direction is the costlier one. The strict bar may be right, and this sample says so.
+2. A spread of 0 over three runs is a lower bound. The overnight full-gold floor measures it over 2,080 cases.
+3. The patches are kept as files (`hillclimb-2026-09-29-round-{1,2,3}.txt`) for that decision. None is promoted.
+
 ### W6 (only if D4 = yes). Cheaper-model trial for two Claude agents
 
 Brad pinned every agent to Opus 5.5 medium on 2026-09-29 (`f6197448d`). The article's example is the reverse

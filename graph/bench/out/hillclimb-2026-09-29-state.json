@@ -1,0 +1,167 @@
+{
+  "history": [
+    false,
+    false,
+    false
+  ],
+  "incumbent": null,
+  "rounds": {
+    "0": {
+      "candidate": null,
+      "kept": false,
+      "measured": {
+        "train": {
+          "adj_false": 7,
+          "adj_match_n": 12,
+          "adj_missed": 1,
+          "adj_no_match_n": 13,
+          "adj_rejected_true": 0,
+          "llm_errors": 0
+        }
+      },
+      "reference": null,
+      "variant": "live",
+      "why": [
+        "baseline round"
+      ]
+    },
+    "1": {
+      "candidate": "graph/bench/out/hillclimb-2026-09-29-round-1.txt",
+      "kept": false,
+      "measured": {
+        "holdout": {
+          "adj_false": 1,
+          "adj_match_n": 14,
+          "adj_missed": 5,
+          "adj_no_match_n": 17,
+          "adj_rejected_true": 5,
+          "llm_errors": 0
+        },
+        "train": {
+          "adj_false": 2,
+          "adj_match_n": 12,
+          "adj_missed": 3,
+          "adj_no_match_n": 13,
+          "adj_rejected_true": 3,
+          "llm_errors": 0
+        }
+      },
+      "reference": {
+        "holdout": {
+          "adj_false": 12,
+          "adj_match_n": 14,
+          "adj_missed": 3,
+          "adj_no_match_n": 17
+        },
+        "spreads": {
+          "holdout_false": 1,
+          "holdout_missed": 0,
+          "train_false": 2
+        },
+        "train": {
+          "adj_false": 7,
+          "adj_match_n": 12,
+          "adj_missed": 0,
+          "adj_no_match_n": 13
+        }
+      },
+      "variant": "cand:01547b000f4c",
+      "why": [
+        "(a) fails: holdout false fell 11 (need > 1), holdout missed rose 2 (max 0), train false rose -5 (max 2)",
+        "(b) fails: holdout missed fell -2 (need > 0), false rose train -5 holdout -11 (max 0)"
+      ]
+    },
+    "2": {
+      "candidate": "graph/bench/out/hillclimb-2026-09-29-round-2.txt",
+      "kept": false,
+      "measured": {
+        "holdout": {
+          "adj_false": 1,
+          "adj_match_n": 14,
+          "adj_missed": 4,
+          "adj_no_match_n": 17,
+          "adj_rejected_true": 4,
+          "llm_errors": 0
+        },
+        "train": {
+          "adj_false": 2,
+          "adj_match_n": 12,
+          "adj_missed": 3,
+          "adj_no_match_n": 13,
+          "adj_rejected_true": 3,
+          "llm_errors": 0
+        }
+      },
+      "reference": {
+        "holdout": {
+          "adj_false": 12,
+          "adj_match_n": 14,
+          "adj_missed": 3,
+          "adj_no_match_n": 17
+        },
+        "spreads": {
+          "holdout_false": 1,
+          "holdout_missed": 0,
+          "train_false": 2
+        },
+        "train": {
+          "adj_false": 7,
+          "adj_match_n": 12,
+          "adj_missed": 0,
+          "adj_no_match_n": 13
+        }
+      },
+      "variant": "cand:be754e51e90d",
+      "why": [
+        "(a) fails: holdout false fell 11 (need > 1), holdout missed rose 1 (max 0), train false rose -5 (max 2)",
+        "(b) fails: holdout missed fell -1 (need > 0), false rose train -5 holdout -11 (max 0)"
+      ]
+    },
+    "3": {
+      "candidate": "graph/bench/out/hillclimb-2026-09-29-round-3.txt",
+      "kept": false,
+      "measured": {
+        "holdout": {
+          "adj_false": 2,
+          "adj_match_n": 14,
+          "adj_missed": 4,
+          "adj_no_match_n": 17,
+          "adj_rejected_true": 4,
+          "llm_errors": 0
+        },
+        "train": {
+          "adj_false": 3,
+          "adj_match_n": 12,
+          "adj_missed": 3,
+          "adj_no_match_n": 13,
+          "adj_rejected_true": 3,
+          "llm_errors": 0
+        }
+      },
+      "reference": {
+        "holdout": {
+          "adj_false": 12,
+          "adj_match_n": 14,
+          "adj_missed": 3,
+          "adj_no_match_n": 17
+        },
+        "spreads": {
+          "holdout_false": 1,
+          "holdout_missed": 0,
+          "train_false": 2
+        },
+        "train": {
+          "adj_false": 7,
+          "adj_match_n": 12,
+          "adj_missed": 0,
+          "adj_no_match_n": 13
+        }
+      },
+      "variant": "cand:1faf2fb2266d",
+      "why": [
+        "(a) fails: holdout false fell 10 (need > 1), holdout missed rose 1 (max 0), train false rose -4 (max 2)",
+        "(b) fails: holdout missed fell -1 (need > 0), false rose train -4 holdout -10 (max 0)"
+      ]
+    }
+  }
+}
