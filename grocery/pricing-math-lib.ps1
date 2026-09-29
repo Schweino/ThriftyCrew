@@ -330,6 +330,19 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # actually prices. Same glyph rule as above: \u00XX escapes, never a literal, and U+00C2 optional.
   $p = [regex]::Replace($p, '(?i)\bSAVE!?\s*\.?\d+\s*(?:\u00C2?\u00A2|cents?)\s*,?', ' ')
   $p = [regex]::Replace($p, '(?i)-?\s*\d+\s*(?:\u00C2?\u00A2|cents?)\s+off\s+with\s+(?:manufacturer.s\s+)?digital\s+coupon\s*,?', ' ')
+  # THE PRICE FIELD WINS OVER THE NAME (2026-09-29, queue 2026-09-29-c70eb2, triage-plans\plan-2026-09-29-4.json).
+  # $p is priceText + nameText, and every price branch below read it, so a NAME that prints its own money token
+  # outvoted the price field: Fareway's ad line "Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)" with
+  # price_text "$9.97" took the last-dollar read's $3.99 as the ITEM price, and the NAME-only per-lb branch in
+  # Get-UnitPrice then divided that rate by 2.5 lb again, publishing bacon at $1.60/lb on 2026-09-28 (true
+  # 9.97 / 2.5 = $3.988). Same two-readers shape as b61b08 (Hy-Vee Perks). So the PRICE is read from the price
+  # field whenever it holds a money token, with the same savings strips applied; the name is read for a price
+  # only when the price field has none. $p (both texts) still feeds the per-lb / per-each KIND markers above.
+  $pPrice = ConvertTo-DigitNumerals (("" + $priceText) -replace "`n", ' ')
+  $pPrice = [regex]::Replace($pPrice, '(?i)(?:\bFUEL\s+SAVE[RD]?\b[,\s]*)?(?:\bEARN\s+)?\d+\s*(?:\u00C2?\u00A2|cents?)\s*OFF\s+PER\s+GALLON\s*,?', ' ')
+  $pPrice = [regex]::Replace($pPrice, '(?i)\bSAVE!?\s*\.?\d+\s*(?:\u00C2?\u00A2|cents?)\s*,?', ' ')
+  $pPrice = [regex]::Replace($pPrice, '(?i)-?\s*\d+\s*(?:\u00C2?\u00A2|cents?)\s+off\s+with\s+(?:manufacturer.s\s+)?digital\s+coupon\s*,?', ' ')
+  $src = if ($pPrice -match '(?i)\$\s*\d|\d\s*(?:\u00C2?\u00A2|cents?\b)') { $pPrice } else { $p }
   $note = ''
   # PACKAGE SIZE vs PER-LB PRICE. This string is priceText + nameText, so a product NAMED
   # "Yellow Onions, 3 lb Bag" used to trip the per-lb marker and its $2.39 BAG price got published
@@ -361,30 +374,30 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # publish the PERKS price (the lower, member price) and let the caller flag the cell membership-gated. This
   # MUST run before the cents and plain-dollar branches below, or a "SAVE! 50c" savings gets read as the price
   # and the LAST dollar in the string is the NON-MEMBER price - both wrong. Grab the $ right before "PERKS PRICE".
-  if ($null -ne ($mkPerks = Get-TcPerksPrice $p)) {   # the shared reading; guards.ps1 10b checks against the same function
+  if ($null -ne ($mkPerks = Get-TcPerksPrice $src)) {   # the shared reading; guards.ps1 10b checks against the same function
     return @{ per_item = [double]$mkPerks; kind=@{perlb=$perlb;pereach=$pereach}; note='' }
   }
 
   # BOGO: buy N get K free
-  $m = [regex]::Match($p, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*(?:of\s*equal[^,]*)?free')
+  $m = [regex]::Match($src, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*(?:of\s*equal[^,]*)?free')
   if ($m.Success -and $reg) {
     $n=[double]$m.Groups[1].Value; $k=[double]$m.Groups[2].Value
     return @{ per_item = ($n*$reg)/($n+$k); kind=@{perlb=$perlb;pereach=$pereach}; note="BOGO buy $n get $k free (reg $reg)" }
   }
   # buy N get K for $Z
-  $m = [regex]::Match($p, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*for\s*\$?\s*([\d.]+)')
+  $m = [regex]::Match($src, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*for\s*\$?\s*([\d.]+)')
   if ($m.Success -and $reg) {
     $n=[double]$m.Groups[1].Value; $k=[double]$m.Groups[2].Value; $z=[double]$m.Groups[3].Value
     return @{ per_item = (($n*$reg)+($k*$z))/($n+$k); kind=@{perlb=$perlb;pereach=$pereach}; note="buy $n get $k for `$$z (reg $reg)" }
   }
   # buy N get K PERCENT off
-  $m = [regex]::Match($p, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*(\d+)\s*%\s*off')
+  $m = [regex]::Match($src, '(?i)buy\s*(\d+)\s*,?\s*get\s*(\d+)\s*(\d+)\s*%\s*off')
   if ($m.Success -and $reg) {
     $n=[double]$m.Groups[1].Value; $k=[double]$m.Groups[2].Value; $pct=[double]$m.Groups[3].Value/100.0
     return @{ per_item = (($n*$reg)+($k*$reg*(1-$pct)))/($n+$k); kind=@{perlb=$perlb;pereach=$pereach}; note="buy $n get $k $($pct*100)% off (reg $reg)" }
   }
   # N for $M  /  N/ $M
-  $m = [regex]::Match($p, '(?i)(\d+)\s*(?:for|/)\s*\$\s*([\d.]+)')
+  $m = [regex]::Match($src, '(?i)(\d+)\s*(?:for|/)\s*\$\s*([\d.]+)')
   if ($m.Success) {
     $n=[double]$m.Groups[1].Value; $tot=[double]$m.Groups[2].Value
     if ($n -gt 0) { return @{ per_item = $tot/$n; kind=@{perlb=$perlb;pereach=$pereach}; note="$n for `$$tot" } }
@@ -408,10 +421,10 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # the 60 cents-only lines carry no $ at all. So a line with a $ amount skips this branch and falls through to
   # the last-dollar read below, and a wording no strip has learned yet prices off its dollar instead of its
   # savings. "Bananas, 49<cent> lb." and a bare "88<cent>" carry no $ and keep pricing here.
-  $m = [regex]::Match($p, '(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON)')
-  if ($m.Success -and ($p -notmatch '\$\s*\d')) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
+  $m = [regex]::Match($src, '(\d+)\s*(?:\u00C2?\u00A2|cents?)(?!\s*OFF\s*PER\s*GALLON)')
+  if ($m.Success -and ($src -notmatch '\$\s*\d')) { return @{ per_item = ([double]$m.Groups[1].Value)/100.0; kind=@{perlb=$perlb;pereach=$pereach}; note='cents' } }
   # plain dollar amount (take the LAST one, which is usually the sale/ad price)
-  $dm = [regex]::Matches($p, '\$\s*([\d]+(?:\.\d{1,2})?)')
+  $dm = [regex]::Matches($src, '\$\s*([\d]+(?:\.\d{1,2})?)')
   if ($dm.Count -gt 0) {
     $val=[double]$dm[$dm.Count-1].Groups[1].Value
     return @{ per_item = $val; kind=@{perlb=$perlb;pereach=$pereach}; note='' }

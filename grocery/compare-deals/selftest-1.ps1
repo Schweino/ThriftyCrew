@@ -240,6 +240,16 @@
   _Near 'MUST FIRE  a savings wording no strip knows (SAVE UP TO 50 cents, $1.99) still reads 1.99' (Get-ItemPrice ('Hy-Vee mini donuts, SAVE UP TO 50' + [char]0x00A2 + ', $1.99') 'Hy-Vee mini donuts' $null).per_item 1.99 0.001
   # MUST NOT FIRE: a cents price on a line with no dollar amount anywhere still prices off its cents.
   _Near 'MUST NOT FIRE  "Limes, 25 cents each" (no dollar amount) still reads 0.25' (Get-ItemPrice ('Limes, 25' + [char]0x00A2 + ' each') 'Limes' $null).per_item 0.25 0.001
+  # THE PRICE FIELD WINS OVER A PRICE IN THE NAME (2026-09-29, queue 2026-09-29-c70eb2). Frozen from
+  # candidates-2026-09-29: Fareway's ad line names its own per-lb rate, and the engine read that rate as the
+  # item price and then divided it by the 2.5 lb size again (1.596, published 2026-09-28). Pre-fix: 1.596.
+  _Near 'MUST FIRE  Fareway bacon "(only $3.99/lb)" with price_text $9.97 / 2.5 lb prices 3.988/lb, never 1.596' (Get-UnitPrice (_D '$9.97' 'Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)' $null '2.5 lb') (_C 'lb')).unit_price 3.988 0.001
+  _Near 'MUST FIRE  the same line reads $9.97 from the price field, not $3.99 from the name' (Get-ItemPrice '$9.97' 'Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)' $null).per_item 9.97 0.001
+  # CLEAN TWINS: the NAME-only per-lb branch still divides a package price, a multibuy in the name agrees with
+  # its per-item price field, and a name-only price (no money in the price field) still prices off the name.
+  _Near 'MUST NOT FIRE  "Kirkwood Chicken Thighs, Per LB" $9.39 / 4.1 lb stays 2.2902' (Get-UnitPrice (_D '$9.39' 'Kirkwood Chicken Thighs, Per LB' $null '4.1 lb') (_C 'lb')).unit_price 2.2902 0.001
+  _Near 'MUST NOT FIRE  "Pork Ribeye Chops (4/$5)" price_text $1.25 still reads 1.25 per item' (Get-ItemPrice '$1.25' 'Pork Ribeye Chops (4/$5)' $null).per_item 1.25 0.001
+  _Near 'MUST NOT FIRE  empty price field still reads the name ("Pork Ribeye Chops (4/$5)" -> 1.25)' (Get-ItemPrice '' 'Pork Ribeye Chops (4/$5)' $null).per_item 1.25 0.001
 
   # --- 11d: SIZE-PARSER DIVERGENCE FIXES (2026-07-30) - the engine vs pu-lib split, closed --------------
   # Every case is a REAL row from 2026-07-29: Bush's beans band-flagged at $0.3988/oz, Hy-Vee Cola flagged
