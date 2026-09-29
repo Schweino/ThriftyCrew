@@ -579,6 +579,26 @@ $hbPrevEap = $ErrorActionPreference
 try { $ErrorActionPreference = 'Stop'; . (Join-Path $PSScriptRoot 'capture-policy-lib.ps1') } catch { } finally { $ErrorActionPreference = $hbPrevEap }
 # <<< PRODUCER-SLOT
 
+function Get-HbQueueIssues {
+  <# The issues queue-depth.ps1 -Json output raises: one per STUCK or unknown row. Pure, so the self-test drives it.
+     ASSIGN, THEN ENUMERATE (2026-09-28, queue 2026-09-26-62b170). This read was `@(... | ConvertFrom-Json)`, and under
+     PS 5.1 ConvertFrom-Json sends a JSON array down the pipe as ONE object: three queue rows became one, its verdict
+     read 'STUCK empty draining', and neither -eq 'STUCK' nor -eq 'unknown' could ever match. From 2026-09-07 no
+     QUEUE STUCK or QUEUE UNMEASURED issue was ever raised, including the ~180h propagate backlog of 09-19 to 09-26. #>
+  param([string]$Text)
+  $parsed = $Text | ConvertFrom-Json
+  $rows = @($parsed | ForEach-Object { $_ })
+  $issues = New-Object System.Collections.Generic.List[object]
+  foreach ($r in $rows) {
+    if ([string]$r.verdict -eq 'STUCK') {
+      $issues.Add([pscustomobject]@{ Kind = 'QUEUE STUCK'; Subject = [string]$r.name; Message = ("QUEUE STUCK: {0} - {1}. What that costs: {2}" -f $r.name, $r.line, $r.cost_if_undrained) })
+    } elseif ([string]$r.verdict -eq 'unknown') {
+      $issues.Add([pscustomobject]@{ Kind = 'QUEUE UNMEASURED'; Subject = [string]$r.name; Message = ("QUEUE UNMEASURED: {0} - {1}. An unmeasured queue is not an empty one." -f $r.name, $r.line) })
+    }
+  }
+  return $issues.ToArray()
+}
+
 if ($SelfTest) {
   # HERMETIC. Frozen transcripts under regression-inputs\, no scheduler, no mail. The two live reads at the end are
   # labelled. Every case runs under Stop inside a try whose catch is a counted failure.
@@ -804,6 +824,22 @@ HbCase 'MUST NOT FIRE  a row that declares nothing gets no declared verdict, so 
     HbCase 'MUST FIRE  Check-Age grades a past-age output through Test-HbOutputNotYet with the row''s slot' ($hbSrc.Contains('$ny = Test-HbOutput' + 'NotYet -LastWrite $lw -Now $now -Slot $slot'))
   } catch { HbCase ('a producer-slot case threw: ' + $_.Exception.Message) $false }
 
+  # ---- QUEUE ISSUES (2026-09-28, queue 2026-09-26-62b170): the founding output is the three rows queue-depth -Json
+  #      printed for a sandbox with propagate-stamps.json backdated to 2026-09-19 06:18. The old read raised nothing.
+  try {
+    $ErrorActionPreference = 'Stop'
+    $qFound = '[{"name":"recipe-specs-awaiting-propagate","depth":33,"hours_since_drain":229.0,"verdict":"STUCK","line":"33 item(s) have been waiting 229.0h, past the 72h this queue tolerates","cost_if_undrained":"corrected cards sit on disk"},{"name":"staged-ghost-writes","depth":0,"hours_since_drain":null,"verdict":"empty","line":"nothing waiting","cost_if_undrained":""},{"name":"open-triage-items","depth":11,"hours_since_drain":1.0,"verdict":"draining","line":"11 item(s) waiting","cost_if_undrained":""}]'
+    $qi1 = Get-HbQueueIssues -Text $qFound
+    HbCase 'MUST FIRE  the 09-19 backlog: three rows, one STUCK, raises exactly one QUEUE STUCK naming recipe-specs-awaiting-propagate (the @(ConvertFrom-Json) read raised none)' (@($qi1).Count -eq 1 -and $qi1[0].Kind -eq 'QUEUE STUCK' -and $qi1[0].Subject -eq 'recipe-specs-awaiting-propagate') ('issues=' + @($qi1).Count)
+    $qi2 = Get-HbQueueIssues -Text ($qFound -replace '"verdict":"empty"', '"verdict":"unknown"')
+    HbCase 'MUST FIRE  an unknown row in a multi-row array raises QUEUE UNMEASURED beside the STUCK one' (@($qi2).Count -eq 2 -and @($qi2 | Where-Object { $_.Kind -eq 'QUEUE UNMEASURED' }).Count -eq 1) ('issues=' + @($qi2).Count)
+    $qi3 = Get-HbQueueIssues -Text '{"name":"recipe-specs-awaiting-propagate","depth":5,"hours_since_drain":99.0,"verdict":"STUCK","line":"x","cost_if_undrained":"y"}'
+    HbCase 'CLEAN TWIN  a single-row output (ConvertTo-Json emits an object, not an array) still raises its QUEUE STUCK' (@($qi3).Count -eq 1 -and $qi3[0].Kind -eq 'QUEUE STUCK') ('issues=' + @($qi3).Count)
+    $qi4 = Get-HbQueueIssues -Text ($qFound -replace '"verdict":"STUCK"', '"verdict":"draining"')
+    HbCase 'MUST NOT FIRE  rows that are all draining or empty raise nothing' ($null -eq $qi4 -or @($qi4 | Where-Object { $_ }).Count -eq 0) ('issues=' + @($qi4 | Where-Object { $_ }).Count)
+    HbCase 'MUST FIRE  the live queue branch raises through Get-HbQueueIssues' ($hbSrc.Contains('$qissues = Get-HbQueue' + 'Issues -Text $qjson'))
+  } catch { HbCase ('a queue-issue case threw: ' + $_.Exception.Message) $false }
+
   Write-Output ("health-heartbeat self-test: {0} case(s), {1} failed" -f $hbCases, $hbFail)
   if ($hbFail) { exit 1 }
   exit 0
@@ -929,14 +965,9 @@ if (@($cfg.queues).Count) {
     Add-HbIssue 'QUEUES UNWATCHED' '' 'QUEUES UNWATCHED: expected-automations.json declares queues and grocery\queue-depth.ps1 is missing, so none of them was measured.'
   } else {
     try {
-      $qrows = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $qd -Json | ConvertFrom-Json)
-      foreach ($r in $qrows) {
-        if ([string]$r.verdict -eq 'STUCK') {
-          Add-HbIssue 'QUEUE STUCK' ([string]$r.name) ("QUEUE STUCK: {0} - {1}. What that costs: {2}" -f $r.name, $r.line, $r.cost_if_undrained)
-        } elseif ([string]$r.verdict -eq 'unknown') {
-          Add-HbIssue 'QUEUE UNMEASURED' ([string]$r.name) ("QUEUE UNMEASURED: {0} - {1}. An unmeasured queue is not an empty one." -f $r.name, $r.line)
-        }
-      }
+      $qjson = (& powershell -NoProfile -ExecutionPolicy Bypass -File $qd -Json) -join "`n"
+      $qissues = Get-HbQueueIssues -Text $qjson
+      foreach ($qi in $qissues) { Add-HbIssue $qi.Kind $qi.Subject $qi.Message }
     } catch {
       Add-HbIssue 'QUEUES UNMEASURED' '' ("QUEUES UNMEASURED: queue-depth.ps1 could not be run ({0}) - no queue was checked, which is not the same as every queue being empty." -f $_.Exception.Message)
     }
