@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Per-file marks for the file-size budget (B2 of design/PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27). Lines as git stores them, of every tracked .ps1/.py file over the limit. No NEW file may exceed the limit; each mark may only go DOWN; a deliberate growth is recorded with -Accept and its reason in the commit.",
-    "generated":  "2026-09-29T01:20:38",
+    "generated":  "2026-09-29T11:26:08",
     "limit":  1000,
     "files":  [
                   {
@@ -61,7 +61,7 @@
                   },
                   {
                       "path":  "grocery/pricing-math-lib.ps1",
-                      "lines":  1259
+                      "lines":  1272
                   },
                   {
                       "path":  "grocery/pull-browser-stores.py",

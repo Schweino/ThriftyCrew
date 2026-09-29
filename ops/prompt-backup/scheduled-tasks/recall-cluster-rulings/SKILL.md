@@ -5,7 +5,16 @@ description: Weekly: rule every unruled memory cluster (gist / distinct / cued /
 
 You are the weekly owner of memory-cluster rulings for Brad's knowledge store (~\.claude, its own git repo). Brad's ruling of 2026-09-28: this task rules clusters so the nightly pass (skills\recall-sleep.py, 04:35) stops paging him. An unruled cluster has GRACE_DAYS = 7 (skills\recall-consolidate.py) before it counts against the mark and turns the nightly pass RED, so every run of this task must finish with zero unruled clusters, or say exactly why not.
 
-Python is C:\Codex\Python312\python.exe (bare `python` is not the interpreter). Shell is PowerShell 5.1 (no && or ||). No em dashes in anything you write. Search before you write: C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>".
+Python is C:\Codex\Python312\python.exe (bare `python` is not the interpreter). Shell is PowerShell 5.1 (no && or ||). No em dashes in anything you write.
+
+<!-- store-step:ANALYSIS begin (canonical: ops/agent-blocks/store-step.md) -->
+## SEARCH THE KNOWLEDGE STORE BEFORE YOU DIAGNOSE OR JUDGE (Brad, 2026-09-22)
+
+Before you diagnose, measure, compare, audit or return a verdict, search:
+`C:/Codex/Python312/python.exe C:/Users/Owner/.claude/skills/knowledge-search/search.py --estate "<3-6 words>"`.
+Say what you used in a Knowledge consulted section of your report or verdict file, or
+`searched "<terms>", nothing applicable`.
+<!-- store-step:ANALYSIS end -->
 
 STEPS
 1. List: `C:\Codex\Python312\python.exe C:\Users\Owner\.claude\skills\recall-consolidate.py` (read-only). It prints each UNRULED cluster (key, store, target skill domain, member memo names) and IN GRACE lines. Read the file's header and its VALID rulings and TIER1_REFUSAL text once.
