@@ -44,7 +44,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+sauce\\\\s+mix\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Hy-Vee Au Jus Sauce Mix' by anchoring on the specific 'Au Jus Sauce Mix' phrase.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -116,7 +116,7 @@
     "payload_json": "{\"payload\": \"^red\\\\s*pepper$\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Red Pepper'. In grocery contexts, 'Red Pepper' usually implies Red Bell Pepper unless specified as chili/ground. The anchor ensures it's the whole item.",
-    "status": "accepted",
+    "status": "held_for_human",
     "target_id": "red-bell-pepper"
   },
   {
@@ -356,7 +356,7 @@
     "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(mild|sharp|triple)?\\\\s*cheddar\"}",
     "queue_hash": "d64b16ed5a7b3b29d0b68645ea6482fe24ca4ca111b36f460847faa5d248761a",
     "rationale": "Matches 'Great Value Sharp Cheddar Finely Shredded', 'Happy Farms Thick Shredded Triple Cheddar', and 'Hy-Vee Finely Shredded Mild Cheddar'. Anchors on shredded cheddar.",
-    "status": "held_for_human",
+    "status": "applied",
     "target_id": "cheddar-cheese-shredded"
   },
   {
@@ -860,7 +860,7 @@
     "payload_json": "{\"payload\": \"hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "9a1ad8518a3518c8151a7a48849c2e615881637d45697ddfa41c23e260a58a95",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on the specific flavor/type 'Hickory Liquid Smoke'.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "liquid-smoke"
   },
   {
@@ -920,7 +920,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+gravy\\\\s+mix\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Au Jus Gravy Mix' and variants like 'Our Family Au Jus Gravy Mix' by anchoring on the core product name.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -1100,7 +1100,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s*hickory\\\\s*liquid\\\\s*smoke\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on brand + flavor to avoid matching other liquid smoke brands or marinades.",
-    "status": "accepted",
+    "status": "held_for_human",
     "target_id": "liquid-smoke"
   },
   {
@@ -1832,7 +1832,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s+hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
-    "status": "accepted",
+    "status": "held_for_human",
     "target_id": "liquid-smoke"
   },
   {
@@ -2000,7 +2000,7 @@
     "payload_json": "{\"payload\": \"cafe\\\\s+spicy\\\\s+italian\\\\s+sausage\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
-    "status": "accepted",
+    "status": "held_for_human",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -2012,7 +2012,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+wing\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches multiple listings like 'Moore's Original Buffalo Wing Sauce' and 'Cookies Wings 'N Things Buffalo Wing Sauce' by anchoring on the core product name 'Buffalo Wing Sauce'.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -2192,7 +2192,7 @@
     "payload_json": "{\"payload\": \"buffalo\\\\s+wings\\\\s+hot\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Frank's Red Hot Buffalo Wings Hot Sauce' by anchoring on the specific product name.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3020,7 +3020,7 @@
     "payload_json": "{\"payload\": \"sour\\\\s+cream,?\\\\s+light\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Sour Cream, Light'. Anchors on 'sour cream' and 'light'.",
-    "status": "held_for_human",
+    "status": "applied",
     "target_id": "light-sour-cream"
   },
   {
@@ -3236,7 +3236,7 @@
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+(gravy|sauce)\\\\s+mix\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Covers various brands of Au Jus Gravy Mix including Hy-Vee, Kroger, and Our Family. The pattern anchors on the food name 'au jus gravy mix' or 'au jus sauce mix'.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "au-jus-gravy-mix"
   },
   {
@@ -3428,7 +3428,7 @@
     "payload_json": "{\"payload\": \"(honey\\\\s+dijon|dijon\\\\s+honey|mustard,?\\\\s+honey)\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches 'Mustard, Honey'. Note: 'Burman's Dijon Mustard' is likely a different product (plain Dijon), so this alias targets the honey variant specifically.",
-    "status": "held_for_human",
+    "status": "applied",
     "target_id": "honey-dijon-mustard"
   },
   {
@@ -3680,7 +3680,7 @@
     "payload_json": "{\"payload\": \"fresca\\\\s+.*\\\\s+2\\\\s+liters|fresca\\\\s+.*\\\\s+2l\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
-    "status": "accepted",
+    "status": "held_for_human",
     "target_id": "zero-sugar-soda-2l"
   },
   {
@@ -3740,7 +3740,7 @@
     "payload_json": "{\"payload\": \"moore's\\\\s+original\\\\s+buffalo\\\\s+wing\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches '(2 pack) Moore's Original Buffalo Wing Sauce' by anchoring on the specific brand and product name.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -3752,7 +3752,7 @@
     "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(sharp|mild|triple)?\\\\s*cheddar\"}",
     "queue_hash": "e6f632cd4a1ba2fea318219f97bd626d8d6d1fb42fa6e7a187b1f9f4769f75fd",
     "rationale": "Matches various shredded cheddar cheeses (Sharp, Mild, Triple). Anchors on 'shredded' and 'cheddar' to exclude block cheese or other types.",
-    "status": "held_for_human",
+    "status": "applied",
     "target_id": "cheddar-cheese-shredded"
   },
   {
@@ -3824,7 +3824,7 @@
     "payload_json": "{\"payload\": \"apple\\\\s+cider\\\\s+juice\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Our Family Apple Cider Juice' by anchoring on the specific 'Apple Cider Juice' phrase.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "apple-cider"
   },
   {
@@ -3836,7 +3836,7 @@
     "payload_json": "{\"payload\": \"spicy\\\\s+garlic\\\\s+buffalo\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Spicy Garlic Buffalo Sauce' by anchoring on the specific flavor descriptor 'Spicy Garlic Buffalo Sauce'.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "buffalo-wing-sauce"
   },
   {
@@ -4124,7 +4124,7 @@
     "payload_json": "{\"payload\": \"medium\\\\s+buffalo\\\\s+sauce\"}",
     "queue_hash": "2d6bc507672e9e030d8c1539d2ab3aa4c13c4016157f28ea2fe1c230374eee21",
     "rationale": "Matches 'Buffalo Wild Wings Medium Buffalo Sauce' by anchoring on the specific flavor variant name.",
-    "status": "accepted",
+    "status": "applied",
     "target_id": "buffalo-wing-sauce"
   },
   {

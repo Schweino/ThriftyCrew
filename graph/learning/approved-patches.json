@@ -714,17 +714,17 @@
     "verdict": "reject"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:35b21d5cae5a70debccc",
     "payload_json": "{\"payload\": \"apple\\\\s+cider\\\\s+juice\"}",
     "proposal_id": "lp:e3c8d0d1ddfbae4172fd",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:24Z (approval inbox-graph_lp_e3c8d0d1ddfbae4172fd-62a0670a); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -1064,17 +1064,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:4ce6b9b16e5b532d6584",
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+gravy\\\\s+mix\"}",
     "proposal_id": "lp:3db0ce0751eb9f9d0421",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:22Z (approval inbox-graph_lp_3db0ce0751eb9f9d0421-8d4afd79); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -1092,17 +1092,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:4e8c947c167be05bb81b",
     "payload_json": "{\"payload\": \"buffalo\\\\s+wing\\\\s+sauce\"}",
     "proposal_id": "lp:79a96fd4f7dc90cc554c",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:23Z (approval inbox-graph_lp_79a96fd4f7dc90cc554c-b4caa8ed); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -1680,31 +1680,31 @@
     "verdict": "reject"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:72431eaf2c4908451e66",
     "payload_json": "{\"payload\": \"sour\\\\s+cream,?\\\\s+light\"}",
     "proposal_id": "lp:b64671ccf11a8abe7808",
     "rationale": "'Sour Cream, Light' is the comma-first form of the commodity's own name and the pattern requires BOTH words. 3 intended captures, zero collisions.",
     "reviewed_at": "2026-08-20T23:47:26",
     "reviewer": "claude-opus-5",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:738018bbe1b07736608c",
     "payload_json": "{\"payload\": \"spicy\\\\s+garlic\\\\s+buffalo\\\\s+sauce\"}",
     "proposal_id": "lp:e4a28593e58590712ecd",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:32Z (approval inbox-graph_lp_e4a28593e58590712ecd-edcd32ac); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2268,17 +2268,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:9e7a59cfe748fe7ba3de",
     "payload_json": "{\"payload\": \"medium\\\\s+buffalo\\\\s+sauce\"}",
     "proposal_id": "lp:f8d5d9559584b5a30c2d",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:29Z (approval inbox-graph_lp_f8d5d9559584b5a30c2d-a5ae5019); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2408,17 +2408,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:a6c5a8d58f65e62f7552",
     "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(sharp|mild|triple)?\\\\s*cheddar\"}",
     "proposal_id": "lp:df3435bdaf93c672deb8",
     "rationale": "Anchors on 'shredded' AND 'cheddar' together, so it cannot reach block cheddar or a shredded blend. 5 intended captures, zero collisions.",
     "reviewed_at": "2026-08-20T23:47:26",
     "reviewer": "claude-opus-5",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2562,17 +2562,17 @@
     "verdict": "reject"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:aeddb8bd9665f3d98648",
     "payload_json": "{\"payload\": \"moore's\\\\s+original\\\\s+buffalo\\\\s+wing\\\\s+sauce\"}",
     "proposal_id": "lp:dee170c61d48ab3d7c82",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:31Z (approval inbox-graph_lp_dee170c61d48ab3d7c82-2182ab28); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2716,17 +2716,17 @@
     "verdict": "reject"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:bb3024638fbc733904e8",
     "payload_json": "{\"payload\": \"(shredded|finely\\\\s+shredded)\\\\s+(mild|sharp|triple)?\\\\s*cheddar\"}",
     "proposal_id": "lp:1a9e67427329bba72c16",
     "rationale": "Requires BOTH 'shredded' and 'cheddar', so it cannot reach block cheddar or a shredded blend. 5 intended captures, zero collisions.",
     "reviewed_at": "2026-08-21T01:01:56",
     "reviewer": "claude-opus-5",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2772,17 +2772,17 @@
     "verdict": "reject"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:be32a46b1c9e09809c96",
     "payload_json": "{\"payload\": \"(honey\\\\s+dijon|dijon\\\\s+honey|mustard,?\\\\s+honey)\"}",
     "proposal_id": "lp:cce60d6f6ece8f8183e4",
     "rationale": "Every branch requires the word honey, so plain Dijon cannot match - the risk Stage 1 flagged itself. Small capture (1) but zero collisions and zero known-wrong hits.",
     "reviewed_at": "2026-08-20T23:47:26",
     "reviewer": "claude-opus-5",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -2940,17 +2940,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:cc3b59c73eb633a5706a",
     "payload_json": "{\"payload\": \"hickory\\\\s+liquid\\\\s+smoke\"}",
     "proposal_id": "lp:38759a83f8e3ba423283",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:35Z (approval inbox-graph_lp_38759a83f8e3ba423283-d29abd61); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -3066,17 +3066,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:dd33ee2069f1345bf875",
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+(gravy|sauce)\\\\s+mix\"}",
     "proposal_id": "lp:c3c6eec7e9d544dcde9f",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:54:36Z (approval inbox-graph_lp_c3c6eec7e9d544dcde9f-6f5710b6); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -3206,17 +3206,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:ec01f2fc09cd2b97275e",
     "payload_json": "{\"payload\": \"buffalo\\\\s+wings\\\\s+hot\\\\s+sauce\"}",
     "proposal_id": "lp:81a977c15bd7b56bc4bc",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:24Z (approval inbox-graph_lp_81a977c15bd7b56bc4bc-ff0fa119); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
@@ -3556,17 +3556,17 @@
     "verdict": "accept"
   },
   {
-    "applied_at": null,
-    "applied_by": null,
+    "applied_at": "2026-09-29T10:44:11",
+    "applied_by": "learning-loop",
     "id": "ap:fd25feb827f7aef78371",
     "payload_json": "{\"payload\": \"au\\\\s+jus\\\\s+sauce\\\\s+mix\"}",
     "proposal_id": "lp:030a8c66c11a41806165",
     "rationale": "Brad's ruling on the approvals page, answered 2026-09-12T19:53:19Z (approval inbox-graph_lp_030a8c66c11a41806165-6c2e4723); re-applied under D13 after the 2026-09-12 apply batch failed on HTTP 429",
     "reviewed_at": "2026-09-23T02:58:49",
     "reviewer": "Brad via approvals page 2026-09-12",
-    "shadow_after_json": null,
-    "shadow_before_json": null,
-    "shadow_verdict": "not_run",
+    "shadow_after_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_before_json": "{\"entity_precision\": 0.9885321100917431, \"entity_recall\": 0.6515495086923658, \"false_merge_rate\": 0.013210039630118891, \"missed_merge_rate\": 0.34845049130763417}",
+    "shadow_verdict": "no_regression",
     "verdict": "accept"
   },
   {
