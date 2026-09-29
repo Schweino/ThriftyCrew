@@ -2,6 +2,45 @@
     "note":  "The matching lane\u0027s decision ledger (plan-2026-09-22-9 b96f21). One row per worklist key: confirm (the claim or refusal is right), applied (a release/widen rule shipped through apply-coverage-batch), reverted (a gate refused it; the reason is kept), known-wrong, ad-line. A key here never re-enters the worklist and never pages again. Written by resolve-match-worklist.ps1 and apply-coverage-batch.ps1 -FromWorklist; edit only through resolve-match-worklist.ps1 -Decide.",
     "verdicts":  [
                      {
+                         "key":  "band|gelatin|Family Fare|Jell O Strawberry Gelatin Snacks 13.5 Oz",
+                         "kind":  "band",
+                         "commodity":  "",
+                         "claimer":  "gelatin",
+                         "store":  "Family Fare",
+                         "name":  "Jell O Strawberry Gelatin Snacks 13.5 Oz",
+                         "verdict":  "release",
+                         "pattern":  "\\bgelatin snacks?\\b",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-29",
+                         "reason":  "ready-to-eat Jell-O gelatin snack cups on the gelatin-mix commodity; the band refused them (no cell moved); exclude gelatin snacks (triage 2026-09-29-d58f5d)"
+                     },
+                     {
+                         "key":  "band|gelatin|Family Fare|Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
+                         "kind":  "band",
+                         "commodity":  "",
+                         "claimer":  "gelatin",
+                         "store":  "Family Fare",
+                         "name":  "Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
+                         "verdict":  "release",
+                         "pattern":  "\\bgelatin snacks?\\b",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-29",
+                         "reason":  "ready-to-eat Jell-O gelatin snack cups on the gelatin-mix commodity; the band refused them (no cell moved); exclude gelatin snacks (triage 2026-09-29-d58f5d)"
+                     },
+                     {
+                         "key":  "band|gelatin|Family Fare|Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
+                         "kind":  "band",
+                         "commodity":  "",
+                         "claimer":  "gelatin",
+                         "store":  "Family Fare",
+                         "name":  "Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
+                         "verdict":  "release",
+                         "pattern":  "\\bgelatin snacks?\\b",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-29",
+                         "reason":  "ready-to-eat Jell-O gelatin snack cups on the gelatin-mix commodity; the band refused them (no cell moved); exclude gelatin snacks (triage 2026-09-29-d58f5d)"
+                     },
+                     {
                          "key":  "contested|all-purpose-cleaner||Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
                          "kind":  "contested",
                          "commodity":  "furniture-polish",
