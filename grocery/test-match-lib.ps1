@@ -513,7 +513,13 @@ if (-not $isShard) {
   _RT 'CLEAN TWIN  c989c6 the Walmart Tony Chachere''s Original Cajun stays cajun-seasoning' 'Tony Chachere''s, Seasoning, Original, Cajun, 32 oz' 'cajun-seasoning'
   _RT 'CLEAN TWIN  c989c6 a wheat angel hair still prices pasta' 'Great Value Angel Hair, 16 oz, Shelf Stable' 'pasta'
   _RT 'CLEAN TWIN  c989c6 a plain mayo still prices mayonnaise' 'Kraft Mayo' 'mayonnaise'
-  $rtWant = 99   # +10 for c989c6 (6 must-fire, 4 clean twins: Tony Creole, konjac, Cinco de Mayo); +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
+# 754693 (2026-09-29): Aldi's roasted carrot + sweet potato medley took the carrots crown at $0.29/lb. The pair
+# shape is excluded on BOTH carrots and sweet-potatoes, so it routes nowhere. Real 2026-09-29 capture names.
+_RT 'MUST FIRE  754693 an Aldi carrot + sweet potato medley is neither carrots nor sweet potatoes' 'Specially Selected Carrots Sweet Potatoes 16 OZ' '<none>'
+_RT 'CLEAN TWIN  754693 Aldi plain carrots still price carrots' 'Carrot 2 Lbs' 'carrots'
+_RT 'CLEAN TWIN  754693 Family Fare whole carrots still price carrots' 'Our Family Whole Carrots 32 Oz' 'carrots'
+_RT 'CLEAN TWIN  754693 a plain sweet potato still prices sweet-potatoes' 'Sweet Potato (Yam)' 'sweet-potatoes'
+  $rtWant = 103   # +4 for 754693 (1 must-fire carrot/sweet-potato medley, 3 clean twins), 2026-09-29; +10 for c989c6 (6 must-fire, 4 clean twins: Tony Creole, konjac, Cinco de Mayo); +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)

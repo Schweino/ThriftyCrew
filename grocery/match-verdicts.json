@@ -93,6 +93,19 @@
                          "reason":  "canned green beans in a teriyaki-free style: canned-green-beans is right, teriyaki-sauce is not the product"
                      },
                      {
+                         "key":  "contested|carrots||Specially Selected Carrots Sweet Potatoes 16 OZ",
+                         "kind":  "contested",
+                         "commodity":  "sweet-potatoes",
+                         "claimer":  "carrots",
+                         "store":  "",
+                         "name":  "Specially Selected Carrots Sweet Potatoes 16 OZ",
+                         "verdict":  "applied",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-09-29",
+                         "reason":  "Aldi roasted carrot and sweet potato medley, not carrots. Released from carrots and sweet-potatoes by the V1 pair excludes in commodities.json (triage 2026-09-29-754693)"
+                     },
+                     {
                          "key":  "contested|chickpeas||Deutsche Küche Lentil Chickpea or Harvest Potato",
                          "kind":  "contested",
                          "commodity":  "brown-lentils",

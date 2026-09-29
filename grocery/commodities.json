@@ -9987,7 +9987,9 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\bcarrots?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*sweet\\s+potato",
+                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b"
                     ]
     },
     {
@@ -12725,7 +12727,9 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\bcarrots?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*sweet\\s+potato",
+                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b"
                     ]
     },
     {
