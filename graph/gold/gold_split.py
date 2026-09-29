@@ -41,7 +41,7 @@ Exit: 0 verified (or rewritten), 1 manifest disagrees with the rule, 2 self-test
 gold to check (BLIND, never a pass).
 """
 # Self-test: in-file fixtures plus the real gold_fingerprints and stage1 filters it imports.
-# gate-inputs: graph\gold\gold_split.py, tools\local-llm\finetune-probe\split_holdout.py, graph\learning\verdict_expiry.py, graph\learning\stage1_analyze.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\llm.py, graph\lib\service_time.py
+# gate-inputs: graph\gold\gold_split.py, tools\local-llm\finetune-probe\split_holdout.py, graph\learning\verdict_expiry.py, graph\learning\stage1_analyze.py, graph\eval\audit_gold_circularity.py, graph\gold\seed_gold.py, graph\lib\graphdb.py, graph\lib\ids.py, graph\lib\llm.py, graph\lib\service_time.py
 from __future__ import annotations
 
 import argparse
