@@ -1,0 +1,124 @@
+{
+ "generated": "2026-09-29T10:40:00",
+ "plan": "plan-2026-09-29-4.json",
+ "board_week": "comparison-2026-09-29 (built 08:15:20; quarantined board, guards exit 4 at 08:16:59)",
+ "corpus_files": [
+  "grocery\\out\\comparison-2026-09-29.json",
+  "grocery\\out\\candidates-2026-09-29.json",
+  "grocery\\out\\regular\\aldi-regular-2026-09-29.json",
+  "grocery\\out\\regular\\bakers-regular-2026-09-29.json",
+  "grocery\\out\\regular\\family-fare-regular-2026-09-29.json",
+  "grocery\\out\\regular\\fareway-regular-2026-09-29.json",
+  "grocery\\out\\regular\\hyvee-regular-2026-09-29.json",
+  "grocery\\out\\regular\\walmart-regular-2026-09-29.json",
+  "grocery\\out\\sams\\sams-deals-2026-09-29.json",
+  "grocery\\out\\sams\\sams-rejects-2026-09-29.json",
+  "grocery\\out\\fareway\\fareway-shop-2026-09-29.json"
+ ],
+ "corpus_names": 37195,
+ "global_excludes_loaded": 87,
+ "skipped_files": "none inside the listed set; captures dated 2026-09-28 or older deliberately excluded to pin one day",
+ "harness": "scratch sim.ps1 (not committed): dot-sources grocery/global-exclude-lib.ps1 + grocery/match-lib.ps1, New-CommodityMatcher over commodities.json as read 2026-09-29, Resolve-Commodity before and after (the engine's own matcher, first-match-wins)",
+ "positive_control": {
+  "name": "Specially Selected Carrots Sweet Potatoes 16 OZ",
+  "before": "carrots",
+  "expected": "none",
+  "observed": "none"
+ },
+ "items": {
+  "2026-09-29-754693": {
+   "proposed": "V1",
+   "patterns": {
+    "carrots.exclude": [
+     "\\bcarrots?\\s*(?:[&+/,]|\\band\\b)?\\s*sweet\\s+potato",
+     "\\bsweet\\s+potato(?:es)?\\s*(?:[&+/,]|\\band\\b)?\\s*carrots?\\b"
+    ],
+    "sweet-potatoes.exclude": [
+     "\\bcarrots?\\s*(?:[&+/,]|\\band\\b)?\\s*sweet\\s+potato",
+     "\\bsweet\\s+potato(?:es)?\\s*(?:[&+/,]|\\band\\b)?\\s*carrots?\\b"
+    ]
+   },
+   "changes": [
+    {
+     "name": "Specially Selected Carrots Sweet Potatoes 16 OZ",
+     "before": "carrots",
+     "after": ""
+    }
+   ],
+   "cell_effects": [
+    {
+     "commodity": "carrots",
+     "store": "Aldi",
+     "before": 0.29,
+     "after": 0.995,
+     "note": "Aldi falls back to 'Carrot 2 Lbs'; crown passes to Family Fare 'Our Family Whole Carrots 32 Oz' 0.458/lb. No other store cell moves (Baker's 0.998, Fareway 0.998, Hy-Vee 1.395, Sam's 0.944, Walmart 1.13 unchanged)"
+    }
+   ],
+   "rejected_variant_V2": {
+    "patterns": {
+     "carrots": [
+      "\\bcarrots?\\s*(?:[&+/,]|\\band\\b)?\\s*(?:sweet\\s+potato(?:es)?|potato(?:es)?|peas|celery|parsnips?|beets?|green\\s+beans?|corn|onions?|zucchini|squash|brussels)\\b",
+      "\\b(?:sweet\\s+potato(?:es)?|potato(?:es)?|peas|celery|parsnips?|beets?|green\\s+beans?|corn|onions?|zucchini|squash|brussels)\\s*(?:[&+/,]|\\band\\b)?\\s*carrots?\\b"
+     ],
+     "sweet_potatoes": [
+      "\\bcarrots?\\s*(?:[&+/,]|\\band\\b)?\\s*sweet\\s+potato",
+      "\\bsweet\\s+potato(?:es)?\\s*(?:[&+/,]|\\band\\b)?\\s*carrots?\\b"
+     ]
+    },
+    "changes": [
+     {
+      "name": "Specially Selected Carrots Sweet Potatoes 16 OZ",
+      "before": "carrots",
+      "after": ""
+     },
+     {
+      "name": "Del Monte Peas & Carrots 14.5 Oz",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     },
+     {
+      "name": "Member's Mark Beef Pot Roast with Carrots and Potatoes, priced per pound",
+      "before": "carrots",
+      "after": ""
+     },
+     {
+      "name": "Del Monte Peas & Carrots",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     },
+     {
+      "name": "Celery And Carrot Sticks Fresh Cut In Store Daily",
+      "before": "carrots",
+      "after": ""
+     },
+     {
+      "name": "Our Family Peas & Carrots 15 Oz",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     },
+     {
+      "name": "Birds Eye Gold & White Corn, Carrots & Asparagus 10.8 Oz",
+      "before": "carrots",
+      "after": "asparagus"
+     },
+     {
+      "name": "Del Monte Peas And Carrots 8.5 Oz",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     },
+     {
+      "name": "Del Monte Peas & Carrots 8.5 Oz",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     },
+     {
+      "name": "Libby's® Peas & Carrots 4-4 oz. Cups",
+      "before": "carrots",
+      "after": "frozen-vegetables"
+     }
+    ],
+    "why_rejected": "moves 10 names but lands 6 canned peas-and-carrots on frozen-vegetables and a Birds Eye corn/carrot/asparagus mix on asparagus: each leaves one wrong commodity for another. None of the 9 extra names wins a carrots cell today (carrots cells identical under V1 and V2)."
+   }
+  }
+ }
+}

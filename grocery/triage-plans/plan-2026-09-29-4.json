@@ -1,0 +1,399 @@
+{
+  "generated": "2026-09-29T10:45:00",
+  "round": 1,
+  "board_week": "comparison-2026-09-29",
+  "board_pin": "comparison-2026-09-29 (built 08:15:20; quarantined board, guards exit 4 at 08:16:59); triage-due printed 'BOARD comparison-2026-09-29 built 08:15:20'",
+  "routing_artifact": "plan-2026-09-29-4.routing.json",
+  "queue_ids_seen": [
+    "2026-09-29-57bc1d",
+    "2026-09-29-ae5518",
+    "2026-09-29-c70eb2",
+    "2026-09-29-754693",
+    "2026-09-29-59b8fc",
+    "2026-09-29-a77f8a",
+    "2026-09-29-d58f5d",
+    "2026-09-29-f376d3",
+    "2026-09-29-9cea96",
+    "2026-09-29-af1fdd"
+  ],
+  "scope_note": "Class A ids of the 2026-09-29 run. Chain: ONE product (Aldi 'Specially Selected Carrots Sweet Potatoes 16 OZ', a roasted medley at $0.29) is 754693 (the cause), 9cea96 and af1fdd (same name, other condition types), ae5518 (the post hold, the one name counted twice) and 57bc1d (post/feed divergence after the held build's board shipped). c70eb2 (bacon basis bug) is independent. b96f21, 177835 and 62b170 are planned in plan-2026-09-29-3 and not re-planned; lane budget here: money 80 (75 used), ops 60 (22 used).",
+  "knowledge_consulted": [
+    "searched 'two vegetable medley wrong commodity': data-quality-craft/applies-here.md 'First-match-wins and freshness ranking let the wrong row take a board cell' (used: first include wins, so the medley fix was measured as a routing simulation, not a token count)",
+    "searched 'publish hold feed ships before post': nothing applicable in skills; memory C--Codex/board-chips-live-in-feed.md used (chips ship in public/board.json, so a post-only hold does not keep a price from readers; this plan checked the served feed)",
+    "searched 'new scheduled task skill mirror public': nothing applicable; the ops/audit-prompt-backup.ps1 header (lines 40-53) is the design record used",
+    ".claude/rules/grocery.md gr-01 (a bad cell quarantines itself) used for Q-2026-09-29-4-A option A"
+  ],
+  "ship_sequence": [
+    "1. [money, publish_batch 1] c70eb2: pricing-math-lib Get-ItemPrice precedence + NAME-only branch; compare-deals -SelfTest case; scratch-clone rebuild and full per_unit diff vs comparison-2026-09-29 (expect exactly 1 cell: bacon/Fareway).",
+    "2. [money, publish_batch 1] 754693: V1 excludes on carrots and sweet-potatoes; _RT fixtures; resolve-match-worklist -Decide release; audit-match-soundness -Accept and commit match-baseline.json WITH the rule (verify-commodities-gate).",
+    "3. Worklist decisions, no code: a77f8a reject x2; d58f5d exclude decision for the weekly batch.",
+    "4. One rebuild: compare-deals, guards (bacon/Fareway must leave quarantine; guards exit 0, or 4 for other cells only), publish-deals-page (soundness must NOT hold); land only through ops\\push-main.ps1.",
+    "5. Live verification, cache-busted fetch: feed carrots p[0] is Family Fare 0.458 and bacon Fareway 3.99 or 3.988; audit-live-page-parity exit 0 (closes 57bc1d); audit-match-soundness cell_by_contest 0 (closes 9cea96 and the ae5518 instance).",
+    "6. [ops, publish_batch 2] f376d3: read, then -Adopt the three SKILLs; audit-prompt-backup -Daily exit 0; push-main.",
+    "7. ae5518 stays open as needs-brad (Q-2026-09-29-4-A); f376d3's class waits on Q-2026-09-29-4-B."
+  ],
+  "open_questions_for_brad": [
+    {
+      "id": "Q-2026-09-29-4-A",
+      "item": "2026-09-29-ae5518",
+      "question": "When the match-soundness gate holds the board post, the board's prices still ship: they are chips in public/board.json, which the chain commits on a held build. Today the held carrots crown ($0.29/lb, a roasted medley) is live, and the alert said 'nothing bad was published'. What should the hold do?",
+      "options": [
+        "A (recommended): a soundness finding that wins a published cell quarantines THAT CELL (held at its last verified price, or withheld), like any guard failure under your 2026-09-21 ruling; the post then publishes normally, so post and feed never diverge. Cost: a per-guard scoping change with its own fixture in audit-match-soundness + guards.",
+        "B: a hold also withholds public/board.json (the whole feed stays on yesterday's board). Stops the leak but holds the whole board over one cell, against the 09-21 ruling.",
+        "C: keep today's behaviour and only correct the HELD alert text to say the prices shipped. Cheapest; the leak stays."
+      ]
+    },
+    {
+      "id": "Q-2026-09-29-4-B",
+      "item": "2026-09-29-f376d3",
+      "question": "Every new scheduled task's SKILL pages a day late because only a person may first-publish a private file into the PUBLIC ops/prompt-backup mirror. Should a new SKILL be adopted automatically when a personal-data screen finds nothing?",
+      "options": [
+        "A: yes, auto-adopt on a clean screen and page at once otherwise (no more day-late pages; risk: a screen miss publishes private text).",
+        "B: no, keep adoption human but ask at creation time (the session that creates a task adopts or exempts it before it ends).",
+        "C: no change; the triage ops lane adopts by hand (about 20 tool calls per occurrence, 2 in 30 days)."
+      ]
+    }
+  ],
+  "items": [
+    {
+      "queue_id": "2026-09-29-57bc1d",
+      "subject": "Grocery page does not match its shipped data (x2)",
+      "classification": "superseded",
+      "superseded_by": "2026-09-29-754693",
+      "evidence": [
+        "audit-live-page-parity: post names board.json?v=a786679133, feed serves v=7f5bd2f7a2. Measured cause: publish-deals-page -BuildOnly wrote public/board.json (line 203), then the match-soundness gate HELD the post (line 285, exit 2, 08:20:59); publish-outcome-lib's rc=2 branch lets the caller commit that board ('the data ships, the post waits'), and 53d4e1da8 (08:59) shipped it. Live feed, cache-busted fetch 2026-09-29: carrots p[0] = [1,0.29,0,'$0.29/lb'] (Aldi)."
+      ],
+      "root_cause": "the post was held by the soundness gate while the board it was built from shipped anyway, so post and feed name different boards until the hold clears; the hold's cause is the contested carrots crown owned by 754693, and the design question (a post-only hold over a feed that ships) is ae5518",
+      "resolution_note": "Superseded by 2026-09-29-754693: the post is held on the carrots contested crown while the feed already serves that board. Clears when 754693 lands, soundness stops holding, and publish-deals-page republishes the post from the served board; re-run audit-live-page-parity (exit 0 closes it)."
+    },
+    {
+      "queue_id": "2026-09-29-ae5518",
+      "subject": "Grocery page HELD (match-soundness)",
+      "classification": "needs-brad",
+      "evidence": [
+        "HELD line 08:20:59: '2 change(s) touch a published cell's winning product'. soundness-report.json (08:24): moved 0, dropped 0, new_contested 14, cell_by_contest 1. soundness-publish-lib.ps1 lines 94-97 add the carrots name twice (NEW-CONTESTED and CELL-BY-CONTEST), so the 2 is ONE product: 'Specially Selected Carrots Sweet Potatoes 16 OZ' winning carrots @ Aldi 0.29/lb.",
+        "The hold protected nothing: public/board.json is built before the gate (publish-deals-page.ps1 line 203 vs 278-285), publish-outcome-lib.ps1's rc=2 branch lets the caller commit it, 53d4e1da8 shipped it, and the live feed serves carrots Aldi $0.29/lb as Cheapest. Chips live in board.json, not the post (memory board-chips-live-in-feed). The HELD alert body says 'nothing bad was published', which is false for the chip layer."
+      ],
+      "root_cause": "Brad's ruling Q-2026-09-25-2-A was implemented as a hold on the Ghost POST, but reader-facing prices are chips in public/board.json, which the chain ships on a held build by design; so a contested crown reaches readers AND post and feed diverge (57bc1d). Fixing it changes what the ruled hold means, which is Brad's call.",
+      "open_question": "Q-2026-09-29-4-A",
+      "resolution_note": "Needs Brad (Q-2026-09-29-4-A): the soundness hold holds only the post while the held board's chips ship in the feed, so the carrots contested crown is live at $0.29/lb. Today's instance clears via 754693."
+    },
+    {
+      "queue_id": "2026-09-29-c70eb2",
+      "subject": "Grocery: board cells quarantined (bacon / Fareway)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "bacon | Fareway | 'Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)' | price_text $9.97 | size 2.5 lb | unit_price 1.596 | basis 'size 2.5 lb (per-lb marker was in the NAME only)' (candidates-2026-09-29). $9.97 / 2.5 lb = $3.988/lb; 1.596 = 3.99 / 2.5.",
+        "Get-ItemPrice (pricing-math-lib.ps1 line 304) prices from priceText + ' ' + nameText, so it took the NAME's '$3.99' rate as the item price; the NAME-only per-lb branch (lines 862-877) then divided that rate by the 2.5 lb size again.",
+        "The same wrong value was PUBLISHED on 2026-09-28 (guards wow line: 'the old cheapest was a sale row (Fareway ... (only $3.99/lb))' at $1.60); today flag-verification caught it and apply-cell-quarantine WITHHELD the cell (08:15:20). Quarantine worked as designed.",
+        "Fareway carries a correctly priced twin row of the same bacon: 'Fareway Hickory Smoked Bacon' $9.97 / 2.5 lb = 3.988 sale."
+      ],
+      "surface_fix": {
+        "what": "the NAME-only per-lb branch must not divide a per_item that is already the name's stated $X/lb rate",
+        "files": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "exact_change": "in the unit -eq 'lb' / kind.perlb block (lines 862-877): when the NAME carries an explicit money-per-lb rate ('$ N / lb'), return per_item as the per-lb rate (basis 'per-lb rate stated in the name') instead of per_item / size"
+      },
+      "root_cause": "one reader, two texts: Get-ItemPrice reads price and name as one string, so a Fareway ad line that prints its own per-lb rate in the name ('(only $3.99/lb)') has that rate taken as the item price, and a later branch that assumes per_item is a package price divides it again. Measured class on candidates-2026-09-29: 6 distinct rows (all Fareway) carry a money token in the name that differs from price_text; 5 are multibuy '(N/$X)' lines whose price_text already equals the per-item price, 1 is the per-lb rate that misprices.",
+      "root_fix": {
+        "what": "the item price comes from price_text whenever price_text holds a money token; the name is read for a price only when price_text has none",
+        "files": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "exact_change": "Get-ItemPrice: parse priceText first; fall back to priceText + nameText only when priceText carries no money token. Keep the concatenated string for the KIND flags (perlb, multibuy markers) later branches read. Before landing: rebuild the board in a scratch clone and diff every cell's per_unit against comparison-2026-09-29; expected moves = 1 (bacon/Fareway). Any other move stops the item."
+      },
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "prior_closes": [
+        "2026-09-21-de4f72",
+        "2026-09-23-92e552",
+        "2026-09-28-b61b08"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "what": "the engine's ad-line price reader, the producer of the per-unit: an item price never comes from the product NAME when the price field has one (b61b08 was the same two-readers shape on a Hy-Vee Perks line)",
+        "exact_change": "as root_fix, plus a compare-deals -SelfTest arithmetic case built from the frozen Fareway bacon row"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "engine branch, no routing change: all 21 rows (19 distinct) priced by the NAME-only per-lb branch and all 6 rows whose name carries a separate money token, candidates-2026-09-29",
+        "affected_now": 1,
+        "names": [
+          "Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)"
+        ],
+        "risk": "the 18 other NAME-only rows (Aldi 'Per LB' meat and produce, Sam's shrimp) carry no '$X/lb' in the name and keep price_text / size, which already equals their unit_price; the 5 Fareway multibuy rows keep price_text as per-item. A Get-ItemPrice precedence change touches every row, so the full-board per_unit diff in a scratch clone is mandatory before landing.",
+        "cell_effects": [
+          {
+            "commodity": "bacon",
+            "store": "Fareway",
+            "before": 1.596,
+            "after": 3.988,
+            "note": "before is the WITHHELD candidate; after is the twin row (the fixed row itself prices 3.99). Crown unchanged: Aldi Appleton Farms 16 OZ 3.95"
+          }
+        ]
+      },
+      "freshness": "measured 2026-09-29 10:00-10:40 against comparison-2026-09-29 + candidates-2026-09-29 (08:15) and out/regular|sams|fareway *2026-09-29* captures; the Family Fare sweep appends every 3h, so re-run the routing diff (routing artifact names the harness) before accepting",
+      "proof": {
+        "guard_or_fixture": "compare-deals.ps1 -SelfTest (engine arithmetic) + test-guards.ps1",
+        "must_fire_case": "MUST FIRE: frozen row {name 'Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)', price_text '$9.97', size_text '2.5 lb'} must price 3.99 or 3.988 per lb, never 1.596 (the pre-fix engine returns 1.596, so the case goes red on a revert)",
+        "clean_twin": "CLEAN TWIN: 'Kirkwood Chicken Thighs, Per LB' $9.39 / 4.1 lb stays 2.2902 (the NAME-only branch still divides a package price), and 'Pork Ribeye Chops (4/$5)' $1.25 / 5 oz stays 4.00/lb",
+        "fixture_occurrences": [
+          "2026-09-21-de4f72",
+          "2026-09-23-92e552",
+          "2026-09-28-b61b08",
+          "2026-09-29-c70eb2"
+        ],
+        "commands": [
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+          "powershell -File grocery\\test-guards.ps1",
+          "powershell -File grocery\\guards.ps1 (after the rebuild: bacon/Fareway no longer quarantined)"
+        ]
+      },
+      "fixture_occurrences_note": "de4f72 and 92e552 quarantined other cells for other causes and are cited as prior closes of the alert TYPE; the case table covers today's row, with b61b08's Perks two-readers shape as a clean twin if the same table reaches it.",
+      "rollback": "revert the pricing-math-lib.ps1 hunk and the self-test case; no data migration",
+      "do_not_touch": [
+        "guards.ps1 thresholds",
+        "apply-cell-quarantine.ps1",
+        "the Sam's 'priced per' suffix handling (lines 866-873)"
+      ],
+      "resolution_note": "Parse-basis bug: the engine read Fareway's '(only $3.99/lb)' from the product name as the item price and divided it by 2.5 lb again, publishing bacon at $1.60/lb on 09-28. Get-ItemPrice now reads the price from the price field whenever it holds a money token (name only as fallback); Fareway bacon prices $3.988/lb. Full-board scratch diff moved exactly 1 cell of 3458 and 1 candidate row of 41229.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 40,
+      "status": "deviated",
+      "premise_verified": true,
+      "premise_check": "Re-measured 2026-09-29 against today's inputs: candidates row 'Fareway Hickory Smoked Bacon 2.5 lb (only $3.99/lb)' price_text $9.97 size 2.5 lb still prices 1.596 on the pre-fix engine (arm A), and the live comparison-2026-09-29 still withholds bacon/Fareway. Get-ItemPrice read priceText + nameText and took the last dollar ($3.99 from the name), as the plan says.",
+      "deviation": "Root fix only; the surface_fix (special-casing a '$N/lb' rate in the NAME-only per-lb branch) was not needed and not shipped: with the price field winning, per_item is 9.97 and the unchanged NAME-only branch divides it by 2.5 lb to 3.988, which is the plan's expected after value. The do_not_touch Sam's suffix lines are untouched.",
+      "diff_proof": "Scratch arms over identical inputs (compare-deals -MinStores 1, bakers-deals-2026-09-09, fareway-deals-2026-09-27, commodities copied, namespaced -OutName, outputs deleted after): board cells 3458 vs 3458, 1 store cell moved (bacon/Fareway 1.596 -> 3.988, twin row 'Fareway Hickory Smoked Bacon') and its crown follows (unquarantined arm A crowned Fareway 1.596; arm B crowns Aldi 3.95, same as the live quarantined board); candidate rows 41229 vs 41229, exactly 1 row changed (the bacon line 1.596 -> 3.988). Live comparison-2026-09-29 vs arm B: 1 difference, the withheld bacon/Fareway cell, so no late-capture drift. The 5 multibuy rows came out unchanged.",
+      "proof_run": "compare-deals.ps1 -SelfTest exit 0 SELF-TEST PASS (5 new cases: 2 MUST FIRE bacon, 3 clean twins incl. Kirkwood 2.2902 and Ribeye 4/$5 1.25); build-walmart-deals.ps1 -SelfTest exit 0 SELF-TEST PASS (it extracts this pricing code). full_suite: deferred-to-land.",
+      "shipped_commit": "57033801d",
+      "live_check": "bacon | Fareway | per_unit 3.988 (item 'Fareway Hickory Smoked Bacon', sale) no longer quarantined; bacon crown Aldi 3.95 unchanged",
+      "actual_tool_calls": 31
+    },
+    {
+      "queue_id": "2026-09-29-754693",
+      "subject": "Grocery matching soundness: CONTESTED CROWN (carrots @ Aldi)",
+      "classification": "wrong-product",
+      "evidence": [
+        "carrots | Aldi | 'Specially Selected Carrots Sweet Potatoes 16 OZ' | $0.29 | 16 oz | 0.29/lb everyday | found_by_term 'spaghetti squash' (regular/aldi-regular-2026-09-29.json; absent from every aldi-regular file 09-20..09-28). Aldi's own page (fetched 2026-09-29) titles it 'Specially Selected Roasted Vegetables, Crts & Swt Pot': a prepared roasted medley, not carrots.",
+        "Live feed (cache-busted fetch 2026-09-29): carrots p[0] = Aldi $0.29/lb Cheapest; the 09-28 board (3451de927) crown was Family Fare 0.458.",
+        "Members of this condition: 2026-09-29-9cea96 (CROWN-BY-CONTEST, same name) and af1fdd (roll-up, superseded in plan-2026-09-29-3)."
+      ],
+      "surface_fix": {
+        "what": "release the medley from both claimants and record the decision",
+        "files": [
+          "grocery/commodities.json (via add-commodity-rule.ps1 or apply-coverage-batch -FromWorklist)",
+          "grocery/out/match-worklist.json (resolve-match-worklist.ps1 -Decide release)",
+          "grocery/out/audit/match-baseline.json (audit-match-soundness -Accept, committed WITH the rule)"
+        ],
+        "exact_change": "carrots.exclude += [\\bcarrots?\\s*(?:[&+/,]|\\band\\b)?\\s*sweet\\s+potato, \\bsweet\\s+potato(?:es)?\\s*(?:[&+/,]|\\band\\b)?\\s*carrots?\\b]; sweet-potatoes.exclude += the same two (exact strings in plan-2026-09-29-4.routing.json items.2026-09-29-754693.patterns). Decide worklist key 'contested|carrots||Specially Selected Carrots Sweet Potatoes 16 OZ' as release (routes to none)."
+      },
+      "root_cause": "carrots' composite excludes are a closed word list ('medley', 'mixed veg', 'blend', 'broccoli', 'cauliflower', a fruit/flavour pair list) with no vegetable-pair shape, so a two-vegetable product whose capture name drops the 'and' and the 'roasted' ('Carrots Sweet Potatoes') is admitted by the bare carrots include and, as the cheapest row, takes the crown. Measured: 10 composite names route to carrots today (routing artifact V2 list); 1 holds a cell.",
+      "root_fix": {
+        "what": "exclude the carrot + sweet-potato pair shape on both commodities (V1). The wider vegetable-pair class (V2) is NOT shippable as a carrots exclude: its 9 other names have no correct destination (6 canned peas-and-carrots would land on frozen-vegetables, a Birds Eye mix on asparagus)",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "V1 as surface_fix; the residual stays with the soundness audit, which flags each as NEW-CONTESTED and would flag CELL-BY-CONTEST the day one wins a cell"
+      },
+      "leaves_open": "9 composite names still route to carrots (6 canned peas-and-carrots, Member's Mark pot roast with carrots and potatoes, Celery And Carrot Sticks, Birds Eye corn/carrots/asparagus); 0 of them wins a carrots cell today. The post-only hold that let this crown ship is Q-2026-09-29-4-A.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_occurrences_window": "a composite name holding a carrots cell other than today's: 0 across aldi-regular 09-20..09-29 and today's board",
+      "leaves_open_followup": "watch:grocery/audit-match-soundness.ps1",
+      "prior_closes": [
+        "2026-09-24-f44c88"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/commodities.json"
+        ],
+        "what": "one prior close (f44c88, a no-code carry-forward review), so a rule source is admissible; the structural prevention (a cell-scoped soundness finding quarantines its cell in the feed instead of holding only the post) waits on Q-2026-09-29-4-A",
+        "exact_change": "the V1 pair excludes, plus the _RT routing fixtures below so the founding row cannot silently return"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "before/after first-match-wins routing of 37195 distinct names across 11 files (comparison-2026-09-29, candidates-2026-09-29, out/regular|sams|fareway *2026-09-29*), engine matcher + 87 global excludes; positive control 'Specially Selected Carrots Sweet Potatoes 16 OZ' carrots -> none observed",
+        "affected_now": 1,
+        "names": [
+          "Specially Selected Carrots Sweet Potatoes 16 OZ"
+        ],
+        "risk": "V1 moves exactly one name; no plain carrot or sweet potato name matches a pair shape. No commodity loses its last row.",
+        "cell_effects": [
+          {
+            "commodity": "carrots",
+            "store": "Aldi",
+            "before": 0.29,
+            "after": 0.995,
+            "note": "Aldi falls back to 'Carrot 2 Lbs'; crown passes to Family Fare 'Our Family Whole Carrots 32 Oz' 0.458/lb. No other store cell moves (Baker's 0.998, Fareway 0.998, Hy-Vee 1.395, Sam's 0.944, Walmart 1.13 unchanged)"
+          }
+        ]
+      },
+      "freshness": "measured 2026-09-29 10:00-10:40 against comparison-2026-09-29 + candidates-2026-09-29 (08:15) and out/regular|sams|fareway *2026-09-29* captures; the Family Fare sweep appends every 3h, so re-run the routing diff (routing artifact names the harness) before accepting",
+      "proof": {
+        "guard_or_fixture": "test-match-lib.ps1 _RT routing fixtures (beside c989c6's Tony row, line ~506)",
+        "must_fire_case": "MUST FIRE: _RT 'Specially Selected Carrots Sweet Potatoes 16 OZ' routes to none (neither carrots nor sweet-potatoes); red on a revert, since today it routes carrots",
+        "clean_twin": "CLEAN TWIN: _RT 'Carrot 2 Lbs' -> carrots, 'Our Family Whole Carrots 32 Oz' -> carrots, 'Sweet Potato (Yam)' -> sweet-potatoes (all real 2026-09-29 capture names)",
+        "fixture_occurrences": [
+          "2026-09-24-f44c88",
+          "2026-09-29-754693"
+        ],
+        "commands": [
+          "powershell -File grocery\\test-match-lib.ps1",
+          "powershell -File grocery\\audit-match-soundness.ps1 (cell_by_contest 0; the carrots name gone from new_contested)",
+          "powershell -File grocery\\audit-live-page-parity.ps1 after the post republishes (closes 57bc1d)"
+        ]
+      },
+      "rollback": "revert the four exclude strings and the baseline hunk; re-accept the baseline",
+      "do_not_touch": [
+        "the carrots include",
+        "frozen-vegetables rules (V2 rejected for landing canned rows there)",
+        "any soundness or guard threshold",
+        "audit-match-soundness -Force"
+      ],
+      "resolution_note": "Wrong product: Aldi's roasted carrot and sweet potato medley ($0.29, 16 oz) held the carrots crown at $0.29/lb. Released from carrots and sweet-potatoes; Aldi carrots now 'Carrot 2 Lbs' $0.995/lb, crown Family Fare $0.458. Soundness clears and the post republishes (57bc1d and 9cea96 close with it).",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 35,
+      "status": "planned"
+    },
+    {
+      "queue_id": "2026-09-29-59b8fc",
+      "subject": "Recipe ingredient priced as a different food",
+      "classification": "superseded",
+      "superseded_by": "2026-09-26-177835",
+      "evidence": [
+        "RISE 3 over mark 86: 'Sun-Dried Tomatoes (Oil-Packed)' priceable at Family Fare by 'California Sun Dry Sun Dried Tomatoes Julienne Ct' and at Hy-Vee by 'Hy-Vee Sun-Dried Tomatoes Halves' (no 'packed'); 'Mayonnaise' priceable at Baker's by 'Kroger Olive Oil Mayo' (does not name 'mayonnaise')."
+      ],
+      "root_cause": "the class 177835 owns (plan-2026-09-29-3, resumed today, money lane): a commodity's admitted shapes and the recipe vocabulary's form words are two records nothing reconciles, so each capture week brings new cell findings; these 3 rows are new instances, not a new cause",
+      "resolution_note": "Superseded by 2026-09-26-177835: same vocabulary-vs-commodity class. Its developer adds these 3 rows (sun-dried tomatoes oil-packed vs dry at Family Fare and Hy-Vee; olive-oil mayo at Baker's) to its fixture list and re-measures the mark."
+    },
+    {
+      "queue_id": "2026-09-29-a77f8a",
+      "subject": "Grocery: semantic sweep found 2 product(s) no rule can see",
+      "classification": "no-code-change",
+      "evidence": [
+        "'Progresso Vegetable Classics Lentil Soup' (Baker's) and 'Progresso Lentil Soup, Vegetable Classics Canned Soup, Gluten Free, 19 oz' (Walmart), both proposed for vegetable-soup. 'Vegetable Classics' is Progresso's product LINE name and the soup is lentil, so neither is vegetable soup; the Walmart row's suggestion is 'widen', which would admit a wrong product."
+      ],
+      "root_cause": "the sweep reads the line name 'Vegetable Classics' as the product type; the correct outcome is a recorded reject, not a rule",
+      "prior_closes": [
+        "2026-08-31-550b2a",
+        "2026-09-01-ff9801",
+        "2026-09-02-fd3f29",
+        "2026-09-03-f2abdb",
+        "2026-09-05-b08e51",
+        "2026-09-06-796030",
+        "2026-09-07-abae06",
+        "2026-09-10-20430e",
+        "2026-09-18-37ac63",
+        "2026-09-19-4f01f6",
+        "2026-09-21-7d64a6",
+        "2026-09-23-3ba362",
+        "2026-09-27-9a351a"
+      ],
+      "prevention_none_because": "the sweep is a by-design arrivals detector: each of the 13 prior closes decided different new products, so recurrence is the detector working (Phase 2 recalibration), not a fix that failed",
+      "resolution_note": "No rule change: both Progresso rows are lentil soup under the 'Vegetable Classics' line name, not vegetable soup. Decide both worklist rows as reject via resolve-match-worklist.ps1 -Decide so the weekly lane never widens on the Walmart 'widen' suggestion."
+    },
+    {
+      "queue_id": "2026-09-29-d58f5d",
+      "subject": "Grocery: a price band refused rows it cannot explain (gelatin / Family Fare)",
+      "classification": "no-code-change",
+      "evidence": [
+        "gelatin | Family Fare | 'Jell O Strawberry Gelatin Snacks 13.5 Oz' | price_text '$5.00 off 5' | refused by the band at 5 vs reference 0.98. Two siblings route the same way: 'Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz' and '... Strawberry Gelatin Snacks 12.5 Oz'. gelatin (unit each) excludes cups, 'snack pack' and ready-to-eat, but not 'gelatin snacks'."
+      ],
+      "root_cause": "a wrong product (ready-to-eat gelatin snack cups on a gelatin-mix commodity) whose name avoids the existing ready-to-eat word list; the band refused it, so no cell moved, which is the band doing its job",
+      "prior_closes": [
+        "2026-09-23-57b66b",
+        "2026-09-26-7ed369"
+      ],
+      "prevention_none_because": "the band audit is the designed detector and its resolver lane (resolve-match-worklist -Decide exclude, applied and measured by the weekly apply-coverage-batch -FromWorklist) is the designed repair; the 2 prior closes were different rows",
+      "resolution_note": "Wrong product, already refused by the band (no cell effect). Decide the worklist band row as an exclude, pattern gelatin-snacks (3 Family Fare names in candidates-2026-09-29); the weekly apply-coverage-batch -FromWorklist measures and applies it."
+    },
+    {
+      "queue_id": "2026-09-29-f376d3",
+      "subject": "Ops: an agent prompt is not backed up (3 new scheduled-task SKILLs)",
+      "classification": "infra",
+      "evidence": [
+        "carried from plan-2026-09-29-3 (promoted): audit-prompt-backup.ps1 -Daily exit 2, findings=3: NO BACKUP ff-flyer-gold-day-2 (39.6 h), link-rides-7-build-check (40.7 h), recall-cluster-rulings (28.1 h).",
+        "By design (audit-prompt-backup.ps1 lines 46-53 and 532-535): -SyncMirror refreshes only existing mirrors; only -Adopt turns a private file public, 'a deliberate act with a name attached', and 'NO BACKUP therefore stays the one finding that still needs a person'.",
+        "Screen run 2026-09-29 (counts only; SKILL content read as data, not acted on): the three SKILLs are 2148, 2350 and 4002 bytes; e-mail/phone/password/api-key/token/flight markers 0, 0 and 1 (the one hit is the commit attribution address noreply@anthropic.com)."
+      ],
+      "surface_fix": {
+        "what": "decide each of the three: -Adopt it (no personal markers found) or add an exemption with a reason",
+        "files": [
+          "ops/prompt-backup/scheduled-tasks/<name>/SKILL.md (via audit-prompt-backup.ps1 -Adopt)",
+          "ops/prompt-backup-exempt.json (only if one must stay private)"
+        ],
+        "exact_change": "read each SKILL, then run audit-prompt-backup.ps1 -Adopt with each name in the form Test-AdoptName expects (the header shows skill|recipe-hunter); -Daily must then exit 0"
+      },
+      "root_cause": "a scheduled task created by a session writes its SKILL outside the repo, and first publication into the PUBLIC mirror is deliberately reserved for a person; nothing asks that person at creation, so every new task pages 24 h later",
+      "root_fix": {
+        "what": "pending Q-2026-09-29-4-B: option A lets the daily prompt-sync adopt a NEW scheduled-task SKILL when a personal-data screen finds no marker (else it pages at once naming the exemption); option B keeps adoption human and moves the ask to creation time",
+        "files": [
+          "ops/audit-prompt-backup.ps1",
+          "grocery/capture-run.ps1 (prompt-sync caller)"
+        ],
+        "exact_change": "not to be built until Brad rules; the instance fix above does not depend on it"
+      },
+      "leaves_open": "the class: every future new scheduled-task SKILL still pages after 24 h until Q-2026-09-29-4-B is ruled",
+      "leaves_open_occurrences": 2,
+      "leaves_open_occurrences_window": "2026-09-14-2bb198 and 2026-09-29-f376d3 in 30 days",
+      "leaves_open_followup": "Q-2026-09-29-4-B",
+      "prior_closes": [
+        "2026-09-14-2bb198"
+      ],
+      "prevention": {
+        "source": [
+          "ops/audit-prompt-backup.ps1"
+        ],
+        "what": "the emitting check's sync is where a NEW SKILL would be decided (screen then adopt, or page same-day)",
+        "exact_change": "gated on Q-2026-09-29-4-B; option A: Invoke-PromptSync gains a new-SKILL path that runs a marker screen (e-mail other than noreply@anthropic.com, phone, token/key words, travel words) and adopts only a clean file"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching rule changes",
+        "affected_now": 3,
+        "names": [
+          "ff-flyer-gold-day-2",
+          "link-rides-7-build-check",
+          "recall-cluster-rulings"
+        ],
+        "risk": "adoption publishes three SKILLs to a public repo; the screen found no personal markers, but the developer reads each before adopting",
+        "cell_effects": []
+      },
+      "freshness": "audit re-run by plan-2026-09-29-3 against origin/main 3edf1272aea4; SKILL sizes and screen read 2026-09-29 about 10:35",
+      "proof": {
+        "guard_or_fixture": "ops/audit-prompt-backup.ps1 -SelfTest and -Daily",
+        "must_fire_case": "MUST FIRE: a new scheduled-task SKILL with no mirror and no exemption, older than 24 h, fails the daily run (as the three did 2026-09-29)",
+        "clean_twin": "CLEAN TWIN: the same SKILL after -Adopt (or an EXEMPT entry) passes, and an EXEMPT personal SKILL is never written into the mirror",
+        "fixture_occurrences": [
+          "2026-09-14-2bb198",
+          "2026-09-29-f376d3"
+        ],
+        "commands": [
+          "powershell -NoProfile -File ops\\audit-prompt-backup.ps1 -Daily",
+          "powershell -NoProfile -File ops\\audit-prompt-backup.ps1 -SelfTest"
+        ]
+      },
+      "rollback": "delete the three mirror files in a follow-up commit (once pushed they have been public, so read before adopting)",
+      "resolution_note": "Three new scheduled-task SKILLs screened (no personal markers) and adopted into ops/prompt-backup; -Daily exit 0. The class (every new task pages a day late) waits on Q-2026-09-29-4-B.",
+      "publish_batch": 2,
+      "lane": "ops",
+      "est_tool_calls": 22,
+      "status": "planned"
+    },
+    {
+      "queue_id": "2026-09-29-9cea96",
+      "subject": "Grocery matching soundness: NEW CONTESTED (CROWN-BY-CONTEST carrots @ Aldi)",
+      "classification": "superseded",
+      "superseded_by": "2026-09-29-754693",
+      "evidence": [
+        "body names the same product and cell as 754693: 'CROWN-BY-CONTEST Specially Selected Carrots Sweet Potatoes 16 OZ | cell carrots @ Aldi 0.29/lb | claimed by: carrots > sweet-potatoes'"
+      ],
+      "root_cause": "one contested name emitted under two condition types by the soundness audit; not a distinct cause",
+      "resolution_note": "Superseded by 2026-09-29-754693 (same carrots medley, same cell); closes when that release lands and soundness reruns clean."
+    }
+  ]
+}
