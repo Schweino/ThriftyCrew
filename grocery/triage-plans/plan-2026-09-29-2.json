@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-29",
+  "note": "Single-item plan written by the developer for Brad's 2026-09-29 ruling on queue 2026-09-28-a5268a: guard 4 grades a Sam's rollback cell instead of exempting it as a weekly-ad sale.",
+  "queue_ids_seen": ["2026-09-28-a5268a"],
+  "items": [
+    {
+      "queue_id": "2026-09-28-a5268a",
+      "subject": "guards.ps1 guard 4 skips Sam's rollback cells typed sale (46 of 321 Sam's cells)",
+      "classification": "parse-basis-bug",
+      "evidence": [
+        "comparison-2026-09-28.json: 42 Sam's Club cells typed sale, every one ad_basis 'ttl' and source_ad 'everyday club price (Omaha Sam's Club)', e.g. batteries | Sam's Club | 48 ct $17.98 | 0.3746/each | ad_from 2026-09-21 ad_to 2026-10-21",
+        "guards.ps1 guard 4 loop: `if (([string]$s.type) -ne 'everyday') { continue }` - every one of those 42 was outside the pack-factor guard",
+        "queue body counted 0 of 316 on 2026-09-22, 46 of 321 on 2026-09-23 and 2026-09-27"
+      ],
+      "surface_fix": {
+        "what": "guard 4 grades a Sam's rollback cell (store Sam's Club, type sale, ad_basis ttl, source_ad 'everyday club price...') against its link; a printed weekly-ad sale stays exempt",
+        "files": ["grocery/guards.ps1", "grocery/factor-grade-lib.ps1"],
+        "exact_change": "new Test-TcFactorGuardGrades / Test-TcSamsRollbackCell in factor-grade-lib.ps1; guard 4's presence pass and main loop call it; a rollback cell is graded at its own per_unit (build-deals-page pins everyday cells only); the ok line reports how many rollbacks were compared"
+      },
+      "root_cause": "build-sams-deals types a Sam's rollback `sale` so rollback-ttl-lib's 30-day window can retire it, and guard 4 read `sale` as 'weekly ad, may differ from its link' - one field carried two meanings (retirement window vs pack comparability)",
+      "root_fix": {
+        "what": "guard 4's grade set is one named predicate in a library, keyed on the rollback's own stamps (ad_basis ttl + the builder's source_ad), not on `type` alone, with a hermetic self-test and a live must-fire in test-guards",
+        "files": ["grocery/factor-grade-lib.ps1", "grocery/test-factor-grade.ps1", "grocery/factor-fixture-lib.ps1", "grocery/test-guards.ps1"],
+        "exact_change": "factor-fixture-lib Find-FactorFixtureTarget -Kind sams-rollback; test-guards case 4b halves a Sam's rollback link and expects guard 4's 'x factor <id> / Sam's Club' at exit 2"
+      },
+      "leaves_open": "2 markdown-shaped sale classes stay exempt from guard 4 by the ruling's scope: Fareway ttl site sales (62 cells, 2 over the bar, garlic-bread / Fareway 0.13x looks like a real basis error) and Walmart rollbacks (18 cells, 0 over)",
+      "leaves_open_occurrences": 1, "leaves_open_occurrences_window": "comparison-2026-09-28.json, one board: 1 likely-wrong cell (garlic-bread / Fareway) among 80 still-exempt markdown cells",
+      "leaves_open_followup": "2026-09-29-35fdeb",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no matching or routing rule changes; the guard's grade set over comparison-2026-09-28.json: 42 Sam's rollback cells newly graded, all 42 with a link and a parseable size",
+        "affected_now": 0,
+        "names": [],
+        "risk": "a newly graded rollback cell with a real pack mismatch now holds that one cell (CELL scope, kind value); measured 0 of 42 today",
+        "cell_effects": []
+      },
+      "freshness": "measured against comparison-2026-09-28.json and product-urls.json in the main checkout on 2026-09-29",
+      "proof": {
+        "guard_or_fixture": "grocery/test-factor-grade.ps1 (hermetic, frozen rows) + grocery/test-guards.ps1 case 4b (live guard)",
+        "must_fire_case": "frozen batteries / Sam's Club rollback cell (48 ct $17.98) against a link recording 24 ct: graded and 2.00x over the 1.5x bar; test-guards 4b halves white-vinegar / Sam's Club (256 -> 128 fl oz), the founding cell of the queue item",
+        "clean_twin": "frozen cooking-spray / Hy-Vee Weekly Ad cell (8 oz $3.49) whose link is the 5 oz can, a real 1.6x difference, stays exempt; everyday cells still graded",
+        "commands": ["powershell -File grocery\\test-factor-grade.ps1", "powershell -File grocery\\guards.ps1", "powershell -File ops\\audit-readjson-inline-wrap.ps1"]
+      },
+      "rollback": "revert the commit; no data migration",
+      "do_not_touch": ["guard 4's 1.5x / 0.67x bar", "build-sams-deals.ps1 (sibling fd62f276b landed today)", "rollback-ttl-lib.ps1", "the weekly-ad sale exemption"],
+      "resolution_note": "Guard 4 now grades Sam's rollback cells (Brad's ruling 2026-09-29): factor-grade-lib.ps1 Test-TcFactorGuardGrades draws the line on ad_basis ttl + the builder's everyday-club-price source_ad; printed weekly-ad sales stay exempt. Run on comparison-2026-09-28: 2418 cells compared, 42 of them Sam's rollbacks, ZERO new factor failures. No board change. Residual (Fareway ttl, Walmart rollbacks; garlic-bread / Fareway 0.13x) queued weekly as 2026-09-29-35fdeb.",
+      "publish_batch": 0,
+      "lane": "money",
+      "est_tool_calls": 45,
+      "status": "done",
+      "premise_verified": "true, with a count correction: guard 4's loop skipped every non-everyday cell (read at guards.ps1 line 908 before the edit), and comparison-2026-09-28.json holds 42 Sam's sale cells, all ad_basis ttl + source_ad everyday club price (the queue body counted 46 on 09-23 and 09-27)",
+      "deviation": null,
+      "shipped_commit": null,
+      "actual_tool_calls": null
+    }
+  ],
+  "ship_sequence": [
+    "factor-grade-lib.ps1 + guard 4 wiring + test-factor-grade.ps1 + test-guards 4b",
+    "test-factor-grade.ps1 (must pass), guards.ps1 against the current board (read guard 4's line), audit-readjson-inline-wrap.ps1",
+    "commit by pathspec; no publish (no board value changes); test-auditors deferred to land"
+  ],
+  "knowledge_consulted": [
+    "searched \"guard pack factor Sam's rollback ad basis source\", \"guard grades sale cell rollback\": nothing more specific than the brief's excerpts",
+    ".claude/rules/grocery.md ('A BAD CELL QUARANTINES ITSELF', gr-01): the rollback arm reuses guard 4's CELL-scoped Add-ScopedFail, so a mismatch holds that cell only",
+    ".claude/rules/ops-and-gates.md ('Three fixture labels, three jobs'): MUST FIRE, MUST NOT FIRE and CLEAN TWIN cases in test-factor-grade.ps1"
+  ],
+  "open_questions_for_brad": []
+}

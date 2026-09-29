@@ -19,7 +19,9 @@
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile
 
 function Find-FactorFixtureTarget {
-  param([string]$Root, $Items)
+  # -Kind sams-rollback targets a Sam's rollback cell instead (queue 2026-09-28-a5268a: guard 4 grades those now).
+  param([string]$Root, $Items, [ValidateSet('everyday','sams-rollback')][string]$Kind = 'everyday')
+  . (Join-Path $Root 'factor-grade-lib.ps1')
   # the SAME board guards.ps1 reads (its line: newest out\comparison-*.json by name)
   $boardF = (Get-ChildItem (Join-Path $Root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
   if (-not $boardF) { return $null }
@@ -33,7 +35,8 @@ function Find-FactorFixtureTarget {
     $lk = $Items.($row.id)
     if (-not $lk) { continue }
     foreach ($s in $row.stores) {
-      if (([string]$s.type) -ne 'everyday') { continue }
+      if ($Kind -eq 'everyday' -and ([string]$s.type) -ne 'everyday') { continue }
+      if ($Kind -eq 'sams-rollback' -and -not (Test-TcSamsRollbackCell $s)) { continue }
       if ($pins.ContainsKey([string]$row.id + '|' + [string]$s.store)) { continue }
       $qp = $s.PSObject.Properties['quarantine']; if ($qp -and $qp.Value) { continue }
       $e = $lk.($s.store); if (-not $e -or -not $e.price) { continue }

@@ -658,6 +658,16 @@ else { $t4.link.size = $t4.to; ($p | ConvertTo-Json -Depth 8) | Set-Content $pf 
   Check ('factor mismatch: {0} / {1} link size "{2}" recorded as "{3}" ({4:N2}x)' -f $t4.id, $t4.store, $t4.from, $t4.to, $t4.ratio) 2 ('x factor\s+' + [regex]::Escape($t4.id) + '\s+/\s+' + [regex]::Escape($t4.store)) }
 RestoreNow $pf
 
+# ---- 4b. factor mismatch on a SAM'S ROLLBACK (queue 2026-09-28-a5268a, Brad 2026-09-29) --------------------
+# MUST FIRE: a rollback is typed `sale` but its link is the same product, so guard 4 grades it. Before the ruling
+# this mutation would have passed in silence. The weekly-ad CLEAN TWIN is frozen in test-factor-grade.ps1.
+$p = Read-JsonFile $pf   # UTF-8 by construction; RestoreNow above put the pre-run bytes back
+$t4b = Find-FactorFixtureTarget -Root $root -Items $p.items -Kind 'sams-rollback'
+if (-not $t4b) { Write-Output '  FAIL  factor mismatch (Sam''s rollback): NO Sam''s rollback cell could be halved into a 2x mismatch - the fixture could not form, so the rollback arm of guard 4 went untested'; $script:failed++ }
+else { $t4b.link.size = $t4b.to; ($p | ConvertTo-Json -Depth 8) | Set-Content $pf -Encoding UTF8
+  Check ('factor mismatch (Sam''s rollback): {0} / {1} link size "{2}" recorded as "{3}" ({4:N2}x)' -f $t4b.id, $t4b.store, $t4b.from, $t4b.to, $t4b.ratio) 2 ('x factor\s+' + [regex]::Escape($t4b.id) + '\s+/\s+' + [regex]::Escape($t4b.store)) }
+RestoreNow $pf
+
 # ---- 5. multipack size -------------------------------------------------------------
 $sf = (Get-ChildItem (Join-Path $root 'out\regular\sams-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
 $sbak = Backup $sf

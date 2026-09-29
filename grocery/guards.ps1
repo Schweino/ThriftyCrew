@@ -19,8 +19,8 @@
                          whole JOB (generate-board-overrides pins a cell whose board price is >30% off its
                          verified link). That old test contradicted the generator AND was a no-op: it read
                          only the staple board while every pin is a recipe-board id. See the note at guard 3.
-    4. factor mismatch : an EVERYDAY cell whose linked product's per-unit differs from the board's by a
-                         FACTOR (>=1.5x or <=0.67x).
+    4. factor mismatch : an EVERYDAY cell (or a Sam's rollback, factor-grade-lib.ps1) whose linked product's
+                         per-unit differs from the board's by a FACTOR (>=1.5x or <=0.67x).
                          *** THE KEY IDEA ***: a store changing its price moves it a few percent. A
                          quantity/parse bug moves it by a FACTOR (2x a 2-pack, 3x a 3-packet strip, 6x,
                          12x, 24x a case). So we gate on the FACTOR and stay quiet about ordinary price
@@ -54,6 +54,7 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
 . (Join-Path $root 'multipack-lib.ps1')   # THE multipack math - the same one build-walmart-deals pre-filters with
+. (Join-Path $root 'factor-grade-lib.ps1')   # guard 4's grade set: everyday cells plus a Sam's rollback (queue 2026-09-28-a5268a)
 . (Join-Path $root 'ad-line-price-lib.ps1')   # guard 10b's ad-line readers and Get-TcPerksPrice, the ENGINE'S Perks reading (no load side effects)
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
@@ -898,14 +899,20 @@ $fcChecked = 0; $fcByStore = @{}; $fcBoardStores = @{}
 # skips every store on that row before they are ever seen.
 foreach ($row in $cmp.comparison) {
   foreach ($s in $row.stores) {
-    if (([string]$s.type) -eq 'everyday') { $fcBoardStores[[string]$s.store] = 1 + [int]$fcBoardStores[[string]$s.store] }
+    if (Test-TcFactorGuardGrades $s) { $fcBoardStores[[string]$s.store] = 1 + [int]$fcBoardStores[[string]$s.store] }
   }
 }
+# A SAM'S ROLLBACK IS GRADED TOO (Brad, 2026-09-29, queue 2026-09-28-a5268a). build-sams-deals types a rollback
+# `sale` only so its 30-day window retires it; its link is the same product at the same size, so the weekly-ad
+# exemption below never applied to it, and from the 2026-09-23 board it hid 46 of 321 Sam's cells from this guard.
+# factor-grade-lib.ps1 draws the line (Test-TcFactorGuardGrades); a printed weekly-ad sale stays exempt.
+$fcRollback = 0
 foreach ($row in $cmp.comparison) {
   $link = $pu.($row.id)
   if (-not $link) { continue }
   foreach ($s in $row.stores) {
-    if (([string]$s.type) -ne 'everyday') { continue }      # a weekly-ad price legitimately differs
+    if (-not (Test-TcFactorGuardGrades $s)) { continue }      # a weekly-ad price legitimately differs; a Sam's rollback does not
+    $isEveryday = ([string]$s.type) -eq 'everyday'
     $e = $link.($s.store)
     if (-not $e -or -not $e.price) { continue }
     $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
@@ -915,11 +922,14 @@ foreach ($row in $cmp.comparison) {
     $k = [string]$row.id + '|' + [string]$s.store
     # A QUARANTINED cell prints its held last verified price and build-deals-page applies no pin to it (2026-09-21),
     # so it is graded at the held price - which is what lets the disposition see a finding against the held value.
-    $bpu = if ($pin.ContainsKey($k) -and -not (Test-TcCellQuarantined $s)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
+    # build-deals-page's Apply-Overrides pins EVERYDAY cells only ("never clobber a live sale"), so a rollback cell
+    # prints its own per_unit and is graded at it, pin or no pin.
+    $bpu = if ($isEveryday -and $pin.ContainsKey($k) -and -not (Test-TcCellQuarantined $s)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
     if ($bpu -le 0 -or $lpu -le 0) { continue }
     # Counted HERE, past every silent `continue`, so it is the number of cells actually compared - not the
     # number looked at. That distinction is the whole point of the rule.
     $fcChecked++; $fcByStore[[string]$s.store] = 1 + [int]$fcByStore[[string]$s.store]
+    if (-not $isEveryday) { $fcRollback++ }
     $ratio = $lpu / $bpu
     if ($ratio -ge 1.5 -or $ratio -le 0.67) {
       $factorBugs++
@@ -931,7 +941,7 @@ foreach ($row in $cmp.comparison) {
 # would print the ok line on runs that hard-fail.
 if ($factorBugs -eq 0) {
   OkUnlessBlind $fcChecked `
-    ('no board cell differs from its linked product by a factor (' + $fcChecked + ' cells compared)' + $(if ($pinned) { " ($pinned pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)" } else { '' })) `
+    ('no board cell differs from its linked product by a factor (' + $fcChecked + ' cells compared, ' + $fcRollback + ' of them Sam''s rollbacks)' + $(if ($pinned) { " ($pinned pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)" } else { '' })) `
     'guard 4 compared ZERO board cells against their links and therefore proves NOTHING - check that product-urls.json still parses to .items and that its store keys still match the board''s store names'
 }
 # PER-STORE blindness, the guard-10 pattern: the whole guard can be healthy while one store's slice is gone.
