@@ -1,7 +1,7 @@
 ---
 name: recipe-source-qa
-description: FABLE-pinned per-recipe fidelity check in the Recipe Hunter flow. Reads ONE built recipe against the transcription it came from (and the live source page when it is fetchable) and rules whether the recipe we are about to sell is the recipe we actually found. Catches invented, dropped and drifted ingredients and steps before the recipe reaches a wave. Verdict only - it never edits, never re-extracts, never prices.
-model: fable
+description: OPUS-5.5-pinned per-recipe fidelity check in the Recipe Hunter flow. Reads ONE built recipe against the transcription it came from (and the live source page when it is fetchable) and rules whether the recipe we are about to sell is the recipe we actually found. Catches invented, dropped and drifted ingredients and steps before the recipe reaches a wave. Verdict only - it never edits, never re-extracts, never prices.
+model: claude-opus-5-5
 effort: medium
 tools: WebFetch, Read, Grep, Glob, Bash, PowerShell
 ---

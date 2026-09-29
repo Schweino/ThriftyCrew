@@ -1,7 +1,7 @@
 ---
 name: commodity-registrar
-description: FABLE-pinned gate for creating any NEW grocery commodity id. Before an id is born, it proves the food is not already priced under another name across all three id namespaces, rules variant-vs-duplicate with written evidence, and prescribes the right mechanism (reuse, alias, or new id). Consult it from any flow about to mint a commodity - the Recipe Hunter's mapping stage, a staples expansion, a manual add. It decides and documents; it does not edit the catalog itself.
-model: fable
+description: OPUS-5.5-pinned gate for creating any NEW grocery commodity id. Before an id is born, it proves the food is not already priced under another name across all three id namespaces, rules variant-vs-duplicate with written evidence, and prescribes the right mechanism (reuse, alias, or new id). Consult it from any flow about to mint a commodity - the Recipe Hunter's mapping stage, a staples expansion, a manual add. It decides and documents; it does not edit the catalog itself.
+model: claude-opus-5-5
 effort: medium
 tools: Read, Grep, Glob, Bash, PowerShell
 ---

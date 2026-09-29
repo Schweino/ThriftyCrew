@@ -1,8 +1,8 @@
 ---
 name: recipe-batch-auditor
-description: FABLE-pinned pre-publish audit of a recipe batch. Adversarially verifies a whole batch (macros vs labels, cost sanity, gates, mapping soundness, card fidelity) BEFORE anything publishes. Use as the final stage of any recipe expansion run.
-model: fable
-effort: high
+description: OPUS-5.5-pinned pre-publish audit of a recipe batch. Adversarially verifies a whole batch (macros vs labels, cost sanity, gates, mapping soundness, card fidelity) BEFORE anything publishes. Use as the final stage of any recipe expansion run.
+model: claude-opus-5-5
+effort: medium
 tools: Read, Grep, Glob, Bash, PowerShell, WebFetch, Write
 ---
 

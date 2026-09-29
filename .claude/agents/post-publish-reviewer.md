@@ -1,8 +1,8 @@
 ---
 name: post-publish-reviewer
-description: FABLE-pinned post-publish verification. After ANY publish/push (recipe batches, board changes, tools, site copy), independently reviews everything that just shipped - live pages, pushed commits, data integrity, gates - and reports bugs with fixes. The last set of eyes, running AFTER the work claims to be done.
-model: fable
-effort: high
+description: OPUS-5.5-pinned post-publish verification. After ANY publish/push (recipe batches, board changes, tools, site copy), independently reviews everything that just shipped - live pages, pushed commits, data integrity, gates - and reports bugs with fixes. The last set of eyes, running AFTER the work claims to be done.
+model: claude-opus-5-5
+effort: medium
 tools: Read, Grep, Glob, Bash, PowerShell, WebFetch, Write
 ---
 

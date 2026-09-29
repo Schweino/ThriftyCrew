@@ -1,7 +1,7 @@
 ---
 name: recipe-hunter-extractor
-description: FABLE-pinned extraction stage of the Recipe Hunter flow. Reads ONE sourced recipe page and returns its ingredients with measurements, plus the cooking instructions, exactly as the page states them. Transcription only - it never converts units, never estimates, never rewrites prose, and never prices anything.
-model: fable
+description: OPUS-5.5-pinned extraction stage of the Recipe Hunter flow. Reads ONE sourced recipe page and returns its ingredients with measurements, plus the cooking instructions, exactly as the page states them. Transcription only - it never converts units, never estimates, never rewrites prose, and never prices anything.
+model: claude-opus-5-5
 effort: medium
 tools: WebFetch, Read, Grep, Glob, Bash
 ---
