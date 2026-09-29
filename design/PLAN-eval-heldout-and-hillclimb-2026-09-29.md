@@ -110,6 +110,15 @@ because W2's hold rule depends on how many patches it would hold.
 - **The holdout is closed to the learner**: Stage 1 `add_gold` for a held-out commodity is refused with a spoken
   reason (MUST FIRE case), and any hand-added gold row for a held-out commodity is fine (humans may add; the
   learner may not).
+- **There is a SECOND gold writer, and it is not the learner**: `graph/pipeline/review_escalations.py` appends every
+  reviewer CONFIRM/REJECT to `escalation-review.jsonl` AND straight into `gold.jsonl` (its `_append_gold`). That is
+  where the 1,386 escalation-review rows come from, and the same review is what files add_alias proposals. A
+  reviewer's verdict is an adjudication, so it may still land in holdout; what must not happen is a patch DERIVED
+  from a holdout case being scored on that case. W2's source-case exclusion covers it only if the review lane
+  records `derived_from` too; W1 checks that both writers route through one function it can guard.
+- **The split is DERIVED at load time, never stored on the row.** `graph/learning/verdict_expiry.py` fingerprints
+  gold per commodity (`graph/sqlite/gold-fingerprints.json`); a stored split field would change every fingerprint
+  and re-expire verdicts for nothing. CLEAN TWIN: the fingerprints are byte-identical before and after W1.
 
 Acceptance: `score.py --split train` + `--split holdout` counts sum to `--split all` exactly, over a named gold
 blob. Self-test covers the namespaced key (a bare id must not silently land in train), and recipe/staple twins
@@ -134,8 +143,13 @@ train case improves, holdout flat, applied).
 
 ### W3. Label where each gold row came from, and seed a small expert-hard set
 
-- Add a derived `selection` class at load time in `seed_gold.load_gold` (not a new stored field): `failure`
-  (known-wrong), `uncertain` (escalation-review), `success` (product-urls), `designed` (allowlist, expert-hard).
+- **Extend `ops/audit_corpus_provenance.py`, do not fork it.** It already prints, per registered corpus, how many
+  cases came from a recorded FAILURE, a SUCCESS, or neither (backlog E23, a push gate per ms-05). Check whether
+  graph gold is registered there; if so, reuse its classifier, and if not, register it. The only addition is a
+  finer class for escalation-review (`uncertain`: the model was unsure, which is neither a failure nor a success)
+  and `designed` for the allowlist and expert-hard rows.
+- Expose that one classifier to `seed_gold.load_gold` as a derived `selection` value (not a stored field, same
+  fingerprint reason as W1).
 - `score.py` prints every metric per selection class beside the total, with denominators.
 - New `graph/gold/expert-hard.jsonl`: 40 to 60 cases chosen by a HUMAN for being intrinsically hard (near twins,
   form splits like gruyere shredded vs block, pack-basis traps), written BEFORE looking at the resolver's output
