@@ -121,7 +121,14 @@ def status(root=None, now=None):
     if ok and isinstance(patches, list):
         applied = [p.get("applied_at") for p in patches if isinstance(p, dict) and p.get("applied_at")]
         out["patches_total"] = len(patches)
-        out["patches_unapplied"] = len(patches) - len(applied)
+        # WAITING means approved to apply and not applied yet. A rejected, deferred or held verdict is a
+        # decided row that will never apply, and a requeued one was demoted back to a proposal (counted
+        # there). Until 2026-09-29 this was total minus applied, so Brad's 69 rejections of 2026-09-12
+        # read as 69 patches waiting and the digest said 97 where 24 waited (plus 4 requeued).
+        out["patches_unapplied"] = sum(
+            1 for p in patches if isinstance(p, dict) and not p.get("applied_at")
+            and p.get("verdict") not in ("reject", "defer", "hold_for_human")
+            and p.get("shadow_verdict") != "requeued")
         out["patches_last_applied_at"] = max(applied) if applied else None
         out["patches_last_applied_age_days"] = _age(max(applied), now) if applied else None
         out["patches_applied_30d"] = sum(1 for a in applied if (_age(a, now) is not None and _age(a, now) <= 30))
@@ -260,7 +267,10 @@ def selftest():
             {"status": "held_for_human", "created_at": "2026-08-21T00:00:00"},
         ])
         w("learning/review-packet.json", {"generated_at": "2026-08-21T01:01:21", "proposals": [1, 2]})
-        w("learning/approved-patches.json", [{"applied_at": "2026-08-20T18:22:55"}, {"applied_at": None}])
+        w("learning/approved-patches.json", [{"applied_at": "2026-08-20T18:22:55"}, {"applied_at": None},
+                                              {"applied_at": None, "verdict": "reject"},
+                                              {"applied_at": None, "verdict": "accept",
+                                               "shadow_verdict": "requeued"}])
         w("learning/promotion-holds.json", {"holds": [
             {"held": "2026-08-21", "commodity": "a", "pattern": "p",
              "reason": "guards 2026-08-21: 1.59x unit-basis outlier vs its own link"},
@@ -280,7 +290,10 @@ def selftest():
              s["proposals_pending"] == 2 and s["proposals_oldest_days"] == 20.5, s)
         case("MUST FIRE", "the review packet's age comes from its own generated_at",
              s["review_packet_age_days"] == 20.5, s["review_packet_age_days"])
-        case("MUST FIRE", "an unapplied approved patch is counted", s["patches_unapplied"] == 1)
+        case("MUST FIRE", "an unapplied approved patch is counted", s["patches_unapplied"] >= 1,
+             s["patches_unapplied"])
+        case("MUST NOT FIRE", "a rejected patch and a requeued one are not counted as waiting",
+             s["patches_unapplied"] == 1, s["patches_unapplied"])
         # 11.0, derived by hand rather than copied from the output: the edit is 2026-09-01 00:00:00
         # and the run 2026-08-21 01:04:51, so 11 days less 3,891 s = 946,509 s = 10.9549 days, which
         # rounds to 11.0. This fixture first expected 10.9 - my arithmetic, not the code.

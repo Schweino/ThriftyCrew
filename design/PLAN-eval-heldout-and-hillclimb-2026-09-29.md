@@ -92,6 +92,30 @@ Exit 0.
 - **Open questions W0 raises, for Brad:** (1) Why has `stage2_review.py --apply` applied nothing since 08-21 with 19
   covered patches waiting? (2) Why do the mapper's rulings stop reaching `ingredient-events.jsonl` after 09-04?
 
+## Stall diagnosis (Brad ruled 2026-09-29: diagnose the stall before W1 to W4)
+
+- **Apply never ran, by design.** `graph/pipeline/nightly.ps1` emits the review packet only ("ingest and apply stay
+  human"). D13 (PLAN-brain-consults W6.4) recorded Brad's 2026-09-12 rulings (18 accept, 51 reject) on 2026-09-23. Nobody
+  ran `--apply` afterwards. The brain digest already names apply as the estate's weakest link, RED.
+- **The digest overstated the queue: 97 waiting, where 24 do.** `graph/learning/learning_status.py` counted every patch
+  row minus the applied ones, so the 69 rejections read as waiting. Fixed in this branch: waiting now excludes
+  reject / defer / hold_for_human verdicts and requeued rows. A MUST NOT FIRE case was added, and the old line fails it
+  (mutant exit 1, 1 of 17 failed; original restored md5-identical).
+- **What `--apply` would do today.** Dry run on a COPY of `graph/sqlite/graph.db` (the live index untouched, the
+  tracked write-through files restored with `git checkout`): 24 candidates. 19 pass the gate, **every one with a delta
+  of exactly 0.0 on all four metrics**. 1 is held for no gold coverage (cannellini-beans). 4 target ids no longer
+  resolve (jasmine-rice-dry x2, part-skim-mozzarella-shredded, dog-food-dry), left retryable. Baseline: precision
+  0.9885, recall 0.6515, false-merge 0.0132, missed-merge 0.3485.
+- **Reading, and what it changes in W2.** The gate's real defect is not circularity. It is that a delta of 0.0 over
+  cases the patch never touches is scored "no_regression". The existing hold asks whether gold covers the TARGET, when
+  it should ask whether gold covers the PATCH (any gold case the pattern matches). W2 should add that hold first: a
+  patch that moves no gold case is `not_run`, "no gold case this pattern matches". That is W0's proxy, already written
+  and tested (`cases_moved`). It is cheaper than `derived_from` provenance and catches the 155-of-159 shape. The source-case
+  exclusion comes second.
+- **Immediate lane: quiet, not broken.** `ingredient-resolutions.json` also stops at 2026-09-04T08:45:54 (269 rows:
+  259 mapper, 10 adjudication), so the event ledger is not dropping rulings. The mapper has recorded no new
+  resolution since then.
+
 ## Out of scope
 
 - The sidecar reranker / fine-tune holdouts (exist; see Knowledge consulted).
