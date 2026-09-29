@@ -285,6 +285,12 @@ LEARN_SCRATCH = scratch_dir(prefix="daemon-learn-seam-")
 SCRATCH_EVENTS = os.path.join(LEARN_SCRATCH, "ingredient-events.jsonl")
 SCRATCH_RESOLUTIONS = os.path.join(LEARN_SCRATCH, "ingredient-resolutions.json")
 
+# THE PAGE-SNAPSHOT SEAM, DEFAULTED THE SAME WAY (W6, 2026-09-29). Every extraction now saves the page
+# it read under <page-cache>\extracted\, and a dozen fixtures here stub harvest.cached_body with a
+# one-line page; without this the battery would write those into the checkout's real cache.
+SNAPSHOT_SCRATCH = scratch_dir(prefix="daemon-snap-seam-")
+os.environ["TC_PAGE_SNAPSHOT_ROOT"] = SNAPSHOT_SCRATCH
+
 # THE FDC SHELF'S TWO SEAMS, DEFAULTED THE SAME WAY (2026-09-11). F1's fill_fdc_shelf calls the REAL
 # fdc_lookup.cache_fill in every map-lane fixture that does not stub it, and cache_fill writes
 # CACHE_FILE - the TRACKED meal-prep\db\fdc-cache.json - by default. Traced that day: 36 writes in one
@@ -611,6 +617,10 @@ def run(names_out=None, names_ref=None):
       *_rung3_cleans_up())
     T("MUST FIRE  a low rung-3 verified rate is RECORDED as a concern, not escalated to nowhere",
       *_rung3_records_not_gates())
+    T("MUST FIRE  rung 3 saves the page it verified against and names it by sha256 (W6)",
+      *_rung3_saves_its_page())
+    T("MUST FIRE  a locally settled page is saved, and the seam keeps it out of the real cache (W6)",
+      *_local_settle_saves_its_page())
 
     # =================================================================================================
     H("B: the registrar is handed its evidence (2026-08-24)")
@@ -5624,6 +5634,85 @@ def _rung3_records_not_gates():
         return (os.path.exists(p) and not os.path.exists(esc)
                 and doc["verification"]["unverified"] == 1 and "verified only" in concerns,
                 "concerns=%s verification=%s" % (concerns[:120], json.dumps(doc["verification"])))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _rung3_saves_its_page():
+    import extract_sweep                                         # noqa: PLC0415
+    import hashlib                                               # noqa: PLC0415
+    tmp = scratch_dir(prefix="daemon-rung3d-")
+    try:
+        d, _esc = _rung3_daemon(tmp, {
+            "state": "ok", "title": "P One",
+            "ingredients": [{"raw": "1 lb chicken thighs", "item": "chicken thighs"},
+                            {"raw": "2 cups rice", "item": "rice"}],
+            "instructions": ["Cook."], "concerns": []})
+        with open(os.path.join(tmp, "extracted", "p1.json"), "r", encoding="utf-8") as f:
+            doc = json.load(f)
+        page = ("<html><body><li>1 lb <strong>chicken</strong> thighs</li>"
+                "<li>2 cups rice</li></body></html>")
+        want = hashlib.sha256(page.encode("utf-8")).hexdigest()
+        snap = doc.get("page_snapshot") or {}
+        return (snap.get("sha256") == want and extract_sweep.snapshot_problem(doc) is None
+                and not any("not saved" in x for x in d.findings),
+                "snapshot=%s problem=%s" % (json.dumps(snap), extract_sweep.snapshot_problem(doc)))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _local_settle_saves_its_page():
+    """The daemon's own extract lane, one page, fake ladder: the contract names a saved page, the
+    file is under the suite's seam, and nothing new appears under the checkout's real cache."""
+    import extract_sweep                                         # noqa: PLC0415
+    import harvest                                               # noqa: PLC0415
+    tmp = scratch_dir(prefix="daemon-snap-local-")
+    real_dir = os.path.join(harvest.PAGE_CACHE, extract_sweep.SNAPSHOT_SUBDIR)
+    real_before = sorted(os.listdir(real_dir)) if os.path.isdir(real_dir) else []
+    try:
+        os.makedirs(os.path.join(tmp, "extracted"), exist_ok=True)
+        d = daemon(run_dir=tmp, dispatcher=FakeDispatch({}))
+        d.ch["extract"].push({"slug": "p1", "url": "https://d/p1", "name": "P One"})
+        d.ch["extract"].close()
+
+        class OneLadder:
+            allow_rung2 = True
+
+            def slot_ctx(self):
+                return 16384
+
+            def rung1(self, html, url):
+                return {"extraction": {"usable": True, "unusable_reason": None, "title": "P One",
+                                       "servings": 4, "total_time": None, "active_time": None,
+                                       "ingredients": [{"raw": "1 lb chicken", "item": "chicken",
+                                                        "qty": "1", "unit": "lb", "prep": None,
+                                                        "optional": False, "section": None}],
+                                       "instructions": ["Cook."]},
+                        "verification": {"lines": 1, "verified": 1, "unverified": 0,
+                                         "verified_rate": 1.0, "unverified_lines": [],
+                                         "passed": True},
+                        "model": "fake", "tokens": 0, "rung": 1, "extracted_by": "jsonld-local",
+                        "escalate": False, "escalate_reason": None}
+
+            def rung2(self, html, url):
+                return None, "unused"
+
+        real = harvest.cached_body
+        harvest.cached_body = lambda u, cache_dir=None: "<html><body>1 lb chicken</body></html>"
+        try:
+            arun(d.extract_lane(ladder=OneLadder()))
+        finally:
+            harvest.cached_body = real
+        p = os.path.join(tmp, "extracted", "p1.json")
+        doc = json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {}
+        real_after = sorted(os.listdir(real_dir)) if os.path.isdir(real_dir) else []
+        return (bool((doc.get("page_snapshot") or {}).get("sha256"))
+                and extract_sweep.snapshot_problem(doc) is None
+                and real_after == real_before
+                and not any("not saved" in x for x in d.findings),
+                "doc=%s real-cache %d -> %d findings=%s"
+                % (json.dumps(doc.get("page_snapshot")), len(real_before), len(real_after),
+                   d.findings[:3]))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

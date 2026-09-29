@@ -1576,6 +1576,11 @@ class Daemon(object):
                     if rec.get("contract") is not None:
                         await loop.run_in_executor(
                             None, lambda r=rec, t=target: extract_sweep.write_record(r, t["dest"]))
+                        # W6: the page the ladder read is saved for the model-comparison corpus.
+                        # A miss is a finding, never a change to the extraction.
+                        if rec.get("snapshot_problem"):
+                            self.findings.append("%s: extraction page not saved - %s"
+                                                 % (rec["slug"], rec["snapshot_problem"]))
                     if rec["settled"]:
                         # Section 4.5's lane-log completeness rule: a locally settled page is WORK
                         # DONE. -By local, tokens 0, which is the point - it cost the run nothing.
@@ -1678,6 +1683,23 @@ class Daemon(object):
                "tokens": 0, "rung": 3, "extracted_by": "claude", "escalate": False,
                "escalate_reason": None}
         contract = local_extract.to_contract(out, url, payload.get("title"))
+        # W6: save the page this verdict was verified against, content-addressed, BEFORE the
+        # contract that cites it is written (og-51). The Claude extractor reads the page itself, so
+        # this is the cached text its lines were checked against; when rungs 1-2 saw different bytes
+        # the escalation's own snapshot is kept beside it, so a harness sees the drift.
+        import extract_sweep                                      # noqa: PLC0415
+        if html is not None:
+            try:
+                contract["page_snapshot"] = extract_sweep.snapshot_page(html, url)
+            except Exception as e:                                # noqa: BLE001
+                self.findings.append("%s: extraction page not saved - %s" % (slug, e))
+        prior = esc.get("page_snapshot")
+        if isinstance(prior, dict) and prior.get("sha256") and \
+                prior.get("sha256") != (contract.get("page_snapshot") or {}).get("sha256"):
+            contract["page_snapshot_local_rungs"] = prior
+        problem = extract_sweep.snapshot_problem(contract)
+        if problem and html is not None:
+            self.findings.append("%s: extraction page not saved - %s" % (slug, problem))
         # RECORDING, NOT GATING. Rung 3 is the last rung, so a low verified_rate is surfaced to
         # source-QA as a concern rather than escalated to nowhere.
         rate = check.get("verified_rate")

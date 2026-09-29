@@ -27,11 +27,27 @@ EXIT CODES (section 4.5): 0 every target settled, 1 findings (escalations to the
 extractor), 2 could-not-run (server down, no cached page, rung 2 blocked). Marker:
 EXTRACT-SWEEP-COMPLETE.
 
+THE PAGE SNAPSHOT (W6 of design/PLAN-eval-heldout-and-hillclimb-2026-09-29.md, Brad 2026-09-29).
+Every page the ladder reads is saved, at the moment it is read, as
+`<page-cache>\\extracted\\<sha256>.html`: the exact text handed to rung 1 and rung 2, UTF-8, named
+by its own sha256. The contract carries `page_snapshot` {sha256, bytes, file, cache_key, taken}, so
+a model-comparison harness pairs a run's extraction and its source-QA verdict with the bytes the
+model saw, offline. WHY NOT THE URL-KEYED CACHE ENTRY: it is mutable. `fetch-recipe.ps1 -Sanitize`
+rewrote 32,895 of its files in place on 2026-09-17 and `-Refresh` overwrites one, so a URL-keyed
+file names today's page, never the page an August extraction read. A content-addressed file cannot
+be rewritten by either (both walk the cache's TOP level only), and writing it is idempotent: the
+same text is the same name, so a re-extraction of an unchanged page writes nothing. Recording only:
+nothing the ladder sees or returns changes. `snapshot_problem` is the detector.
+
 INTERPRETER: C:\\Codex\\Python312\\python.exe. Bare `python` is the Windows Store shim.
 """
+# The suite imports harvest (and its band_precheck/harvest_embed), hunt_lib, local_extract and llm, and
+# its drill shells hunt-run.ps1, which dot-sources the three libraries named last.
+# gate-inputs: meal-prep\pipeline\extract_sweep.py, meal-prep\pipeline\harvest.py, meal-prep\pipeline\band_precheck.py, meal-prep\pipeline\harvest_embed.py, meal-prep\pipeline\hunt_lib.py, meal-prep\pipeline\local_extract.py, graph\lib\llm.py, meal-prep\pipeline\hunt-run.ps1, lib\json-io.ps1, lib\atomic-write.ps1, grocery\native-lib.ps1, lib\guard-contract.ps1
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import statistics
@@ -58,6 +74,62 @@ EXTRACTABLE = ("sourced", "selected")
 def say(msg):
     print(msg)
     sys.stdout.flush()
+
+
+# =====================================================================================================
+# The page snapshot - see the header
+# =====================================================================================================
+
+SNAPSHOT_SUBDIR = "extracted"
+# A test seam, never a production knob: the daemon battery points it at scratch so its fixtures
+# never write into a checkout's real cache.
+SNAPSHOT_ROOT_ENV = "TC_PAGE_SNAPSHOT_ROOT"
+
+
+def snapshot_root(cache_dir=None):
+    return cache_dir or os.environ.get(SNAPSHOT_ROOT_ENV) or harvest.PAGE_CACHE
+
+
+def snapshot_page(text, url, cache_dir=None):
+    """Save the exact text an extractor read, content-addressed. Returns the record the contract
+    carries. Idempotent: an existing file of that name already holds these bytes, so it is left
+    untouched (never rewritten, never duplicated)."""
+    data = text.encode("utf-8")
+    sha = hashlib.sha256(data).hexdigest()
+    d = os.path.join(snapshot_root(cache_dir), SNAPSHOT_SUBDIR)
+    os.makedirs(d, exist_ok=True)
+    name = sha + ".html"
+    path = os.path.join(d, name)
+    if not os.path.exists(path):
+        tmp = "%s.%d.%d.tmp" % (path, os.getpid(), time.monotonic_ns())
+        try:
+            with open(tmp, "wb") as fh:
+                fh.write(data)
+            os.replace(tmp, path)
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+    return {"sha256": sha, "bytes": len(data), "file": SNAPSHOT_SUBDIR + "/" + name,
+            "cache_key": harvest.cache_key(url or ""), "taken": time.strftime("%Y-%m-%dT%H:%M:%S")}
+
+
+def snapshot_problem(doc, cache_dir=None):
+    """None when the contract names a saved page whose bytes hash to the recorded sha256; otherwise
+    the reason it cannot be paired offline. The MUST FIRE is an extraction that ran without saving."""
+    snap = (doc or {}).get("page_snapshot")
+    if not isinstance(snap, dict) or not snap.get("sha256"):
+        return "no page_snapshot: the page this extraction read was not saved"
+    sha = str(snap["sha256"])
+    if snap.get("file") != SNAPSHOT_SUBDIR + "/" + sha + ".html":
+        return "page_snapshot names %r, not its own content address" % snap.get("file")
+    path = os.path.join(snapshot_root(cache_dir), SNAPSHOT_SUBDIR, sha + ".html")
+    if not os.path.exists(path):
+        return "page_snapshot %s is recorded but its file is missing" % sha[:12]
+    with open(path, "rb") as fh:
+        got = hashlib.sha256(fh.read()).hexdigest()
+    if got != sha:
+        return "page_snapshot %s holds bytes hashing to %s" % (sha[:12], got[:12])
+    return None
 
 
 # =====================================================================================================
@@ -196,6 +268,15 @@ def sweep_one(target, ladder, cache_dir=None):
                          "was spent once already)" % target["url"])
         return rec
 
+    # THE INPUT IS FIXED HERE: `html` is the one string both rungs read (rung 2 through
+    # page_text_from_html, a pure function of it). Saved BEFORE any record cites it (og-51), and a
+    # failure to save is recorded, never a change to the extraction.
+    try:
+        rec["page_snapshot"] = snapshot_page(html, target["url"], cache_dir)
+    except Exception as e:                                        # noqa: BLE001
+        rec["page_snapshot"] = None
+        rec["snapshot_problem"] = "the page could not be saved: %s" % e
+
     out = ladder.rung1(html, target["url"])
     rec["rung"] = 1
     if not out["escalate"]:
@@ -229,7 +310,7 @@ def sweep_one(target, ladder, cache_dir=None):
     return rec
 
 
-def write_record(rec, dest_dir):
+def write_record(rec, dest_dir, cache_dir=None):
     """A SETTLED page becomes `<slug>.json` - the section 4.5 extraction contract, and the only
     file downstream reads. An escalation becomes `<slug>.escalation.json` instead, carrying the
     failure reason and the unverified lines the Claude extractor's dispatch needs (S3: it must not
@@ -258,11 +339,14 @@ def write_record(rec, dest_dir):
     if stale and os.path.exists(stale):
         os.remove(stale)
     doc = dict(rec["contract"] or {})
+    if rec.get("page_snapshot"):
+        doc["page_snapshot"] = rec["page_snapshot"]
     if not rec["settled"]:
         doc["escalate"] = True
         doc["escalate_reason"] = rec["reason"]
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(doc, fh, indent=2, ensure_ascii=False)
+    rec["snapshot_problem"] = rec.get("snapshot_problem") or snapshot_problem(doc, cache_dir)
     return path
 
 
@@ -297,7 +381,7 @@ def run_sweep(targets, ladder, cache_dir=None, do_lane_log=True, do_advance=Fals
     for n, t in enumerate(targets, 1):
         rec = sweep_one(t, ladder, cache_dir)
         if rec["contract"] is not None:
-            rec["path"] = write_record(rec, t["dest"])
+            rec["path"] = write_record(rec, t["dest"], cache_dir)
         if rec["settled"] and t.get("run_dir"):
             if do_lane_log:
                 rc, blob = lane_log(t["run_dir"], rec["slug"], rec["rung"], rec["seconds"], ps)
@@ -339,6 +423,7 @@ def report(records, wall, jobs, slot_ctx=None):
         "settle_rate": round(len(settled) / n, 4) if n else 0.0,
         "escalation_rate": round(len(esc) / n, 4) if n else 0.0,
         "unverified_lines_in_settled": sum(r["unverified"] for r in settled),
+        "extractions_without_saved_page": sum(1 for r in records if r.get("snapshot_problem")),
         "seconds_per_page_mean": round(statistics.mean(timed), 2) if timed else None,
         "seconds_per_page_median": round(statistics.median(timed), 2) if timed else None,
         "wall_clock_seconds": wall,
@@ -373,6 +458,7 @@ def print_report(rep):
         % (rep["escalated_to_claude"], 100 * rep["escalation_rate"]))
     say("  BLOCKED (could-not-run, never a pass)          : %d" % rep["blocked"])
     say("  unverified lines inside a SETTLED extraction   : %d" % rep["unverified_lines_in_settled"])
+    say("  extractions whose page was NOT saved (W6)      : %d" % rep["extractions_without_saved_page"])
     say("  wall clock %.1fs   mean %.1fs/page   median %.1fs/page"
         % (rep["wall_clock_seconds"], rep["seconds_per_page_mean"] or 0,
            rep["seconds_per_page_median"] or 0))
@@ -573,6 +659,47 @@ def selftest():
     T("CLEAN TWIN a rung-2 settle is written and stamped local-page",
       json.load(open(os.path.join(dest, "two.json"),
                      encoding="utf-8"))["extracted_by"] == "local-page")
+
+    # ---- W6: every extraction saves the exact page it read, content-addressed ---------------------
+    snap_dir = os.path.join(cache, SNAPSHOT_SUBDIR)
+    want_sha = hashlib.sha256("<html>page</html>".encode("utf-8")).hexdigest()
+    snap = doc.get("page_snapshot") or {}
+    T("CLEAN TWIN a settled extraction names its saved page by the sha256 of the text the ladder read",
+      snap.get("sha256") == want_sha and snapshot_problem(doc, cache) is None
+      and recs[0].get("snapshot_problem") is None, json.dumps(snap))
+    T("  and the saved bytes ARE that text",
+      open(os.path.join(snap_dir, want_sha + ".html"), "rb").read() == b"<html>page</html>",
+      str(os.listdir(snap_dir) if os.path.isdir(snap_dir) else "no snapshot dir"))
+    T("  and an escalation carries it too, so rung 3 and a harness can pair it",
+      (esc.get("page_snapshot") or {}).get("sha256") == want_sha, json.dumps(esc)[:200])
+    T("CLEAN TWIN three pages with the same text are ONE saved file, never three",
+      os.listdir(snap_dir) == [want_sha + ".html"], str(os.listdir(snap_dir)))
+    snap_file = os.path.join(snap_dir, want_sha + ".html")
+    before = os.stat(snap_file).st_mtime_ns
+    time.sleep(0.02)
+    run_sweep([tgt("settles", u_ok)], FakeLadder({u_ok: "settle1"}), cache_dir=cache,
+              do_lane_log=False, quiet=True)
+    T("CLEAN TWIN re-extracting an already-saved page neither rewrites nor duplicates it",
+      os.stat(snap_file).st_mtime_ns == before and len(os.listdir(snap_dir)) == 1,
+      "mtime %s -> %s, files %s" % (before, os.stat(snap_file).st_mtime_ns, os.listdir(snap_dir)))
+    unsaved = dict(recs[0], slug="unsaved", page_snapshot=None, snapshot_problem=None,
+                   contract=dict(doc, page_snapshot=None))
+    write_record(unsaved, dest, cache)
+    T("MUST FIRE  an extraction written without saving its page is caught at write time",
+      unsaved.get("snapshot_problem") is not None
+      and "not saved" in unsaved["snapshot_problem"]
+      and report([unsaved], 1.0, 1)["extractions_without_saved_page"] == 1,
+      str(unsaved.get("snapshot_problem")))
+    forged = dict(doc, page_snapshot=dict(snap, sha256="0" * 64,
+                                          file=SNAPSHOT_SUBDIR + "/" + "0" * 64 + ".html"))
+    T("MUST FIRE  a recorded snapshot whose file is missing is caught",
+      "missing" in str(snapshot_problem(forged, cache)), str(snapshot_problem(forged, cache)))
+    tamper_dir = os.path.join(td, "tamper")
+    os.makedirs(os.path.join(tamper_dir, SNAPSHOT_SUBDIR))
+    with open(os.path.join(tamper_dir, SNAPSHOT_SUBDIR, want_sha + ".html"), "wb") as fh:
+        fh.write(b"<html>page, rewritten by a later sanitize</html>")
+    T("MUST FIRE  a saved page whose bytes no longer hash to the recorded sha256 is caught",
+      "hashing to" in str(snapshot_problem(doc, tamper_dir)), str(snapshot_problem(doc, tamper_dir)))
 
     # ---- an uncached page is could-not-run: this sweep NEVER fetches -----------------------------
     recs2, _ = run_sweep([tgt("missing", u_missing)], ladder, cache_dir=cache,
