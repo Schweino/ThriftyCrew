@@ -278,11 +278,18 @@ Why this target first: free (local model), programmatic grader (gold), large cor
 - **W4, landed `b62da5b9d`.** `graph/eval/score_health.py` (`score.py --health`): per-arm spread, ORDERING-SUSPECT,
   SATURATED. The full LLM noise floor could not be measured in session: one LLM pass is about 2 hours.
 - **Brad ruled on scale, 2026-09-29: a fixed keyed sample now and the full run overnight.** `--sample 60` per split
-  (`ae32013e5`). The overnight full `--health --runs 3` is running (PID 22488; log
-  `.claude/worktrees/overnight-eval-2026-09-29/graph/bench/out/overnight-eval-2026-09-29.log`, done at
-  `OVERNIGHT-COMPLETE`).
+  (`ae32013e5`).
 - **Brad ruled after W5, 2026-09-29: confirm round 1 on full gold overnight, and promote nothing either way until he has
-  seen it.** It is queued behind PID 22488.
+  seen it.**
+- **The 2026-09-29 overnight run DID NOT HAPPEN.** Its three processes, launched from an agent session, all vanished at
+  about 17:34 after 129 model calls, with no error line and no reboot. The results log never got past its first line.
+  **Brad ruled 2026-09-30: rerun from 18:30.** One-off scheduled task `ThriftyCrew Eval One-off 2026-09-30` runs
+  `graph/bench/out/overnight-eval-2026-09-30.ps1` in the overnight worktree. It owns its model server, runs noise run 1
+  until 21:20, then steps aside for TC Graph Nightly Matching (starts 21:30, about 10 minutes of card use). After that it
+  runs the round-1 full-gold check first, then noise runs 2 and 3, and stops everything by 06:45 for the 07:00 sweep.
+  It keeps the machine awake while running. Log: `graph/bench/out/overnight-eval-2026-09-30.log` in that worktree,
+  timestamped per line, ending `OVERNIGHT2-COMPLETE`. Estimated at 12 to 15 hours of model work: 14 s a call from the
+  09-29 partial, about 380 calls a pass. Whatever does not finish resumes the next evening.
 - **W6: refused to score.** Only 20 of 48 source-QA-passed extractions had a saved page (bar 100), and those 20 were
   rewritten in place by the 2026-09-17 cache sanitize. The other 28 came from runs dated 08-15, a day before the cache
   existed. **Brad ruled: save pages going forward, then retry.** Landed `74d0e54f4`, `bcd2ee99e`: every extraction writes
