@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "no weekly ad cycle",
-    "cursor_start":  277,
-    "cursor_next":  285,
+    "cursor_start":  285,
+    "cursor_next":  293,
     "total_terms":  641,
     "rotation_terms":  [
-                           "frozen broccoli florets",
-                           "frozen burritos",
-                           "frozen cauliflower florets",
-                           "frozen sweet corn",
-                           "frozen french fries",
-                           "frozen mixed berries",
-                           "frozen cut green beans",
-                           "frozen lasagna"
+                           "frozen lima beans",
+                           "frozen meatballs",
+                           "frozen pepper blend",
+                           "frozen sweet peas",
+                           "frozen pizza",
+                           "frozen mixed vegetables",
+                           "frozen waffles",
+                           "fruit cocktail canned"
                        ],
     "sale_terms":  [
 
@@ -24,26 +24,26 @@
     "terms":  [
                   "italian sausage",
                   "old fashioned oats",
-                  "frozen broccoli florets",
-                  "frozen burritos",
-                  "frozen cauliflower florets",
-                  "frozen sweet corn",
-                  "frozen french fries",
-                  "frozen mixed berries",
-                  "frozen cut green beans",
-                  "frozen lasagna"
+                  "frozen lima beans",
+                  "frozen meatballs",
+                  "frozen pepper blend",
+                  "frozen sweet peas",
+                  "frozen pizza",
+                  "frozen mixed vegetables",
+                  "frozen waffles",
+                  "fruit cocktail canned"
               ],
     "commodities":  [
                         "italian-sausage",
                         "oatmeal",
-                        "frozen-broccoli-florets",
-                        "frozen-burritos",
-                        "frozen-cauliflower-florets",
-                        "frozen-corn",
-                        "frozen-fries",
-                        "frozen-fruit",
-                        "frozen-green-beans",
-                        "frozen-lasagna"
+                        "frozen-lima-beans",
+                        "frozen-meatballs",
+                        "frozen-mixed-peppers",
+                        "frozen-peas",
+                        "frozen-pizza",
+                        "frozen-vegetables",
+                        "frozen-waffles",
+                        "fruit-cocktail"
                     ],
     "ruling_terms":  [
 

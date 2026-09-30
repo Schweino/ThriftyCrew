@@ -1,8 +1,8 @@
 {
     "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages once, on the first run it is open and not shadowed by a cheaper-or-equal standing cell at its own store (paged_on; shadowed_by names that cell\u0027s price); a match-verdicts.json verdict (band|key) removes it.",
-    "from":  "flagged-2026-09-29.json",
-    "written":  "2026-09-29",
-    "count":  160,
+    "from":  "flagged-2026-09-30.json",
+    "written":  "2026-09-30",
+    "count":  163,
     "rows":  [
                  {
                      "key":  "air-freshener|Family Fare|Febreze Plugs Single Refill Downy Calm",
@@ -159,6 +159,17 @@
                      "shadowed_by":  null
                  },
                  {
+                     "key":  "canned-peas|Baker\u0027s|English Green Peas",
+                     "first_seen":  "2026-09-30",
+                     "id":  "canned-peas",
+                     "store":  "Baker\u0027s",
+                     "name":  "English Green Peas",
+                     "unit_price":  0.2744,
+                     "band_ref":  0.05435,
+                     "paged_on":  "",
+                     "shadowed_by":  0.0667
+                 },
+                 {
                      "key":  "cat-food|Hy-Vee|Sheba cat food, 2.6 or 2.64 oz., 10/ $10.00",
                      "first_seen":  "2026-09-28",
                      "id":  "cat-food",
@@ -220,7 +231,7 @@
                      "store":  "Baker\u0027s",
                      "name":  "Pepperidge Farm Farmhouse Thin \u0026 Crispy Dark Chocolate Chip Cookies",
                      "unit_price":  0.8681,
-                     "band_ref":  0.1533,
+                     "band_ref":  0.1561,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1408
                  },
@@ -231,7 +242,7 @@
                      "store":  "Hy-Vee",
                      "name":  "Nothing But The Truth oat cookies, 5 oz., $3.99",
                      "unit_price":  0.798,
-                     "band_ref":  0.1533,
+                     "band_ref":  0.1561,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.3121
                  },
@@ -456,6 +467,28 @@
                      "shadowed_by":  6.76
                  },
                  {
+                     "key":  "dried-oregano|Baker\u0027s|Litehouse Oregano Freeze Dried Herbs",
+                     "first_seen":  "2026-09-30",
+                     "id":  "dried-oregano",
+                     "store":  "Baker\u0027s",
+                     "name":  "Litehouse Oregano Freeze Dried Herbs",
+                     "unit_price":  23.1786,
+                     "band_ref":  1.192,
+                     "paged_on":  "",
+                     "shadowed_by":  1.6959
+                 },
+                 {
+                     "key":  "dried-parsley|Baker\u0027s|Litehouse Parsley Freeze Dried Herbs",
+                     "first_seen":  "2026-09-30",
+                     "id":  "dried-parsley",
+                     "store":  "Baker\u0027s",
+                     "name":  "Litehouse Parsley Freeze Dried Herbs",
+                     "unit_price":  21.6333,
+                     "band_ref":  3.645,
+                     "paged_on":  "",
+                     "shadowed_by":  2.5
+                 },
+                 {
                      "key":  "flour|Family Fare|Delimex Chkn \u0026 Cheese Flour Taquitos",
                      "first_seen":  "2026-09-27",
                      "id":  "flour",
@@ -494,7 +527,7 @@
                      "id":  "frozen-fruit",
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
-                     "unit_price":  0.9362,
+                     "unit_price":  0.8738,
                      "band_ref":  0.1726,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.1561
@@ -505,7 +538,7 @@
                      "id":  "frozen-fruit",
                      "store":  "Baker\u0027s",
                      "name":  "Tru Fru Fresh Frozen Strawberries in Dark \u0026 White Chocolate",
-                     "unit_price":  0.8738,
+                     "unit_price":  0.9362,
                      "band_ref":  0.1726,
                      "paged_on":  "2026-09-28",
                      "shadowed_by":  0.1561
@@ -527,7 +560,7 @@
                      "id":  "fruit-snacks",
                      "store":  "Fareway",
                      "name":  "Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
-                     "unit_price":  9.99,
+                     "unit_price":  7.99,
                      "band_ref":  0.2276,
                      "paged_on":  "",
                      "shadowed_by":  0.2112
@@ -538,43 +571,10 @@
                      "id":  "fruit-snacks",
                      "store":  "Fareway",
                      "name":  "Welch\u0027s Fruit Snacks, Berries \u0027N Cherries, Family Size",
-                     "unit_price":  7.99,
+                     "unit_price":  9.99,
                      "band_ref":  0.2276,
                      "paged_on":  "",
                      "shadowed_by":  0.2112
-                 },
-                 {
-                     "key":  "gelatin|Family Fare|Jell O Strawberry Gelatin Snacks 13.5 Oz",
-                     "first_seen":  "2026-09-29",
-                     "id":  "gelatin",
-                     "store":  "Family Fare",
-                     "name":  "Jell O Strawberry Gelatin Snacks 13.5 Oz",
-                     "unit_price":  5,
-                     "band_ref":  0.98,
-                     "paged_on":  "2026-09-29",
-                     "shadowed_by":  null
-                 },
-                 {
-                     "key":  "gelatin|Family Fare|Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "gelatin",
-                     "store":  "Family Fare",
-                     "name":  "Jell O Zero Sugar Low Calorie Black Cherry Gelatin Snacks 12.5 Oz",
-                     "unit_price":  5,
-                     "band_ref":  0.98,
-                     "paged_on":  "2026-09-27",
-                     "shadowed_by":  null
-                 },
-                 {
-                     "key":  "gelatin|Family Fare|Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
-                     "first_seen":  "2026-09-27",
-                     "id":  "gelatin",
-                     "store":  "Family Fare",
-                     "name":  "Jell O Zero Sugar Low Calorie Strawberry Gelatin Snacks 12.5 Oz",
-                     "unit_price":  5,
-                     "band_ref":  0.98,
-                     "paged_on":  "2026-09-27",
-                     "shadowed_by":  null
                  },
                  {
                      "key":  "green-olives|Hy-Vee|FreeStyle Lemon Garlic Green Olives",
@@ -605,9 +605,20 @@
                      "store":  "Baker\u0027s",
                      "name":  "Tampico Cinnamon Ground",
                      "unit_price":  2.29,
-                     "band_ref":  0.45625,
+                     "band_ref":  0.3877,
                      "paged_on":  "2026-09-27",
                      "shadowed_by":  0.6443
+                 },
+                 {
+                     "key":  "ground-cinnamon|Family Fare|Mc Cormick Ground Cinnamon 2.37 Oz",
+                     "first_seen":  "2026-09-30",
+                     "id":  "ground-cinnamon",
+                     "store":  "Family Fare",
+                     "name":  "Mc Cormick Ground Cinnamon 2.37 Oz",
+                     "unit_price":  1.9789,
+                     "band_ref":  0.3877,
+                     "paged_on":  "",
+                     "shadowed_by":  0.3119
                  },
                  {
                      "key":  "ground-coriander|Hy-Vee|McCormick Gourmet Organic Coriander Seed, 0.87 oz",
@@ -627,18 +638,7 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Green Pepper Sauce, Hot Sauce",
                      "unit_price":  0.898,
-                     "band_ref":  0.1442,
-                     "paged_on":  "2026-09-26",
-                     "shadowed_by":  0.1085
-                 },
-                 {
-                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "first_seen":  "2026-09-26",
-                     "id":  "hot-sauce",
-                     "store":  "Baker\u0027s",
-                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "unit_price":  1.095,
-                     "band_ref":  0.1442,
+                     "band_ref":  0.1375,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -649,7 +649,18 @@
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
                      "unit_price":  0.898,
-                     "band_ref":  0.1442,
+                     "band_ref":  0.1375,
+                     "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1085
+                 },
+                 {
+                     "key":  "hot-sauce|Baker\u0027s|TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "first_seen":  "2026-09-26",
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
+                     "unit_price":  1.095,
+                     "band_ref":  0.1375,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -660,7 +671,7 @@
                      "store":  "Baker\u0027s",
                      "name":  "Yellowbird Serrano Hot Sauce",
                      "unit_price":  0.7448,
-                     "band_ref":  0.1442,
+                     "band_ref":  0.1375,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
                  },
@@ -830,11 +841,11 @@
                      "shadowed_by":  3.49
                  },
                  {
-                     "key":  "milk|Family Fare|Whoppers Malted The Original Milk Balls 5 Oz",
-                     "first_seen":  "2026-09-29",
+                     "key":  "milk|Family Fare|Whoppers The Original Malted Milk Balls 5 Oz",
+                     "first_seen":  "2026-09-30",
                      "id":  "milk",
                      "store":  "Family Fare",
-                     "name":  "Whoppers Malted The Original Milk Balls 5 Oz",
+                     "name":  "Whoppers The Original Malted Milk Balls 5 Oz",
                      "unit_price":  32,
                      "band_ref":  3.025,
                      "paged_on":  "",
@@ -938,6 +949,17 @@
                      "band_ref":  0.07,
                      "paged_on":  "2026-09-27",
                      "shadowed_by":  0.0831
+                 },
+                 {
+                     "key":  "pasta-sauce|Aldi|Specially Selected Pepperoni Marinara 8 OZ",
+                     "first_seen":  "2026-09-30",
+                     "id":  "pasta-sauce",
+                     "store":  "Aldi",
+                     "name":  "Specially Selected Pepperoni Marinara 8 OZ",
+                     "unit_price":  0.3938,
+                     "band_ref":  0.0683,
+                     "paged_on":  "",
+                     "shadowed_by":  0.0704
                  },
                  {
                      "key":  "pasta-sauce|Family Fare|Rao\u0027s Homemade Arrabbiata Spicy Marinara Sauce 24 Oz",
@@ -1044,7 +1066,7 @@
                      "id":  "raisins",
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
-                     "unit_price":  0.0415,
+                     "unit_price":  0.0346,
                      "band_ref":  0.22395,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  null
@@ -1055,7 +1077,7 @@
                      "id":  "raisins",
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
-                     "unit_price":  0.0346,
+                     "unit_price":  0.0415,
                      "band_ref":  0.22395,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  null
@@ -1499,6 +1521,17 @@
                      "band_ref":  0.0148,
                      "paged_on":  "2026-09-27",
                      "shadowed_by":  0.0473
+                 },
+                 {
+                     "key":  "strawberries|Baker\u0027s|Fresh Cut In Store Strawberry",
+                     "first_seen":  "2026-09-30",
+                     "id":  "strawberries",
+                     "store":  "Baker\u0027s",
+                     "name":  "Fresh Cut In Store Strawberry",
+                     "unit_price":  0.8738,
+                     "band_ref":  0.1528,
+                     "paged_on":  "",
+                     "shadowed_by":  0.2181
                  },
                  {
                      "key":  "sugar|Hy-Vee|Mann\u0027s sugar snow peas, 6 or 8 oz. pkg., $2.99",

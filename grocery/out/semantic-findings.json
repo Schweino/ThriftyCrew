@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-29 21:33",
-    "board":  "comparison-2026-09-29.json",
-    "sidecar_generated":  "2026-09-29 21:33:32",
+    "generated":  "2026-09-30 08:24",
+    "board":  "comparison-2026-09-30.json",
+    "sidecar_generated":  "2026-09-30 08:24:01",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,16 +9,36 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2881,
-                     "corpus":  44330,
-                     "rule_invisible":  9110
+                     "board_pairs":  2890,
+                     "corpus":  44439,
+                     "rule_invisible":  9149
                  },
     "identity_count":  0,
-    "coverage_count":  2,
+    "coverage_count":  4,
     "identity":  [
 
                  ],
     "coverage":  [
+                     {
+                         "kind":  "coverage",
+                         "id":  "baby-back-ribs",
+                         "commodity":  "Baby Back Ribs",
+                         "store":  "Walmart",
+                         "product":  "Prairie Fresh Natural Fresh Pork Spareribs, Bone-in, 4.0-5.5 lb, 19g Protein per 4oz Serving",
+                         "cos":  0.7322,
+                         "score":  0.975688,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
+                     {
+                         "kind":  "coverage",
+                         "id":  "baby-back-ribs",
+                         "commodity":  "Baby Back Ribs",
+                         "store":  "Walmart",
+                         "product":  "Prairie Fresh Natural Fresh Pork St. Louis Style Spareribs, Bone-in, 3.0- 4.4 lb, 19g of protein per 4oz serving",
+                         "cos":  0.7212,
+                         "score":  0.955741,
+                         "why":  "no rule matches it, but it reads as an instance of this commodity"
+                     },
                      {
                          "kind":  "coverage",
                          "id":  "vegetable-soup",

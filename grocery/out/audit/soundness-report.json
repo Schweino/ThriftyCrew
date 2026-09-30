@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-29 08:24",
+    "generated":  "2026-09-30 08:19",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -11,6 +11,24 @@
 
                 ],
     "new_contested":  [
+                          {
+                              "name":  "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz",
+                              "chain":  "rotisserie-chicken (each) \u003e lemon-pepper-seasoning (oz)",
+                              "form":  true,
+                              "winner":  "rotisserie-chicken",
+                              "verdict":  "per-each (weight is one unit) = 3.97/each",
+                              "cell":  "rotisserie-chicken @ Walmart 3.97/each",
+                              "crown":  true
+                          },
+                          {
+                              "name":  "Barissimo Halloween Ground Coffees Chai Cookie 12 OZ",
+                              "chain":  "coffee (oz) \u003e cookies (oz)",
+                              "form":  false,
+                              "winner":  "coffee",
+                              "verdict":  "size 12 oz = 0.4908/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
                           {
                               "name":  "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
                               "chain":  "almonds (oz) \u003e walnuts (oz)",
@@ -53,6 +71,15 @@
                               "form":  true,
                               "winner":  "ice-cream",
                               "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Giovanni Rana Chicken Alfredo \u0026 Mushroom Lasagna, 40 oz.",
+                              "chain":  "mushrooms (oz) \u003e frozen-lasagna (oz)",
+                              "form":  true,
+                              "winner":  "mushrooms",
+                              "verdict":  "size 40 oz = 0.3455/oz",
                               "cell":  "",
                               "crown":  false
                           },
@@ -129,21 +156,24 @@
                               "crown":  false
                           },
                           {
-                              "name":  "Specially Selected Carrots Sweet Potatoes 16 OZ",
-                              "chain":  "carrots (lb) \u003e sweet-potatoes (lb)",
+                              "name":  "Specially Selected Pepperoni Marinara 8 OZ",
+                              "chain":  "pasta-sauce (oz) \u003e pepperoni (oz)",
                               "form":  false,
-                              "winner":  "carrots",
-                              "verdict":  "size 1 lb = 0.29/lb",
-                              "cell":  "carrots @ Aldi 0.29/lb",
-                              "crown":  true
+                              "winner":  "pasta-sauce",
+                              "verdict":  "OUT-OF-BAND",
+                              "cell":  "",
+                              "crown":  false
                           }
                       ],
     "new_contested_names":  [
+                                "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz",
+                                "Barissimo Halloween Ground Coffees Chai Cookie 12 OZ",
                                 "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
                                 "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
                                 "Del Monte Peas And Carrots 8.5 Oz",
                                 "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
                                 "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
+                                "Giovanni Rana Chicken Alfredo \u0026 Mushroom Lasagna, 40 oz.",
                                 "Gustare Vita capers or chopped garlic, 3 oz., $2.49",
                                 "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
                                 "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
@@ -152,14 +182,14 @@
                                 "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
                                 "New York Bakery Cheesy Focaccia Pesto \u0026 Garlic",
                                 "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
-                                "Specially Selected Carrots Sweet Potatoes 16 OZ"
+                                "Specially Selected Pepperoni Marinara 8 OZ"
                             ],
     "cell_by_contest":  [
                             {
-                                "name":  "Specially Selected Carrots Sweet Potatoes 16 OZ",
-                                "cell":  "carrots @ Aldi 0.29/lb",
+                                "name":  "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz",
+                                "cell":  "rotisserie-chicken @ Walmart 3.97/each",
                                 "crown":  true,
-                                "claimed_by":  "carrots \u003e sweet-potatoes"
+                                "claimed_by":  "rotisserie-chicken \u003e lemon-pepper-seasoning"
                             }
                         ]
 }

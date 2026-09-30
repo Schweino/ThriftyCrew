@@ -1,10 +1,10 @@
 ﻿{
-    "generated":  "2026-09-29T08:16:59",
+    "generated":  "2026-09-30T08:14:25",
     "written_by":  "guards.ps1",
-    "board_file":  "comparison-2026-09-29.json",
-    "board_sha256":  "c6d033e40e25b0166e038c6ba749c4e6c46ee671e17e8788c52352fa5a3e0179",
-    "action":  "quarantined",
-    "exit_code":  4,
+    "board_file":  "comparison-2026-09-30.json",
+    "board_sha256":  "7c7e9d40be7ed871a68d0e20e7c5d39f9edf512796288c3d1b17774aa9bb2412",
+    "action":  "pass",
+    "exit_code":  0,
     "reasons":  [
 
                 ],
@@ -20,16 +20,12 @@
     "breaker":  {
                     "tripped":  false,
                     "why":  "",
-                    "quarantined":  1,
-                    "priced":  2881,
+                    "quarantined":  0,
+                    "priced":  2890,
                     "board_pct_bar":  2,
                     "store_pct_bar":  10,
                     "stores":  [
-                                   {
-                                       "store":  "Fareway",
-                                       "quarantined":  1,
-                                       "priced":  330
-                                   }
+
                                ]
                 },
     "note":  "Written by every guards run. action: pass | quarantine (required: run apply-cell-quarantine.ps1, then guards again) | reapply (a held value was itself condemned: apply-cell-quarantine.ps1 withholds reapply_withhold once, then guards again) | quarantined (applied and verified) | hold. See grocery\\cell-quarantine-lib.ps1."

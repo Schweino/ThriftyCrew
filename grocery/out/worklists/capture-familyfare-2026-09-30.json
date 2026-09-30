@@ -5,13 +5,13 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-10-03; next_pull 2026-10-04",
-    "cursor_start":  455,
-    "cursor_next":  458,
+    "cursor_start":  458,
+    "cursor_next":  461,
     "total_terms":  641,
     "rotation_terms":  [
-                           "pepperoncini",
-                           "sliced pepperoni",
-                           "basil pesto"
+                           "phyllo dough",
+                           "pickled jalapeno slices",
+                           "dill pickle spears"
                        ],
     "sale_terms":  [
 
@@ -37,9 +37,9 @@
                   "brandy",
                   "brown gravy mix",
                   "butter",
-                  "pepperoncini",
-                  "sliced pepperoni",
-                  "basil pesto",
+                  "phyllo dough",
+                  "pickled jalapeno slices",
+                  "dill pickle spears",
                   "frozen french fries",
                   "13 gallon trash bags"
               ],
@@ -64,9 +64,9 @@
                         "brandy",
                         "brown-gravy-mix",
                         "butter",
-                        "pepperoncini",
-                        "pepperoni",
-                        "pesto",
+                        "phyllo-dough",
+                        "pickled-jalapenos",
+                        "pickles",
                         "frozen-fries",
                         "trash-bags"
                     ],

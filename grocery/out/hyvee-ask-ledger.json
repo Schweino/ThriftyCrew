@@ -1,4 +1,10 @@
 {
+    "1677620":  {
+                    "size":  "4 oz",
+                    "streak":  1,
+                    "last_asked":  "2026-09-30",
+                    "last_outcome":  "store product lookup returned no usable offer"
+                },
     "2540589":  {
                     "size":  "1.25 oz",
                     "streak":  0,
@@ -17,10 +23,22 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "3627889":  {
+                    "size":  "9.8 oz",
+                    "streak":  1,
+                    "last_asked":  "2026-09-30",
+                    "last_outcome":  "store product lookup returned no usable offer"
+                },
     "3239440":  {
                     "size":  "11.64 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
+    "4214043":  {
+                    "size":  "15 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
                     "last_outcome":  "success"
                 },
     "61942":  {
@@ -29,6 +47,12 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "835077":  {
+                   "size":  "15 oz",
+                   "streak":  1,
+                   "last_asked":  "2026-09-30",
+                   "last_outcome":  "refused-below-shelf-tag"
+               },
     "2519320":  {
                     "size":  "16 oz",
                     "streak":  1,
@@ -59,18 +83,18 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "22718":  {
+                  "size":  "8.5 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-30",
+                  "last_outcome":  "success"
+              },
     "40355":  {
                   "size":  "16.3 oz",
                   "streak":  0,
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
-    "3413341":  {
-                    "size":  "9 oz",
-                    "streak":  0,
-                    "last_asked":  "2026-09-28",
-                    "last_outcome":  "success"
-                },
     "1755875":  {
                     "size":  "19 oz",
                     "streak":  0,
@@ -107,6 +131,12 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "3447237":  {
+                    "size":  "8.8 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
     "4669":  {
                  "size":  "2 oz",
                  "streak":  0,
@@ -126,16 +156,22 @@
                    "last_asked":  "2026-09-28",
                    "last_outcome":  "store product lookup returned no usable offer"
                },
+    "5161":  {
+                 "size":  "16.3 oz",
+                 "streak":  0,
+                 "last_asked":  "2026-09-27",
+                 "last_outcome":  "success"
+             },
     "3447236":  {
                     "size":  "8.8 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
-    "56357":  {
-                  "size":  "24 x 16.9 fl oz",
+    "57415":  {
+                  "size":  "19 oz",
                   "streak":  0,
-                  "last_asked":  "2026-09-28",
+                  "last_asked":  "2026-09-29",
                   "last_outcome":  "success"
               },
     "4670":  {
@@ -185,12 +221,6 @@
                   "size":  "lb",
                   "streak":  0,
                   "last_asked":  "2026-09-28",
-                  "last_outcome":  "success"
-              },
-    "17181":  {
-                  "size":  "0.9 oz",
-                  "streak":  0,
-                  "last_asked":  "2026-09-29",
                   "last_outcome":  "success"
               },
     "23532":  {
@@ -279,6 +309,18 @@
                   "last_asked":  "2026-09-27",
                   "last_outcome":  "success"
               },
+    "272641":  {
+                   "size":  "18 oz",
+                   "streak":  0,
+                   "last_asked":  "2026-09-30",
+                   "last_outcome":  "success"
+               },
+    "4209805":  {
+                    "size":  "3 ct",
+                    "streak":  0,
+                    "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
     "4145663":  {
                     "size":  "12 fl oz",
                     "streak":  0,
@@ -304,30 +346,18 @@
                   "last_outcome":  "source product size conflicts with the worklist variant",
                   "theirs":  "lb"
               },
-    "4135751":  {
-                    "size":  "2.12 oz",
-                    "streak":  0,
-                    "last_asked":  "2026-09-29",
-                    "last_outcome":  "success"
-                },
-    "3447237":  {
-                    "size":  "8.8 oz",
-                    "streak":  0,
-                    "last_asked":  "2026-09-28",
-                    "last_outcome":  "success"
-                },
+    "17181":  {
+                  "size":  "0.9 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-29",
+                  "last_outcome":  "success"
+              },
     "2905497":  {
                     "size":  "16 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
-    "57415":  {
-                  "size":  "19 oz",
-                  "streak":  0,
-                  "last_asked":  "2026-09-29",
-                  "last_outcome":  "success"
-              },
     "37464":  {
                   "size":  "lb",
                   "streak":  1,
@@ -335,6 +365,12 @@
                   "last_outcome":  "source product size conflicts with the worklist variant",
                   "theirs":  "lb"
               },
+    "3038822":  {
+                    "size":  "7 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
+                    "last_outcome":  "success"
+                },
     "3059284":  {
                     "size":  "1.5 oz",
                     "streak":  0,
@@ -383,6 +419,12 @@
                     "last_asked":  "2026-09-29",
                     "last_outcome":  "success"
                 },
+    "56916":  {
+                  "size":  "6 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-30",
+                  "last_outcome":  "success"
+              },
     "3503550":  {
                     "size":  "13 fl oz",
                     "streak":  1,
@@ -395,6 +437,12 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "store product lookup returned no usable offer"
                 },
+    "64125":  {
+                  "size":  "12 fl oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-28",
+                  "last_outcome":  "success"
+              },
     "3871503":  {
                     "size":  "0.75 oz",
                     "streak":  0,
@@ -449,6 +497,12 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
+    "19977":  {
+                  "size":  "8.5 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-30",
+                  "last_outcome":  "success"
+              },
     "4248731":  {
                     "size":  "10.58 oz",
                     "streak":  0,
@@ -474,12 +528,18 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
-    "33211":  {
-                  "size":  "14 oz",
-                  "streak":  0,
-                  "last_asked":  "2026-09-28",
-                  "last_outcome":  "success"
-              },
+    "4135751":  {
+                    "size":  "2.12 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-29",
+                    "last_outcome":  "success"
+                },
+    "4141472":  {
+                    "size":  "0.55 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-29",
+                    "last_outcome":  "success"
+                },
     "4148594":  {
                     "size":  "1.3 oz",
                     "streak":  0,
@@ -504,6 +564,12 @@
                     "last_asked":  "2026-09-27",
                     "last_outcome":  "store product lookup returned no usable offer"
                 },
+    "155120":  {
+                   "size":  "8 oz",
+                   "streak":  0,
+                   "last_asked":  "2026-09-30",
+                   "last_outcome":  "success"
+               },
     "22891":  {
                   "size":  "8 oz",
                   "streak":  0,
@@ -558,12 +624,24 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
+    "3293449":  {
+                    "size":  "6 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
+                    "last_outcome":  "success"
+                },
     "40085":  {
                   "size":  "0.14 oz",
                   "streak":  0,
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "5172":  {
+                 "size":  "16.3 oz",
+                 "streak":  0,
+                 "last_asked":  "2026-09-30",
+                 "last_outcome":  "success"
+             },
     "40103":  {
                   "size":  "1.8 oz",
                   "streak":  0,
@@ -589,12 +667,12 @@
                    "last_asked":  "2026-09-28",
                    "last_outcome":  "success"
                },
-    "64125":  {
-                  "size":  "12 fl oz",
-                  "streak":  0,
-                  "last_asked":  "2026-09-28",
-                  "last_outcome":  "success"
-              },
+    "4215896":  {
+                    "size":  "8.5 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
     "4135758":  {
                     "size":  "1.5 oz",
                     "streak":  0,
@@ -611,6 +689,12 @@
                     "size":  "16 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
+    "3188324":  {
+                    "size":  "8.5 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
                     "last_outcome":  "success"
                 },
     "74585":  {
@@ -637,12 +721,12 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
-    "4153223":  {
-                    "size":  "32 oz",
-                    "streak":  0,
-                    "last_asked":  "2026-09-28",
-                    "last_outcome":  "success"
-                },
+    "47157":  {
+                  "size":  "15 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-29",
+                  "last_outcome":  "success"
+              },
     "444508":  {
                    "size":  "15 oz",
                    "streak":  2,
@@ -660,6 +744,12 @@
                     "size":  "10.58 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
+    "4251744":  {
+                    "size":  "16.3 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
                     "last_outcome":  "success"
                 },
     "129138":  {
@@ -681,6 +771,12 @@
                   "last_outcome":  "source product size conflicts with the worklist variant",
                   "theirs":  "32 oz"
               },
+    "56357":  {
+                  "size":  "24 x 16.9 fl oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-28",
+                  "last_outcome":  "success"
+              },
     "52837":  {
                   "size":  "",
                   "streak":  1,
@@ -693,12 +789,6 @@
                    "last_asked":  "2026-09-28",
                    "last_outcome":  "success"
                },
-    "2492344":  {
-                    "size":  "14 oz",
-                    "streak":  0,
-                    "last_asked":  "2026-09-29",
-                    "last_outcome":  "success"
-                },
     "221617":  {
                    "size":  "8 oz",
                    "streak":  0,
@@ -717,12 +807,6 @@
                  "last_asked":  "2026-09-28",
                  "last_outcome":  "store product lookup returned no usable offer"
              },
-    "47157":  {
-                  "size":  "15 oz",
-                  "streak":  0,
-                  "last_asked":  "2026-09-29",
-                  "last_outcome":  "success"
-              },
     "282855":  {
                    "size":  "8 oz",
                    "streak":  0,
@@ -741,18 +825,18 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "store product lookup returned no usable offer"
                 },
-    "4209805":  {
-                    "size":  "3 ct",
-                    "streak":  0,
-                    "last_asked":  "2026-09-28",
-                    "last_outcome":  "success"
-                },
-    "4141472":  {
-                    "size":  "0.55 oz",
+    "2492344":  {
+                    "size":  "14 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-29",
                     "last_outcome":  "success"
                 },
+    "33211":  {
+                  "size":  "14 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-28",
+                  "last_outcome":  "success"
+              },
     "1884397":  {
                     "size":  "1.6 oz",
                     "streak":  0,
@@ -808,6 +892,12 @@
                     "last_outcome":  "source product size conflicts with the worklist variant",
                     "theirs":  "0.75 oz"
                 },
+    "23519":  {
+                  "size":  "2 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-30",
+                  "last_outcome":  "success"
+              },
     "3972711":  {
                     "size":  "1.87 oz",
                     "streak":  1,
@@ -832,10 +922,22 @@
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
                 },
+    "56918":  {
+                  "size":  "2 oz",
+                  "streak":  0,
+                  "last_asked":  "2026-09-30",
+                  "last_outcome":  "success"
+              },
     "4238525":  {
                     "size":  "9 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
+    "2311599":  {
+                    "size":  "12.5 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
                     "last_outcome":  "success"
                 },
     "1849998":  {
@@ -850,12 +952,12 @@
                    "last_asked":  "2026-09-28",
                    "last_outcome":  "success"
                },
-    "5161":  {
-                 "size":  "16.3 oz",
-                 "streak":  0,
-                 "last_asked":  "2026-09-27",
-                 "last_outcome":  "success"
-             },
+    "4153223":  {
+                    "size":  "32 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-28",
+                    "last_outcome":  "success"
+                },
     "2436168":  {
                     "size":  "8 oz",
                     "streak":  1,
@@ -917,6 +1019,12 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "5163":  {
+                 "size":  "16.3 oz",
+                 "streak":  0,
+                 "last_asked":  "2026-09-30",
+                 "last_outcome":  "success"
+             },
     "3603868":  {
                     "size":  "16 oz",
                     "streak":  1,
@@ -929,6 +1037,12 @@
                   "last_asked":  "2026-09-28",
                   "last_outcome":  "success"
               },
+    "4885":  {
+                 "size":  "2.5 oz",
+                 "streak":  0,
+                 "last_asked":  "2026-09-30",
+                 "last_outcome":  "success"
+             },
     "536497":  {
                    "size":  "1 pt",
                    "streak":  1,
@@ -947,8 +1061,8 @@
                    "last_asked":  "2026-09-27",
                    "last_outcome":  "store product lookup returned no usable offer"
                },
-    "4215896":  {
-                    "size":  "8.5 oz",
+    "3413341":  {
+                    "size":  "9 oz",
                     "streak":  0,
                     "last_asked":  "2026-09-28",
                     "last_outcome":  "success"
@@ -959,6 +1073,12 @@
                   "last_asked":  "2026-09-27",
                   "last_outcome":  "success"
               },
+    "4251743":  {
+                    "size":  "16.3 oz",
+                    "streak":  0,
+                    "last_asked":  "2026-09-30",
+                    "last_outcome":  "success"
+                },
     "4141470":  {
                     "size":  "0.25 oz",
                     "streak":  0,

@@ -747,6 +747,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
     },
     {
+        "id":  "chipotle-adobo",
+        "store":  "Family Fare",
+        "product":  "San Marcos Original Recipe Traditional Mexican Flavor Chipotles Peppers In Adobo Sauce 7.5 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/canned_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "chocolate-chips",
         "store":  "Family Fare",
         "product":  "Our Family Morsels, Semi Sweet Chocolate 24 Oz",
@@ -961,6 +970,15 @@
         "aisle":  "health_beauty/baby_child",
         "verdict":  "ALLOW",
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027baby\u0027"
+    },
+    {
+        "id":  "diced-ham",
+        "store":  "Family Fare",
+        "product":  "Farmland Diced Ham 16 Oz",
+        "dept":  "meat",
+        "aisle":  "meat/ham",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
     },
     {
         "id":  "tomatoes-green-chilies",
@@ -1296,15 +1314,6 @@
         "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
     },
     {
-        "id":  "frozen-waffles",
-        "store":  "Family Fare",
-        "product":  "Our Family Buttermilk Waffles 24 Ea",
-        "dept":  "freezer",
-        "aisle":  "freezer/frozen_meals_more",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027freezer\u0027 is an allowed department for category \u0027frozen\u0027"
-    },
-    {
         "id":  "fruit-punch",
         "store":  "Family Fare",
         "product":  "Minute Maid Fruit Punch Juice Drink Carton 59 Fl Oz",
@@ -1456,15 +1465,6 @@
         "aisle":  "pantry/breakfast",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
-    },
-    {
-        "id":  "ground-cinnamon",
-        "store":  "Family Fare",
-        "product":  "That\u0027s Smart! Ground Cinnamon",
-        "dept":  "pantry",
-        "aisle":  "pantry/mixes_spices_seasoning",
-        "verdict":  "ALLOW",
-        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "ground-turmeric",
@@ -2626,6 +2626,15 @@
         "aisle":  "household/bath_tissue",
         "verdict":  "ALLOW",
         "reason":  "\u0027household\u0027 is an allowed department for category \u0027household\u0027"
+    },
+    {
+        "id":  "tomatillos",
+        "store":  "Family Fare",
+        "product":  "Tomatillos",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/other_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
         "id":  "tomato-paste",
