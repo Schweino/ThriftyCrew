@@ -38,6 +38,13 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
          promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
          task on 2026-09-13, and the stores went unread for six days.
+         INJECT THE COMMITTED SCRIPTS BYTE-FOR-BYTE, COMMENTS AND ALL (Brad, 2026-09-30). Every brief says so, in
+         these words: "Paste each file exactly as the Read tool returns it. Do not strip comments, minify, reformat
+         or edit a single character: removing comments by pattern breaks any string that holds // or /*, and the
+         result is no longer the reviewed code." On 2026-09-30 the Walmart and Aldi agents both stripped the
+         comments despite a brief that said VERBATIM, to save tokens; the code survived that day by luck. Ask each
+         agent to report the character count it injected against the file's own length, and treat a mismatch as
+         an open item.
          MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5.5, Medium effort; Brad, 2026-09-29).
          This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
          refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
