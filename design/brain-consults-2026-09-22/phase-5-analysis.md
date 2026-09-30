@@ -249,6 +249,18 @@ of eight absence-assertion cues (there-is-no, does-not-exist, no-caller, nothing
 no-such, i-could-not-find) and carries no `Checked:` line. It never reads the footer. The one-time task
 d4-analysis-trigger-tune-0930 reads the 7-day rate on 2026-09-30 and builds the refusal only if the bar holds.
 
+**2026-09-30, the 7-day reading (task d4-analysis-trigger-tune-0930): D4b is NOT switched on.**
+- Rows: recall-subagent-stop-log.jsonl, t=1790176182 to 1790780982, 882 rows. W1.9's exclusions dropped 0 and
+  there were 0 duplicate rows, so each row is one helper answer.
+- The rate: non-workflow helpers would refuse on **93 of 838 answers (11.1%)**, over the 10% bar.
+- The 374 rows with an empty agent_type (1 would refuse) are counted as helpers, as the 09-25 reading did. They
+  take their text from `last_assistant_message` and have no agent transcript file on disk, so which surface
+  writes them is unknown. Leaving them out gives 92 of 464 (19.8%). The bar fails either way.
+- Most refusals: general-purpose 45 of 303, triage-developer 26 of 79, triage-ops-developer 7 of 49. Next are
+  triage-reviewer 6 of 17 and Explore 6 of 11.
+- Workflow rows: 44, of which 3 would refuse. They stay report-only whatever the rate.
+- Nothing was built and `settings.json` is unchanged. SubagentStop stays measure-only.
+
 ## W5.7 The Stop gates see what the prompt hook offered, and chat analysis is measured
 
 **Repo:** brain. **Lands via:** `~/.claude` commit. **Effort:** S. **Needs:** W2.2, W4.2 (its marker), W5.4 (its
@@ -292,6 +304,27 @@ d4-analysis-trigger-tune-0930 reads the 7-day rate on 2026-09-30 and builds the 
    in the context 34 of 45 (76%); shape (a) 14 of 45; shape (b) 8 of 10 contexts; by cue rate 44, verdict 1; 45 fires
    on record and 0 hand-labelled, against the 50 this step asks for. The 50-case precision check and any trigger
    tightening move to the one-time task d4-analysis-trigger-tune-0930 (2026-09-30).
+   **2026-09-30, the precision check and the tune (task d4-analysis-trigger-tune-0930).**
+   - The report: `recall-consulted-hook.py --report --days 7`, exit 0, `CONSULTED-REPORT-COMPLETE rows=815
+     analysis=179`. By cue: rate 155, verdict 17, root-cause 6, the-cause-is 1.
+   - The bar, written before labelling: at least 40 of 50 real analysis keeps the trigger.
+   - Hand-labelled, the 50 most recent distinct fires: **21 of 50 (42%) were real analysis, so the bar FAILED.**
+     The other 29 were status reports carrying a gate tally, a progress ordinal or "waiting for its verdict".
+   - The fix: the trigger now needs a conclusion beside the cue (`recall_analysis.CLAIM_MARKERS`, six families).
+     It sits behind a new mode key, `analysis_trigger`: brain 7d6d49a is the code and 14af3d2 the flip to `claim`.
+     Five variants were scored.
+   - Before and after, on the 50: the cue alone fires 50, of which 21 are real, and keeps all 21 real replies.
+     The claim trigger fires 21, of which 20 are real, and keeps 20 of the 21.
+   - On 50 older fires it was not tuned on (the newest kept and dropped, not a random sample): 16 of its 21 fires
+     were real (76%), and 13 of the 29 replies it dropped were analysis.
+   - So precision roughly doubled, but the 80% bar is not yet shown out of sample, and the rung now misses analysis
+     replies it used to catch.
+   - A cued reply the trigger leaves unarmed still writes its row (`armed: false`) and is never refused. The next
+     read labels fires written after the flip.
+   - Labels, one row per case: `~/.claude/recall-consulted-analysis-labels-2026-09-30.jsonl` (local, not tracked).
+     Fixtures: `skills/recall-analysis-owes-cases.jsonl`, 100 rows as trimmed excerpts.
+   - Checks: the self-tests pass, recall_analysis 72 of 72 and recall-consulted-hook 106 of 106, both exit 0. The
+     mutation probe killed 13 of 14 mutants; the survivor was a case-sensitivity with no effect, now removed.
 5. **Report:** "analysis answers with no search in the context: N of M" (M10), and "named items per armed turn". Never
    the footer rate.
 
