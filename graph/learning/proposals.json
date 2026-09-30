@@ -126,7 +126,7 @@
     "payload_json": "{\"payload\": \"^red\\\\s*pepper$\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Red Pepper'. In grocery contexts, 'Red Pepper' usually implies Red Bell Pepper unless specified as chili/ground. The anchor ensures it's the whole item.",
-    "status": "held_for_human",
+    "status": "accepted",
     "target_id": "red-bell-pepper"
   },
   {
@@ -664,6 +664,19 @@
   },
   {
     "confidence": 0.9,
+    "created_at": "2026-09-29T21:37:52",
+    "derived_from": "[]",
+    "id": "lp:29ad8ad4f86654d9f2db",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"quartered\\\\s+artichokes\"}",
+    "queue_hash": "5b4725e617d299f82991cde7331e2c6f1607154f4ff3810abe15d17fd44c88a2",
+    "rationale": "Matches 'Napoleon Quartered Artichokes'. Quartered artichokes are a standard form of canned/jarred hearts.",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
+    "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "derived_from": null,
     "id": "lp:2a2e6bfbda0a16642353",
@@ -1192,7 +1205,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s*hickory\\\\s*liquid\\\\s*smoke\"}",
     "queue_hash": "a253ad82028d0820b43081214ba41f6b4b9354f68d122cdbf08b814653580280",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke'. Anchors on brand + flavor to avoid matching other liquid smoke brands or marinades.",
-    "status": "held_for_human",
+    "status": "accepted",
     "target_id": "liquid-smoke"
   },
   {
@@ -1985,7 +1998,7 @@
     "payload_json": "{\"payload\": \"figaro\\\\s+hickory\\\\s+liquid\\\\s+smoke\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Figaro Hickory Liquid Smoke & Barbecue Marinade'. Anchors on brand and specific flavor/type.",
-    "status": "held_for_human",
+    "status": "accepted",
     "target_id": "liquid-smoke"
   },
   {
@@ -2167,7 +2180,7 @@
     "payload_json": "{\"payload\": \"cafe\\\\s+spicy\\\\s+italian\\\\s+sausage\"}",
     "queue_hash": "2c8e5fd582023ef64e452af2ce35372d37bcdbfea0014118c2a6d3fae33c0a5b",
     "rationale": "Matches 'Member's Mark Cafe Spicy Italian Sausage'. Anchors on the specific product line name.",
-    "status": "held_for_human",
+    "status": "accepted",
     "target_id": "hot-italian-sausage"
   },
   {
@@ -3987,7 +4000,7 @@
     "payload_json": "{\"payload\": \"fresca\\\\s+.*\\\\s+2\\\\s+liters|fresca\\\\s+.*\\\\s+2l\"}",
     "queue_hash": "d4a1a38e3caa1e8fee42dbcfd7733df82a71245846a4cb2e2078d01efa294e8f",
     "rationale": "Fresca is a zero-sugar soda brand. The pattern anchors on the brand and size to match the specific commodity.",
-    "status": "held_for_human",
+    "status": "accepted",
     "target_id": "zero-sugar-soda-2l"
   },
   {
