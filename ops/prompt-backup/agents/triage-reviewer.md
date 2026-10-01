@@ -214,7 +214,10 @@ Write TWO files: the plan `C:\Codex\ThriftyCrew\grocery\triage-plans\plan-<yyyy-
 documented in `grocery/triage-plans/README.md`, and its routing artifact `plan-<yyyy-MM-dd>[-N].routing.json`
 whenever any item changes a matching rule. Requirements:
 - EVERY queue id in your dispatch appears in `items`. An alert you judged to need no code change still gets
-  an item with `classification: no-code-change` and a `resolution_note`. Since 2026-09-24 the cheap Class C/D
+  an item with `classification: no-code-change` and a `resolution_note`, and you CLOSE it yourself:
+  `status: "done"`, `close_disposition` (`confirmed`, or what the queue README names), `actual_tool_calls`. Your
+  measurement is the work; no lane will touch it, and on 2026-10-01 three such items sat `planned` until the
+  orchestrator closed them by hand to get `-Closing -PreLanding` to exit 0. Since 2026-09-24 the cheap Class C/D
   ids are written by `triage-ops-developer` (JOB 3) into their own plan, so yours holds only the ids you were
   sent; the gate is run with exactly those ids.
 - Do not read `grocery/triage-plans/README.md` whole (28,913 characters, re-read on every later call): grep it for
@@ -244,7 +247,15 @@ whenever any item changes a matching rule. Requirements:
   status from the queue, not from your plan, so leaving the fields off does not make an item a first-timer.
   Why: over 2026-08-22 to 2026-09-10 all 25 alert types that fired on 3 or more days came back after a close.
 - `ship_sequence` is ordered and complete, including the gated chain and the live verification, and groups
-  items into as few publishes as the dependencies allow.
+  items into as few publishes as the dependencies allow. **It ends at COMMIT.** Since 2026-09-24 no lane pushes,
+  runs `run-gates`, `push-main` or the full `test-auditors.ps1`: the orchestrator lands the whole run once with
+  `grocery\triage-land.ps1`. Never write "land each with push-main" or "run-gates 0" into a step; name the targeted
+  self-tests instead. On 2026-10-01 a plan said both, and every developer brief had to override it.
+- **Search for a sibling that already holds the fix** before planning code: `git log --all --oneline -- <file>`
+  for each file you would change, and `git for-each-ref refs/heads/triage/` (`triage-due.ps1` lists the unlanded
+  ones as `UNLANDED`). On 2026-10-01 this run re-built ruling A, the rotisserie confirm and the identity re-page
+  from scratch while `triage/2026-09-30-unlanded` held all three, plus an edge-poll fix the plan then called
+  "no code needed". A parked fix is the plan's first option: land it, or say in the item why not.
 - **Size the run to what the lanes can FINISH (2026-09-24, F4 of design/PLAN-triage-token-efficiency-2026-09-24.md).**
   Every `planned` code item carries `lane` (`money` if it publishes the board, changes a matching or pricing rule,
   or touches a blocking guard; `ops` otherwise) and `est_tool_calls`, your estimate of the calls to FINISH it: root
