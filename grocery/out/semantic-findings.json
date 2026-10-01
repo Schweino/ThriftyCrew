@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-09-30 21:33",
+    "generated":  "2026-10-01 08:25",
     "board":  "comparison-2026-09-30.json",
-    "sidecar_generated":  "2026-09-30 21:33:52",
+    "sidecar_generated":  "2026-10-01 08:25:06",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2890,
-                     "corpus":  44439,
-                     "rule_invisible":  9149
+                     "board_pairs":  2908,
+                     "corpus":  44560,
+                     "rule_invisible":  9190
                  },
     "identity_count":  0,
     "coverage_count":  4,
@@ -60,7 +60,7 @@
                          "why":  "no rule matches it, but it reads as an instance of this commodity"
                      }
                  ],
-    "coverage_excluded_count":  10,
+    "coverage_excluded_count":  9,
     "coverage_excluded":  [
                               {
                                   "kind":  "coverage",
@@ -121,18 +121,6 @@
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "REFUSED-BY-EXCLUDE",
                                   "detail":  "no admit pattern matches, and exclude \u0027patt\u0027 would refuse it anyway"
-                              },
-                              {
-                                  "kind":  "coverage",
-                                  "id":  "canned-butter-beans",
-                                  "commodity":  "Canned Butter Beans",
-                                  "store":  "Walmart",
-                                  "product":  "Glory Foods Canned Seasoned Butter Beans, 15.5 oz Can",
-                                  "cos":  0.6813,
-                                  "score":  0.92039,
-                                  "why":  "no rule matches it, but it reads as an instance of this commodity",
-                                  "verdict":  "EXCLUDED",
-                                  "detail":  "include \u0027\\bbutter\\s+beans?\\b\u0027 matched, exclude \u0027\\b(?:baked|refried|seasoned|soup|chili|salad|dip|hummus|entree)\\b\u0027 killed it"
                               },
                               {
                                   "kind":  "coverage",

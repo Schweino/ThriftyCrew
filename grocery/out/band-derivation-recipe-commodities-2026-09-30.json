@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  4779,
+    "evidence_rows":  4729,
     "derived_commodities":  107,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1398
+                                "newly_refused_rows":  1367
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  963
+                                "newly_refused_rows":  938
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  674
+                                "newly_refused_rows":  658
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  518
+                                "newly_refused_rows":  510
                             }
                 },
     "typed_fields_ignored":  [
@@ -97,7 +97,7 @@
                               "name":  "Our own ready to cook shrimp \u0026 crab boil, Snow crab clusters, crawfish, Argentine red EZ peel snow crab, skinned jumbo lump crabs, mini sweet corn cobs, garlic herb butter chunks \u0026 Old Bay Cajun spices, 64 oz. half shrimp \u0026 crab boil 32 oz. $17.99, $34.99",
                               "per_unit":  0.5467,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "pepper-jack-cheese",
@@ -161,7 +161,7 @@
                               "name":  "Pam Non Stick Butter Cooking Spray 5 Oz",
                               "per_unit":  0.658,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "marinara-sauce",
@@ -193,13 +193,69 @@
                               "name":  "Jolly Rancher Trickies Green Apple, Blue Raspberry, Cherry, Grape \u0026 Watermelon Minis Candy 9.2 Oz",
                               "per_unit":  5.5,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "potato",
                               "store":  "Fareway",
                               "name":  "Ore-Ida Potatoes",
                               "per_unit":  4.1937,
+                              "typed":  "none",
+                              "derived":  "0.099-2.475"
+                          },
+                          {
+                              "id":  "canned-sweet-corn",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Del Monte Whole Kernel Corn, 106 oz.",
+                              "per_unit":  6.28,
+                              "typed":  "none",
+                              "derived":  "0.16-4"
+                          },
+                          {
+                              "id":  "apple",
+                              "store":  "Aldi",
+                              "name":  "Organic Pink Lady Cripps Apple Bag Each",
+                              "per_unit":  5.29,
+                              "typed":  "none",
+                              "derived":  "0.1639-4.0975"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Aldi",
+                              "name":  "Emporium Selection Honey I D Rather Bee AT The Sea Sea Salt Honey Cheddar Cheese 4 OZ",
+                              "per_unit":  0.8725,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
+                              "per_unit":  0.4917,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Butter Garlic Grilling Blend 5.5 OZ",
+                              "per_unit":  0.5982,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Fremont Fish Market Salted Butter Garlic Toss N Serve Shrimp 12 OZ",
+                              "per_unit":  0.5825,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Aldi",
+                              "name":  "Deutsche Kuche Herbs OF The Alps Potato Sticks 4.41 OZ",
+                              "per_unit":  6.8571,
                               "typed":  "none",
                               "derived":  "0.099-2.475"
                           },
@@ -212,20 +268,12 @@
                               "derived":  "0.01238-0.3095"
                           },
                           {
-                              "id":  "apple",
-                              "store":  "Aldi",
-                              "name":  "Organic Pink Lady Cripps Apple Bag Each",
-                              "per_unit":  5.29,
-                              "typed":  "none",
-                              "derived":  "0.1389-3.4725"
-                          },
-                          {
                               "id":  "carrots",
                               "store":  "Aldi",
                               "name":  "Organic Purple Carrot And Blueberry Puffs",
                               "per_unit":  29.7297,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -233,31 +281,7 @@
                               "name":  "Organic Mango And Carrot Puffs",
                               "per_unit":  29.7297,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Aldi",
-                              "name":  "Little Salad Bar Sweet Butter Salad 6 OZ",
-                              "per_unit":  0.4917,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Butter Garlic Grilling Blend 5.5 OZ",
-                              "per_unit":  0.5982,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Aldi",
-                              "name":  "Emporium Selection Honey I D Rather Bee AT The Sea Sea Salt Honey Cheddar Cheese 4 OZ",
-                              "per_unit":  0.8725,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "chickpeas",
@@ -289,7 +313,7 @@
                               "name":  "Countryside Creamery Pure Salted Irish Butter 8 OZ",
                               "per_unit":  0.4988,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "peanut-butter",
@@ -302,18 +326,10 @@
                           {
                               "id":  "butter",
                               "store":  "Aldi",
-                              "name":  "Fremont Fish Market Salted Butter Garlic Toss N Serve Shrimp 12 OZ",
-                              "per_unit":  0.5825,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Aldi",
                               "name":  "Berryhill Maple Butter 9.5 OZ",
                               "per_unit":  0.7042,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "peanut-butter",
@@ -337,7 +353,7 @@
                               "name":  "Fremont Fish Market Salted Butter Shrimp Skewer 8 OZ",
                               "per_unit":  0.8488,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -353,7 +369,7 @@
                               "name":  "Countryside Creamery Pure Irish Butter Salted",
                               "per_unit":  0.4988,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "apple",
@@ -361,7 +377,7 @@
                               "name":  "Kirkton House Fall Tray Objects Apples 1 Each",
                               "per_unit":  5.99,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "apple",
@@ -369,39 +385,79 @@
                               "name":  "Kirkton House 3 Wick Candle Pump Apple Wood 1 Each",
                               "per_unit":  4.99,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
-                              "id":  "potato",
-                              "store":  "Aldi",
-                              "name":  "Organic Yellow Potato Bag 24 OZ",
-                              "per_unit":  2.66,
-                              "typed":  "none",
-                              "derived":  "0.099-2.475"
-                          },
-                          {
-                              "id":  "carrots",
+                              "id":  "honey",
                               "store":  "Baker\u0027s",
-                              "name":  "Freshpet Healthy Senior: Chicken Recipe With Cranberries And Carrots Fresh Dog Food Roll",
-                              "per_unit":  5.3267,
+                              "name":  "Bragg Organic Apple Cider Vinegar Honey Blend with the Mother",
+                              "per_unit":  0.5494,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.02091-0.52275"
                           },
                           {
-                              "id":  "green-beans",
+                              "id":  "honey",
                               "store":  "Baker\u0027s",
-                              "name":  "Kroger Green Beans",
-                              "per_unit":  0.2908,
+                              "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse",
+                              "per_unit":  0.5494,
                               "typed":  "none",
-                              "derived":  "0.01097-0.27425"
+                              "derived":  "0.02091-0.52275"
                           },
                           {
-                              "id":  "frozen-green-peas",
+                              "id":  "butter",
                               "store":  "Baker\u0027s",
-                              "name":  "English Green Peas",
-                              "per_unit":  0.2744,
+                              "name":  "Kerrygold Irish Grass-Fed Salted Butter Sticks, 8oz",
+                              "per_unit":  0.6612,
                               "typed":  "none",
-                              "derived":  "0.01087-0.27175"
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Grass-Fed Pure Irish Salted Butter Sticks",
+                              "per_unit":  0.6244,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Irish Grass-Fed Salted Butter Foil",
+                              "per_unit":  0.6612,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Sticks, 8oz",
+                              "per_unit":  0.6612,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Grass-Fed Pure Irish Salted Softer Butter Tub",
+                              "per_unit":  0.7862,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Foil, 8oz",
+                              "per_unit":  0.6612,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kerrygold Grass-Fed Pure Irish Naturally Softer Butter Tub",
+                              "per_unit":  0.7493,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -412,84 +468,36 @@
                               "derived":  "0.099-2.475"
                           },
                           {
-                              "id":  "honey",
+                              "id":  "carrots",
                               "store":  "Baker\u0027s",
-                              "name":  "Secret Whole Body Deodorant Spray for Women, Almond Milk \u0026 Honey Scent, Aluminum Free",
-                              "per_unit":  3.7114,
+                              "name":  "Private Selection Hand Peeled Baby Carrots",
+                              "per_unit":  6.98,
                               "typed":  "none",
-                              "derived":  "0.02091-0.52275"
+                              "derived":  "0.199-4.975"
                           },
                           {
-                              "id":  "butter",
+                              "id":  "carrots",
                               "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Irish Grass-Fed Salted Butter Sticks, 8oz",
-                              "per_unit":  0.6612,
+                              "name":  "Evergreen Zucchini \u0026 Carrot Frozen Mini Waffles",
+                              "per_unit":  9.76,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.199-4.975"
                           },
                           {
-                              "id":  "butter",
+                              "id":  "carrots",
                               "store":  "Baker\u0027s",
-                              "name":  "Private Selection Grass Fed Salted Butter Block",
-                              "per_unit":  0.4488,
+                              "name":  "Evergreen Zucchini \u0026 Carrot Frozen Mini Waffles",
+                              "per_unit":  10.6489,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.199-4.975"
                           },
                           {
-                              "id":  "butter",
+                              "id":  "carrots",
                               "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Grass-Fed Pure Irish Salted Butter Sticks",
-                              "per_unit":  0.6244,
+                              "name":  "Pictsweet Farms Frozen Broccoli Florets, Red Potatoes \u0026 Carrots Vegetables for Roasting",
+                              "per_unit":  6.2533,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Irish Grass-Fed Salted Butter Foil",
-                              "per_unit":  0.6612,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Sticks, 8oz",
-                              "per_unit":  0.6612,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Grass-Fed Pure Irish Salted Softer Butter Tub",
-                              "per_unit":  0.7862,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Irish Grass-Fed Unsalted Butter Foil, 8oz",
-                              "per_unit":  0.6612,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Baker\u0027s",
-                              "name":  "Kerrygold Grass-fed Pure Irish Unsalted Butter Sticks, 16oz",
-                              "per_unit":  0.6244,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "paprika",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Ground Paprika Shaker",
-                              "per_unit":  2.988,
-                              "typed":  "none",
-                              "derived":  "0.09664-2.416"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "honey",
@@ -508,10 +516,42 @@
                               "derived":  "0.0498-1.245"
                           },
                           {
+                              "id":  "ketchup",
+                              "store":  "Baker\u0027s",
+                              "name":  "Heinz No Sugar Added Tomato Ketchup",
+                              "per_unit":  0.3838,
+                              "typed":  "none",
+                              "derived":  "0.01188-0.297"
+                          },
+                          {
+                              "id":  "ketchup",
+                              "store":  "Baker\u0027s",
+                              "name":  "Heinz Simply Tomato Ketchup, Bottle",
+                              "per_unit":  0.3104,
+                              "typed":  "none",
+                              "derived":  "0.01188-0.297"
+                          },
+                          {
+                              "id":  "ketchup",
+                              "store":  "Baker\u0027s",
+                              "name":  "Heinz Spicy Simply Tomato Ketchup Blended with Jalapeno, Bottle",
+                              "per_unit":  0.3104,
+                              "typed":  "none",
+                              "derived":  "0.01188-0.297"
+                          },
+                          {
                               "id":  "marinara-sauce",
                               "store":  "Baker\u0027s",
                               "name":  "Sturdy Sauce Marinara High Protein Sauce",
                               "per_unit":  0.8431,
+                              "typed":  "none",
+                              "derived":  "0.01644-0.411"
+                          },
+                          {
+                              "id":  "marinara-sauce",
+                              "store":  "Baker\u0027s",
+                              "name":  "TGIF Fridays Mozzarella Sticks Frozen Snacks with Marinara Sauce, Box",
+                              "per_unit":  0.4592,
                               "typed":  "none",
                               "derived":  "0.01644-0.411"
                           },
@@ -564,6 +604,46 @@
                               "derived":  "0.02128-0.532"
                           },
                           {
+                              "id":  "honey",
+                              "store":  "Baker\u0027s",
+                              "name":  "Honey Smoked Fish Smoked Salmon Fillet, Original, 6 oz",
+                              "per_unit":  1.665,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "carrots",
+                              "store":  "Baker\u0027s",
+                              "name":  "Freshpet Healthy Senior: Chicken Recipe With Cranberries And Carrots Fresh Dog Food Roll",
+                              "per_unit":  5.3267,
+                              "typed":  "none",
+                              "derived":  "0.199-4.975"
+                          },
+                          {
+                              "id":  "green-beans",
+                              "store":  "Baker\u0027s",
+                              "name":  "Kroger Green Beans",
+                              "per_unit":  0.2908,
+                              "typed":  "none",
+                              "derived":  "0.01097-0.27425"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Baker\u0027s",
+                              "name":  "Secret Whole Body Deodorant Spray for Women, Almond Milk \u0026 Honey Scent, Aluminum Free",
+                              "per_unit":  3.7114,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "paprika",
+                              "store":  "Baker\u0027s",
+                              "name":  "Private Selection Ground Paprika Shaker",
+                              "per_unit":  2.988,
+                              "typed":  "none",
+                              "derived":  "0.09664-2.416"
+                          },
+                          {
                               "id":  "peanut-butter",
                               "store":  "Baker\u0027s",
                               "name":  "Milk-Bone 4.5 Ounce Peanut Buttery Bites Peanut Butter Dog Treat Each",
@@ -609,7 +689,7 @@
                               "name":  "Private Selection Grilled Beef Sirloin Steak with Mushrooms and Herb Butter",
                               "per_unit":  1.0256,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "carrots",
@@ -617,7 +697,7 @@
                               "name":  "Fresh Cut In Store Carrot \u0026 Cucumber Ranch",
                               "per_unit":  5.3333,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -625,29 +705,13 @@
                               "name":  "Fresh Cut In Store Carrot, Broccoli, Grape Tomato Ranch",
                               "per_unit":  8,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "honey",
                               "store":  "Baker\u0027s",
                               "name":  "Philadelphia Honey Pecan Cream Cheese Spread",
                               "per_unit":  0.532,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Baker\u0027s",
-                              "name":  "Bragg Organic Apple Cider Vinegar Honey Blend with the Mother",
-                              "per_unit":  0.5494,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Baker\u0027s",
-                              "name":  "Bragg Organic Apple Cider Vinegar Honey Cayenne Wellness Cleanse",
-                              "per_unit":  0.5494,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
                           },
@@ -665,7 +729,7 @@
                               "name":  "Happy Baby Clearly Crafted Stage 2 Apples Pumpkin \u0026 Carrots Organic Baby Food Pouch",
                               "per_unit":  7.96,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "peanut-butter",
@@ -697,7 +761,7 @@
                               "name":  "Beech-Nut Chicken Stage 2 Baby Food, Chicken Carrots Peas \u0026 Butternut Squash",
                               "per_unit":  11.4286,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "frozen-green-peas",
@@ -705,7 +769,7 @@
                               "name":  "Earth\u0027s Best Organic Baby Food Pouches, Butternut Squash, Sweet Peas \u0026 Mango Puree",
                               "per_unit":  0.4829,
                               "typed":  "none",
-                              "derived":  "0.01087-0.27175"
+                              "derived":  "0.01127-0.28175"
                           },
                           {
                               "id":  "carrots",
@@ -713,31 +777,7 @@
                               "name":  "Pumpkin Tree Peter Rabbit Organics Apple Carrot \u0026 Pumpkin Puree Pouch",
                               "per_unit":  8.3273,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Baker\u0027s",
-                              "name":  "Private Selection Hand Peeled Baby Carrots",
-                              "per_unit":  6.98,
-                              "typed":  "none",
-                              "derived":  "0.1949-4.8725"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Baker\u0027s",
-                              "name":  "Evergreen Zucchini \u0026 Carrot Frozen Mini Waffles",
-                              "per_unit":  10.6489,
-                              "typed":  "none",
-                              "derived":  "0.1949-4.8725"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Baker\u0027s",
-                              "name":  "Celery And Carrot Sticks Fresh Cut In Store Daily",
-                              "per_unit":  5.7143,
-                              "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -745,7 +785,7 @@
                               "name":  "Fresh Cut In Store Carrot, Snap Pea, Celery Ranch",
                               "per_unit":  8,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "chickpeas",
@@ -785,15 +825,7 @@
                               "name":  "PAM Butter Non-Stick Cooking Spray",
                               "per_unit":  0.838,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Baker\u0027s",
-                              "name":  "Pictsweet Farms Frozen Broccoli Florets, Red Potatoes \u0026 Carrots Vegetables for Roasting",
-                              "per_unit":  6.2533,
-                              "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "peanut-butter",
@@ -809,7 +841,7 @@
                               "name":  "Guy Fieri Flavortown Ultimate Steak Butter Rub, Garlic Herb Seasoning for Beef and Vegetables, 5 oz",
                               "per_unit":  1.198,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -817,7 +849,7 @@
                               "name":  "Kinder\u0027s Premium Quality Seasoning Garlic Butter",
                               "per_unit":  1.0679,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -956,36 +988,12 @@
                               "derived":  "0.02128-0.532"
                           },
                           {
-                              "id":  "ketchup",
-                              "store":  "Baker\u0027s",
-                              "name":  "Heinz No Sugar Added Tomato Ketchup",
-                              "per_unit":  0.3838,
-                              "typed":  "none",
-                              "derived":  "0.01179-0.29475"
-                          },
-                          {
-                              "id":  "ketchup",
-                              "store":  "Baker\u0027s",
-                              "name":  "Heinz Simply Tomato Ketchup, Bottle",
-                              "per_unit":  0.3104,
-                              "typed":  "none",
-                              "derived":  "0.01179-0.29475"
-                          },
-                          {
-                              "id":  "ketchup",
-                              "store":  "Baker\u0027s",
-                              "name":  "Heinz Spicy Simply Tomato Ketchup Blended with Jalapeno, Bottle",
-                              "per_unit":  0.3104,
-                              "typed":  "none",
-                              "derived":  "0.01179-0.29475"
-                          },
-                          {
                               "id":  "butter",
                               "store":  "Baker\u0027s",
                               "name":  "Simple Truth Organic Baby Red Butter Lettuce",
                               "per_unit":  0.698,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "paprika",
@@ -1044,20 +1052,12 @@
                               "derived":  "0.099-2.475"
                           },
                           {
-                              "id":  "honey",
-                              "store":  "Baker\u0027s",
-                              "name":  "Honey Smoked Fish Smoked Salmon Fillet, Original, 6 oz",
-                              "per_unit":  1.665,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
                               "id":  "butter",
                               "store":  "Baker\u0027s",
                               "name":  "Private Selection Atlantic Salmon Shallot and Herb Butter",
                               "per_unit":  0.8,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -1209,7 +1209,7 @@
                               "name":  "Fancy Feast Purina Fancy Feast Medleys White Meat Chicken Primavera With Tomatoes, Carrots And Spinach In A Silky Broth 3 Oz",
                               "per_unit":  6.88,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1217,7 +1217,7 @@
                               "name":  "Beneful Freshly Prepared Meals Savory Rice \u0026 Lamb Stew With Peas \u0026 Carrots Dog Food 10 Oz",
                               "per_unit":  5.104,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1225,7 +1225,7 @@
                               "name":  "Fresh Celery \u0026 Baby Carrots Fresh Divide",
                               "per_unit":  5.99,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1233,7 +1233,7 @@
                               "name":  "Freshpet Small Bites Chicken Recipe With Carrots \u0026 Cranberries Dog Food Larger Size 2 Lb",
                               "per_unit":  8.145,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1241,7 +1241,7 @@
                               "name":  "Beneful Freshly Prepared Meals Beef Stew With Peas Carrots Rice \u0026 Barley Dog Food 10 Oz",
                               "per_unit":  5.104,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "toasted-sesame-seeds",
@@ -1305,7 +1305,7 @@
                               "name":  "Pam Non Stick Butter Cooking Spray 5 Oz",
                               "per_unit":  0.858,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "tomato-sauce",
@@ -1361,7 +1361,7 @@
                               "name":  "Beneful Freshly Prepared Meals Roasted Chicken Recipe With Brown Rice Carrots \u0026 Spinach Dog Food 10 Oz",
                               "per_unit":  5.424,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1369,7 +1369,7 @@
                               "name":  "Beneful Freshly Prepared Meals Simmered Chicken Medley With Carrots Green Beans \u0026 Wild Rice Dog Food 10 Oz",
                               "per_unit":  5.424,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "green-beans",
@@ -1385,7 +1385,7 @@
                               "name":  "Sheba Chicken, Carrots, Barley \u0026 Green Beans Recipe Canine Cuisine 17.6 Oz",
                               "per_unit":  8.1727,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1393,7 +1393,7 @@
                               "name":  "Sheba Beef, Chicken, Carrots, Barley \u0026 Green Beans Recipe Canine Cuisine 17.6 Oz",
                               "per_unit":  8.1727,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "ketchup",
@@ -1401,7 +1401,7 @@
                               "name":  "Heinz Tomato Ketchup 14 Oz",
                               "per_unit":  0.3064,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -1409,7 +1409,7 @@
                               "name":  "Heinz Simply Tomato Ketchup 19 Oz",
                               "per_unit":  0.3047,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -1417,7 +1417,7 @@
                               "name":  "G Hughes Sugar Free Ketchup 13 Oz",
                               "per_unit":  0.43,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -1425,7 +1425,7 @@
                               "name":  "Primal Kitchen Ketchup, Organic And Unsweetened 11.3 Oz",
                               "per_unit":  0.6097,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "peanut-butter",
@@ -1529,7 +1529,7 @@
                               "name":  "Lean Cuisine Signature Butternut Squash Ravioli With Peas And Carrots In A Creamy Sauce 9.875 Oz",
                               "per_unit":  6.4648,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "honey",
@@ -1553,7 +1553,7 @@
                               "name":  "Fresh \u0026 Finest Garlic Herb Butter",
                               "per_unit":  1.2475,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1561,7 +1561,7 @@
                               "name":  "Fresh \u0026 Finest Cinnamon Butter",
                               "per_unit":  1.2475,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1569,7 +1569,7 @@
                               "name":  "Kerrygold Butter, Pure Irish 8 Oz",
                               "per_unit":  0.7488,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1577,7 +1577,7 @@
                               "name":  "Kerrygold Grass Fed Pure Irish Salted Softer Butter Tub, 8oz",
                               "per_unit":  0.9362,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1585,7 +1585,7 @@
                               "name":  "Kerrygold Butter, Pure Irish, Salted 4 Ea",
                               "per_unit":  0.6869,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1593,7 +1593,7 @@
                               "name":  "Land O Lakes Salted Whipped Butter 8 Oz",
                               "per_unit":  0.6612,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -1601,7 +1601,7 @@
                               "name":  "Red Barn Creamery Salted Butter 8 Oz",
                               "per_unit":  0.4988,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -1625,7 +1625,7 @@
                               "name":  "Happy Tot Stage 4 Organic Pears, Raspberries, Carrots \u0026 Butternut Squash Pouch 4 Oz",
                               "per_unit":  7.96,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -1633,7 +1633,7 @@
                               "name":  "Freshpet Dog Food, Chicken Recipe With Carrots \u0026 Cranberries, Bite Size, Small Dog 1 Lb",
                               "per_unit":  9.29,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "peanut-butter",
@@ -1657,7 +1657,7 @@
                               "name":  "Tippy Toes Baby Food, Apple Carrot Butternut Squash Chia, 2 (6 Months \u0026 Up) 3.5 Oz",
                               "per_unit":  7.2686,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "tomato-sauce",
@@ -1673,7 +1673,7 @@
                               "name":  "Kerrygold Grass Fed Pure Irish Unsalted Butter Foil, 8oz",
                               "per_unit":  0.7862,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -1689,7 +1689,7 @@
                               "name":  "Heinz Tomato Simply Ketchup 19 Oz",
                               "per_unit":  0.3047,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "butter",
@@ -1697,7 +1697,7 @@
                               "name":  "Fresh Gourmet Croutons, Butter \u0026 Garlic 5 Oz",
                               "per_unit":  0.498,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -1737,7 +1737,7 @@
                               "name":  "Plum Organics Pear, Purple Carrot \u0026 Blueberry Baby Food",
                               "per_unit":  9.16,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "potato",
@@ -1841,7 +1841,7 @@
                               "name":  "Quaker Instant Grits, Butter Flavor, 10-0.98 oz",
                               "per_unit":  0.6112,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -1857,7 +1857,47 @@
                               "name":  "Happy Tot Stage 4 Organic Pears, Raspberries, Carrots \u0026 Butternut Squash Pouch, 4 oz.",
                               "per_unit":  6.96,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Walmart",
+                              "name":  "Busy Bee Raw Honey, 100% Traceable USA Honey, Convenient To Go Packets (40 Packets Total)",
+                              "per_unit":  0.833,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Walmart",
+                              "name":  "Jack Daniels Tennessee Honey Boneless Pork Ribs, Refrigerated Entree, 16 oz",
+                              "per_unit":  0.6606,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Walmart",
+                              "name":  "Flavortown All Purpose Garlic Butter Rub 6 oz",
+                              "per_unit":  0.8217,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Walmart",
+                              "name":  "Honey Smoked Salmon (TM) Cracked Pepper 8oz",
+                              "per_unit":  1.2462,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
+                          },
+                          {
+                              "id":  "honey",
+                              "store":  "Walmart",
+                              "name":  "Honey Smoked Salmon (TM) Original 8oz",
+                              "per_unit":  1.2462,
+                              "typed":  "none",
+                              "derived":  "0.02091-0.52275"
                           },
                           {
                               "id":  "fajita-seasoning",
@@ -1884,22 +1924,6 @@
                               "derived":  "0.02729-0.68225"
                           },
                           {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Jack Daniels Tennessee Honey Boneless Pork Ribs, Refrigerated Entree, 16 oz",
-                              "per_unit":  0.6606,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Walmart",
-                              "name":  "Flavortown All Purpose Garlic Butter Rub 6 oz",
-                              "per_unit":  0.8217,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
                               "id":  "dried-rosemary",
                               "store":  "Walmart",
                               "name":  "Badia Rosemary 0.5 oz – Aromatic Single Herb Spice for Versatile Culinary Use",
@@ -1913,7 +1937,7 @@
                               "name":  "Glade Automatic Spray Refill 2 Count, Apple Cinnamon, 12.4 oz. Total, Air Freshener",
                               "per_unit":  5.89,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "apple",
@@ -1921,7 +1945,7 @@
                               "name":  "Clorox Scentiva Cleaning Wipes, Harvest Apple \u0026 Spice, 75 Count",
                               "per_unit":  0.0571,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "peanut-butter",
@@ -1937,7 +1961,7 @@
                               "name":  "Hartz Oinkies Hearty Kabobs Rawhide‑Free Dog Treats with Chicken, Duck, Sweet Potato, and Carrot, Highly Digestible Dog Chews, 18 Count",
                               "per_unit":  21.7612,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "dijon-mustard",
@@ -2073,7 +2097,7 @@
                               "name":  "Crisco Butter Flavor No-Stick Cooking Spray Can, 6 oz",
                               "per_unit":  0.6617,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "cornstarch",
@@ -2241,7 +2265,7 @@
                               "name":  "Stouffers Hidden Valley, Bacon Ranch Broccoli and Carrots, Side Dish, Frozen Vegetables 11 oz",
                               "per_unit":  5.2945,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "canned-sweet-corn",
@@ -2257,7 +2281,7 @@
                               "name":  "Marketside Butter Lettuce Salad Blend, 6 oz Bag",
                               "per_unit":  0.6283,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -2297,7 +2321,7 @@
                               "name":  "Quaker Instant Grits, Butter, 1.48 oz Cup",
                               "per_unit":  5.3298,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "hoisin-sauce",
@@ -2457,7 +2481,7 @@
                               "name":  "Heinz Tomato Ketchup with No Sugar Added, 13 oz Bottle",
                               "per_unit":  0.3062,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2465,7 +2489,7 @@
                               "name":  "Heinz Organic Tomato Ketchup Inverted Squeeze Bottle, 1 Bottle, for Easy Sharing and Easy Serving, Classic Style, No High-Fructose Corn Syrup, 14 oz",
                               "per_unit":  0.32,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2473,7 +2497,7 @@
                               "name":  "True Made Foods No Sugar Added Ketchup, 18.5oz Squeeze Bottle",
                               "per_unit":  0.3151,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2481,7 +2505,7 @@
                               "name":  "Whataburger Fancy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.5845,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2489,7 +2513,7 @@
                               "name":  "Whataburger Spicy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.549,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2497,7 +2521,7 @@
                               "name":  "Primal Kitchen Organic and Unsweetened Ketchup 11.3 oz",
                               "per_unit":  0.4894,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -2505,7 +2529,7 @@
                               "name":  "Heinz Tomato Ketchup, 14 oz Bottle",
                               "per_unit":  0.6343,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "kidney-beans",
@@ -2521,7 +2545,7 @@
                               "name":  "Maya Kaimal Organic Everyday Dal Kidney Bean Carrot Tamarind, 10 Oz",
                               "per_unit":  16,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "kidney-beans",
@@ -2569,7 +2593,7 @@
                               "name":  "BrightFarms Sweet Baby Butter Leaf Lettuce, 4 oz Salad",
                               "per_unit":  0.785,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -2665,7 +2689,7 @@
                               "name":  "The Bearded Butchers Butter Blend Seasoning, 6 oz",
                               "per_unit":  1.1617,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "peanut-butter",
@@ -2708,22 +2732,6 @@
                               "derived":  "0.02128-0.532"
                           },
                           {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Honey Smoked Salmon (TM) Original 8oz",
-                              "per_unit":  1.2462,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Honey Smoked Salmon (TM) Cracked Pepper 8oz",
-                              "per_unit":  1.2462,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
                               "id":  "salsa-verde",
                               "store":  "Walmart",
                               "name":  "La Costea Green Salsa Verde Tomatillo Sauce, 7 oz",
@@ -2753,7 +2761,7 @@
                               "name":  "Dollar Shave Club Smooth Shave Butter 6 fl oz for Precision Shaving",
                               "per_unit":  1.1617,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2761,7 +2769,7 @@
                               "name":  "Dr. Squatch Mens Moisturizing Shave Butter, Easy Glide Natural Thick \u0026 Creamy Shaving Butter for Men, Pine Tar, 6 fl Oz",
                               "per_unit":  2.1633,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2769,7 +2777,7 @@
                               "name":  "Dr. Squatch Mens Moisturizing Shave Butter, Easy Glide Natural Thick \u0026 Creamy Shaving Butter for Men, Coconut Castaway, 6 fl Oz",
                               "per_unit":  2.1633,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2777,7 +2785,7 @@
                               "name":  "eos Cashmere Skin Collection - Women\u0027s Shave Butter, Vanilla Cashmere, 7 fl oz",
                               "per_unit":  1.1386,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "soy-sauce",
@@ -2921,7 +2929,7 @@
                               "name":  "Caribbean Rhythms Butter Beans 14.1 oz",
                               "per_unit":  0.6206,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2929,7 +2937,7 @@
                               "name":  "Kerrygold Irish Grass-Fed Irish Salted Butter Sticks, 8 oz, 2 Sticks",
                               "per_unit":  0.62,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2937,7 +2945,7 @@
                               "name":  "Kerrygold Naturally Softer Irish Butter, All Purpose Grass Fed Soft Butter Tub",
                               "per_unit":  0.695,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2945,7 +2953,7 @@
                               "name":  "Kerrygold Grass-Fed Salted Pure Irish Butter, 8 oz.",
                               "per_unit":  0.585,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2953,7 +2961,7 @@
                               "name":  "Kerrygold Grass-Fed Pure Irish Unsalted Butter, 8 Oz, 2 Sticks",
                               "per_unit":  0.62,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2961,7 +2969,7 @@
                               "name":  "Kerrygold Grass-Fed Garlic \u0026 Herb Pure Irish Butter, 3.5 oz.",
                               "per_unit":  0.7886,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2969,7 +2977,7 @@
                               "name":  "Kerrygold Grass-Fed Unsalted Pure Irish Butter Foil, 8 Oz.",
                               "per_unit":  0.585,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2977,7 +2985,7 @@
                               "name":  "Kerrygold Irish Grass-fed Salted Butter Sticks, 16oz 4x4oz",
                               "per_unit":  0.5794,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2985,7 +2993,7 @@
                               "name":  "Horizon Organic Unsalted Butter Sticks, 16 oz, 4 Sticks",
                               "per_unit":  0.5588,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -2993,7 +3001,7 @@
                               "name":  "Horizon Organic Salted Butter Sticks, 16 oz, 4 Sticks",
                               "per_unit":  0.5588,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -3001,7 +3009,7 @@
                               "name":  "Kerrygold 16oz Unsalted Butter Sticks",
                               "per_unit":  0.5794,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -3009,7 +3017,7 @@
                               "name":  "bettergoods Garlic, Parmesan, and Basil Butter, 3 oz",
                               "per_unit":  0.8533,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "green-cabbage",
@@ -3169,7 +3177,7 @@
                               "name":  "Flavortown All Purpose Garlic Butter Rub Seasoning, 6 oz",
                               "per_unit":  0.8217,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "soy-sauce",
@@ -3207,17 +3215,9 @@
                               "id":  "butter",
                               "store":  "Walmart",
                               "name":  "Kerrygold Irish Grass-fed Salted Butter Sticks, 16oz 4x4oz",
-                              "per_unit":  0.5794,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Walmart",
-                              "name":  "Kerrygold Irish Grass-fed Salted Butter Sticks, 16oz 4x4oz",
                               "per_unit":  0.645,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -3279,14 +3279,6 @@
                               "id":  "fajita-seasoning",
                               "store":  "Walmart",
                               "name":  "Blues Hog Ritas \u0026 Fajitas Seasoning, Gluten-Free, 6.5 oz",
-                              "per_unit":  8.99,
-                              "typed":  "none",
-                              "derived":  "0.178-4.45"
-                          },
-                          {
-                              "id":  "fajita-seasoning",
-                              "store":  "Walmart",
-                              "name":  "Blues Hog Ritas \u0026 Fajitas Seasoning, Gluten-Free, 6.5 oz",
                               "per_unit":  12.71,
                               "typed":  "none",
                               "derived":  "0.178-4.45"
@@ -3305,21 +3297,13 @@
                               "name":  "Grill Mates Garlic Butter Seasoning, 6.56 oz Bottle",
                               "per_unit":  0.5915,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
                               "store":  "Walmart",
                               "name":  "Egmont Raw Manuka Honey MGO 50+ - 100% Pure New Zealand Manuka Honey - Non-GMO, Certified MGO, 8.8oz (250 Gram)",
                               "per_unit":  1.05,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Local Hive Honey Hot Sauce, Original, 6oz",
-                              "per_unit":  0.5783,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
                           },
@@ -3367,14 +3351,6 @@
                               "id":  "canned-sweet-corn",
                               "store":  "Walmart",
                               "name":  "Del Monte Golden Sweet Whole Kernel Corn, NON GMO, 106 oz, Aluminum Can",
-                              "per_unit":  20.5,
-                              "typed":  "none",
-                              "derived":  "0.16-4"
-                          },
-                          {
-                              "id":  "canned-sweet-corn",
-                              "store":  "Walmart",
-                              "name":  "Del Monte Golden Sweet Whole Kernel Corn, NON GMO, 106 oz, Aluminum Can",
                               "per_unit":  23.1,
                               "typed":  "none",
                               "derived":  "0.16-4"
@@ -3384,14 +3360,6 @@
                               "store":  "Walmart",
                               "name":  "Mid\u0027s Premium All Natural Marinara Sauce, Gluten-Free Spaghetti Sauce, 28 oz, 1 Pack",
                               "per_unit":  0.6782,
-                              "typed":  "none",
-                              "derived":  "0.01644-0.411"
-                          },
-                          {
-                              "id":  "marinara-sauce",
-                              "store":  "Walmart",
-                              "name":  "Botticelli Premium Spicy Marinara Pasta Sauce, 24 oz, 5 Servings, No Preservatives",
-                              "per_unit":  0.5412,
                               "typed":  "none",
                               "derived":  "0.01644-0.411"
                           },
@@ -3455,23 +3423,7 @@
                               "id":  "honey",
                               "store":  "Walmart",
                               "name":  "Nate\u0027s Organic Honey: 100% Pure, Raw and Unfiltered Honey - 16 fl oz Bottle",
-                              "per_unit":  0.645,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Nate\u0027s Organic Honey: 100% Pure, Raw and Unfiltered Honey - 16 fl oz Bottle",
                               "per_unit":  0.7163,
-                              "typed":  "none",
-                              "derived":  "0.02091-0.52275"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Walmart",
-                              "name":  "Nate\u0027s Organic Honey 100% Pure, Raw \u0026 Unfiltered Honey - 32 fl oz Gluten-Free Honey",
-                              "per_unit":  0.562,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
                           },
@@ -3553,7 +3505,7 @@
                               "name":  "True Made Foods No Sugar Added Ketchup, 18.5oz Squeeze Bottle",
                               "per_unit":  0.3124,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -3561,7 +3513,7 @@
                               "name":  "Red Gold Made with Real Sugar Ketchup, 20 oz Bottle",
                               "per_unit":  0.316,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -3569,7 +3521,7 @@
                               "name":  "Whataburger Fancy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.599,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -3577,7 +3529,7 @@
                               "name":  "Heinz Tomato Ketchup with a Blend of Veggies, 19.5 oz Bottle",
                               "per_unit":  0.3067,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -3585,7 +3537,7 @@
                               "name":  "Heinz Tomato Ketchup, 20 oz Bottle",
                               "per_unit":  0.5625,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -3593,7 +3545,7 @@
                               "name":  "Heinz Tomato Ketchup, 3 ct Pack, 44 oz Bottles",
                               "per_unit":  0.5666,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "honey",
@@ -3631,14 +3583,6 @@
                               "id":  "brown-sugar",
                               "store":  "Walmart",
                               "name":  "bettergoods Chicken Wings with Brown Sugar BBQ Dry Rub, 22 oz (Frozen)",
-                              "per_unit":  0.3593,
-                              "typed":  "none",
-                              "derived":  "0.01238-0.3095"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Walmart",
-                              "name":  "bettergoods Chicken Wings with Brown Sugar BBQ Dry Rub, 22 oz (Frozen)",
                               "per_unit":  0.4001,
                               "typed":  "none",
                               "derived":  "0.01238-0.3095"
@@ -3657,7 +3601,7 @@
                               "name":  "Uncle Bob\u0027s Butter Country Coconut Cream Syrup, 16 fl oz",
                               "per_unit":  1.5619,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -3682,14 +3626,6 @@
                               "per_unit":  1.3224,
                               "typed":  "none",
                               "derived":  "0.04716-1.179"
-                          },
-                          {
-                              "id":  "no-boil-lasagna-noodles",
-                              "store":  "Walmart",
-                              "name":  "Barilla Gluten Free Oven Ready Lasagna Pasta, 10 oz",
-                              "per_unit":  0.897,
-                              "typed":  "none",
-                              "derived":  "0.03375-0.84375"
                           },
                           {
                               "id":  "no-boil-lasagna-noodles",
@@ -3721,7 +3657,7 @@
                               "name":  "St Pierre Butter Brioche Waffles 6 Packs Belgian Waffles 10.6 oz with Flour Milk and Egg",
                               "per_unit":  0.483,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "marinara-sauce",
@@ -3735,17 +3671,9 @@
                               "id":  "ketchup",
                               "store":  "Walmart",
                               "name":  "Carbona Stain Devils® #2   Ketchup, Mustard \u0026 Chocolate   Professional Strength Laundry Stain Remover   Multi-Fabric Cleaner   Safe On Skin \u0026 Washable Fabrics   1.7 Fl Oz, 1 Pack",
-                              "per_unit":  4.4059,
-                              "typed":  "none",
-                              "derived":  "0.01179-0.29475"
-                          },
-                          {
-                              "id":  "ketchup",
-                              "store":  "Walmart",
-                              "name":  "Carbona Stain Devils® #2   Ketchup, Mustard \u0026 Chocolate   Professional Strength Laundry Stain Remover   Multi-Fabric Cleaner   Safe On Skin \u0026 Washable Fabrics   1.7 Fl Oz, 1 Pack",
                               "per_unit":  5.6765,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "butter",
@@ -3753,7 +3681,7 @@
                               "name":  "eos Cashmere Skin Collection Women\u0027s Shave Butter, Vanilla Cashmere, Ultra Smooth \u0026 Moisturizing, 7 fl oz",
                               "per_unit":  1.1386,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -3761,7 +3689,7 @@
                               "name":  "Athena Club Fluffy Shave Butter - Women\u0027s Shaving Cream, All Skin Types, 7 Fl Oz, Coconut Sparkle",
                               "per_unit":  0.9829,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "carrots",
@@ -3769,7 +3697,7 @@
                               "name":  "Serenity Kids Stage 2 Baby Food Pouch Free Range Pork \u0026 Apple with Organic Carrots \u0026 Sage - 3.5oz",
                               "per_unit":  17.7371,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -3777,7 +3705,7 @@
                               "name":  "Happy Baby Clearly Crafted, Stage 2 Organic Baby Food, Sweet Potatoes Mangos \u0026 Carrots, 4 oz. Pouch",
                               "per_unit":  7.32,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -3785,7 +3713,7 @@
                               "name":  "Gerber Stage 2 Baby Food, Sweet Potato Carrot Beef \u0026 Tomato, Baby Food Pouches, Puree 3.5 oz",
                               "per_unit":  7.04,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "cornstarch",
@@ -3810,14 +3738,6 @@
                               "per_unit":  0.8838,
                               "typed":  "none",
                               "derived":  "0.02655-0.66375"
-                          },
-                          {
-                              "id":  "bread-crumbs",
-                              "store":  "Walmart",
-                              "name":  "Aleia\u0027s Gluten Free Italian Bread Crumbs – 7 oz – Non-GMO, Dairy Free, Kosher, Low Sodium",
-                              "per_unit":  0.7086,
-                              "typed":  "none",
-                              "derived":  "0.02493-0.62325"
                           },
                           {
                               "id":  "bread-crumbs",
@@ -3967,14 +3887,6 @@
                               "id":  "soy-sauce",
                               "store":  "Walmart",
                               "name":  "Lee Kum Kee Premium Soy Sauce, 5.1 Fl. Oz.",
-                              "per_unit":  1.9588,
-                              "typed":  "none",
-                              "derived":  "0.02887-0.72175"
-                          },
-                          {
-                              "id":  "soy-sauce",
-                              "store":  "Walmart",
-                              "name":  "Lee Kum Kee Premium Soy Sauce, 5.1 Fl. Oz.",
                               "per_unit":  2.9314,
                               "typed":  "none",
                               "derived":  "0.02887-0.72175"
@@ -4009,7 +3921,7 @@
                               "name":  "SPECTRUM NATURALS ORGANIC DISTILLED WHITE VINEGAR, 32 OZ.",
                               "per_unit":  0.7497,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "white-vinegar",
@@ -4017,15 +3929,7 @@
                               "name":  "2X-Simple Truth Organic Distilled White Vinegar - 32 fl oz",
                               "per_unit":  0.4359,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
-                          },
-                          {
-                              "id":  "white-vinegar",
-                              "store":  "Walmart",
-                              "name":  "Heinz White Vinegar 16oz - Kitchen Essential for Culinary Perfection",
-                              "per_unit":  0.5619,
-                              "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "white-vinegar",
@@ -4033,7 +3937,7 @@
                               "name":  "Heinz White Vinegar 16oz - Kitchen Essential for Culinary Perfection",
                               "per_unit":  0.7044,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "olives",
@@ -4090,22 +3994,6 @@
                               "per_unit":  1.5055,
                               "typed":  "none",
                               "derived":  "0.034-0.85"
-                          },
-                          {
-                              "id":  "honey-dijon-mustard",
-                              "store":  "Walmart",
-                              "name":  "Inglehoffer Honey Mustard, 4 Oz",
-                              "per_unit":  2.11,
-                              "typed":  "none",
-                              "derived":  "0.03233-0.80825"
-                          },
-                          {
-                              "id":  "balsamic-vinegar",
-                              "store":  "Walmart",
-                              "name":  "Kosterina Original Balsamic Vinegar, 8 fl oz",
-                              "per_unit":  1.5588,
-                              "typed":  "none",
-                              "derived":  "0.04716-1.179"
                           },
                           {
                               "id":  "balsamic-vinegar",
@@ -4169,15 +4057,7 @@
                               "name":  "Mae Ploy Red Curry Paste, Authentic Thai Curry Paste With Red Chili, Shrimp Paste, Lemongrass and Aromatic Herbs for Cooking Butter Chicken, Rendang, Curries, Stews and Other Dishes, 2.2lbs Tub",
                               "per_unit":  0.5364,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Walmart",
-                              "name":  "Quaker Butter Instant Grits 1.48 oz. Cup",
-                              "per_unit":  0.8571,
-                              "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4185,7 +4065,7 @@
                               "name":  "Quaker Butter Instant Grits 1.48 oz. Cup",
                               "per_unit":  2.1357,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4193,7 +4073,7 @@
                               "name":  "Fire \u0026 Smoke Society Onion Butter All Purpose Seasoning Blend,, 9.2 Ounce Mixed Spices \u0026 Seasonings",
                               "per_unit":  0.6239,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "carrots",
@@ -4201,7 +4081,7 @@
                               "name":  "Serenity Kids Stage 2 Organic Free Range Chicken Baby Food with Peas \u0026 Carrots, 3.5oz Pouch",
                               "per_unit":  17.7371,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "honey",
@@ -4217,7 +4097,7 @@
                               "name":  "Glade Automatic Spray Refill 2 Count, Apple Cinnamon, 12.4 oz. Total, Air Freshener",
                               "per_unit":  4.99,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "honey",
@@ -4241,7 +4121,7 @@
                               "name":  "Great Value Hickory Smoked Fully Cooked Thick Cut Bacon, 2.1 oz",
                               "per_unit":  30.3077,
                               "typed":  "none",
-                              "derived":  "0.91567-22.89175"
+                              "derived":  "0.81567-20.39175"
                           },
                           {
                               "id":  "butter",
@@ -4249,7 +4129,7 @@
                               "name":  "Kerrygold 14oz Softer Butter Tub",
                               "per_unit":  0.66,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "brown-sugar",
@@ -4297,7 +4177,7 @@
                               "name":  "Grill Mates Garlic Butter Seasoning, 6.56 oz Bottle",
                               "per_unit":  0.5854,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4305,7 +4185,7 @@
                               "name":  "Flavortown All Purpose Garlic Butter Rub Seasoning, 6 oz",
                               "per_unit":  0.8133,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "paprika",
@@ -4401,7 +4281,7 @@
                               "name":  "Primal Kitchen Organic and Unsweetened Ketchup 11.3 oz",
                               "per_unit":  0.485,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -4409,7 +4289,7 @@
                               "name":  "Heinz Tomato Ketchup, 14 oz Bottle",
                               "per_unit":  0.4557,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -4417,7 +4297,7 @@
                               "name":  "Primal Kitchen Organic Unsweetened Squeeze Ketchup 1 lb 2.5 oz",
                               "per_unit":  0.421,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -4425,7 +4305,7 @@
                               "name":  "Heinz Organic Tomato Ketchup, 15 Oz",
                               "per_unit":  0.2987,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "butter",
@@ -4433,7 +4313,7 @@
                               "name":  "Kinder\u0027s Caramelized Onion Butter Seasoning, 6.2 oz",
                               "per_unit":  0.7306,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4441,7 +4321,7 @@
                               "name":  "Pit Boss Cowboy Butter Rub",
                               "per_unit":  0.71,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "soy-sauce",
@@ -4473,7 +4353,7 @@
                               "name":  "Happy Baby Clearly Crafted, Stage 2 Organic Baby Food, Sweet Potatoes Mangos \u0026 Carrots, 4 oz. Pouch",
                               "per_unit":  6.96,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "ginger",
@@ -4497,7 +4377,7 @@
                               "name":  "WILD OATS SWEET PEAS",
                               "per_unit":  1.77,
                               "typed":  "none",
-                              "derived":  "0.01087-0.27175"
+                              "derived":  "0.01127-0.28175"
                           },
                           {
                               "id":  "honey",
@@ -4513,7 +4393,7 @@
                               "name":  "PAM Non-Stick Cooking Spray, Butter Taste, Great for Air Fryer, Baking \u0026 Grilling, 5 oz.",
                               "per_unit":  0.796,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -4529,7 +4409,7 @@
                               "name":  "Comfort Cravers Spider-Man Spiral Pasta \u0026 Meatballs with Green Peas and Chocolate Brownie, 9 oz (Frozen)",
                               "per_unit":  0.62,
                               "typed":  "none",
-                              "derived":  "0.01087-0.27175"
+                              "derived":  "0.01127-0.28175"
                           },
                           {
                               "id":  "peanut-butter",
@@ -4577,7 +4457,7 @@
                               "name":  "BrightFarms Butter Crunch Lettuce, 4oz Salad",
                               "per_unit":  0.785,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4585,7 +4465,7 @@
                               "name":  "BrightFarms Butter Crunch  Lettuce 8 Oz",
                               "per_unit":  0.635,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -4593,7 +4473,7 @@
                               "name":  "Organic Brown Butter Flavor Maple Syrup",
                               "per_unit":  1.06,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "marinara-sauce",
@@ -4617,7 +4497,7 @@
                               "name":  "Van der Hagen Shave Butter Beard Shaving Cream, for All Skin Types, formulated with Natural Oils, 6 oz (Men)",
                               "per_unit":  0.995,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "potato",
@@ -4633,7 +4513,7 @@
                               "name":  "Kinder\u0027s Cowboy Butter Seasoning, 6.4oz",
                               "per_unit":  0.7781,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "tomato-sauce",
@@ -4689,7 +4569,7 @@
                               "name":  "Happy Tot Organics Fiber \u0026 Protein Stage 4, Pears Raspberries Carrots \u0026 Butternut Squash Organic Tot Food, 4 oz. Pouch",
                               "per_unit":  6.96,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "carrots",
@@ -4697,15 +4577,7 @@
                               "name":  "Beech-Nut Chicken Stage 2 Baby Food, Chicken Carrots Peas \u0026 Butternut Squash, Puree Meat Baby Food Pouch, 3.5 oz Pouch",
                               "per_unit":  10.4229,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
-                          },
-                          {
-                              "id":  "ketchup",
-                              "store":  "Walmart",
-                              "name":  "Gates Sweet \u0026  Mild Bar-B-Q Sauce, 18 oz. size is a savory, sweet \u0026 mild ketchup based barbeque (barbecue) sauce that contains no allergens, or GMOs.",
-                              "per_unit":  0.2967,
-                              "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "peanut-butter",
@@ -4817,7 +4689,7 @@
                               "name":  "Kernel Season\u0027s Jumbo Movie Theater Butter Salt, 11.75 oz, Shelf-Stable",
                               "per_unit":  0.6443,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -4865,7 +4737,7 @@
                               "name":  "Red Gold Made with Real Sugar Ketchup, 20 oz Bottle",
                               "per_unit":  0.2975,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -4873,7 +4745,7 @@
                               "name":  "Whataburger Fancy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.644,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "ketchup",
@@ -4881,7 +4753,7 @@
                               "name":  "Heinz Tomato Ketchup, 14 oz Bottle",
                               "per_unit":  0.4493,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "peanut-butter",
@@ -4953,7 +4825,7 @@
                               "name":  "Dan-O’s Outlaw Butter Steak All-Purpose Seasoning for Great Grilling (6.9 oz)",
                               "per_unit":  1.3,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -5041,7 +4913,7 @@
                               "name":  "Red Barn Creamery, Premium Salted Butter 8oz Brick",
                               "per_unit":  0.56,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "honey",
@@ -5153,7 +5025,7 @@
                               "name":  "Heinz All Natural Distilled White Vinegar with 5% Acidity, 16 fl oz Bottle",
                               "per_unit":  0.6244,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "white-vinegar",
@@ -5161,7 +5033,7 @@
                               "name":  "2X-Simple Truth Organic Distilled White Vinegar - 32 fl oz",
                               "per_unit":  0.4041,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "marinara-sauce",
@@ -5225,7 +5097,7 @@
                               "name":  "Quaker Instant Grits, Butter, 1.48 oz Cup",
                               "per_unit":  1.32,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "chickpeas",
@@ -5281,7 +5153,7 @@
                               "name":  "Heinz All Natural Distilled White Vinegar with 5% Acidity, 16 fl oz Bottle",
                               "per_unit":  0.32,
                               "typed":  "none",
-                              "derived":  "0.00826-0.2065"
+                              "derived":  "0.00904-0.226"
                           },
                           {
                               "id":  "butter",
@@ -5289,7 +5161,7 @@
                               "name":  "Westgold New Zealand Grass Fed Salted Butter 8 oz",
                               "per_unit":  0.58,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "butter",
@@ -5297,7 +5169,7 @@
                               "name":  "Westgold New Zealand Unsalted Grass Fed Butter 8oz",
                               "per_unit":  0.58,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "bone-broth",
@@ -5321,7 +5193,7 @@
                               "name":  "Whataburger Fancy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.62,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "soy-sauce",
@@ -5385,7 +5257,7 @@
                               "name":  "Van der Hagen Shave Butter Beard Shaving Cream, for All Skin Types, formulated with Natural Oils, 6 oz (Men)",
                               "per_unit":  0.995,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "apple",
@@ -5393,7 +5265,7 @@
                               "name":  "Great Value Cinnamon Apple Herbal Tea Bags, 1.76 oz, 20 Count",
                               "per_unit":  0.129,
                               "typed":  "none",
-                              "derived":  "0.1389-3.4725"
+                              "derived":  "0.1639-4.0975"
                           },
                           {
                               "id":  "brown-sugar",
@@ -5409,7 +5281,7 @@
                               "name":  "Tillen Farms Crunchy Carrots, Classic, 12 oz.",
                               "per_unit":  342.08,
                               "typed":  "none",
-                              "derived":  "0.1949-4.8725"
+                              "derived":  "0.199-4.975"
                           },
                           {
                               "id":  "ketchup",
@@ -5417,7 +5289,7 @@
                               "name":  "Heinz Organic Tomato Ketchup, 14 oz Bottle",
                               "per_unit":  0.32,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "potato",
@@ -5433,7 +5305,7 @@
                               "name":  "Whataburger Fancy Ketchup, 20 oz Squeeze Bottle",
                               "per_unit":  0.625,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "marinara-sauce",
@@ -5449,7 +5321,7 @@
                               "name":  "Heinz Tomato Ketchup, 14 oz Bottle",
                               "per_unit":  0.3736,
                               "typed":  "none",
-                              "derived":  "0.01179-0.29475"
+                              "derived":  "0.01188-0.297"
                           },
                           {
                               "id":  "butter",
@@ -5457,7 +5329,7 @@
                               "name":  "Soom Premium Organic Tahini Paste, Smooth Sesame Butter Spre",
                               "per_unit":  0.5891,
                               "typed":  "none",
-                              "derived":  "0.01762-0.4405"
+                              "derived":  "0.01858-0.4645"
                           }
                       ]
 }

@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-09-30 08:19",
+    "generated":  "2026-10-01 08:21",
     "drift_vs_engine":  0,
     "drift_products":  [
 
@@ -44,6 +44,15 @@
                               "form":  false,
                               "winner":  "paper-towels",
                               "verdict":  "UNPRICED",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
+                              "name":  "Chick-fil-A Sea Salt Waffle Potato Chips 7oz",
+                              "chain":  "potato-chips (oz) \u003e frozen-waffles (each)",
+                              "form":  true,
+                              "winner":  "potato-chips",
+                              "verdict":  "size 7 oz = 0.66/oz",
                               "cell":  "",
                               "crown":  false
                           },
@@ -120,6 +129,15 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Miss Vickies Dill Pickle Kettle Cooked Potato Chips Bag, 7.5 oz",
+                              "chain":  "potato-chips (oz) \u003e pickles (oz)",
+                              "form":  false,
+                              "winner":  "potato-chips",
+                              "verdict":  "size 7.5 oz = 0.496/oz",
+                              "cell":  "",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Muscle Milk Cookies \u0027N Creme High Protein Shake With Ultra Filtered Milk 4 Ea",
                               "chain":  "milk (gallon) \u003e cookies (oz)",
                               "form":  true,
@@ -156,6 +174,15 @@
                               "crown":  false
                           },
                           {
+                              "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                              "chain":  "almond-flour (lb) \u003e cookies (oz)",
+                              "form":  true,
+                              "winner":  "almond-flour",
+                              "verdict":  "size 0.344 lb = 15.9709/lb ; size 0.344 lb = 17.4255/lb",
+                              "cell":  "almond-flour @ Baker\u0027s 15.9709/lb",
+                              "crown":  false
+                          },
+                          {
                               "name":  "Specially Selected Pepperoni Marinara 8 OZ",
                               "chain":  "pasta-sauce (oz) \u003e pepperoni (oz)",
                               "form":  false,
@@ -170,6 +197,7 @@
                                 "Barissimo Halloween Ground Coffees Chai Cookie 12 OZ",
                                 "Bella Maria almonds, pecans or walnuts, 10% off regular price,",
                                 "Charmin bath tissue 12 mega XL rolls or Bounty paper towels 6 triple plus rolls, -3.00 off with manufacturer\u0027s digital coupon, $14.99",
+                                "Chick-fil-A Sea Salt Waffle Potato Chips 7oz",
                                 "Del Monte Peas And Carrots 8.5 Oz",
                                 "Fresh blackberries or raspberries, 6 oz. pkg., $2.99",
                                 "Frollies ice pops 6 ct., Häagen-Dazs novelties 3 or 4 ct. or ice cream 14 fl. oz., $3.99",
@@ -178,10 +206,12 @@
                                 "Hero bread, buns, rolls, bagels or tortillas, .50 off regular price,",
                                 "Hy-Vee aluminum foil or parchment paper, 37.5 or 45 sq. ft., $3.99",
                                 "McCormick taco seasoning or brown gravy mix, .87 or 1 oz., $0.99",
+                                "Miss Vickies Dill Pickle Kettle Cooked Potato Chips Bag, 7.5 oz",
                                 "Muscle Milk Cookies \u0027N Creme High Protein Shake With Ultra Filtered Milk 4 Ea",
                                 "Nabisco snack crackers, Oreo cookies or Cakesters, 3.5 to 14.3 oz., $3.48",
                                 "New York Bakery Cheesy Focaccia Pesto \u0026 Garlic",
                                 "Nothing But The Truth blueberries, strawberries or berry medley, 10 oz., $2.99",
+                                "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
                                 "Specially Selected Pepperoni Marinara 8 OZ"
                             ],
     "cell_by_contest":  [
@@ -190,6 +220,12 @@
                                 "cell":  "rotisserie-chicken @ Walmart 3.97/each",
                                 "crown":  true,
                                 "claimed_by":  "rotisserie-chicken \u003e lemon-pepper-seasoning"
+                            },
+                            {
+                                "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                                "cell":  "almond-flour @ Baker\u0027s 15.9709/lb",
+                                "crown":  false,
+                                "claimed_by":  "almond-flour \u003e cookies"
                             }
                         ]
 }

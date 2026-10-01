@@ -13,6 +13,19 @@
         "board_src":  "main"
     },
     {
+        "id":  "asparagus",
+        "store":  "Aldi",
+        "unit":  "lb",
+        "board":  2.95,
+        "link":  3.59,
+        "ratio":  1.22,
+        "price":  3.59,
+        "size":  "1 lb",
+        "boardItem":  "Freshire Farms Asparagus",
+        "linkItem":  "Asparagus 1 LB",
+        "board_src":  "main"
+    },
+    {
         "id":  "avocado-oil",
         "store":  "Sam\u0027s Club",
         "unit":  "floz",
@@ -26,16 +39,42 @@
         "board_src":  "main"
     },
     {
-        "id":  "fruit-cups",
-        "store":  "Sam\u0027s Club",
-        "unit":  "each",
-        "board":  0.599,
-        "link":  0.474,
-        "ratio":  0.79,
-        "price":  9.48,
-        "size":  "20 ct 4 oz",
-        "boardItem":  "Dole Fruit Bowls Diced Mango in 100% Juice, 4 oz., 20 pk.",
-        "linkItem":  "Dole Fruit Bowls Diced Mango in 100% Juice, 4 oz., 20 pk.",
+        "id":  "baby-back-ribs",
+        "store":  "Walmart",
+        "unit":  "lb",
+        "board":  3.8406,
+        "link":  3.3798,
+        "ratio":  0.88,
+        "price":  11.15,
+        "size":  "3.299 lb",
+        "boardItem":  "Prairie Fresh Natural Fresh Pork Back Ribs, Bone in, 2.4- 4 lb, 19g of protein per 4oz serving",
+        "linkItem":  "Prairie Fresh Natural Fresh Pork Back Ribs, Bone in, 2.4- 4 lb, 19g of protein per 4oz serving",
+        "board_src":  "main"
+    },
+    {
+        "id":  "chicken-breast",
+        "store":  "Walmart",
+        "unit":  "lb",
+        "board":  2.5684,
+        "link":  2.2301,
+        "ratio":  0.87,
+        "price":  10.35,
+        "size":  "4.641 lb",
+        "boardItem":  "Freshness Guaranteed Boneless, Skinless Chicken Breasts, 2.75 - 7.0 lb Tray",
+        "linkItem":  "Freshness Guaranteed Boneless, Skinless Chicken Breasts, 2.75 - 7.0 lb Tray",
+        "board_src":  "main"
+    },
+    {
+        "id":  "jalapenos",
+        "store":  "Walmart",
+        "unit":  "lb",
+        "board":  1.96,
+        "link":  1.76,
+        "ratio":  0.9,
+        "price":  0.44,
+        "size":  "0.25 lb",
+        "boardItem":  "Fresh Jalapenos, Each",
+        "linkItem":  "Fresh Jalapenos, Each",
         "board_src":  "main"
     },
     {
@@ -114,6 +153,19 @@
         "size":  "12 ct",
         "boardItem":  "Millville Frosted Brown Sugar Cinnamon Toaster Tarts Pastries 12 CT",
         "linkItem":  "Millville Frosted Brown Sugar Cinnamon Toaster Tarts Pastries 12 CT",
+        "board_src":  "main"
+    },
+    {
+        "id":  "veggie-sausages",
+        "store":  "Walmart",
+        "unit":  "oz",
+        "board":  0.6385,
+        "link":  0.495,
+        "ratio":  0.78,
+        "price":  6.97,
+        "size":  "0.88 lb",
+        "boardItem":  "Beyond Meat Beyond Sausage Plant-Based Dinner Sausage Links, Hot Italian 14 oz",
+        "linkItem":  "Beyond Meat Beyond Sausage Plant-Based Dinner Sausage Links, Hot Italian 14 oz",
         "board_src":  "main"
     },
     {
@@ -274,15 +326,15 @@
     },
     {
         "id":  "greek-yogurt",
-        "store":  "Baker\u0027s",
+        "store":  "Aldi",
         "unit":  "oz",
-        "board":  0.1403,
-        "link":  0.1341,
-        "ratio":  0.96,
-        "price":  4.29,
+        "board":  0.0934,
+        "link":  0.0872,
+        "ratio":  0.93,
+        "price":  2.79,
         "size":  "32 oz",
-        "boardItem":  "Simple Truth Organic Plain Nonfat Greek Yogurt Tub",
-        "linkItem":  "Kroger Plain Nonfat Greek Yogurt Tub",
+        "boardItem":  "Friendly Farms Nonfat Plain Greek Yogurt 32 OZ",
+        "linkItem":  "Friendly Farms Nonfat Plain Greek Yogurt",
         "board_src":  "recipe"
     },
     {
@@ -439,19 +491,6 @@
         "size":  "16 oz",
         "boardItem":  "Kroger Hot Italian Sausage",
         "linkItem":  "Johnsonville Hot Italian Ground Sausage",
-        "board_src":  "recipe"
-    },
-    {
-        "id":  "salsa-verde",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.1662,
-        "link":  0.1562,
-        "ratio":  0.94,
-        "price":  2.5,
-        "size":  "16 oz",
-        "boardItem":  "Herdez Salsa Verde Mild",
-        "linkItem":  "Herdez Salsa Verde Mild",
         "board_src":  "recipe"
     },
     {

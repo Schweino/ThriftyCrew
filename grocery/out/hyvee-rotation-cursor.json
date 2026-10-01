@@ -1,7 +1,7 @@
 ﻿{
     "next_index":  20,
     "from_index":  0,
-    "last_advanced":  "2026-09-30",
-    "updated":  "2026-09-30T08:00:38",
+    "last_advanced":  "2026-10-01",
+    "updated":  "2026-10-01T08:01:13",
     "note":  "PRODUCT-index rotation cursor for the Hy-Vee re-verify lane (NOT the commodity-search term cursor in capture-cursor.json). Advanced when the run ASKED the store, even if the write was later refused - a refused write must not also refuse the rotation, or the same slice is re-asked forever."
 }

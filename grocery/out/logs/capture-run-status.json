@@ -1,26 +1,21 @@
 ﻿{
     "daily":  {
-                  "date":  "2026-09-30",
-                  "pid":  52660,
-                  "started":  "2026-09-30T08:00:02",
-                  "updated":  "2026-09-30T09:08:49",
-                  "stage":  "complete",
-                  "exit_code":  0,
-                  "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-09-30.log",
+                  "date":  "2026-10-01",
+                  "pid":  47392,
+                  "started":  "2026-10-01T08:00:02",
+                  "updated":  "2026-10-01T08:55:03",
+                  "stage":  "publishing",
+                  "exit_code":  null,
+                  "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-daily-2026-10-01.log",
                   "failed_lanes":  [
 
                                    ],
                   "dirty_at_start":  [
-                                         "graph/identity/staple/_manifest.json",
-                                         "graph/identity/staple/aldi.jsonl",
-                                         "graph/identity/staple/bakers.jsonl",
-                                         "graph/identity/staple/family-fare.jsonl",
-                                         "graph/identity/staple/fareway.jsonl",
                                          "graph/identity/staple/hy-vee.jsonl",
-                                         "graph/identity/staple/sams-club.jsonl",
-                                         "graph/identity/staple/walmart.jsonl",
                                          "grocery/alert-log.txt",
                                          "grocery/out/alert-census-class.jsonl",
+                                         "grocery/out/alert-census.jsonl",
+                                         "grocery/out/asof-evidence.json",
                                          "grocery/out/audit/soundness-report.json",
                                          "grocery/out/band-censorship.json",
                                          "grocery/out/band-derivation-2026-09-27.json",
@@ -28,9 +23,13 @@
                                          "grocery/out/band-derivation-2026-09-29.json",
                                          "grocery/out/basis-outliers.json",
                                          "grocery/out/basis-reconcile.json",
+                                         "grocery/out/browser-capture-due-2026-09-22.flag",
+                                         "grocery/out/browser-capture-due-2026-09-23.flag",
+                                         "grocery/out/browser-capture-due-2026-09-24.flag",
+                                         "grocery/out/browser-capture-due-2026-09-25.flag",
                                          "grocery/out/browser-capture-due-2026-09-26.flag",
                                          "grocery/out/browser-capture-due-2026-09-27.flag",
-                                         "grocery/out/capture-evictions.json",
+                                         "grocery/out/browser-capture-due-2026-09-28.flag",
                                          "grocery/out/cell-quarantine.json",
                                          "grocery/out/coverage-ledger-history.jsonl",
                                          "grocery/out/deals-page.sig",
@@ -38,7 +37,6 @@
                                          "grocery/out/input-usage.json",
                                          "grocery/out/logs/browser-refresh-model-trial.jsonl",
                                          "grocery/out/logs/capture-run-status.json",
-                                         "grocery/out/match-worklist.json",
                                          "grocery/out/pack-basis-audit.json",
                                          "grocery/out/price-table-2026-09-27.csv",
                                          "grocery/out/price-table-2026-09-27.json",
@@ -46,71 +44,51 @@
                                          "grocery/out/price-table-2026-09-28.json",
                                          "grocery/out/price-table-2026-09-29.csv",
                                          "grocery/out/price-table-2026-09-29.json",
-                                         "grocery/out/product-urls.backup-preprune.json",
+                                         "grocery/out/price-table-2026-09-30.json",
                                          "grocery/out/regular/family-fare-regular-2026-09-27.json",
                                          "grocery/out/regular/family-fare-regular-2026-09-28.json",
                                          "grocery/out/regular/family-fare-regular-2026-09-29.json",
+                                         "grocery/out/regular/family-fare-regular-2026-09-30.json",
                                          "grocery/out/store-guide.sig",
                                          "grocery/out/throttled/family-fare-2026-09-27.throttled.json",
                                          "grocery/out/throttled/family-fare-2026-09-28.throttled.json",
                                          "grocery/out/throttled/family-fare-2026-09-29.throttled.json",
+                                         "grocery/out/throttled/family-fare-2026-09-30.throttled.json",
                                          "grocery/out/trend-pages-published.json",
                                          "grocery/out/trend-pages.stamp",
                                          "grocery/out/url-inputs/store-fareway1-urls.json",
                                          "grocery/out/worklists/capture-familyfare-2026-09-27.json",
                                          "grocery/out/worklists/capture-familyfare-2026-09-28.json",
                                          "grocery/out/worklists/capture-familyfare-2026-09-29.json",
-                                         "grocery/product-urls.json",
+                                         "grocery/out/worklists/capture-familyfare-2026-09-30.json",
                                          "grocery/rollback-first-seen.json"
                                      ],
-                  "commit_size":  {
-                                      "verdict":  "within-caps",
-                                      "ok":  true,
-                                      "own_files":  10,
-                                      "unvouched_files":  0,
-                                      "carried_runs":  [
-
-                                                       ],
-                                      "deep":  false,
-                                      "deep_days":  0
-                                  },
+                  "commit_size":  null,
                   "held_deletions":  [
-                                         "grocery/out/browser-capture-due-2026-09-26.flag",
-                                         "grocery/out/browser-capture-due-2026-09-27.flag",
-                                         "grocery/out/health-heartbeat.sig"
+
                                      ],
                   "sync":  {
                                "outcome":  "current",
                                "class":  "",
                                "why":  "HEAD already contains origin; nothing was written",
-                               "H0":  "6c1016a21b4f2f9f50350215f6a8b5acffee3c37",
-                               "NEW":  "6c1016a21b4f2f9f50350215f6a8b5acffee3c37",
+                               "H0":  "3c7a0080895f3570661d0e6f62de7f2bfc30308c",
+                               "NEW":  "3c7a0080895f3570661d0e6f62de7f2bfc30308c",
                                "behind":  0,
                                "behind_after":  0,
                                "startup_changed":  false,
                                "page":  false
                            },
-                  "tail_sync":  {
-                                    "outcome":  "current",
-                                    "class":  "",
-                                    "why":  "HEAD already contains origin; nothing was written",
-                                    "H0":  "bdc4e9a92cf579c63fb3520298022cda49517b89",
-                                    "NEW":  "bdc4e9a92cf579c63fb3520298022cda49517b89",
-                                    "behind":  0,
-                                    "behind_after":  0,
-                                    "startup_changed":  false,
-                                    "page":  false
-                                },
-                  "committed_sha":  "bdc4e9a92cf579c63fb3520298022cda49517b89",
-                  "pushed":  true
+                  "tail_sync":  null,
+                  "committed_sha":  "",
+                  "pushed":  null
               },
     "ad":  {
                "date":  "2026-10-01",
                "pid":  51408,
                "started":  "2026-10-01T07:00:02",
-               "updated":  "2026-10-01T07:01:18",
-               "stage":  "publishing",
-               "exit_code":  null,
+               "updated":  "2026-10-01T07:10:42",
+               "stage":  "complete",
+               "exit_code":  0,
                "log":  "C:\\Codex\\ThriftyCrew\\grocery\\out\\logs\\capture-run-ad-2026-10-01.log",
                "failed_lanes":  [
 
@@ -171,9 +149,25 @@
                                       "grocery/out/worklists/capture-familyfare-2026-09-30.json",
                                       "grocery/rollback-first-seen.json"
                                   ],
-               "commit_size":  null,
-               "held_deletions":  [
+               "commit_size":  {
+                                   "verdict":  "within-caps",
+                                   "ok":  true,
+                                   "own_files":  3,
+                                   "unvouched_files":  17,
+                                   "carried_runs":  [
 
+                                                    ],
+                                   "deep":  false,
+                                   "deep_days":  0
+                               },
+               "held_deletions":  [
+                                      "grocery/out/browser-capture-due-2026-09-22.flag",
+                                      "grocery/out/browser-capture-due-2026-09-23.flag",
+                                      "grocery/out/browser-capture-due-2026-09-24.flag",
+                                      "grocery/out/browser-capture-due-2026-09-25.flag",
+                                      "grocery/out/browser-capture-due-2026-09-26.flag",
+                                      "grocery/out/browser-capture-due-2026-09-27.flag",
+                                      "grocery/out/browser-capture-due-2026-09-28.flag"
                                   ],
                "sync":  {
                             "outcome":  "current",
@@ -186,8 +180,18 @@
                             "startup_changed":  false,
                             "page":  false
                         },
-               "tail_sync":  null,
-               "committed_sha":  "",
-               "pushed":  null
+               "tail_sync":  {
+                                 "outcome":  "current",
+                                 "class":  "",
+                                 "why":  "HEAD already contains origin; nothing was written",
+                                 "H0":  "3c7a0080895f3570661d0e6f62de7f2bfc30308c",
+                                 "NEW":  "3c7a0080895f3570661d0e6f62de7f2bfc30308c",
+                                 "behind":  0,
+                                 "behind_after":  0,
+                                 "startup_changed":  false,
+                                 "page":  false
+                             },
+               "committed_sha":  "3c7a0080895f3570661d0e6f62de7f2bfc30308c",
+               "pushed":  true
            }
 }

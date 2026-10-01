@@ -405,6 +405,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
+        "id":  "brown-gravy-mix",
+        "store":  "Family Fare",
+        "product":  "Our Family Gravy Mix, Brown 0.87 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
         "id":  "brown-rice",
         "store":  "Family Fare",
         "product":  "Long Grain Brown Rice Our Family",
@@ -610,6 +619,15 @@
         "aisle":  "pantry/canned_goods",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027canned\u0027"
+    },
+    {
+        "id":  "caraway-seeds",
+        "store":  "Family Fare",
+        "product":  "Mc Cormick Whole Caraway Seed 0.9 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/mixes_spices_seasoning",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
         "id":  "carrots",
@@ -1105,6 +1123,15 @@
         "aisle":  "pantry/pasta_sauces",
         "verdict":  "ALLOW",
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
+        "id":  "eggplant",
+        "store":  "Family Fare",
+        "product":  "Regular Eggplant (Aubergine)",
+        "dept":  "fresh_fruits_vegetables",
+        "aisle":  "fresh_fruits_vegetables/other_vegetables",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027veg\u0027"
     },
     {
         "id":  "enchilada-sauce",

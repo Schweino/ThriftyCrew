@@ -1,27 +1,6 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "frozen-fries",
-                         "fault":  "NO-LINK",
-                         "board":  "Ore Ida Crispy Straight Cut Fries 32 Oz",
-                         "board_pu":  0.1562,
-                         "name":  "Ore Ida Crispy Straight Cut Fries 32 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_potatoes/french_fries/ore_ida_crispy_straight_cut_fries_32_oz/p/14941",
-                         "price":  "$4.99",
-                         "size":  "32 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "hash-browns",
-                         "fault":  "NO-LINK",
-                         "board":  "Ore Ida Diced Hash Browns 32 Oz",
-                         "board_pu":  0.1562,
-                         "name":  "Ore Ida Diced Hash Browns 32 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_potatoes/hashbrowns/ore_ida_diced_hash_browns_32_oz/p/11691",
-                         "price":  "$4.99",
-                         "size":  "32 oz",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
@@ -90,7 +69,7 @@
                     },
                     {
                         "id":  "coffee-creamer",
-                        "why":  "match found but per-unit disagrees: board $0.1092 vs link $0.1295 (15.7%)"
+                        "why":  "match found but per-unit disagrees: board $0.1092 vs link $0.1497 (27%)"
                     },
                     {
                         "id":  "coffee-pods",
@@ -106,7 +85,7 @@
                     },
                     {
                         "id":  "dinner-rolls",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"15 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "sponges",
@@ -137,7 +116,15 @@
                         "why":  "match found but its size \"27.3 oz\" gives no per-unit in each"
                     },
                     {
+                        "id":  "frozen-waffles",
+                        "why":  "match found but per-unit disagrees: board $0.179 vs link $0.199 (10.1%)"
+                    },
+                    {
                         "id":  "garlic-bread",
+                        "why":  "match found but per-unit disagrees: board $2.89 vs link $0.3612 (700%)"
+                    },
+                    {
+                        "id":  "ground-cinnamon",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
@@ -217,10 +204,6 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
-                        "id":  "tomatillos",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
                         "id":  "tomatoes",
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
@@ -245,7 +228,7 @@
                         "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  57,
-    "generated":  "2026-09-30 08:12",
+    "worked":  56,
+    "generated":  "2026-10-01 08:13",
     "board":  "comparison-2026-09-30.json"
 }

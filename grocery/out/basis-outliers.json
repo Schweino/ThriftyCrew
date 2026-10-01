@@ -412,22 +412,7 @@
                                                  }
                                              ],
     "rounding_band_crown":  [
-                                {
-                                    "id":  "chicken-drumsticks",
-                                    "commodity":  "Chicken Drumsticks",
-                                    "unit":  "lb",
-                                    "store":  "Sam\u0027s Club",
-                                    "per_unit":  0.98,
-                                    "rounding_pct":  0.51,
-                                    "band_low":  0.975,
-                                    "band_high":  0.985,
-                                    "tie_with":  [
-                                                     "Walmart"
-                                                 ],
-                                    "item":  "Member\u0027s Mark Chicken Drumsticks, priced per pound",
-                                    "size":  "lb",
-                                    "basis":  "per-lb marker"
-                                }
+
                             ],
     "findings":  [
                      {
@@ -526,7 +511,7 @@
 
                             ],
     "ratio":  4,
-    "generated":  "2026-09-30T08:13:11",
+    "generated":  "2026-10-01T08:14:23",
     "kind_mismatch_agrees_unit_not_majority":  [
                                                    {
                                                        "id":  "coconut-oil",

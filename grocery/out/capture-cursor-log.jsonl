@@ -295,3 +295,6 @@
 {"at":"2026-10-01T06:38:37","store":"Aldi","from":250,"to":258,"day":"2026-10-01","caller":"build-aldi-regular.ps1","pid":32740}
 {"at":"2026-10-01T06:43:13","store":"Fareway","from":263,"to":271,"day":"2026-10-01","caller":"build-fareway-regular.ps1","pid":51960}
 {"at":"2026-10-01T07:01:17","store":"Family Fare","from":464,"to":467,"day":"2026-10-01","caller":"pull-regular-familyfare.ps1","pid":3916}
+{"at":"2026-10-01T08:01:13","store":"Hy-Vee (products)","from":0,"to":20,"day":"2026-10-01","caller":"pull-regular-hyvee.ps1","pid":50208}
+{"at":"2026-10-01T08:02:05","store":"Family Fare","from":467,"to":470,"day":"2026-10-01","caller":"pull-regular-familyfare.ps1","pid":49504}
+{"at":"2026-10-01T08:02:23","store":"Baker\u0027s","from":270,"to":278,"day":"2026-10-01","caller":"pull-regular-bakers-api.ps1","pid":26124}
