@@ -1,0 +1,19 @@
+{
+    "store":  "sams",
+    "date":  "2026-10-01",
+    "rows_in":  235,
+    "rows_out":  152,
+    "rejects":  33,
+    "rejects_by_reason":  {
+                              "no unitprice (the #-#-# proof no longer passes today\u0027s rules: name conflict: per-piece unit price - the name states a multipack and sam\u0027s #/oz prices one piece (lp/up derives #))":  1,
+                              "name conflict: name states #, # oz but none reproduces sam\u0027s #/oz (lp/up derives #)":  5,
+                              "no unitprice":  20,
+                              "name conflict: name states # lb but none reproduces sam\u0027s #/lb (lp/up derives #)":  3,
+                              "name conflict: per-piece unit price - the name states a multipack and sam\u0027s #/oz prices one piece (lp/up derives #)":  2,
+                              "name conflict: name states # ct but none reproduces sam\u0027s #/ct (lp/up derives #)":  1,
+                              "name conflict: per-piece unit price - the name states a multipack and sam\u0027s #/lb prices one piece (lp/up derives #)":  1
+                          },
+    "unknown_unit_spellings":  {
+
+                               }
+}
