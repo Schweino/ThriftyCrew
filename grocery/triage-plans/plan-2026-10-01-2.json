@@ -143,7 +143,8 @@
       "deviation": "(1) match-baseline.json was accepted and committed WITH commodities.json in this item, not in the board chain: pre-commit (ops/verify-commodities-gate.ps1) refuses the rule without it. Reviewed first: post-change sweep MOVED=0 DROPPED=0, drift = the cookie only (artifact's intended move), nothing outside plan-2026-10-01-2.routing.json moved; 28 contested arrivals stay undecided. The board chain still runs audit-match-soundness after the rebuild and accepts again only if something moved. (2) -CellScope writes NO report file (soundness-report.json is tracked and is the publish gate's; a second path was untracked litter on every guards run). (3) Its BLIND exit (empty exclude list) stays exit 2 with no scope line, which guards already holds as BOARD scoped, the same fail-closed outcome as the plan's exit 1. (4) The HELD alert states whether public\\board.json differs from HEAD's, since the landed commit does not exist when the alert is sent. (5) test-guards could not evaluate: run-test-guards-weekly exit 3 because the copy's baseline guards run is red from THIS change working: GUARDS QUARANTINE-REQUIRED, 1 hard failure, rotisserie-chicken / Walmart [selection], 1 of 2908 priced cells. That clears when abf660's -Decide lands. Nothing narrowed.",
       "shipped_commit": "10264e10d",
       "premise_check": "2026-10-01: newest board still comparison-2026-09-30 built 08:07:45; out\\audit\\soundness-report.json (08:21:10) has exactly 2 cell_by_contest names (the rotisserie chicken and the Simple Mills cookie), each also in new_contested_names, so the old lib counted 4; the board rows match evidence (almond-flour Baker's 15.9709 cookie, Aldi crown 6.65; rotisserie Walmart 3.97 crown). The 09-29 carrot medley row is no longer on comparison-2026-09-29.json (rebuilt), so its fixture is transcribed from ae5518's evidence.",
-      "actual_tool_calls": 66
+      "actual_tool_calls": 66,
+      "almond_flour_outcome": "CELL LEFT THE BOARD (2026-10-01 batch-1 rebuild by the abf660 spawn): almond-flour at Baker's was 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies' $5.49 / 5.5 oz before and has no Baker's cell after; the 2026-08-16 Recipe Hunter row at $7.49/lb did NOT take it. audit-capture-eviction.ps1 over comparison-2026-09-30: 2907 published cells, 23940 dated candidate rows, 0 cells dearer than the eligibility rule allows, no almond-flour line. Before/after cell diff: 1 of 2908 cells changed, this one. Verified in public/board.json: almond-flour chips = Aldi $6.65/lb only. Soundness MOVED=0 DROPPED=0 (no -Accept owed); guards GUARDS OK hard=0."
     },
     {
       "queue_id": "2026-09-30-ef21d4",
@@ -327,14 +328,17 @@
         "the per-condition queue writes",
         "send-alert's write-before-mute ordering"
       ],
-      "resolution_note": "The Walmart chilled lemon-pepper rotisserie chicken is a real $3.97 everyday cell; contest decided for rotisserie-chicken. The soundness digest no longer opens a second queue item (closes weekly dc03c3 with it).",
+      "resolution_note": "The Walmart chilled lemon-pepper rotisserie chicken is a real $3.97 everyday cell; contest decided confirm for rotisserie-chicken in match-verdicts.json, and the rebuilt board carries it with guards OK (hard=0). The soundness digest no longer opens a second queue item: send-alert -DigestOnly (mailed, DIGEST-NOT-QUEUED) when every listed condition is queued, still queued when any condition's own send failed; registry entry match-soundness-digest (closes weekly dc03c3 with it). Proof: send-alert -SelfTest PASS rc 0 (MUST FIRE one CONTESTED CROWN line -> exactly one queue item; CLEAN TWIN digest still mailed; MUST NOT FIRE failed condition keeps digest queued); audit-alert-registry PASSED rc 0; full_suite: deferred-to-land.",
       "publish_batch": 1,
       "lane": "money",
       "est_tool_calls": 35,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "deviated",
+      "premise_verified": "true: newest comparison still comparison-2026-09-30 built 2026-10-01T08:07:45 before the rebuild; its rotisserie-chicken Walmart cell was (Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz, $3.97 everyday, 2.25 lb per-each; worklist key contested|rotisserie-chicken||<name> was undecided; alert-lib.ps1 Send-AlertConditions sent the digest with -Force through the queue write, and 'grocery matching soundness condition s need action' had no registry entry (the other four Send-AlertConditions digests are registered digest class)",
+      "deviation": "Detail, not a narrowing: the digest entry match-soundness-digest is registered at PAGE class, not digest/mail-only, because a digest-class entry never queues and would break the plan's own clean twin (a failed condition's digest must still queue). -DigestOnly makes it mail-only exactly when every listed condition holds its own item. Batch 1 chain ran in the main checkout, not a scratch clone (a clone has no gitignored boards or captures, so the chain would have built nothing); every step's output went to scratch logs and only public/board.json + public/smp-feed.json are committed. publish-deals-page printed HELD for ORDERING, not a guard: the post names board.json?v=4a32e473c0 and feed.thriftycrew.com still serves v=089732c8c9, so the Ghost post upsert is owed AFTER landing: run grocery\\publish-deals-page.ps1 once triage-land has pushed public/board.json.",
+      "shipped_commit": "9a23e0df4",
+      "live_check": "after landing AND a re-run of grocery\\publish-deals-page.ps1: fetch https://feed.thriftycrew.com/board.json?cb=<fresh> and confirm rotisserie-chicken Walmart chip $3.97 each (data-pu 3.9700) and almond-flour carries no Baker's chip (Aldi $6.65/lb only); the post's v= must equal 4a32e473c0 or the hash of the landed board.json",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 50
     },
     {
       "queue_id": "2026-09-30-d694ee",
