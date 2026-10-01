@@ -1,0 +1,553 @@
+{
+  "generated": "2026-10-01T10:13:40",
+  "round": 1,
+  "board_week": "2026-09-30",
+  "board_file": "comparison-2026-09-30 built 2026-10-01T08:07:45",
+  "queue_ids_seen": [
+    "2026-09-30-3851d2",
+    "2026-09-30-ef21d4",
+    "2026-10-01-6a6140",
+    "2026-10-01-86678f",
+    "2026-09-30-abf660",
+    "2026-09-30-d694ee",
+    "2026-09-30-16027b",
+    "2026-09-30-130abf",
+    "2026-09-30-9b9cf1",
+    "2026-09-30-e6eb97"
+  ],
+  "routing_artifact": "plan-2026-10-01-2.routing.json",
+  "knowledge_consulted": {
+    "searched": [
+      "cell quarantine soundness hold",
+      "push could not land daily chain",
+      "code changed mid run artifacts",
+      "edge did not pick up push",
+      "recipe ingredient identity cell",
+      "propagate recipes queue stuck",
+      "daemon battery task failed",
+      "duplicate queue item rollup alert"
+    ],
+    "used": [
+      "memory C--Codex/ruling-soundness-hold-quarantines-cell.md (via brief): ruling A, a finding on a winning cell quarantines that cell and the post publishes normally",
+      ".claude/rules/grocery.md gr-01: A BAD CELL QUARANTINES ITSELF; delegated audits scope via QUARANTINE-CELL and QUARANTINE-SCOPE complete; teaching a guard to scope is a per-guard change with its own fixture",
+      "machinery grocery/cell-quarantine-lib.ps1 (Get-TcChildQuarantineScope, Test-TcCellQuarantined) and guards.ps1 lines 635-650: the scope road reused by 3851d2",
+      "machinery lib/chain-code-currency.ps1: the 86678f emitter",
+      "ThriftyCrew CLAUDE.md, push-main: from the MAIN checkout it lands through a throwaway worktree, so the gate judges the commit (6a6140)",
+      ".claude/rules/ops-and-gates.md og-04 (Invoke-Native for native stderr), og-11 (a plain ratchet run never writes its mark), og-45 (keyed self-tests), og-47 (board steps in a scratch clone)",
+      ".claude/rules/meal-prep.md mp-02: propagate refuses an unscoped hand run (9b9cf1)",
+      "reliability-craft/applies-here.md (via brief): send-alert writes the durable queue entry before the mute gate (abf660 digest fix keeps that ordering)"
+    ]
+  },
+  "items": [
+    {
+      "queue_id": "2026-09-30-3851d2",
+      "subject": "Grocery page HELD (match-soundness) x2 (09-30 and again 10-01 08:18)",
+      "classification": "wrong-product",
+      "evidence": [
+        "ad-cycle-log 2026-10-01T08:18:07 publish-verdict: HELD: commodity matching changed vs the reviewed baseline and 4 change(s) touch a published cell's winning product (audit rc=1)",
+        "soundness-report.json (08:21:10) cell_by_contest has exactly 2 names; each is ALSO in new_contested_names, so soundness-publish-lib.ps1 lines 96-97 count 2 products as 4 changes",
+        "almond-flour | Baker's | 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies' | 5.5 oz | 15.9709/lb - a COOKIE priced as almond flour (wrong-product, live on comparison-2026-09-30; crown is Aldi 'Baker S Corner Almond Flour 16 OZ' 6.65/lb)",
+        "rotisserie-chicken | Walmart | '(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz' | 2.25 lb | 3.97/each CROWN - a real chilled rotisserie chicken (raw walmart-regular-2026-10-01: ad_price $3.97 everyday; its Hot twin is $5.97); contested only because lemon-pepper-seasoning also matches; owned by 2026-09-30-abf660",
+        "origin/main public/board.json (bdc4e9a92, 09-30) carries neither name; the 10-01 board never left the box (6a6140), so nothing wrong reached readers today"
+      ],
+      "surface_fix": {
+        "what": "route the cookie off almond-flour, and decide the rotisserie contest (abf660 item)",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "almond-flour.exclude += '\\b(?:cookies?|bars?)\\b' (bars catches the same head-noun shape: Sam's 'Simple Mills Soft Baked Almond Flour Bars, Variety Pack, 18 ct.' routes to almond-flour today)"
+      },
+      "root_cause": "the soundness gate in publish-deals-page.ps1 (lines 278-287) has only one outcome for a finding on a winning cell: exit 2 and hold the WHOLE post, so one wrong cell (or one good cell flagged as contested) holds every cell and diverges post from feed; it is the one blocking check that never joined the 2026-09-21 cell-quarantine scope protocol that guards.ps1 gives every delegated audit",
+      "root_fix": {
+        "what": "implement ruling Q-2026-09-29-4-A (Brad 2026-09-30): a soundness finding on a winning cell QUARANTINES THAT CELL through the existing guards scope protocol, before board.json is written; the publish gate then skips quarantined cells and holds only on a board-scoped failure (unreadable or unjoinable report)",
+        "files": [
+          "grocery/audit-match-soundness.ps1",
+          "grocery/soundness-publish-lib.ps1",
+          "grocery/guards.ps1",
+          "grocery/publish-deals-page.ps1",
+          "grocery/publish-outcome-lib.ps1",
+          "grocery/check-ad-cycles.ps1"
+        ],
+        "exact_change": "(1) soundness-publish-lib: Get-CellNames records id and store per name and whether the cell carries a quarantine object (Test-TcCellQuarantined, cell-quarantine-lib.ps1); Get-SoundnessPublishVerdict returns Cells (id|store) for each winner, de-duplicates a name present in both new_contested_names and cell_by_contest (count once), and treats a change whose cell is quarantined as REVIEW, not hold. (2) audit-match-soundness.ps1 gains -CellScope: runs the audit with no -Alert and no -Accept, joins against the board guards is grading, prints one 'QUARANTINE-CELL <id>|<store>|selection' per winning cell and 'QUARANTINE-SCOPE complete cells=N stores=0', exits 2 when any, 0 when none, and exits 1 (unscoped, BOARD hold, fail-closed as today) when the report cannot be read or joined. (3) guards.ps1 delegated-child table (the @{ f; n; k } list ending at audit-ended-window, harvested by Wait-Kid) gains the -CellScope run as k=match-soundness-cells, so the breaker counts these cells and apply-cell-quarantine holds or withholds them. (4) publish-deals-page keeps its gate for the fail-closed cases only. (5) the HELD alert text at publish-outcome-lib.ps1:99 and check-ad-cycles.ps1:1724 stops saying nothing bad was published and states whether public/board.json in the landed commit changed."
+      },
+      "leaves_open": "quarantining on a soundness finding also quarantines GOOD cells it flags (today 1 of 2: the rotisserie crown; 2 of 3 in 88bd45 sample); the cost is a cell held at its last verified price, never a wrong price, and its rate is weekly 2026-09-30-88bd45. The known DROPPED-product limit in soundness-publish-lib.ps1 lines 15-17 also stays.",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "2026-09-30-88bd45",
+      "prior_closes": [
+        "2026-09-29-ae5518"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/soundness-publish-lib.ps1",
+          "grocery/audit-match-soundness.ps1",
+          "grocery/guards.ps1"
+        ],
+        "what": "the emitting check becomes cell-scoped: a finding quarantines its cell instead of holding the board, so a soundness finding can no longer produce a HELD page",
+        "exact_change": "as root_fix (1)-(3): QUARANTINE-CELL and QUARANTINE-SCOPE complete from audit-match-soundness -CellScope, consumed by the existing Get-TcChildQuarantineScope road in guards.ps1"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "first-match-wins before/after over 51,326 distinct names from 574 files: comparison-2026-09-30 + out\\regular\\* + out\\sams\\* + out\\bakers\\* + out\\fareway\\* (plan-2026-10-01-2.routing.json)",
+        "affected_now": 2,
+        "names": [
+          "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+          "Simple Mills Soft Baked Almond Flour Bars, Variety Pack, 18 ct."
+        ],
+        "risk": "both are the intended head-noun shapes; all 7 real almond flours (Baker S Corner, Simple Truth Superfine, Blue Diamond, Bob's Red Mill, Nature's Eats x2) still route to almond-flour. Cookie moves to cookies; bars route to nothing. Positive control asserted in the artifact (almond-flour -> cookies).",
+        "cell_effects": [
+          {
+            "commodity": "almond-flour",
+            "store": "Baker's",
+            "before": 15.9709,
+            "after": 7.49,
+            "note": "UNPROVEN, two outcomes: 7.49/lb if capture selection admits the carried hunter-bakers-regular-2026-08-16 row (Simple Truth Gluten Free Superfine Almond Flour, 16 oz, $7.49, as_of 2026-08-16, Recipe Hunter agent source), otherwise the Baker's cell leaves the board (bakers-regular-2026-10-01 holds no other almond flour). The developer runs audit-capture-eviction.ps1 after the rebuild and records which; an agent-sourced row may be refused under gr-11. The commodity keeps its Aldi crown 6.65/lb either way."
+          },
+          {
+            "commodity": "cookies",
+            "store": "Baker's",
+            "before": 0.1408,
+            "after": 0.1408,
+            "note": "the cookie lands on cookies at 15.9709/lb = 0.998/oz, far above Smart Way 0.1408/oz, so the cell does not move"
+          }
+        ]
+      },
+      "freshness": "measured 2026-10-01 10:00-11:00 against comparison-2026-09-30 built 2026-10-01T08:07:45 (BOARD line of triage-due; not mid-build), soundness-report.json written 08:21:10, capture-run-daily-2026-10-01.log finished 09:37:27, origin/main 49a0813df; local main c537de8bc carries 2 unpushed commits (30a5e95d5 bot data, c537de8bc JOB 3 plan)",
+      "proof": {
+        "guard_or_fixture": "audit-match-soundness.ps1 -SelfTest (PUBLISH-HOLD cases) + grocery/test-cell-quarantine.ps1 + test-guards.ps1",
+        "must_fire_case": "frozen 2026-10-01 report slice: Simple Mills Crunchy Chocolate Chip Almond Flour Cookies winning almond-flour @ Baker's must make -CellScope print QUARANTINE-CELL almond-flour|Baker's|selection and exit 2, guards exit 2 QUARANTINE-REQUIRED then 4 after apply, and publish-deals-page NOT exit 2; plus the 09-29 carrot medley (Aldi Specially Selected Carrots Sweet Potatoes 16 OZ on carrots 0.29/lb) as the ae5518 occurrence; plus the de-dup: a name in both lists counts once",
+        "clean_twin": "a report whose only change is on no published cell quarantines nothing and holds nothing (REVIEW line); an UNREADABLE report still holds the board (exit 2, fail-closed) - the fail-closed half must survive the change",
+        "fixture_occurrences": [
+          "2026-09-29-ae5518",
+          "2026-09-30-3851d2"
+        ],
+        "commands": [
+          "powershell -File grocery\\audit-match-soundness.ps1 -SelfTest",
+          "powershell -File grocery\\test-cell-quarantine.ps1",
+          "powershell -File grocery\\test-guards.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "revert the guards child entry and the -CellScope mode; the publish gate falls back to the whole-post hold, which is fail-closed. The exclude is one json hunk.",
+      "do_not_touch": [
+        "the fail-closed HOLD on an unreadable or unjoinable report",
+        "the breaker thresholds in cell-quarantine-lib.ps1",
+        "resolve-match-worklist -Decide semantics (-Accept must still not clear a CONTESTED name)",
+        "any of the 219 foreign-dirty files"
+      ],
+      "resolution_note": "Ruling A implemented (commit 10264e10d): audit-match-soundness -CellScope runs inside guards.ps1 (k=match-soundness-cells) on the board guards grades, and names each live winning cell through QUARANTINE-CELL, so apply-cell-quarantine holds or withholds that cell and the post publishes. publish-deals-page holds only on an unreadable or unjoinable report, or a winner on a cell nothing quarantined. De-dup: a name in both new_contested_names and cell_by_contest is one change. HELD alert text no longer says nothing bad was published. Simple Mills almond-flour cookies and bars excluded from almond-flour (routing: 2 of 51,326 names), baseline accepted with it. Proof: audit-match-soundness -SelfTest PASS 93/93 (9 new), test-cell-quarantine PASS 63/63 (4 new), publish-deals-page -SelfTest PASS, test-defer-post PASS; live -CellScope exit 2 naming exactly the two cells before the exclude, only rotisserie after; test-guards COULD NOT EVALUATE (baseline red from the rotisserie cell, abf660's). full_suite: deferred-to-land. Closes ef21d4 with it.",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 110,
+      "status": "deviated",
+      "premise_verified": true,
+      "deviation": "(1) match-baseline.json was accepted and committed WITH commodities.json in this item, not in the board chain: pre-commit (ops/verify-commodities-gate.ps1) refuses the rule without it. Reviewed first: post-change sweep MOVED=0 DROPPED=0, drift = the cookie only (artifact's intended move), nothing outside plan-2026-10-01-2.routing.json moved; 28 contested arrivals stay undecided. The board chain still runs audit-match-soundness after the rebuild and accepts again only if something moved. (2) -CellScope writes NO report file (soundness-report.json is tracked and is the publish gate's; a second path was untracked litter on every guards run). (3) Its BLIND exit (empty exclude list) stays exit 2 with no scope line, which guards already holds as BOARD scoped, the same fail-closed outcome as the plan's exit 1. (4) The HELD alert states whether public\\board.json differs from HEAD's, since the landed commit does not exist when the alert is sent. (5) test-guards could not evaluate: run-test-guards-weekly exit 3 because the copy's baseline guards run is red from THIS change working: GUARDS QUARANTINE-REQUIRED, 1 hard failure, rotisserie-chicken / Walmart [selection], 1 of 2908 priced cells. That clears when abf660's -Decide lands. Nothing narrowed.",
+      "shipped_commit": "10264e10d",
+      "premise_check": "2026-10-01: newest board still comparison-2026-09-30 built 08:07:45; out\\audit\\soundness-report.json (08:21:10) has exactly 2 cell_by_contest names (the rotisserie chicken and the Simple Mills cookie), each also in new_contested_names, so the old lib counted 4; the board rows match evidence (almond-flour Baker's 15.9709 cookie, Aldi crown 6.65; rotisserie Walmart 3.97 crown). The 09-29 carrot medley row is no longer on comparison-2026-09-29.json (rebuilt), so its fixture is transcribed from ae5518's evidence.",
+      "actual_tool_calls": 66
+    },
+    {
+      "queue_id": "2026-09-30-ef21d4",
+      "subject": "Triage residual: soundness finding on a winning cell must quarantine that cell, ruling A (ae5518)",
+      "classification": "superseded",
+      "evidence": [
+        "3851d2 is this residual's live symptom (HELD 09-30 and 10-01); its root_fix in this plan IS the ruling-A implementation this item asks for, including the lines 94-97 double count and the HELD alert text"
+      ],
+      "root_cause": "the soundness publish gate has only a whole-post hold; see 2026-09-30-3851d2",
+      "resolution_note": "Superseded by 2026-09-30-3851d2 (pulled forward): its root fix implements ruling A. Closes with it. The false-positive measurement stays with weekly 2026-09-30-88bd45.",
+      "status": "superseded"
+    },
+    {
+      "queue_id": "2026-10-01-6a6140",
+      "subject": "Grocery pipeline could not push - 2026-10-01",
+      "classification": "infra",
+      "evidence": [
+        "push ledger pushes-2026-10-01.jsonl, checkout C:\\Codex\\ThriftyCrew: hook-refused 14:05Z (09:05 CDT) gate ops\\reap-runaway-processes.ps1 rc=1; 14:21Z, 14:28Z, 14:37Z gate ops\\audit-ruling-drift.ps1 rc=1; four refusals for four attempts",
+        "kept log tc-prepush-1580.log: RULING-DRIFT AUDIT FAILED: 4 ruling(s) cite a document that no longer exists: pork-and-beans-is-not-a-baked-bean, band-censorship-median-floor-0.4, kind-equivalent-near-water-declaration, memory-remote-allowlist-is-probed; all four cite grocery/triage-plans/plan-2026-09-07-3.json",
+        "that file is TRACKED at HEAD and at origin/main; it is missing only from the main checkout's working tree, one of 119 unstaged deletions under grocery/triage-plans (foreign-dirty; git grep finds no tracked script that deletes plan files)",
+        "attempt 1 also failed reap-runaway-processes MUST FIRE share=48.4 against its 50% bar: a load-dependent self-test on a busy box",
+        "sync[tail 1..3] HEAD already contains origin: main did not move, so this was no rebase race; capture-run.ps1:1948 pipes only git's STDOUT, so none of the hook's stderr refusal reached capture-run-daily-2026-10-01.log, although the alert tells the reader to look there",
+        "origin/main still carries the 09-30 board (bdc4e9a92); 30a5e95d5 (10-01 data) is local only; live-page-parity: the post names board.json?v=089732c8c9 and the feed serves exactly that board, so post and feed agree with each other and are one day stale"
+      ],
+      "surface_fix": {
+        "what": "land the 10-01 local data commit from a clean tree with batch 1",
+        "files": [],
+        "exact_change": "no file edit: batch 1 rebuilds the board on top of it; land with ops\\push-main.ps1 (it gates a detached worktree of HEAD, so the main checkout's foreign deletions cannot redden it). Do NOT restore or commit the 119 deleted plan files; they are foreign."
+      },
+      "root_cause": "the bot pushes with a plain git push origin HEAD:main FROM THE SHARED MAIN CHECKOUT, so the pre-push gate judges that checkout's working tree, not the commit being pushed: any other session's dirt (a stray file 09-27 b1efed, an untracked blocker 09-19 c7c57d, 119 deleted tracked plans today) refuses the bot's clean data commit, and the refusal text goes to stderr that the bot never logs",
+      "root_fix": {
+        "what": "land the bot's commit through the detached-worktree road push-main already provides, and capture the push's full output",
+        "files": [
+          "grocery/capture-run.ps1"
+        ],
+        "exact_change": "line 1948: replace the bare git push (stdout-only pipe) with Invoke-Native (native-lib.ps1) running powershell -File ops\\push-main.ps1 -ViaWorktree (gates a detached worktree of HEAD; same hook, nothing weakened), logging every line as push[N]; on refusal, read the newest hook-refused row for this checkout from the push ledger (lib/push-ledger.ps1) and put its gate, rc and kept-log path into the log line AND the could-not-push alert body. Keep the 4-attempt loop and the sync tail; lock order is unchanged (capture-run mutex 0 is outer to push-main 0a/0b/1/2)."
+      },
+      "leaves_open": "two residuals that turned the gate red today and are not this item's to fix: (a) an unknown producer deleted 119 tracked triage plan files in the main checkout, unstaged (1 occurrence, 2026-10-01); (b) reap-runaway-processes MUST FIRE asserts a CPU share of 50% or more that load pushes under (48.4% today; 1 occurrence)",
+      "leaves_open_occurrences": 2,
+      "leaves_open_followup": null,
+      "prior_closes": [
+        "2026-09-19-c7c57d",
+        "2026-09-21-5ac200",
+        "2026-09-24-924782",
+        "2026-09-26-e3566b",
+        "2026-09-27-b1efed"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/capture-run.ps1"
+        ],
+        "what": "the producer of the push decides what the gate judges: gate the commit in a clean worktree instead of the shared, dirty main checkout, and log the refusal",
+        "exact_change": "as root_fix: push via ops\\push-main.ps1 -ViaWorktree through Invoke-Native, log stderr, and name the refusing gate from the push ledger in the alert"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching change: no product name can route differently; scope is the bot's landing step only",
+        "affected_now": 0,
+        "names": [],
+        "risk": "push-main adds a pre-flight rebase and catch-up rounds to the bot's landing; a chain-queue ticket can make the bot wait for its turn to swap (never to gate)",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-10-01 10:00-11:00 against comparison-2026-09-30 built 2026-10-01T08:07:45 (BOARD line of triage-due; not mid-build), soundness-report.json written 08:21:10, capture-run-daily-2026-10-01.log finished 09:37:27, origin/main 49a0813df; local main c537de8bc carries 2 unpushed commits (30a5e95d5 bot data, c537de8bc JOB 3 plan)",
+      "proof": {
+        "guard_or_fixture": "capture-run.ps1 self-test push-retry cases",
+        "must_fire_case": "a fixture repo whose MAIN working tree deletes a tracked file a gate needs, with a clean commit on top: the landing must succeed (the gate judged the commit), and a refused push must leave a log line naming the refusing gate",
+        "clean_twin": "a commit that is itself red (the gate fails on the committed tree) is still refused and the alert still fires, so the change cannot launder a real red",
+        "fixture_occurrences": [
+          "2026-09-19-c7c57d",
+          "2026-09-21-5ac200",
+          "2026-09-24-924782",
+          "2026-09-26-e3566b",
+          "2026-09-27-b1efed",
+          "2026-10-01-6a6140"
+        ],
+        "commands": [
+          "powershell -File grocery\\capture-run.ps1 -SelfTest",
+          "powershell -File ops\\push-main.ps1 -DryRun"
+        ]
+      },
+      "rollback": "revert the one hunk at capture-run.ps1:1948; the plain push returns",
+      "do_not_touch": [
+        "ops/hooks/pre-push and every gate it runs",
+        "ops/audit-ruling-drift.ps1 (it is right: the document IS missing from that tree)",
+        "the 119 foreign deletions under grocery/triage-plans",
+        "lib/checkout-sync.ps1"
+      ],
+      "resolution_note": "All 4 pushes were refused by the pre-push gate, not by a moved main: audit-ruling-drift failed because 119 tracked triage plans are deleted (unstaged, foreign) in the main checkout. The bot now lands through push-main's detached worktree and logs the refusing gate. Today's board shipped with batch 1.",
+      "publish_batch": 1,
+      "lane": "ops",
+      "est_tool_calls": 45,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-10-01-86678f",
+      "subject": "Daily chain shipped artifacts built by code that changed mid-run - 2026-10-01",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-run-daily-2026-10-01.log: sync[tail 4] moved 67589fc96..30a5e95d5 (1 commit, 49a0813df Browser refresh: rescue terms lead the walled worklists, touching capture-policy-lib.ps1) then chain-code[4]: public/board.json <- grocery/capture-policy-lib.ps1; tails 1-3 had nothing to sync. The push then failed, so the stale-built board.json never reached origin."
+      ],
+      "root_cause": "a consequence of 6a6140: 32 minutes of gate-refused retries (09:05-09:37) left a window in which another session landed a producer change; the alert is the designed named-and-paged gap, and nothing it names shipped",
+      "resolution_note": "Caused by 6a6140's retry window, not a separate defect: the stale-built board.json never shipped (push failed) and batch 1 rebuilds it on current code. The producer change was worklist ordering, not pricing.",
+      "prior_closes": [
+        "2026-09-28-d70062"
+      ],
+      "prevention_none_because": "by-design named-and-paged gap (capture-run.ps1:1939-1945); today it was triggered by 6a6140's long retry window, which 6a6140's prevention removes",
+      "status": "planned"
+    },
+    {
+      "queue_id": "2026-09-30-abf660",
+      "subject": "Grocery matching soundness: CONTESTED CROWN (Walmart rotisserie-chicken 3.97/each)",
+      "classification": "infra",
+      "evidence": [
+        "rotisserie-chicken | Walmart | (Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz | 2.25 lb | $3.97 everyday (walmart-regular-2026-09-30 and -10-01, source_checkout_price $3.97) | 3.97/each CROWN; Hot twin (Hot) Freshness Guaranteed Lemon Pepper Rotisserie Whole Chicken, 2.25 lb is $5.97; other cells 7.99-8.99 (Family Fare, Baker's cold, Hy-Vee cold). A REAL cell (real-economics), routed correctly",
+        "chain: rotisserie-chicken (each, index 153) > lemon-pepper-seasoning (oz, index 576); rotisserie-chicken already excludes seasoning and lemon-pepper-seasoning already excludes lemon pepper ... chicken, so first-match is right and only the contest detector disagrees",
+        "98f7c0 (08:19:43) carried the identical line two seconds after abf660 (08:19:41): alert-lib.ps1 Send-AlertConditions sends each condition through send-alert.ps1 (queued), then sends the digest <prefix>: N condition(s) need action through send-alert.ps1 -Force, which queues it AGAIN under an unregistered type (3 times in 30 days: 3b1e6e, af1fdd, 98f7c0; weekly dc03c3)"
+      ],
+      "surface_fix": {
+        "what": "decide the contest for rotisserie-chicken",
+        "files": [
+          "match worklist decision via grocery/resolve-match-worklist.ps1"
+        ],
+        "exact_change": "resolve-match-worklist.ps1 -Decide for (Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz -> rotisserie-chicken (reason: a whole chilled rotisserie chicken at $3.97 everyday; the seasoning claim is a flavour word); then audit-match-soundness -Accept and commit match-baseline.json in batch 1"
+      },
+      "root_cause": "one soundness finding is queued twice because the email digest re-enters the queueing path: send-alert.ps1 writes a queue item for every message, and Send-AlertConditions has no way to send the digest as mail-only even when every condition it summarises already holds its own queue item",
+      "root_fix": {
+        "what": "the digest is mail-only when every condition it lists was queued; it still queues when any condition's own send failed (the fail-toward-page branch)",
+        "files": [
+          "grocery/alert-lib.ps1",
+          "grocery/send-alert.ps1",
+          "grocery/alert-registry.json"
+        ],
+        "exact_change": "send-alert.ps1 gains [switch]$DigestOnly: mails, writes no triage-queue item, prints DIGEST-NOT-QUEUED; alert-lib.ps1 Send-AlertConditions passes -DigestOnly only when every due entry has a non-empty type and no note; register the digest subject pattern in alert-registry.json as mail-only so audit-alert-registry stops calling it unregistered"
+      },
+      "leaves_open": "a NEW contested name on a crown still opens its own item by design, one per name (prior closes f44c88 and 754693: one a real wrong product, one a good cell); under 3851d2's ruling-A fix it quarantines its cell instead of holding the board, and its false-positive rate is weekly 88bd45",
+      "leaves_open_occurrences": 3,
+      "leaves_open_followup": "2026-09-30-88bd45",
+      "prior_closes": [
+        "2026-09-24-f44c88",
+        "2026-09-29-754693"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/alert-lib.ps1",
+          "grocery/send-alert.ps1"
+        ],
+        "what": "the emitter stops minting a second queue item for the same soundness condition (pulls weekly 2026-09-30-dc03c3 forward)",
+        "exact_change": "as root_fix: -DigestOnly on the digest send when every condition is queued"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "the -Decide changes no rule; first-match routing of the name is rotisserie-chicken before and after (index 153 precedes lemon-pepper-seasoning 576), so 0 of 51,326 names re-route",
+        "affected_now": 0,
+        "names": [
+          "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz"
+        ],
+        "risk": "none to cells; the digest change can only remove a duplicate queue item, and keeps queueing when any per-condition send failed",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-10-01 10:00-11:00 against comparison-2026-09-30 built 2026-10-01T08:07:45 (BOARD line of triage-due; not mid-build), soundness-report.json written 08:21:10, capture-run-daily-2026-10-01.log finished 09:37:27, origin/main 49a0813df; local main c537de8bc carries 2 unpushed commits (30a5e95d5 bot data, c537de8bc JOB 3 plan)",
+      "proof": {
+        "guard_or_fixture": "send-alert.ps1 -SelfTest and the Send-AlertConditions fixture seam (-QueueMutexName) + grocery/audit-alert-registry.ps1",
+        "must_fire_case": "one soundness condition (the 98f7c0 shape: the CONTESTED CROWN rotisserie line) sent through Send-AlertConditions into a temp queue yields exactly ONE queue item, and the digest mail is still sent",
+        "clean_twin": "a condition whose own send-alert exits nonzero still puts the digest in the queue (fail toward page)",
+        "fixture_occurrences": [
+          "2026-09-24-f44c88",
+          "2026-09-29-754693",
+          "2026-09-30-abf660"
+        ],
+        "commands": [
+          "powershell -File grocery\\send-alert.ps1 -SelfTest",
+          "powershell -File grocery\\audit-alert-registry.ps1",
+          "powershell -File grocery\\test-auditors.ps1"
+        ]
+      },
+      "rollback": "drop -DigestOnly from the alert-lib call; the duplicate returns and nothing is lost. The decision is one worklist row.",
+      "do_not_touch": [
+        "the per-condition queue writes",
+        "send-alert's write-before-mute ordering"
+      ],
+      "resolution_note": "The Walmart chilled lemon-pepper rotisserie chicken is a real $3.97 everyday cell; contest decided for rotisserie-chicken. The soundness digest no longer opens a second queue item (closes weekly dc03c3 with it).",
+      "publish_batch": 1,
+      "lane": "money",
+      "est_tool_calls": 35,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-30-d694ee",
+      "subject": "Recipe ingredient priced as a different food x2",
+      "classification": "infra",
+      "evidence": [
+        "RISE: 3 cell findings not in the mark of 2026-09-26 (mark 86): Sun-Dried Tomatoes (Oil-Packed) at Family Fare California Sun Dry Sun Dried Tomatoes Julienne Ct 8 oz 0.7488/oz and at Hy-Vee Hy-Vee Sun-Dried Tomatoes Halves 8.5 oz 0.8224/oz; Mayonnaise at Baker's Kroger Olive Oil Mayo 30 fl oz 0.133/oz",
+        "the SAME three keys were 2026-09-29-59b8fc; 177835's close: they stay findings by the 09-27 c989c6 design, all 3 are now frozen as live must-fires; no price moves: no recipe line is costed at these cells (recipe lines cost at the Walmart cells: Bella Sun Luci in olive oil 0.6153/oz, Great Value Mayonnaise 0.099/oz)",
+        "audit-ingredient-identity.ps1 header lines 31-34: a key not in its mark is a RISE and exits 2; a fall is spoken and -Tighten records only falls; so a deliberately kept finding can never enter the mark and re-pages every day"
+      ],
+      "root_cause": "the ratchet has no road for a REVIEWED finding: a key the triage decided to keep (proof of form owned by 2026-09-29-465acc) is indistinguishable from a new one, so the detector re-raises the same RISE daily and every close returns",
+      "root_fix": {
+        "what": "a reviewed-key list with owner and expiry: a RISE whose key is reviewed and unexpired prints KNOWN (owner id) and does not exit 2",
+        "files": [
+          "meal-prep/pipeline/audit-ingredient-identity.ps1",
+          "ops/out/ingredient-identity-cell-baseline.json"
+        ],
+        "exact_change": "the cell mark gains reviewed: [{key, owner, until, why}], written only by a new -Review <key> -Owner <queue id> -Until <date> switch (never by a plain run, og-11); the RISE set is the unmarked keys minus unexpired reviewed keys; an expired review re-raises; print the reviewed count beside rises. Seed the three keys owned by 2026-09-29-465acc with a 14-day expiry."
+      },
+      "leaves_open": "the form question itself (oil-packed vs dry at Family Fare and Hy-Vee; olive-oil mayo as mayonnaise) stays with 2026-09-29-465acc",
+      "leaves_open_occurrences": 4,
+      "leaves_open_followup": "2026-09-29-465acc",
+      "prior_closes": [
+        "2026-09-26-177835",
+        "2026-09-27-c989c6",
+        "2026-09-29-59b8fc"
+      ],
+      "prevention": {
+        "source": [
+          "meal-prep/pipeline/audit-ingredient-identity.ps1"
+        ],
+        "what": "the emitting check distinguishes reviewed findings from new ones, with an expiry so a review cannot become permanent silence",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "detector-only change; no product routing or recipe cost moves (the three cells cost no recipe line)",
+        "affected_now": 3,
+        "names": [
+          "California Sun Dry Sun Dried Tomatoes Julienne Ct",
+          "Hy-Vee Sun-Dried Tomatoes Halves",
+          "Kroger Olive Oil Mayo"
+        ],
+        "risk": "a review could hide a real new defect in the same cell; the key carries store AND product (header line 21), so a different product in the cell is still a RISE",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-10-01 10:00-11:00 against comparison-2026-09-30 built 2026-10-01T08:07:45 (BOARD line of triage-due; not mid-build), soundness-report.json written 08:21:10, capture-run-daily-2026-10-01.log finished 09:37:27, origin/main 49a0813df; local main c537de8bc carries 2 unpushed commits (30a5e95d5 bot data, c537de8bc JOB 3 plan)",
+      "proof": {
+        "guard_or_fixture": "audit-ingredient-identity.ps1 -SelfTest (72 cases today)",
+        "must_fire_case": "a fourth, unreviewed key (a new product in the sun-dried-tomatoes cell) still exits 2 RISE while the three reviewed keys are present; a reviewed key past its until date exits 2",
+        "clean_twin": "the three frozen keys (Family Fare Julienne Ct, Hy-Vee Halves, Kroger Olive Oil Mayo) with an unexpired review exit 0 and print KNOWN 2026-09-29-465acc",
+        "fixture_occurrences": [
+          "2026-09-26-177835",
+          "2026-09-27-c989c6",
+          "2026-09-29-59b8fc",
+          "2026-09-30-d694ee"
+        ],
+        "commands": [
+          "powershell -File meal-prep\\pipeline\\audit-ingredient-identity.ps1 -SelfTest",
+          "powershell -File meal-prep\\pipeline\\audit-ingredient-identity.ps1"
+        ]
+      },
+      "rollback": "remove the reviewed array; the detector returns to a daily RISE",
+      "do_not_touch": [
+        "the mark-only-falls rule for the count",
+        "recipe-board-everyday.json",
+        "set-board-cell.ps1"
+      ],
+      "resolution_note": "The same three deliberate findings re-paged because the ratchet could not record a reviewed key. Added an expiring reviewed list owned by 465acc; a new key in those cells still pages.",
+      "publish_batch": 2,
+      "lane": "money",
+      "est_tool_calls": 35,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-30-16027b",
+      "subject": "smp-feed edge did not pick up today's push - 2026-09-30",
+      "classification": "no-code-change",
+      "evidence": [
+        "capture-run-daily-2026-09-30.log: pushed on attempt 1, then EDGE STALE after the 10x30 s poll (edge 2026-09-29T11:02:12, HEAD bdc4e9a92 2026-09-30T08:09:40); fetched 2026-10-01 with a cache-busting query: edge generated 2026-09-30T08:09:40, equal to origin/main's committed feed"
+      ],
+      "root_cause": "a Workers deploy slower than the 5-minute poll at capture-run.ps1:2216; it landed afterwards and the edge now serves the committed bytes",
+      "resolution_note": "Self-healed: the edge serves exactly origin/main's 09-30 feed. A deploy slower than the 5-minute poll; 2 occurrences in 28 days (58057b, 16027b).",
+      "prior_closes": [
+        "2026-09-03-58057b"
+      ],
+      "prevention_none_because": "by-design poll window; 2 slow deploys in 28 days is Phase 2 recalibration of the poll length, not a code defect",
+      "status": "planned"
+    },
+    {
+      "queue_id": "2026-09-30-130abf",
+      "subject": "Automation silent-death: TASK FAILED (TC Daemon Battery 0230)",
+      "classification": "infra",
+      "evidence": [
+        "Get-ScheduledTaskInfo: last 2026-10-01 09:20:54 result 2 (hourly repetitions replay the 05:25:53 rc=2 run via run-once-a-day)",
+        "daemon-battery-2026-10-01.log: DAEMON-BATTERY-COMPLETE commit=172089bb1 exit=2 cases=568 removed=1 added=16 status=0 hard=2: (a) 1 case name in the pinned reference did not run: MUST FIRE  the writer is NOT on an opus tier... (still line 533 of hunt_daemon_selftest.names.txt on origin/main); (b) red case MUST FIRE  the dossier carries NO row CONTENTS",
+        "daemon-battery-2026-09-30.log had only (a); git log: e73a611bf 2026-09-29 15:42 Daemon battery: pin every agent to Opus 5.5 Medium instead of the writer off opus renamed the case without updating the pinned names list; (b) appeared between the 09-30 and 10-01 runs"
+      ],
+      "surface_fix": {
+        "what": "update the pinned names list for the renamed case and fix the dossier red",
+        "files": [
+          "meal-prep/pipeline/hunt_daemon_selftest.names.txt",
+          "meal-prep/pipeline/hunt_daemon_selftest.py"
+        ],
+        "exact_change": "replace line 533 with the case name e73a611bf introduced; bisect origin/main between the 09-30 and 10-01 battery commits for the dossier case and fix its cause (not the case)"
+      },
+      "root_cause": "the daemon battery runs only nightly: run-gates skips it because it takes minutes, so a commit that renames a case or reddens one lands ungated and the first evidence is a nonzero scheduled task the next morning",
+      "root_fix": {
+        "what": "run the battery at push time only for pushes that touch its inputs, through run-gates' keyed-input mechanism",
+        "files": [
+          "ops/run-gates.ps1",
+          "meal-prep/pipeline/hunt_daemon_selftest.py"
+        ],
+        "exact_change": "register the battery as a keyed gate whose input key is meal-prep/pipeline/hunt_daemon*.py + hunt_daemon_selftest.names.txt (+ declared lib inputs, og-45, then -VerifyDeclared), so it runs (388-677 s) on those pushes and replays its verdict on every other; state the cost in the commit"
+      },
+      "leaves_open": "other long suites run-gates skips are not covered by this keying (not counted here); a TASK FAILED for a different task is a different defect each time",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/health-heartbeat.ps1",
+      "prior_closes": [
+        "2026-09-23-4f9842",
+        "2026-09-26-ef3d50",
+        "2026-09-28-536bd3"
+      ],
+      "prevention": {
+        "source": [
+          "ops/run-gates.ps1"
+        ],
+        "what": "the change that breaks the battery is refused at push instead of being found by the nightly task",
+        "exact_change": "as root_fix"
+      },
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "not a matching change; scope is pushes touching the daemon files",
+        "affected_now": 0,
+        "names": [],
+        "risk": "adds 6-11 minutes to a push that touches the daemon; zero to every other push (keyed replay)",
+        "cell_effects": []
+      },
+      "freshness": "measured 2026-10-01 10:00-11:00 against comparison-2026-09-30 built 2026-10-01T08:07:45 (BOARD line of triage-due; not mid-build), soundness-report.json written 08:21:10, capture-run-daily-2026-10-01.log finished 09:37:27, origin/main 49a0813df; local main c537de8bc carries 2 unpushed commits (30a5e95d5 bot data, c537de8bc JOB 3 plan)",
+      "proof": {
+        "guard_or_fixture": "ops/run-daemon-battery.ps1 -SelfTest + run-gates key -VerifyDeclared",
+        "must_fire_case": "a push whose hunt_daemon_selftest.py renames a case without updating names.txt (the e73a611bf shape) is refused by run-gates",
+        "clean_twin": "a push touching no daemon file replays the recorded verdict and does not run the battery",
+        "fixture_occurrences": [
+          "2026-09-23-4f9842",
+          "2026-09-26-ef3d50",
+          "2026-09-28-536bd3",
+          "2026-09-30-130abf"
+        ],
+        "commands": [
+          "powershell -File ops\\run-daemon-battery.ps1 -SelfTest",
+          "powershell -File ops\\run-gates.ps1"
+        ]
+      },
+      "rollback": "remove the keyed registration; the nightly task remains the only runner",
+      "do_not_touch": [
+        "the green-only stamp rule in run-daemon-battery.ps1",
+        "the pinned names list semantics (a missing case is HARD)"
+      ],
+      "resolution_note": "Battery red since e73a611bf renamed a pinned case, plus a dossier case red since 09-30. Fixed both; the battery now runs at push for pushes that touch the daemon.",
+      "publish_batch": 0,
+      "lane": "ops",
+      "est_tool_calls": 40,
+      "status": "planned",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null
+    },
+    {
+      "queue_id": "2026-09-30-9b9cf1",
+      "subject": "Automation silent-death: QUEUE STUCK (33 recipe specs, 75.5h)",
+      "classification": "infra",
+      "evidence": [
+        "no scheduled task and no chain step calls meal-prep/pipeline/propagate-recipes.ps1 (git grep: only self-tests and queue-depth lift from it; Get-ScheduledTask: no TC task runs it); propagate-stamps.json last committed 2026-09-26 (JOB 3 note, plan-2026-10-01.json); a hand run refuses without -SlugsFile or -AllowCatalogue (PROPAGATE-SCOPE-REFUSED)"
+      ],
+      "root_cause": "the propagate drain has no automated caller, so its queue drains only when a person runs it, and health-heartbeat's QUEUE STUCK is an alarm with no repair lane",
+      "resolution_note": "Deferred for budget, due tomorrow. Instance: a scoped propagate (-SlugsFile of the 33 dirty specs, sync-recipesdb-cost first). Class fix to design: a scheduled scoped drain step behind propagate's existing gates.",
+      "status": "deferred-budget"
+    },
+    {
+      "queue_id": "2026-09-30-e6eb97",
+      "subject": "Grocery capture watchdog: AD STALE 2026-09-30",
+      "classification": "no-code-change",
+      "evidence": [
+        "owner audit-ad-status.ps1 ran (watchdog 09-30); 09-30 log: pull-bakers-ad-list REFUSED - no candidate ad id verified; the 10-01 run wrote bakers-ad-list-2026-09-30.json (07:21) and audit-ad-status now prints 0 of 7 (rc 0). Baker's generations: 09-23 offers 149, terms 78, unrouted 63 -> 09-30 offers 165, terms 70, unrouted 84; depth did not drop materially, sale rows EXCLUDED 0"
+      ],
+      "root_cause": "Baker's new-week ad id did not verify on turnover day; the next run found it (49a0813df also routes a stale Baker's ad id to Chrome)",
+      "resolution_note": "Owned by audit-ad-status.ps1, which ran; Baker's 09-30 ad landed on 10-01 with 165 offers (previous week 149), 0 of 7 stale now, no sale rows excluded. No consequence audit needed.",
+      "prior_closes": [
+        "2026-09-23-4090fc"
+      ],
+      "prevention_none_because": "an ad-turnover-day lag that self-heals within one run; 2 occurrences, both on Wednesday turnover; Phase 2 recalibration",
+      "status": "planned"
+    }
+  ],
+  "open_questions_for_brad": [],
+  "ship_sequence": [
+    "BATCH 1 (money items 3851d2 + abf660, ops item 6a6140), worked in a scratch clone per og-47; first re-pin the board: newest comparison must still be comparison-2026-09-30 built 08:07:45, else re-run the routing diff against plan-2026-10-01-2.routing.json",
+    "3851d2 root fix: soundness-publish-lib (cells, de-dup, skip quarantined) + audit-match-soundness -CellScope + guards child entry + HELD text; audit-match-soundness -SelfTest, test-cell-quarantine, test-guards all 0",
+    "abf660: send-alert -DigestOnly + alert-lib + alert-registry; send-alert -SelfTest and audit-alert-registry 0; resolve-match-worklist -Decide the chilled rotisserie name -> rotisserie-chicken",
+    "commodities.json: almond-flour.exclude += \\b(?:cookies?|bars?)\\b",
+    "repair-multipack-sizes.ps1 -Apply, then stamp-ad-as-of.ps1 -Apply (both BEFORE compare-deals; copy the chain from check-ad-cycles.ps1, not from memory)",
+    "compare-deals.ps1 -MinStores 1 -BakersFile <newest> -FarewayFile <newest>; update-history.ps1 -Reconcile",
+    "audit-name-drift, prune-bad-links, audit-name-drift again if prune rewrote product-urls.json, generate-board-overrides, build-deals-page",
+    "audit-match-soundness.ps1: review moved and dropped line by line, -Accept, stage match-baseline.json WITH the commodities.json change",
+    "guards.ps1 (0, or 4 QUARANTINED with each cell named) + audit-basis-reconcile + audit-pack-basis + audit-food-category",
+    "publish-deals-page.ps1 (must NOT print HELD); test-auditors.ps1 (0)",
+    "6a6140: capture-run.ps1 line 1948 change + its self-test",
+    "commit with pathspecs and a Store: line; land with ops\\push-main.ps1, never git push origin HEAD:main (this also carries local 30a5e95d5 and c537de8bc)",
+    "verify live with a cache-busting fetch: board.json almond-flour Baker's no longer the cookie, rotisserie Walmart 3.97 present, live-page-parity PARITY",
+    "BATCH 2 (no publish): d694ee reviewed keys (-SelfTest, then a live run exits 0 printing KNOWN x3); 130abf names.txt + dossier fix + keyed gate (run-daemon-battery -SelfTest; run-gates 0); land each with push-main"
+  ]
+}
