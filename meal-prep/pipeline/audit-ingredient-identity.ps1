@@ -52,6 +52,15 @@
   SCOPE OF A CLEAN -RoutesOnly REPORT: unsound. It sees a row whose OWN NAME moves; it cannot see a union cell that
   admits another member while the row's name still routes to its bid (Zucchini / Yellow Squash was exactly that).
   A refusal is complete: the row's own name routed differently from its mark, which is the defect.
+
+  REVIEWED KEYS (2026-10-01, queue 2026-09-30-d694ee, plan-2026-10-01-2). The cell mark may carry
+  reviewed: [{key, owner, until, why}], a finding triage decided to KEEP while a named queue item owns the question.
+  A RISE key that is reviewed and unexpired (until >= today, local date) prints KNOWN <owner> and does not exit 2;
+  a key past its until, or with an until that does not parse, is a RISE again. Only
+  -Review <key> -Owner <queue id> -Until <yyyy-MM-dd> [-ReviewWhy <text>] writes the list (never a plain run, og-11),
+  and it refuses an until in the past or more than $script:MaxReviewDays days ahead, so a review cannot become
+  permanent silence. The key carries store AND product, so a different product in a reviewed cell is still a RISE.
+  The mark's count and keys are untouched by a review; -Tighten carries the list.
 #>
 # Declared inputs of its -SelfTest (round 5, design\PLAN-push-gate-diet-2026-09-27.md): the self-test works in a temp sandbox, and what it loads joins the key through the walk. Verified in a sandbox holding only the keyed files: both arms agree.
 # gate-inputs: meal-prep\pipeline\audit-ingredient-identity.ps1
@@ -67,7 +76,11 @@ param(
   [string]$CostedFile = '',
   [string]$BaselineFile = '',
   [string]$CellBaselineFile = '',
-  [switch]$RoutesOnly
+  [switch]$RoutesOnly,
+  [string]$Review = '',
+  [string]$Owner = '',
+  [string]$Until = '',
+  [string]$ReviewWhy = ''
 )
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -114,15 +127,24 @@ function Invoke-KeyRatchet {
   }
   $known = New-Object 'System.Collections.Generic.HashSet[string]'
   foreach ($k in @($base.keys)) { [void]$known.Add([string]$k) }
-  $new = @($Findings | Where-Object { -not $known.Contains([string]$_.key) })
+  $rv = Get-ReviewedState $base
+  $unmarked = @($Findings | Where-Object { -not $known.Contains([string]$_.key) })
+  $kept = @($unmarked | Where-Object { $rv.Live.ContainsKey([string]$_.key) })
+  $new = @($unmarked | Where-Object { -not $rv.Live.ContainsKey([string]$_.key) })
+  if ($rv.All.Count -gt 0) { [void]$lines.Add(('  {0} reviewed: {1} key(s) unexpired, {2} expired, {3} of them found this run' -f $Label, $rv.Live.Count, ($rv.All.Count - $rv.Live.Count), $kept.Count)) }
+  foreach ($x in $kept) { $e = $rv.Live[[string]$x.key]; [void]$lines.Add('  KNOWN ' + [string]$e.owner + ' until ' + [string]$e.until + '  ' + $x.kind + '  ' + $x.detail) }
   if ($new.Count -gt 0) {
     [void]$lines.Add(('  RISE: {0} {1} finding(s) not in the mark of {2} (mark {3}):' -f $new.Count, $Label, [string]$base.recorded, [int]$base.count))
-    foreach ($x in $new) { [void]$lines.Add('  NEW  ' + $x.kind + '  ' + $x.detail) }
+    foreach ($x in $new) {
+      $ex = ''; if ($rv.Expired.ContainsKey([string]$x.key)) { $ee = $rv.Expired[[string]$x.key]; $ex = '  (review by ' + [string]$ee.owner + ' EXPIRED, until ' + [string]$ee.until + ')' }
+      [void]$lines.Add('  NEW  ' + $x.kind + '  ' + $x.detail + $ex + '  key=' + [string]$x.key)
+    }
     return [pscustomobject]@{ Code = 2; Lines = $lines }
   }
   if ($keys.Count -lt [int]$base.count) {
     if ($Tighten -and $MayWrite) {
       $doc = [ordered]@{ recorded = (Get-Date -Format 'yyyy-MM-dd'); why = [string]$base.why; read_from = $ReadFrom; count = $keys.Count; keys = @($keys) }
+      if ($rv.All.Count -gt 0) { $doc['reviewed'] = @($rv.All) }
       [void](Write-TcLfFile -Path $File -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
       [void]$lines.Add(('  {0} mark TIGHTENED {1} -> {2}' -f $Label, [int]$base.count, $keys.Count))
     } elseif ($Tighten) {
@@ -131,6 +153,64 @@ function Invoke-KeyRatchet {
       [void]$lines.Add(('  {0} ratchet CAN tighten: {1} -> {2} (mark kept; -Tighten records it)' -f $Label, [int]$base.count, $keys.Count))
     }
   }
+  return [pscustomobject]@{ Code = 0; Lines = $lines }
+}
+
+# A review is a ruling with an end date: the cap is the plausibility bar on a list that silences a page (og-19).
+# 30 = about two weekly triage cycles past the 14-day seed; first plausible value, no sweep.
+$script:MaxReviewDays = 30
+
+function Get-ReviewedState {
+  <# The mark's reviewed list, split by the local date: Live (until >= today) and Expired (past, or an until that does
+     not parse, which fails closed). Keyed ORDINALLY: a bare @{} would let a key differing only in case hide. #>
+  param($Base)
+  $today = (Get-Date).Date
+  $all = New-Object System.Collections.ArrayList
+  $live = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+  $exp = New-Object 'System.Collections.Generic.Dictionary[string,object]' ([StringComparer]::Ordinal)
+  $p = $Base.PSObject.Properties['reviewed']
+  if ($p -and $null -ne $p.Value) {
+    foreach ($e in @($p.Value)) {
+      if ($null -eq $e) { continue }
+      $k = [string]$e.key
+      if (-not $k) { continue }
+      $row = [pscustomobject][ordered]@{ key = $k; owner = [string]$e.owner; until = [string]$e.until; why = [string]$e.why }
+      [void]$all.Add($row)
+      $d = [datetime]::MinValue
+      $parsed = [datetime]::TryParseExact([string]$e.until, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$d)
+      if ($parsed -and $d.Date -ge $today) { $live[$k] = $row } else { $exp[$k] = $row }
+    }
+  }
+  return [pscustomobject]@{ All = $all.ToArray(); Live = $live; Expired = $exp }
+}
+
+function Invoke-ReviewWrite {
+  <# -Review <key> -Owner <queue id> -Until <yyyy-MM-dd>: the ONLY writer of the cell mark's reviewed list. Count and
+     keys are carried byte-for-byte in meaning; an entry for the same key is replaced. Exit 0 written, 1 refused. #>
+  $lines = New-Object System.Collections.ArrayList
+  $why = ''
+  $d = [datetime]::MinValue
+  $today = (Get-Date).Date
+  if (-not $Review.StartsWith('cell|', [StringComparison]::Ordinal)) { $why = 'the key must be a cell mark key (cell|item|id|store|product): ' + $Review }
+  elseif ($Owner -notmatch '^\d{4}-\d{2}-\d{2}-[0-9a-f]{6}$') { $why = '-Owner must be the queue id that owns the question (yyyy-mm-dd-xxxxxx), got "' + $Owner + '"' }
+  elseif (-not [datetime]::TryParseExact($Until, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::None, [ref]$d)) { $why = '-Until must be yyyy-MM-dd, got "' + $Until + '"' }
+  elseif ($d.Date -lt $today) { $why = '-Until ' + $Until + ' is already past' }
+  elseif ($d.Date -gt $today.AddDays($script:MaxReviewDays)) { $why = '-Until ' + $Until + ' is more than ' + $script:MaxReviewDays + ' days ahead: a review must expire' }
+  elseif (-not (Test-Path $CellBaselineFile)) { $why = 'no cell mark at ' + $CellBaselineFile }
+  if ($why) {
+    [void]$lines.Add('audit-ingredient-identity -Review: REFUSED - ' + $why + ' (mark not written)')
+    return [pscustomobject]@{ Code = 1; Lines = $lines }
+  }
+  $base = Read-JsonFile $CellBaselineFile
+  $rv = Get-ReviewedState $base
+  $list = New-Object System.Collections.ArrayList
+  foreach ($e in @($rv.All)) { if (-not [string]::Equals([string]$e.key, $Review, [StringComparison]::Ordinal)) { [void]$list.Add($e) } }
+  [void]$list.Add([pscustomobject][ordered]@{ key = $Review; owner = $Owner; until = $d.ToString('yyyy-MM-dd'); why = $ReviewWhy })
+  $doc = [ordered]@{}
+  foreach ($pp in $base.PSObject.Properties) { if ($pp.Name -ne 'reviewed') { $doc[$pp.Name] = $pp.Value } }
+  $doc['reviewed'] = $list.ToArray()
+  [void](Write-TcLfFile -Path $CellBaselineFile -Text (([pscustomobject]$doc) | ConvertTo-Json -Depth 4) -NoBom)
+  [void]$lines.Add(('audit-ingredient-identity -Review: REVIEWED {0} owner {1} until {2}; cell mark count {3} and keys unchanged, {4} reviewed entr(ies)' -f $Review, $Owner, $d.ToString('yyyy-MM-dd'), [int]$base.count, $list.Count))
   return [pscustomobject]@{ Code = 0; Lines = $lines }
 }
 
@@ -446,6 +526,44 @@ if ($SelfTest) {
     WriteBoard 'Kroger Black Beans 15 oz'
     $o = & powershell @a; $c5 = $LASTEXITCODE
     Check 'MUST FIRE  a standing chickpeas key does not hide a NEW "Kroger Black Beans" product in the same cell: RISE, exit 2' (($c5 -eq 2) -and (($o -join ' ') -match 'NEW  CELL .*Kroger Black Beans')) ("exit $c5")
+
+    # REVIEWED KEYS (queue 2026-09-30-d694ee): the shape of the three kept findings (Family Fare Julienne Ct, Hy-Vee
+    # Halves, Kroger Olive Oil Mayo) re-paging daily because a kept key could never enter the mark. The Black Beans key
+    # stands in for one of them; its key is derived by the SAME lib the data pass calls, never typed.
+    $dd = CellRun $rowsB (Read-JsonFile $kf) (Get-IdentityBoardIndex (Read-JsonFile $bfile)) (Get-IdentityBoardIndex (Read-JsonFile $rbf)) @{}
+    $bbKeys = @(@($dd.findings) | Where-Object { [string]$_.detail -match 'Kroger Black Beans' } | ForEach-Object { [string]$_.key })
+    $bbKey = if ($bbKeys.Count -eq 1) { $bbKeys[0] } else { 'cell|no-black-beans-key-derived' }
+    $own = '2026-09-29-465acc'
+    function RvCount($j) { $p = $j.PSObject.Properties['reviewed']; if ($p -and $null -ne $p.Value) { return @($p.Value).Count }; return 0 }
+    $day = { param([int]$n) (Get-Date).Date.AddDays($n).ToString('yyyy-MM-dd') }
+    $cnt0 = [int](Read-JsonFile $cmf).count
+    $o = & powershell @($base + @('-Review', $bbKey, '-Owner', $own, '-Until', (& $day 14), '-ReviewWhy', 'fixture')); $e1 = $LASTEXITCODE
+    $m1 = Read-JsonFile $cmf
+    Check 'CLEAN TWIN  -Review writes one reviewed entry (owner 2026-09-29-465acc, 14 days) and leaves the mark count and keys unchanged' (($e1 -eq 0) -and ($bbKeys.Count -eq 1) -and ((RvCount $m1) -eq 1) -and ([int]$m1.count -eq $cnt0) -and (@($m1.keys).Count -eq $cnt0)) ("exit $e1 keys=$($bbKeys.Count) " + ($o -join ' | '))
+    $hr = (Get-FileHash -LiteralPath $cmf).Hash
+    $o = & powershell @a; $e2 = $LASTEXITCODE
+    Check 'CLEAN TWIN  the reviewed unexpired key exits 0, prints KNOWN 2026-09-29-465acc, no RISE, and a plain run leaves the mark byte-identical' (($e2 -eq 0) -and (($o -join ' ') -match 'KNOWN 2026-09-29-465acc') -and (($o -join ' ') -notmatch 'RISE') -and ((Get-FileHash -LiteralPath $cmf).Hash -eq $hr)) ("exit $e2 " + ($o -join ' | '))
+    [IO.File]::WriteAllText($bfile, ([pscustomobject]@{ comparison = @((Bd 'chickpeas' @('Aldi', 'Aldi Garbanzo Beans 15.5 OZ', "Baker's", 'Kroger Black Beans 15 oz', 'Hy-Vee', 'Hy-Vee Black Beans 15 oz'))) } | ConvertTo-Json -Depth 6), $enc)
+    $o = & powershell @a; $e3 = $LASTEXITCODE; $oj = $o -join ' '
+    Check 'MUST FIRE  a new unreviewed product in the same commodity (Hy-Vee Black Beans) exits 2 RISE 1 naming only it, while the reviewed key prints KNOWN' (($e3 -eq 2) -and ($oj -match 'RISE: 1 cell') -and (@($o | Where-Object { $_ -match '^\s*NEW  CELL .*Hy-Vee Black Beans' }).Count -eq 1) -and (@($o | Where-Object { $_ -match '^\s*NEW  CELL .*Kroger Black Beans' }).Count -eq 0) -and ($oj -match 'KNOWN 2026-09-29-465acc')) ("exit $e3 " + ($o -join ' | '))
+    WriteBoard 'Kroger Black Beans 15 oz'
+    function SetUntil([string]$u) { $j = Read-JsonFile $cmf; $j.reviewed[0].until = $u; [IO.File]::WriteAllText($cmf, ($j | ConvertTo-Json -Depth 4), $enc) }
+    SetUntil (& $day 0)
+    $o = & powershell @a; $e4 = $LASTEXITCODE
+    Check 'CLEAN TWIN  a review whose until is TODAY (AT the bar) is still live: exit 0, KNOWN' (($e4 -eq 0) -and (($o -join ' ') -match 'KNOWN 2026-09-29-465acc')) ("exit $e4 " + ($o -join ' | '))
+    SetUntil (& $day -1)
+    $o = & powershell @a; $e5 = $LASTEXITCODE
+    Check 'MUST FIRE  a review whose until was YESTERDAY (one day past the bar) re-raises: exit 2 RISE naming Kroger Black Beans as EXPIRED' (($e5 -eq 2) -and (@($o | Where-Object { $_ -match '^\s*NEW  CELL .*Kroger Black Beans.*EXPIRED' }).Count -eq 1)) ("exit $e5 " + ($o -join ' | '))
+    $o = & powershell @($base + @('-Review', $bbKey, '-Owner', $own, '-Until', (& $day 30))); $e6 = $LASTEXITCODE
+    $m6 = Read-JsonFile $cmf
+    Check 'CLEAN TWIN  -Until 30 days ahead (AT the cap) is written, replacing the key''s old entry (still one entry)' (($e6 -eq 0) -and ((RvCount $m6) -eq 1) -and ([string]$m6.reviewed[0].until -eq (& $day 30))) ("exit $e6 " + ($o -join ' | '))
+    $h6 = (Get-FileHash -LiteralPath $cmf).Hash
+    $o = & powershell @($base + @('-Review', $bbKey, '-Owner', $own, '-Until', (& $day 31))); $e7 = $LASTEXITCODE
+    Check 'MUST FIRE  -Until 31 days ahead (one past the cap) is REFUSED, exit 1, the mark byte-identical: a review must expire' (($e7 -eq 1) -and (($o -join ' ') -match 'REFUSED') -and ((Get-FileHash -LiteralPath $cmf).Hash -eq $h6)) ("exit $e7 " + ($o -join ' | '))
+    [IO.File]::WriteAllText($bfile, ([pscustomobject]@{ comparison = @((Bd 'chickpeas' @('Aldi', 'Aldi Chickpeas 15.5 OZ', "Baker's", 'Kroger Chickpeas 15 oz'))) } | ConvertTo-Json -Depth 6), $enc)
+    $o = & powershell @($a + '-Tighten'); $e8 = $LASTEXITCODE
+    $m8 = Read-JsonFile $cmf
+    Check 'CLEAN TWIN  -Tighten on a cell fall (1 -> 0) carries the reviewed list unchanged' (($e8 -eq 0) -and ([int]$m8.count -eq 0) -and ((RvCount $m8) -eq 1) -and ([string]$m8.reviewed[0].owner -eq $own)) ("exit $e8 " + ($o -join ' | '))
   } finally { Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue }
 
   # -RoutesOnly, THE PUSH-TIME PAIR CHECK (queue 2026-09-26-177835). FROZEN, never regenerated: lo-mein-noodles' three
@@ -504,12 +622,12 @@ if ($SelfTest) {
     Check 'CLEAN TWIN  -RoutesOnly child with the rebid riding the push exits 0 and never writes the mark, even under -Tighten' (($d2 -eq 0) -and ((Get-FileHash -LiteralPath $mf2).Hash -eq $h1)) ("exit $d2")
   } finally { Remove-Item -Recurse -Force $tmp2 -ErrorAction SilentlyContinue }
 
-  if ($ran -ne 72) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 72 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
+  if ($ran -ne 80) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL - ran ' + $ran + ' of 80 cases'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest ran=' + $ran) }
   if ($bad -gt 0) { Write-Output ('audit-ingredient-identity SELF-TEST FAIL (' + $bad + ' of ' + $ran + ')'); Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 1 -Summary ('selftest fail=' + $bad) }
   Write-Output ('audit-ingredient-identity SELF-TEST PASS (' + $ran + ' cases)')
   Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code 0 -Summary ('selftest pass cases=' + $ran)
 }
 
-$res = if ($RoutesOnly) { Invoke-RoutesOnlyRun } else { Invoke-IdentityRun }
+$res = if ($Review) { Invoke-ReviewWrite } elseif ($RoutesOnly) { Invoke-RoutesOnlyRun } else { Invoke-IdentityRun }
 foreach ($l in $res.Lines) { Write-Output $l }
 Exit-Guard -Name 'INGREDIENT-IDENTITY' -Code $res.Code -Summary ('exit=' + $res.Code)

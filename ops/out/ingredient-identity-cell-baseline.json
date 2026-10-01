@@ -90,5 +90,25 @@
                  "cell|Ziti Pasta|pasta|hyvee|hyveepennerigate",
                  "cell|Ziti Pasta|pasta|walmart|greatvaluepenne32ozshelfstable",
                  "cell|Zucchini|zucchini|walmart|freshyellowsquasheach"
-             ]
+             ],
+    "reviewed":  [
+                     {
+                         "key":  "cell|Sun-Dried Tomatoes (Oil-Packed)|sun-dried-tomatoes|familyfare|californiasundrysundriedtomatoesjuliennect",
+                         "owner":  "2026-09-29-465acc",
+                         "until":  "2026-10-15",
+                         "why":  "kept by triage (177835 close, 2026-09-27 c989c6 design): oil-packed vs dry form and olive-oil mayo identity owned by 2026-09-29-465acc; no recipe line costs at this cell"
+                     },
+                     {
+                         "key":  "cell|Sun-Dried Tomatoes (Oil-Packed)|sun-dried-tomatoes|hyvee|hyveesundriedtomatoeshalves",
+                         "owner":  "2026-09-29-465acc",
+                         "until":  "2026-10-15",
+                         "why":  "kept by triage (177835 close, 2026-09-27 c989c6 design): oil-packed vs dry form and olive-oil mayo identity owned by 2026-09-29-465acc; no recipe line costs at this cell"
+                     },
+                     {
+                         "key":  "cell|Mayonnaise|mayonnaise|bakers|krogeroliveoilmayo",
+                         "owner":  "2026-09-29-465acc",
+                         "until":  "2026-10-15",
+                         "why":  "kept by triage (177835 close, 2026-09-27 c989c6 design): oil-packed vs dry form and olive-oil mayo identity owned by 2026-09-29-465acc; no recipe line costs at this cell"
+                     }
+                 ]
 }
