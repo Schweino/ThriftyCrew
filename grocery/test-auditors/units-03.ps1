@@ -325,6 +325,9 @@ foreach ($d in @($fxLeLf, $fxLeCrLf)) {
   Copy-Item (Join-Path $root 'check-ad-cycles.ps1') (Join-Path $d 'check-ad-cycles.ps1') -Force
   # AND publish-outcome-lib.ps1 (2026-09-28): the board_sha256 write moved there from check-ad-cycles.
   Copy-Item (Join-Path $root 'publish-outcome-lib.ps1') (Join-Path $d 'publish-outcome-lib.ps1') -Force
+  # AND edge-decision-lib.ps1 (2026-10-01, 16027b port): the EDGE-DECISION region moved there out of capture-run,
+  # and the fixture READS it with Get-Content (so Copy-FxWithDeps, which follows dot-sources only, cannot find it).
+  Copy-Item (Join-Path $root 'edge-decision-lib.ps1') (Join-Path $d 'edge-decision-lib.ps1') -Force
 }
 [IO.File]::WriteAllText((Join-Path $fxLeLf   'capture-run.ps1'), $crLf,   (New-Object Text.UTF8Encoding $true))
 [IO.File]::WriteAllText((Join-Path $fxLeCrLf 'capture-run.ps1'), $crCrLf, (New-Object Text.UTF8Encoding $true))
