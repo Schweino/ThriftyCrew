@@ -13,7 +13,7 @@
   vegetable-oil / Sam's Club on comparison-2026-09-21.json and on public\board.json at origin/main aa53973d5.
 #>
 # The self-test builds every board in memory; beyond the lib it reads guards.ps1 and apply-cell-quarantine.ps1 as text only.
-# gate-inputs: grocery\cell-quarantine-lib.ps1
+# gate-inputs: grocery\cell-quarantine-lib.ps1, grocery\soundness-publish-lib.ps1
 # gate-inputs-text: grocery\guards.ps1, grocery\apply-cell-quarantine.ps1
 [CmdletBinding()]
 param([switch]$SelfTest)
@@ -352,6 +352,47 @@ Assert-QCase 'MUST FIRE  the applier refuses a second reapply on the same board,
 Assert-QCase 'CLEAN TWIN the reapply verdict line keeps the GUARDS QUARANTINE-REQUIRED words (exit 2) and names the cell' {
   $vl = Get-TcGuardsVerdictLines -Disposition $dv -FailCount 2
   $vl.code -eq 2 -and $vl.lines[-1].StartsWith('GUARDS QUARANTINE-REQUIRED: 2 hard failure(s); the held value of 1') -and ($vl.lines -join "`n") -match "WITHHOLD    vegetable-oil / Sam's Club  its held value 0\.0373" }
+
+# ---- 16: match-soundness scopes its own cells (2026-10-01, queue 2026-09-30-3851d2, Brad's ruling Q-2026-09-29-4-A) --------
+# The two winning rows are FROZEN from comparison-2026-09-30.json (built 2026-10-01 08:07:45) and the report slice from
+# soundness-report.json 2026-10-01 08:21:10. The 250 filler cells exist so the breaker (2% of priced cells) is not what
+# decides it. No last published value is supplied, so both cells WITHHOLD (ruling A: nothing is invented).
+. (Join-Path $root 'soundness-publish-lib.ps1')
+function New-QMsCell([string]$Store, [double]$Pu, [string]$Item, [string]$Unit) {
+  return [pscustomobject]@{ store = $Store; per_unit = $Pu; unit = $Unit; type = 'everyday'; bulk = $false; membership = $false; member_label = ''; item = $Item; ad = ''; size = ''; basis = ''; note = ''; source_ad = 'everyday shelf price'; ad_from = ''; ad_to = ''; ad_basis = ''; as_of = '2026-09-30' }
+}
+$msCookie = 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies'
+$msChicken = '(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz'
+$msB = New-QBoard -Stores @('Aldi', "Baker's", 'Walmart', 'Family Fare', 'Hy-Vee') -Commodities 50
+$msAf = [pscustomobject]@{ commodity = 'Almond Flour'; id = 'almond-flour'; unit = 'lb'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''
+  stores = @((New-QMsCell 'Aldi' 6.65 'Baker S Corner Almond Flour 16 OZ' 'lb'), (New-QMsCell "Baker's" 15.9709 $msCookie 'lb')) }
+$msRo = [pscustomobject]@{ commodity = 'Rotisserie Chicken'; id = 'rotisserie-chicken'; unit = 'each'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''
+  stores = @((New-QMsCell 'Walmart' 3.97 $msChicken 'each'), (New-QMsCell 'Family Fare' 7.99 'Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)' 'each'), (New-QMsCell "Baker's" 8.99 'Simple Truth Cold Deli Fresh Whole Rotisserie Chicken' 'each'), (New-QMsCell 'Hy-Vee' 8.99 'Whole Savory Rotisserie Chicken (Cold)' 'each')) }
+Update-TcRowWinners $msAf; Update-TcRowWinners $msRo
+$msB.comparison = @(@($msB.comparison) + @($msAf, $msRo))
+$msRep = [ordered]@{ moved = $null; dropped = $null; new_contested_names = @($msChicken, 'Del Monte Peas And Carrots 8.5 Oz', $msCookie)
+  cell_by_contest = @([pscustomobject]@{ name = $msChicken }, [pscustomobject]@{ name = $msCookie }) }
+$msScope = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report $msRep -CellNames (Get-CellNames $msB.comparison))
+$msKid = Get-TcChildQuarantineScope $msScope.Lines
+$msFails = @(@($msKid.cells) | ForEach-Object { New-TcGuardFailure -Message 'HARD FAIL: no published cell is won by a product whose commodity match changed (see audit-match-soundness.ps1)' -Family 'cell' -Id $_.id -Store $_.store -Kind $_.kind -Check 'match-soundness-cells' })
+$msD = Get-TcGuardsDisposition -Failures $msFails -Board $msB
+Assert-QCase 'MUST FIRE  the 2026-10-01 soundness finding is QUARANTINE-REQUIRED (exit 2) on exactly almond-flour/Baker''s and rotisserie-chicken/Walmart, never a board hold' {
+  $msScope.Code -eq 2 -and $msD.action -eq 'quarantine' -and (Get-TcGuardsExitCode $msD.action) -eq 2 -and ((@(@($msD.cells) | ForEach-Object { [string]$_.id + '|' + [string]$_.store }) | Sort-Object) -join ',') -eq "almond-flour|Baker's,rotisserie-chicken|Walmart" }
+$msBefore = Get-QSnapshot $msB
+$msA = Invoke-TcCellQuarantine -Board $msB -Plan (ConvertTo-QPlan $msD) -LastPublished $null -Today '2026-10-01' -MaxAgeDays 90
+$msB2 = Invoke-QRoundTrip $msB
+$msAfter = Get-QSnapshot $msB2
+Assert-QCase 'MUST FIRE  applied: the cookie no longer prices almond-flour at Baker''s (withheld, no prior value), and every other cell is unchanged value by value' {
+  $msOther = @($msBefore.Keys | Where-Object { $_ -ne "almond-flour|Baker's" -and $_ -ne 'rotisserie-chicken|Walmart' })
+  $msA.ok -and $null -eq (Get-QCell $msB2 'almond-flour' "Baker's") -and $null -eq (Get-QCell $msB2 'rotisserie-chicken' 'Walmart') -and $msOther.Count -eq 254 -and @($msOther | Where-Object { $msAfter[$_] -ne $msBefore[$_] }).Count -eq 0 }
+$msV2 = Get-SoundnessPublishVerdict -Report $msRep -CellNames (Get-CellNames $msB2.comparison)
+$msScope2 = Get-SoundnessCellScope $msV2
+$msD2 = Get-TcGuardsDisposition -Failures @() -Board $msB2
+Assert-QCase 'MUST FIRE  second guards pass over the applied board: soundness names nothing, guards is QUARANTINED (exit 4), and the publish verdict does NOT hold' {
+  $msScope2.Code -eq 0 -and $msD2.action -eq 'quarantined' -and (Get-TcGuardsExitCode $msD2.action) -eq 4 -and -not $msV2.Hold }
+Assert-QCase 'CLEAN TWIN  guards.ps1 registers the cell-scope run on the board it grades and harvests it in the delegated table (k=match-soundness-cells)' {
+  $gSrc = [IO.File]::ReadAllText((Join-Path $root 'guards.ps1'))
+  $gSrc.Contains("Register-Kid 'match-soundness-cells' 'audit-match-soundness.ps1'") -and $gSrc.Contains("k='match-soundness-cells'") -and $gSrc.Contains("@('-CellScope')") }
 
 if ($script:qFail -gt 0) { Write-Output ("test-cell-quarantine self-test: FAIL ({0} of {1} case(s) failed)" -f $script:qFail, $script:qCases); exit 1 }
 Write-Output ("test-cell-quarantine self-test: PASS ({0} of {0} case(s))" -f $script:qCases)

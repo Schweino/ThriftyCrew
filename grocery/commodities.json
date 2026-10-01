@@ -13985,6 +13985,7 @@
                         "bread\\s+flour",
                         "self[\\s-]*rising",
                         "\\bcake\\b",
+                        "\\b(?:cookies?|bars?)\\b",
                         "whole\\s+wheat",
                         "\\bmix\\b",
                         "beech\\s*nut",

@@ -346,6 +346,13 @@ $null = Register-Kid 'board-mojibake'      'audit-board-mojibake.ps1'       @('-
 $null = Register-Kid 'capture-encoding'    'audit-capture-encoding.ps1'     @()
 # flag-verification is registered FIRST (see the top of this block); ended-window keeps its place here.
 $null = Register-Kid 'ended-window'        'audit-ended-window.ps1'         @()
+# match-soundness-cells (2026-10-01, queue 2026-09-30-3851d2, Brad's ruling Q-2026-09-29-4-A): the soundness finding on a
+# winning cell quarantines THAT cell here instead of holding the whole post in publish-deals-page. It joins against the
+# SAME board this file grades (the selection below is $cmpF's, further down), passed by path so the two cannot differ.
+# Cost: one cached soundness sweep, about 2 s measured in publish-deals-page's stage table, run beside the others.
+$msCellBoard = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
+$msCellArgs = @('-CellScope'); if ($msCellBoard) { $msCellArgs += @('-CompareFile', $msCellBoard.FullName) }
+$null = Register-Kid 'match-soundness-cells' 'audit-match-soundness.ps1'    $msCellArgs
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
 $null = Register-Kid 'st-walmart-batch'     'import-walmart-batch.ps1'       @('-SelfTest')
 # The BROWSER-PULL JS LANE (2026-08-31). pull-agent-lib.js and the four store agents are the whole
@@ -601,7 +608,12 @@ foreach ($g in @(
     #                    expiry at the ad set's date, and a Sam's markdown was typed everyday so its window could not retire
     #                    it. Both fixed in compare-deals; this is the backstop, CELL scoped through QUARANTINE-CELL, so an
     #                    ended window quarantines its one cell and never holds the board.
-    @{ f='audit-ended-window.ps1';      n='no published cell is priced from a sale or rollback window that ended before today'; k='ended-window' })) {
+    @{ f='audit-ended-window.ps1';      n='no published cell is priced from a sale or rollback window that ended before today'; k='ended-window' },
+    #   match-soundness-cells = a product whose commodity match MOVED, DROPPED or became CONTESTED against the reviewed
+    #                    baseline while it WINS a cell (2026-10-01, Brad's ruling Q-2026-09-29-4-A). CELL scoped through
+    #                    QUARANTINE-CELL (always `selection`), so it quarantines that cell; exit 1 (report unreadable or
+    #                    unjoinable) is unscoped and holds the board, fail-closed. The publish gate then holds only that.
+    @{ f='audit-match-soundness.ps1';   n='no published cell is won by a product whose commodity match changed against the reviewed baseline (match-soundness, cell scoped)'; k='match-soundness-cells' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   # CAPTURE the output instead of discarding it: a delegated audit that says "nothing to check" was exiting 0,

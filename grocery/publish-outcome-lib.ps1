@@ -30,12 +30,34 @@ function Get-PublishHeldGate([string[]]$VerdictLines) {
   $why  = 'publish-deals-page returned 2 with a HELD line this reader does not recognise, or with none at all - read the publish-verdict lines in ad-cycle-log.txt before assuming which gate held it.'
   if     ($held -match '(?i)coverage gate failed')       { $gate = 'coverage';           $why = "a store's pull produced too few commodities, or a store is thin/missing. Check the store pulls." }
   elseif ($held -match '(?i)missing a store tile')       { $gate = 'store-coverage';     $why = 'a staple commodity rendered no tile for one of the seven stores (out\store-coverage-report.json). The board would hide a store; fix the render, do not force it.' }
-  elseif ($held -match '(?i)commodity matching changed') { $gate = 'match-soundness';    $why = 'a product MOVED or DROPPED commodity against the reviewed baseline (out\audit\soundness-report.json). Read the moved/dropped list line by line, then run audit-match-soundness.ps1 -Accept AND COMMIT grocery\out\audit\match-baseline.json, which is a TRACKED file: an accept left uncommitted is undone by the next checkout and this gate holds the next build again.' }
+  elseif ($held -match '(?i)commodity matching changed') { $gate = 'match-soundness';    $why = 'a product MOVED, DROPPED or became CONTESTED against the reviewed baseline on a cell guards did not quarantine, or the soundness report could not be read or joined (out\audit\soundness-report.json; since 2026-10-01 a finding on a winning cell quarantines that cell in guards.ps1 instead of holding the post). Read the moved/dropped list line by line, then run audit-match-soundness.ps1 -Accept AND COMMIT grocery\out\audit\match-baseline.json, which is a TRACKED file: an accept left uncommitted is undone by the next checkout and this gate holds the next build again.' }
   elseif ($held -match '(?i)not in exactly one category'){ $gate = 'category-coverage'; $why = 'a commodity is not filed in exactly one category (out\category-coverage-report.json), so it would render in no filter. File it in categories.json.' }
   elseif ($held -match '(?i)the board this post names') { $gate = 'board-not-served'; $why = 'the post would name a board.json version feed.thriftycrew.com does not serve yet, or the feed could not be read (the HELD line says which). Nothing was written to Ghost. Land the push that carries public\board.json, let the edge serve it, then publish - capture-run does exactly that on the daily road (grocery\feed-served-lib.ps1).' }
   [pscustomobject]@{ gate = $gate; why = $why; held = $held }
 }
 # <<PUBLISH-HELD-GATE-END>>
+
+function Get-HeldBoardStatement([string]$RepoRoot) {
+  # WHAT A HELD PAGE LEFT LIVE, READ FROM BYTES (2026-10-01, queue 2026-09-30-3851d2). The HELD alert said "nothing bad
+  # was published", but a gate that stands after the build leaves public\board.json rewritten and the caller commits it,
+  # and committing that file IS the feed deploy. So the alert now says whether public\board.json differs from HEAD's,
+  # which is what the pipeline's commit will carry. Two git reads, only on a HELD road. A read that fails says so.
+  $f = Join-Path $RepoRoot 'public\board.json'
+  $head = ''; $work = ''; $ok = $false
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $head = [string](@(& git -C $RepoRoot rev-parse 'HEAD:public/board.json' 2>$null) | Select-Object -First 1)
+    $hrc = $LASTEXITCODE
+    if ($hrc -eq 0 -and (Test-Path -LiteralPath $f)) {
+      $work = [string](@(& git -C $RepoRoot hash-object -- $f 2>$null) | Select-Object -First 1)
+      $ok = ($LASTEXITCODE -eq 0 -and $head.Trim() -and $work.Trim())
+    }
+  } catch { $ok = $false } finally { $ErrorActionPreference = $prevEap }
+  if (-not $ok) { return 'Whether public\board.json changed could not be read (no HEAD copy or no working file), so do not assume the board data did or did not ship.' }
+  if ($head.Trim() -eq $work.Trim()) { return 'public\board.json is byte-identical to the committed one, so the commit that lands today does not change the board data; readers still see the last committed board.' }
+  return 'public\board.json WAS rewritten by this build and differs from the committed one, so the pipeline commit that carries it ships the new board data to the feed while the post waits: read the held gate''s cells before that commit lands.'
+}
 
 function Invoke-DeferPostBuild {
   <#
@@ -96,7 +118,7 @@ function Invoke-DeferPostBuild {
     $sum.Add('HELD      the ' + $heldGate.gate + ' gate held the board build - no post deferred, live post NOT updated')
     if (-not $NoAlert) {
       $heldLine = if ($heldGate.held) { $heldGate.held } else { '(publish-deals-page printed no HELD line)' }
-      $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $AsOf while it was being built for the deferred post, so no post was deferred and the live post was NOT updated - nothing bad was published. " + $heldGate.why + " The gate's own line was: " + $heldLine
+      $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $AsOf while it was being built for the deferred post, so no post was deferred and the live post was NOT updated. " + (Get-HeldBoardStatement (Split-Path $Root -Parent)) + ' ' + $heldGate.why + " The gate's own line was: " + $heldLine
       try { Send-Alert -Subject ('Grocery page HELD (' + $heldGate.gate + ") - $AsOf") -Body $heldBody | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) }
     }
   } else {

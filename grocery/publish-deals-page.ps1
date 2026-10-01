@@ -272,6 +272,10 @@ if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodi
 # soundness-publish-lib.ps1 and its fixtures are audit-match-soundness.ps1 -SelfTest (PUBLISH-HOLD). FAILS CLOSED: an
 # unreadable or stale report, or a board that cannot be joined, holds. Exit 3 (BLIND) is unchanged. Any exit but 0 and
 # 3 is judged from the report, so a crashed audit (exit 1 with no fresh report) now HOLDS where it used to pass.
+# A WINNING CELL QUARANTINES ITSELF FIRST (Brad's ruling Q-2026-09-29-4-A, 2026-09-30; queue 2026-09-30-3851d2): guards.ps1
+# runs `audit-match-soundness.ps1 -CellScope` and apply-cell-quarantine holds or withholds each winning cell before this
+# runs, so a winner whose every cell is quarantined reads REVIEW here. What still HOLDS is fail-closed only: an unreadable
+# or unjoinable report, or a winner on a cell nothing quarantined (guards did not scope it, so nothing proves it safe).
 . (Join-Path $root 'soundness-publish-lib.ps1')
 $__sw = [Diagnostics.Stopwatch]::StartNew()
 $msStart = Get-Date
@@ -281,8 +285,8 @@ $__sw.Stop(); $script:StageTimes['audit-match-soundness'] = [math]::Round($__sw.
 if ($msRc -ne 0 -and $msRc -ne 3) {
   $msV = Read-SoundnessPublishVerdict -ReportFile (Join-Path $OutDir 'audit\soundness-report.json') -CompareFile $CompareFile -NotBefore $msStart
   foreach ($w in $msV.Winners) { Write-Output ('match-soundness HOLD: ' + $w) }
-  foreach ($rv in $msV.Review) { Write-Output ('match-soundness REVIEW (on no published cell, does not hold the post): ' + $rv) }
-  if ($msV.Hold -and -not $Force) { Write-Output ('HELD: commodity matching changed vs the reviewed baseline and ' + $msV.Reason + ' (audit rc=' + $msRc + '; see out\audit\soundness-report.json). Review, then `audit-match-soundness.ps1 -Accept` for a moved or dropped product; a CONTESTED one is cleared only by `resolve-match-worklist.ps1 -Decide`, which -Accept no longer bypasses (or -Force to override).'); exit 2 }
+  foreach ($rv in $msV.Review) { Write-Output ('match-soundness REVIEW (on no live published cell, does not hold the post): ' + $rv) }
+  if ($msV.Hold -and -not $Force) { Write-Output ('HELD: commodity matching changed vs the reviewed baseline and ' + $msV.Reason + ', on a cell guards did not quarantine or with a report that cannot be joined (audit rc=' + $msRc + '; see out\audit\soundness-report.json). Review, then `audit-match-soundness.ps1 -Accept` for a moved or dropped product; a CONTESTED one is cleared only by `resolve-match-worklist.ps1 -Decide`, which -Accept no longer bypasses (or -Force to override).'); exit 2 }
   if ($msV.Hold) { Write-Output ('match-soundness: -Force overrides a HOLD (' + $msV.Reason + '; audit rc=' + $msRc + ').') }
   else { Write-Output ('match-soundness: NOT held (' + $msV.Reason + '; audit rc=' + $msRc + '). The baseline still waits for a reviewed `audit-match-soundness.ps1 -Accept`.') }
 }

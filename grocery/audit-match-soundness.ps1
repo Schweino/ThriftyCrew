@@ -18,7 +18,7 @@
           -Alert     send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
 # The self-test runs on frozen fixtures and temp files, reads its own source and the live alert-registry.json, through these libraries.
-# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\soundness-publish-lib.ps1, grocery\alert-registry-lib.ps1, lib\json-io.ps1, grocery\alert-registry.json
+# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\soundness-publish-lib.ps1, grocery\cell-quarantine-lib.ps1, grocery\alert-registry-lib.ps1, lib\json-io.ps1, grocery\alert-registry.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # -ForceAccept: bless the baseline EVEN OVER outstanding DROP verdicts. The gate below exists because
@@ -27,6 +27,13 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # made them permanently invisible to this audit - and they published as crowns. Forcing must be a loud,
   # deliberate act, never the default.
   [switch]$ForceAccept,
+  # -CellScope (2026-10-01, queue 2026-09-30-3851d2, Brad's ruling Q-2026-09-29-4-A): the run guards.ps1 makes. No
+  # -Alert, no -Accept. Joins the findings against -CompareFile (the board guards is grading) and prints one
+  # QUARANTINE-CELL line per LIVE cell a changed product wins, closed by QUARANTINE-SCOPE complete. Exit 2 when it
+  # names any (guards quarantines exactly those), 0 when none, 1 when it cannot scope (unreadable or unjoinable),
+  # which guards holds as BOARD scoped. Writes no report file (soundness-report.json is the publish gate's and the
+  # daily -Alert run's). Get-SoundnessCellScope (soundness-publish-lib.ps1) is the rule.
+  [switch]$CellScope, [string]$CompareFile = "",
   # -SelfTest: this guard had NONE until 2026-09-05, which is why the drift check could count seven
   # disagreements and name none of them for a whole day without anything noticing.
   [switch]$SelfTest)
@@ -447,7 +454,7 @@ if ($SelfTest) {
   # these cases sat inside a comment behind a typed backslash-n (8847c9fa5) and the suite printed PASS over 60 of 62. Every call
   # to T counts; the verdict below refuses any total but $script:expectedCases. Add a case, move the number.
   $script:ran = 0
-  $script:expectedCases = 84
+  $script:expectedCases = 93
   function T([string]$n, [bool]$ok, [string]$got) {
     $script:ran++
     if ($ok) { Write-Output ('  ok    ' + $n) } else { Write-Output ('  X     ' + $n + '   got: ' + $got); $script:bad++ }
@@ -858,6 +865,60 @@ if ($SelfTest) {
     $phV = Read-SoundnessPublishVerdict -ReportFile (Join-Path $phDir 'absent.json') -CompareFile $phCmp -NotBefore $phStart
     T 'MUST FIRE  a missing report HOLDS the post' ($phV.Hold) ('hold=' + $phV.Hold + ' ' + $phV.Reason)
   } finally { Remove-Item -LiteralPath $phDir -Recurse -Force -ErrorAction SilentlyContinue }
+  # ---- CELL-SCOPE: a finding on a winning cell QUARANTINES THAT CELL (Brad's ruling Q-2026-09-29-4-A, 2026-09-30; queue
+  # 2026-09-30-3851d2). FROZEN from comparison-2026-09-30.json (built 2026-10-01 08:07:45): both rows whole. The report
+  # slice is soundness-report.json of 2026-10-01 08:21:10: its two cell_by_contest names, each ALSO in new_contested_names
+  # (the HELD line counted them as 4 changes), plus two of its off-board new-contested names.
+  $csBoard = @(
+    [pscustomobject]@{ id = 'almond-flour'; unit = 'lb'; cheapest_store = 'Aldi'; stores = @(
+      [pscustomobject]@{ store = 'Aldi'; per_unit = 6.65; item = 'Baker S Corner Almond Flour 16 OZ' },
+      [pscustomobject]@{ store = "Baker's"; per_unit = 15.9709; item = 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies' }) },
+    [pscustomobject]@{ id = 'rotisserie-chicken'; unit = 'each'; cheapest_store = 'Walmart'; stores = @(
+      [pscustomobject]@{ store = 'Walmart'; per_unit = 3.97; item = '(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz' },
+      [pscustomobject]@{ store = 'Family Fare'; per_unit = 7.99; item = 'Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)' },
+      [pscustomobject]@{ store = "Baker's"; per_unit = 8.99; item = 'Simple Truth Cold Deli Fresh Whole Rotisserie Chicken' },
+      [pscustomobject]@{ store = 'Hy-Vee'; per_unit = 8.99; item = 'Whole Savory Rotisserie Chicken (Cold)' }) })
+  $csCookie = 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies'
+  $csChicken = '(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz'
+  $csRep = [ordered]@{ moved = $null; dropped = $null
+    new_contested_names = @($csChicken, 'Chick-fil-A Sea Salt Waffle Potato Chips 7oz', $csCookie, 'Del Monte Peas And Carrots 8.5 Oz')
+    cell_by_contest = @([pscustomobject]@{ name = $csChicken; cell = 'rotisserie-chicken @ Walmart 3.97/each' }, [pscustomobject]@{ name = $csCookie; cell = "almond-flour @ Baker's 15.9709/lb" }) }
+  $csV = Get-SoundnessPublishVerdict -Report $csRep -CellNames (Get-CellNames $csBoard)
+  T 'MUST FIRE  de-dup: a name in BOTH new_contested_names and cell_by_contest is ONE change (2026-10-01 08:18 said 4 for 2 products)' `
+    (($csV.Hold) -and ($csV.Winners.Count -eq 2) -and ($csV.Review.Count -eq 2)) ('hold=' + $csV.Hold + ' winners=' + $csV.Winners.Count + ' review=' + $csV.Review.Count)
+  $csS = Get-SoundnessCellScope $csV
+  $csSc = Get-TcChildQuarantineScope $csS.Lines
+  T 'MUST FIRE  the 2026-10-01 cookie on almond-flour @ Baker''s is named QUARANTINE-CELL almond-flour|Baker''s|selection, exit 2, and guards'' own parser reads a complete scope of 2 cells' `
+    (($csS.Code -eq 2) -and (@($csS.Lines) -contains "QUARANTINE-CELL almond-flour|Baker's|selection") -and ($null -ne $csSc) -and (@($csSc.cells).Count -eq 2) -and (@(@($csSc.cells) | Where-Object { $_.kind -eq 'selection' }).Count -eq 2)) ('code=' + $csS.Code + ' ' + (@($csS.Lines) -join ' / '))
+  # The 2026-09-29 occurrence (queue 2026-09-29-ae5518), transcribed from that item's evidence: the Aldi carrot and sweet
+  # potato medley on carrots at 0.29/lb. comparison-2026-09-29.json was rebuilt after it and no longer carries the row.
+  $csCar = @([pscustomobject]@{ id = 'carrots'; unit = 'lb'; cheapest_store = 'Aldi'; stores = @(
+      [pscustomobject]@{ store = 'Aldi'; per_unit = 0.29; item = 'Specially Selected Carrots Sweet Potatoes 16 OZ' },
+      [pscustomobject]@{ store = 'Family Fare'; per_unit = 0.458; item = 'Our Family Whole Carrots 32 Oz' }) })
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report ([ordered]@{ moved = $null; dropped = $null; new_contested_names = @('Specially Selected Carrots Sweet Potatoes 16 OZ'); cell_by_contest = $null }) -CellNames (Get-CellNames $csCar))
+  T 'MUST FIRE  the 2026-09-29 carrot medley crown quarantines carrots|Aldi only, never the board (exit 2, 1 cell)' `
+    (($csS.Code -eq 2) -and (@($csS.Lines) -contains 'QUARANTINE-CELL carrots|Aldi|selection') -and (@($csS.Lines) -contains 'QUARANTINE-SCOPE complete cells=1 stores=0')) ('code=' + $csS.Code + ' ' + (@($csS.Lines) -join ' / '))
+  $csTwo = @([pscustomobject]@{ id = 'limes'; unit = 'each'; cheapest_store = 'Walmart'; stores = @([pscustomobject]@{ store = 'Walmart'; per_unit = 0.25; item = 'Lime' }, [pscustomobject]@{ store = 'Hy-Vee'; per_unit = 0.99; item = 'Lime' }) })
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report ([ordered]@{ moved = $null; dropped = $null; new_contested_names = @('Lime'); cell_by_contest = $null }) -CellNames (Get-CellNames $csTwo))
+  T 'MUST FIRE  a name that wins TWO cells quarantines both (Get-CellNames records every cell, not only the crown)' `
+    (($csS.Code -eq 2) -and (@($csS.Lines) -contains 'QUARANTINE-CELL limes|Walmart|selection') -and (@($csS.Lines) -contains 'QUARANTINE-CELL limes|Hy-Vee|selection')) ('code=' + $csS.Code + ' ' + (@($csS.Lines) -join ' / '))
+  $csQ = @([pscustomobject]@{ id = 'almond-flour'; unit = 'lb'; cheapest_store = 'Aldi'; stores = @(
+      [pscustomobject]@{ store = 'Aldi'; per_unit = 6.65; item = 'Baker S Corner Almond Flour 16 OZ' },
+      [pscustomobject]@{ store = "Baker's"; per_unit = 15.9709; item = $csCookie; quarantine = [pscustomobject]@{ since = '2026-09-30'; kind = 'selection' } }) })
+  $csV = Get-SoundnessPublishVerdict -Report ([ordered]@{ moved = $null; dropped = $null; new_contested_names = @($csCookie); cell_by_contest = $null }) -CellNames (Get-CellNames $csQ)
+  $csS = Get-SoundnessCellScope $csV
+  T 'CLEAN TWIN  once that cell is QUARANTINED the publish verdict does not hold and names it REVIEW, and the cell scope names nothing (exit 0)' `
+    ((-not $csV.Hold) -and ($csV.Review.Count -eq 1) -and ([string]$csV.Review[0] -like '*QUARANTINED*') -and ($csS.Code -eq 0)) ('hold=' + $csV.Hold + ' code=' + $csS.Code + ' ' + ($csV.Review -join ' | '))
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report ([ordered]@{ moved = $null; dropped = $null; new_contested_names = @('Del Monte Peas And Carrots 8.5 Oz'); cell_by_contest = $null }) -CellNames (Get-CellNames $csBoard))
+  T 'MUST NOT FIRE  a report whose only change is on no published cell quarantines nothing and holds nothing (exit 0, no QUARANTINE-CELL)' `
+    (($csS.Code -eq 0) -and (@(@($csS.Lines) | Where-Object { $_ -like 'QUARANTINE-*' }).Count -eq 0)) ('code=' + $csS.Code)
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report $null -CellNames (Get-CellNames $csBoard) -ReadError 'no report')
+  T 'MUST FIRE  an UNREADABLE report still holds the BOARD from the cell scope (exit 1, no scope line: fail-closed survives)' `
+    (($csS.Code -eq 1) -and (@(@($csS.Lines) | Where-Object { $_ -like 'QUARANTINE-*' }).Count -eq 0)) ('code=' + $csS.Code)
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report $csRep -CellNames @{} -ReadError 'no board')
+  T 'MUST FIRE  changes that cannot be joined to a board hold the BOARD from the cell scope (exit 1)' ($csS.Code -eq 1) ('code=' + $csS.Code)
+  $csS = Get-SoundnessCellScope (Get-SoundnessPublishVerdict -Report $csRep -CellNames @{ $csCookie = [pscustomobject]@{ text = 'x'; crown = $true } })
+  T 'MUST FIRE  a winner whose entry lists no cells cannot be scoped, so it holds the BOARD (exit 1)' ($csS.Code -eq 1) ('code=' + $csS.Code)
   $ranCount = $script:ran
   if ($ranCount -ne $script:expectedCases) {
     Write-Output ("  X     CASE COUNT  the suite ran {0} case(s) and lists {1}: a case was skipped, hidden in a comment, or added without moving expectedCases" -f $ranCount, $script:expectedCases)
@@ -868,6 +929,10 @@ if ($SelfTest) {
 }
 
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+if ($CellScope -and ($Accept -or $ForceAccept -or $Alert)) {
+  Write-Output 'match-soundness cell scope: BOARD hold - -CellScope never accepts or alerts; run it alone'
+  Write-GuardComplete -Name 'match-soundness'; exit 1
+}
 $audDir = Join-Path $OutDir 'audit'
 if (-not (Test-Path $audDir)) { New-Item -ItemType Directory -Path $audDir | Out-Null }
 $baseF = Join-Path $audDir 'match-baseline.json'
@@ -1252,11 +1317,19 @@ $newContest = @($contest.Keys | Where-Object { -not $baseContest.ContainsKey($_)
 # column of the current comparison.
 # ONE implementation, driven by the frozen fixture in -SelfTest and by this live path - see Get-CellNames.
 $cellNames = @{}
+$msBoardErr = ''
 try {
-  $msCmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
-            Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
-  if ($msCmpF) { $cellNames = Get-CellNames ((ConvertFrom-Json ([IO.File]::ReadAllText($msCmpF.FullName))).comparison) }
-} catch { }
+  if ($CompareFile) {
+    # -CompareFile: the exact board the caller grades (guards.ps1). A missing one is an error, never a fallback.
+    if (-not (Test-Path -LiteralPath $CompareFile)) { throw ('no board at ' + $CompareFile) }
+    $msCmpF = Get-Item -LiteralPath $CompareFile
+  } else {
+    $msCmpF = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue |
+              Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+  }
+  if ($msCmpF) { $cellNames = Get-CellNames ((ConvertFrom-Json ([IO.File]::ReadAllText($msCmpF.FullName, [Text.Encoding]::UTF8))).comparison) }
+  else { $msBoardErr = 'no comparison board under ' + $OutDir }
+} catch { $cellNames = @{}; $msBoardErr = $_.Exception.Message }
 $cellContest = @(Select-CellByContest $newContest $cellNames)
 
 # ---- EVERY NEW-CONTESTED NAME DESCRIBES ITSELF (2026-09-08, queue 2026-09-08-2e59b3) -------------------
@@ -1290,7 +1363,9 @@ foreach ($cbn in $cellContest) {
 # a typed-assignment fault. Reproduced standalone 2026-09-08; the literal form has always been fine.
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_vs_engine = $drift; drift_products = $driftRows; moved = $moved; dropped = $dropped
                       new_contested = $newContestRows; new_contested_names = $newContest; cell_by_contest = $cellContestRows }
-Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8
+# -CellScope writes NO report: soundness-report.json is a tracked file the publish gate and the daily -Alert run read,
+# and a second path would be untracked litter on every guards run. Its findings are its stdout, in the guards log.
+if (-not $CellScope) { Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8 }
 
 $regr = $moved.Count + $dropped.Count
 Write-Output ("match-soundness: MOVED=$($moved.Count)  DROPPED=$($dropped.Count)  new-contested=$($newContest.Count)  drift-vs-engine=$drift")
@@ -1351,6 +1426,16 @@ if ($regr -gt 0) {
   Write-Output ('  CAUSE [' + $regCause.label + ']: ' + $regCause.why)
 }
 
+if ($CellScope) {
+  # THE GUARDS RUN (ruling Q-2026-09-29-4-A): the same join the publish gate makes, on the board guards grades, so a
+  # finding on a winning cell quarantines THAT CELL and the post publishes. The rule is Get-SoundnessCellScope.
+  $csV = Get-SoundnessPublishVerdict -Report $report -CellNames $cellNames -ReadError $msBoardErr
+  foreach ($rv in $csV.Review) { Write-Output ('match-soundness REVIEW (on no live published cell, quarantines nothing): ' + $rv) }
+  $csS = Get-SoundnessCellScope $csV
+  foreach ($csl in $csS.Lines) { Write-Output $csl }
+  Write-GuardComplete -Name 'match-soundness'
+  exit ([int]$csS.Code)
+}
 if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
   # ONE CONDITION PER CAUSE (see Get-RegressionCause): each label is its own queue type through
   # Send-AlertConditions, and each is re-sent only when ITS findings change (Select-ChangedConditions).

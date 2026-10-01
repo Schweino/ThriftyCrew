@@ -1721,7 +1721,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           $summary += ('HELD      the ' + $heldGate.gate + ' gate held the page - live page NOT updated')
           if (-not $NoAlert) {
             $heldLine = if ($heldGate.held) { $heldGate.held } else { '(publish-deals-page printed no HELD line)' }
-            $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $asofS, so the live page was NOT updated - nothing bad was published. " + $heldGate.why + " The gate's own line was: " + $heldLine
+            $heldBody = 'A refreshed board was held by the ' + $heldGate.gate + " gate on $asofS, so the live page was NOT updated. " + (Get-HeldBoardStatement (Split-Path $root -Parent)) + ' ' + $heldGate.why + " The gate's own line was: " + $heldLine
             try { Send-Alert -Subject ('Grocery page HELD (' + $heldGate.gate + ") - $asofS") -Body $heldBody | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) }
           }
         }
