@@ -511,7 +511,7 @@
       "status": "done",
       "premise_verified": "yes: ops\\out\\logs\\daemon-battery-2026-10-01.log reads DAEMON BATTERY RED, 2 hard: names.txt line 533 (renamed by e73a611bf into per-agent tier pins; 16 added, 1 removed) and the dossier case got leaked=[\"47\"]",
       "deviation": "(1) The dossier red was not a regression to bisect: a 30-run probe found the \"47\" in the dossier's quoted mkdtemp dir (daemon-wave-47j59gce, 1 of 30 runs). The case planted 613/47 and substring-matched; the planted values now carry a decimal point (613.25, 47.75), which no mkdtemp name can hold (20 clean runs). (2) The keyed gate is hunt-daemon.py --selftest-gate, a new flag equal to --selftest plus --names-diff against the committed names list, registered through run-gates $pyArg (hunt-daemon.py left $pySkip; hunt_daemon_selftest.py stays skipped so the battery never runs twice). Declared inputs: meal-prep\\pipeline\\*.py, the names list, .claude\\agents\\*.md, grocery\\ingredient-queue.ps1; -VerifyDeclared VERIFIED, 51 probes. run-gates itself was not run (the orchestrator's landing runs it).",
-      "shipped_commit": null,
+      "shipped_commit": "b404cca54",
       "actual_tool_calls": 38,
       "close_disposition": "confirmed"
     },
