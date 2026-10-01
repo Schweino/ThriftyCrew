@@ -72,6 +72,17 @@ $script:TcGateKeyMaxAgeHours = 72
 #   4. a spelling that builds a path on a base and that this file does not parse is refused (Test-TcGateUnparsed).
 # A DECLARATION (# gate-inputs:) still outranks all four: the author has said what the gate reads.
 
+# KEYING MEMO (2026-10-01, design\PLAN-push-speed-2026-10-01.md). Measured that day: run-gates spent 293 of 357 s of an
+# unchanged-tree run KEYING 559 gates one at a time, 1,367 ms a gate, because every gate re-read, re-stripped, re-resolved
+# and re-hashed the same shared libraries. Two memos, and nothing else changes:
+#   TEXT memo - always on: functions that are pure over the exact text they are handed (ordinal keys: og-21).
+#   RUN memo  - only after Enable-TcGateKeyMemo: functions that read the disk (SHA-256s, reference and glob resolution).
+#               run-gates turns it on for its keying pass, when no file the keys read is being written; a self-test that
+#               rewrites a fixture between calls never turns it on, so it always sees the disk.
+$script:TcGateTextMemo = New-Object Collections.Hashtable ([StringComparer]::Ordinal)
+$script:TcGateRunMemo = $null
+function Enable-TcGateKeyMemo { $script:TcGateRunMemo = New-Object Collections.Hashtable ([StringComparer]::Ordinal) }
+function Disable-TcGateKeyMemo { $script:TcGateRunMemo = $null }
 function Resolve-TcGateBaseExpr {
   <# Pure over one assignment's right-hand side. Returns an array of bases - an [int] number of folders UP from the
      file's own folder, or the string 'repo' for the checkout root, or 'var:<name>' for another base variable - or
@@ -176,7 +187,7 @@ function Test-TcGateUnparsed {
   return ''
 }
 
-function Resolve-TcGateFileRefs {
+function Resolve-TcGateFileRefs__Compute {
   <# The inputs ONE file names, resolved against the folders its bases really point to. $FileRel is the file's path
      below the checkout, $GateRel the gate's (an unreadable base takes the ancestors of both). -Strict applies rules
      2 and 3; without it (a gate or a library that DECLARES its inputs) only the candidates that exist are hashed and
@@ -286,8 +297,19 @@ function Resolve-TcGateFileRefs {
   $ab = $absent.ToArray(); [Array]::Sort($ab, [StringComparer]::OrdinalIgnoreCase)
   return [pscustomobject]@{ Ok = $true; Why = ''; Paths = $pa; Absent = $ab }
 }
+function Resolve-TcGateFileRefs {
+  param([string]$Repo, [string]$FileRel, [string]$GateRel, [string]$Text, [switch]$Strict, [switch]$KeepDataGlobs)
+  if ($null -eq $script:TcGateRunMemo) { return (Resolve-TcGateFileRefs__Compute -Repo $Repo -FileRel $FileRel -GateRel $GateRel -Text $Text -Strict:$Strict -KeepDataGlobs:$KeepDataGlobs) }
+  # The gate is read only through its FOLDER (the fallback bases), so two gates in one folder share an answer.
+  $gd = [IO.Path]::GetDirectoryName(([string]$GateRel).TrimStart('\')); if ($null -eq $gd) { $gd = '' }
+  $mk = 'fr' + [char]0 + $Repo + [char]0 + $FileRel + [char]0 + $gd + [char]0 + [bool]$Strict + [char]0 + [bool]$KeepDataGlobs + [char]0 + $Text
+  if ($script:TcGateRunMemo.ContainsKey($mk)) { return $script:TcGateRunMemo[$mk] }
+  $r = Resolve-TcGateFileRefs__Compute -Repo $Repo -FileRel $FileRel -GateRel $GateRel -Text $Text -Strict:$Strict -KeepDataGlobs:$KeepDataGlobs
+  $script:TcGateRunMemo[$mk] = $r
+  return $r
+}
 
-function Get-TcFileSha256 {
+function Get-TcFileSha256__Compute {
   param([string]$Path)
   if (-not [IO.File]::Exists($Path)) { return 'absent' }
   $sha = [Security.Cryptography.SHA256]::Create()
@@ -296,6 +318,15 @@ function Get-TcFileSha256 {
     try { return ([BitConverter]::ToString($sha.ComputeHash($fs)) -replace '-', '').ToLowerInvariant() }
     finally { $fs.Dispose() }
   } catch { return 'unreadable' } finally { $sha.Dispose() }
+}
+function Get-TcFileSha256 {
+  param([string]$Path)
+  if ($null -eq $script:TcGateRunMemo) { return (Get-TcFileSha256__Compute -Path $Path) }
+  $mk = 'sh' + [char]0 + $Path
+  if ($script:TcGateRunMemo.ContainsKey($mk)) { return $script:TcGateRunMemo[$mk] }
+  $r = Get-TcFileSha256__Compute -Path $Path
+  $script:TcGateRunMemo[$mk] = $r
+  return $r
 }
 
 function Get-TcGateReferencedPaths {
@@ -315,7 +346,7 @@ function Get-TcGateReferencedPaths {
   return [pscustomobject]@{ Paths = @($sorted); Computed = [regex]::IsMatch($Text, $script:TcGateComputedRx) }
 }
 
-function Remove-TcGateComments {
+function Remove-TcGateComments__Compute {
   <# Pure. Drops whole-line comments before the refusal rules read the text. A comment cannot open a file, and
      a header that DESCRIBES the data a script avoids would otherwise refuse it: measured 2026-09-12, 12 of the
      279 self-tests were refused for a data path that appears only in prose or on a fixture line. #>
@@ -328,6 +359,14 @@ function Remove-TcGateComments {
     $out.Add($l)
   }
   return ($out -join "`n")
+}
+function Remove-TcGateComments {
+  param([string]$Text)
+  $mk = 'rc' + [char]0 + $Text
+  if ($script:TcGateTextMemo.ContainsKey($mk)) { return $script:TcGateTextMemo[$mk] }
+  $r = Remove-TcGateComments__Compute -Text $Text
+  $script:TcGateTextMemo[$mk] = $r
+  return $r
 }
 
 function Get-TcGateUnpinnedBase {
@@ -380,7 +419,7 @@ function Get-TcGateUnpinnedBase {
   return ''
 }
 
-function Test-TcGateCacheable {
+function Test-TcGateCacheable__Compute {
   <# Pure over TEXT. Why is returned even on success, so a run can print WHY a gate was refused rather than
      leaving a reader to guess which of the two rules bit.
 
@@ -416,6 +455,14 @@ function Test-TcGateCacheable {
   }
   return [pscustomobject]@{ Ok = $true; Why = '' }
 }
+function Test-TcGateCacheable {
+  param([string]$Text)
+  $mk = 'tc' + [char]0 + $Text
+  if ($script:TcGateTextMemo.ContainsKey($mk)) { return $script:TcGateTextMemo[$mk] }
+  $r = Test-TcGateCacheable__Compute -Text $Text
+  $script:TcGateTextMemo[$mk] = $r
+  return $r
+}
 
 # A GATE MAY DECLARE WHAT IT READS, instead of being guessed at (Brad, 2026-09-12). One line in its own source:
 #
@@ -434,7 +481,7 @@ function Test-TcGateCacheable {
 # otherwise narrow the input set silently, which is the one direction that turns into a stale pass.
 $script:TcGateDeclRx = '(?im)^[ \t]*#[ \t]*gate-inputs:[ \t]*(.+?)[ \t]*$'
 
-function Get-TcGateDeclaredInputs {
+function Get-TcGateDeclaredInputs__Compute {
   <# The declared input patterns, in source order, or an empty array when the gate declares none. Pure over text so
      the fixture drives it without a disk. #>
   param([string]$Text)
@@ -446,6 +493,12 @@ function Get-TcGateDeclaredInputs {
     }
   }
   return @($out)
+}
+function Get-TcGateDeclaredInputs {
+  param([string]$Text)
+  $mk = 'di' + [char]0 + $Text
+  if (-not $script:TcGateTextMemo.ContainsKey($mk)) { $r = Get-TcGateDeclaredInputs__Compute -Text $Text; $script:TcGateTextMemo[$mk] = @($r) }
+  return @($script:TcGateTextMemo[$mk])
 }
 
 # A DECLARED INPUT MAY BE READ AS TEXT ONLY (2026-09-24, push-speed review F3). One more line form:
@@ -465,7 +518,7 @@ function Get-TcGateDeclaredInputs {
 # would drop it in silence. A text pattern that matches nothing is refused like any declared one.
 $script:TcGateTextDeclRx = '(?im)^[ \t]*#[ \t]*gate-inputs-text:[ \t]*(.+?)[ \t]*$'
 
-function Get-TcGateDeclaredTextInputs {
+function Get-TcGateDeclaredTextInputs__Compute {
   <# The text-only input patterns, in source order. Pure over text. #>
   param([string]$Text)
   $out = [Collections.Generic.List[string]]::new()
@@ -476,6 +529,12 @@ function Get-TcGateDeclaredTextInputs {
     }
   }
   return @($out)
+}
+function Get-TcGateDeclaredTextInputs {
+  param([string]$Text)
+  $mk = 'dt' + [char]0 + $Text
+  if (-not $script:TcGateTextMemo.ContainsKey($mk)) { $r = Get-TcGateDeclaredTextInputs__Compute -Text $Text; $script:TcGateTextMemo[$mk] = @($r) }
+  return @($script:TcGateTextMemo[$mk])
 }
 
 # A LIBRARY MAY DECLARE A FILE IT ONLY WRITES (2026-09-24). One more line form, in a LIBRARY:
@@ -493,7 +552,7 @@ function Get-TcGateDeclaredTextInputs {
 # some spelling that names neither is outside it, and the read-by list is the library author's assertion to keep true.
 $script:TcGateOutDeclRx = '(?im)^[ \t]*#[ \t]*gate-output:[ \t]*(.*?)[ \t]*$'
 
-function Get-TcGateDeclaredOutputs {
+function Get-TcGateDeclaredOutputs__Compute {
   <# Pure over text. Returns Ok, Why and Outputs (Path repo-relative with backslashes, Readers). #>
   param([string]$Text)
   $outs = [Collections.Generic.List[object]]::new()
@@ -510,6 +569,14 @@ function Get-TcGateDeclaredOutputs {
     $outs.Add([pscustomobject]@{ Path = $p; Readers = $rd })
   }
   return [pscustomobject]@{ Ok = $true; Why = ''; Outputs = $outs.ToArray() }
+}
+function Get-TcGateDeclaredOutputs {
+  param([string]$Text)
+  $mk = 'do' + [char]0 + $Text
+  if ($script:TcGateTextMemo.ContainsKey($mk)) { return $script:TcGateTextMemo[$mk] }
+  $r = Get-TcGateDeclaredOutputs__Compute -Text $Text
+  $script:TcGateTextMemo[$mk] = $r
+  return $r
 }
 
 function Test-TcGateNamesOutputReader {
@@ -535,7 +602,7 @@ function Test-TcGateLoadsLeaf {
   return [regex]::IsMatch($Code, $rx)
 }
 
-function Get-TcGateLoadedLeafSet {
+function Get-TcGateLoadedLeafSet__Compute {
   <# Pure over comment-stripped TEXT. Every file name that Test-TcGateLoadsLeaf could match in this code, read ONCE: for
      each line that dot-sources, calls with & or starts with -File, the last path segment of every run of text between
      quote marks after the load. A SUPERSET of the per-leaf rule (it also takes quoted runs that were not a path), so a
@@ -552,8 +619,16 @@ function Get-TcGateLoadedLeafSet {
   }
   return $set
 }
+function Get-TcGateLoadedLeafSet {
+  param([string]$Code)
+  $mk = 'll' + [char]0 + $Code
+  if ($script:TcGateTextMemo.ContainsKey($mk)) { return $script:TcGateTextMemo[$mk] }
+  $r = Get-TcGateLoadedLeafSet__Compute -Code $Code
+  $script:TcGateTextMemo[$mk] = $r
+  return $r
+}
 
-function Resolve-TcGateDeclaredInputs {
+function Resolve-TcGateDeclaredInputs__Compute {
   <# Expand declared patterns against the repo root. Returns Ok and either Paths (relative, sorted ordinally) or
      Why. A pattern matching nothing refuses the whole gate; so does one that escapes the repo. #>
   param([string]$Repo, [string[]]$Patterns)
@@ -587,6 +662,15 @@ function Resolve-TcGateDeclaredInputs {
   $sorted = $paths.ToArray()
   [Array]::Sort($sorted, [StringComparer]::OrdinalIgnoreCase)
   return [pscustomobject]@{ Ok = $true; Paths = @($sorted); Why = '' }
+}
+function Resolve-TcGateDeclaredInputs {
+  param([string]$Repo, [string[]]$Patterns)
+  if ($null -eq $script:TcGateRunMemo) { return (Resolve-TcGateDeclaredInputs__Compute -Repo $Repo -Patterns $Patterns) }
+  $mk = 'dr' + [char]0 + $Repo + [char]0 + (@($Patterns) -join [string][char]0)
+  if ($script:TcGateRunMemo.ContainsKey($mk)) { return $script:TcGateRunMemo[$mk] }
+  $r = Resolve-TcGateDeclaredInputs__Compute -Repo $Repo -Patterns $Patterns
+  $script:TcGateRunMemo[$mk] = $r
+  return $r
 }
 
 function Test-TcGateDeclarationMoves {
@@ -1926,6 +2010,24 @@ if ($SelfTest) { }
     T 'MUST NOT FIRE  a read via $repo still keys' ($cu2.Ok) ('why=' + $cu2.Why)
     $cu3 = Test-TcGateCacheable -Text $ubTemp
     T 'CLEAN TWIN  a sandbox variable pinned to the temp folder is unchanged: keyable' ($cu3.Ok) ('why=' + $cu3.Why)
+
+    # ---- THE KEYING MEMO (2026-10-01): the run memo is OFF unless run-gates turns it on, so a fixture that rewrites a
+    # file between two calls always sees the disk; ON, a second read of one path within the run reuses the first. ----
+    $mf = Join-Path $sb 'memo-probe.txt'
+    [IO.File]::WriteAllText($mf, 'first bytes', $utf8)
+    Disable-TcGateKeyMemo
+    $h1 = Get-TcFileSha256 $mf
+    [IO.File]::WriteAllText($mf, 'second bytes', $utf8)
+    $h2 = Get-TcFileSha256 $mf
+    T 'MUST FIRE  with the run memo OFF (the default) a file rewritten between two calls hashes to its new bytes' ($h1 -ne $h2) "$h1 / $h2"
+    Enable-TcGateKeyMemo
+    $h3 = Get-TcFileSha256 $mf
+    [IO.File]::WriteAllText($mf, 'third bytes', $utf8)
+    $h4 = Get-TcFileSha256 $mf
+    T 'CLEAN TWIN  with the run memo ON one path is hashed once per run (the keying pass reads files nothing is writing)' ($h3 -eq $h4 -and $h3 -eq $h2) "$h3 / $h4"
+    Disable-TcGateKeyMemo
+    $h5 = Get-TcFileSha256 $mf
+    T 'MUST FIRE  turning the run memo off again drops what it held, so the next read is the disk' ($h5 -ne $h4) "$h4 / $h5"
   } catch {
     $script:f++
     Write-Output ('FAIL  the self-test threw: ' + $_.Exception.Message)
@@ -1933,7 +2035,7 @@ if ($SelfTest) { }
     Remove-Item -LiteralPath $sb -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE CAN RUN ZERO CASES AND EXIT 0, so the count is asserted.
-  if ($cases -lt 126) { $f++; Write-Output ("FAIL  only {0} of 126 cases ran" -f $cases) }
+  if ($cases -lt 129) { $f++; Write-Output ("FAIL  only {0} of 129 cases ran" -f $cases) }
   if ($f) { Write-Output ("gate-input-key SELF-TEST FAIL: {0} of {1} case(s)" -f $f, $cases); exit 1 }
   Write-Output ("gate-input-key SELF-TEST PASS: {0} cases - led by every input moving the key one at a time, including two hops down a library graph, and by the three refusals that keep a stale pass impossible" -f $cases)
   exit 0

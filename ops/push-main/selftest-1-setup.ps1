@@ -202,6 +202,43 @@
     Remove-Item -LiteralPath $taDir -Recurse -Force -ErrorAction SilentlyContinue
   }
 
+  # ---- THE TWO LEGS AT ONCE (2026-10-01, design\PLAN-push-speed-2026-10-01.md step 2) ----
+  # Founding cost: run-gates (396 s) then test-auditors (631 s) one after the other on 2026-10-01's landings. Proved by a
+  # RENDEZVOUS, never a stopwatch (og-36): each leg's stub joins a 2-way rendezvous, which only completes if both legs
+  # were alive at once; a serial runner leaves the first leg waiting alone until the probe's deadline.
+  . (Join-Path $repo 'lib\concurrency-probe.ps1')
+  $lgDir = Join-Path $env:TEMP ('tc-pm-lg-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
+  $null = New-Item -ItemType Directory -Force -ErrorAction Stop (Join-Path $lgDir 'ops')
+  try {
+    $lgProbe = New-TcRendezvousProbe -Count 2 -DeadlineSec 120
+    $lgJoin = "& powershell.exe -NoProfile -ExecutionPolicy Bypass -File '" + $lgProbe.Script + "' | Out-Null`n"
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\run-gates.ps1'), ($lgJoin + "Write-Output 'RUN-GATES-COMPLETE pass=1 fail=0'`nexit 0`n"))
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\prepush-test-auditors.ps1'), ($lgJoin + "`$null = [Console]::In.ReadToEnd()`nWrite-Output 'prepush-test-auditors: PASS'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"))
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\seed-worktree.ps1'), "param([string]`$Target)`n`$SEED_DIRS = @(@{ p = 'fixture-seed' })`nexit 0`n")
+    foreach ($ga in @(@('init', '-q'), @('-c', 'user.email=t@t', '-c', 'user.name=t', 'add', '-A'), @('-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-q', '-m', 'legs fixture'))) { $null = Invoke-TcGit -Dir $lgDir -Arguments $ga }
+    $lgHead = ([string]@((Invoke-TcGit -Dir $lgDir -Arguments @('rev-parse', 'HEAD')).Out)[0]).Trim()
+    $null = Invoke-TcGit -Dir $lgDir -Arguments @('update-ref', 'refs/remotes/origin/main', $lgHead)
+    $lgRes = Invoke-TcDefaultLegs -Dir $lgDir -Remote 'origin' -Branch 'main'
+    $lgV = Get-TcRendezvousVerdict -Probe $lgProbe
+    $lgWts = @((Invoke-TcGit -Dir $lgDir -Arguments @('worktree', 'list', '--porcelain')).Out | Where-Object { ([string]$_).StartsWith('worktree ') })
+    T ($kCT + '  run-gates and test-auditors run AT THE SAME TIME (both legs meet at one rendezvous), the pass is a pass, and the leg worktree is gone after') `
+      ($lgRes.Code -eq 0 -and $lgV.Ok -and $lgRes.TaExit -eq 0 -and $lgWts.Count -eq 1) ("code={0} rendezvous={1} taExit={2} worktrees={3}" -f $lgRes.Code, $lgV.Detail, $lgRes.TaExit, $lgWts.Count)
+    # A red run-gates still collects test-auditors, so ONE refusal names both layers (landing 1 of 2026-10-01 hid five
+    # test-auditors reds behind eight gate reds, and the run ended unlanded on its one retry).
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\run-gates.ps1'), "Write-Output '  FAIL  fixture-gate  (exit 1)'`nWrite-Output 'RUN-GATES-COMPLETE pass=0 fail=1'`nexit 1`n")
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\prepush-test-auditors.ps1'), "`$null = [Console]::In.ReadToEnd()`nWrite-Output 'prepush-test-auditors: REFUSED - a new failing case'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=1'`nexit 1`n")
+    $null = Invoke-TcGit -Dir $lgDir -Arguments @('-c', 'user.email=t@t', '-c', 'user.name=t', 'add', '-A')
+    $lgCommit = Invoke-TcGit -Dir $lgDir -Arguments @('-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-q', '-m', 'both red')
+    $lgHead2 = ([string]@((Invoke-TcGit -Dir $lgDir -Arguments @('rev-parse', 'HEAD')).Out)[0]).Trim()
+    $lgRed = Invoke-TcDefaultLegs -Dir $lgDir -Remote 'origin' -Branch 'main'
+    T ($kMF + '  a red run-gates still waits for test-auditors: the refusal is the gate''s, and it names test-auditors'' red too') `
+      ($lgHead2 -ne $lgHead -and $lgRed.Code -eq 1 -and $lgRed.TaExit -eq 1 -and ([string]$lgRed.Why) -match 'test-auditors refused too') ("headMoved={0} commit={1} code={2} taExit={3} why={4}" -f ($lgHead2 -ne $lgHead), (([string]$lgCommit.Text) -replace '\s+', ' '), $lgRed.Code, $lgRed.TaExit, $lgRed.Why)
+  } finally {
+    Remove-TcRendezvousProbe
+    $null = Invoke-TcGit -Dir $lgDir -Arguments @('worktree', 'prune')
+    Remove-Item -LiteralPath $lgDir -Recurse -Force -ErrorAction SilentlyContinue
+  }
+
   # ---- the whole thing, against real repositories ----
   $tmp = Join-Path $env:TEMP ('tc-pm-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
   $null = New-Item -ItemType Directory -Force -ErrorAction Stop $tmp

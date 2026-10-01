@@ -816,6 +816,10 @@ $nowUtcKey = [DateTime]::UtcNow
 # rows are git's listing of the tracked tree under its pathspecs (the same Get-TcGateScanRows D1's static entries use),
 # computed once per distinct set. A set git cannot list leaves the suite unkeyed, so it runs.
 $ownScanCache = @{}
+# THE KEYING PASS SHARES ONE MEMO (2026-10-01, design\PLAN-push-speed-2026-10-01.md): nothing writes a file the keys read
+# between here and the pool, so each shared library is read, resolved and hashed once per run instead of once per gate.
+# Measured over 287 gates: 688 -> 137 ms a key, 287 of 287 keys identical with the memo on and off.
+Enable-TcGateKeyMemo
 if ($cacheDir) {
   for ($i = 0; $i -lt $selfJobs.Count; $i++) {
     $fullPath = [string]$selfKeys[$i]
@@ -893,6 +897,7 @@ if ($cacheDir) {
     }
   }
 } else { $stUnkeyed = $staticEntries.Count }
+Disable-TcGateKeyMemo   # the gates are about to run and may write; nothing after this reads through the memo
 # DISPATCH ONLY WHAT IS NOT ALREADY ANSWERED, then scatter the results back into their own slots, because
 # every loop below indexes by the job's position. A reused entry is filled in afterwards.
 $toRun = [Collections.Generic.List[object]]::new()

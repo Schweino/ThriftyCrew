@@ -7,6 +7,13 @@
 # writers on one file. Nothing reads these reports (that is the whole point of -ReportDir, section 97),
 # but a harness that races on a file it does not even read would look like a flaky auditor.
 if (Use-Unit 'u001-1-basis-reconciler') {
+# AN EMPTY -RawDir, OR EACH RUN SCANS THE LIVE CAPTURES (2026-10-01, design\PLAN-push-speed-2026-10-01.md). Without it
+# the audit's store-capture scan defaults to grocery\out, so these four FROZEN-board cases each read every real capture:
+# 139.8 s a run against 0.4 s with an empty fixture folder, the same verdict either way (checked=1 findings=1). This unit
+# was 354 of a 704 s full run, and the share grew with the data, which is why test-auditors went from ~200 s (2026-08-23)
+# to 631 s. These cases judge the board alone; the cross-file join is u002 and u003's, each with its own -RawDir fixture.
+$brRaw = Join-Path $fixRep 'br-raw-empty'
+$null = New-Item -ItemType Directory -Path $brRaw -Force
 $brCases = @(
   # MUST FIRE: Hy-Vee published $3.15/lb for corned beef brisket while the store's own size text printed
   # "($8.99/lb)" right there on the same row.
@@ -18,7 +25,7 @@ $brCases = @(
 $br = RunPSMany @($brCases | ForEach-Object {
   $d = Join-Path $fixRep $_.tag
   $null = New-Item -ItemType Directory -Path $d -Force
-  @{ script = 'audit-basis-reconcile.ps1'; args = @('-CompareFile', (Join-Path $fix $_.fixture), '-ReportDir', $d) } })
+  @{ script = 'audit-basis-reconcile.ps1'; args = @('-CompareFile', (Join-Path $fix $_.fixture), '-ReportDir', $d, '-RawDir', $brRaw) } })
 $r = $br[0]
 if ($r.text -match 'corned-beef-brisket' -and $r.text -match 'disagree') { Ok 'basis-reconcile FIRES on the per-lb-rate conflict' }
 else { Bad ('basis-reconcile MISSED its founding bug: ' + $r.text) }
@@ -34,7 +41,7 @@ else { Bad ('basis-reconcile tripped on cent rounding: ' + $r.text) }
 # The three cases above are the CLEAN TWIN half: the real frozen boards still run clean under the mode.
 $smBoard = Join-Path $fixRep 'br-strict-noitem-board.json'
 [IO.File]::WriteAllText($smBoard, '{"comparison":[{"id":"corned-beef-brisket","commodity":"Corned Beef Brisket","unit":"lb","stores":[{"store":"Hy-Vee","per_unit":3.15,"size":"2.85 lbs ($8.99/lb)","ad":"$8.98","basis":"lb"}]}]}', (New-Object Text.UTF8Encoding($false)))
-$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', $smBoard, '-ReportDir', $fixRep)
+$r = RunPS 'audit-basis-reconcile.ps1' @('-CompareFile', $smBoard, '-ReportDir', $fixRep, '-RawDir', $brRaw)
 # The child's error record is wrapped at its console width, so the words are matched with whitespace collapsed.
 $smText = ($r.text -replace '\s+', ' ')
 if ($r.rc -ne 0 -and $smText -match 'PropertyNotFoundStrict' -and $smText -match "property 'item' cannot be found") { Ok 'basis-reconcile runs STRICT: a board cell missing its item field throws and names the field (backlog I179 pilot)' }
