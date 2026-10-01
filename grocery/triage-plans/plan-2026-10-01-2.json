@@ -256,7 +256,9 @@
         "2026-09-28-d70062"
       ],
       "prevention_none_because": "by-design named-and-paged gap (capture-run.ps1:1939-1945); today it was triggered by 6a6140's long retry window, which 6a6140's prevention removes",
-      "status": "planned"
+      "status": "done",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 0
     },
     {
       "queue_id": "2026-09-30-abf660",
@@ -432,7 +434,9 @@
         "2026-09-03-58057b"
       ],
       "prevention_none_because": "by-design poll window; 2 slow deploys in 28 days is Phase 2 recalibration of the poll length, not a code defect",
-      "status": "planned"
+      "status": "done",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 0
     },
     {
       "queue_id": "2026-09-30-130abf",
@@ -539,7 +543,9 @@
         "2026-09-23-4090fc"
       ],
       "prevention_none_because": "an ad-turnover-day lag that self-heals within one run; 2 occurrences, both on Wednesday turnover; Phase 2 recalibration",
-      "status": "planned"
+      "status": "done",
+      "close_disposition": "confirmed",
+      "actual_tool_calls": 0
     }
   ],
   "open_questions_for_brad": [],
