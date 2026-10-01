@@ -567,6 +567,56 @@ if ($SelfTest) {
     $co4 = Get-TriageCloseOnly $coOpen @($coP1, $coP0) $null
     _T 'CLEAN TWIN no landed predicate reads as not landed: only the no-commit item is CLOSE-ONLY' `
       ((((@($co4)) | ForEach-Object { $_.id }) -join ',') -eq '2026-09-27-b1efed') ((@($co4) | ForEach-Object { $_.id }) -join ',')
+    # A TRACKED PLAN THE DISK LACKS IS READ FROM HEAD, AND COUNTED (2026-10-01). Founding case: capture-run's monthly
+    # rotation moved 119 plan-2026-09-*.json files out of the checkout and 0 of 14 RETURNs got a ROUTE line.
+    $rpFx = Join-Path $env:TEMP ('triagedue-plans-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    $rpDir = Join-Path $rpFx 'grocery\triage-plans'
+    $rpEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+      New-Item -ItemType Directory -Force $rpDir | Out-Null
+      Set-Content (Join-Path $rpDir 'plan-2026-09-01.json') '{"items":[{"queue_id":"2026-09-01-aaaaaa","status":"done"}]}' -Encoding UTF8
+      Set-Content (Join-Path $rpDir 'plan-2026-09-02.json') '{"items":[{"queue_id":"2026-09-02-bbbbbb","status":"done"}]}' -Encoding UTF8
+      & git -C $rpFx init --quiet | Out-Null
+      & git -C $rpFx config user.name t | Out-Null
+      & git -C $rpFx config user.email t@t | Out-Null
+      & git -C $rpFx add -A | Out-Null
+      & git -C $rpFx commit -q -m 'two plans' | Out-Null
+      $rpTwin = Read-TriagePlanRecords $rpDir -RepoRoot $rpFx
+      $rpTwinN = $script:TriagePlansReadFromGit
+      _T 'CLEAN TWIN both tracked plans on disk: 2 records, none read from git' ((@($rpTwin)).Count -eq 2 -and $rpTwinN -eq 0) ("records=" + (@($rpTwin)).Count + " fromgit=" + $rpTwinN)
+      Remove-Item -LiteralPath (Join-Path $rpDir 'plan-2026-09-01.json') -Force
+      $rpFire = Read-TriagePlanRecords $rpDir -RepoRoot $rpFx
+      $rpFireN = $script:TriagePlansReadFromGit
+      $rpIds = (@($rpFire) | ForEach-Object { [string]@($_.items)[0].queue_id }) -join ','
+      _T 'MUST FIRE a tracked plan deleted from disk is still read (from HEAD) and counted, so RESUME and ROUTE keep it' `
+        ($rpIds -eq '2026-09-02-bbbbbb,2026-09-01-aaaaaa' -and $rpFireN -eq 1) ("ids=" + $rpIds + " fromgit=" + $rpFireN)
+      # PARKED BRANCHES (2026-10-01): origin/main is faked as a remote-tracking ref at the first commit.
+      $null = & git -C $rpFx checkout -q -- grocery/triage-plans/plan-2026-09-01.json
+      $rpBase = ([string](& git -C $rpFx rev-parse HEAD)).Trim()
+      & git -C $rpFx update-ref refs/remotes/origin/main $rpBase | Out-Null
+      & git -C $rpFx checkout -q -b triage/2026-09-30-unlanded | Out-Null
+      Set-Content (Join-Path $rpFx 'fix.txt') 'the parked fix' -Encoding UTF8
+      & git -C $rpFx add fix.txt | Out-Null
+      & git -C $rpFx commit -q -m 'parked fix' | Out-Null
+      $rpParked = ([string](& git -C $rpFx rev-parse HEAD)).Trim()
+      & git -C $rpFx checkout -q -b triage/2026-09-29-landed $rpBase | Out-Null
+      $u = Get-TriageUnlandedBranches $rpFx
+      $uLines = Format-TriageUnlandedLines @($u)
+      _T 'MUST FIRE a triage branch with a commit origin/main lacks is listed UNLANDED with its count, and a branch at origin/main is not' `
+        ((@($u)).Count -eq 1 -and @($u)[0].branch -eq 'triage/2026-09-30-unlanded' -and @($u)[0].unlanded -eq 1 -and ($uLines -join ' ') -match '^DUE  UNLANDED 1 ') `
+        ((@($u) | ForEach-Object { $_.branch + '=' + $_.unlanded }) -join ',')
+      # CLEAN TWIN: the same patch landed on origin under a NEW hash (a rebase) is not unlanded work.
+      & git -C $rpFx checkout -q --detach $rpBase | Out-Null
+      & git -C $rpFx cherry-pick $rpParked 2>$null | Out-Null
+      & git -C $rpFx update-ref refs/remotes/origin/main HEAD | Out-Null
+      $u2 = Get-TriageUnlandedBranches $rpFx
+      _T 'CLEAN TWIN a parked commit whose patch reached origin/main under another hash is not listed' `
+        ((@($u2)).Count -eq 0) ((@($u2) | ForEach-Object { $_.branch }) -join ',')
+    } finally {
+      $ErrorActionPreference = $rpEap
+      Remove-Item -LiteralPath $rpFx -Recurse -Force -ErrorAction SilentlyContinue
+    }
   } catch {
     _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
   }
@@ -626,14 +676,21 @@ $overdueIds = @($split.Overdue | ForEach-Object { [string]$_.id })
 # UNFINISHED WORK IS DUE WORK (2026-09-20). Read the committed plans once, here, and share them with the ROUTE
 # lines below. Wrapped: a plan directory that cannot be read costs the RESUME section and never the triage tick.
 $planRecs = @()
-try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') } catch { $planRecs = @() }
+try { $planRecs = Read-TriagePlanRecords (Join-Path $root 'triage-plans') -RepoRoot (Split-Path $root -Parent) } catch { $planRecs = @() }
+# Plans git tracks but the checkout lacks were read from HEAD; say so, because something deleted them (2026-10-01:
+# capture-run's monthly rotation moved 119 and every RETURN lost its ROUTE line with nothing on screen).
+if ($script:TriagePlansReadFromGit -gt 0) { Write-Output ('WARN  ' + $script:TriagePlansReadFromGit + ' tracked triage plan file(s) are missing from the checkout; read from git HEAD so RESUME and ROUTE still work. Find what deleted them (git status -- grocery/triage-plans).') }
 $resume = @()
 # Assign, THEN wrap: a comma-returned array read as @(Get-Thing ...) counts 1 ([[ps-json-array-collapse]]).
 try { $resume = Get-TriageUnfinished $q.items $planRecs; $resume = @($resume) } catch { $resume = @() }
 # A RESUME record whose leftover an OPEN queue item owns is that item's work, listed with it; only the rest make the run due.
 $resumeDue = @()
 try { $resumeDue = Get-TriageResumeDue $resume; $resumeDue = @($resumeDue) } catch { $resumeDue = @($resume) }
-if ((Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resumeDue.Count)) {
+# PARKED WORK IS DUE WORK (2026-10-01): a triage branch origin/main lacks is a landing nobody finished.
+$unlandedLines = @()
+try { $unl = Get-TriageUnlandedBranches (Split-Path $root -Parent); $unlandedLines = Format-TriageUnlandedLines @($unl); $unlandedLines = @($unlandedLines) } catch { $unlandedLines = @() }
+foreach ($l in $unlandedLines) { Write-Output $l }
+if ($unlandedLines.Count -eq 0 -and (Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resumeDue.Count)) {
   if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
   $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }

@@ -211,6 +211,15 @@ the way STEP 0.9 transcribes an inline item and carrying the prior plan's root c
 RESUME work alone makes the run DUE, so a day whose queue is otherwise clear is a day for finishing what the
 last run started. If there is more RESUME work than the run can finish, finish the ones you take and leave
 the rest listed - they stay RESUME until their fix actually lands, which is the whole point of the block.
+**AN `UNLANDED` BLOCK COMES EVEN BEFORE RESUME (2026-10-01).** Each `UNLANDED:` line is a `triage/*` branch holding
+commits origin/main lacks (`git cherry`, so a commit already landed under another hash is not counted): a run whose
+landing was refused, parked by STEP 3.9. Its plan items may read `done` while nothing shipped, which RESUME cannot
+see. Land it before planning anything that touches the same files: one `triage-ops-developer` spawn rebases it in a
+worktree (`git worktree add`, `ops\seed-worktree.ps1`), fixes what refused it, and you land from there with that
+worktree's `grocery\triage-land.ps1`. A branch origin already holds or superseded is retired with
+`git branch -m <b> retired/<b>` and the reason goes in the report. Founding case: `triage/2026-09-30-unlanded` sat a
+day unlisted, and the 10-01 reviewer re-built three of its fixes from scratch and called a fourth "no code needed".
+Tell the reviewer about every UNLANDED branch; its definition makes a parked fix the plan's first option.
 PREVENTION DUE (2026-09-10, ruling 6) is the one exception to stopping on IDLE. When the guard prints a
 `PREVENTION DUE` line, after IDLE or after DUE, run STEP 3.5 today even if no weekly-lane item is open: the
 weekly lane plans prevention for the scoreboard's top recurring class every week, whether or not anything is
@@ -230,7 +239,8 @@ they never go to the reviewer. Throughout STEPS 0.75 to 5, "every open id" means
 weekly item you pulled forward; the weekly lane's ids belong to STEP 3.5's own plan.
 
 STEP 0.5 - SYNC: powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\sync-production-checkout.ps1  (it pulls through a guard: SYNC-SKIPPED means the daily chain is running, so carry on with the checkout as it is)
-Then capture the current HEAD and `git status --porcelain`. Keep the list of FOREIGN uncommitted files:
+Then capture the current HEAD (this is RUN_BASE: STEP 3.9 parks the run's commits back to it if they cannot land)
+and `git status --porcelain`. Keep the list of FOREIGN uncommitted files:
 you pass it to both agents so neither reverts, commits or fights another session's in-flight work.
 
 STEP 0.75 - TRIAGE THE TRIAGE (cheap, and it is most of the savings). Before spawning anything:
@@ -388,6 +398,16 @@ or ruling, per COST CONTROLS) before it closes a single queue item, and that
 `validate-triage-plan.ps1 -Plan <plan> -Closing -PreLanding` must exit 0 first (they never push, so they skip the landed check). After each spawn run `triage-cost.py --append
 --plan <plans>` (COST CONTROLS); `-Closing` refuses a plan dated 2026-09-25 or later that no derived row names.
 
+STEP 3.8 - REHEARSE THE LANDING WHILE THE OPS LANE WORKS (2026-10-01). As soon as the money lane has committed, start
+  powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-land.ps1 -Rehearse
+with run_in_background: true. It runs run-gates AND test-auditors on HEAD at once, each in its own seeded worktree,
+pushes nothing, and ends `TRIAGE-REHEARSE-COMPLETE gates=<v> ta=<v>` with every red named above it. Before STEP 3.9,
+read that line: any red goes to ONE fresh developer spawn with the red lines verbatim (fix the cause, never the
+gate), and only then do you land. Why: push-main runs run-gates and THEN test-auditors, so on 2026-10-01 landing 1
+was refused on 8 gates, they were fixed, and landing 2 was refused on 5 test-auditors cases nobody had seen; the run
+ended unlanded at 93% of budget. A rehearsal finds both layers before the landing spends its one retry. If the ops
+lane commits after the rehearsal started, its changes are covered by the landing itself, as before.
+
 STEP 3.9 - LAND THE RUN ONCE, WITH NO MODEL WAITING ON IT (2026-09-24). After STEP 3 and, when due, STEP 3.5:
   powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-land.ps1 [-CheckFeed]
 run with run_in_background: true (you are notified when it exits; do not poll it), `-CheckFeed` when any agent
@@ -396,9 +416,14 @@ with `C:\Codex\Python312\python.exe C:\Codex\ThriftyCrew\grocery\triage-plan-ite
 every item whose status is done, deviated or superseded with
   powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-close.ps1 -Id <id> -Disposition <the item's close_disposition, or confirmed> -Notes "<the item's resolution_note>"
 and check each `live_check` an agent wrote with one fetch. `outcome=refused`: read the log it names (the refusal
-lines only), fix nothing yourself; send the ONE item whose change the refusal names back to a fresh developer spawn
-with that line, then run triage-land once more. A second refusal is reported verbatim with every queue item left
-OPEN, never looped. `feed=mismatch` or `feed=blind` after a landing is reported verbatim and is the first item of
+lines only), fix nothing yourself; send the items whose changes the refusal names back to ONE fresh developer spawn
+with those lines, then run triage-land once more, this time with `-Park -RunBase <RUN_BASE from STEP 0.5>`. A
+run-gates refusal also runs the test-auditors leg push-main never reached (`second_leg=` on the line, its reds in the
+output), so one refusal names every cause: give the developer both. A second refusal is reported verbatim with every
+queue item left OPEN, never looped, and with `-Park` the run's commits are moved to `triage/<day>-unlanded` and main
+reset to RUN_BASE under the capture-run mutex (`parked=<branch>` on the line), because the 08:00 bot pushes main and
+would carry or be refused by them. `parked=` empty after a refusal means it could not park (the output says why):
+park by hand before the next bot run, and say so. The next run's `triage-due.ps1` lists the branch as UNLANDED. `feed=mismatch` or `feed=blind` after a landing is reported verbatim and is the first item of
 tomorrow's run.
 
 STEP 3.5 - THE WEEKLY LANE, only when `triage-due.ps1` said it is due. After the daily lane, or on its own when

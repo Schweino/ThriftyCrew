@@ -456,21 +456,81 @@ function Format-TriageResumeLines {
   }
   return ,$lines.ToArray()
 }
-function Read-TriagePlanRecords {
-  <# .SYNOPSIS Plan files as {path, items}, newest name first. Never throws: an unreadable plan is skipped. #>
-  param([string]$PlansDir, [int]$Newest = 40)
+function Get-TriageUnlandedBranches {
+  <# .SYNOPSIS Every local triage/* branch holding commits origin/main lacks, as {branch, unlanded, tip, date}.
+     WORK PARKED ON A BRANCH IS INVISIBLE UNLESS SOMETHING LISTS IT (2026-10-01). When a run's landing is refused
+     twice its commits are parked on triage/<day>-unlanded so the bot's push cannot carry them; RESUME reads only
+     plan items closed deviated or needs-more-time, so items closed DONE on an unlanded branch were seen by nothing.
+     triage/2026-09-30-unlanded sat a day unlisted and was found only because a developer met its conflict.
+     `git cherry` is the test, not rev-list: after a rebase a landed commit has a new hash, and cherry's '-' lines
+     are the ones origin already holds by patch. Never throws; git it cannot run reads as no branches. #>
+  param([string]$RepoRoot, [string]$Upstream = 'origin/main')
   $out = New-Object System.Collections.Generic.List[object]
-  if (-not $PlansDir -or -not (Test-Path -LiteralPath $PlansDir)) { return ,$out.ToArray() }
-  $files = @()
-  try { $files = @(Get-ChildItem -LiteralPath $PlansDir -Filter 'plan-*.json' -File -ErrorAction Stop | Sort-Object Name -Descending) } catch { return ,$out.ToArray() }
+  if (-not $RepoRoot) { return ,$out.ToArray() }
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $refs = @(& git -C $RepoRoot for-each-ref --format='%(refname:short)|%(objectname:short)|%(committerdate:short)' 'refs/heads/triage/' 2>$null)
+    foreach ($r in $refs) {
+      $p = ([string]$r).Split('|')
+      if ($p.Count -lt 3 -or -not $p[0]) { continue }
+      $cherry = @(& git -C $RepoRoot cherry $Upstream $p[0] 2>$null)
+      if ($LASTEXITCODE -ne 0) { continue }
+      $plus = @($cherry | Where-Object { ([string]$_).StartsWith('+') }).Count
+      if ($plus -gt 0) { [void]$out.Add([pscustomobject]@{ branch = $p[0]; unlanded = $plus; tip = $p[1]; date = $p[2] }) }
+    }
+  } catch { } finally { $ErrorActionPreference = $prevEap }
+  return ,$out.ToArray()
+}
+
+function Format-TriageUnlandedLines {
+  <# .SYNOPSIS Pure. The UNLANDED block triage-due prints above RESUME; empty when nothing is parked. #>
+  param([object[]]$Branches)
+  $lines = New-Object System.Collections.Generic.List[string]
+  $b = @($Branches | Where-Object { $_ })
+  if ($b.Count -eq 0) { return ,$lines.ToArray() }
+  [void]$lines.Add('DUE  UNLANDED ' + $b.Count + ' triage branch(es) hold commits origin/main lacks. Their items may read done but nothing shipped: land each (rebase in a worktree, grocery\triage-land.ps1 from there) or, when origin already holds or superseded it, retire it with `git branch -m <branch> retired/<branch>` (kept, no longer listed) and say why in the report.')
+  foreach ($x in $b) { [void]$lines.Add('  UNLANDED: ' + $x.branch + '  ' + $x.unlanded + ' commit(s) not on origin/main, tip ' + $x.tip + ' (' + $x.date + ')') }
+  return ,$lines.ToArray()
+}
+
+function Read-TriagePlanRecords {
+  <# .SYNOPSIS Plan files as {path, items}, newest name first. Never throws: an unreadable plan is skipped.
+     A PLAN GIT TRACKS BUT THE DISK LACKS IS READ FROM HEAD (2026-10-01). capture-run.ps1's first-of-month
+     housekeeping moved every plan-2026-09-*.json out of the checkout at 08:00, and this reader then saw no
+     September plan: triage-due printed 0 ROUTE lines for 14 RETURNs (14 of 14 once the files were restored), so
+     every return went to the full-price reviewer and nothing said why. With -RepoRoot, the tracked names are
+     unioned with the disk, a missing one is read with `git show HEAD:<path>`, and $script:TriagePlansReadFromGit
+     counts them so the caller can SAY it (a silent fallback would hide the deleter the same way). #>
+  param([string]$PlansDir, [int]$Newest = 40, [string]$RepoRoot = '')
+  $script:TriagePlansReadFromGit = 0
+  $out = New-Object System.Collections.Generic.List[object]
+  $onDisk = @{}
+  if ($PlansDir -and (Test-Path -LiteralPath $PlansDir)) {
+    try { foreach ($f in @(Get-ChildItem -LiteralPath $PlansDir -Filter 'plan-*.json' -File -ErrorAction Stop)) { $onDisk[$f.Name] = $f.FullName } } catch { }
+  }
+  $tracked = @()
+  if ($RepoRoot) {
+    $prevEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $tracked = @(& git -C $RepoRoot ls-files -- 'grocery/triage-plans/plan-*.json' 2>$null | ForEach-Object { Split-Path ([string]$_) -Leaf }) } catch { $tracked = @() }
+    finally { $ErrorActionPreference = $prevEap }
+  }
+  $names = @(@($onDisk.Keys) + $tracked | Where-Object { $_ -and $_ -notlike '*.routing.json' } | Sort-Object -Unique -Descending)
   $kept = 0
-  foreach ($f in $files) {
+  foreach ($n in $names) {
     if ($kept -ge $Newest) { break }
-    if ($f.Name -like '*.routing.json') { continue }
     try {
-      $j = Read-JsonFile $f.FullName
+      $j = $null
+      if ($onDisk.ContainsKey($n)) { $j = Read-JsonFile $onDisk[$n] }
+      else {
+        $prevEap = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try { $txt = (& git -C $RepoRoot show ('HEAD:grocery/triage-plans/' + $n) 2>$null) -join "`n" } finally { $ErrorActionPreference = $prevEap }
+        if ($txt) { $j = $txt | ConvertFrom-Json; $script:TriagePlansReadFromGit++ }
+      }
       if ($null -eq $j -or -not $j.items) { continue }
-      [void]$out.Add([pscustomobject]@{ path = ('grocery/triage-plans/' + $f.Name); items = @($j.items) })
+      [void]$out.Add([pscustomobject]@{ path = ('grocery/triage-plans/' + $n); items = @($j.items) })
       $kept++
     } catch { continue }
   }
