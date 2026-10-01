@@ -213,16 +213,20 @@
     $lgProbe = New-TcRendezvousProbe -Count 2 -DeadlineSec 120
     $lgJoin = "& powershell.exe -NoProfile -ExecutionPolicy Bypass -File '" + $lgProbe.Script + "' | Out-Null`n"
     [IO.File]::WriteAllText((Join-Path $lgDir 'ops\run-gates.ps1'), ($lgJoin + "Write-Output 'RUN-GATES-COMPLETE pass=1 fail=0'`nexit 0`n"))
-    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\prepush-test-auditors.ps1'), ($lgJoin + "`$null = [Console]::In.ReadToEnd()`nWrite-Output 'prepush-test-auditors: PASS'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"))
+    $lgCwd = Join-Path $env:TEMP ('tc-pm-lg-cwd-' + [guid]::NewGuid().ToString('N').Substring(0, 10) + '.txt')
+    [IO.File]::WriteAllText((Join-Path $lgDir 'ops\prepush-test-auditors.ps1'), ($lgJoin + "[IO.File]::WriteAllText('" + $lgCwd + "', (Get-Location).Path)`n`$null = [Console]::In.ReadToEnd()`nWrite-Output 'prepush-test-auditors: PASS'`nWrite-Output 'PREPUSH-TEST-AUDITORS-COMPLETE rc=0'`nexit 0`n"))
     [IO.File]::WriteAllText((Join-Path $lgDir 'ops\seed-worktree.ps1'), "param([string]`$Target)`n`$SEED_DIRS = @(@{ p = 'fixture-seed' })`nexit 0`n")
     foreach ($ga in @(@('init', '-q'), @('-c', 'user.email=t@t', '-c', 'user.name=t', 'add', '-A'), @('-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-q', '-m', 'legs fixture'))) { $null = Invoke-TcGit -Dir $lgDir -Arguments $ga }
     $lgHead = ([string]@((Invoke-TcGit -Dir $lgDir -Arguments @('rev-parse', 'HEAD')).Out)[0]).Trim()
     $null = Invoke-TcGit -Dir $lgDir -Arguments @('update-ref', 'refs/remotes/origin/main', $lgHead)
     $lgRes = Invoke-TcDefaultLegs -Dir $lgDir -Remote 'origin' -Branch 'main'
     $lgV = Get-TcRendezvousVerdict -Probe $lgProbe
-    $lgWts = @((Invoke-TcGit -Dir $lgDir -Arguments @('worktree', 'list', '--porcelain')).Out | Where-Object { ([string]$_).StartsWith('worktree ') })
-    T ($kCT + '  run-gates and test-auditors run AT THE SAME TIME (both legs meet at one rendezvous), the pass is a pass, and the leg worktree is gone after') `
-      ($lgRes.Code -eq 0 -and $lgV.Ok -and $lgRes.TaExit -eq 0 -and $lgWts.Count -eq 1) ("code={0} rendezvous={1} taExit={2} worktrees={3}" -f $lgRes.Code, $lgV.Detail, $lgRes.TaExit, $lgWts.Count)
+    $lgCwdSeen = if (Test-Path -LiteralPath $lgCwd) { ([IO.File]::ReadAllText($lgCwd)).Trim() } else { '<not written>' }
+    Remove-Item -LiteralPath $lgCwd -Force -ErrorAction SilentlyContinue
+    # IN THE PUSHING CHECKOUT, because its pass record is named by the checkout root: a leg run elsewhere made the
+    # in-lock hook re-run all 818 cases holding the lock (7b6f1698e's own landing, 327 s).
+    T ($kCT + '  run-gates and test-auditors run AT THE SAME TIME (both legs meet at one rendezvous), test-auditors runs IN the pushing checkout where its pass record lives, and the pass is a pass') `
+      ($lgRes.Code -eq 0 -and $lgV.Ok -and $lgRes.TaExit -eq 0 -and [string]::Equals($lgCwdSeen.TrimEnd('\'), $lgDir.TrimEnd('\'), [StringComparison]::OrdinalIgnoreCase)) ("code={0} rendezvous={1} taExit={2} taCwd={3}" -f $lgRes.Code, $lgV.Detail, $lgRes.TaExit, $lgCwdSeen)
     # A red run-gates still collects test-auditors, so ONE refusal names both layers (landing 1 of 2026-10-01 hid five
     # test-auditors reds behind eight gate reds, and the run ended unlanded on its one retry).
     [IO.File]::WriteAllText((Join-Path $lgDir 'ops\run-gates.ps1'), "Write-Output '  FAIL  fixture-gate  (exit 1)'`nWrite-Output 'RUN-GATES-COMPLETE pass=0 fail=1'`nexit 1`n")

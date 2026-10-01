@@ -951,57 +951,27 @@ function Invoke-TcDefaultLegs {
   # THE TWO LEGS RUN AT ONCE (2026-10-01, design\PLAN-push-speed-2026-10-01.md step 2; Brad: "20 minutes for a push is not
   # acceptable"). Until then run-gates ran first and test-auditors only after it passed, so a push paid the SUM (396 s +
   # 631 s on 2026-10-01's landings) and a red run-gates hid every test-auditors red until the next attempt. test-auditors
-  # now starts first, in its OWN detached, seeded worktree of this HEAD, so neither leg's writes can trip the other's
-  # gate-leftovers check; run-gates runs here meanwhile; then the leg is collected. A push pays the LONGER leg, and a red
-  # run-gates still waits for test-auditors, so one refusal names both layers. The decision is unchanged: a run-gates that
-  # did not pass is the answer, else a test-auditors Code that is not 0 is, else the pass. A leg worktree that cannot be
-  # made falls back to the old order in this checkout, so this degrades to the day before and never to a refusal.
+  # now starts first, IN THIS CHECKOUT, and run-gates runs beside it; then the leg is collected. A push pays the LONGER leg,
+  # and a red run-gates still waits for test-auditors, so one refusal names both layers. The decision is unchanged: a
+  # run-gates that did not pass is the answer, else a test-auditors Code that is not 0 is, else the pass.
+  # THIS CHECKOUT, NEVER A SIBLING WORKTREE (found on this change's own landing, 7b6f1698e). The first cut ran the leg in a
+  # throwaway worktree, and prepush-test-auditors names its pass record by a hash of the CHECKOUT ROOT (Get-PassRecordPath),
+  # so the in-lock hook found no record for this checkout and ran all 818 cases again, 327 s, HOLDING THE PUSH LOCK. Here
+  # the record is this checkout's, and the in-lock leg replays it as it always did. test-auditors may not write a tracked
+  # path (og-39), so a write that trips run-gates' gate-leftovers check beside it is a real defect, named by its path.
   $refLine = Get-TcWarmRefLine -Dir $Dir -Remote $Remote -Branch $Branch
-  $legWt = New-TcLegWorktree -Dir $Dir
-  $th = $null
-  if ($legWt) { $th = Start-TcWarmTestAuditors -Dir $legWt -RefLine $refLine }
-  try {
-    $wg = Invoke-TcWarmGate -Dir $Dir
-    $res = [pscustomobject]@{ Ran = $wg.Ran; Code = $wg.Code; Why = $wg.Why; RgSec = $wg.Sec; RgLines = $wg.Lines; TaSec = $null; TaExit = $null; TaLines = $null }
-    $gatePassed = ($wg.Ran -and $wg.Code -eq 0)
-    # W2.3's SHAPE (W9.3 step 3): the rehearsal starts once run-gates has passed. A no-op when it has already started
-    # beside run-gates.
-    if ($gatePassed -and $BeforeTestAuditors) { & $BeforeTestAuditors }
-    if ($null -ne $th) {
-      $wt = Complete-TcWarmTestAuditors -Handle $th
-    } elseif ($gatePassed) {
-      Say 'push-main: the test-auditors leg could not get its own worktree, so it runs after run-gates in this checkout, as before.'
-      $wt = Invoke-TcWarmTestAuditors -Dir $Dir -RefLine $refLine
-    } else { return $res }
-    $res.TaSec = $wt.Sec; $res.TaExit = $wt.Exit; $res.TaLines = $wt.Lines
-    if ($gatePassed -and $wt.Code -ne 0) { $res.Ran = $wt.Ran; $res.Code = $wt.Code; $res.Why = $wt.Why }
-    elseif (-not $gatePassed -and $wt.Code -eq 1) { $res.Why = ([string]$res.Why + '; test-auditors refused too (its lines are above)').TrimStart('; ') }
-    return $res
-  } finally {
-    if ($legWt) { Remove-TcLegWorktree -Dir $Dir -Path $legWt }
-  }
-}
-
-function New-TcLegWorktree {
-  <# A detached, seeded worktree of $Dir's HEAD for the test-auditors leg, or '' when one cannot be made (the caller then
-     runs the leg the old way). Under %TEMP%, so it is never inside a checkout a gate walks. #>
-  param([string]$Dir)
-  $head = Invoke-TcGit -Dir $Dir -Arguments @('rev-parse', 'HEAD')
-  if ($head.Code -ne 0 -or -not @($head.Out).Count) { return '' }
-  $path = Join-Path $env:TEMP ('tc-pm-legwt-' + [guid]::NewGuid().ToString('N').Substring(0, 10))
-  $add = Invoke-TcGit -Dir $Dir -Arguments @('worktree', 'add', '--detach', $path, ([string]@($head.Out)[0]).Trim())
-  if ($add.Code -ne 0) { Say ('push-main: could not add the test-auditors worktree (' + (([string]$add.Text) -replace '\s+', ' ').Trim() + ').'); return '' }
-  $seed = Invoke-TcSeedBeforeGate -Dir $path
-  if (-not $seed.Ran -or $seed.Code -ne 0) { Remove-TcLegWorktree -Dir $Dir -Path $path; return '' }
-  return $path
-}
-
-function Remove-TcLegWorktree {
-  <# Removes a leg worktree and never leaves a husk: a half-removed worktree resolves to the MAIN checkout for git. #>
-  param([string]$Dir, [string]$Path)
-  $null = Invoke-TcGit -Dir $Dir -Arguments @('worktree', 'remove', '--force', $Path)
-  if (Test-Path -LiteralPath $Path) { Remove-Item -LiteralPath $Path -Recurse -Force -ErrorAction SilentlyContinue }
-  $null = Invoke-TcGit -Dir $Dir -Arguments @('worktree', 'prune')
+  $th = Start-TcWarmTestAuditors -Dir $Dir -RefLine $refLine
+  $wg = Invoke-TcWarmGate -Dir $Dir
+  $res = [pscustomobject]@{ Ran = $wg.Ran; Code = $wg.Code; Why = $wg.Why; RgSec = $wg.Sec; RgLines = $wg.Lines; TaSec = $null; TaExit = $null; TaLines = $null }
+  $gatePassed = ($wg.Ran -and $wg.Code -eq 0)
+  # W2.3's SHAPE (W9.3 step 3): the rehearsal starts once run-gates has passed. A no-op when it has already started
+  # beside run-gates.
+  if ($gatePassed -and $BeforeTestAuditors) { & $BeforeTestAuditors }
+  $wt = Complete-TcWarmTestAuditors -Handle $th
+  $res.TaSec = $wt.Sec; $res.TaExit = $wt.Exit; $res.TaLines = $wt.Lines
+  if ($gatePassed -and $wt.Code -ne 0) { $res.Ran = $wt.Ran; $res.Code = $wt.Code; $res.Why = $wt.Why }
+  elseif (-not $gatePassed -and $wt.Code -eq 1) { $res.Why = ([string]$res.Why + '; test-auditors refused too (its lines are above)').TrimStart('; ') }
+  return $res
 }
 
 # ======================================================================================================================
