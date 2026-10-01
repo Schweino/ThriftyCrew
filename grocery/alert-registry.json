@@ -1032,6 +1032,18 @@
    "resolver": "lane:grocery/resolve-match-worklist.ps1"
   },
   {
+   "id": "match-soundness-digest",
+   "match": "exact",
+   "key": "grocery matching soundness condition s need action",
+   "class": "page",
+   "condition": "4 live-cell-moved-unexplained",
+   "condition_note": "the ONE message per audit-match-soundness run that lists its due conditions. Send-AlertConditions sends it with -DigestOnly (mailed, never queued) when every listed condition holds its own queue item; page class so that, when a condition's own send failed, the digest still queues (fail toward page). Before 2026-10-01 it was unregistered and queued a duplicate of every soundness finding (3b1e6e, af1fdd, 98f7c0).",
+   "emitter": "grocery/audit-match-soundness.ps1 (Send-AlertConditions)",
+   "split_from": "plan-2026-10-01-2.json",
+   "lineage_parent": "match-soundness",
+   "resolver": "lane:grocery/resolve-match-worklist.ps1"
+  },
+  {
    "id": "match-soundness-matcher-drift",
    "match": "exact",
    "key": "grocery matching soundness matcher drift",

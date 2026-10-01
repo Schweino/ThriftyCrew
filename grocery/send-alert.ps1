@@ -78,6 +78,10 @@ param(
   # The mute switch is applied to that one message, not per condition. Both default off: every other caller is unchanged.
   [switch]$DeferMail,
   [string]$MarkSentTypes = '',
+  # A DIGEST WHOSE CONDITIONS ARE ALL QUEUED IS MAIL-ONLY (2026-10-01, queue 2026-09-30-abf660). Send-AlertConditions
+  # passes this on its one digest send only when every listed condition holds its own queue item; it mails as its class
+  # says, writes NO triage-queue item and prints DIGEST-NOT-QUEUED. Without it the digest queues as before.
+  [switch]$DigestOnly,
   # exercises the queue-routing decision against temp fixtures and exits. Sends nothing, touches no live file.
   # 2026-09-22 (queue 2026-09-19-8a3090): a deliberate send from a linked worktree, and the checkout the footer grades
   # (default: this script's own checkout; the self-test points it at a fixture worktree).
@@ -785,7 +789,9 @@ if ($SelfTest) {
       '{ "id": "fx-run-record", "match": "exact", "key": "fixture emitter run record", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
       '{ "id": "fx-no-fresh-rows", "match": "exact", "key": "fixture emitter no fresh rows", "class": "page", "condition": "3 scheduled-work-did-not-run-or-land", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
       '{ "id": "fx-graph-shape", "match": "exact", "key": "fixture emitter graph shape", "class": "review", "condition": "review", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
-      '{ "id": "fx-digest", "match": "exact", "key": "fixture emitter condition s need action", "class": "digest", "condition": "information", "emitter": "x", "resolver": "unassigned:2026-09-22" } ] }'
+      '{ "id": "fx-digest", "match": "exact", "key": "fixture emitter condition s need action", "class": "digest", "condition": "information", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "fx-sound-crown", "match": "exact", "key": "fixture soundness contested crown", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "x", "resolver": "unassigned:2026-09-22" },' +
+      '{ "id": "fx-sound-digest", "match": "exact", "key": "fixture soundness condition s need action", "class": "page", "condition": "4 live-cell-moved-unexplained", "emitter": "x", "resolver": "unassigned:2026-09-22" } ] }'
     [IO.File]::WriteAllText($saReg, $saRegCond, $utf8)
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     . (Join-Path $saG 'alert-lib.ps1')
@@ -815,6 +821,21 @@ if ($SelfTest) {
     $cx4 = Send-AlertConditions -SubjectPrefix 'Fixture emitter' -Conditions @('GRAPH SHAPE: structural orphans rose by 3') -ReportPointer $cxPtr -SenderArgs $cxArgs
     $cxQ4 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
     _T 'MUST NOT FIRE a review-class condition is queued as its own item and sends no message at all' ([bool]($cxQ4.Count -eq 3 -and $cx4.due.Count -eq 0 -and $cx4.digest_rc -eq -1)) 'True'
+    # ---- A DIGEST WHOSE CONDITIONS ARE ALL QUEUED IS NOT QUEUED AGAIN (2026-10-01, queue 2026-09-30-abf660) ----
+    # The founding row: 98f7c0 carried abf660's CONTESTED CROWN line two seconds later, because the digest (registered here,
+    # as live, at PAGE class) went through the queue write a second time.
+    $cxCrown = 'CONTESTED CROWN: rotisserie-chicken | Walmart | (Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz | 3.97/each'
+    $cx5 = Send-AlertConditions -SubjectPrefix 'Fixture soundness' -Conditions @($cxCrown) -ReportPointer $cxPtr -SenderArgs $cxArgs
+    $cxQ5 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
+    $cxNew5 = @($cxQ5 | Where-Object { [string]$_.type -like 'fixture soundness*' })
+    _T 'MUST FIRE one CONTESTED CROWN condition through Send-AlertConditions yields exactly ONE queue item, its own type' ([bool]($cxQ5.Count -eq 4 -and $cxNew5.Count -eq 1 -and [string]$cxNew5[0].type -eq 'fixture soundness contested crown')) 'True'
+    _T 'CLEAN TWIN and the digest mail is still sent, marked DIGEST-NOT-QUEUED' ([bool]($cx5.digest_only -and [string]$cx5.digest_out -match 'DIGEST-NOT-QUEUED fixture soundness condition s need action' -and [string]$cx5.digest_out -match 'alert MUTED')) 'True'
+    # Fail toward page: an agent-lane send of an UNREGISTERED condition type is refused (exit 2) before any queue write,
+    # so that condition holds no item and the digest that lists it must queue.
+    $cx6 = Send-AlertConditions -SubjectPrefix 'Fixture soundness' -Conditions @('UNREGISTERED THING: no entry matches this type') -ReportPointer $cxPtr -SenderArgs ($cxArgs + @('-Lane', 'weekly'))
+    $cxQ6 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
+    $cxDig6 = @($cxQ6 | Where-Object { [string]$_.type -eq 'fixture soundness condition s need action' })
+    _T 'MUST NOT FIRE a condition whose own send failed keeps the digest QUEUED (fail toward page)' ([bool]($cx6.failed.Count -eq 1 -and -not $cx6.digest_only -and $cxQ6.Count -eq 5 -and $cxDig6.Count -eq 1 -and [string]$cx6.digest_out -notmatch 'DIGEST-NOT-QUEUED')) 'True'
     _T 'the condition key is the leading label, dashes and all' (Get-AlertConditionKey 'GIT HOOKS NOT LIVE - pushes are ungated: hook missing') 'GIT HOOKS NOT LIVE - pushes are ungated'
     _T 'a line with no short label keeps its first four words' (Get-AlertConditionKey 'could not ask git whether today''s prices reached main (x)') 'could not ask git'
   } finally {
@@ -897,6 +918,11 @@ if ($agentRefused) {
   [Console]::Error.WriteLine($refMsg)
   Write-Output $refMsg
   exit 2
+}
+if ($DigestOnly -and $delivery.queue) {
+  $delivery.queue = $false
+  Log ("DIGEST-NOT-QUEUED '" + $Subject + "' [type: " + $typeKey + "] - every condition it lists already holds its own queue item")
+  Write-Output ('DIGEST-NOT-QUEUED ' + $typeKey)
 }
 if ($delivery.resolverless) { Log ("RESOLVERLESS ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - " + $delivery.note + ". Name its resolver in grocery\alert-registry.json (design/RCA-holistic-2026-09-22.md F5).") }
 

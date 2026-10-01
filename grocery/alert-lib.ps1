@@ -275,6 +275,13 @@ function Send-AlertConditions {
     $mark = (@($due | Where-Object { $_.type } | ForEach-Object { $_.type }) -join '|')
     $mArgs = @()
     if ($mark) { $mArgs = @('-MarkSentTypes', $mark) }
+    # THE DIGEST IS MAIL-ONLY WHEN EVERY CONDITION IT LISTS IS ALREADY QUEUED (2026-10-01, queue 2026-09-30-abf660, pulls
+    # weekly 2026-09-30-dc03c3 forward). Sent plainly, the digest went through send-alert's queue write a second time, so
+    # one soundness finding opened two items (abf660 08:19:41 and 98f7c0 08:19:43; 3 times in 30 days). Any condition
+    # whose own send failed (no type, or a note) keeps the digest queued: fail toward page.
+    $digestOnly = (@($due | Where-Object { (-not $_.type) -or $_.note }).Count -eq 0)
+    if ($digestOnly) { $mArgs += '-DigestOnly' }
+    $res | Add-Member -NotePropertyName digest_only -NotePropertyValue $digestOnly
     $dOut = @()
     try {
       $dOut = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $saPick.Path -Subject $dSubj -BodyFile $dbf -Force @mArgs @emArgs @SenderArgs)

@@ -366,6 +366,19 @@
                          "reason":  "one ad line names several products joined by or (Fresh blackberries or raspberries, 6 oz. pkg., $2.99); the contested chain is the alternatives, not two rules fighting over one product. Waits for the per-product ingest split. Triage 2026-09-28 ops lane, 2026-09-27-c744ba."
                      },
                      {
+                         "key":  "contested|rotisserie-chicken||(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz",
+                         "kind":  "contested",
+                         "commodity":  "lemon-pepper-seasoning",
+                         "claimer":  "rotisserie-chicken",
+                         "store":  "",
+                         "name":  "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz",
+                         "verdict":  "confirm",
+                         "pattern":  "",
+                         "by":  "resolve-match-worklist -Decide",
+                         "date":  "2026-10-01",
+                         "reason":  "a whole chilled rotisserie chicken (36 oz / 2.25 lb) at 3.97 everyday at Walmart (walmart-regular-2026-09-30 and -10-01); lemon pepper is a flavour word, not the seasoning commodity. rotisserie-chicken (index 153) already excludes seasoning and claims it first; 0 of 51,326 names re-route (plan-2026-10-01-2 abf660)"
+                     },
+                     {
                          "key":  "contested|shredded-cheese||Kraft Flavor Fusions Garlic \u0026 Herb Cheddar Cheese 7 Oz Block",
                          "kind":  "contested",
                          "commodity":  "garlic",
