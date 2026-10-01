@@ -68,7 +68,7 @@ $script:PolicyRoot = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Par
 # A pending price-flag verification is an owed re-read (2026-09-21, plan-2026-09-21-8.json; Get-CaptureWorklist below).
 # Loaded only when present: this lib's own self-tests re-load it from a copied root that need not carry it, and there a
 # worklist says VerifyBlind rather than the whole lib failing to load.
-foreach ($__lib in 'flag-verify-lib.ps1', 'link-identity-lib.ps1') { $__p = Join-Path $script:PolicyRoot $__lib; if (Test-Path -LiteralPath $__p) { . $__p } }   # link-identity-lib: PLAN-link-rides-with-price L5
+foreach ($__lib in 'flag-verify-lib.ps1', 'link-identity-lib.ps1', 'rescue-owed-lib.ps1') { $__p = Join-Path $script:PolicyRoot $__lib; if (Test-Path -LiteralPath $__p) { . $__p } }   # link-identity-lib: PLAN-link-rides-with-price L5
 # -SelfTest drives both ledgers from concurrent processes (the block at the end of this file). Read from $args,
 # because this file declares no parameters - see the header.
 $__cplSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
@@ -948,6 +948,7 @@ function Get-CaptureWorklist {
     foreach ($hit in $hits) { [void]$verifyTerms.Add($hit) }
   }
   if (Get-Command Select-TcLinkOwedTerms -ErrorAction SilentlyContinue) { $lot = Select-TcLinkOwedTerms -Store $Store -OutDir $OutDir -All $all -SkipIds @($vo.Ids) -Room ($vRoom - $verifyTerms.Count); foreach ($hit in $lot) { [void]$verifyTerms.Add($hit) } }   # priced tiles with no link lead next (L5)
+  $rq = $null; if (Get-Command Select-TcRescueTerms -ErrorAction SilentlyContinue) { $rq = Select-TcRescueTerms -Store $Store -OutDir $OutDir -Today $plan.Today -All $all -SkipIds @($verifyTerms.ToArray() | ForEach-Object { [string]$_.id }) -Room ($vRoom - $verifyTerms.Count); foreach ($hit in @($rq.Terms)) { [void]$verifyTerms.Add($hit) } }   # cells the board is losing (rescue-owed-lib, 2026-10-01)
   if ($verifyTerms.Count -gt 0) {
     $saleRoomV = $vRoom - $verifyTerms.Count
     if ($saleRoomV -lt 0) { $saleRoomV = 0 }
@@ -1029,6 +1030,7 @@ function Get-CaptureWorklist {
     VerifyBlind   = [bool]$vo.Blind
     VerifyWhy     = [string]$vo.Why
     SaleDeferredByVerify = $saleDeferredByVerify
+    RescueTerms = if ($rq) { @($rq.Terms) } else { @() }; RescueOwed = if ($rq) { @($rq.Owed) } else { @() }; RescueDeferred = if ($rq) { [int]$rq.Deferred } else { 0 }; RescueBlind = if ($rq) { [bool]$rq.Blind } else { $true }; RescueWhy = if ($rq) { [string]$rq.Why } else { 'rescue-owed-lib.ps1 is not beside capture-policy-lib.ps1' }
     # Baker's weekly ad terms owed an ask (2026-09-18). Empty for every other store, and empty for Baker's
     # once every routed term of the current ad list has a receipt inside the ad window.
     AdTerms       = $adTerms.ToArray()
@@ -1919,6 +1921,7 @@ function Write-CaptureWorklist {
     # BAKER'S WEEKLY AD TERMS, AT THE HEAD OF `terms` after any ruling (2026-09-18). Routed from the ad's own
     # list (pull-bakers-ad-list.ps1) and derived: they leave on their own once asked inside the ad window.
     ad_terms       = @($wl.AdTerms | ForEach-Object { $_.term })
+    rescue_terms   = @($wl.RescueTerms | ForEach-Object { $_.term }); rescue_owed_total = @($wl.RescueOwed).Count; rescue_deferred = $wl.RescueDeferred; rescue_blind = $wl.RescueBlind; rescue_why = $wl.RescueWhy   # at-risk cells, after verifications (rescue-owed-lib.ps1)
     # sale fallbacks owed (2026-09-22, plan-2026-09-22-9): on sale here with no everyday twin, asked while the sale runs.
     # Already inside terms, after everything else; listed here so the browser run can say which it reached.
     sale_fallback_terms = @($wl.SaleFallbackTerms | ForEach-Object { $_.term })

@@ -51,7 +51,8 @@
   window does not contain today, whose root or ANY page cannot be fetched or parsed, or that lists 0 offers for
   the location (exit 1). A partial list is worse than none: the missing pages' sales would simply never be asked.
 
-  EXIT CODES  0 list written, or a current list already on disk (-Force re-pulls)   1 refused   4 no ad id
+  EXIT CODES  0 list written, or a current list already on disk (-Force re-pulls)   1 refused   4 no ad id, or no id
+              on disk verified and none was handed in (-AdId / -SeenFile), so capture-run reads a fresh one in Chrome
   Self-test:  pull-bakers-ad-list.ps1 -SelfTest   (hermetic: the frozen 2026-09-16 ad in
               regression-inputs\bakers-ad-2026-09-16, a temp out dir, no network)
 #>
@@ -178,6 +179,24 @@ if ($SelfTest) {
     $hrc = $LASTEXITCODE
     Test-BkalCase 'MUST NOT FIRE  a current list already on disk is not pulled again (exit 0, says current)' `
       (($hrc -eq 0) -and (($h -join "`n") -match 'already current')) ("rc=$hrc")
+
+    # I. MUST FIRE - the founding case (2026-09-30). Rollover morning: the only id on disk is LAST week's, left in a
+    #    bakers-ad-id-seen file, and the ad it names (09-16..09-22) does not contain today (09-25). That is no usable id,
+    #    so it exits 4 and capture-run reads the page in Chrome. Before the fix it refused with exit 1 and Chrome never ran.
+    $iDir = Join-Path $tmpRoot 'i'
+    New-Item -ItemType Directory -Path (Join-Path $iDir 'bakers') -Force -ErrorAction Stop | Out-Null
+    $iSeen = Join-Path $iDir 'bakers\bakers-ad-id-seen-2026-09-18.json'
+    [IO.File]::WriteAllText($iSeen, ($seen | ConvertTo-Json -Depth 4), (New-Object Text.UTF8Encoding($false)))
+    $io = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -OutDir $iDir -FixtureDir $fx -Today '2026-09-25')
+    $irc = $LASTEXITCODE
+    Test-BkalCase 'MUST FIRE  last week''s id left on disk (seen file, ad 09-16..09-22, today 09-25) is NO USABLE AD ID: exit 4, no list' `
+      (($irc -eq 4) -and ($null -eq (Get-BkalList $iDir)) -and (($io -join "`n") -match 'NO USABLE AD ID')) ("rc=$irc")
+    # J. CLEAN TWIN - the same stale id handed in as -SeenFile (capture-run's retry after its Chrome read) still REFUSES
+    #    with exit 1, so a fresh read that does not verify can never send capture-run back to Chrome a second time.
+    $jo = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -OutDir $iDir -FixtureDir $fx -Today '2026-09-25' -SeenFile $iSeen)
+    $jrc = $LASTEXITCODE
+    Test-BkalCase 'CLEAN TWIN  the same stale id passed as -SeenFile refuses: exit 1 (REFUSED), never 4, no list' `
+      (($jrc -eq 1) -and ($null -eq (Get-BkalList $iDir)) -and (($jo -join "`n") -match 'REFUSED')) ("rc=$jrc")
   } catch {
     $script:stFail++
     Write-Output ('  FAIL  the self-test threw: ' + $_.Exception.Message)
@@ -311,7 +330,20 @@ foreach ($c in $cands) {
   $adRoot = $r
   break
 }
-if (-not $ad) { Stop-BkalRefused ('no candidate ad id verified: ' + ($whyNot -join ' | ')) }
+# A STALE ID ON DISK IS NO ID (2026-10-01). With nothing handed in (-AdId or -SeenFile), every candidate came from a file
+# an earlier run left behind, and on the morning an ad rolls over that is LAST week's id: on 2026-09-30 the newest
+# bakers-ad-id-seen file named the 09-23 ad, it answered 401, this refused with exit 1, and capture-run reads the page in
+# Chrome only on exit 4 - so the one read that finds the new id never ran and the week's ad list did not land. Exit 4
+# here sends capture-run to Chrome once; its retry passes -SeenFile, so a fresh read that still fails refuses (exit 1)
+# and the page is never loaded twice.
+if (-not $ad) {
+  if (-not $AdId -and -not $SeenFile) {
+    Write-Output ('pull-bakers-ad-list: NO USABLE AD ID for ' + $todayS + ' - nothing on disk verified: ' + ($whyNot -join ' | '))
+    Write-Output '  capture-run reads the current id in Chrome (pull-browser-stores.py --bakers-ad-id-out); by hand: open https://www.bakersplus.com/weeklyad on the Saddlecreek store and pass the /api/dacs/<guid> it requests as -AdId.'
+    exit 4
+  }
+  Stop-BkalRefused ('no candidate ad id verified: ' + ($whyNot -join ' | '))
+}
 
 # ============================================================================ 3. every page, or nothing
 $offers = New-Object System.Collections.Generic.List[object]

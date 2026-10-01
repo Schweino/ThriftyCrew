@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Per-file marks for the file-size budget (B2 of design/PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27). Lines as git stores them, of every tracked .ps1/.py file over the limit. No NEW file may exceed the limit; each mark may only go DOWN; a deliberate growth is recorded with -Accept and its reason in the commit.",
-    "generated":  "2026-09-29T11:26:08",
+    "generated":  "2026-10-01T09:02:44",
     "limit":  1000,
     "files":  [
                   {
@@ -13,7 +13,7 @@
                   },
                   {
                       "path":  "graph/pipeline/resolve.py",
-                      "lines":  1491
+                      "lines":  1437
                   },
                   {
                       "path":  "grocery/audit-match-soundness.ps1",
@@ -33,7 +33,7 @@
                   },
                   {
                       "path":  "grocery/capture-policy-lib.ps1",
-                      "lines":  2422
+                      "lines":  2425
                   },
                   {
                       "path":  "grocery/capture-run.ps1",
@@ -129,7 +129,7 @@
                   },
                   {
                       "path":  "meal-prep/pipeline/hunt_daemon_selftest.py",
-                      "lines":  13088
+                      "lines":  13020
                   },
                   {
                       "path":  "meal-prep/pipeline/hunt_dispatch.py",
@@ -141,7 +141,7 @@
                   },
                   {
                       "path":  "meal-prep/pipeline/hunt-daemon.py",
-                      "lines":  8823
+                      "lines":  8815
                   },
                   {
                       "path":  "meal-prep/pipeline/hunt-run.ps1",
