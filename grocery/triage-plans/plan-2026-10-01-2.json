@@ -182,9 +182,9 @@
         ],
         "exact_change": "line 1948: replace the bare git push (stdout-only pipe) with Invoke-Native (native-lib.ps1) running powershell -File ops\\push-main.ps1 -ViaWorktree (gates a detached worktree of HEAD; same hook, nothing weakened), logging every line as push[N]; on refusal, read the newest hook-refused row for this checkout from the push ledger (lib/push-ledger.ps1) and put its gate, rc and kept-log path into the log line AND the could-not-push alert body. Keep the 4-attempt loop and the sync tail; lock order is unchanged (capture-run mutex 0 is outer to push-main 0a/0b/1/2)."
       },
-      "leaves_open": "two residuals that turned the gate red today and are not this item's to fix: (a) an unknown producer deleted 119 tracked triage plan files in the main checkout, unstaged (1 occurrence, 2026-10-01); (b) reap-runaway-processes MUST FIRE asserts a CPU share of 50% or more that load pushes under (48.4% today; 1 occurrence)",
-      "leaves_open_occurrences": 2,
-      "leaves_open_followup": null,
+      "leaves_open": "(b) reap-runaway-processes MUST FIRE asserts a CPU share of 50% or more that load pushed to 48.4% (1 occurrence, 2026-10-01): weekly residual 2026-10-01-c12baf. (a) is closed: the writer was found and removed, the files restored.",
+      "leaves_open_occurrences": 1,
+      "leaves_open_followup": "2026-10-01-c12baf",
       "prior_closes": [
         "2026-09-19-c7c57d",
         "2026-09-21-5ac200",
@@ -232,14 +232,16 @@
         "the 119 foreign deletions under grocery/triage-plans",
         "lib/checkout-sync.ps1"
       ],
-      "resolution_note": "All 4 pushes were refused by the pre-push gate, not by a moved main: audit-ruling-drift failed because 119 tracked triage plans are deleted (unstaged, foreign) in the main checkout. The bot now lands through push-main's detached worktree and logs the refusing gate. Today's board shipped with batch 1.",
+      "resolution_note": "All 4 bot pushes on 2026-10-01 were refused by the pre-push gate judging the shared checkout, not the commit: audit-ruling-drift failed because capture-run.ps1's own 1st-of-month housekeeping had moved 119 tracked triage plans into the gitignored logs-archive at 08:00. The bot (tail and push-only retry) now lands through ops\\push-main.ps1 -ViaWorktree, logs the push's stdout and stderr, and names the refusing gate from the push ledger in the log and the alert; the plan rotation is removed and the 119 plans restored. test-capture-run-sync 65/65 exit 0; full_suite: deferred-to-land.",
       "publish_batch": 1,
       "lane": "ops",
       "est_tool_calls": 45,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "done",
+      "premise_verified": "yes: push ledger 2026-10-01 holds hook-refused rows 14:28Z and 14:37Z from checkout C:\\Codex\\ThriftyCrew, gate ops\\audit-ruling-drift.ps1 rc=1; capture-run.ps1 piped only git stdout (old line 1948, and the push-only retry at old line 547 did the same); 119 tracked plan files were deleted under grocery/triage-plans",
+      "deviation": "Wider than planned, on measurement. (1) The push-only retry (Invoke-CaptureRunPushRetry) also pushed plainly from the shared checkout; it now lands through the same Invoke-CaptureRunLandingPush. (2) The \"unknown producer\" of the 119 deletions is capture-run.ps1 itself: its 1st-of-month housekeeping (old lines 863-871) moved every plan-<last month>-*.json into the gitignored grocery\\logs-archive\\triage-plans. That directory was written at 2026-10-01 08:00:06 (the daily run) and holds plan-2026-09-07-3.json. The rotation was written when plans were untracked history; they are now tracked records gates read. Removed with a must-fire/clean-twin fixture, and the 119 files restored from HEAD (git checkout, D entries under grocery/triage-plans only). The archive copies stay in the gitignored logs-archive, untouched. (3) Refusal attribution reads the newest ledger refusal since the attempt began, preferring this checkout; a row from another checkout is labelled as such.",
+      "shipped_commit": null,
+      "actual_tool_calls": 40,
+      "close_disposition": "confirmed"
     },
     {
       "queue_id": "2026-10-01-86678f",

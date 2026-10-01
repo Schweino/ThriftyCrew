@@ -458,6 +458,82 @@ function Get-CaptureRunCopies {
   return @{ all = ($tw.twins.Count -eq $own); own = $own; twins = $tw.twins }
 }
 
+# ---- THE BOT'S LANDING PUSH (2026-10-01, queue 2026-10-01-6a6140; returns 09-19 c7c57d, 09-21 5ac200, 09-24 924782,
+# 09-26 e3566b, 09-27 b1efed) ----------------------------------------------------------------------------------------
+# The bot pushed with `git push origin HEAD:main` FROM THE SHARED MAIN CHECKOUT, so the pre-push gate judged that
+# checkout's working tree, not the commit being pushed: another session's dirt (a stray file 09-27, an untracked blocker
+# 09-19, 119 deleted tracked triage plans 10-01) refused the bot's clean data commit, four times running on 10-01, and the
+# refusal text went to stderr, which the bot never logged. It now lands through ops\push-main.ps1 -ViaWorktree, which
+# gates a detached worktree of HEAD with the same hook: nothing is weakened, and a commit that is itself red is still
+# refused. Every line the child printed, stdout AND stderr (Invoke-Native, no redirect), comes back in .lines. On a
+# non-zero exit the push ledger's newest refusal row since the attempt began names the gate, its rc and its kept log;
+# a row from this checkout is preferred, and one from another checkout is labelled so. Lock order: the capture-run mutex
+# (0) is outer to push-main's 0a/0b/1/2, as declared. The git repository environment is cleared for the child, so a
+# private index this run still holds can never become the index push-main's worktree reads.
+# $script:CaptureRunPushSeam is the fixture seam: a scriptblock (Repo) returning @{ rc; lines }; $null runs push-main.
+# Returns @{ rc; lines; refusal } (refusal '' when rc is 0 or nothing was recorded).
+function Get-CaptureRunPushRefusal {
+  param([string]$Repo, [datetime]$SinceUtc, [string]$LedgerRoot = '')
+  try {
+    if (-not (Get-Command Read-TcPushRows -ErrorAction SilentlyContinue)) { . (Join-Path (Split-Path -Parent $PSScriptRoot) 'lib\push-ledger.ps1') }
+    $rows = New-Object System.Collections.Generic.List[object]
+    $days = @($SinceUtc.ToLocalTime().Date, (Get-Date).Date) | Select-Object -Unique
+    foreach ($d in $days) {
+      $rr = Read-TcPushRows -Path (Get-TcPushLedgerPath -Root $LedgerRoot -Now $d)
+      foreach ($r in @($rr)) { $rows.Add($r) }
+    }
+    $mine = $null; $any = $null
+    foreach ($r in $rows) {
+      if ($r.PSObject.Properties['malformed']) { continue }
+      $ev = [string]$r.event; $oc = [string]$r.outcome
+      if (-not ($ev -eq 'hook-refused' -or ($ev -eq 'push-main' -and $oc -like 'refused*'))) { continue }
+      $ts = [DateTimeOffset]::MinValue
+      if (-not [DateTimeOffset]::TryParse([string]$r.ts, [Globalization.CultureInfo]::InvariantCulture, [Globalization.DateTimeStyles]::AssumeUniversal, [ref]$ts)) { continue }
+      # The ledger stamps whole seconds, so a row written in the same second the attempt began reads up to 1 s early.
+      if ($ts.UtcDateTime -lt $SinceUtc.AddSeconds(-1)) { continue }
+      $any = $r
+      if ([string]::Equals(([string]$r.checkout).TrimEnd('\'), $Repo.TrimEnd('\'), [StringComparison]::OrdinalIgnoreCase)) { $mine = $r }
+    }
+    $hit = $(if ($null -ne $mine) { $mine } else { $any })
+    if ($null -eq $hit) { return '' }
+    $parts = New-Object System.Collections.Generic.List[string]
+    foreach ($k in @('event', 'outcome', 'cause', 'gate', 'rc', 'blind', 'log')) {
+      $pp = $hit.PSObject.Properties[$k]
+      if ($pp -and $null -ne $pp.Value -and [string]$pp.Value -ne '') { $parts.Add($k + '=' + [string]$pp.Value) }
+    }
+    if ($null -eq $mine) { $parts.Add('(row from another checkout: ' + [string]$hit.checkout + ')') }
+    return ($parts.ToArray() -join ' ')
+  } catch { return ('the push ledger could not be read: ' + $_.Exception.Message) }
+}
+
+function Invoke-CaptureRunLandingPush {
+  param([string]$Repo, [string]$Root, [string]$LedgerRoot = '')
+  $since = [datetime]::UtcNow
+  $res = [pscustomobject]@{ rc = 1; lines = @(); refusal = '' }
+  if ($script:CaptureRunPushSeam) {
+    $s = & $script:CaptureRunPushSeam $Repo
+    $res.rc = [int]$s.rc; $res.lines = @(@($s.lines) | ForEach-Object { [string]$_ })
+  } else {
+    if (-not (Get-Command Invoke-Native -ErrorAction SilentlyContinue)) { . (Join-Path $Root 'native-lib.ps1') }
+    $saved = @{}
+    foreach ($k in @('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_COMMON_DIR')) { $saved[$k] = [Environment]::GetEnvironmentVariable($k, 'Process'); [Environment]::SetEnvironmentVariable($k, $null, 'Process') }
+    try { $n = Invoke-Native 'powershell' '-NoProfile' '-ExecutionPolicy' 'Bypass' '-File' (Join-Path $Repo 'ops\push-main.ps1') '-ViaWorktree' }
+    finally { foreach ($k in @($saved.Keys)) { [Environment]::SetEnvironmentVariable($k, $saved[$k], 'Process') } }
+    $res.rc = [int]$n.ExitCode
+    $res.lines = @((@($n.Output) + @($n.Error)) | ForEach-Object { [string]$_ })
+    # THE OLD ROAD STAYS AS THE FALLBACK WHEN PUSH-MAIN CANNOT RUN (design D, W2.3 of
+    # design/PLAN-bot-dedicated-checkout-2026-09-25.md): exit 3 is could-not-evaluate, never a refusal, so the plain
+    # push, still fully gated by the same hook, goes next. A refusal (exit 1) is never retried by the plain road.
+    if ($res.rc -eq 3) {
+      $g = Invoke-Native 'git' '-C' $Repo 'push' 'origin' 'HEAD:main'
+      $res.rc = [int]$g.ExitCode
+      $res.lines = @($res.lines) + @('push-main could not evaluate (exit 3); fell back to the plain gated push') + @((@($g.Output) + @($g.Error)) | ForEach-Object { [string]$_ })
+    }
+  }
+  if ($res.rc -ne 0) { $res.refusal = Get-CaptureRunPushRefusal -Repo $Repo -SinceUtc $since -LedgerRoot $LedgerRoot }
+  return $res
+}
+
 function Invoke-CaptureRunPushRetry {
   param([string]$Repo, [string]$Root, [string]$Kind, [string]$Sha, [int]$Attempts = 4, [scriptblock]$StaleFeed = $null)
   $lines = New-Object System.Collections.Generic.List[string]
@@ -544,11 +620,11 @@ function Invoke-CaptureRunPushRetry {
         $lines.Add('push-retry[' + $attempt + ']: REFUSED - ' + $res.why); break
       }
     }
-    $pOut = @(& git -C $Repo push origin HEAD:main | ForEach-Object { [string]$_ })
-    $pRc = $LASTEXITCODE
-    foreach ($l in $pOut) { $lines.Add('push-retry push[' + $attempt + ']: ' + $l) }
+    $lp = Invoke-CaptureRunLandingPush -Repo $Repo -Root $Root
+    $pRc = [int]$lp.rc
+    foreach ($l in @($lp.lines)) { $lines.Add('push-retry push[' + $attempt + ']: ' + [string]$l) }
     if ($pRc -eq 0) { $res.outcome = 'landed'; $res.reason = 'landed'; $res.pushed = $true; $res.rc = 0; $res.why = ('pushed on attempt ' + $attempt); $lines.Add('push-retry: ' + $res.why); break }
-    $res.why = ('git push exited ' + $pRc + ' on attempt ' + $attempt)
+    $res.why = ('the push exited ' + $pRc + ' on attempt ' + $attempt + ': ' + $(if ($lp.refusal) { [string]$lp.refusal } else { 'the push ledger recorded no refusal row since the attempt began' }))
     Start-Sleep -Seconds $script:TailRetrySec
   }
   if ($res.outcome -eq 'push-failed') { $lines.Add('push-retry: PUSH FAILED after ' + $Attempts + ' attempts - ' + $res.why) }
@@ -792,15 +868,11 @@ if ($Kind -eq 'daily' -and (Get-Date).Day -eq 1 -and -not $WhatIf) {
       $src = Join-Path $root $lf; $dst = Join-Path $arch ($lf -replace '[.]txt$', "-$stamp.txt")
       if ((Test-Path $src) -and -not (Test-Path $dst)) { Move-Item $src $dst -Force -ErrorAction SilentlyContinue; Write-Output "rotation: $lf -> logs-archive" }
     }
-    $tp = Join-Path $root 'triage-plans'; $tpArch = Join-Path $arch 'triage-plans'
-    if (Test-Path $tp) {
-      if (-not (Test-Path $tpArch)) { New-Item -ItemType Directory -Path $tpArch -Force | Out-Null }
-      $moved = 0
-      foreach ($pf in @(Get-ChildItem (Join-Path $tp 'plan-*.json') -ErrorAction SilentlyContinue)) {
-        if ($pf.BaseName -match '^plan-([0-9]{4}-[0-9]{2})' -and $Matches[1] -le $stamp) { Move-Item $pf.FullName $tpArch -Force -ErrorAction SilentlyContinue; $moved++ }
-      }
-      if ($moved) { Write-Output "rotation: archived $moved triage plan(s)" }
-    }
+    # TRIAGE PLANS ARE NOT ROTATED ANY MORE (2026-10-01, queue 2026-10-01-6a6140). They were "pure history" when this
+    # was written; they are now TRACKED records that gates read (audit-ruling-drift resolves ruling citations into them,
+    # validate-triage-plan reads every plan-*.json for prevention items and RETURN closes). On 2026-10-01 at 08:00 this
+    # block moved 119 tracked plan-2026-09-*.json files into the gitignored logs-archive, which left them deleted in the
+    # main checkout and refused every bot push that day through audit-ruling-drift. Nothing here may move a plan file.
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'ghost-export.ps1') | ForEach-Object { Write-Output ("ghost-export: " + $_) }
   } catch { Write-Output ("monthly housekeeping threw (not fatal): " + $_.Exception.Message) }
 }
@@ -1945,14 +2017,19 @@ try {
           }
         } catch { Write-Output ("chain-code[$attempt]: the stale-code check threw (" + $_.Exception.Message + ") - pushing as before") }
       }
-      & git -C $repo push origin HEAD:main | ForEach-Object { Write-Output ("push[$attempt]: " + $_) }
-      if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }
+      # THE LANDING GOES THROUGH PUSH-MAIN'S DETACHED WORKTREE (2026-10-01, queue 2026-10-01-6a6140): see
+      # Invoke-CaptureRunLandingPush. Every line the push printed, stderr too, is logged, and a refusal names its gate.
+      $lp = Invoke-CaptureRunLandingPush -Repo $repo -Root $root
+      foreach ($l in @($lp.lines)) { Write-Output ("push[$attempt]: " + $l) }
+      if ($lp.rc -eq 0) { $pushed = $true; Write-Output "pushed on attempt $attempt"; break }
+      $script:LastPushRefusal = ('attempt ' + $attempt + ' exited ' + $lp.rc + ': ' + $(if ($lp.refusal) { $lp.refusal } else { 'the push ledger recorded no refusal row since the attempt began' }))
+      Write-Output ("push[$attempt]: REFUSED - " + $script:LastPushRefusal)
       Start-Sleep -Seconds $script:TailRetrySec
     }
     if (-not $pushed -and -not $tailStopped) {
       Write-Output 'PUSH FAILED after 4 attempts - this run''s data is committed locally but NOT on main, so the live site still serves the previous board'
       Add-FailedLane 'push'
-      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 sync-and-push attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. See grocery\out\logs\capture-run-$Kind-$today.log for each attempt's sync line and push output.") | Out-Null; Set-FailedLanePaged 'push' ("Grocery pipeline could not push - $today") $LASTEXITCODE } catch {}
+      try { Send-Alert -Subject "Grocery pipeline could not push - $today" -Body ("capture-run.ps1 [$Kind] committed today's refresh locally but could not push to main after 4 sync-and-push attempts. Cloudflare deploys from the repo, so the live board and feed are STALE until this lands. See grocery\out\logs\capture-run-$Kind-$today.log for each attempt's sync line and push output.`n`nThe last refusal: " + $(if ($script:LastPushRefusal) { [string]$script:LastPushRefusal } else { 'none recorded' })) | Out-Null; Set-FailedLanePaged 'push' ("Grocery pipeline could not push - $today") $LASTEXITCODE } catch {}
     }
   }
   # <<< TAIL-PUSH BLOCK <<<

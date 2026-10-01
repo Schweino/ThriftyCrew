@@ -37,7 +37,7 @@ $repoLib = Join-Path (Split-Path $PSScriptRoot -Parent) 'lib'
 . (Join-Path $PSScriptRoot 'native-lib.ps1')
 $env:GIT_TERMINAL_PROMPT = '0'
 
-$EXPECTED_CASES = 59
+$EXPECTED_CASES = 65
 $script:pass = 0; $script:fail = 0
 function T([string]$Label, [bool]$Cond, [string]$Got = '') {
   if ($Cond) { $script:pass++; Write-Output ('  ok    ' + $Label) }
@@ -56,7 +56,7 @@ $crAst = [System.Management.Automation.Language.Parser]::ParseInput($crSrc, [ref
 $fnNames = @('Write-RunStatus', 'Add-FailedLane', 'Set-FailedLanePaged', 'Release-RunMutex', 'Test-CaptureRunPidAlive', 'Get-CaptureRunInheritedLock',
   'Enter-CaptureRunMutex', 'Register-CaptureRunMergedWrites', 'ConvertTo-CaptureRunSyncStatus', 'Format-CaptureRunSyncLine',
   'Get-StartSyncAction', 'Invoke-CaptureRunHandoff', 'Invoke-CaptureRunTailSync', 'Invoke-CaptureRunOwedTailSync',
-  'Invoke-CaptureRunPushRetry', 'Get-CaptureRunCopies', 'Update-CaptureRunLanding')
+  'Invoke-CaptureRunPushRetry', 'Get-CaptureRunCopies', 'Update-CaptureRunLanding', 'Invoke-CaptureRunLandingPush', 'Get-CaptureRunPushRefusal')
 $fnAsts = @($crAst.FindAll({ param($a) $a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $fnNames -contains $a.Name }, $true))
 $fnFound = @($fnAsts | ForEach-Object { $_.Name } | Sort-Object -Unique)
 if ($fnFound.Count -ne $fnNames.Count) { Write-Output ('BLIND: capture-run.ps1 defines ' + $fnFound.Count + ' of the ' + $fnNames.Count + ' functions this fixture lifts (' + ($fnFound -join ', ') + ') - nothing was proven'); Write-Output 'capture-run-sync SELF-TEST BLIND'; exit 3 }
@@ -84,6 +84,12 @@ function Send-Alert { param($Subject, $Body) [void]$script:pages.Add([string]$Su
 function Get-BotInputPaths { return @('grocery') }
 function Get-BotServedPaths { return @('public') }
 $script:fxSeams = @{ IndexLockWaitSec = 0; InProgressWaitSec = 0; HeldRetrySec = 0; PollSec = 0; FetchAttempts = 1; FetchRetrySec = 0 }
+# THE LANDING PUSH SEAM, SUITE-WIDE (2026-10-01, queue 2026-10-01-6a6140). Shipped, the bot lands through
+# ops\push-main.ps1 -ViaWorktree; here every tail and retry fixture pushes plainly to its own bare remote, so a
+# remote pre-receive hook still plays the refusing gate. Set suite-wide, because a fixture that forgot it would run
+# the real push-main against a temp repo. The push ledger is redirected suite-wide for the same reason.
+$script:CaptureRunPushSeam = { param($R) $g = GitR $R @('push', 'origin', 'HEAD:main'); return @{ rc = $g.rc; lines = @((([string]$g.out) + "`n" + ([string]$g.err)) -split "`n" | Where-Object { $_.Trim() }) } }
+. (Join-Path $repoLib 'push-ledger.ps1')
 
 function GitR([string]$Dir, [string[]]$A) {
   $g = Invoke-GitCaptured -Repo $Dir -GitArgs (@('-c', 'core.quotePath=false') + $A)
@@ -476,6 +482,36 @@ try {
     T 'attempt 1 is rejected, attempt 2 syncs again and lands' ($r.pushed -and ($r.text -match 'sync\[tail 2\]') -and ($r.text -match 'pushed on attempt 2') -and $r.failed -eq '' -and (Test-Path -LiteralPath (Join-Path $E.remote 'rejected-once'))) ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' text=' + $r.text)
   }
 
+  Invoke-Group 'PUSH REFUSAL MUST FIRE - a refused landing logs the push''s stderr and names the refusing gate from the ledger' {
+    $E = New-Estate 'refusal'
+    $ledgerDir = Join-Path $E.dir 'push-ledger'; New-Item -ItemType Directory -Path $ledgerDir -ErrorAction Stop | Out-Null
+    $prevLedger = $env:TC_PUSH_LEDGER_ROOT; $env:TC_PUSH_LEDGER_ROOT = $ledgerDir
+    $prevSeam = $script:CaptureRunPushSeam
+    $script:CaptureRunPushSeam = {
+      param($R)
+      $row = [ordered]@{ ts = [datetime]::UtcNow.ToString('yyyy-MM-ddTHH:mm:ssZ'); event = 'hook-refused'; outcome = 'refused'; checkout = $R; cause = 'run-gates'; gate = 'ops\audit-ruling-drift.ps1'; rc = 1; log = 'C:\fx\tc-prepush-1580.log' }
+      [IO.File]::AppendAllText((Get-TcPushLedgerPath), (($row | ConvertTo-Json -Compress) + "`n"), $script:fxUtf8)
+      return @{ rc = 1; lines = @('RULING-DRIFT AUDIT FAILED: 4 ruling(s) cite a document that no longer exists') }
+    }
+    try {
+      W $E.bot 'grocery/ledger.json' "a`nb`nc`nr`n"
+      $sha = New-BotCommit $E @('grocery')
+      $script:LastPushRefusal = ''
+      $r = Invoke-TailPush $E $sha
+      $script:tailTexts.Add($r.text)
+      T 'MUST FIRE: four refused attempts, nothing pushed, the push lane failed and the could-not-push page fired' (-not $r.pushed -and ($r.failed -split ',') -contains 'push' -and ((@($r.pages) -join '|') -match 'Grocery pipeline could not push')) ('pushed=' + $r.pushed + ' failed=' + $r.failed + ' pages=' + (@($r.pages) -join '|'))
+      T 'MUST FIRE: the log carries the push''s own refusal text and the gate, rc and kept log read from the ledger' (($r.text -match 'push\[1\]: RULING-DRIFT AUDIT FAILED') -and ($r.text -match [regex]::Escape('gate=ops\audit-ruling-drift.ps1 rc=1 log=C:\fx\tc-prepush-1580.log')) -and ([string]$script:LastPushRefusal -match 'audit-ruling-drift')) ('text=' + $r.text)
+    } finally { $script:CaptureRunPushSeam = $prevSeam; $env:TC_PUSH_LEDGER_ROOT = $prevLedger }
+    # CLEAN TWIN: a refusal row older than the attempt is another push's, never this one's.
+    $old2 = [ordered]@{ ts = '2026-01-01T00:00:00Z'; event = 'hook-refused'; outcome = 'refused'; checkout = $E.bot; gate = 'ops\stale-gate.ps1'; rc = 1 }
+    [IO.File]::AppendAllText((Get-TcPushLedgerPath -Root $ledgerDir -Now ([datetime]::Now)), (($old2 | ConvertTo-Json -Compress) + "`n"), $script:fxUtf8)
+    $since = [datetime]::UtcNow.AddSeconds(1)
+    $ref = Get-CaptureRunPushRefusal -Repo $E.bot -SinceUtc $since -LedgerRoot $ledgerDir
+    T 'CLEAN TWIN: no row since the attempt began reads as no refusal, so an older refusal is never blamed' ($ref -eq '') ('refusal=' + $ref)
+    $pmNeedle = "'ops\push-" + "main.ps1') '-ViaWorktree'"
+    $plainNeedle = 'push origin ' + 'HEAD:main |'
+    T 'CLEAN TWIN: the shipped landing runs push-main -ViaWorktree, and neither the tail nor the retry pipes a plain push' ($crSrc.Contains($pmNeedle) -and -not $tailBlock.Contains($plainNeedle) -and -not $crSrc.Contains('& git -C $Repo ' + 'push origin')) ('pm=' + $crSrc.Contains($pmNeedle))
+  }
   Invoke-Group 'PARTIAL MUST FIRE - a partial tail sync with a local commit does not push, and fails lane sync' {
     $E = New-Estate 'partial'
     Push-Up $E 'public/derived.json' "{`n  ""v"": 6`n}`n" 'up: push 1'
@@ -737,6 +773,27 @@ try {
     T ('no tail fixture run printed "' + $stashLine + '" (' + $script:tailTexts.Count + ' runs read), and capture-run.ps1 no longer names ' + $autoCfg) ($script:tailTexts.Count -ge 6 -and $hits -eq 0 -and $crSrc.IndexOf($autoCfg, [StringComparison]::OrdinalIgnoreCase) -lt 0) ('runs=' + $script:tailTexts.Count + ' hits=' + $hits)
   }
 
+  # NO MONTHLY ROTATION OF TRIAGE PLANS (2026-10-01, queue 2026-10-01-6a6140). The 1st-of-month housekeeping moved every
+  # plan-<last month>-*.json into the gitignored logs-archive; the plans are tracked records gates read, so 119 of them
+  # read deleted in the main checkout and audit-ruling-drift refused all four bot pushes. Needles are concatenated.
+  Invoke-Group 'PLAN ROTATION - the monthly housekeeping never moves a triage plan file' {
+    $tpNeedle = "Join-Path `$root 'triage-" + "plans'"
+    $mvNeedle = 'Move-' + 'Item'
+    function Test-RotatesPlans([string]$Src) {
+      $h = $Src.IndexOf('1st-OF-MONTH ' + 'HOUSEKEEPING', [StringComparison]::Ordinal)
+      if ($h -lt 0) { return [pscustomobject]@{ found = $false; rotates = $false } }
+      $e = $Src.IndexOf('ghost-' + 'export.ps1', $h, [StringComparison]::Ordinal)
+      if ($e -lt 0) { return [pscustomobject]@{ found = $false; rotates = $false } }
+      $blk = $Src.Substring($h, $e - $h)
+      $i = $blk.IndexOf($tpNeedle, [StringComparison]::Ordinal)
+      return [pscustomobject]@{ found = $true; rotates = ($i -ge 0 -and $blk.IndexOf($mvNeedle, $i, [StringComparison]::Ordinal) -ge 0) }
+    }
+    $fxOld = "# ---- 1st-OF-MONTH " + "HOUSEKEEPING`n    `$tp = " + $tpNeedle + "; `$tpArch = Join-Path `$arch 'triage-plans'`n      foreach (`$pf in @(Get-ChildItem (Join-Path `$tp 'plan-*.json'))) { " + $mvNeedle + " `$pf.FullName `$tpArch -Force }`n    & powershell -File (Join-Path `$root 'ghost-" + "export.ps1')`n"
+    $m = Test-RotatesPlans $fxOld
+    T 'MUST FIRE: the pre-2026-10-01 housekeeping, which moved plan-*.json out of triage-plans, is caught' ($m.found -and $m.rotates) ('found=' + $m.found + ' rotates=' + $m.rotates)
+    $live = Test-RotatesPlans $crSrc
+    T 'CLEAN TWIN: the shipped housekeeping block is found and moves no triage plan' ($live.found -and -not $live.rotates) ('found=' + $live.found + ' rotates=' + $live.rotates)
+  }
   # PROMPT SYNC RUNS BEFORE DOWNSTREAM (2026-09-25, queue 2026-09-23-cf85c8). check-ad-cycles runs test-auditors, which
   # runs audit-prompt-backup; with the -SyncScopes/-SyncMirror block at the tail, every prompt committed the day before
   # paged "test-auditors hygiene finding(s)" before this same run repaired it (5 of 5 recorded hygiene pages).
