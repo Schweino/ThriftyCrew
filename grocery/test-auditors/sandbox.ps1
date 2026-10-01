@@ -26,6 +26,34 @@ function NewFxDir([string]$tag) {
   # a silent pass, which is what makes the targeted copy safe where json-io's would not have been.
   return $d
 }
+# COPY A SCRIPT WITH EVERY SIBLING IT DOT-SOURCES, followed recursively (2026-10-01, queue 2026-09-30-3851d2).
+# A hand-kept copy list goes stale the day a library gains a dependency, and the fixture then dies at STARTUP
+# with "The term ... is not recognized" (rc=1), which reads as a red case, not a broken sandbox. 3851d2 made
+# soundness-publish-lib.ps1 load cell-quarantine-lib.ps1 and five cases in u076/u077 went red at landing; the
+# 2026-09-26 landing hit seven of the same shape. Only `. (Join-Path $root|$PSScriptRoot '<x>.ps1')` sites in
+# code (not comments) count, and only names that exist beside the source script. A fixture that stubs a library
+# (global-exclude-lib.ps1, compare-deals.ps1) writes its stub AFTER this call, so the stub still wins.
+# Returns the names copied, so a unit can assert what its sandbox holds.
+function Copy-FxWithDeps([string]$SourceDir, [string]$Script, [string]$Dest) {
+  $copied = New-Object System.Collections.Generic.List[string]
+  $todo = New-Object System.Collections.Generic.Queue[string]
+  $todo.Enqueue($Script)
+  while ($todo.Count -gt 0) {
+    $name = $todo.Dequeue()
+    if ($copied.Contains($name)) { continue }
+    $src = Join-Path $SourceDir $name
+    if (-not (Test-Path -LiteralPath $src)) { continue }
+    Copy-Item -LiteralPath $src -Destination (Join-Path $Dest $name) -Force
+    [void]$copied.Add($name)
+    foreach ($line in [IO.File]::ReadAllLines($src)) {
+      if ($line -match '^\s*#') { continue }
+      foreach ($m in [regex]::Matches($line, "\.\s+\(Join-Path\s+\`$(?:root|PSScriptRoot)\s+'([^'\\/]+\.ps1)'\)")) {
+        $todo.Enqueue($m.Groups[1].Value)
+      }
+    }
+  }
+  return ,$copied.ToArray()
+}
 function RunPSAt([string]$dir, [string]$script, $argList) {
   # same stderr-throw guard as RunPS above - see the long note there
   $prev = $ErrorActionPreference
