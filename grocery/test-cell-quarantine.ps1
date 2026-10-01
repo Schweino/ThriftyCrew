@@ -363,9 +363,11 @@ function New-QMsCell([string]$Store, [double]$Pu, [string]$Item, [string]$Unit) 
 }
 $msCookie = 'Simple Mills Crunchy Chocolate Chip Almond Flour Cookies'
 $msChicken = '(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz'
+# store-subset-ok: filler board for case 16 only; Get-SoundnessCellScope joins report names to cell items and never branches on store, so 5 stores prove it for all 7
 $msB = New-QBoard -Stores @('Aldi', "Baker's", 'Walmart', 'Family Fare', 'Hy-Vee') -Commodities 50
 $msAf = [pscustomobject]@{ commodity = 'Almond Flour'; id = 'almond-flour'; unit = 'lb'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''
   stores = @((New-QMsCell 'Aldi' 6.65 'Baker S Corner Almond Flour 16 OZ' 'lb'), (New-QMsCell "Baker's" 15.9709 $msCookie 'lb')) }
+# store-subset-ok: the four rotisserie rows FROZEN from comparison-2026-09-30.json (Aldi, Fareway, Sam's held none); the soundness join keys on product name, never on store
 $msRo = [pscustomobject]@{ commodity = 'Rotisserie Chicken'; id = 'rotisserie-chicken'; unit = 'each'; cheapest_store = ''; cheapest_price = 0.0; cheapest_type = ''; nomem_store = ''; nomem_price = 0.0; nomem_type = ''
   stores = @((New-QMsCell 'Walmart' 3.97 $msChicken 'each'), (New-QMsCell 'Family Fare' 7.99 'Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)' 'each'), (New-QMsCell "Baker's" 8.99 'Simple Truth Cold Deli Fresh Whole Rotisserie Chicken' 'each'), (New-QMsCell 'Hy-Vee' 8.99 'Whole Savory Rotisserie Chicken (Cold)' 'each')) }
 Update-TcRowWinners $msAf; Update-TcRowWinners $msRo

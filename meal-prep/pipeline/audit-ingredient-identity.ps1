@@ -563,7 +563,7 @@ if ($SelfTest) {
     [IO.File]::WriteAllText($bfile, ([pscustomobject]@{ comparison = @((Bd 'chickpeas' @('Aldi', 'Aldi Chickpeas 15.5 OZ', "Baker's", 'Kroger Chickpeas 15 oz'))) } | ConvertTo-Json -Depth 6), $enc)
     $o = & powershell @($a + '-Tighten'); $e8 = $LASTEXITCODE
     $m8 = Read-JsonFile $cmf
-    Check 'CLEAN TWIN  -Tighten on a cell fall (1 -> 0) carries the reviewed list unchanged' (($e8 -eq 0) -and ([int]$m8.count -eq 0) -and ((RvCount $m8) -eq 1) -and ([string]$m8.reviewed[0].owner -eq $own)) ("exit $e8 " + ($o -join ' | '))
+    Check 'MUST NOT FIRE  -Tighten on a cell fall (1 -> 0) finds nothing, exits 0 and carries the reviewed list unchanged' (($e8 -eq 0) -and ([int]$m8.count -eq 0) -and ((RvCount $m8) -eq 1) -and ([string]$m8.reviewed[0].owner -eq $own)) ("exit $e8 " + ($o -join ' | '))
   } finally { Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue }
 
   # -RoutesOnly, THE PUSH-TIME PAIR CHECK (queue 2026-09-26-177835). FROZEN, never regenerated: lo-mein-noodles' three

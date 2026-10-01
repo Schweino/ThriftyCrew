@@ -188,7 +188,8 @@ $script:TcCheckoutSyncStartupFiles = @(
   'lib/json-io.ps1',
   'lib/keep-awake.ps1',
   'lib/pipeline-commit.ps1',
-  'lib/production-writers.ps1'
+  'lib/production-writers.ps1',
+  'lib/push-ledger.ps1'
 )
 
 # The seven operations 1c waits on, each resolved through `git rev-parse --git-path`.

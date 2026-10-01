@@ -1,4 +1,5 @@
 <#
+  HOLD SCOPE: cell - the -CellScope run guards makes names each live cell a changed product wins (QUARANTINE-CELL <id>|<store>|selection); an unreadable or unjoinable report exits 1 and the board holds (ruling Q-2026-09-29-4-A, queue 2026-09-30-3851d2)
   audit-match-soundness.ps1 - STANDING guard for the commodity MATCHING logic (the class of bug the
   2026-07-13 audit found: a WRONG product silently landing in a commodity, or a rule change quietly
   moving/dropping an existing product). None of the other guards catch this.
