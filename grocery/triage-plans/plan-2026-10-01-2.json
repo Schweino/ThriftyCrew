@@ -407,14 +407,15 @@
         "recipe-board-everyday.json",
         "set-board-cell.ps1"
       ],
-      "resolution_note": "The same three deliberate findings re-paged because the ratchet could not record a reviewed key. Added an expiring reviewed list owned by 465acc; a new key in those cells still pages.",
+      "resolution_note": "The same three deliberate findings re-paged because the ratchet could not record a reviewed key. The cell mark now carries reviewed [{key, owner, until, why}], written only by -Review/-Owner/-Until (refuses past or more than 30 days ahead); a reviewed unexpired key prints KNOWN, an expired one re-raises as RISE marked EXPIRED, and a new product in the same cell still pages. Seeded the three keys owned by 2026-09-29-465acc until 2026-10-15. Proof: -SelfTest exit 0 PASS 80 (8 new); live pass exit 0 printing KNOWN 2026-09-29-465acc x3. full_suite: deferred-to-land. Note: sibling commit a5847c8ab on unlanded branch triage/2026-09-30-unlanded built an owner-open state with no date expiry; not taken, and it conflicts on these two files if that branch is ever landed.",
       "publish_batch": 2,
       "lane": "money",
       "est_tool_calls": 35,
-      "status": "planned",
-      "premise_verified": null,
+      "status": "done",
+      "premise_verified": "true: live pass 2026-10-01 on comparison-2026-09-30.json (file mtime 10:46:10, later than the 08:07:45 build in freshness, likely batch 1's rebuild) + recipe-board.json + recipe-floor-id-map.json exited 2 RISE 3 with exactly the three plan keys (familyfare californiasundrysundriedtomatoesjuliennect, hyvee hyveesundriedtomatoeshalves, bakers krogeroliveoilmayo) against the 2026-09-26 mark of 86; header lines 31-34 confirmed: no road for a kept key",
       "deviation": null,
-      "shipped_commit": null
+      "shipped_commit": "807afd7a6",
+      "actual_tool_calls": 28
     },
     {
       "queue_id": "2026-09-30-16027b",
