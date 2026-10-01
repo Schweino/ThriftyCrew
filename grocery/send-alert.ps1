@@ -796,6 +796,9 @@ if ($SelfTest) {
     Remove-Item -LiteralPath $saQ -Force -ErrorAction SilentlyContinue
     . (Join-Path $saG 'alert-lib.ps1')
     $cxArgs = @('-QueueMutexName', $saMutex)
+    # alert-lib dot-sourced here logs through THIS script's Log, so point $logFile at the sandbox: cx6 wrote the tracked live log (2026-10-01, abf660)
+    $cxLiveLog = $logFile; $cxLiveHash = if (Test-Path -LiteralPath $cxLiveLog) { (Get-FileHash -LiteralPath $cxLiveLog).Hash } else { '' }
+    $logFile = Join-Path $saG 'alert-log-conditions.txt'
     $cxRun1 = 'RUN RECORD: capture-run [ad] completed with exit 1 - see grocery\out\logs\capture-run-ad-2026-09-21.log'
     $cxRun2 = 'NO FRESH ROWS: Hy-Vee contributed ZERO rows dated 2026-09-20 (newest 2026-09-19, 1d old)'
     $cxPtr = 'Full report, healthy checks included: grocery\out\logs\fixture-2026-09-21.log'
@@ -836,6 +839,10 @@ if ($SelfTest) {
     $cxQ6 = @((Get-Content -LiteralPath $saQ -Raw -Encoding UTF8 | ConvertFrom-Json).items)
     $cxDig6 = @($cxQ6 | Where-Object { [string]$_.type -eq 'fixture soundness condition s need action' })
     _T 'MUST NOT FIRE a condition whose own send failed keeps the digest QUEUED (fail toward page)' ([bool]($cx6.failed.Count -eq 1 -and -not $cx6.digest_only -and $cxQ6.Count -eq 5 -and $cxDig6.Count -eq 1 -and [string]$cx6.digest_out -notmatch 'DIGEST-NOT-QUEUED')) 'True'
+    $cxSpoken = ((Test-Path -LiteralPath $logFile) -and ([IO.File]::ReadAllText($logFile) -match 'ALERT FAILED TO SEND \[Fixture soundness'))
+    $cxLiveNow = if (Test-Path -LiteralPath $cxLiveLog) { (Get-FileHash -LiteralPath $cxLiveLog).Hash } else { '' }
+    _T 'CLEAN TWIN the failed send is still spoken, into the sandbox log, and the live alert-log.txt is byte-identical' ([bool](($cxSpoken) -and ($cxLiveNow -eq $cxLiveHash))) 'True'
+    $logFile = $cxLiveLog
     _T 'the condition key is the leading label, dashes and all' (Get-AlertConditionKey 'GIT HOOKS NOT LIVE - pushes are ungated: hook missing') 'GIT HOOKS NOT LIVE - pushes are ungated'
     _T 'a line with no short label keeps its first four words' (Get-AlertConditionKey 'could not ask git whether today''s prices reached main (x)') 'could not ask git'
   } finally {
