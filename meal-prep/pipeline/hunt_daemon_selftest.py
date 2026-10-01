@@ -12437,10 +12437,13 @@ def _rd_never_carries_the_numbers():
     try:
         # THE NUMBERS RIDE ON THE ROWS THIS PUBLISH ADDED, not only on the pre-existing one: the
         # dossier names the ADDED rows, so those are the rows a leak would leak.
+        # THE PLANTED VALUES CARRY A DECIMAL POINT (2026-10-01, queue 2026-09-30-130abf). They were 613 and 47, and
+        # the dossier quotes the scratch dir, a mkdtemp name of [a-z0-9_]: daemon-wave-47j59gce held "47" and reddened
+        # the nightly battery with no leak (1 of 30 probe runs). No mkdtemp name can hold a "."; 31.46 always had one.
         doss, _d, _fg = _rd_dossier(tmp, tri, db, after_db=["z", "a", "b"],
-                                    after_extra={"per_serving": {"cal": 613, "protein_g": 47},
+                                    after_extra={"per_serving": {"cal": 613.25, "protein_g": 47.75},
                                                  "batch": {"cost": 31.46}, "servings": 14})
-        leaked = [n for n in ("613", "47", "31.46") if n in doss]
+        leaked = [n for n in ("613.25", "47.75", "31.46") if n in doss]
         res.append(("MUST FIRE  the dossier carries NO row CONTENTS - not a per-serving macro, not a "
                     "batch cost - because the reviewer must verify the live page against the "
                     "ARTIFACT, and a number quoted here would be the daemon's transcription of it",

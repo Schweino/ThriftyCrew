@@ -239,7 +239,7 @@
       "status": "done",
       "premise_verified": "yes: push ledger 2026-10-01 holds hook-refused rows 14:28Z and 14:37Z from checkout C:\\Codex\\ThriftyCrew, gate ops\\audit-ruling-drift.ps1 rc=1; capture-run.ps1 piped only git stdout (old line 1948, and the push-only retry at old line 547 did the same); 119 tracked plan files were deleted under grocery/triage-plans",
       "deviation": "Wider than planned, on measurement. (1) The push-only retry (Invoke-CaptureRunPushRetry) also pushed plainly from the shared checkout; it now lands through the same Invoke-CaptureRunLandingPush. (2) The \"unknown producer\" of the 119 deletions is capture-run.ps1 itself: its 1st-of-month housekeeping (old lines 863-871) moved every plan-<last month>-*.json into the gitignored grocery\\logs-archive\\triage-plans. That directory was written at 2026-10-01 08:00:06 (the daily run) and holds plan-2026-09-07-3.json. The rotation was written when plans were untracked history; they are now tracked records gates read. Removed with a must-fire/clean-twin fixture, and the 119 files restored from HEAD (git checkout, D entries under grocery/triage-plans only). The archive copies stay in the gitignored logs-archive, untouched. (3) Refusal attribution reads the newest ledger refusal since the attempt began, preferring this checkout; a row from another checkout is labelled as such.",
-      "shipped_commit": null,
+      "shipped_commit": "084cf87fa",
       "actual_tool_calls": 40,
       "close_disposition": "confirmed"
     },
@@ -504,14 +504,16 @@
         "the green-only stamp rule in run-daemon-battery.ps1",
         "the pinned names list semantics (a missing case is HARD)"
       ],
-      "resolution_note": "Battery red since e73a611bf renamed a pinned case, plus a dossier case red since 09-30. Fixed both; the battery now runs at push for pushes that touch the daemon.",
+      "resolution_note": "Battery red since e73a611bf renamed a pinned case into 13 per-agent tier pins without repinning, plus a non-hermetic dossier case that matched \"47\" inside a random temp-dir name. Names list repinned (568), fixture values made unmatchable by a temp name, and the battery now runs at push (hunt-daemon.py --selftest-gate) keyed on its declared inputs. Proof: --selftest-gate printed 0 removed, 0 added and SELF-TEST PASS; the same battery against the pre-fix list printed 1 removed and the not-run verdict (numeric exit codes not captured: PS 5.1 Start-Process); run-daemon-battery -SelfTest 15/15 exit 0; -VerifyDeclared exit 0. full_suite: deferred-to-land.",
       "publish_batch": 0,
       "lane": "ops",
       "est_tool_calls": 40,
-      "status": "planned",
-      "premise_verified": null,
-      "deviation": null,
-      "shipped_commit": null
+      "status": "done",
+      "premise_verified": "yes: ops\\out\\logs\\daemon-battery-2026-10-01.log reads DAEMON BATTERY RED, 2 hard: names.txt line 533 (renamed by e73a611bf into per-agent tier pins; 16 added, 1 removed) and the dossier case got leaked=[\"47\"]",
+      "deviation": "(1) The dossier red was not a regression to bisect: a 30-run probe found the \"47\" in the dossier's quoted mkdtemp dir (daemon-wave-47j59gce, 1 of 30 runs). The case planted 613/47 and substring-matched; the planted values now carry a decimal point (613.25, 47.75), which no mkdtemp name can hold (20 clean runs). (2) The keyed gate is hunt-daemon.py --selftest-gate, a new flag equal to --selftest plus --names-diff against the committed names list, registered through run-gates $pyArg (hunt-daemon.py left $pySkip; hunt_daemon_selftest.py stays skipped so the battery never runs twice). Declared inputs: meal-prep\\pipeline\\*.py, the names list, .claude\\agents\\*.md, grocery\\ingredient-queue.ps1; -VerifyDeclared VERIFIED, 51 probes. run-gates itself was not run (the orchestrator's landing runs it).",
+      "shipped_commit": null,
+      "actual_tool_calls": 38,
+      "close_disposition": "confirmed"
     },
     {
       "queue_id": "2026-09-30-9b9cf1",

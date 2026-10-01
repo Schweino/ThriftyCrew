@@ -568,8 +568,11 @@ $pySkip = @{
   # which runs ops\run-daemon-battery.ps1: exit code first, --names-diff against a committed reference, and red on
   # any git status line in its throwaway checkout. A definition is not a registration; health-heartbeat pages
   # TASK MISSING while the task is not on the scheduler.
-  'meal-prep\pipeline\hunt-daemon.py'       = 'the daemon itself - its --selftest IS the battery below; runs for minutes'
-  'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - 250-680 s; nightly as TC Daemon Battery 0230 (ops\run-daemon-battery.ps1), not at push time'
+  # SINCE 2026-10-01 (queue 2026-09-30-130abf) the battery ALSO runs at push time, through hunt-daemon.py
+  # --selftest-gate in $pyArg below, KEYED on the inputs that file declares: a push touching the daemon, its battery,
+  # its pinned names or the agent definitions pays 250-680 s; every other push replays the recorded verdict. Nightly
+  # stayed green-only and blind to the push: e73a611bf renamed a pinned case and only the 02:30 task saw it.
+  'meal-prep\pipeline\hunt_daemon_selftest.py' = 'the full daemon battery - run by hunt-daemon.py --selftest-gate (below), never twice; nightly as TC Daemon Battery 0230 too'
 }
 # A PYTHON SUITE CAN BE TOLD WHICH SELF-TEST A PUSH RUNS (Brad, 2026-09-12). Keyed like $pySkip, and a decision
 # someone defends in a diff. grocery\pull-browser-stores.py's --selftest launches a real Chrome per store (~30s on
@@ -580,6 +583,7 @@ $pySkip = @{
 # agents' logic on every push.
 $pyArg = @{
   'grocery\pull-browser-stores.py' = '--selftest-lookup'
+  'meal-prep\pipeline\hunt-daemon.py' = '--selftest-gate'
 }
 $pySuites = @()
 # MATCHED BELOW THE ROOT (2026-09-11, lib\tree-walk.ps1), the same fix as the PowerShell discovery above. On the full

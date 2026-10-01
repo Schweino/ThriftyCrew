@@ -8744,7 +8744,19 @@ def main(argv=None):
     ap.add_argument("--names-diff", dest="names_diff", default="",
                     help="with --selftest: diff this run's case names against a pinned reference. "
                          "Exit 2 if any reference case did not run, even when every case passed.")
+    # THE PUSH-TIME BATTERY (2026-10-01, queue 2026-09-30-130abf). run-gates runs this, keyed on the files declared at
+    # the gate-inputs line below, so a push that touches the daemon or its battery pays the 250-680 s run and every
+    # other push replays the recorded verdict. It is --selftest plus --names-diff against the COMMITTED reference: a
+    # renamed or deleted pinned case exits 2 (e73a611bf renamed one on 2026-09-29 and only the nightly task saw it).
+    # gate-inputs: meal-prep\pipeline\*.py, meal-prep\pipeline\hunt_daemon_selftest.names.txt, .claude\agents\*.md, grocery\ingredient-queue.ps1
+    ap.add_argument("--selftest-gate", dest="selftest_gate", action="store_true",
+                    help="--selftest with --names-diff against hunt_daemon_selftest.names.txt beside this file")
     a = ap.parse_args(argv)
+
+    if a.selftest_gate:
+        import hunt_daemon_selftest                               # noqa: PLC0415
+        return hunt_daemon_selftest.run(names_out=None,
+                                        names_ref=os.path.join(HERE, "hunt_daemon_selftest.names.txt"))
 
     if a.selftest:
         import hunt_daemon_selftest                               # noqa: PLC0415

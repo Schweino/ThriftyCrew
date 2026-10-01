@@ -530,7 +530,22 @@ MUST FIRE  run()'s drain actually consults should_force_drain - the predicate be
 MUST FIRE  published_slugs reads the run's own wave results and DEDUPES - a slug republished as collateral must not count twice toward the target
 CLEAN TWIN a run that has published nothing reports an empty list, never a count it cannot support
 MUST FIRE  probe-ingredient hands the pricer more than 8 hits per store - at 8 the cap BOUND on 21 of 30 measured results and hid the ladder the pricer then paid 16 turns to re-derive
-MUST FIRE  the writer is NOT on an opus tier - it cannot introduce a number (apply_writer_fields patches the intake from its payload) and it is the only stage with two independent fable gates behind it, source-qa per recipe and the auditor per wave
+MUST FIRE  a locally settled page is saved, and the seam keeps it out of the real cache (W6)
+MUST FIRE  commodity-registrar is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  post-publish-reviewer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-batch-auditor is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-dedup-selector is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-hunter-extractor is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-hunter-pricer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-ingredient-mapper is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-source-qa is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-sourcer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  recipe-writer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  rung 3 saves the page it verified against and names it by sha256 (W6)
+MUST FIRE  the agent directory holds the recipe-writer, so the tier pin read something
+MUST FIRE  triage-developer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  triage-ops-developer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
+MUST FIRE  triage-reviewer is pinned to claude-opus-5-5 at effort medium (Brad's ruling, 2026-09-29: every agent on Opus 5.5 Medium)
 MUST FIRE  the map lane runs MORE calls at once - the one lever that changes no quality decision at all, since each call keeps its model, effort and prompt and only the number in flight moves; the map lane was 22.6 of 23.0 covered minutes
 MUST FIRE  the mapper's batch stays under the output-token cliff - a batch whose payload crosses the 32,000 ceiling is cut mid-JSON and regenerated in full, which cost the 4-recipe call 6.6 of its 14 minutes on text nothing read
 CLEAN TWIN the batch is not zero or negative - take_batch would starve the lane
