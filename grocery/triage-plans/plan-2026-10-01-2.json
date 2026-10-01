@@ -429,14 +429,15 @@
         "capture-run-daily-2026-09-30.log: pushed on attempt 1, then EDGE STALE after the 10x30 s poll (edge 2026-09-29T11:02:12, HEAD bdc4e9a92 2026-09-30T08:09:40); fetched 2026-10-01 with a cache-busting query: edge generated 2026-09-30T08:09:40, equal to origin/main's committed feed"
       ],
       "root_cause": "a Workers deploy slower than the 5-minute poll at capture-run.ps1:2216; it landed afterwards and the edge now serves the committed bytes",
-      "resolution_note": "Self-healed: the edge serves exactly origin/main's 09-30 feed. A deploy slower than the 5-minute poll; 2 occurrences in 28 days (58057b, 16027b).",
+      "resolution_note": "The smp-feed edge check now waits up to 20 minutes (10x30s then 15x60s) before paging and records every wait in grocery/out/edge-deploy-latency.log, so the bar can be set from a distribution. Ported from the parked 2026-09-30 fix.",
       "prior_closes": [
         "2026-09-03-58057b"
       ],
       "prevention_none_because": "by-design poll window; 2 slow deploys in 28 days is Phase 2 recalibration of the poll length, not a code defect",
-      "status": "done",
+      "status": "deviated",
       "close_disposition": "confirmed",
-      "actual_tool_calls": 0
+      "actual_tool_calls": 0,
+      "deviation": "Closed no-code by the reviewer as a slow deploy, but triage/2026-09-30-unlanded already held the root fix for this RETURN (the 5-minute page was a bar nobody measured): Wait-EdgeServesPushed polls up to 20 minutes and logs every wait to out/edge-deploy-latency.log. Ported onto origin by the follow-up session of 2026-10-01 (cherry-picks of 1476cb604 and 4b18be788, without their unlanded 09-30 plan file)."
     },
     {
       "queue_id": "2026-09-30-130abf",

@@ -90,6 +90,7 @@ $todayS = if ($Today) { $Today } else { (Get-Date).ToString('yyyy-MM-dd') }
 . (Join-Path (Split-Path $root -Parent) 'lib\checkout-sync.ps1')     # Invoke-TcCheckoutSync: the ONE mover of the shared checkout, at the start and the tail (plan W4.1, W4.2)
 . (Join-Path (Split-Path $root -Parent) 'lib\production-writers.ps1')   # Get-TcSyncIntruderArgs: the sync's intruder policy and classifier (W2.2)
 . (Join-Path $root 'capture-run-lock-lib.ps1')   # Get-CaptureRunOrphanHolder: an abandoned lock is not free while a capture-run is alive (plan W4.1 step 7), shared with chain-idle
+. (Join-Path $root 'edge-decision-lib.ps1')   # Test-EdgeServesPushed/Wait-EdgeServesPushed/Get-DeferredPostDecision/Get-HeldPostDecision: the pure edge and post decisions, fixtured by test-capture-builders
 
 # ---- ALREADY RAN TODAY? (2026-09-10, queue 2026-09-10-2b79d3) --------------------------------------------
 # The TC capture tasks gained hourly catch-up occurrences inside a per-task window, so a Windows Update
@@ -2121,140 +2122,7 @@ if ($shipServed -and $botCommitted) {
 }
 # <<< SERVED-DIRTY BLOCK <<<
 
-# >>> EDGE-DECISION >>>
-# THE DECISION, LIFTED OUT SO A FIXTURE CAN REACH IT (2026-09-03, queue 2026-09-03-58057b).
-# THE RULE THIS FILE NOW RUNS ON: any read-after-write in this chain compares against GIT, never against
-# the working tree, and gates on $shipServed, never on $pushed.
-# What went wrong on 2026-09-03: the block below gated on ($runDownstream -and $pushed) and read its own
-# side of the comparison from the WORKING TREE. Both halves are wrong for a held-back board. $pushed is a
-# whole-run flag - line 816 sets it true for "nothing to ship is not a failed ship" - so it is true on a
-# run where public\** was never in the commit at all; and the recipe lane rewrites public\smp-feed.json
-# BEFORE guards run, so on a guards-blocked day that file is dirty on purpose and comparing the edge
-# against it manufactures a mismatch. The alert then asserted a conclusion it never checked ("The push
-# succeeded, so this is a Cloudflare deploy that has not landed") and accused a third party, on exactly
-# the day the operator is already busy with a real hard fail. The edge was in fact serving the newest
-# PUSHED feed correctly. The correct predicate was already eight lines above, in the served-dirty block.
-function Test-EdgeServesPushed {
-  <# .DESCRIPTION Pure. ok | stale | skipped | blind. No network, no git, no clock - so a fixture can drive
-     every arm without a repo. 'skipped' is the 2026-09-03 founding bug: the chain deliberately did not ship
-     the served files, so there is nothing to verify and NOTHING TO ALERT ABOUT. 'blind' is could-not-run,
-     which is not a failure either. #>
-  param(
-    [bool]$ShipServed,
-    [string]$CommittedGenerated,
-    [string]$LiveGenerated
-  )
-  if (-not $ShipServed) { return 'skipped' }
-  if ([string]::IsNullOrWhiteSpace($CommittedGenerated)) { return 'blind' }
-  if ([string]::IsNullOrWhiteSpace($LiveGenerated))      { return 'stale' }
-  if ([string]$LiveGenerated -eq [string]$CommittedGenerated) { return 'ok' }
-  return 'stale'
-}
-# THE BYTE COMPARISON (2026-09-04, queue 2026-09-04-4ec26c). The board.json read-after-write compared a
-# CONSOLE-CODE-PAGE decode of the git blob (`git show | Out-String`) against a UTF-8 decode of the live
-# response, so it compared two different decodings of identical bytes and could never pass on a board
-# containing a single non-ASCII character. Measured the morning it fired: the edge and HEAD were byte-for-
-# byte identical (SHA256 C24A9BF3..., 2,961,318 bytes on both sides), and the alert's own two numbers were
-# that one file in two units - 2,961,318 bytes, 2,959,184 UTF-8 characters, and the board carries exactly
-# 2,134 characters above U+007F.
-# Pure, and it takes HASHES rather than the payloads: a byte-by-byte loop over 2.9 MB in PowerShell costs
-# seconds, and a hash is the same answer. An unreadable side is BLIND, never 'ok' - two empty hashes must
-# not compare equal and read as agreement.
-function Test-EdgeServesPushedBytes {
-  <# .DESCRIPTION Pure. ok | stale | blind. Hex SHA256 of the committed blob vs the live response. #>
-  param([string]$CommittedHash, [string]$LiveHash)
-  if ([string]::IsNullOrWhiteSpace($CommittedHash)) { return 'blind' }
-  if ([string]::IsNullOrWhiteSpace($LiveHash))      { return 'blind' }
-  if ($CommittedHash -eq $LiveHash) { return 'ok' }
-  return 'stale'
-}
-function Test-PointerShippedWithoutObject {
-  <#
-    THE POINTER SHIPPED AND THE OBJECT DID NOT (2026-09-22, queue 2026-09-22-972de2).
-    .claude\rules\ops-and-gates.md: "Write the POINTED-TO object before the object that points to it.
-    Every interruption then leaves an object nothing refers to yet, which is a LEAK, and never a reference
-    to an object that is not there, which is CORRUPTION." This chain does it the other way round. The Ghost
-    post is upserted inside check-ad-cycles' ship path and carries board.json?v=<hash of the board it just
-    built>; public\board.json reaches readers only through the commit BELOW, which can fail on its own.
-    .claude\rules\site-and-publish.md already says the right order in words and nothing enforced it.
-
-    WHAT IT COST. On 2026-09-22 the ship path published the post at 08:17 asking for board.json?v=56fb50a601
-    and the commit was refused eighteen minutes later. From then until a human looked, the live post said
-    "week of 2026-09-22" while feed.thriftycrew.com served origin/main's 2026-09-21 board (blob e266e0d45),
-    and 583 recipe pages priced off a 2026-09-21 smp-feed. The branch below printed
-    "edge check skipped: ... Readers keep the last good board." Readers did NOT: they kept the last good
-    board.json underneath a post advertising a different one, and the check had never tested the claim.
-
-    WHY THE OLD SILENCE WAS RIGHT ONCE AND WRONG HERE. The skip was scoped on 2026-09-03 to the
-    guards-blocked day, where the chain deliberately ships nothing AND publishes no post, so nothing points
-    at anything missing. On 2026-09-09 the refused-commit case was folded into the same branch. That was
-    correct for the served-dirty ALERT one block up, which would have prescribed an inert repair, and wrong
-    for the edge check, which is the only thing still asking a question that matters when a commit is
-    refused. So this decides on the POINTER, not on the reason the commit failed, and covers every reason:
-    a refused hook, a non-fast-forward rejection, a push lock, a network failure.
-
-    Measured over the 28 daily logs on disk (2026-08-24 to 2026-09-22): the branch below was reached on 3
-    days and all 3 had shipServed=True, so all 3 were reassurances about a state nobody had read.
-  #>
-  param([bool]$ShipServed, [bool]$ObjectLanded, [bool]$ObjectDirty)
-  if (-not $ShipServed) { return 'nothing-shipped' }
-  if ($ObjectLanded)    { return 'ok' }
-  if ($ObjectDirty)     { return 'pointer-without-object' }
-  return 'ok'
-}
-function Get-DeferredPostDecision {
-  <#
-    THE POST SHIPS AFTER THE DATA IT POINTS AT IS LIVE (2026-09-22, queue 2026-09-22-81d955). The PREVENTIVE half of
-    Test-PointerShippedWithoutObject above: check-ad-cycles -DeferPost no longer upserts the post, and this decides whether
-    capture-run publishes it now. 'publish' only when the served files landed (committed AND pushed) and the edge serves
-    the committed board.json AND smp-feed.json byte for byte; every other state is 'hold:<why>', which leaves readers on
-    yesterday's post over yesterday's board (a LEAK the next run repairs), never today's post over yesterday's board
-    (CORRUPTION, which is what 2026-09-22 shipped for five hours). A could-not-look on either edge read is a hold.
-  #>
-  param([bool]$Deferred, [bool]$ObjectLanded, [string]$EdgeBoard, [string]$EdgeFeed)
-  if (-not $Deferred) { return 'none' }
-  if (-not $ObjectLanded) { return 'hold:the served files did not land (commit refused or push failed), so the post would point at a board readers cannot get' }
-  if ($EdgeBoard -ne 'ok') { return ('hold:the edge does not serve the committed board.json (' + $(if ($EdgeBoard) { $EdgeBoard } else { 'not read' }) + ')') }
-  if ($EdgeFeed -ne 'ok') { return ('hold:the edge does not serve the committed smp-feed.json (' + $(if ($EdgeFeed) { $EdgeFeed } else { 'not read' }) + ')') }
-  return 'publish'
-}
-function Get-HeldPostDecision {
-  <#
-    A HELD POST REPUBLISHES ITSELF ONCE ITS DATA IS LIVE, WHOEVER LANDED IT (2026-09-26, queue 2026-09-26-518fff, the
-    leftover of 2026-09-23-80f302). Get-DeferredPostDecision above only asks "did THIS run push?", and it only honours a
-    deferral dated today. On 2026-09-24 and again on 2026-09-25 the run held its post because its own push did not land;
-    each commit landed LATER on somebody else's push, nothing publishes a post for a push it did not make, and the deferral
-    expired at midnight, so the live post named a board the edge no longer served. This decides a deferral CARRIED from an
-    earlier day on what is TRUE NOW, not on what this run did:
-      publish  only when the board the deferral recorded (board_sha256, SHA-256 of public\board.json as written) is the
-               board on origin/main, is the board in this checkout, AND is the board feed.thriftycrew.com serves. Every
-               comparison is ordinal on the hex; a blank on any side is a could-not-look, which is a hold, never a match.
-      clear    the deferral's signature is already the published one (another road published this board), so nothing
-               is owed and the record goes.
-      hold     anything else, including a record written before board_sha256 existed (it cannot prove which board it
-               names). The record stays, so the next run asks again: it never expires by the clock.
-      none     nothing pending, or the deferral is today's, which Get-DeferredPostDecision owns.
-    publish-deals-page re-checks the edge against the board it names before its first Ghost write, so this can only
-    make a publish LESS likely than that gate, never more.
-  #>
-  param([bool]$Pending, [string]$DocDate, [string]$Today, [string]$DocBoardSha, [string]$DocSig, [string]$PublishedSig,
-        [string]$OriginBoardSha, [string]$TreeBoardSha, [string]$EdgeBoardSha)
-  if (-not $Pending) { return 'none' }
-  if ([string]::Equals([string]$DocDate, [string]$Today, [StringComparison]::Ordinal)) { return 'none' }
-  if ($DocSig -and $PublishedSig -and [string]::Equals($DocSig.Trim(), $PublishedSig.Trim(), [StringComparison]::OrdinalIgnoreCase)) {
-    return 'clear:published-board.sig already records this deferral''s board, so another road published it'
-  }
-  if (-not $DocBoardSha) { return 'hold:the deferral carries no board_sha256 (written before 2026-09-26), so it cannot prove which board the post would name' }
-  $want = $DocBoardSha.Trim().ToUpperInvariant()
-  if (-not $OriginBoardSha) { return 'hold:could not read public/board.json on origin/main, so the landing is unproven' }
-  if (-not [string]::Equals($OriginBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:origin/main does not carry the board this deferral names (its push has not landed, or a newer board replaced it)' }
-  if (-not $TreeBoardSha) { return 'hold:could not read public\board.json in this checkout' }
-  if (-not [string]::Equals($TreeBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:this checkout holds a different public\board.json than the deferral names, so a rebuild here would name another board' }
-  if (-not $EdgeBoardSha) { return 'hold:could not read board.json from feed.thriftycrew.com' }
-  if (-not [string]::Equals($EdgeBoardSha.Trim().ToUpperInvariant(), $want, [StringComparison]::Ordinal)) { return 'hold:feed.thriftycrew.com does not serve the board this deferral names yet' }
-  return 'publish'
-}
-# <<< EDGE-DECISION <<<
+# The EDGE-DECISION functions (Test-EdgeServesPushed, Wait-EdgeServesPushed and the post decisions) live in grocery\edge-decision-lib.ps1, dot-sourced at startup.
 # ---- READ-AFTER-WRITE: prove the EDGE serves what we just pushed (was run-daily-local's check) ---------
 # A successful push is NOT a successful deploy: if the Cloudflare build fails afterwards the edge keeps
 # serving the OLD feed indefinitely and nothing in the estate notices. Cache-busted on purpose - the
@@ -2287,27 +2155,35 @@ if ($shipServed -and $pushed) {
     $repoFeed = if ($repoFeedRaw) { $repoFeedRaw | ConvertFrom-Json } else { $null }
     # POLL, DO NOT GUESS. A Workers asset deploy takes 1-3 minutes; the single 30-second check this
     # replaced would have reported EDGE STALE on most days, and an alert that cries wolf about the one
-    # thing a reader actually sees is worse than no alert. Give it 5 minutes, then say so.
+    # thing a reader actually sees is worse than no alert. Since 2026-09-30 (16027b) it waits up to 20 minutes
+    # through Wait-EdgeServesPushed (grocery\edge-decision-lib.ps1) and logs every wait to out\edge-deploy-latency.log.
     $live = $null
     $liveFeedBytes = $null
-    foreach ($try in 1..10) {
-      Start-Sleep -Seconds 30
-      try {
-        $resp = Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45
-        # keep the RAW BYTES as well as the parsed object: the poll question is "has generated caught up",
-        # the read-after-write question is "are these the bytes we committed", and only bytes answer that.
-        $liveFeedBytes = Get-ResponseBytes $resp
-        $live = ([Text.Encoding]::UTF8.GetString($liveFeedBytes) | ConvertFrom-Json)
-      } catch { continue }
-      if ([string]$live.generated -eq [string]$repoFeed.generated) { break }
+    $script:edgeLastBytes = $null
+    $edgeFetch = {
+      $resp = Invoke-WebRequest -Uri ("https://feed.thriftycrew.com/smp-feed.json?deploycheck=" + [guid]::NewGuid().ToString('N')) -UseBasicParsing -TimeoutSec 45
+      # keep the RAW BYTES as well as the parsed object: the poll question is "has generated caught up",
+      # the read-after-write question is "are these the bytes we committed", and only bytes answer that.
+      $b = Get-ResponseBytes $resp
+      $doc = ([Text.Encoding]::UTF8.GetString($b) | ConvertFrom-Json)
+      $script:edgeLastBytes = $b
+      $doc
     }
+    $edgeWait = Wait-EdgeServesPushed -CommittedGenerated ([string]$repoFeed.generated) -Fetch $edgeFetch
+    $live = $edgeWait.live
+    $liveFeedBytes = $script:edgeLastBytes
+    try {
+      . (Join-Path $repo 'lib\append-line.ps1')
+      $latLine = [ordered]@{ date = $today; at = (Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'); commit = $feedSha; committed_generated = [string]$repoFeed.generated; verdict = [string]$edgeWait.verdict; attempts = [int]$edgeWait.attempts; elapsed_s = [int]$edgeWait.elapsed_s; live_generated = [string]$edgeWait.live_generated }
+      [void](Add-TcLine -Path (Join-Path $root 'out\edge-deploy-latency.log') -Text (([pscustomobject]$latLine) | ConvertTo-Json -Compress))
+    } catch { Write-Output ('edge latency log not written: ' + $_.Exception.Message) }
     # SAY WHAT WAS COMPARED, not what was inferred. The old body asserted "the push succeeded" without ever
     # having checked it. This one names the committed value, the commit it came from, and the live value.
     $verdict = Test-EdgeServesPushed -ShipServed $shipServed -CommittedGenerated ([string]$repoFeed.generated) -LiveGenerated ([string]$live.generated)
     if ($verdict -eq 'blind') {
       Write-Output 'EDGE BLIND: could not read HEAD:public/smp-feed.json, so nothing was compared and no alert is sent - could-not-run is not a failure.'
     } elseif ($verdict -eq 'stale') {
-      $m = "The edge is serving smp-feed.json generated '$($live.generated)'. The COMMITTED copy at HEAD ($feedSha) is generated '$($repoFeed.generated)'. Those differ, so the bytes the edge serves are not the bytes in the commit. This compared the edge against git, not against the working tree, and it only runs when the chain actually shipped the served files. Live recipe prices are stale until the deploy lands. Check the CF dashboard build log."
+      $m = "Still stale $([int]$edgeWait.elapsed_s) s ($([math]::Round([int]$edgeWait.elapsed_s / 60, 1)) min) after the push, over $([int]$edgeWait.attempts) cache-busted polls ending $(Get-Date -Format 'yyyy-MM-ddTHH:mm:ss'). The edge is serving smp-feed.json generated '$($live.generated)'. The COMMITTED copy at HEAD ($feedSha) is generated '$($repoFeed.generated)'. Those differ, so the bytes the edge serves are not the bytes in the commit. This compared the edge against git, not against the working tree, and it only runs when the chain actually shipped the served files. Live recipe prices are stale until the deploy lands. Check the CF dashboard build log."
       Write-Output ("EDGE STALE: " + $m)
       try { Send-Alert -Subject "smp-feed edge did not pick up today's push - $today" -Body $m -CausedBy 'guards-hold' | Out-Null } catch {}
     } else {
@@ -2403,7 +2279,7 @@ if ($postDecision -eq 'publish') {
   Write-Output ('POST HELD (it ships after its data, never before): ' + $postDecision.Substring(5) + '. The deferral stays in out\post-deferred.json and the next run that ships its data publishes it.')
 }
 # ---- A HELD POST FROM AN EARLIER DAY (2026-09-26, queue 2026-09-26-518fff): republish once its data is live, whoever landed it
-# Get-HeldPostDecision (EDGE-DECISION above) reads what is true NOW: the deferred board on origin/main, in this checkout,
+# Get-HeldPostDecision (grocery\edge-decision-lib.ps1) reads what is true NOW: the deferred board on origin/main, in this checkout,
 # and at the edge. No Send-Alert here on purpose: a post still behind its board is paged by audit-live-page-parity below.
 $heldDecision = 'none'
 try {

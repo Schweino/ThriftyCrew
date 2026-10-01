@@ -147,13 +147,16 @@ T 'output is emitted in LAUNCH order (walmart before samsclub before fareway)' `
 # left dirty ON PURPOSE, and the check compared the edge against that WORKING-TREE file while gating on
 # $pushed (true even when nothing shipped). It then accused Cloudflare of a failed deploy. The edge was in
 # fact serving the newest PUSHED feed exactly right.
-$edgeI = $src.IndexOf('# >>> EDGE-DECISION >>>')
-$edgeJ = $src.IndexOf('# <<< EDGE-DECISION <<<')
+# Since 2026-09-30 (16027b send-back) the region lives in grocery\edge-decision-lib.ps1, which capture-run.ps1
+# dot-sources at startup; the markers moved with it, so this still lifts the SHIPPED text.
+$edgeSrc = (Get-Content (Join-Path $root 'edge-decision-lib.ps1') -Raw -Encoding UTF8) -replace "`r`n", "`n"
+$edgeI = $edgeSrc.IndexOf('# >>> EDGE-DECISION >>>')
+$edgeJ = $edgeSrc.IndexOf('# <<< EDGE-DECISION <<<')
 if ($edgeI -lt 0 -or $edgeJ -lt 0) {
-  Write-Output 'BLIND: could not find the EDGE-DECISION markers in capture-run.ps1 - the edge cases proved NOTHING'
+  Write-Output 'BLIND: could not find the EDGE-DECISION markers in edge-decision-lib.ps1 - the edge cases proved NOTHING'
   exit 3
 }
-. ([scriptblock]::Create($src.Substring($edgeI, $edgeJ - $edgeI)))
+. ([scriptblock]::Create($edgeSrc.Substring($edgeI, $edgeJ - $edgeI)))
 
 # MUST FIRE (skipped): today's exact shape. Guards blocked, so the chain shipped nothing; the working tree
 # is dirty and the committed feed still matches the edge. NO ALERT.
@@ -170,6 +173,39 @@ T 'E  CLEAN TWIN: shipServed TRUE and the values match -> ok, no alert' `
 # BLIND: could-not-run is not a failure.
 T 'E  could-not-read-the-committed-blob is BLIND, not stale - it must not alert' `
   ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated '' -LiveGenerated '2026-09-03T08:06:59') -eq 'blind')
+# THE POLL WAITS 20 MINUTES BEFORE IT PAGES (2026-09-30, queue 2026-09-30-16027b, a RETURN of 2026-09-03-58057b,
+# whose 'skipped' cases above stay unchanged). Push 09:03:36, page 09:08:42 after 10 x 30 s, edge serving HEAD
+# byte-for-byte by 09:53:50 unaided. Every wait goes through the -Sleep seam and every read through -Fetch, so
+# these cases run the shipped function with no network and no clock. Sleep is first: poll n=12 is at 420 s.
+$edgeCommitted = '2026-09-30T08:09:40'; $edgeOld = '2026-09-29T11:02:12'
+$script:edgeSlept = New-Object System.Collections.ArrayList
+$script:edgeCalls = 0
+$edgeSleep = { param($s) [void]$script:edgeSlept.Add([int]$s) }
+function New-EdgeFetch([int]$landsAt) { $script:edgeCalls = 0; $n = $landsAt; return { $script:edgeCalls++; if ($n -gt 0 -and $script:edgeCalls -ge $n) { [pscustomobject]@{ generated = $edgeCommitted } } else { [pscustomobject]@{ generated = $edgeOld } } }.GetNewClosure() }
+# MUST FIRE: a deploy that never lands still pages, after the whole 20-minute schedule.
+$script:edgeSlept.Clear(); $w = Wait-EdgeServesPushed -CommittedGenerated $edgeCommitted -Fetch (New-EdgeFetch 0) -Sleep $edgeSleep
+$wPage = ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated $edgeCommitted -LiveGenerated ([string]$w.live_generated)) -eq 'stale')
+T 'E  MUST-FIRE (never lands): stale on all 25 polls -> verdict stale, attempts 25, elapsed_s 1200, and the stale branch pages' `
+  (($w.verdict -eq 'stale') -and ($w.attempts -eq 25) -and ($w.elapsed_s -eq 1200) -and $wPage -and ((@($script:edgeSlept) | Measure-Object -Sum).Sum -eq 1200))
+# CLEAN TWIN (2026-09-30-16027b, today): stale past the old 5-minute bar (11 polls), HEAD from poll 12 -> no page.
+$script:edgeSlept.Clear(); $w = Wait-EdgeServesPushed -CommittedGenerated $edgeCommitted -Fetch (New-EdgeFetch 12) -Sleep $edgeSleep
+$wOk = ((Test-EdgeServesPushed -ShipServed $true -CommittedGenerated $edgeCommitted -LiveGenerated ([string]$w.live_generated)) -eq 'ok')
+T 'E  CLEAN TWIN (2026-09-30-16027b): stale for 11 polls, HEAD from poll 12 -> ok, attempts 12, elapsed_s 420, no page' `
+  (($w.verdict -eq 'ok') -and ($w.attempts -eq 12) -and ($w.elapsed_s -eq 420) -and $wOk)
+# CLEAN TWIN: a healthy day matches on poll 1 and costs no extra wait.
+$script:edgeSlept.Clear(); $w = Wait-EdgeServesPushed -CommittedGenerated $edgeCommitted -Fetch (New-EdgeFetch 1) -Sleep $edgeSleep
+T 'E  CLEAN TWIN: HEAD on poll 1 -> ok, attempts 1, elapsed_s 30, one 30 s sleep' `
+  (($w.verdict -eq 'ok') -and ($w.attempts -eq 1) -and ($w.elapsed_s -eq 30) -and ($script:edgeSlept.Count -eq 1))
+# A fetch that throws is a missed poll, never a match; an unreadable committed stamp is BLIND and never sleeps.
+$script:edgeSlept.Clear(); $w = Wait-EdgeServesPushed -CommittedGenerated $edgeCommitted -Fetch { throw 'network down' } -Sleep $edgeSleep -ScheduleSeconds @(30, 30)
+T 'E  MUST-FIRE: every fetch throwing -> stale after the schedule, live_generated empty' `
+  (($w.verdict -eq 'stale') -and ($w.attempts -eq 2) -and ($w.live_generated -eq ''))
+$script:edgeSlept.Clear(); $w = Wait-EdgeServesPushed -CommittedGenerated '' -Fetch (New-EdgeFetch 1) -Sleep $edgeSleep
+T 'E  unreadable committed stamp -> blind, 0 attempts, no sleep (could-not-run is not a failure)' `
+  (($w.verdict -eq 'blind') -and ($w.attempts -eq 0) -and ($script:edgeSlept.Count -eq 0))
+# The chain calls the function and logs it: a copy-paste loop beside it would leave these cases proving nothing.
+T 'E  capture-run dot-sources edge-decision-lib.ps1, polls through Wait-EdgeServesPushed and appends to out\edge-deploy-latency.log (no inline 1..10 loop)' `
+  (($src -match "\. \(Join-Path \`$root 'edge-decision-lib\.ps1'\)") -and ($src -match '\$edgeWait = Wait-EdgeServesPushed') -and ($src -match 'edge-deploy-latency\.log') -and -not ($src -match 'foreach \(\$try in 1\.\.10\)'))
 # THE POINTER SHIPPED AND THE OBJECT DID NOT (2026-09-22, queue 2026-09-22-972de2). Built from BOTH recorded
 # occurrences and not only today's: 2026-09-22 (guards passed, post published at 08:17, hook refused the
 # commit, public/board.json left dirty) and 2026-09-09 (guards passed, commit refused the same way). Until

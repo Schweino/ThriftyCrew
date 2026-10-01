@@ -37,9 +37,10 @@
         "git grep: propagate-recipes.ps1 does not mention the battery, and ops/run-daemon-battery.ps1 does not mention propagate; propagate-stamps.json last committed 2026-09-26 18:45 (d05680d91)"
       ],
       "root_cause": "a different cause from the primary: the recipe propagate drain has not run since 2026-09-26, which is independent of the nightly daemon battery failure in 130abf",
-      "status": "promote",
+      "status": "superseded",
       "actual_tool_calls": 6,
-      "resolution_note": "PROMOTE to reviewer, not worked here: Not the primary's cause: QUEUE STUCK is the propagate-recipes.ps1 drain (33 specs, 75.5h, last stamp commit 2026-09-26), and 130abf is the TC Daemon Battery 0230 task; neither script references the other."
+      "resolution_note": "Promoted by JOB 3 to the reviewer (different cause from 130abf); planned there as deferred-budget in plan-2026-10-01-2.json, whose queue id stays open and is due the next run.",
+      "close_disposition": "confirmed"
     }
   ],
   "knowledge_consulted": [
