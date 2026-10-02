@@ -254,3 +254,23 @@ their committed pacing. Nothing here publishes; the 08:00 chain still owns the b
 - The repo mirror of the task file was synced to the live file on 2026-10-02 and landed with this plan, from a
   follow-up interactive session. W7 is about the morning task landing its own future edits.
 - W2 and W3 bars are written above; neither has been run.
+
+## Implementation status (2026-10-02, the implementation session)
+
+Each item's commit names it in its subject; cite the landed hash from `git log origin/main`, never a branch's.
+
+| item | state | evidence |
+|---|---|---|
+| W1 Sam's pinned to club 8146 | built and self-tested; the done-when (one real morning capture building with the id) is OPEN | 8146 = 13130 L St from samsclub.com; today's capture with the id builds the same 168 deals as the old builder |
+| W2 Walmart no-unit-price rows | step 1 measured, bar NOT MET (0 distinct cells over 14 days, bar 5); step 2 not built, so decision 3 is moot | design/MEASURE-walmart-missing-unitprice-2026-10.md |
+| W3 cost | step 1 measured: a localhost script loads on 0 of 4 store pages (Chrome's local-network protection, not CSP), so 2a is not built; 2b is W4's runner. The done-when (one real run at or under 300,000 agent tokens) is OPEN | design/MEASURE-browser-localhost-script-2026-10.md |
+| W4 post helper, finish functions, templates | built and self-tested (tcPostToSink, tcStart/tcWait, four finish functions, grocery/browser-briefs/, fill-browser-brief.ps1); the done-when (all four agents' own posts AGREE in a real run) is OPEN | test-pull-post-route.ps1, fill-browser-brief.ps1 -SelfTest |
+| W5 Fareway no-match record | done: out/fareway/fareway-no-match-<date>.jsonl (a .jsonl beside the shop file, not a field in it: the shop file is a JSON array its readers glob) | select-fareway-shop.ps1 -SelfTest; today's capture records 3 |
+| W6 task file trim | done: 499 lines to under 160, every instruction line accounted for | docs/rules-history/browser-refresh.md |
+| W7 the task lands its own backup | ruled yes; the procedure is in the task file; the done-when (a morning edit landing its mirror) is OPEN | task file, WHAT YOU DO NOT DO |
+| W8 product-link chips | step 1 measured, bar NOT MET for both resolvers (Family Fare 17 of 65 with 2 wrong links; Hy-Vee 0 of 41); nothing wired; step 3 applied: the browser batch is 20 a day, Aldi and Fareway first, with a 2026-10-16 check | design/MEASURE-chip-resolvers-2026-10.md; a separate task was offered for the Family Fare resolver's blocked-as-not-carried rows |
+| W9 sink favicon | done: 404, nothing written | capture-sink.ps1 -SelfTest |
+
+**Open question for Brad, not blocking anything:** Chrome refuses a store page's request to a localhost script unless the
+site is allowed local network access. Allowing it for the four store sites in his Chrome would make W3 step 2a possible
+(the sink serves the scripts, nothing is pasted). That is a browser security setting, his to change or leave.

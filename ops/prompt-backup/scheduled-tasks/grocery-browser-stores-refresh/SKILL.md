@@ -3,497 +3,151 @@ name: grocery-browser-stores-refresh
 description: STAGE ONE of the daily grocery pipeline, 06:15 - Walmart, Sam's Club, Aldi and Fareway captured in Brad's own Chrome, one tab per store, all four concurrently, then built. The 08:00 driver covers Fareway/Sam's only on a day this did not land them; the 10:30 watchdog pages any browser store with no capture today. Brad's ruling 2026-09-19.
 ---
 
-THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026-09-19).
+This file holds each rule's OPERATIVE text only (trimmed 2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md
+W6). The dates, incidents and measurements behind a rule are in C:\Codex\ThriftyCrew\docs\rules-history\browser-refresh.md
+at the anchor its tag names (`full: br-NN`), word for word. Read it only when a rule's reason matters to a decision.
+
+## SHAPE (Brad's ruling 2026-09-19; full: br-01)
 "All browser-needed stores should be using my Chrome... each store gets its own tab and it's running concurrently."
-  - You run at 06:15, BEFORE the 07:00 ad pull and the 08:00 chain, so your captures are what 08:00 builds the board
-    from. The 08:00 driver now drives Fareway or Sam's ONLY when you left no capture dated today with a data row
-    (Get-BrowserStoresToDrive in grocery\capture-policy-lib.ps1). Walmart and Aldi have no fallback at all.
-  - ALL FOUR STORES ARE YOURS EVERY DAY: Walmart, Sam's Club, Aldi, Fareway. "Fareway/Sam's only when 0800 failed"
-    below is retired.
-  - ONE TAB PER STORE, CONCURRENTLY. Do the setup yourself, then spawn one Agent per store in ONE message:
-      1. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\chain-idle.ps1   (must print FREE)
-      2. powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-policy.ps1 -Emit
-         (today's worklists; on a FULL RECAPTURE day, Brad asks for it: add -Full)
-      3. start grocery\capture-sink.ps1 ONCE, in the background (see constraint 2 below); every store posts to it.
-         PASS -MaxIdleMinutes 90 (2026-09-24): the default 30 expired between the fast stores' posts (~06:40) and
-         Fareway's (~07:15), the POST hit a dead port, and the whole Fareway sweep was lost. Probe the sink from the
-         shell before a slow store posts. Fareway's router sweep is COMMITTED CODE since 2026-09-26: farewaySweep() in
-         grocery\pull-fareway-shop.js pushes each term, waits for the route, resets the store, settles, and
-         extracts only that term's own search (memory fareway-router-sweep-needs-apollo-reset). Never hand-roll it.
-      3a. CREATE THE TABS YOURSELF, BEFORE SPAWNING (2026-09-26). All agents share ONE Chrome MCP tab group. When
-         any agent closes the group's LAST tab the group is destroyed and recreated, and every other agent's tab
-         drops out of it and becomes unreachable mid-sweep (its in-memory results are lost); and a call made
-         without a tabId lands on the group's first tab, whoever owns it. Measured 2026-09-26: Aldi lost three
-         tabs and captured nothing, Sam's lost a finished 45-term sweep and re-swept (90 searches). So: call
-         tabs_context_mcp(createIfEmpty) and keep that first tab as a KEEPER nobody uses or closes; create one
-         tab per store with tabs_create_mcp; pass each agent ITS tabId. Agents must pass that tabId on EVERY
-         call, never call tabs_create_mcp, tabs_close_mcp or tabs_context_mcp(createIfEmpty), and never
-         navigate without a tabId. You close all five tabs after the last agent reports.
-      4. Spawn the four store agents together (overriding the tab lines below: each agent works ONLY in the tabId you
-         gave it and creates or closes no tab). Give each ONLY its own store's section of PER-STORE METHOD below,
-         the three constraints of running in Brad's real profile, and these rules: call tabs_context_mcp, create
-         its OWN tab with tabs_create_mcp, work only in that tab, never touch another tab, close its tab at the end;
-         assert its store and In-Store/pickup mode before trusting a price; post the emitter's output UNALTERED to
-         the sink under the file name its builder reads; report rows captured, terms UNUSABLE and why.
-         Keep them mechanical and cheap: inject the committed pull agent, start the sweep as a background
-         promise, poll it, post the CSV. Never read product pages as text. A usage limit is what stopped this
-         task on 2026-09-13, and the stores went unread for six days.
-         INJECT THE COMMITTED SCRIPTS BYTE-FOR-BYTE, COMMENTS AND ALL (Brad, 2026-09-30). Every brief says so, in
-         these words: "Paste each file exactly as the Read tool returns it. Do not strip comments, minify, reformat
-         or edit a single character: removing comments by pattern breaks any string that holds // or /*, and the
-         result is no longer the reviewed code." On 2026-09-30 the Walmart and Aldi agents both stripped the
-         comments despite a brief that said VERBATIM, to save tokens; the code survived that day by luck. Ask each
-         agent to report the character count it injected against the file's own length, and treat a mismatch as
-         an open item.
-         THE WRAPPER THAT MEASURES IT (2026-10-01, all four stores matched exactly, 0 of 5 files off). Wrap the
-         paste in `(function __tcInject() { ... })()`: shadow localStorage first with a block-level
-         `const localStorage = {getItem,setItem,removeItem}` over a plain object (the in-memory sink, and the
-         committed code binds to it unchanged), paste pull-agent-lib.js between `/*TC-A-BEGIN*/` and
-         `/*TC-A-END*/`, and the store file inside its own nested `{ }` between `/*TC-B-BEGIN*/` and `/*TC-B-END*/`.
-         Then measure each segment from `__tcInject.toString()`, with newlines trimmed off both ends; build the marker
-         needles by concatenation ('/*TC-' + 'A-BEGIN') so the search cannot find itself. Expected = the file's
-         length minus its final LF (lib 18129, walmart 31932, aldi 19366, sams 20209, fareway 17977 at the
-         2026-10-01 blobs; re-measure with [IO.File]::ReadAllText when a file changes). EXPORT EVERY FUNCTION
-         YOU CALL LATER FROM INSIDE THE NESTED BLOCK (`window.__tcPull = pullWalmartInStore;`): the store files'
-         entry points are `const` arrows, block-scoped, so a starter placed after the block throws ReferenceError.
-         That is what the 2026-10-01 template did for Walmart and Sam's. Both agents repaired it in the wrapper, and the file
-         text was untouched.
-         RESCUE TERMS ARE IN THE WORKLIST (2026-10-01, grocery\rescue-owed-lib.ps1). Get-CaptureWorklist now reads
-         rescue-terms-<store>.txt itself and puts its commodities right after the price-flag verifications, so
-         `terms`/`commodities` already carry them and `rescue_terms` names them. Check `rescue_blind`/`rescue_why`:
-         blind means the list was missing or older than yesterday, so nothing was added. Only if the worklist
-         predates that landing (no `rescue_terms` field) do it by hand: a second start after the main sweep and
-         BEFORE the post (the in-memory store keeps both, 4 of 4 matched this way on 2026-10-01). Fareway's
-         farewaySweep replaces its state on every start, so append its rescue terms to TERMS/COMMS before it starts.
-         MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5.5, Medium effort; Brad, 2026-09-29).
-         This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
-         refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
-         and the builders REFUSE a capture with no store line, the wrong store or a non-In-Store mode, so a
-         slip by the cheaper model is refused, not published. The pasted script text is most of each agent's
-         cost, and that is billed at the agent's model.
-         FAREWAY MOVES TO SONNET TOO (2026-09-26): its contamination and settled-count checks are now enforced
-         in code, not in this brief. farewayShopExtract keeps only the items its own term's search returned and
-         stamps each row scope_query; farewaySweep settles on that scoped count before extracting; and
-         select-fareway-shop REFUSES a capture with a row scoped to another term, an unscoped row, or counts that
-         rise at every step over 8 consecutive terms. A slip is refused, not published. Same trial bar as the
-         others. Fareway's Opus baseline, captures 2026-09-21..25 (rows / terms with rows): 53-79 (1636/28,
-         711/9, 741/14, 2666/45, 2796/40).
-         TRIAL BAR, written 2026-09-26 before any Sonnet run. Over the first 5 Sonnet days, per store:
-           - zero builder refusals for store/mode/straddle, and for Fareway scope/climb (any one sends that
-             store back to Opus);
-           - terms with rows / terms requested >= 90%, stated with both numbers in the report;
-           - capture rows per term, 5-day mean within 20% of the Opus baseline below.
-         Opus baseline, captures 2026-09-21..25 (rows / terms with rows): Walmart 48-50 (1462/30, 1544/32,
-         1335/27, 1719/35, 1750/35); Aldi 57-69 (522/9, 1082/19, 1099/17, 1453/21, 1291/21); Sam's 20-28
-         (2034/95, 278/10, 1459/71, 887/45, 1645/69). Terms REQUESTED were not recorded on those days, so
-         coverage has no Opus baseline; the 90% bar is absolute. Rows per term moves with WHICH terms are asked,
-         so a miss on that line alone is a reason to look, not to revert. Record each trial day as one row per
-         store in grocery\out\logs\browser-refresh-model-trial.jsonl
-         ({date, store, model, requested, with_rows, rows, unusable, builder_refused}).
-      5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
-         build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
-         they write out\regular and advance the shared cursor, so they do not run side by side.
-         RE-RUN chain-idle.ps1 IMMEDIATELY BEFORE EACH BUILDER, not only at setup (2026-10-01): the sweeps take
-         20-30 minutes, the builders then ran 06:45-07:05 on a FREE read taken at 06:23, and the 08:00 chain writes
-         the same out\regular files. HELD means apply STEP ZERO below: wait, then skip the builders if it stays held.
-      5a. BAKER'S STORE (2026-10-01). Brad's bakersplus.com session had drifted to Twincreek (3614 Twin Creek Dr,
-         location 61500300); it was switched back to Saddlecreek (888 S Saddle Creek Rd, 61500319), pickup. The ad id
-         read in Chrome is verified against 61500319 by pull-bakers-ad-list either way, so a drift costs nothing on
-         the list, but if the weekly-ad page names another store, switch it back in the page's own picker.
-      6. Then the ad reads and the other items below, in their stated order, with what time is left.
-  - IF CHROME OR THE EXTENSION IS NOT CONNECTED: capture nothing, say so. The 08:00 driver covers Fareway and Sam's,
-    and the 10:30 watchdog pages "BROWSER CAPTURE MISSING TODAY" for the rest. Never launch an automated Chrome.
+- You run at 06:15, before the 07:00 ad pull and the 08:00 chain; 08:00 builds the board from your captures. It drives
+  Fareway or Sam's ONLY when you left no capture dated today with a data row. Walmart and Aldi have no fallback.
+- ALL FOUR STORES ARE YOURS EVERY DAY: Walmart, Sam's Club, Aldi, Fareway. One tab per store, concurrently.
+- You are the only thing in the estate that can drive Brad's real browser (full: br-02). Do the browser half, then stop.
+- IF CHROME OR THE EXTENSION IS NOT CONNECTED: capture nothing and say so. Never launch an automated Chrome.
 
-STAGE TWO of the daily grocery pipeline: the browser work that a scheduled script physically cannot do.
-(Written when this task ran at 09:00, after the chain. The timing and scope in THE SHAPE above now win.)
+## SETUP, in this order (full: br-01)
+1. `powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\chain-idle.ps1` (must print FREE).
+2. `powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\capture-policy.ps1 -Emit` (today's worklists; on a FULL
+   RECAPTURE day, which Brad asks for, add -Full). Check each worklist's `rescue_blind`/`rescue_why`: blind means its
+   rescue list was missing or older than yesterday, so nothing was added. Rescue terms are already in `terms`.
+3. Start the committed sink ONCE, as a BACKGROUND command, with an ABSOLUTE -OutDir and -MaxIdleMinutes 90:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File C:\Codex\ThriftyCrew\grocery\capture-sink.ps1 -OutDir C:\Codex\ThriftyCrew\grocery\out\captures\_sink -MaxIdleMinutes 90`
+   Never write or hand-roll another receiver. Probe the sink from the shell before a slow store posts.
+4. CREATE THE TABS YOURSELF, before spawning: `tabs_context_mcp(createIfEmpty)`, keep that first tab as a KEEPER nobody
+   uses or closes, then one `tabs_create_mcp` per store. You close all five tabs after the last agent reports.
 
-WHY YOU EXIST, IN ONE PARAGRAPH. Three Windows tasks own the pipeline (TC Grocery Ad Pulls 0700,
-Daily Capture 0800, Capture Watchdog 0930). They run PowerShell, and PowerShell can never reach
-Brad's Chrome. Some stores answer his real browser and refuse an automated one - measured
-2026-08-22: an automated Chrome gets a challenge page or a price-less payload, his own tab gets 1.3 MB of
-products. You are a Claude session, so you have the claude-in-chrome extension, and you are the only
-thing in this estate that can drive his actual browser. That is your entire reason for being: do the
-browser half, then stop. You do NOT publish, compare, verify or push - 0800 owns all of that.
+## STORE AGENTS (full: br-01, br-04, br-08)
+- Write each store's brief with the committed template, never by hand:
+  `powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\fill-browser-brief.ps1 -Store <walmart|sams|aldi|fareway> -TabId <id> -Out <scratch file>`
+  Pass the file's text as the agent's whole prompt, unedited. It carries the tab rule, the byte-for-byte inject wrapper
+  that refuses a mis-pasted script, the store assertion, start, wait (`tcWait`), finish (which posts top-level through
+  `tcPostToSink`, the only route to the sink) and the report shape. Do not add method prose to it.
+- FAIL-SAFE: if fill-browser-brief.ps1 is missing or prints REFUSED, that store is not captured today; say why in the
+  report. Never compose a brief from memory in its place. (Missing means the main checkout is stale.)
+- Spawn the four agents in ONE message, model "sonnet" (Sonnet 5.5, Medium effort; Brad 2026-09-26 and 09-29). This
+  session stays Opus: it decides what is due, reads builder refusals and writes the report.
+- TRIAL BAR, written 2026-09-26 before any Sonnet run (full: br-01 for the Opus baselines). Over the first 5 Sonnet
+  days, per store: zero builder refusals for store, mode or straddle, and for Fareway scope or climb (any one sends
+  that store back to Opus); terms with rows / terms requested >= 90%, stated with both numbers; capture rows per term,
+  5-day mean within 20% of the Opus baseline (a miss on that line alone is a reason to look, not to revert). Record each
+  trial day as one row per store in grocery\out\logs\browser-refresh-model-trial.jsonl
+  ({date, store, model, requested, with_rows, rows, unusable, builder_refused}).
+- If a worklist predates rescue terms (no `rescue_terms` field), run a second start after the main sweep and before
+  the post; for Fareway append its rescue terms to TERMS and COMMS before it starts (farewaySweep replaces its state).
 
-WHY YOU WERE GONE, AND WHY YOU ARE BACK (2026-08-25). You were DEREGISTERED on 2026-08-22 during a
-cleanup whose stated rule was "the three TC Windows tasks are the ONLY routines that should fire".
-Your siblings were disabled with a written reason each; you were removed without one, and the prompt
-was left orphaned on disk. Nothing replaced you, because nothing CAN: the three Windows tasks run
-PowerShell, and since Chrome 136 `--remote-debugging-port` is ignored unless `--user-data-dir` is
-non-default (verified 2026-08-23 on the Chrome 151 here) - a deliberate anti-cookie-theft measure, not
-a setting anyone can turn off. Copying Brad's session into a driver profile was measured and failed:
-same cookies, same fingerprint, same IP, still no prices. The extension reaches his browser through
-`chrome.debugger`, a different door, and only a Claude session can open it. So the split is
-structural, not a preference.
-The cost of the three days you were missing: Walmart and Aldi went uncaptured from 08-22, four
-browser-capture flags piled up, and the watchdog's own source records it - "as of 2026-08-22 the
-browser stores have no scheduled capture at all". On 2026-08-25 Walmart (193 rows) and Aldi (264) were
-captured by hand through the extension to clear the backlog, which is your job description, done
-manually because you were not there to do it.
+## BUILD, one store at a time (full: br-01, br-05, br-08, br-09)
+Re-run chain-idle.ps1 IMMEDIATELY BEFORE EACH BUILDER. HELD: wait a few minutes and re-check, up to about 20. If it is
+still held, keep the captures (only out\captures and out\fareway) but SKIP the builders and say so; 08:00 builds them.
+Confirm the sink's RECV line read chars=AGREE for the file first. Then, with the sink's file as -In:
+- `build-walmart-deals.ps1 -In <file> -Date <date>`
+- `build-sams-deals.ps1 -In <file> -Date <date>`
+- `build-aldi-regular.ps1 -In <file> -Date <date>`
+- `select-fareway-shop.ps1 -In <file> -Today <date>`, then `build-fareway-regular.ps1 -Today <date> -ModeVerified <date>`.
+  -ModeVerified is legitimate only because the agent's identity check proved In-Store; without it compare-deals drops
+  every Fareway cell.
+The builders advance the capture cursor themselves, and only when the build produced rows: never advance it by hand. A
+capture that priced nothing re-attempts the same slice tomorrow. A builder REFUSAL is the store's answer for today: report
+it, never edit the capture to get it through.
 
-HARD RULES. Breaking any of these costs more than the data you were fetching.
- 1. USE BRAD'S OWN BROWSER, NEVER A HEADLESS ONE. His Chrome is signed in with the Omaha store
-    selected and In-Store mode set, and that session context is what makes a price the RIGHT
-    price. A headless or freshly-launched Chrome carries none of it and returns a different,
-    price-less payload. This rule is about having the correct signed-in session, not about
-    disguising anything.
- 2. ONE REQUEST, THEN STOP. If a store returns a challenge page, an error page or a price-less
-    shell, that IS the answer - record it as UNUSABLE and move to the next store. Do not retry:
-    it will not change the response, and repeatedly hammering a store's servers is not something
-    we do. Run notify-desktop.ps1 so Brad knows that store is cold today.
- 3. BLINDNESS IS NOT EMPTINESS. A page you could not read is UNUSABLE, never EMPTY. EMPTY is a claim
-    about the STORE and downstream turns it into a not-carried ruling that retires a real cell. If a
-    search returns products but you extract none, the parser is wrong - say so, capture nothing.
- 4. PROVE THE STORE BEFORE YOU TRUST A PRICE. Every capture must confirm the Omaha store AND
-    In-Store mode. A fresh Fareway session reads plausibly while sitting on Des Moines.
- 5. NEVER FABRICATE. Skip anything you cannot verify. A missing cell is recoverable; a wrong price
-    that looks right is not.
+## WHAT IS OUTSTANDING, FROM THE DATA, NOT FROM A FLAG (full: br-06)
+- Hy-Vee, Baker's, Family Fare everyday prices are headless APIs: NEVER yours.
+- BAKER'S WEEKLY AD LIST (one page load, no vision read). Due when no out\bakers\bakers-ad-list-*.json has
+  ad_from <= today <= ad_to; ad-schedule.json's "current" window is NOT evidence. If due: open
+  https://www.bakersplus.com/weeklyad in one tab, read the /api/dacs/<guid> request (performance.getEntriesByType
+  ('resource')), run `pull-bakers-ad-list.ps1 -AdId <guid>`; exit 0 with "N offer(s) for 61500319" is landed. If the page
+  names a store other than Saddlecreek (888 S Saddle Creek Rd, 61500319, pickup), switch it back in the page's picker.
+- FAREWAY'S WEEKLY AD (a VISION READ of the flyer pull-fareway-ads.ps1 downloads). Due when no fareway-deals-*.json has
+  ad_from >= the manifest's weekly.from AND ad_to >= its weekly.to, OR when the last read was partial: every
+  fareway-deals file MUST carry "pages_read" and "pages_total", and the ad is due unless pages_read == pages_total ==
+  the manifest's weekly.pages. READ THE WHOLE FLYER. Take the window from the ad's OWN PRINTED FOOTER, never the
+  filename or the manifest. Exclude what the board cannot verify ("WHEN YOU BUY N" conditionals, BOGOs, basket offers);
+  record a simple N/$X at its arithmetic unit price. Write out\fareway\fareway-deals-<today>.json, then advance Fareway
+  current/next_pull in ad-schedule.json (hand-maintained). pull-fareway-ads.ps1 exit 3 is your work order, not a fault.
+- RESCUE TERMS (out\rescue-terms-<store>.txt) are in the worklists already; they come before ordinary rotation.
+- SALE FALLBACKS arrive in each store's worklist (Get-CapturePlan SaleFallbacks); out\research-worklist.json is retired.
+- COMPREHENSIVE FULL PULL, Walmart or Sam's: due only when
+  `powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\audit-walmart-fullpull.ps1` exits 1 (it names the store). Do
+  not take it from a flag, this file or memory.
+- PRODUCT-URL CHIPS (out\url-worklist.json): a BOUNDED batch of 20, Aldi and Fareway first, only with time left. Search
+  the chip's exact `term`, confirm the price matches, write {id,url,price,size,name} to
+  out\url-inputs\store-<store>N-urls.json. (No headless resolver met its bar on 2026-10-02: design\MEASURE-chip-
+  resolvers-2026-10.md. If chips still do not move by 2026-10-16, say so in the report: it is Brad's call to drop them.)
 
-THREE CONSTRAINTS OF RUNNING IN BRAD'S REAL PROFILE (measured 2026-08-25, each cost a false start).
-The python driver never meets these because it runs a dedicated EMPTY profile; you are in Brad's
-real one, which is both fuller and more restricted.
-  1. localStorage IS ALREADY FULL. pull-agent-lib.js persists every settled term to localStorage so a
-     sweep survives a reload. walmart.com's own SPA holds ~623 keys / ~5.24M chars on that origin, so
-     the FIRST persist throws "exceeded the quota" and kills the sweep on term 1 - AFTER the fetch
-     succeeded, so it reads as a dead run rather than a full disk. Re-inject runPacedSweep/sweepToCsv
-     with an in-memory sink (a plain object plus tcGet/tcSet). NEVER clear the site's own keys: that
-     is Brad's live session, and logging him out of a store is worse than missing the capture.
-  2. GETTING THE CSV TO DISK - USE THE COMMITTED SINK, DO NOT WRITE A NEW ONE.
-     grocery\capture-sink.ps1 is the local file drop. Start it as a BACKGROUND command (a
-     PowerShell Start-Job dies with its shell):
-         powershell -NoProfile -ExecutionPolicy Bypass -File grocery\capture-sink.ps1 -OutDir <dir>
-     ALWAYS PASS -OutDir AS AN ABSOLUTE PATH (2026-09-21): with no -OutDir the sink's default resolved to
-     C:\out\captures\_sink, outside the repo, because $PSScriptRoot is empty in a CmdletBinding param
-     default. It still replies AGREE, so nothing on the page side shows it.
-     BUNDLING pull-agent-lib.js WITH A STORE AGENT IN ONE SCOPE: pull-aldi-instore.js re-declares
-     `const sleep`, so put the store file in its own nested { } block inside the wrapper, or it is a
-     SyntaxError before anything runs.
-     It binds localhost ONLY, writes each POST to <OutDir>\<name>.txt, and echoes char and line
-     counts back to the page so you can confirm both sides agree BEFORE running a builder. It
-     also exits on its own after 30 idle minutes, and -Stop shuts it down.
-     The page posts with a hidden form rather than fetch(): store pages set a Content-Security-
-     Policy governing where the PAGE may send data (walmart.com sets connect-src 'self'), and a
-     form POST is a separate mechanism that connect-src does not cover. aldi.us sets no CSP at
-     all but fetch() hung there anyway, so use the form POST everywhere. Submit inside
-     setTimeout(...,0) so the tool call returns instead of blocking on the navigation.
-     DO NOT hand-roll a receiver each run. The committed script is reviewed, sanitises the output
-     filename and times out when idle; a fresh listener written under time pressure is both
-     unreviewed and, on 2026-08-25, the thing that got the whole browser half of a run refused.
-     What moves here is public product-listing data, on Brad's machine, to Brad's disk.
-     POST FROM THE STORE TAB'S OWN DOCUMENT, NEVER FROM AN IFRAME (2026-09-19 full recapture). A form
-     inside an injected iframe inherits the frame's origin rules and the post did not arrive; the same
-     form built on the tab's own document landed every time. Confirm the sink's echoed char and line
-     counts match the page's before building.
-     AND NEVER TARGET AN IFRAME EITHER (2026-10-02): the form must submit TOP-LEVEL, with no `target`, and
-     the tab navigates to the sink's reply. Do it as the LAST step, after the counts are read. A form on the
-     tab's own document with target=<hidden iframe> arrived from NONE of the four stores (8 attempts):
-     walmart.com's frame-src blocks localhost, and on Aldi, Sam's and Fareway it failed silently with no
-     console error. The same form with no target landed AGREE on the first try for all four. A brief that
-     says "do not navigate the tab" leaves the agent no working route, so say "submit top-level, last".
-     THE IN-MEMORY SINK IS NOT OPTIONAL ON ALDI EITHER (same day). aldi.us held a stale TC_ALDI_SEARCH
-     key in localStorage from an earlier sweep, and a sweep that reads it resumes from someone else's
-     cursor. Use the plain-object tcGet/tcSet sink on every store, and never trust or clear a TC_* key
-     you did not set this run: leave it, and do not read it.
-  3. THE TOOL CALL TIMES OUT AT 45s. Any sweep or long scroll must be started as a background promise
-     (window.__tcRun = ...) and POLLED, never awaited in one call. Do not try to return the CSV
-     through the tool output either: it truncates around 1 KB, so a 40-60 KB sweep would need ~60
-     round trips per store and still risk a partial read. That is what the sink is for.
-Also: sweepToCsv does not emit a header row and every builder needs one - q|n|lp|up|id|was for Sam's.
-ALDI, WALMART AND SAM'S NOW WRITE THEIR OWN (aldiSearchToCsv since 2026-09-10, walmartSweepToCsv since
-2026-09-12, samsSweepToCsv since 2026-09-18): their output opens with a #tc-store line naming the store
-or club each row was READ at, then its own copy of the column header. POST ALL THREE UNALTERED. Keep prepending Aldi's header anyway - the builder
-drops the duplicate and an older copy of the emitter writes none - but never prepend anything ABOVE a
-#tc-store line and never strip one: all three builders REFUSE a capture that cannot name its store.
+## ORDER OF WORK, because the order decides what is lost (full: br-07)
+1. Any weekly ad due today (Baker's list on its rollover; Fareway when missing OR partial). If you do nothing else, do this.
+2. Rescue terms. 3. One comprehensive full pull when due AND no ad is due: about 45 minutes, so it REPLACES items 4-6
+for the day; one store per day, Walmart before Sam's; NEVER on an ad-rollover day. 4. The everyday rotation (the four
+stores' sweeps). 5. Sale fallbacks. 6. Product-URL chips, bounded. Spend at most ~45 minutes; stopping with 1-4 done
+beats timing out inside 6.
 
-STEP ZERO - MAKE SURE THE 0800 CHAIN HAS FINISHED. You run at 09:00, and the 0800 task's downstream
-chain (compare -> guards -> publish -> commit) measured 08:12-08:43 on 2026-08-22 - 31 minutes. It
-writes the same out\regular files your builders write and touches the same git index, so starting a
-build inside it is a torn read by construction. Before running ANY builder, check the same named
-mutex capture-run itself uses:
+## HARD RULES (full: br-03)
+1. USE BRAD'S OWN BROWSER, NEVER A HEADLESS ONE. His signed-in session with the Omaha store and In-Store mode is what
+   makes a price the right price.
+2. A WALL IS THE ANSWER. A challenge page, error page or price-less shell is UNUSABLE for that store today: do not retry
+   by hand (the committed sweep's paced backoff is the only retry) and run notify-desktop.ps1 so Brad knows the store
+   is cold. Never solve a CAPTCHA.
+3. BLINDNESS IS NOT EMPTINESS. A page you could not read is UNUSABLE, never EMPTY: EMPTY becomes a not-carried ruling
+   that retires a real cell. Products shown but none extracted means the parser is wrong: capture nothing.
+4. PROVE THE STORE AND THE MODE BEFORE YOU TRUST A PRICE (the templates assert both; see STORES).
+5. NEVER FABRICATE. Skip anything you cannot verify. A missing cell is recoverable; a wrong price that looks right is not.
 
-    powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\chain-idle.ps1
+## BRAD'S REAL PROFILE (full: br-04)
+- NEVER clear or read a site's own localStorage keys, and never trust a TC_* key you did not set this run: it is Brad's
+  live session. The template's wrapper gives the scripts an in-memory store for exactly this.
+- The capture leaves the page only through the sink: never through tool output (it truncates near 1 KB), never by
+  fetch (connect-src), never through an iframe or a form `target` (failed 8 of 8 on 2026-10-02). The post is
+  top-level and LAST, and the tab navigates to the sink's reply.
+- Every capture is posted UNALTERED, and a rescue comes from the same committed sweep, line and all. Never
+  hand-assemble, merge or strip a capture file, never prepend anything above a #tc-store line and never strip one: the
+  builders REFUSE a capture that cannot name its store.
 
-It prints FREE (the chain is done - proceed) or HELD (still running). If HELD, wait a few minutes and
-re-check, up to about 20. If it is STILL held after that, do the CAPTURES anyway - they only write
-out\captures and out\fareway, which nothing else touches - but SKIP the builders and say so in your
-report; the next 0800 will build from your capture files. Capturing is the part that cannot be redone
-later, because the store's prices move; building always can.
+## STORES: the identity rules (full: br-08; the method is in grocery\browser-briefs\)
+- WALMART: storeId 5361, Omaha L St Supercenter 68137 (Brad 2026-08-28). The id is the discriminator: 3153 is an Omaha
+  address too. If the agent refuses the store, SWITCH THE STORE in Brad's Chrome (yours to do) and re-run; do not
+  re-escalate the ruling. Ruling-owed terms lead the worklist as `ruling_terms`: never hand-pick them and NEVER edit a
+  ruling file to mark something done.
+- SAM'S CLUB: club #8146, 13130 L St 68137 (Brad 2026-10-02). Every search response's pickup club must be 8146; a term
+  read elsewhere is UNUSABLE (wrong-club). If it happens, switch the club in Brad's Chrome and re-run.
+- ALDI: In-Store mode and a store line ending in Omaha, asserted per term. NEVER assert the OLA number.
+- FAREWAY: retailerLocation 531573 AND In-Store (Pickup at the right store is still wrong). If farewaySweep is
+  missing after the inject, capture NOTHING for Fareway, never hand-roll a router loop, and report "Fareway: main
+  checkout stale"; the 08:00 driver covers it.
 
-FIRST, WORK OUT WHAT IS ACTUALLY OUTSTANDING - FROM THE DATA, NOT FROM A FLAG.
-out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before (a store marked
-"paused" in the driver returns success and silently drops off it). So check each source yourself:
+## WHAT YOU DO NOT DO (full: br-09)
+DO NOT PUBLISH. No compare-deals, no check-ad-cycles, no publish-deals-page, and no push of anything but the one file
+below. The 08:00 task owns the downstream chain. If something is urgent enough to publish today, say so and let Brad decide.
 
-  A. EVERYDAY ROTATION - out\worklists\capture-<store>-<date>.json, ~7 terms per store.
-     Needed for a store only if out\regular\<prefix>-regular-<date>.json (or, for Sam's,
-     out\sams\sams-deals-<date>.json) has no rows dated today.
-       Walmart, Aldi  - ALWAYS yours. They refuse the automated driver.
-       Fareway, Sam's - normally captured by the 0800 driver. Yours only when it failed
-                        (expired cookies, a wall). Check before doing the work twice.
-       Hy-Vee, Baker's, Family Fare - headless APIs. NEVER yours.
-  B. BAKER'S WEEKLY AD - NO LONGER A VISION READ (since 2026-09-18). The ad's offer LIST comes from its own feed
-     (pull-bakers-ad-list.ps1), keyed by an ad GUID that changes every Wednesday and can only be read off the
-     weekly-ad page in a real Chrome. The 08:00 run reads it itself when no id on disk verifies (exit 4 since
-     2026-10-01; before that a stale id exited 1 and skipped Chrome, which lost the 09-30 ad). CHECK IT, DO NOT
-     ASSUME IT: due when no out\bakers\bakers-ad-list-*.json has ad_from <= today <= ad_to. ad-schedule.json's
-     "current" window is NOT evidence the list landed (on 2026-10-01 it showed 09-30..10-06 with no list on disk).
-     If due: open https://www.bakersplus.com/weeklyad in one tab, read the /api/dacs/<guid> request
-     (performance.getEntriesByType('resource')), then run pull-bakers-ad-list.ps1 -AdId <guid>. Exit 0 with
-     "N offer(s) for 61500319" is landed; the 08:00 Baker's lane then asks the routed terms. One page load, no vision.
-  B2. FAREWAY'S WEEKLY AD - ARRIVES ON ITS OWN, BUT STILL HAS TO BE READ. This is the gap that cost
-     32 excluded sale rows between 2026-08-20 and 08-25, and the old wording here ("do not go looking
-     for ads that arrive on their own") is part of why. pull-fareway-ads.ps1 downloads the flyer
-     server-side every morning and exits 0 - but the flyer is an IMAGE SET, and the board prices
-     Fareway ad rows from out\fareway\fareway-deals-<captured>.json, which only a VISION READ can
-     produce. Pages on disk are not a captured ad.
-     Due when no fareway-deals-*.json has ad_from >= the manifest's weekly.from AND ad_to >= its
-     weekly.to. As of 2026-08-25 pull-fareway-ads.ps1 EXITS 3 in exactly that state, so the 07:00 job
-     will go red the morning a new Fareway ad drops and stay red until you read it - that red is your
-     work order, not a fault to investigate.
-     ALSO DUE WHEN THE LAST READ WAS PARTIAL - THIS IS THE ONE THE DATE TEST CANNOT SEE. That
-     window check only compares dates, so a file that read 5 of 16 pages PASSES it and the other
-     11 pages are lost in silence. That is exactly what happened on 2026-08-25: the 13:38 file
-     held 77 deals from pages 1-5 and looked healthy to every downstream check; the complete read
-     is 218. Every fareway-deals file MUST therefore carry "pages_read" and "pages_total", and the
-     ad is DUE unless pages_read == pages_total == the manifest's weekly.pages.
-     READ THE WHOLE FLYER. The back half is where the everyday staples live - produce, frozen &
-     dairy, beverages, tortillas, bread, pets, household. Dole bananas at $0.49/lb and Country
-     Daybreak eggs at $0.99/dozen were both on pages a five-page read never reached.
-     Take the window from the ad's OWN PRINTED FOOTER, never the filename or the manifest: they have
-     disagreed twice (an impossible month "80" for 0822, and a 08-23 manifest against a printed
-     "August 24-29"). Exclude anything whose unit price the board cannot verify - the explicit "WHEN
-     YOU BUY N" conditionals, BOGOs and basket offers; record simple N/$X at its arithmetic unit
-     price. Write out\fareway\fareway-deals-<today>.json, then advance Fareway current/next_pull in
-     ad-schedule.json (hand-maintained - nothing writes it).
-     Every other store's ad is a server feed that needs no reading (Aldi/Hy-Vee/Family Fare via Flipp).
-  C. RESCUE TERMS - out\rescue-terms-<store>.txt. Cells already DROPPED or about to EXPIRE off the
-     board. These are known losses, so they come BEFORE ordinary rotation.
-  D. SALE FALLBACKS - now inside each store's own capture plan (since 2026-09-22, plan-2026-09-22-9,
-     commit 686d83d9c). A commodity on sale with no everyday item to revert to vanishes from the cell
-     when the sale ends, so the store owes its everyday price. Get-CapturePlan hands these out as
-     SaleFallbacks, from what the expiring sales leave and always after them, so they arrive in the
-     store's daily worklist with the other terms: find the cheapest NON-sale everyday item and add it
-     to that store's out\regular\ file like any rotation term. out\research-worklist.json is NO
-     LONGER written at all (retired 2026-09-25, it had no reader); ignore it if a stale copy exists.
-  E. PRODUCT-URL CHIPS - out\url-worklist.json, the "See item" links, across ALL SEVEN stores
-     (446 outstanding on 2026-08-22). Search the chip's exact `term`, confirm the price matches, and
-     write {id,url,price,size,name} to out\url-inputs\store-<store>N-urls.json.
+LANDING THIS FILE'S OWN BACKUP (Brad's ruling 2026-10-02, PLAN W7). Only on a day you EDITED this file, and as your last
+step, land the repo mirror and nothing else, from a throwaway worktree so no board file or unpushed commit rides along:
+1. `git -C C:\Codex\ThriftyCrew fetch origin`, then
+   `git -C C:\Codex\ThriftyCrew worktree add -b tc/skill-backup-<date> C:\Codex\ThriftyCrew\.claude\worktrees\skill-backup-<date> origin/main`
+2. Copy this file byte for byte (Copy-Item, never Get-Content/Set-Content) to
+   `<worktree>\ops\prompt-backup\scheduled-tasks\grocery-browser-stores-refresh\SKILL.md`.
+3. Write the message to a file (with [IO.File]::WriteAllText and UTF-8 without BOM) ending in
+   `Store: searched "prompt backup mirror", nothing applicable` and commit with
+   `git -C <worktree> commit -F <msgfile> -- ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md`;
+   check `git -C <worktree> show --stat HEAD` names that one file.
+4. From the worktree: `powershell -NoProfile -File ops\push-main.ps1` (about 8 minutes). LANDED: remove the worktree.
+   REFUSED: leave it, and put push-main's last line in the report; audit-prompt-backup -Daily pages after 24 hours.
 
-  F. COMPREHENSIVE FULL-WORKLIST PULL (Walmart or Sam's) - THE 90-DAY CLOCK NOBODY WAS WINDING.
-     The rotation in A re-prices about 7 terms per store per day. It never resets the quarterly
-     full-catalogue capture, and nothing else in the estate can: PowerShell cannot reach Brad's
-     Chrome, and the driver's own empty profile gets price-less payloads back. So the clock had a
-     warning and no consumer. Measured 2026-08-30: audit-walmart-fullpull.ps1 exits 1 with Walmart's
-     newest comprehensive capture (walmart-regular-2026-08-11.json, 525 terms) 19 days old and Sam's
-     (sams-deals-2026-08-15.json, 594 terms) 15 days old. At day 90 a capture leaves the union window
-     and that store's coverage collapses - the guard holds the board rather than publish it thin.
-     DUE, FROM THE DATA, the same way everything else on this list is:
-         powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\audit-walmart-fullpull.ps1
-     Exit 1 names the store. Do not take this from a flag, from this file, or from memory.
-ORDER OF WORK, because you will not finish everything and the order decides what is lost:
-  1. ANY WEEKLY AD THAT IS DUE TODAY - Baker's on its rollover, and Fareway whenever its last read
-     was missing OR partial (pages_read < pages_total). An ad is the only item on this list with a
-     HARD DEADLINE and a VISIBLE consequence: the hour its window lapses those rows leave the
-     board, and any tile that ad was winning silently changes store. Measured 2026-08-25, the
-     Baker's ad expiring that night took 10 sale cells with it, 4 of which it was WINNING -
-     clementines, coffee, ice-cream, popsicles - and in every one of the four Baker's own everyday
-     fallback was DEARER than the runner-up, so all four tiles moved to Aldi or Walmart. Nothing
-     was broken; the ad had simply lapsed. Baker's is also the ONLY ad in the estate that needs a
-     browser at all - every other store's ad is a server feed the 07:00 job pulls without you - so
-     if this agent does not read it, nothing does. If you do nothing else today, do this.
-  2. Rescue terms (cells leave the board if you skip them - a slower bleed than a lapsed ad, but
-     a real one)
-  3. ONE STORE'S COMPREHENSIVE FULL PULL, when F says it is due AND no weekly ad is due today.
-     It is about 45 minutes - the whole term worklist through the committed sweep lane for that
-     store, same emit format as the rotation - so it REPLACES items 4-6 for the day rather than
-     sharing a session with them. One store per day; Walmart before Sam's while both warn.
-     NEVER on an ad-rollover day. Measured 2026-08-30: an ad day already crowds this session out -
-     the 45-minute budget went to the Fareway 25-page vision read plus the Walmart rotation and had
-     not reached Aldi, an ALWAYS store, by 09:32.
-     This is also the only thing that delivers the 9-column comprehensive capture audit-shelf-signal
-     is waiting on, which arms the marketplace-case rule behind three clamped recipe cost inversions.
-  4. Everyday rotation for stores genuinely outstanding
-  5. Sale-fallback research
-  6. Product-URL chips - a BOUNDED batch, say 40, newest-flagged first. This list is long by design
-     and will never be empty; do not let it eat the session.
-On most days item 1 is EMPTY - no ad is due - and rescue terms lead. That is the normal shape of a
-day; item 1 only jumps the queue on a rollover.
-Spend at most ~45 minutes. Stopping with items 1-4 done beats timing out inside item 6.
+## WHEN SOMETHING ELSE GOES WRONG (full: br-10)
+- If a browser tool is refused by a SAFETY CHECK rather than a store ("auto mode", "could not evaluate", earlier
+  conversation content): do not rephrase, switch tools or route around it. Do the items that need no browser (the
+  Fareway ad vision read from local JPEGs, sale-fallback research on out\regular), report the refusal plainly, and say
+  a fresh session is what clears it. Keep names accurate and boring.
 
-PER-STORE METHOD. All of it lives in memory grocery-method-<store>.md - read ONLY the stores you are
-actually touching. The parts that cost a whole day to rediscover on 2026-08-22:
-
-  ALDI (aldi.us, everyday). DO NOT HAND-WRITE THIS SWEEP ANY MORE - it is a committed agent as of
-    2026-08-25. Paste grocery\pull-agent-lib.js, then grocery\pull-aldi-instore.js, then:
-        await pullAldiSearch(TERMS)          // TERMS = the worklist's own terms
-        aldiSearchToCsv(idByTerm)            // idByTerm = term -> commodity id, both in the worklist
-    The search lane is the PRIMARY one; the slug walker in the same file is only a re-pricer for
-    products whose slug we already know. Everything below is what that agent encodes, kept here so a
-    failure is diagnosable - not as an instruction to reimplement it.
-    Client-side router, NOT navigation:
-    window.__do_not_use_me_history.push('/aldi/s?k=' + encodeURIComponent(term))
-    The path is '/aldi/s' - NOT '/store/aldi/s'. The router is already scoped under /store/, and
-    doubling it gives /store/store/aldi/s, a page with no mode label at all.
-    THE TURNOVER WINDOW IS THE TRAP. The router changes the URL BEFORE it swaps the result list, so
-    just after the push the PREVIOUS term's tiles are still mounted. A loop that seeds its stability
-    counter at that moment calls the shelf loaded while looking at the old term. Measured 2026-08-25,
-    the same session, same terms:  aluminum foil 2 vs 6, all purpose cleaner 5 vs 23, unsweetened
-    almond milk 3 vs 70. A 3-of-70 read is not a shallow sweep - every row is a candidate for
-    CHEAPEST, so it silently publishes the wrong Aldi price, and it looks exactly like a store that
-    does not stock much. Aldi IS limited-assortment (6 really is the whole aluminium-foil shelf),
-    which is why a low count can NEVER be the signal that the read finished. Remember the tile set
-    before the push, wait for it to turn over, and floor the number of scroll rounds.
-    Name from the URL SLUG (the longest card line is often "Sold individually"), size from the CARD
-    (the slug cannot hold a decimal: "15.5 oz" arrives as "15 5 oz" - the builders Repair-SlugDecimals
-    fixes it FROM THE SIZE COLUMN, which is why size must come off the card). Price ONLY from
-    "Current price: $X.XX" - the card also carries a glued "$249" for a $2.49 item.
-    Assert: header says In-Store AND the store line ends in Omaha ("ALDI - OLA <n> - Omaha"). NEVER
-    assert the OLA number: the session has read OLA 48 and OLA 42 at different times, and a pinned
-    number refuses a correct capture while reading as a store problem. Asserted PER TERM, not once per
-    run: a session flipped back to Delivery mid-sweep marks every later row up ~10% while looking normal.
-    Emit id|term|name|prices|unit|size|href, then aldiSearchToCsv(idByTerm)'s output unaltered ->
-    out\captures\aldi-capture-<date>.csv. That output opens with
-    #tc-store store="ALDI - OLA <n> - Omaha" mode="In-Store" rows=<n> - the store each row was READ at -
-    and its own copy of the header, which the builder drops. build-aldi-regular writes `source` and each row's
-    store_location from that line, and REFUSES a capture with no store line, a non-Omaha or non-In-Store
-    one, or one that straddles two stores (2026-09-10: every file since 07-29 had claimed OLA 42 from a
-    literal, including the fortnight the session read OLA 48). Never hand-assemble this file or strip
-    that line.
-    Then: build-aldi-regular.ps1 -In <that> -Date <date>
-
-  WALMART (everyday). fetch('/search?q=<term>') from a walmart.com tab, parse <script id="__NEXT_DATA__">.
-    ASSERT THE STORE FIRST, AND IT IS NOT OPTIONAL (2026-09-12). Walmart prices ARE the local store's,
-    which is the reason the store matters and not a reason to skip it. Brad's session has drifted to
-    storeId 3153 "Omaha S 167th St Neighborhood Market" twice, and both times this agent captured real,
-    clean, plausible rows at it - 414 on 2026-08-27, 380 on 2026-09-12 - which a human caught by reading
-    the page header, and which had to be quarantined by hand. The board's basis is storeId 5361, Omaha
-    L St Supercenter 68137 (Brad's ruling, grocery\out\walmart-store-ruling-2026-08-28.json, mirrored in
-    stores.json -> Walmart -> store_identity). The ID is the discriminator: 3153 is an Omaha address too,
-    so any test on the word "Omaha" passes the wrong store.
-    walmartIdentity() now READS storeId from __NEXT_DATA__ and THROWS on anything else, and walmartProbe
-    re-reads it from every /search response - a session can be flipped mid-sweep, and a term whose
-    response names another store settles UNUSABLE rather than MATCHES. If it refuses: SWITCH THE STORE
-    in Brad's Chrome (that is yours to do, Brad 2026-08-28) and re-run; do not re-escalate the ruling.
-    THE RULING'S OWED TERMS ARE IN YOUR WORKLIST ALREADY - do not hand-pick them (2026-09-12).
-    capture-policy-lib derives what the 2026-08-28 store-drift ruling still owes and puts it at the
-    HEAD of the Walmart worklist as `ruling_terms`, inside the same allowance the sale expiries get, so
-    the rotation keeps its daily drip. Fetch the worklist in the order given. A term leaves that list on
-    its own once a built walmart-regular file NAMES the sanctioned store and carries a row for it, so
-    NEVER edit a ruling file to mark something done - capture it and the list shortens itself.
-    `ruling_deferred` are owed terms that did not fit today and lead tomorrow's; `ruling_blind` means
-    this checkout could not read what has already landed and is naming everything the ruling named.
-    As of 2026-09-12: 8 of 23 recaptured at L St (fresh rhubarb, apples, apple juice, applesauce, apple
-    cider vinegar, alfredo sauce, aluminum foil, acorn squash), 15 owed, and the 25/day call_cap is what
-    stopped the rest.
-    The price shape is FLAT STRINGS: priceInfo.linePrice "$1.74", priceInfo.unitPrice "2.7 c/fl oz".
-    The older nested shape (currentPrice.price / priceDetails.priceLines[0].price) may still appear -
-    read both. lp MUST reach the CSV as "$x.xx"; the builder rejects a bare number as "no linePrice".
-    If a page holds item nodes but you extract none, that is UNUSABLE, not EMPTY.
-    ALSO EMIT THE SHELF SIGNAL (2026-08-29): sel = p.sellerName, ff = (p.fulfillmentType||'').toUpperCase().
-    Both are on the SAME item node you already read for name and price - grocery\walmart-capture-reducer.js
-    has read them since July for import-walmart-batch's 3P filter, so this is not new extraction, it is the
-    daily path finally carrying what the manual path already had.
-    WHY IT IS WORTH TWO COLUMNS: three generations of per-product known-wrong rulings failed to converge on
-    the marketplace-bulk class (Frontier Co-op 16 oz -> 27 Peaks 12-19 oz -> Badia 16 oz / 24 Mantra), because
-    a ruling names a PRODUCT and the defect is a LISTING KIND. curry-powder was blocked at Frontier's
-    $0.7669/oz and came straight back at 27 Peaks' $0.7775/oz. Every proxy tried - brand absence, exact-item
-    absence, size shape - stands in for one fact that was on the page and not in our data: is this listing
-    purchasable at the L St store, or does it only ship? Spec:
-    design\BRIEF-marketplace-shelf-signal-2026-08-29.md.
-    EMIT EMPTY RATHER THAN GUESSING. If a node has no sellerName or no fulfillmentType, write the field
-    EMPTY. Empty means unknown and every consumer admits the row; it must never be filled with a default,
-    because "" and "SHIP" are about to mean opposite things.
-    Pace 3500ms +/- 2000. Post walmartSweepToCsv()'s output UNALTERED ->
-    out\captures\walmart-capture-<date>.csv. It opens with
-    #tc-store store="Omaha L St Supercenter" id="5361" zip="68137" read="response" rows=<n> - the store
-    each row was READ at - and its own q|n|lp|up|id|was|rb|sel|ff header, which the builder drops if you
-    prepend a second one. read="page" marks rows whose own response carried no store block. build-walmart-deals
-    writes `source` from that line instead of the literal it carried until 2026-09-12, and REFUSES a capture
-    with no store line, an UNRECORDED one, one read at any store but 5361/68137, or one that straddles two
-    stores. Never hand-assemble this file or strip that line.
-    Then: build-walmart-deals.ps1 -In <that> -Date <date>
-
-  SAM'S CLUB (everyday, only if 0800 failed). Paste grocery\pull-agent-lib.js, then
-    grocery\pull-sams-instore.js, then pullSamsInStore(<terms>) - the same fetch('/s/<term>') and
-    __NEXT_DATA__ read, capturing BOTH linePrice AND unitPrice, paced 2600ms +/- 1400.
-    Post samsSweepToCsv()'s output UNALTERED -> out\captures\sams-capture-<date>.csv. It opens with
-    #tc-store store="<the club the page names>" read="page" rows=<n> and its own q|n|lp|up|id|was header.
-    build-sams-deals writes the file's `club` and every row's store_location from that line (until
-    2026-09-18 it stamped "13130 L St" from a literal while the session sat at 15429 Blackwell Dr), and
-    REFUSES a capture with no store line, an UNRECORDED one, a non-Omaha club, or one that straddles two
-    clubs. A RESCUE appended to the morning capture must be samsSweepToCsv output too, line and all:
-    rows pasted without a line are FLAGGED as attributed to a club they were not read at.
-    Then: build-sams-deals.ps1 -In <that> -Date <date>
-
-  FAREWAY (everyday). Open /store/fareway-meat-grocery/s?k=<first term>; the data is read from
-    window.__APOLLO_CLIENT__ by pull-fareway-shop.js, driven by farewaySweep (below). The
-    fetch-and-regex probe is DEAD - the storefront is client-rendered and returns a shell.
-    Assert retailerLocation 531573 AND In-Store before trusting anything.
-    ON 2026-09-19 THE SESSION WAS SITTING ON PICKUP, at the right store. The store id alone did not
-    catch it: read the fulfilment mode the page shows and switch it to In-Store in the page's own
-    picker before the first term, then assert again. Pickup prices are not shelf prices.
-    WAIT FOR A SETTLED COUNT BEFORE EXTRACTING (2026-09-21). The results page paints ~9 items, pauses
-    several seconds, then fills the rest. An extract taken at first paint read 1-14 candidates per term
-    where the settled page held 13-109 - partial rows that look like success. A capture whose terms
-    cluster at 9 is this defect.
-    THE SWEEP IS COMMITTED CODE (2026-09-26). After the identity and In-Store checks, on a search results
-    page, inject pull-fareway-shop.js and start, WITHOUT awaiting:
-        farewaySweep(<terms>, <commodities>, { loc: '531573' })     // the worklist's parallel arrays
-    FAIL-SAFE: after injecting, check typeof farewaySweep === 'function'. If it is NOT, the main checkout
-    predates the 2026-09-26 landing (ec39b05d7) because no bot has synced it yet: capture NOTHING for
-    Fareway, never hand-roll a router loop in its place, and report "Fareway: main checkout stale" - the
-    08:00 driver covers Fareway the same day.
-    Poll window.__fwSweep ({done, i, n, errors, aborted}) every ~30 s; ~18 s a term. It pushes each term
-    on the router, waits for the route, resets the store, scrolls until the SCOPED count holds for four
-    reads, then extracts that term's own search only. A term that never settles lands in errors, never as
-    a line; any row read off 531573 stops the sweep (aborted). When done, post farewaySweepJsonl()
-    UNALTERED to the sink as out\fareway\fareway-shop-<date>.jsonl, and report errors and aborted.
-    Every row carries scope_query; select-fareway-shop refuses a capture with a row scoped to another
-    term, an unscoped row, or counts rising over 8 consecutive terms - so never strip, merge or hand-build
-    lines. A rescue appended later must come from farewaySweep too.
-    Then: select-fareway-shop.ps1 -In <that> -Today <date>
-          build-fareway-regular.ps1 -Today <date> -ModeVerified <date>
-    -ModeVerified is only legitimate because the identity check proved In-Store. Without it
-    compare-deals silently drops all ~433 Fareway cells.
-
-  BAKER'S (weekly ad only). bakersplus.com/weeklyad, store "Pickup at Saddlecreek". Capture przone
-    flyer image URLs, run pull-bakers.ps1, then VISION-READ the pages meta.json lists (not a bare
-    page-*.jpg glob - a shorter ad leaves the previous one's extra pages behind). Scan for EVERY
-    tracked commodity, including multibuy/BOGO call-outs: capture ad_price verbatim ("Buy 1 Get 2
-    Free"), the numeric regular, and the unit basis ("lb" / "each" / a pack size). The engine does
-    the maths; a multibuy without a regular cannot be priced.
-    READ EVERY PAGE, AND PROVE IT. Same rule as Fareway above, for the same reason: write
-    "pages_read" and "pages_total" into bakers-deals-<date>.json, and treat the ad as still due
-    unless pages_read == pages_total == meta.json's ad_pages. Without those two fields a five-page
-    read of a fourteen-page flyer is indistinguishable from a complete one, and every downstream
-    check will call it healthy. (The 2026-08-20 file did read all 14 - it just could not prove it.)
-
-AFTER EACH STORE, ADVANCE ITS CURSOR - but only if the build really produced rows. The builders call
-commit-capture-cursor.ps1 themselves and it re-checks; do not advance by hand. A capture that priced
-nothing must re-attempt the same slice tomorrow, never skip it.
-
-DO NOT PUBLISH. No compare-deals, no check-ad-cycles, no publish-deals-page, no push. The 0800 task
-owns the whole downstream chain and runs ONE chain a day; a second one races it on the same working
-tree. Your rows reach the live board at the next 0800. If something is urgent enough to publish
-today, say so in your report and let Brad decide.
-
-IF BRAD'S CHROME IS NOT AVAILABLE (no extension, browser closed, locked screen): report that plainly
-and stop. Do not fall back to launching an automated Chrome - it has none of his store/mode session
-and returns price-less payloads anyway.
-
-IF A BROWSER TOOL IS REFUSED BY A SAFETY CHECK RATHER THAN BY A STORE - a refusal naming "auto
-mode", "could not evaluate", or earlier conversation content - that is NOT a store problem and NOT
-something to engineer around. Do not rephrase the call, do not switch to a different browser tool,
-do not route around it; such refusals state plainly that reworking them is out of bounds, and they
-persist for the whole session. Instead:
-  - Do the items that need no browser: the Fareway ad vision-read (local JPEGs), and sale-fallback
-    research, which reads the on-disk out\regular feeds.
-  - Report the refusal plainly and say a fresh session is what clears it.
-This happened on 2026-08-25 and cost that run its entire browser half. The likeliest trigger was
-authoring a brand-new local HTTP listener, documented in terms of defeating a site's CSP, moments
-before pointing a browser at that same site - which is why capture-sink.ps1 is now committed and
-described for what it is. Keep it that way: accurate, boring names for ordinary things.
-
-REPORT: which stores you captured and how many priced rows each produced; what you deliberately did
-not reach and why; any store that came back UNUSABLE (and confirm you notified); any commodity you skipped
-because you could not verify it; and the outstanding counts still on the url-worklist and rescue
-lists, so the size of the backlog is visible rather than implied.
+## REPORT (full: br-11)
+Which stores you captured and the priced rows each built; what you deliberately did not reach and why; any store that
+came back UNUSABLE (and confirm you notified); any commodity you skipped as unverifiable; builder refusals verbatim; the
+trial rows written; the outstanding counts on the url-worklist and rescue lists; and, if you edited this file, the
+backup's push-main result.
