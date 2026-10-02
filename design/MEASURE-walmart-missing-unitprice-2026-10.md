@@ -1,6 +1,8 @@
 # MEASURE: Walmart in-store rows with no unit price (W2 step 1)
 
 Plan: `design/PLAN-browser-refresh-hardening-2026-10-02.md`, W2 step 1. A measurement only. No pricing code changed.
+Harness: `grocery/measure-walmart-missing-unitprice.py` at blob 256b189e5bf2dcdb20499e7af951505f440a13a9, run 2026-10-02
+(and re-run the same day by the implementation session: exit 0, the same verdict).
 
 ## Question
 
