@@ -14,7 +14,7 @@
   than a swallowed exception. The whole account of the four-day silent outage is in alert-lib.ps1.
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: grocery\send-alert.ps1, grocery\alert-lib.ps1, grocery\mute-lib.ps1, grocery\alert-registry-lib.ps1, grocery\alert-registry.json, lib\*.ps1
+# gate-inputs: grocery\send-alert.ps1, grocery\alert-lib.ps1, grocery\mute-lib.ps1, grocery\alert-registry-lib.ps1, grocery\review-adjudication-lib.ps1, grocery\alert-registry.json, lib\*.ps1
 param(
   # NO DEFAULT SUBJECT (2026-09-22, plan-2026-09-22-10 item 2026-09-20-cb8f30). The old default 'Grocery pipeline alert'
   # matched no registry entry, and two unrelated residuals minted with no -Subject became ONE type. An empty subject is
@@ -464,7 +464,7 @@ if ($SelfTest) {
   $utf8 = New-Object Text.UTF8Encoding($false)
   try {
     Copy-Item -LiteralPath $PSCommandPath -Destination (Join-Path $saG 'send-alert.ps1')
-    foreach ($n in @('alert-registry-lib.ps1', 'mute-lib.ps1')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $n) -Destination (Join-Path $saG $n) }
+    foreach ($n in @('alert-registry-lib.ps1', 'mute-lib.ps1', 'review-adjudication-lib.ps1')) { Copy-Item -LiteralPath (Join-Path $PSScriptRoot $n) -Destination (Join-Path $saG $n) }
     # EVERY lib\*.ps1, NEVER A HAND LIST (2026-09-11). This sandbox copied four named libraries, and two of the real
     # script's four library loads sit inside a try whose catch LOGS and falls back: atomic-write to a bare Move-Item,
     # append-line to a bare Add-Content. Measured from a temp mirror at c17cc59a7, one library dropped per run: without
@@ -868,10 +868,8 @@ if (Test-WorktreeSendRefused $graded ([bool]$AllowWorktree) $Lane $Escalates) {
 }
 
 # ---- WHICH QUEUE? (2026-09-23, ops lane) ----------------------------------------------------------------------------
-# Everything that reaches this line may write (the automated sends from a linked worktree were refused just above), and
-# it writes the ONE queue triage reads: the main checkout's. From a worktree this used to be the worktree's gitignored
-# copy, and on 2026-09-22 several agents' residuals had to be moved into the main queue by hand. It is still written
-# under the same machine-wide queue mutex, so a worktree's send and a main-checkout send never race.
+# Everything that reaches this line may write (the automated sends from a linked worktree were refused just above), and it writes the ONE queue triage reads: the main checkout's.
+# From a worktree this used to be the worktree's gitignored copy, and on 2026-09-22 several agents' residuals had to be moved into the main queue by hand. It is still written under the same machine-wide queue mutex, so a worktree's send and a main-checkout send never race.
 $queueFileEff = Join-Path $root 'triage-queue.json'
 if ($QueueFile) { $queueFileEff = $QueueFile }
 else {
@@ -898,11 +896,9 @@ if (-not ([string]$Subject).Trim()) {
 }
 
 # ---- WHICH CLASS IS THIS ALERT? (2026-09-10, Brad ruling 1) ------------------------------------------------
-# page = emailed and queued; review = queued, never emailed; digest = emailed, never queued. The class comes from
-# grocery\alert-registry.json through alert-registry-lib.ps1. EVERY failure here fails toward PAGE: a lib that will
-# not load, a registry that is missing or unparseable, or a type no entry matches all leave $delivery as page, and
-# the last of those also marks the mail subject so the registry gap is visible in the inbox. The default below IS
-# the behaviour this script had before the registry existed.
+# page = emailed and queued; review = queued, never emailed; digest = emailed, never queued. The class comes from grocery\alert-registry.json through alert-registry-lib.ps1.
+# EVERY failure here fails toward PAGE: a lib that will not load, a registry that is missing or unparseable, or a type no entry matches all leave $delivery as page, and
+# the last of those also marks the mail subject so the registry gap is visible in the inbox. The default below IS the behaviour this script had before the registry existed.
 $delivery = [pscustomobject]@{ class = 'page'; queue = $true; mail = $true; mail_subject = $Subject; unregistered = $false; resolverless = $false; entry_id = ''; note = '' }
 $regLibOk = $false
 try { . (Join-Path $root 'alert-registry-lib.ps1'); $regLibOk = $true } catch { Log ("ALERT REGISTRY LIB DID NOT LOAD (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
@@ -914,9 +910,8 @@ if ($regLibOk) {
   } catch { Log ("ALERT REGISTRY could not be applied (" + $_.Exception.Message + ") - failing toward PAGE for '" + $Subject + "'") }
 }
 if ($delivery.unregistered) { Log ("UNREGISTERED ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - no entry in grocery\alert-registry.json matches, so it queues AND pages as a registry defect. Register it and run grocery\audit-alert-registry.ps1.") }
-# AN AGENT'S UNREGISTERED ALERT IS REFUSED BEFORE ANY QUEUE WRITE (Brad's ruling Q-sender-refuses-unregistered,
-# 2026-09-22: "Refuse agents only"). The agent re-sends in the same turn under a registered type; a pipeline alert never
-# reaches this branch. Test-AgentSendRefused in alert-registry-lib.ps1 holds the rule and the ruling's words.
+# AN AGENT'S UNREGISTERED ALERT IS REFUSED BEFORE ANY QUEUE WRITE (Brad's ruling Q-sender-refuses-unregistered, 2026-09-22: "Refuse agents only").
+# The agent re-sends in the same turn under a registered type; a pipeline alert never reaches this branch. Test-AgentSendRefused in alert-registry-lib.ps1 holds the rule and the ruling's words.
 $agentRefused = $false
 if ($regLibOk) { try { $agentRefused = Test-AgentSendRefused $delivery $Lane $Escalates } catch { $agentRefused = $false } }
 if ($agentRefused) {
@@ -932,9 +927,14 @@ if ($DigestOnly -and $delivery.queue) {
   Write-Output ('DIGEST-NOT-QUEUED ' + $typeKey)
 }
 if ($delivery.resolverless) { Log ("RESOLVERLESS ALERT TYPE '" + $Subject + "' [type: " + $typeKey + "] - " + $delivery.note + ". Name its resolver in grocery\alert-registry.json (design/RCA-holistic-2026-09-22.md F5).") }
-
-# -CausedBy: read the incident's evidence now, outside the queue lock. An unreadable verdict is $null, and a $null
-# verdict absorbs nothing, so every failure here sends the alert normally.
+# REVIEW INTAKE AS A PACKET (step 11 of design/PLAN-zero-alert-days-remainder-2026-09-24.md; the rule is grocery\review-adjudication-lib.ps1): one of the five review types writes ONE packet row instead of a queue item, adjudication first. A row that pages, and every failure here, goes on to queue exactly as before.
+if ($delivery.class -eq 'review' -and -not $Escalates -and $Lane -ne 'weekly' -and -not $CausedBy -and -not $DigestOnly) {
+  try { $pkt = $null; . (Join-Path $root 'review-adjudication-lib.ps1'); $pkt = Invoke-ReviewPacketRoute -Registry $regState.registry -EntryId ([string]$delivery.entry_id) -Class 'review' -TypeKey $typeKey -Subject $Subject -Body $Body -Emitter $Emitter -QueueFile $queueFileEff -MutexName $QueueMutexName -LockTimeoutMs $QueueLockTimeoutMs -Today $today } catch { Log ("REVIEW PACKET LIB DID NOT LOAD (" + $_.Exception.Message + ") - '" + $Subject + "' queues as before") }
+  if ($pkt -and $pkt.log) { Log $pkt.log }
+  if ($pkt -and $pkt.written -and -not $pkt.pages) { Write-Output $pkt.out; exit 0 }
+  if ($pkt -and $pkt.written) { Write-Output $pkt.out; $Body += "`n`n" + $pkt.summary }
+}
+# -CausedBy: read the incident's evidence now, outside the queue lock. An unreadable verdict is $null, and a $null verdict absorbs nothing, so every failure here sends the alert normally.
 $incVerdict = $null
 if ($CausedBy) {
   try {

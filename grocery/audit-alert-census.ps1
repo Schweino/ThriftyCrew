@@ -42,7 +42,7 @@
   Self-test: powershell -File grocery\audit-alert-census.ps1 -SelfTest
 #>
 # The self-test is pure in-memory fixtures; the queue, archive and registry are read only by the live path.
-# gate-inputs: grocery\audit-alert-census.ps1
+# gate-inputs: grocery\audit-alert-census.ps1, grocery\review-adjudication-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '', [string]$ArchiveDir = '', [string]$RegistryFile = '', [string]$ClassOutFile = '',
       # the RULED STEPS line pages a stalled step on Mondays; -NoPage prints it and sends nothing (a hand run, a scratch replay)
@@ -235,6 +235,47 @@ function Get-CensusSummary {
   }
 }
 
+# ---- STEP 11'S BAR, READ HERE (design/PLAN-zero-alert-days-remainder-2026-09-24.md, step 11) ------------------------
+# Bar, verbatim: "those five types page on at most 4 of 14 days, while the packet carries every row the alerts used to.
+# The census checks row-count parity." The rows the alert path carried are grocery\out\review-intake.jsonl, one line per
+# five-type send appended BEFORE adjudication or the packet write; the packet's rows are grocery\out\review-packet.json's
+# observations. The math is grocery\review-adjudication-lib.ps1's. This census pages nothing (exit 0 = measured), so a
+# parity break is PRINTED, never paged, the same as every other line here.
+function Format-ReviewPacketCensusLines {
+  <# Pure. Get-ReviewPacketParity and Get-ReviewPacketPageDays answers -> the lines the report prints. #>
+  param($Parity, $PageDays, [string]$Opens, [datetime]$Today)
+  $out = New-Object System.Collections.Generic.List[string]
+  if ($Today -lt ([datetime]$Opens)) {
+    [void]$out.Add(('  REVIEW PACKET  step 11 bar window opens {0} (14 days, at most {1} page day(s)) - NOT YET MEASURABLE' -f $Opens, $PageDays.max))
+  } else {
+    $state = if ($PageDays.met) { 'within the bar so far' } else { 'OVER THE BAR' }
+    [void]$out.Add(('  REVIEW PACKET  the five review types paged on {0} of {1} day(s) {2} to {3} (bar: at most {4} of 14) - {5}' -f $PageDays.days, $PageDays.span, $PageDays.start, $PageDays.end, $PageDays.max, $state))
+  }
+  $tr = 0; $tp = 0; foreach ($r in @($Parity.rows)) { $tr += [int]$r.intake_rows; $tp += [int]$r.packet_rows }
+  if ($Today -lt ([datetime]$Opens)) { [void]$out.Add(('  REVIEW PACKET  row-count parity: NOT YET MEASURABLE, its window opens {0}' -f $Opens)) }
+  elseif ($Parity.parity) { [void]$out.Add(('  REVIEW PACKET  row-count parity {0} to {1}: PARITY, {2} send(s) on the alert path and {3} packet row observation(s) over 5 type(s)' -f $Parity.start, $Parity.end, $tr, $tp)) }
+  else {
+    [void]$out.Add(('  REVIEW PACKET  row-count parity {0} to {1}: PARITY BREAK in {2} of 5 type(s) - a send the packet does not hold reached the queue instead or was lost; read alert-log.txt for REVIEW PACKET NOT WRITTEN' -f $Parity.start, $Parity.end, @($Parity.broken).Count))
+    foreach ($b in @($Parity.broken)) { [void]$out.Add(('    {0}: alert path {1} row(s) / {2} line(s), packet {3} row(s) / {4} line(s)' -f $b.type, $b.intake_rows, $b.intake_lines, $b.packet_rows, $b.packet_lines)) }
+  }
+  return $out.ToArray()
+}
+function Write-ReviewPacketCensus {
+  <# Reads the packet, the intake ledger and the queue; prints. A file that cannot be read says so and costs only these lines. #>
+  param($QueueItems, $Registry, [datetime]$Today)
+  try {
+    . (Join-Path $root 'review-adjudication-lib.ps1')
+    $pf = Join-Path $root 'out\review-packet.json'; $if = Join-Path $root 'out\review-intake.jsonl'
+    $pk = if (Test-Path -LiteralPath $pf) { Read-ReviewPacket $pf } else { [pscustomobject]@{ rows = @() } }
+    $ir = @(); if (Test-Path -LiteralPath $if) { $ir = @([IO.File]::ReadAllLines($if) | Where-Object { $_.Trim() } | ForEach-Object { $_ | ConvertFrom-Json }) }
+    $cache = @{}
+    $eo = { param($k) if (-not $cache.ContainsKey($k)) { $res = Resolve-AlertClass $Registry $k; $cache[$k] = $(if ($res.entry) { [string]$res.entry.id } else { '' }) }; $cache[$k] }
+    $par = Get-ReviewPacketParity $ir $pk $Today
+    $pd = Get-ReviewPacketPageDays $QueueItems $eo $Today
+    foreach ($l in (Format-ReviewPacketCensusLines $par $pd $script:ReviewPacketBarOpens $Today)) { Write-Output $l }
+  } catch { Write-Output ('  REVIEW PACKET  NOT MEASURED - ' + $_.Exception.Message) }
+}
+
 if ($SelfTest) {
   $fail = 0; $ran = 0
   function _T([string]$label, [bool]$cond, [string]$detail) {
@@ -345,6 +386,17 @@ if ($SelfTest) {
   $cxWithout = Get-CensusClassMeasure $cxQ2 @() $cxReg @(Get-CensusRows $cxQ2) ([datetime]'2026-09-22') 30
   _T 'MUST FIRE a close found only in the archive makes the next same-class id a return (1 with it, 0 without)' `
     ($cxWith.arm2.returns -eq 1 -and $cxWithout.arm2.returns -eq 0) ("with=" + $cxWith.arm2.returns + " without=" + $cxWithout.arm2.returns)
+  # ---- STEP 11: row-count parity between the alert path (the intake ledger) and the review packet ----
+  . (Join-Path $root 'review-adjudication-lib.ps1')
+  $rpPk = [pscustomobject]@{ rows = @([pscustomobject]@{ type = 'semantic-sweep'; observations = @([pscustomobject]@{ date = '2026-10-04'; lines = 2 }) }) }
+  $rpIn = @([pscustomobject]@{ date = '2026-10-04'; type = 'semantic-sweep'; lines = 2 }, [pscustomobject]@{ date = '2026-10-05'; type = 'new-price-flags'; lines = 3 })
+  $rpPd = Get-ReviewPacketPageDays @() { param($k) '' } ([datetime]'2026-10-05') 14 '2026-10-03'
+  $rpBreak = @(Format-ReviewPacketCensusLines (Get-ReviewPacketParity $rpIn $rpPk ([datetime]'2026-10-05') 14 '2026-10-03') $rpPd '2026-10-03' ([datetime]'2026-10-05'))
+  _T 'MUST FIRE a five-type send the packet does not hold prints PARITY BREAK naming its type and both counts' `
+    ((($rpBreak -join "`n") -match 'PARITY BREAK in 1 of 5') -and (($rpBreak -join "`n") -match 'new-price-flags: alert path 1 row\(s\) / 3 line\(s\), packet 0 row\(s\)')) ($rpBreak -join ' / ')
+  $rpOk = @(Format-ReviewPacketCensusLines (Get-ReviewPacketParity @($rpIn[0]) $rpPk ([datetime]'2026-10-05') 14 '2026-10-03') $rpPd '2026-10-03' ([datetime]'2026-10-05'))
+  _T 'CLEAN TWIN an intake ledger and a packet that agree print PARITY and the page-day line with its bar' `
+    ((($rpOk -join "`n") -match 'PARITY, 1 send\(s\) on the alert path and 1 packet row') -and (($rpOk -join "`n") -match 'paged on 0 of 3 day\(s\) 2026-10-03 to 2026-10-05 \(bar: at most 4 of 14\)')) ($rpOk -join ' / ')
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail of $ran case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($ran alert-census cases)"
@@ -423,6 +475,7 @@ foreach ($t in @($s.Recurring | Select-Object -First 10)) {
 }
 $dTxt = (@($s.Dispositions.Keys | Sort-Object | ForEach-Object { $_ + '=' + $s.Dispositions[$_] })) -join ' '
 Write-Output ("  CLOSES       last 30 by disposition: " + $(if ($dTxt) { $dTxt } else { 'none dated' }))
+Write-ReviewPacketCensus $items $(if ($regSt.ok) { $regSt.registry } else { $null }) $now
 
 # ---- RULED STEPS (2026-10-02, D3 A): the header says why; grocery\ruled-step-lib.ps1 is the rule ----
 $rsStalledN = 'none'; $rsBlindTok = 'none'

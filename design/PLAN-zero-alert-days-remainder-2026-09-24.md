@@ -48,7 +48,8 @@ Only files that no other lane writes, because they do not exist yet and each ste
 - step 8: `design/SPEC-capture-row-contract.md`, `grocery/row-contract-lib.ps1`
 - step 9: `grocery/audit-store-category-share.ps1`, `grocery/audit-crown-identity-shadow.ps1`, `grocery/store-department-lib.ps1`,
   `grocery/store-department-map.json` (the last two added by the step's first commit, 2026-10-02; nothing else writes them)
-- step 11: `grocery/review-adjudication-lib.ps1`
+- step 11: `grocery/review-adjudication-lib.ps1`, and since step 11 started (2026-10-02) its existing files
+  `grocery/send-alert.ps1`, `grocery/triage-due.ps1`, `grocery/audit-alert-census.ps1`
 - R11: `design/TRIAL-aldi-fareway-page-json.md`
 
 ### Named when their step starts (file names only, so the check does not read them yet)
@@ -58,7 +59,7 @@ Only files that no other lane writes, because they do not exist yet and each ste
 | 8, row contract | the seven builders `build-walmart-deals.ps1`, `build-aldi-regular.ps1`, `build-fareway-regular.ps1`, `build-sams-deals.ps1`, `pull-regular-hyvee.ps1`, `pull-regular-familyfare.ps1`, `pull-regular-bakers-api.ps1`, and the two batch importers `import-walmart-batch.ps1` and `import-instacart-batch.ps1` (all under `grocery/`) | 32 |
 | 9, two-signal identity | none until enforcement; the crown selection file joins only if the enforcement bars are met | |
 | 10, muffins | the commodity catalog `commodities.json` and its search and category files (under `grocery/`), in one change through the registrar and the money lane | 23 (the catalog file alone) |
-| 11, review packet | `send-alert.ps1` (the review-class route), `triage-due.ps1` (triage works the packet), `audit-alert-census.ps1` (row-count parity), all under `grocery/` | 15 |
+| 11, review packet | moved to the named list above on 2026-10-02, when the step started; they move back out when it finishes | 15 |
 | R18, own Chrome tabs | `pull-walmart-instore.js`, `pull-sams-instore.js` (under `grocery/`), and the browser-stores prompt mirror `SKILL.md` under `ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/` | 11 |
 | R11, in-page JSON trial | `pull-aldi-instore.js`, `pull-fareway-shop.js` (under `grocery/`) | 1 |
 | 3b, Family Fare catalog walk | `pull-regular-familyfare.ps1` (shared with step 8) | |
@@ -238,6 +239,28 @@ The five bucket-1 types, from the source's section 3: matching soundness review,
 stores dropped from a commodity, wrong store department. Since 2026-09-20 a review-class alert is born in the weekly
 lane and never mailed (`send-alert.ps1`, Brad's ruling of that day), so step 11 starts from there: it moves those
 queue items into the packet and adds the adjudication, rather than reclassifying anything.
+
+**Status: BUILT 2026-10-02, not yet landed; bar window opens 2026-10-03, closes 2026-10-17** (the 14 days 2026-10-03 to
+2026-10-16). The bar above is unchanged. What was built, for the reader of the bar:
+- The route is at `send-alert.ps1` once the registry class is known, so no emitter call site changed. A review-class
+  alert whose registry entry is one of the five (the soundness entries by id or by `lineage_parent` match-soundness,
+  `new-price-flags`, `semantic-sweep`, `stores-dropped`, `wrong-department`) writes one row of
+  `grocery/out/review-packet.json` (gitignored, machine-local, beside the queue it replaces for these types) and is not
+  queued. A row with an unexplained crown change or an engine-stated out-of-band move on a live cell ALSO queues as a
+  review item did before (still not mailed: nothing is reclassified). Every failure falls back to the queue.
+- The three adjudications are pure functions in `grocery/review-adjudication-lib.ps1`, each recording its evidence on the
+  line: a ruling footprint (a catalog change or a known-wrong ruling on the commodity in the last 2 days), an
+  acknowledgement in `review-ack.json` still inside its expiry, and a committed `*.routing.json` prediction from the last
+  14 days. The band verdict is the engine's, read off the line; no band is computed.
+- dc03c3 is folded in: one condition is one packet row (a repeat absorbs, as a queue item absorbs), and the soundness
+  roll-up adds none. The roll-up subject was already registered on 2026-10-01 (`match-soundness-digest`), so the
+  registry is unchanged.
+- `triage-due.ps1` lists the rows a reader owes as Class C/D work for the JOB 3 spawn; a row makes the run DUE on its own
+  after 7 days. `audit-alert-census.ps1` prints the page days against the bar and the row-count parity against
+  `grocery/out/review-intake.jsonl`, the ledger the route appends before it adjudicates. A break is printed, not paged.
+- Baseline for the bar, measured 2026-10-02 from the live queue with the lib's own page-day count: the five types plus
+  the soundness crown page queued on 14 of the 14 days 2026-09-19 to 2026-10-02 (50 observations over 7 registry
+  entries). The packet's effect on that number is not predicted here; the window measures it.
 
 ## 3. Not carried
 

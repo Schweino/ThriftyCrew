@@ -8,7 +8,7 @@
   -SelfTest runs the RE-MEASURE FIRST fixtures against a temp git repo and exits, touching no live file.
 #>
 # The self-test builds its fixtures in temp (a temp git repo included) and reads only its libraries:
-# gate-inputs: grocery\triage-return-lib.ps1, lib\json-io.ps1, lib\git-repo-env.ps1
+# gate-inputs: grocery\triage-return-lib.ps1, grocery\review-adjudication-lib.ps1, lib\json-io.ps1, lib\git-repo-env.ps1
 # [CmdletBinding()] so -SelfTest cannot fall into $args and run the LIVE report instead ([[arg-silently-ignored]]).
 [CmdletBinding()]
 param([switch]$SelfTest)
@@ -154,6 +154,37 @@ function Format-PreventionDueLine {
   param($StampTime)
   $last = if ($null -eq $StampTime) { 'never' } else { ([datetime]$StampTime).ToString('yyyy-MM-dd HH:mm') }
   return ('PREVENTION DUE  the weekly lane last planned prevention: ' + $last + ' - run the SKILL''s STEP 3.5 prevention step today even if no weekly item is open (ruling 6)')
+}
+# ---- THE REVIEW PACKET IS WORKED THE WAY CLASS C ITEMS ARE (step 11, design/PLAN-zero-alert-days-remainder-2026-09-24.md) --
+# Since step 11 the five review types (matching soundness, new price flags, semantic sweep, stores dropped, wrong store
+# department) write a row to grocery\out\review-packet.json instead of a queue item; grocery\review-adjudication-lib.ps1
+# holds the rule. The ruling: "Daily triage works the packet the way it works Class C items today", and Class C/D items
+# go to ONE small triage-ops-developer spawn in JOB 3 (the SKILL's STEP 0.9). So every run LISTS the rows a reader owes
+# under that tier, and a row that paged is also in the queue above it. The packet makes the run DUE on its own only when
+# a row has waited 7 days, the weekly lane's cadence, so Brad's 2026-09-20 ruling (a review item does not set the daily
+# pace) still holds. Adjudicated rows owe no reader; they are counted with what explained them, never hidden.
+function Format-ReviewPacketDueLines {
+  <# .SYNOPSIS Pure. Get-ReviewPacketWork's answer -> the lines this report prints. Nothing when no row is owed. #>
+  param($Work)
+  $out = New-Object System.Collections.Generic.List[string]
+  if ($null -eq $Work) { return $out.ToArray() }
+  $open = @($Work.open)
+  if ($open.Count) {
+    $lead = if ($Work.due) { 'DUE  REVIEW PACKET' } else { 'REVIEW PACKET' }
+    [void]$out.Add($lead + '  ' + $open.Count + ' row(s) a reader owes, oldest ' + $Work.oldest_days + ' day(s) - Class C/D: name every id in the ONE JOB 3 spawn (STEP 0.9); close each with grocery\review-adjudication-lib.ps1 -CloseRow <id> -Disposition <confirmed|false-alarm|superseded|by-design|wont-fix> -Notes "<what was established>"')
+    foreach ($r in $open) {
+      $ls = @($r.lines); $ux = @($ls | Where-Object { -not ($_.adjudication -and $_.adjudication.explained) }).Count
+      $pg = if ([string]$r.status -eq 'paged') { '  PAGED (its queue item is listed above)' } else { '' }
+      $un = if ($r.unparsed) { '  NO PARSEABLE LINE' } else { '' }
+      [void]$out.Add('  [' + [string]$r.id + '] ' + [string]$r.type + ' x' + [string]$r.count + '  ' + $ux + ' of ' + $ls.Count + ' line(s) unexplained' + $pg + $un + '  ' + [string]$r.subject)
+    }
+  }
+  $adj = @($Work.adjudicated)
+  if ($adj.Count) {
+    $by = (@($Work.adjudicated_by.Keys | Sort-Object | ForEach-Object { $_ + '=' + $Work.adjudicated_by[$_] }) -join ' ')
+    [void]$out.Add('REVIEW PACKET  ' + $adj.Count + ' row(s) adjudicated in the last day (' + $by + ') - no reader owed; the evidence is on each row')
+  }
+  return $out.ToArray()
 }
 
 if ($SelfTest) {
@@ -620,6 +651,24 @@ if ($SelfTest) {
   } catch {
     _T 'the RETURN rule loads and runs (triage-return-lib.ps1)' $false $_.Exception.Message
   }
+  # ---- THE REVIEW PACKET (step 11): rows a reader owes are listed as Class C/D work, and due on their own at 7 days ----
+  try {
+    . (Join-Path $root 'review-adjudication-lib.ps1')
+    $rpLine = { param($ex) [pscustomobject]@{ text = 'x'; adjudication = [pscustomobject]@{ explained = $ex; by = $(if ($ex) { 'acknowledged' } else { '' }) } } }
+    $rpPk = [pscustomobject]@{ rows = @(
+      [pscustomobject]@{ id = 'rp-2026-09-23-aaaaaa'; date = '2026-09-23'; last_seen = '2026-09-23T08:00:00'; type = 'semantic-sweep'; status = 'open'; count = 1; unparsed = $false; subject = 'Grocery: semantic sweep found 2 product(s) no rule can see'; lines = @((& $rpLine $false), (& $rpLine $false)) },
+      [pscustomobject]@{ id = 'rp-2026-09-30-bbbbbb'; date = '2026-09-30'; last_seen = '2026-09-30T08:00:00'; type = 'new-price-flags'; status = 'adjudicated'; count = 1; unparsed = $false; subject = 'Grocery: 1 NEW price flag(s)'; lines = @((& $rpLine $true)) }) }
+    $rpDue = Format-ReviewPacketDueLines (Get-ReviewPacketWork $rpPk ([datetime]'2026-09-30T09:00:00'))
+    _T 'MUST FIRE a packet row a reader has owed for 7 days makes the run DUE and is listed as Class C/D work with the close command' `
+      ((@($rpDue) -join "`n") -match '^DUE  REVIEW PACKET  1 row' -and (@($rpDue) -join "`n") -match 'rp-2026-09-23-aaaaaa\] semantic-sweep x1  2 of 2 line\(s\) unexplained' -and (@($rpDue) -join "`n") -match '-CloseRow <id>') (@($rpDue) -join ' / ')
+    _T 'CLEAN TWIN an adjudicated row is counted with what explained it, so a quiet type is never a hidden one' `
+      ((@($rpDue) -join "`n") -match 'REVIEW PACKET  1 row\(s\) adjudicated in the last day \(acknowledged=1\)') (@($rpDue) -join ' / ')
+    $rpFresh = Format-ReviewPacketDueLines (Get-ReviewPacketWork $rpPk ([datetime]'2026-09-29T09:00:00'))
+    _T 'MUST NOT FIRE the same row at 6 days is listed for the JOB 3 spawn but does not make the run DUE' `
+      ((@($rpFresh) -join "`n") -match '^REVIEW PACKET  1 row' -and (@($rpFresh) -join "`n") -notmatch '(?m)^DUE') (@($rpFresh) -join ' / ')
+  } catch {
+    _T 'the review packet lib loads and formats (review-adjudication-lib.ps1)' $false $_.Exception.Message
+  }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($cases triage-due cases)"
@@ -690,11 +739,20 @@ try { $resumeDue = Get-TriageResumeDue $resume; $resumeDue = @($resumeDue) } cat
 $unlandedLines = @()
 try { $unl = Get-TriageUnlandedBranches (Split-Path $root -Parent); $unlandedLines = Format-TriageUnlandedLines @($unl); $unlandedLines = @($unlandedLines) } catch { $unlandedLines = @() }
 foreach ($l in $unlandedLines) { Write-Output $l }
-if ($unlandedLines.Count -eq 0 -and (Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resumeDue.Count)) {
+# THE REVIEW PACKET (step 11): read beside the queue. A packet that exists but cannot be read is DUE, like the queue.
+$pktLines = @(); $pktDue = $false; $pktOpen = 0
+try {
+  . (Join-Path $root 'review-adjudication-lib.ps1')
+  $pktFile = Join-Path $root 'out\review-packet.json'
+  if (Test-Path -LiteralPath $pktFile) { $pktW = Get-ReviewPacketWork (Read-ReviewPacket $pktFile) (Get-Date); $pktDue = [bool]$pktW.due; $pktOpen = @($pktW.open).Count; $pktLines = Format-ReviewPacketDueLines $pktW; $pktLines = @($pktLines) }
+} catch { $pktDue = $true; $pktLines = @('DUE  REVIEW PACKET could not be read (' + $_.Exception.Message + ') - that itself is the first item to fix; its rows are unlisted') }
+if ($unlandedLines.Count -eq 0 -and -not $pktDue -and (Test-TriageIdle $daily.Count ([bool]$split.WeeklyDue) $resumeDue.Count)) {
   if ($spools.Count -gt 0) { exit 0 }   # spool lines above already said DUE
   $nb = ''; if ($needsBrad.Count) { $nb = ' (' + $needsBrad.Count + ' item(s) parked needs-brad - do not re-triage, they are his)' }
   $wl = ''; if ($weekly.Count) { $wl = ' (' + $weekly.Count + ' weekly-lane item(s) wait for ' + $split.NextDue.ToString('yyyy-MM-dd') + ')' }
+  if ($pktOpen) { $wl += (' (' + $pktOpen + ' review-packet row(s) listed below for the next run''s JOB 3 spawn)') }
   Write-Output ('IDLE  triage queue clear' + $wl + $nb)
+  foreach ($l in $pktLines) { Write-Output $l }
   if (Test-PreventionDue $laneStamp (Get-Date)) { Write-Output (Format-PreventionDueLine $laneStamp) }
   exit 0
 }
@@ -742,6 +800,7 @@ if ($weekly.Count) {
     Write-Output ('  [' + $i.id + '] x' + $i.count + '  ' + $i.subject + $ov)
   }
 }
+foreach ($l in $pktLines) { Write-Output $l }
 # a due weekly lane already runs prevention first; otherwise say when prevention alone is owed (ruling 6)
 if (-not $split.WeeklyDue -and (Test-PreventionDue $laneStamp (Get-Date))) { Write-Output (Format-PreventionDueLine $laneStamp) }
 # An item whose emitter was committed after the alert fired may be describing code that no longer exists.

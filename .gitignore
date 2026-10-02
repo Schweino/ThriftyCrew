@@ -275,6 +275,11 @@ __pycache__/
 # the weekly triage lane's last-WORKED stamp (2026-09-10): read by triage-due.ps1 beside the queue it gates,
 # machine-local for the same reason as the queue.
 /grocery/triage-weekly-lane-stamp.txt
+# the review packet and its parity ledger (step 11, grocery/review-adjudication-lib.ps1): the five review types'
+# replacement for their triage-queue items, so machine-local for the same reason as the queue. capture-run stages
+# the whole of grocery/out, so without these lines the bot would commit them.
+/grocery/out/review-packet.json
+/grocery/out/review-intake.jsonl
 # the graph's learning + escalation queues: same class as triage-queue.json above. Producer (the daily
 # pipeline / resolver) and consumer (the learning loop, the Claude review agent) are on the SAME PC, so
 # these never cross the git-bus, and their bodies carry raw store product text. Durable learning records
