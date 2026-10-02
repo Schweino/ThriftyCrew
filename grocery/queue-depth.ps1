@@ -139,8 +139,9 @@ function Get-TcPropagateDrainSource {
   $src = Get-Content (Join-Path $repo 'meal-prep\pipeline\propagate-recipes.ps1') -Raw -Encoding UTF8
   $a = [regex]::Match($src, '(?s)function Read-HeldSlugs\(\[string\]\$Path\)\s*\{.*?\n\}')
   $b = [regex]::Match($src, '(?s)function Get-DrainScope \{.*?\n\}')
-  if (-not ($a.Success -and $b.Success)) { throw 'could not lift Read-HeldSlugs / Get-DrainScope from propagate-recipes.ps1' }
-  return ($a.Value + "`n" + $b.Value)
+  $c = [regex]::Match($src, '(?s)function Get-HeldListPath\(\[string\]\$MealPrep\)\s*\{.*?\n\}')
+  if (-not ($a.Success -and $b.Success -and $c.Success)) { throw 'could not lift Read-HeldSlugs / Get-DrainScope / Get-HeldListPath from propagate-recipes.ps1' }
+  return ($a.Value + "`n" + $b.Value + "`n" + $c.Value)
 }
 
 function Get-TcLiveDepth {
@@ -169,7 +170,7 @@ function Get-TcLiveDepth {
       # file already reads as a failed probe, never as an empty queue.
       Invoke-Expression (Get-TcPropagateDrainSource)
       $dirtyArr = $dirty.ToArray()
-      $dsq = Get-DrainScope -Dirty $dirtyArr -Held (Read-HeldSlugs (Join-Path $repo 'meal-prep\db\held-recipes.json')) -Max ([int]::MaxValue)
+      $dsq = Get-DrainScope -Dirty $dirtyArr -Held (Read-HeldSlugs (Get-HeldListPath (Join-Path $repo 'meal-prep'))) -Max ([int]::MaxValue)
       $named = @($dsq.Named)
       # Get-TcLiveDrain ages this queue by these names; Measure-TcQueue always reads depth first.
       $script:TcPropagateDirty = $named
@@ -306,7 +307,8 @@ if ($SelfTest) {
   $hDir = Join-Path $env:TEMP ('qd-held-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
   New-Item -ItemType Directory -Force $hDir -ErrorAction Stop | Out-Null
   try {
-    $hFile = Join-Path $hDir 'held-recipes.json'
+    $hFile = Get-HeldListPath $hDir
+    New-Item -ItemType Directory -Force (Split-Path $hFile -Parent) -ErrorAction Stop | Out-Null
     Set-Content $hFile '{"held":[{"slug":"held-h","reason":"fixture"}]}' -Encoding UTF8
     $qs = Get-DrainScope -Dirty @('stuck-a', 'held-h') -Held (Read-HeldSlugs $hFile) -Max ([int]::MaxValue)
     T 'MUST FIRE  a HELD dirty spec is not counted as queue (it is dirty on purpose and publish refuses it)' `

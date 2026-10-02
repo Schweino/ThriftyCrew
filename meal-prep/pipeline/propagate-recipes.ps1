@@ -47,7 +47,7 @@
 # caller passes -AllowCatalogue. See Test-PropagateScope below for why.
 # The self-test copies lib\*.ps1 into a sandbox, runs the allergen gate on a temp card against allergens.json, reads the reanchor patterns as text, and its -DryRun child reads the stamps:
 # gate-inputs: lib\*.ps1, meal-prep\lib\allergen-lib.ps1, meal-prep\db\allergens.json, meal-prep\pipeline\audit-allergen-line.ps1, meal-prep\pipeline\propagate-stamps.json
-# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1, grocery\check-ad-cycles.ps1
+# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1, grocery\check-ad-cycles.ps1, grocery\propagate-drain-lib.ps1
 param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
       [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue, [switch]$Drain, [int]$DrainMax = 150)
 $ErrorActionPreference = 'Stop'
@@ -174,6 +174,11 @@ function Read-HeldSlugs([string]$Path) {
   if (-not (Test-Path -LiteralPath $Path)) { return @() }
   $hd = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
   return @(@($hd.held) | Where-Object { $_ -and $_.slug } | ForEach-Object { [string]$_.slug })
+}
+# THE ONE PLACE THE HELD LIST'S PATH IS SPELLED (2026-10-02). grocery\queue-depth.ps1 lifts this with the two
+# functions around it, so the alarm reads the held list the drain reads and grocery never names meal-prep's db.
+function Get-HeldListPath([string]$MealPrep) {
+  return (Join-Path $MealPrep 'db\held-recipes.json')
 }
 function Get-DrainScope {
   param($Dirty, $Held, [int]$Max)
@@ -499,8 +504,10 @@ if ($SelfTest) {
       ($dzRc -ne 0 -and (@($dz) -join '|') -notmatch 'propagate scope:') ("rc=" + $dzRc)
     # THE CALLER EXISTS: the daily chain runs -Drain. Red on a revert of the chain step. Needle by concatenation.
     $chainSrc = Get-Content (Join-Path (Split-Path $mp -Parent) 'grocery\check-ad-cycles.ps1') -Raw -Encoding UTF8
+    # Since 2026-10-02 the step lives in grocery\propagate-drain-lib.ps1 (a size split): the chain must call it AND it must run -Drain.
+    $drainSrc = Get-Content (Join-Path (Split-Path $mp -Parent) 'grocery\propagate-drain-lib.ps1') -Raw -Encoding UTF8
     T 'MUST FIRE  grocery\check-ad-cycles.ps1 calls propagate-recipes.ps1 -Drain (the queue has an automated caller)' `
-      ($chainSrc -match ("propagate-recipes\.ps1'\)\s+-" + 'Drain')) 'no -Drain call in the daily chain'
+      (($chainSrc -match ('Invoke-TcPropagate' + 'Drain -PipelineDir')) -and ($drainSrc -match ("propagate-recipes\.ps1'\)\s+-" + 'Drain'))) 'no -Drain call in the daily chain'
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -527,7 +534,7 @@ if ($Drain) {
     Write-Output 'PROPAGATE-DRAIN-REFUSED: -Drain names its own scope and takes no -SlugsFile, -AllowCreateFile or -AllowCatalogue. Nothing ran and no stamp moved.'
     exit 2
   }
-  $heldNow = Read-HeldSlugs (Join-Path $mp 'db\held-recipes.json')
+  $heldNow = Read-HeldSlugs (Get-HeldListPath $mp)
   $ds = Get-DrainScope -Dirty $dirty -Held $heldNow -Max $DrainMax
   $ds.Held | ForEach-Object { Write-Output ('  held, not drained: ' + $_) }
   if ($ds.Refuse) {
