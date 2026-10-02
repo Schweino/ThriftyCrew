@@ -134,7 +134,8 @@ else {
   # printed FAIL here, and ops\prepush-test-auditors.ps1 counted it as a NEW failing case and refused most first
   # pushes from a fresh worktree for a reason unrelated to the change. A blind child is now a SKIP, counted as one,
   # and only when its ran + blind still add to the pinned 28: a blind line over a smaller suite is still lost fixtures.
-  $fcV = Get-FeedCovSelfTestVerdict -Rc $LASTEXITCODE -Text $r -Pinned 28
+  # 28 -> 31 (2026-10-02): three Get-FeedCovReadableVerdict cases (a run that read no card is BLIND, not clean). Verified before moving it: the child reports 30 of 31 ran + 1 BLIND unseeded, exit 0.
+  $fcV = Get-FeedCovSelfTestVerdict -Rc $LASTEXITCODE -Text $r -Pinned 31
   if ($fcV.state -eq 'pass') {
     Ok 'feed-covers-published -SelfTest passes with its founding-bug fixtures armed (a published slug the feed does not carry, a bid in ingredients but not pricing_inputs, a present-but-zero-priced entry, and the allowlist pardoning only its own bid)'
   } elseif ($fcV.state -eq 'blind') {
