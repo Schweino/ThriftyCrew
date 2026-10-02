@@ -322,6 +322,9 @@ function Get-AlertRegistryEntryProblems {
     if ($script:AlertMatchModes -notcontains [string]$e.match) { [void]$p.Add($tag + ": match '" + [string]$e.match + "' is not exact, prefix or regex") }
     if (-not [string]$e.key) { [void]$p.Add($tag + ': no key') }
     elseif ([string]$e.match -eq 'regex') { try { $null = [regex]::new([string]$e.key) } catch { [void]$p.Add($tag + ': the regex does not compile') } }
+    # A KEY NO SUBJECT CAN REACH (2026-10-02): a type key is lower-case letters and single spaces, so an exact or prefix
+    # key holding a hyphen or a digit can never match (board-freshness-reprice-owed carried 're-priced' unseen).
+    elseif ((Get-AlertTypeKey ([string]$e.key)) -cne [string]$e.key) { [void]$p.Add($tag + ": " + [string]$e.match + " key '" + [string]$e.key + "' is not in type-key form (lower-case letters, single spaces), so no subject can ever match it") }
     if (-not [string]$e.condition) { [void]$p.Add($tag + ': no condition') }
     elseif ([string]$e.class -eq 'page' -and $script:AlertPageConditions -notcontains [string]$e.condition) { [void]$p.Add($tag + ": page condition '" + [string]$e.condition + "' is not one of the page conditions") }
     if (-not [string]$e.emitter) { [void]$p.Add($tag + ': no emitter') }

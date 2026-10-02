@@ -20,6 +20,9 @@
   own prompt) is listed UNREADABLE and not checked, and a queue type is only seen after it has fired. A clean
   report means every subject it could read, and every queued type, maps to exactly one entry. It does not mean no
   unregistered alert can fire; send-alert.ps1 is the backstop for those and pages them as UNREGISTERED ALERT TYPE.
+  A file that defines Send-Alert at script top level (the transport, a test-*.ps1 harness) is skipped whole; a stub
+  nested in a self-test block or a function hides only the calls inside that block (2026-10-02: until then a fixture
+  stub in check-ad-cycles.ps1 hid all 73 of its call sites, and one unregistered page shipped past this check).
 
   EXIT: 0 clean. 2 at least one unmapped or ambiguous subject or type, or an entry that cannot be applied.
   3 could not evaluate (registry missing or unparseable, no call site found at all, or with -Queue an unreadable
@@ -201,16 +204,39 @@ function Test-InsideSelfTest {
   return $false
 }
 
+function Get-StubScope {
+  <# The region a Send-Alert definition can actually capture. $null means the file itself: a definition at script
+     top level, outside any self-test block, is the transport or a test harness and the whole file is skipped. A
+     definition inside an if ($SelfTest) block or inside a function body captures only that block or body. #>
+  param($Def)
+  $p = $Def.Parent
+  while ($p) {
+    if (Test-AstKind $p 'IfStatementAst') { foreach ($cl in $p.Clauses) { if ($cl.Item1.Extent.Text -match '\$SelfTest') { return $p } } }
+    if ((Test-AstKind $p 'ScriptBlockAst') -and $null -ne $p.Parent) { return $p }
+    $p = $p.Parent
+  }
+  return $null
+}
+
 function Get-AlertCallSites {
   <# Pure over a parsed script. One row per send-alert call: its readable subjects, or unreadable. A file that
-     DEFINES Send-Alert is a stub or the transport, and calls inside an if ($SelfTest) block are fixtures. #>
+     DEFINES Send-Alert at top level is a stub harness or the transport and is skipped whole; a definition nested
+     in a self-test block or a function excludes only the calls inside that same block (2026-10-02: a fixture stub
+     in check-ad-cycles.ps1 hid all of its call sites). Calls inside an if ($SelfTest) block are fixtures. #>
   param($Ast, [string]$File)
   $sites = New-Object System.Collections.Generic.List[object]
-  $stubs = @($Ast.FindAll({ param($a) $a.GetType().Name -eq 'FunctionDefinitionAst' -and $a.Name -ieq 'Send-Alert' }, $true))
-  if ($stubs.Count) { return ,$sites }
+  $stubScopes = New-Object System.Collections.Generic.List[object]
+  foreach ($d in $Ast.FindAll({ param($a) $a.GetType().Name -eq 'FunctionDefinitionAst' -and $a.Name -ieq 'Send-Alert' }, $true)) {
+    $sc = Get-StubScope $d
+    if ($null -eq $sc) { return ,$sites }
+    [void]$stubScopes.Add($sc)
+  }
   foreach ($c in $Ast.FindAll({ param($a) $a.GetType().Name -eq 'CommandAst' }, $true)) {
     if (-not (Test-IsSendAlertCommand $c $Ast)) { continue }
     if (Test-InsideSelfTest $c) { continue }
+    $stubbed = $false
+    foreach ($sc in $stubScopes) { if ($c.Extent.StartOffset -ge $sc.Extent.StartOffset -and $c.Extent.EndOffset -le $sc.Extent.EndOffset) { $stubbed = $true; break } }
+    if ($stubbed) { continue }
     $arg = Get-BoundArgument $c 'Subject' -1
     $subjects = New-Object System.Collections.Generic.List[string]
     $partial = $false
@@ -371,7 +397,7 @@ param([string]$Title = '')
 
   # THE RESOLVER CONTRACT (2026-09-22, design/RCA-holistic-2026-09-22.md F5). Every entry names what closes it.
   $rvBase = [ordered]@{ match = 'exact'; class = 'page'; condition = '1 board-or-feed-wrong-or-held'; emitter = 'x.ps1' }
-  function _RvE([string]$id, $res) { $h = [ordered]@{ id = $id; key = ('k ' + $id) } + $rvBase; if ($null -ne $res) { $h['resolver'] = $res }; return [pscustomobject]$h }
+  function _RvE([string]$id, $res) { $h = [ordered]@{ id = $id; key = ('k ' + ($id -replace '-', ' ' -replace '1', ' one' -replace '2', ' two')) } + $rvBase; if ($null -ne $res) { $h['resolver'] = $res }; return [pscustomobject]$h }
   $rvNone = [pscustomobject]@{ entries = @((_RvE 'new-type' $null)) }
   $rvp = @((Get-AlertRegistryEntryProblems $rvNone))
   _T 'MUST FIRE a page entry with no resolver field is an INVALID ENTRY that names the three resolver kinds' (@($rvp | Where-Object { $_ -match 'new-type\): no resolver - name what closes it' }).Count -eq 1) ($rvp -join ' | ')
@@ -400,7 +426,7 @@ param([string]$Title = '')
   $rvp = @((Get-AlertRegistryEntryProblems $rvNoMark))
   _T 'MUST FIRE grandfathered entries with no recorded mark are reported' (@($rvp | Where-Object { $_ -match 'unassigned_max is missing' }).Count -eq 1) ($rvp -join ' | ')
   # delivery: the mailer queues a resolver-less type and mails nothing
-  $dNo = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvNone 'k new-type') -Subject 's'
+  $dNo = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvNone 'k new type') -Subject 's'
   _T 'MUST FIRE a registered page type with no resolver is delivered queue=true mail=false resolverless=true' ($dNo.queue -and -not $dNo.mail -and $dNo.resolverless) ('queue=' + $dNo.queue + ' mail=' + $dNo.mail)
   $dLane = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvOk 'k a') -Subject 's'
   _T 'CLEAN TWIN a page type with a lane: resolver is still queued AND mailed' ($dLane.queue -and $dLane.mail -and -not $dLane.resolverless) ('queue=' + $dLane.queue + ' mail=' + $dLane.mail)
@@ -408,7 +434,7 @@ param([string]$Title = '')
   $dDig = Get-AlertDelivery -Resolution (Resolve-AlertClass $rvDig 'k dg') -Subject 's'
   _T 'MUST FIRE a digest-class type with no resolver is QUEUED (never lost) and not mailed' ($dDig.queue -and -not $dDig.mail) ('queue=' + $dDig.queue + ' mail=' + $dDig.mail)
   # ---- LINEAGE (2026-09-22, plan-2026-09-22-10, the class-keyed return rate) ----
-  function _LnE([string]$id, [hashtable]$extra) { $h = [ordered]@{ id = $id; key = ('k ' + $id); resolver = 'digest' } + $rvBase; foreach ($k in $extra.Keys) { $h[$k] = $extra[$k] }; return [pscustomobject]$h }
+  function _LnE([string]$id, [hashtable]$extra) { $h = [ordered]@{ id = $id; key = ('k ' + ($id -replace '-', ' ' -replace '1', ' one' -replace '2', ' two')); resolver = 'digest' } + $rvBase; foreach ($k in $extra.Keys) { $h[$k] = $extra[$k] }; return [pscustomobject]$h }
   $lnPar = _LnE 'watch' @{ retired = '2026-09-21 split' }
   $lnNoLp = [pscustomobject]@{ entries = @($lnPar, (_LnE 'watch-run-record' @{ split_from = 'plan-2026-09-21-5.json' })) }
   $lnp = @((Get-AlertRegistryEntryProblems $lnNoLp))
@@ -423,7 +449,7 @@ param([string]$Title = '')
   $lnOk = [pscustomobject]@{ entries = @($lnPar, (_LnE 'watch-run-record' @{ split_from = 'plan-2026-09-21-5.json'; lineage_parent = 'watch' })) }
   $lnp = @((Get-AlertRegistryEntryProblems $lnOk))
   _T 'MUST NOT FIRE a split_from naming its retired parent passes' ($lnp.Count -eq 0) ($lnp -join ' | ')
-  _T 'CLEAN TWIN the successor and its retired parent share one class key' (((Get-AlertClassKey $lnOk 'k watch-run-record') -eq 'class:watch') -and ((Get-AlertClassKey $lnOk 'k watch') -eq 'class:watch')) ((Get-AlertClassKey $lnOk 'k watch-run-record') + ' / ' + (Get-AlertClassKey $lnOk 'k watch'))
+  _T 'CLEAN TWIN the successor and its retired parent share one class key' (((Get-AlertClassKey $lnOk 'k watch run record') -eq 'class:watch') -and ((Get-AlertClassKey $lnOk 'k watch') -eq 'class:watch')) ((Get-AlertClassKey $lnOk 'k watch run record') + ' / ' + (Get-AlertClassKey $lnOk 'k watch'))
   _T 'CLEAN TWIN an unregistered type keeps its own key, counted apart' ((Get-AlertClassKey $lnOk 'k nobody knows') -eq 'unregistered:k nobody knows') (Get-AlertClassKey $lnOk 'k nobody knows')
   # ---- A HOLD THE PRODUCER CAN NEVER REACH (2026-09-22, Brad's ruling "Email first miss") ----
   $phOver = [pscustomobject]@{ entries = @((_LnE 'slot-close-missing' @{ hold_observations = 2; producer_max_observations_per_day = 1 })) }
@@ -470,7 +496,48 @@ Send-Alert -Body $b | Out-Null
   $st = Read-AlertRegistry (Join-Path $env:TEMP ('no-such-alert-registry-' + [guid]::NewGuid().ToString('N') + '.json'))
   _T 'MUST FIRE a missing registry reads as not ok, and resolves every type to page' ((-not $st.ok) -and (Resolve-AlertClass $st.registry 'grocery matching soundness review needed').class -eq 'page' -and -not (Resolve-AlertClass $st.registry 'x').registry_ok) $st.why
 
+  # A STUB HIDES ONLY WHAT IT CAN CAPTURE (2026-10-02, plan-2026-10-02 item 2026-09-30-9b9cf1 part 6). Founding bug:
+  # check-ad-cycles.ps1 defines a Send-Alert stub inside its own -SelfTest fixture, and the file was skipped WHOLE, so
+  # its 73 production call sites were never checked; 31ec588e8 added an unregistered one and the audit passed.
+  # MUST FIRE: a self-test-nested stub beside an unregistered top-level call -> UNMAPPED.
+  $srcSt = @'
+if ($SelfTest) {
+  function Send-Alert { param([string]$Subject, [string]$Body) [void]$script:pages.Add($Subject) }
+  Send-Alert -Subject 'Grocery: a fixture page beside the stub' -Body 'x'
+}
+function Watch-It { Send-Alert -Subject 'Grocery: page held coverage' -Body 'x' }
+Send-Alert -Subject 'Recipe propagate drain did not complete' -Body 'x' | Out-Null
+'@
+  $sSt = Get-AlertCallSites (ConvertTo-ParsedAst $srcSt) 'fxst.ps1'
+  $vSt = Get-RegistryVerdict $fxReg $sSt @()
+  _T 'MUST FIRE a self-test-nested Send-Alert stub no longer hides the file: its top-level unregistered call is UNMAPPED' ($sSt.Count -eq 2 -and $vSt.findings.Count -eq 1 -and $vSt.findings[0] -match 'UNMAPPED call site fxst\.ps1:6') ("sites=" + $sSt.Count + " findings=" + ($vSt.findings -join ' | '))
+  # MUST NOT FIRE: the calls inside the self-test block beside the stub, and inside a function that defines its own stub, stay unchecked.
+  $srcFn = @'
+function Test-Fixture {
+  function Send-Alert { param($Subject, $Body) $script:s = $Subject }
+  Send-Alert -Subject 'Grocery: a stubbed call inside the fixture function' -Body 'x'
+}
+'@
+  $nFn = (Get-AlertCallSites (ConvertTo-ParsedAst $srcFn) 'fxfn.ps1').Count
+  _T 'MUST NOT FIRE calls beside a nested stub (self-test block or fixture function) are not call sites' ((@($sSt | Where-Object { $_.line -eq 3 }).Count -eq 0) -and $nFn -eq 0) ("selftest-beside-stub=" + @($sSt | Where-Object { $_.line -eq 3 }).Count + " fixture-fn=" + $nFn)
+  # CLEAN TWIN: an alert-lib-style top-level transport definition still skips the file whole (fx6 above is the bare
+  # stub harness; this one carries a production-looking call after the transport, as alert-lib.ps1 does).
+  $srcTx = @'
+function Send-Alert { param([string]$Subject, [string]$Body, [switch]$Force) & (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject $Subject -Body $Body }
+function Send-AlertConditions { Send-Alert -Subject 'Grocery: an unregistered condition' -Body 'x' }
+'@
+  _T 'CLEAN TWIN a top-level transport definition still skips the file whole' ((Get-AlertCallSites (ConvertTo-ParsedAst $srcTx) 'fxtx.ps1').Count -eq 0) 'sites found'
+  # MUST FIRE: an exact key the type-key form can never produce is an entry that cannot be applied (the 're-priced' key
+  # this same blindness hid). CLEAN TWIN: the same key in type-key form is accepted.
+  $fxKey = [pscustomobject]@{ entries = @([pscustomobject]@{ id = 'rp'; match = 'exact'; key = 'board freshness ended sales not re-priced'; class = 'page'; condition = '3 scheduled-work-did-not-run-or-land'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' }) }
+  $kpRaw = Get-AlertRegistryEntryProblems $fxKey; $kp = @($kpRaw | Where-Object { $_ -match 'type-key form' })
+  $fxKey.entries[0].key = 'board freshness ended sales not re priced'
+  $kcRaw = Get-AlertRegistryEntryProblems $fxKey; $kc = @($kcRaw | Where-Object { $_ -match 'type-key form' })
+  _T 'MUST FIRE an exact key with a hyphen is refused; CLEAN TWIN its type-key form is accepted' ($kp.Count -eq 1 -and $kc.Count -eq 0) ("bad=" + $kp.Count + " good=" + $kc.Count)
+
   Write-Output ''
+  $expectCases = 48   # a deleted case must turn this red, not quietly shrink the tally
+  if ($expectCases -gt 0 -and $ran -ne $expectCases) { Write-Output "SELF-TEST FAIL: ran $ran case(s), expected $expectCases"; exit 1 }
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail of $ran case(s)"; exit 1 }
   Write-Output "SELF-TEST PASS ($ran alert-registry cases)"
   exit 0
@@ -498,8 +565,8 @@ foreach ($rel in $tracked) {
   $full = Join-Path $repo $rel
   if (-not (Test-Path -LiteralPath $full)) { continue }
   # A SPLIT PIECE IS JUDGED INSIDE ITS HOST (2026-09-27, design\PLAN-split-giant-files-2026-09-27.md D4). check-ad-cycles.ps1
-  # defines its own Send-Alert, so Get-AlertCallSites skips it whole; its moved watchers define none and, read alone, were
-  # counted as 12 new emitter sites. A piece is skipped here and its host is read with every piece in place.
+  # is read with its pieces in place (its own Send-Alert stub sits inside a self-test block and hides only that block);
+  # its moved watchers, read alone, were counted as 12 new emitter sites. A piece is skipped here and its host is read with every piece in place.
   if (Get-SplitPieceHost $full) { continue }
   $scanned++
   $text = Expand-SelfTestPointers -Text ([IO.File]::ReadAllText($full)) -Path $full
