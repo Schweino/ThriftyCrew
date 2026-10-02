@@ -191,6 +191,18 @@ function Test-FeedCoverage {
   return [pscustomobject]@{ findings = $findings.ToArray(); exempted = $exempted.ToArray() }
 }
 
+function Get-FeedCovReadableVerdict {
+  <# Pure. '' when at least one published card was readable, else why the run is BLIND (2026-10-02, found by the
+     Phase 6 build of design/PLAN-weekly-root-families-2026-10-02.md): in an unseeded worktree all 577 published
+     cards were unreadable, no bid was checked, and the run still printed "every bid on every card is priceable"
+     and exited 0 as clean. A could-not-look is never a pass (.claude/rules/grocery.md gr-17). #>
+  param([int]$Published, [int]$Unreadable)
+  if ($Published -gt 0 -and $Unreadable -ge $Published) {
+    return ("none of the {0} published recipe card(s) is readable here (db\built is gitignored; ops\seed-worktree.ps1 seeds it), so no bid was checked" -f $Published)
+  }
+  return ''
+}
+
 # ======================================================================================================
 # FIXTURES. Frozen at the founding bug, with a clean twin that must pass or this is only a refuser.
 # ======================================================================================================
@@ -417,6 +429,11 @@ if ($SelfTest) {
     Write-Output ("  BLIND the card parser cannot be driven against a real built card - could not look: missing {0} [{1}]" -f $sample, (Get-TcMissingInputHintHere -Repo $repo -Missing $sample))
   }
 
+  # -- A RUN THAT COULD READ NO CARD IS BLIND, NOT CLEAN (2026-10-02). The bar is "every published card unreadable".
+  TT 'MUST FIRE  AT the bar: 577 published, 577 unreadable reads BLIND (the unseeded-worktree founding case)' ((Get-FeedCovReadableVerdict 577 577) -like 'none of the 577*') (Get-FeedCovReadableVerdict 577 577)
+  TT 'MUST NOT FIRE  one step short of the bar: 577 published, 576 unreadable is not BLIND (one card was checked)' ((Get-FeedCovReadableVerdict 577 576) -eq '') (Get-FeedCovReadableVerdict 577 576)
+  TT 'CLEAN TWIN  0 published is not BLIND (the existing 0-in-scope exit owns that case)' ((Get-FeedCovReadableVerdict 0 0) -eq '') (Get-FeedCovReadableVerdict 0 0)
+
   if ($bad -eq 0) {
     # WITH ITS DENOMINATOR (measurement.md, 2026-09-12). "27/27 pass, 1 BLIND" put full coverage on the left
     # of the comma and the hole on the right; cases + blind is the whole suite, so state that instead. The
@@ -466,6 +483,11 @@ foreach ($slug in $published) {
   $u = Get-CardUnbidItems $html
   if ($null -ne $u -and @($u).Count) { $cardUnbid[$slug] = $u }
 }
+$unreadWhy = Get-FeedCovReadableVerdict $published.Count $noCard.Count
+if ($unreadWhy) {
+  Write-Output ('FEEDCOV: BLIND - ' + $unreadWhy + '. Not a pass.')
+  Exit-Guard -Name 'FEEDCOV' -Summary ("could not evaluate: 0 of {0} card(s) readable blind=no-built-cards" -f $published.Count) -Code 3
+}
 
 function ToMap($obj) { $h = @{}; if ($null -ne $obj) { foreach ($p in $obj.PSObject.Properties) { $h[$p.Name] = $p.Value } }; return $h }
 # THE SAME allowlist cost-engine.ps1 reads, not a copy of the decision. Unreadable means empty, so a
@@ -513,4 +535,4 @@ if ($findings.Count) {
   Exit-Guard -Name 'FEEDCOV' -Summary ("{0} finding(s) over {1} published recipe(s)" -f $findings.Count, $published.Count) -Code 1
 }
 Write-Output 'FEEDCOV: every published recipe resolves in the feed its card fetches, and every bid on every card is priceable.'
-Exit-Guard -Name 'FEEDCOV' -Summary ("clean over {0} published recipe(s)" -f $published.Count) -Code 0
+Exit-Guard -Name 'FEEDCOV' -Summary ("clean over {0} published recipe(s), {1} of {0} card(s) read" -f $published.Count, ($published.Count - $noCard.Count)) -Code 0
