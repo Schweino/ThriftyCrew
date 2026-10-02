@@ -31,13 +31,18 @@
   account is that retrying empties under a hard throttle ran 45 minutes. -BreakerAt consecutive blocked chips trip
   the breaker and the rest are not attempted, because a walled run only deepens the wall.
 
+  ONE RUN DOES NOT FIT ONE FRESHOP WINDOW. Up to 2 calls a chip against a wall measured at roughly 40-130 calls, and
+  the same budget is what pull-regular-familyfare.ps1's production windows (07:00, 08:00, 10:30) buy prices with.
+  -Ids "a,b,c" runs a slice of the worklist, in worklist order; an id not on the worklist is refused. A string, not
+  an array, because -File binds a list into one value (og-10).
+
   Exit 0 = every chip attempted. 3 = the breaker tripped (the outputs hold what was resolved; the rest is UNCHECKED).
 
   SCOPE OF A CLEAN REPORT: UNSOUND as a claim about carriage - a chip not in ff-notcarry.json may still be one the
   store does not carry (empty, blocked, not attempted). A no-match row is INCOMPLETE: a candidate, because the
   commodity rules or a one-query search can miss a product the store sells.
 #>
-param([string]$OutDir = "", [double]$MinScore = 0.75, [int]$PaceMs = 4000, [string]$BackoffMs = '8000,20000', [int]$BreakerAt = 3, [switch]$SelfTest)
+param([string]$OutDir = "", [double]$MinScore = 0.75, [int]$PaceMs = 4000, [string]$BackoffMs = '8000,20000', [int]$BreakerAt = 3, [string]$Ids = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference='SilentlyContinue'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')  # Write-TcLfFile: the outputs are TRACKED, so LF (og-39)
@@ -188,6 +193,15 @@ function Invoke-FfResolve($Chips, $TermFor, [double]$Min, [int]$Breaker) {
   return [pscustomobject]@{ results = $res.ToArray(); tripped = $tripped }
 }
 
+function Select-FfChips($Chips, [string]$IdList) {
+  $want = @(([string]$IdList -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  if (-not $want.Count) { return , @($Chips) }
+  $have = @{}; foreach ($c in @($Chips)) { $have[[string]$c.id] = $true }
+  $missing = @($want | Where-Object { -not $have.ContainsKey($_) })
+  if ($missing.Count) { throw ('-Ids names chips not on the Family Fare worklist: ' + ($missing -join ', ')) }
+  return , @(@($Chips) | Where-Object { $want -contains [string]$_.id })
+}
+
 function Write-FfOutputs($Results, [string]$Dir) {
   $urlDir = Join-Path $Dir 'url-inputs'; if (-not (Test-Path -LiteralPath $urlDir)) { New-Item -ItemType Directory -Force -Path $urlDir | Out-Null }
   $rows = @($Results | Where-Object { $_.verdict -like 'resolved-*' } | ForEach-Object {
@@ -286,12 +300,20 @@ if ($SelfTest) {
     Check 'MUST FIRE: ff-notcarry.json is written LF (no CR byte)' (-not ($bytes -contains 13)) 'found a CR'
     $urlDoc = Read-JsonFile (Join-Path $tmp 'url-inputs\store-ff-urls.json'); $urlRows = @($urlDoc)
     Check 'CLEAN TWIN: with nothing resolved, store-ff-urls.json is an empty array, not an empty file' ($urlRows.Count -eq 0) ("rows=" + $urlRows.Count)
+
+    $wlChips = @((& $mk 'a'), (& $mk 'b'), (& $mk 'c'))
+    $sl = Select-FfChips $wlChips 'c, a'
+    Check 'CLEAN TWIN: -Ids keeps worklist order and only the named chips' ((@($sl | ForEach-Object { $_.id }) -join ',') -eq 'a,c') (@($sl | ForEach-Object { $_.id }) -join ',')
+    $all = Select-FfChips $wlChips ''
+    Check 'MUST NOT FIRE: no -Ids runs every chip' (@($all).Count -eq 3) (@($all).Count)
+    $threw = $false; try { [void](Select-FfChips $wlChips 'a,zz') } catch { $threw = $true }
+    Check 'MUST FIRE: an -Ids entry not on the worklist is refused, never silently dropped' $threw ''
   } catch {
     $fail++; Write-Output ("FAIL  self-test threw: " + $_.Exception.Message)
   } finally {
     if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
   }
-  $expect = 17
+  $expect = 20
   if ($cases -ne $expect) { $fail++; Write-Output "FAIL  ran $cases cases, expected $expect" }
   if ($fail) { Write-Output "resolve-familyfare-urls self-test FAIL ($fail of $cases)"; exit 1 }
   Write-Output "resolve-familyfare-urls self-test pass ($cases cases)"
@@ -300,7 +322,8 @@ if ($SelfTest) {
 
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 $wl = Read-JsonFile (Join-Path $OutDir 'url-worklist.json')
-$ff = @($wl.stores.'Family Fare')
+$ffAll = @($wl.stores.'Family Fare')
+$ff = Select-FfChips $ffAll $Ids
 $terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 
 # rules: id -> @{include;exclude;unit;gex}   gex = the global-exclude list for that id's board
