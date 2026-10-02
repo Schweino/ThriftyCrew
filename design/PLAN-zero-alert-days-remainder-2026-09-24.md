@@ -1,6 +1,6 @@
 # PLAN: the rest of zero-alert days (row contract, two-signal identity, muffins, the review packet)
 
-**Status: RULED 2026-09-10 (carried from PLAN-zero-alert-days). Step 9 under way since 2026-10-02 (shadow only); the rest not started.**
+**Status: RULED 2026-09-10 (carried from PLAN-zero-alert-days). Under way since 2026-10-02: step 8 in SHADOW (Brad's D1 A in PLAN-weekly-root-families-2026-10-02.md), step 9 in shadow, step 11 built; R18, R11, 3b and step 10 not started.**
 
 Source: `PLAN-zero-alert-days-2026-09-10.md` in `design/`, section 7, and Brad's rulings recorded there (the first set
 and the second set of 2026-09-10). That plan closed at build step 7 on 2026-09-24 (RULED close 1 to 7 by Brad,
@@ -45,7 +45,7 @@ moves its files back out.
 
 Only files that no other lane writes, because they do not exist yet and each step creates its own:
 
-- step 8: `design/SPEC-capture-row-contract.md`, `grocery/row-contract-lib.ps1`
+- step 8: `design/SPEC-capture-row-contract.md`, `grocery/row-contract-lib.ps1`, `grocery/test-row-contract.ps1`, `grocery/audit-row-contract-shadow.ps1` (the last two added by the step's first commit, 2026-10-02)
 - step 9: `grocery/audit-store-category-share.ps1`, `grocery/audit-crown-identity-shadow.ps1`, `grocery/store-department-lib.ps1`,
   `grocery/store-department-map.json` (the last two added by the step's first commit, 2026-10-02; nothing else writes them)
 - step 11: `grocery/review-adjudication-lib.ps1`, and since step 11 started (2026-10-02) its existing files
@@ -139,6 +139,15 @@ both importers as well as the seven builders."
 Ruling 6 applies here too, verbatim: "every new store, feed or large commodity batch is checked against the row
 contract before it goes live". The weekly lane's `new_source_check` records that the contract does not exist yet, and
 starts checking against it once this step lands.
+
+**Status note (2026-10-02, not a change to the ruling or its bar):** shadow under way since 2026-10-02, enforcement per
+store after R18 (Walmart, Sam's) or R11 (Aldi, Fareway) has landed for that store and it has 7 shadow days. The contract
+is `design/SPEC-capture-row-contract.md`, the validator `grocery/row-contract-lib.ps1`, the daily shadow
+`grocery/audit-row-contract-shadow.ps1` (one fan-out lane of the daily chain, writing only the gitignored
+`row-contract-shadow-<date>.json`, and covering both batch importers through the regular files they write). Ruling 6 is
+on: the weekly lane's `new_source_check` quotes the shadow's per-store line for each new store, feed or large batch,
+and the triage plan gate refuses the old "does not exist" wording. The first run's numbers are in the spec's last
+section.
 
 ### 9. Ruling 3, two-signal identity
 

@@ -60,8 +60,8 @@
   BLIND (exit 3) in handoff mode exactly as in -Closing. The rule itself is grocery\triage-return-lib.ps1.
   THE WEEKLY LANE PLANS AHEAD (2026-09-10, Brad's ruling 6, prevention first, then leftovers). A plan with
   "lane": "weekly" carries prevention_target (type, window_days of at least 14, days_fired, rank, and why_not_top
-  when rank is above 1), new_source_check (until build step 8's row contract exists: a record that none exists
-  yet), and one item whose queue_id is prevention:<type>, holding the full code-item fields and prevention.source.
+  when rank is above 1), new_source_check (since 2026-10-02 the row contract exists, in shadow: each new store, feed or large batch
+  quoted with its audit-row-contract-shadow.ps1 -Store verdict line, or 'went live ... : none'), and one item whose queue_id is prevention:<type>, holding the full code-item fields and prevention.source.
   The gate RECOMPUTES days_fired and rank from grocery\out\alert-census.jsonl (or -CensusFile) over the window
   ending on the plan's generated date, through Get-AlertCensusTypeDays in triage-return-lib.ps1, and names any
   mismatch. A weekly plan whose census is missing or unreadable is BLIND (exit 3) in both modes. A plan with no
@@ -503,8 +503,15 @@ function Test-Plan {
       $effRank = if ($hit) { [int]$hit.rank } else { $rk }
       if (($rk -gt 1 -or $effRank -gt 1) -and -not $wnt) { $problems.Add("prevention_target is rank $effRank and carries no why_not_top - say why the lane is not working the top type ($topTxt), for example that it already has a prevention item shipped or open, naming that plan") }
     }
-    if (-not ([string]$Doc.new_source_check).Trim()) {
-      $problems.Add("weekly plan carries no new_source_check - ruling 6 checks every new store, feed or large commodity batch against the row contract before it goes live; that contract is build step 8 and does not exist yet, so write 'no row contract exists yet (build step 8)' and name what went live since the last lane run, or none")
+    # RULING 6 against the row contract, which exists in shadow since 2026-10-02 (design/SPEC-capture-row-contract.md): quote the
+    # audit-row-contract-shadow.ps1 -Store line for each new source, or say none went live. The old 'does not exist' wording is false now.
+    $nsc = ([string]$Doc.new_source_check).Trim()
+    if (-not $nsc) {
+      $problems.Add("weekly plan carries no new_source_check - ruling 6 checks every new store, feed or large commodity batch against the row contract (build step 8, design/SPEC-capture-row-contract.md) before it goes live: run grocery\audit-row-contract-shadow.ps1 -Store <store> for each and quote its ROW-CONTRACT-SHADOW line, or write 'went live since the last lane run: none'")
+    } elseif ($nsc -match '(?i)no row contract exists|contract does not exist') {
+      $problems.Add("weekly plan's new_source_check says the row contract does not exist; it does since 2026-10-02 (build step 8, in shadow): run grocery\audit-row-contract-shadow.ps1 -Store <store> for each new store, feed or large batch and quote its ROW-CONTRACT-SHADOW line, or write 'went live since the last lane run: none'")
+    } elseif ($nsc -notmatch '(?i)went live[^;]*:\s*none' -and $nsc -notmatch 'ROW-CONTRACT-SHADOW') {
+      $problems.Add("weekly plan's new_source_check names a new source but quotes no row contract result - run grocery\audit-row-contract-shadow.ps1 -Store <store> and quote its ROW-CONTRACT-SHADOW line (ruling 6)")
     }
     $pvIds = @($items | Where-Object { $_ -and ([string]$_.queue_id) -like 'prevention:*' } | ForEach-Object { [string]$_.queue_id })
     $wantPv = if ($ptType) { 'prevention:' + $ptType } else { 'prevention:<type>' }
@@ -1115,7 +1122,7 @@ if ($SelfTest) {
     $weekly = $good | ConvertTo-Json -Depth 9 | ConvertFrom-Json
     $weekly | Add-Member -NotePropertyName lane -NotePropertyValue 'weekly' -Force
     $weekly | Add-Member -NotePropertyName generated -NotePropertyValue '2026-09-10T09:00:00' -Force
-    $weekly | Add-Member -NotePropertyName new_source_check -NotePropertyValue 'no row contract exists yet (build step 8); went live since the last lane run: none' -Force
+    $weekly | Add-Member -NotePropertyName new_source_check -NotePropertyValue 'row contract (build step 8, shadow) checked; went live since the last lane run: none' -Force
     $weekly | Add-Member -NotePropertyName prevention_target -NotePropertyValue ([pscustomobject]@{ type = $aging; window_days = 14; days_fired = 5; rank = 1 }) -Force
     $weekly.items = @($weekly.items[0], $pvItem)
     $weekly = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
@@ -1150,6 +1157,12 @@ if ($SelfTest) {
     $wNoSrc = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json
     $wNoSrc.PSObject.Properties.Remove('new_source_check')
     _CaseWeekly 'MUST FIRE a weekly plan with no new_source_check is rejected, naming build step 8' $wNoSrc $cOk 2 'no new_source_check.*build step 8' 5 1
+    foreach ($srcCase in @(@('MUST FIRE a new_source_check saying no row contract exists is rejected now that it does', 'no row contract exists yet (build step 8); went live since the last lane run: none', 2, 'says the row contract does not exist'),
+                       @('MUST FIRE a new_source_check naming a new source with no ROW-CONTRACT-SHADOW line is rejected', 'went live since the last lane run: Family Fare deli feed', 2, 'quotes no row contract result'),
+                       @('CLEAN TWIN a new_source_check quoting the ROW-CONTRACT-SHADOW line for the new source passes', 'went live since the last lane run: Family Fare deli feed; ROW-CONTRACT-SHADOW Family Fare: examined 120 row(s)', 0, $null))) {
+      $wSrc = $weekly | ConvertTo-Json -Depth 9 | ConvertFrom-Json; $wSrc.new_source_check = $srcCase[1]
+      _CaseWeekly $srcCase[0] $wSrc $cOk $srcCase[2] $srcCase[3] 5 1
+    }
     # MUST FIRE, BLIND: the census is missing, so nothing about the target can be checked.
     _CaseWeekly 'MUST FIRE a weekly plan whose census is missing is BLIND (rc 3)' $weekly $cMissing 3 'BLIND.*no alert census' $null $null
     # MUST NOT FIRE: a daily plan, with no lane and no census, is asked for none of it.
@@ -1363,7 +1376,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 119  # +3 on 2026-10-02: a ruled step owns a residual (D3 A); +8 on 2026-09-28: the fix is on main (Test-PlanLanded); +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
+  $expectedRan = 122  # +3 on 2026-10-02: a ruled step owns a residual (D3 A); +3 on 2026-10-02: ruling 6 against the row contract (old wording refused, a new source with no shadow line refused, one quoted passes); +8 on 2026-09-28: the fix is on main (Test-PlanLanded); +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }

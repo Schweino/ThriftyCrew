@@ -371,7 +371,7 @@ the class that fires most. A weekly plan carries three things more:
   // batch against the row contract before it goes live. That contract is build step 8 of
   // design/PLAN-zero-alert-days-2026-09-10.md and DOES NOT EXIST YET, so until it does this line records that,
   // and names what went live since the last lane. The gate requires the line, not its wording.
-  "new_source_check": "no row contract exists yet (build step 8); went live since the last lane run: none (git log since the lane stamp over grocery/stores.json, grocery/commodities.json and the capture builders)",
+  "new_source_check": "row contract (build step 8, shadow since 2026-10-02) checked; went live since the last lane run: none (git log since the lane stamp over grocery/stores.json, grocery/commodities.json and the capture builders). A named source quotes its ROW-CONTRACT-SHADOW line from grocery/audit-row-contract-shadow.ps1 -Store <store>",
   "items": [
     {
       "queue_id": "prevention:board prices aging inside a fresh file",

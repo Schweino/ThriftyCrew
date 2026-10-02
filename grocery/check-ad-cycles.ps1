@@ -2078,6 +2078,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # (gitignored). It writes no board, cell or verdict, and stores.json Hy-Vee flyer_link 'off' makes it ask nothing.
       # Paced at 1.5 s because discover-hyvee reads the same API in parallel. ~560 requests, so the budget is 1500 s.
       New-FanoutLane -Name 'hyvee-flyer-link'    -File (Join-Path $root 'hyvee-flyer-link.ps1')           -TimeoutSec 1500 -Arguments @('-Variant','2','-PaceMs','1500') -Marker 'FLYER-LINK-COMPLETE'
+      New-FanoutLane -Name 'row-contract-shadow' -File (Join-Path $root 'audit-row-contract-shadow.ps1')    -TimeoutSec 900 -Arguments @('-OutDir', $OutDir) -Marker 'ROW-CONTRACT-SHADOW-COMPLETE'   # SHADOW ONLY, build step 8 (design/SPEC-capture-row-contract.md): writes only the gitignored out\row-contract-shadow-<date>.json
         New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir) -Marker 'STORE-TAXONOMY-COMPLETE'
         # STEP 9 SHADOW (design\PLAN-zero-alert-days-remainder-2026-09-24.md): refuses nothing, writes only out\crown-identity-shadow\ (gitignored).
         New-FanoutLane -Name 'crown-identity-shadow' -File (Join-Path $root 'audit-crown-identity-shadow.ps1') -Arguments @('-OutDir', (Join-Path $OutDir 'crown-identity-shadow')) -Marker 'CROWN-IDENTITY-SHADOW-COMPLETE'

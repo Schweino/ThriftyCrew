@@ -145,11 +145,12 @@ touches the class that fires most.
    A fix that needs a file on THE LINE YOU DO NOT CROSS is `bounced` with its measurement, like any item.
 
 **B. THE NEW-SOURCE CHECK, WAITING ON THE ROW CONTRACT.** Ruling 6 checks every new store, feed or large commodity
-batch against the row contract before it goes live. That contract is build step 8 of
-`design/PLAN-zero-alert-days-2026-09-10.md` and it DOES NOT EXIST YET. Until it does, the check is a record: the plan's
-`new_source_check` says "no row contract exists yet (build step 8)" and names what went live since the last lane run
-(`git log` since `grocery\triage-weekly-lane-stamp.txt` over `grocery/stores.json`, `grocery/commodities.json` and the
-capture builders), or "none". The gate requires the line. When step 8 lands, this step runs its validator instead.
+batch against the row contract before it goes live. That contract is build step 8 (`design/SPEC-capture-row-contract.md`),
+in SHADOW since 2026-10-02. Name what went live since the last lane run (`git log` since
+`grocery\triage-weekly-lane-stamp.txt` over `grocery/stores.json`, `grocery/commodities.json` and the capture builders);
+for each one run `grocery\audit-row-contract-shadow.ps1 -Store <store>` and quote its `ROW-CONTRACT-SHADOW <store>:` line
+in the plan's `new_source_check`, or write "went live since the last lane run: none". The gate refuses the old "no row
+contract exists yet" wording and a named source with no quoted line.
 
 **C. LEFTOVERS.** Then each weekly-lane queue id, in the order given:
 1. **Re-measure first.** The item describes a class some earlier run could not finish. Is it still real
