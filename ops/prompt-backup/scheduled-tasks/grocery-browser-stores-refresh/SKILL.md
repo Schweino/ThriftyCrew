@@ -45,6 +45,26 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
          comments despite a brief that said VERBATIM, to save tokens; the code survived that day by luck. Ask each
          agent to report the character count it injected against the file's own length, and treat a mismatch as
          an open item.
+         THE WRAPPER THAT MEASURES IT (2026-10-01, all four stores matched exactly, 0 of 5 files off). Wrap the
+         paste in `(function __tcInject() { ... })()`: shadow localStorage first with a block-level
+         `const localStorage = {getItem,setItem,removeItem}` over a plain object (the in-memory sink, and the
+         committed code binds to it unchanged), paste pull-agent-lib.js between `/*TC-A-BEGIN*/` and
+         `/*TC-A-END*/`, and the store file inside its own nested `{ }` between `/*TC-B-BEGIN*/` and `/*TC-B-END*/`.
+         Then measure each segment from `__tcInject.toString()`, with newlines trimmed off both ends; build the marker
+         needles by concatenation ('/*TC-' + 'A-BEGIN') so the search cannot find itself. Expected = the file's
+         length minus its final LF (lib 18129, walmart 31932, aldi 19366, sams 20209, fareway 17977 at the
+         2026-10-01 blobs; re-measure with [IO.File]::ReadAllText when a file changes). EXPORT EVERY FUNCTION
+         YOU CALL LATER FROM INSIDE THE NESTED BLOCK (`window.__tcPull = pullWalmartInStore;`): the store files'
+         entry points are `const` arrows, block-scoped, so a starter placed after the block throws ReferenceError.
+         That is what the 2026-10-01 template did for Walmart and Sam's. Both agents repaired it in the wrapper, and the file
+         text was untouched.
+         RESCUE TERMS ARE IN THE WORKLIST (2026-10-01, grocery\rescue-owed-lib.ps1). Get-CaptureWorklist now reads
+         rescue-terms-<store>.txt itself and puts its commodities right after the price-flag verifications, so
+         `terms`/`commodities` already carry them and `rescue_terms` names them. Check `rescue_blind`/`rescue_why`:
+         blind means the list was missing or older than yesterday, so nothing was added. Only if the worklist
+         predates that landing (no `rescue_terms` field) do it by hand: a second start after the main sweep and
+         BEFORE the post (the in-memory store keeps both, 4 of 4 matched this way on 2026-10-01). Fareway's
+         farewaySweep replaces its state on every start, so append its rescue terms to TERMS/COMMS before it starts.
          MODEL TIER (Brad's ruling, 2026-09-26): spawn the four store agents with model "sonnet" (Sonnet 5.5, Medium effort; Brad, 2026-09-29).
          This orchestrating session stays on Opus: it orders rescue terms, decides what is due, reads builder
          refusals and writes the report. Why it is safe: the store checks live in the committed pull scripts
@@ -73,6 +93,13 @@ THE SHAPE, AND IT OVERRIDES ANY OLDER TIMING OR SCOPE BELOW (Brad's ruling, 2026
       5. When all four have reported, run the builders yourself, one store at a time (build-walmart-deals,
          build-sams-deals, build-aldi-regular, select-fareway-shop then build-fareway-regular -ModeVerified):
          they write out\regular and advance the shared cursor, so they do not run side by side.
+         RE-RUN chain-idle.ps1 IMMEDIATELY BEFORE EACH BUILDER, not only at setup (2026-10-01): the sweeps take
+         20-30 minutes, the builders then ran 06:45-07:05 on a FREE read taken at 06:23, and the 08:00 chain writes
+         the same out\regular files. HELD means apply STEP ZERO below: wait, then skip the builders if it stays held.
+      5a. BAKER'S STORE (2026-10-01). Brad's bakersplus.com session had drifted to Twincreek (3614 Twin Creek Dr,
+         location 61500300); it was switched back to Saddlecreek (888 S Saddle Creek Rd, 61500319), pickup. The ad id
+         read in Chrome is verified against 61500319 by pull-bakers-ad-list either way, so a drift costs nothing on
+         the list, but if the weekly-ad page names another store, switch it back in the page's own picker.
       6. Then the ad reads and the other items below, in their stated order, with what time is left.
   - IF CHROME OR THE EXTENSION IS NOT CONNECTED: capture nothing, say so. The 08:00 driver covers Fareway and Sam's,
     and the 10:30 watchdog pages "BROWSER CAPTURE MISSING TODAY" for the rest. Never launch an automated Chrome.
@@ -157,6 +184,12 @@ real one, which is both fuller and more restricted.
      inside an injected iframe inherits the frame's origin rules and the post did not arrive; the same
      form built on the tab's own document landed every time. Confirm the sink's echoed char and line
      counts match the page's before building.
+     AND NEVER TARGET AN IFRAME EITHER (2026-10-02): the form must submit TOP-LEVEL, with no `target`, and
+     the tab navigates to the sink's reply. Do it as the LAST step, after the counts are read. A form on the
+     tab's own document with target=<hidden iframe> arrived from NONE of the four stores (8 attempts):
+     walmart.com's frame-src blocks localhost, and on Aldi, Sam's and Fareway it failed silently with no
+     console error. The same form with no target landed AGREE on the first try for all four. A brief that
+     says "do not navigate the tab" leaves the agent no working route, so say "submit top-level, last".
      THE IN-MEMORY SINK IS NOT OPTIONAL ON ALDI EITHER (same day). aldi.us held a stale TC_ALDI_SEARCH
      key in localStorage from an earlier sweep, and a sweep that reads it resumes from someone else's
      cursor. Use the plain-object tcGet/tcSet sink on every store, and never trust or clear a TC_* key
@@ -197,10 +230,15 @@ out\browser-capture-due-<date>.flag is a hint and it has been INCOMPLETE before 
        Fareway, Sam's - normally captured by the 0800 driver. Yours only when it failed
                         (expired cookies, a wall). Check before doing the work twice.
        Hy-Vee, Baker's, Family Fare - headless APIs. NEVER yours.
-  B. BAKER'S WEEKLY AD - a flyer VISION READ, and the only ad whose PAGES need a browser. Due when
-     ad-schedule.json's Baker's next_pull is today or past. Walmart and Sam's have no ad cycle at all.
-     WHEN THIS IS DUE IT IS THE FIRST THING YOU DO - see ORDER OF WORK item 1. It is the only ad
-     nothing else in the estate can pull, and a lapsed one moves tiles the same day.
+  B. BAKER'S WEEKLY AD - NO LONGER A VISION READ (since 2026-09-18). The ad's offer LIST comes from its own feed
+     (pull-bakers-ad-list.ps1), keyed by an ad GUID that changes every Wednesday and can only be read off the
+     weekly-ad page in a real Chrome. The 08:00 run reads it itself when no id on disk verifies (exit 4 since
+     2026-10-01; before that a stale id exited 1 and skipped Chrome, which lost the 09-30 ad). CHECK IT, DO NOT
+     ASSUME IT: due when no out\bakers\bakers-ad-list-*.json has ad_from <= today <= ad_to. ad-schedule.json's
+     "current" window is NOT evidence the list landed (on 2026-10-01 it showed 09-30..10-06 with no list on disk).
+     If due: open https://www.bakersplus.com/weeklyad in one tab, read the /api/dacs/<guid> request
+     (performance.getEntriesByType('resource')), then run pull-bakers-ad-list.ps1 -AdId <guid>. Exit 0 with
+     "N offer(s) for 61500319" is landed; the 08:00 Baker's lane then asks the routed terms. One page load, no vision.
   B2. FAREWAY'S WEEKLY AD - ARRIVES ON ITS OWN, BUT STILL HAS TO BE READ. This is the gap that cost
      32 excluded sale rows between 2026-08-20 and 08-25, and the old wording here ("do not go looking
      for ads that arrive on their own") is part of why. pull-fareway-ads.ps1 downloads the flyer
