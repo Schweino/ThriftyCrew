@@ -103,7 +103,7 @@ function Close-TcQueueItem {
   # AN OWNED-BY-STEP CLOSE NAMES ITS STEP (D3 A, 2026-10-02). Without the token the census cannot count it against the
   # step, and an owner nobody can find owns the work the way an unread stamp checks it. Whether the step RESOLVES is
   # the live path's question (triage-close.ps1, Test-StepOwner), because it reads a plan from disk.
-  if ($Disposition -eq 'owned-by-step' -and -not (([string]$Notes) -match 'step:\s*[^\s#]+#[^\s,;)]+')) {
+  if ($Disposition -eq 'owned-by-step' -and -not (([string]$Notes) -match 'step:\s*[^\s#]+#[^\s,;:.)]+')) {
     return 'an owned-by-step close must name its owner in the notes as step:<plan>#<step label> (a ruled, unbuilt step; grocery\ruled-steps.json)'
   }
   $hit = @($Items | Where-Object { [string]$_.id -eq $Id })

@@ -61,6 +61,8 @@ try {
     (Test-StepOwner 'step:design/PLAN-ruled.md#3b' $tmp $stub) -eq '' }
   Assert-RCase 'CLEAN TWIN  a "### Phase 5." heading is addressed as #phase-5, any letter case' {
     ((Test-StepOwner 'step:design/PLAN-ruled.md#phase-5' $tmp $stub) -eq '') -and ((Test-StepOwner 'step:design/PLAN-ruled.md#Phase-5' $tmp $stub) -eq '') }
+  Assert-RCase 'CLEAN TWIN  a ref followed by sentence punctuation ("#8." or "#phase-5:") resolves to its step (2026-10-02: closing notes read "step:<plan>#8. The shadow...")' {
+    ((Test-StepOwner 'step:design/PLAN-ruled.md#8.' $tmp $stub) -eq '') -and ((Test-StepOwner 'step:design/PLAN-ruled.md#phase-5:' $tmp $stub) -eq '') }
   Assert-RCase 'MUST FIRE  a rooted plan path is refused (the owner must be a file the repo versions)' {
     (Test-StepOwner ('step:' + (Join-Path $tmp 'design/PLAN-ruled.md') + '#8') $tmp $stub) -match 'repo-relative' }
   Assert-RCase 'MUST FIRE  a plan state the stub has never heard of throws loudly (og-16), never a quiet pass' {
@@ -118,7 +120,7 @@ try {
   Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-$expected = 21
+$expected = 22
 if ($script:rCases -ne $expected) { Write-Output ("test-ruled-step-lib self-test: FAIL (ran {0} case(s), expected {1})" -f $script:rCases, $expected); exit 1 }
 if ($script:rFail -gt 0) { Write-Output ("test-ruled-step-lib self-test: FAIL ({0} of {1} case(s) failed)" -f $script:rFail, $script:rCases); exit 1 }
 Write-Output ("test-ruled-step-lib self-test: PASS ({0} of {0} case(s))" -f $script:rCases)

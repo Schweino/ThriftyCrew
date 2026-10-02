@@ -91,7 +91,7 @@ function Test-StepOwner {
      $StateOf: scriptblock (planFull) -> plan state; defaults to Get-PlanStateFromCitation. #>
   param([string]$Owner, [string]$RepoRoot, [scriptblock]$StateOf = $null)
   if (-not ($Owner -match '^step:\s*([^#]+)#(.+)$')) { return "'$Owner' is not step:<repo-relative plan>#<step label>" }
-  $plan = $Matches[1].Trim(); $label = $Matches[2].Trim()
+  $plan = $Matches[1].Trim(); $label = $Matches[2].Trim().TrimEnd('.', ':', ',', ';', ')')   # a label never holds '.' or ':' (it is the heading text before them), so sentence punctuation after a ref is not part of it
   if ([IO.Path]::IsPathRooted($plan)) { return "step owner '$Owner' must name a repo-relative plan, so the step it trusts is one the repo versions" }
   $full = Join-Path $RepoRoot $plan
   if (-not (Test-Path -LiteralPath $full -PathType Leaf)) { return "step owner '$Owner' resolves to nothing - no plan at $plan" }

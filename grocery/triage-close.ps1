@@ -230,7 +230,7 @@ if (-not (Test-Path -LiteralPath $QueueFile)) {
 }
 # AN OWNED-BY-STEP OWNER MUST RESOLVE (D3 A, 2026-10-02): the plan exists in this checkout, reads RULED or under way, and
 # its step heading exists and is not [DONE. Checked before the lock is taken, so a refusal never holds up send-alert.
-if ($Disposition -eq 'owned-by-step' -and ($Notes -match '(step:\s*[^\s#]+#[^\s,;)]+)')) {
+if ($Disposition -eq 'owned-by-step' -and ($Notes -match '(step:\s*[^\s#]+#[^\s,;:.)]+)')) {
   $stepOwner = $Matches[1]
   . (Join-Path $PSScriptRoot 'ruled-step-lib.ps1')
   $stepWhy = Test-StepOwner $stepOwner (Split-Path -Parent $PSScriptRoot)
