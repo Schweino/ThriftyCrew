@@ -550,3 +550,5 @@ ops/out/gate-verdict.json
 # the next -ForceBigCommit run committed its three files to main, one as a rename of graph/provenance/2026-09-22.jsonl
 # out of its real path, and without this line the commit gate's new-directory rule refuses the next day it appears.
 /grocery/out/untracked-quarantine/
+# step 9 two-signal identity shadow (design/PLAN-zero-alert-days-remainder-2026-09-24.md): one file per day, written by grocery/audit-crown-identity-shadow.ps1
+/grocery/out/crown-identity-shadow/

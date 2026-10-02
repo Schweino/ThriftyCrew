@@ -1,0 +1,143 @@
+{
+  "note": "STEP 9 OF design/PLAN-zero-alert-days-remainder-2026-09-24.md, two-signal identity, SHADOW ONLY. The first signal is the commodity's include/exclude rules over the product NAME. This file declares the SECOND: where each store's own capture records the store's category for a row, and how that store's words translate into the ONE department vocabulary aisle-lib.ps1 already uses (Family Fare's shelf departments). The EXPECTED departments per commodity are NOT declared here: they are aisle-lib.ps1's reviewed tables ($AISLE_CAT_DEPT by estate category from categories.json, $AISLE_COMMODITY_DEPT per commodity), read through Test-AisleAllowed, so there is one expected set in the estate and not two. commodities.json is not read for categories and is not edited by this step. Read by grocery/audit-store-category-share.ps1 and grocery/audit-crown-identity-shadow.ps1.",
+  "ad_files_note": "Weekly-ad and deals files carry no category at any store today; they are counted by the coverage audit (rows filtered to the store) so the denominator is every captured row, and the shadow reaches an ad crown only through a same-named regular row or, at Family Fare, the flyer-link evidence.",
+  "rule": "A store value that maps to no department (listed under neutral, or simply absent) gives NO SIGNAL for that row: counted, never agree, never a failure. A multi-valued field (split) gives the set of its mapped values, and the row AGREES when any of them is allowed for the commodity. Never add a mapping without reading that store's own products under the value: a guessed mapping turns the second signal back into a copy of the first.",
+  "vocabulary": ["pantry", "beverages", "dairy", "meat", "meat_seafood", "freezer", "fresh_fruits_vegetables", "deli", "bakery", "seasonal_special_occasion", "beer_wine_spirits", "health_beauty", "household", "pets_wildlife"],
+  "stores": {
+    "Family Fare": {
+      "files": ["out/regular/family-fare-regular-*.json"],
+      "ad_files": ["out/ads-*.json"],
+      "field": "dept",
+      "url_field": "canonical_url",
+      "identity": true,
+      "evidence": "familyfare/flyer-link-evidence-*.jsonl",
+      "evidence_note": "Weekly Ad lines carry no shelf path on the board. The flyer-link lane resolves each line to a Freshop product and records its canonical_url, whose first /shop/ segment is the department (aisle-lib Get-AisleDept). A crown whose own link has no shelf path is looked up there by ad line, then by product id, then by the regular file's row of the same name.",
+      "source": "pull-regular-familyfare.ps1 stamps dept from canonical_url through aisle-lib Get-AisleDept"
+    },
+    "Hy-Vee": {
+      "files": ["out/regular/hyvee-regular-*.json"],
+      "ad_files": ["out/ads-*.json"],
+      "field": "store_department",
+      "id_pattern": "/p/(\\d+)",
+      "source": "pull-regular-hyvee.ps1, the Aisles Online product record (store_department, with store_category and store_department_group beside it); read 2026-10-02 on hyvee-regular-2026-10-02.json",
+      "map": {
+        "Cooking & Baking": "pantry",
+        "Canned & Jarred Foods": "pantry",
+        "Produce": "fresh_fruits_vegetables",
+        "Dairy, Cheese & Eggs": "dairy",
+        "Meat & Seafood": "meat",
+        "Snack Foods": "pantry",
+        "Condiments & Salad Dressing": "pantry",
+        "Packaged Meals & Sides": "pantry",
+        "Laundry & Cleaning": "household",
+        "Frozen Fruits & Vegetables": "freezer",
+        "Grains & Pasta": "pantry",
+        "Frozen Meals & Entrees": "freezer",
+        "Personal Care": "health_beauty",
+        "Breakfast Foods": "pantry",
+        "Juices": "beverages",
+        "Frozen Meat & Seafood": "freezer",
+        "Breads & Cakes": "bakery",
+        "Delicatessen": "deli",
+        "Prepared Foods": "deli",
+        "Kitchen & Dining": "household",
+        "Bakery": "bakery",
+        "Bulk Foods": "pantry",
+        "Pet": "pets_wildlife",
+        "Paper & Plastic": "household",
+        "Coffee": "beverages",
+        "Health Care": "health_beauty",
+        "Baby": "health_beauty",
+        "Tea & Hot Chocolate": "beverages",
+        "Sports & Energy Drinks": "beverages",
+        "Ice Cream, Desserts & Toppings": "freezer",
+        "Water": "beverages",
+        "Soft Drinks": "beverages",
+        "Household Supplies": "household",
+        "Frozen Pizza": "freezer"
+      },
+      "neutral": ["International Foods", "Grilling"]
+    },
+    "Baker's": {
+      "files": ["out/regular/bakers-regular-*.json"],
+      "ad_files": ["out/bakers/bakers-deals-*.json"],
+      "field": "store_category",
+      "split": " > ",
+      "id_pattern": "/p/[^/]+/(\\d+)",
+      "source": "pull-regular-bakers-api.ps1, the Kroger product API categories list, joined with ' > ' (a SET of tags, not a path: 'Natural & Organic > Dairy' is two tags); read 2026-10-02 on bakers-regular-2026-10-02.json",
+      "map": {
+        "Canned & Packaged": "pantry",
+        "Snacks": "pantry",
+        "Baking Goods": "pantry",
+        "Frozen": "freezer",
+        "Cleaning Products": "household",
+        "Beverages": "beverages",
+        "Dairy": "dairy",
+        "Meat & Seafood": "meat",
+        "Condiment & Sauces": "pantry",
+        "Produce": "fresh_fruits_vegetables",
+        "Personal Care": "health_beauty",
+        "Pasta, Sauces, Grain": "pantry",
+        "Breakfast": "pantry",
+        "Pet Care": "pets_wildlife",
+        "Bakery": "bakery",
+        "Deli": "deli",
+        "Adult Beverage": "beer_wine_spirits",
+        "Baby": "health_beauty",
+        "Beauty": "health_beauty",
+        "Health": "health_beauty",
+        "Garden & Patio": "household",
+        "Candy": "pantry",
+        "Home Decor": "household",
+        "Kitchen": "household",
+        "Hardware": "household",
+        "Automotive": "household"
+      },
+      "neutral": ["Natural & Organic", "International", "Party", "Thanksgiving", "Halloween", "Other"]
+    },
+    "Fareway": {
+      "files": ["out/regular/fareway-regular-*.json"],
+      "ad_files": ["out/fareway/fareway-deals-*.json"],
+      "field": "taxonomy_path",
+      "source": "pull-fareway-shop.js storefront DOM; the field mostly carries an aisle number ('Aisle 17') or a size note, which is a location and not a category. Read 2026-10-02 on fareway-regular-2026-10-02.json",
+      "map": {
+        "Produce": "fresh_fruits_vegetables",
+        "Dairy": "dairy",
+        "Fresh Meat Counter": "meat",
+        "Self-Serve Deli": "deli"
+      },
+      "neutral": []
+    },
+    "Walmart": {
+      "files": ["out/regular/walmart-regular-*.json"],
+      "field": "",
+      "source": "no category field on the regular rows (read 2026-10-02 on walmart-regular-2026-10-02.json); every Walmart crown reads no-signal"
+    },
+    "Sam's Club": {
+      "files": ["out/sams/sams-deals-*.json"],
+      "field": "",
+      "source": "no category field on the deals rows (read 2026-10-02 on sams-deals-2026-10-02.json); every Sam's Club crown reads no-signal"
+    },
+    "Aldi": {
+      "files": ["out/regular/aldi-regular-*.json"],
+      "ad_files": ["out/ads-*.json"],
+      "field": "",
+      "source": "no category field on the regular rows (read 2026-10-02 on aldi-regular-2026-10-02.json); every Aldi crown reads no-signal"
+    }
+  },
+  "watch_cases": [
+    { "queue": "2026-09-28-6fc290", "store": "Family Fare", "commodity": "lemons", "product": "Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct", "cited": "familyfare/flyer-link-evidence-2026-09-27.jsonl", "context": "crowned lemons on comparison-2026-09-27 and -28; flyer-link department household" },
+    { "queue": "2026-09-28-6fc290", "store": "Family Fare", "commodity": "lemons", "product": "Cascade Ap Comp Lemon", "cited": "", "context": "comparison-2026-09-11, an FF Weekly Ad line; no flyer-link evidence file that old" },
+    { "queue": "2026-09-28-184b1d", "store": "Family Fare", "commodity": "carrots", "product": "Del Monte Peas And Carrots 8.5 Oz", "cited": "", "context": "claimed by carrots; a can, which the store would shelve in pantry" },
+    { "queue": "2026-09-28-184b1d", "store": "Family Fare", "commodity": "milk", "product": "Muscle Milk Cookies N Creme High Protein Shake", "cited": "", "context": "claimed by milk; no protein-shake commodity" },
+    { "queue": "2026-09-28-184b1d", "store": "Family Fare", "commodity": "garlic", "product": "New York Bakery Cheesy Focaccia Pesto & Garlic", "cited": "", "context": "claimed by garlic; frozen garlic bread" },
+    { "queue": "2026-09-28-184b1d", "store": "Fareway", "commodity": "canned-pears", "product": "Fareway Diced No Sugar Added Pears", "cited": "", "context": "matches nothing and carries no size" },
+    { "queue": "2026-09-29-356c4e", "store": "Walmart", "commodity": "facial-tissues", "product": "Great Value Ultra Soft Facial Tissues, 4 Flat Cartons, 120 Tissues per Carton", "cited": "", "context": "moved by a lotion exclude; not the crown" },
+    { "queue": "2026-09-29-465acc", "store": "Baker's", "commodity": "mayonnaise", "product": "Kroger Olive Oil Mayo", "cited": "out/regular/bakers-regular-2026-09-29.json", "context": "form question: mayonnaise or a reduced-fat dressing" },
+    { "queue": "2026-09-29-465acc", "store": "Family Fare", "commodity": "sun-dried-tomatoes", "product": "California Sun Dry Sun Dried Tomatoes Julienne Ct", "cited": "", "context": "form question: oil-packed jar or dry" },
+    { "queue": "2026-09-29-465acc", "store": "Hy-Vee", "commodity": "sun-dried-tomatoes", "product": "Hy-Vee Sun-Dried Tomatoes Halves", "cited": "out/regular/hyvee-regular-2026-09-29.json", "context": "form question: oil-packed jar or dry" },
+    { "queue": "2026-09-30-88bd45", "store": "Aldi", "commodity": "horseradish", "product": "Inglehoffer Horseradish Cream Style 9.5 OZ", "cited": "", "context": "quarantined on one signal; GOOD cell" },
+    { "queue": "2026-09-30-88bd45", "store": "Aldi", "commodity": "carrots", "product": "Specially Selected Carrots Sweet Potatoes 16 OZ", "cited": "", "context": "quarantined on one signal; BAD cell" },
+    { "queue": "2026-09-30-88bd45", "store": "Walmart", "commodity": "rotisserie-chicken", "product": "(Chilled) Freshness Guaranteed Lemon Pepper Rotisserie Chicken, 36 oz", "cited": "", "context": "quarantined on one signal; GOOD cell" }
+  ]
+}

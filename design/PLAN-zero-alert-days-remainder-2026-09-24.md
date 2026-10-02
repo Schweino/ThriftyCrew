@@ -1,6 +1,6 @@
 # PLAN: the rest of zero-alert days (row contract, two-signal identity, muffins, the review packet)
 
-**Status: RULED 2026-09-10 (carried from PLAN-zero-alert-days), not started.**
+**Status: RULED 2026-09-10 (carried from PLAN-zero-alert-days). Step 9 under way since 2026-10-02 (shadow only); the rest not started.**
 
 Source: `PLAN-zero-alert-days-2026-09-10.md` in `design/`, section 7, and Brad's rulings recorded there (the first set
 and the second set of 2026-09-10). That plan closed at build step 7 on 2026-09-24 (RULED close 1 to 7 by Brad,
@@ -46,7 +46,8 @@ moves its files back out.
 Only files that no other lane writes, because they do not exist yet and each step creates its own:
 
 - step 8: `design/SPEC-capture-row-contract.md`, `grocery/row-contract-lib.ps1`
-- step 9: `grocery/audit-store-category-share.ps1`, `grocery/audit-crown-identity-shadow.ps1`
+- step 9: `grocery/audit-store-category-share.ps1`, `grocery/audit-crown-identity-shadow.ps1`, `grocery/store-department-lib.ps1`,
+  `grocery/store-department-map.json` (the last two added by the step's first commit, 2026-10-02; nothing else writes them)
 - step 11: `grocery/review-adjudication-lib.ps1`
 - R11: `design/TRIAL-aldi-fareway-page-json.md`
 
@@ -147,6 +148,62 @@ Build step and bar, verbatim: "First measure what share of each store's rows car
 of shadow on crowns. Enforce only if a hand-checked sample of at least 30 disagreements is at least 80% real wrong
 products, and enforcement would empty no more than 2% of live cells. Both numbers are first guesses, recorded as such,
 to be revisited against the shadow data."
+
+**Status 2026-10-02: SHADOW STARTED, enforces nothing.** (Phase 3 of `PLAN-weekly-root-families-2026-10-02.md` in `design/`.)
+- **Shadow started 2026-10-02**: the first day was measured by hand on `comparison-2026-09-30.json` (built
+  2026-10-02T08:10) into a scratch directory. The daily chain records from its first run after this lands, expected
+  2026-10-03, so **the 14 shadow days end 2026-10-16** if it records every day. Each day is one gitignored file,
+  `grocery/out/crown-identity-shadow/crown-identity-shadow-<date>.jsonl`, one row per crown plus one per watch case, and
+  the audit prints the days on record. A BLIND day (no board, or no crown) writes nothing and is not a shadow day.
+- **How it reads.** The second signal is the department the store's own capture filed the crown's product in,
+  translated into aisle-lib's department vocabulary by `grocery/store-department-map.json`, and judged against the
+  expected departments aisle-lib ALREADY holds (its reviewed category and per-commodity tables, through
+  `Test-AisleAllowed`). So the expected set is declared once, in aisle-lib, and the new data file holds only each
+  store's field and its word-to-department map; `commodities.json` is neither read for this nor edited. Verdicts:
+  agree, disagree, no-signal. A no-signal is counted and is never agree.
+- **Coverage, measured 2026-10-02** (`grocery/audit-store-category-share.ps1`, blob e2b7999ec5c6, over the newest file
+  of each family; usable means the value maps to a department). All rows, then the regular or deals file alone:
+
+  | Store | Field | Usable, all captured rows | Regular file alone | Note |
+  |---|---|---|---|---|
+  | Hy-Vee | `store_department` | 628 of 2,058 (30.5%) | 628 of 1,546 (40.6%) | only freshly read rows carry it; carried rows and 512 ad rows do not |
+  | Aldi | none captured | 0 of 4,024 (0%) | 0 of 3,950 | |
+  | Family Fare | `dept` (from `canonical_url`) | 3,833 of 6,931 (55.3%) | 3,833 of 5,602 (68.4%) | Weekly Ad lines: flyer-link evidence 2026-09-27 gives a department on 171 of 171 resolved lines (171 of 191 lines resolved) |
+  | Fareway | `taxonomy_path` | 15 of 1,132 (1.3%) | 15 of 915 (1.6%) | 96 rows carry the field, mostly an aisle number, which is a place and not a category |
+  | Baker's | `store_category` | 7,222 of 7,508 (96.2%) | 7,222 of 7,362 (98.1%) | a set of Kroger tags joined with " > " |
+  | Sam's Club | none captured | 0 of 210 (0%) | 0 of 210 | |
+  | Walmart | none captured | 0 of 266 (0%) | 0 of 266 | |
+  | All | | 11,698 of 22,129 (52.9%) | | |
+
+- **First shadow day, 2026-10-02** (`grocery/audit-crown-identity-shadow.ps1` blob 52513e1933db, `store-department-lib.ps1`
+  blob 3ac2f93f3149, `store-department-map.json` blob 4ba66c171119, `aisle-lib.ps1` blob ac1634c62bd5; board
+  `comparison-2026-09-30.json` built 2026-10-02T08:10): **577 crowns; a signal on 101 of 577 (17.5%): 99 agree, 2
+  disagree, 476 no-signal.** Per store, signal on: Baker's 73 of 79 (71 agree, 2 disagree), Hy-Vee 11 of 15, Family
+  Fare 17 of 26, Walmart 0 of 174, Aldi 0 of 150, Sam's Club 0 of 109, Fareway 0 of 24. The two disagreements, first
+  read only (this is not the ruled hand check): fresh-cranberries @ Baker's, "Kroger Sweetened Cranberries" 32 oz,
+  filed Snacks, is dried fruit holding the only fresh-cranberries cell, which reads as a real wrong product;
+  breakfast-sausage @ Baker's, "Farmland Hot Pork Sausage" 12 oz, filed Frozen, reads as a right product the map's
+  meat set is too tight for.
+- **What the numbers already say about the bar.** Crowns at Walmart, Aldi and Sam's Club (433 of 577, 75%) capture no
+  category, so no amount of shadow can judge them; two signals cannot agree where one store gives only one. Day one
+  found 2 disagreements, and a crown that disagrees today is mostly the same crown tomorrow, so 30 DISTINCT
+  disagreements for the hand check may take longer than 14 days. Count distinct (commodity, store, product) across the
+  daily files, not rows. Both are inputs for the revisit the ruling asks for, not a change to the bar.
+- **Family 2 queue cases, read the same day** (watch_cases in the map; each re-read daily):
+
+  | Queue item | Case | Second signal |
+  |---|---|---|
+  | 6fc290 | Glad Drawstring Odor Shield Lemon Tall Kitchen 40 Ct, lemons, Family Fare | DISAGREE: household, on flyer-link-evidence-2026-09-27.jsonl (the cited file, also today's newest) |
+  | 6fc290 | Cascade Ap Comp Lemon, lemons, Family Fare | no signal: comparison-2026-09-11 predates every flyer-link evidence file |
+  | 184b1d | Del Monte Peas And Carrots 8.5 Oz, carrots, Family Fare | AGREE (pantry): the vegetable set allows pantry, so a department cannot tell a can from fresh carrots |
+  | 184b1d | Muscle Milk shake, milk; NY Bakery Cheesy Focaccia, garlic | no signal: both are Family Fare Weekly Ad lines the flyer linker never resolved |
+  | 184b1d | Fareway Diced No Sugar Added Pears, canned-pears | no signal: the row carries no taxonomy_path |
+  | 356c4e | Great Value Ultra Soft Facial Tissues, facial-tissues, Walmart | no signal: Walmart captures no category |
+  | 465acc | Kroger Olive Oil Mayo, Baker's; California Sun Dry and Hy-Vee sun-dried tomatoes | AGREE on all three, today and on the cited 2026-09-29 files: a FORM question (mayo or dressing, oil-packed or dry) sits inside one department, so this signal cannot settle it |
+  | 88bd45 | horseradish @ Aldi (good), carrots @ Aldi (bad), rotisserie-chicken @ Walmart (good) | no signal on all three: Aldi and Walmart capture no category, so this signal cannot yet replace the single-signal quarantine for these stores |
+
+  So on today's data the step changes 1 of the 13 case rows (6fc290's Glad bags, which it catches), cannot see 8 for
+  want of a category, and agrees on 4 that are form or can-versus-fresh questions a department cannot answer.
 
 ### 10. Ruling 8, muffins
 
