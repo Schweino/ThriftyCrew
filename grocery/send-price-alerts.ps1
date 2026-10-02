@@ -555,9 +555,12 @@ $apiUrl = 'https://map-to-success.ghost.io'
 $liveHeaders = { @{ Authorization = ('Ghost ' + (Get-GhostJWT -Key $adminKey)); 'Accept-Version' = (Get-GhostAcceptVersion); 'Content-Type' = 'application/json' } }
 
 # ---- boards + history ----
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1')   # a chain run's pinned board, or '' outside one (2026-10-02)
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'send-price-alerts')) {
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
 try { $wk0 = (Read-JsonFile $cmpF.FullName).week_of; $verF = Join-Path $OutDir ("verified-" + $wk0 + ".json"); if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF } } catch {}
+}
 $doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of
 $rows = @($doc.comparison)

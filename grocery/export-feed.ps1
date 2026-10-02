@@ -38,7 +38,7 @@
 
   Self-test:  powershell -File grocery\export-feed.ps1 -SelfTest
 #>
-# gate-inputs: grocery\export-feed.ps1, grocery\cell-quarantine-lib.ps1, lib\json-io.ps1, lib\atomic-write.ps1
+# gate-inputs: grocery\export-feed.ps1, grocery\cell-quarantine-lib.ps1, lib\json-io.ps1, lib\atomic-write.ps1, lib\board-pin.ps1, lib\append-line.ps1
 [CmdletBinding()]
 param(
   # Every path is overridable so the self-test can run the WHOLE export in a sandbox; production passes none of them.
@@ -63,6 +63,9 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'cell-quarantine-lib.ps1')
 # Write-TcAtomicFile: the two served feed copies are replaced through it (2026-09-24, see the write at the end).
 . (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1')
+# Resolve-TcBoardPin: inside a daily chain run the board is the run's pinned generation, never "the newest file" (2026-10-02,
+# D2 = A, design/PLAN-weekly-root-families-2026-10-02.md Phase 5). Outside a run it returns '' and the legacy lines below run.
+. (Join-Path (Split-Path $root -Parent) 'lib\board-pin.ps1')
 
 # THE SHRINK BAR: 10%, THE FIRST PLAUSIBLE NUMBER, NOT THE SURVIVOR OF A SWEEP. Measured 2026-09-23 over the 40 newest
 # committed public\smp-feed.json (a2e167727 .. 9827b3c77, 39 consecutive pairs): leaving out the founding pair
@@ -574,7 +577,10 @@ function AddBoard($rows) {
     $pinNoBasis = $seenNoBasis; $pinDiverged = $seenDiv
   }
 }
-$cmpF = Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+# -AlsoHash records which recipe-costs.json this export read, so the run record can show the feed's recipe fields are
+# top5-weekly's (Phase 5's bar: lib\board-pin.ps1 -Report).
+$bpCmp = Resolve-TcBoardPin -OutDir $out -Role comparison -Consumer 'export-feed' -AlsoHash @('recipe-costs.json')
+$cmpF = if ($bpCmp) { Get-Item -LiteralPath $bpCmp } else { Get-ChildItem (Join-Path $out 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1 }
 $weekOf = ''
 if ($cmpF) { $cdoc = Read-JsonFile $cmpF.FullName; $weekOf = [string]$cdoc.week_of; AddBoard $cdoc.comparison }   # weekly first (wins ties)
 $rbF = Join-Path $out 'recipe-board.json'
@@ -673,7 +679,7 @@ if ($rec.Count -eq 0) {
 # the homepage). Served in the feed so the tc-ic site markers stay current without any page edits.
 $boardItemCount = 0
 try {
-  $cmpF = Get-ChildItem (Join-Path $out 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  $cmpF = if ($bpCmp) { Get-Item -LiteralPath $bpCmp } else { Get-ChildItem (Join-Path $out 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1 }
   if($cmpF){ $boardItemCount = @(((Read-JsonFile $cmpF.FullName).comparison)).Count }
 } catch {}
 $feed = [ordered]@{

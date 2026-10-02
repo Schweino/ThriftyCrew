@@ -19,8 +19,8 @@
           1 a stage threw, or (without -NoCommit only, since 2026-09-11) that commit did not land; the EXIT line says which.
           3 it refused to pull, because neither -NoPull nor -ForcePull was passed.
 #>
-# The -SelfTest (lines after this header, to its exit 0) parses its own source and loads these five libraries; every verdict and export case runs against a %TEMP% fixture as its -Repo or -OutDir (M3, design\PLAN-push-gate-diet-2026-09-27.md).
-# gate-inputs: lib\pipeline-commit.ps1, grocery\ad-schedule-backing-lib.ps1, grocery\native-lib.ps1, grocery\feed-export-lib.ps1, lib\chain-verdict-lib.ps1
+# The -SelfTest (lines after this header, to its exit 0) parses its own source, loads these libraries and reads the declared step list; every verdict and export case runs against a %TEMP% fixture as its -Repo or -OutDir (M3, design\PLAN-push-gate-diet-2026-09-27.md).
+# gate-inputs: lib\pipeline-commit.ps1, grocery\ad-schedule-backing-lib.ps1, grocery\native-lib.ps1, grocery\feed-export-lib.ps1, lib\chain-verdict-lib.ps1, lib\chain-step-order.ps1, ops\chain-steps.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param(
   [string]$Today = "",
@@ -294,6 +294,8 @@ if ($SelfTest) {
     $script:cacFxLog.Clear(); $script:cacFxPages.Clear()
     $cacF = Invoke-ChainFeedExport -ScriptPath $cacFailed -Stage 'quarantine' -AsOf '2026-09-24'
     Test-CacCase 'MUST FIRE  a named FAILED line is the reason over the earlier shrink line, and the page says the served copy WAS rewritten' { ($cacF.rc -eq 3) -and ($cacF.why -match '^export-feed: FAILED writing') -and ([string]$script:cacFxPages[0].body -match 'WAS rewritten') -and ([string]$script:cacFxPages[0].body -notmatch 'Neither copy') }
+    $script:cacFxLog.Clear(); $script:cacFxPages.Clear(); $cacA = Invoke-ChainFeedExport -ScriptPath $cacRefuse -Stage 'after top5-weekly' -AsOf '2026-10-02' -AfterVerdict
+    Test-CacCase 'MUST FIRE  a refused re-export AFTER the verdict (c6bafd) logs and pages that the earlier export stands and it holds nothing, never feed_refreshed=false' { (-not $cacA.refreshed) -and (@($script:cacFxLog | Where-Object { ($_ -match 'smp-feed NOT exported \(after top5-weekly\)') -and ($_ -match 'the earlier export stands') -and ($_ -notmatch 'feed_refreshed=false') }).Count -eq 1) -and ([string]$script:cacFxPages[0].body -match 'it holds nothing') -and ([string]$script:cacFxPages[0].body -notmatch 'feed_refreshed=false') }
 
     # The four reader-facing steps swept with it (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly).
     $cacStepBad = Join-Path $cacFxRoot 'step-fails.ps1'
@@ -312,7 +314,11 @@ if ($SelfTest) {
   Test-CacCase 'WIRING  the four reader-facing steps (build-sale-windows, recipe-overlay, publish-deals-page, top5-weekly) go through Invoke-ChainReaderStep' { (Get-CacCalls 'Invoke-ChainReaderStep').Count -eq 4 }
   # WIRING, read off the parsed file: both exports go through Invoke-ChainFeedExport, no pipeline outside this block still
   # runs export-feed into Out-Null, and the verdict writer is handed the refusal.
-  Test-CacCase 'WIRING  both export-feed runs (the daily export and the quarantine re-export) go through Invoke-ChainFeedExport' { (Get-CacCalls 'Invoke-ChainFeedExport').Count -eq 2 }
+  Test-CacCase 'WIRING  all three export-feed runs (daily, the quarantine re-export, the re-export after top5-weekly) go through Invoke-ChainFeedExport, and only the last says -AfterVerdict' { ((Get-CacCalls 'Invoke-ChainFeedExport').Count -eq 3) -and (@((Get-CacCalls 'Invoke-ChainFeedExport') | Where-Object { $_.Extent.Text -match '-AfterVerdict' }).Count -eq 1) }
+  # THE DECLARED STEP ORDER (2026-10-02, Phase 5 of design\PLAN-weekly-root-families-2026-10-02.md): ops\chain-steps.json is this file, and no declared step reads a file a later step writes.
+  $cacCso = @('not run'); try { . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\chain-step-order.ps1'); $cacCso = @(Invoke-TcChainStepGate -StepsFile (Join-Path (Split-Path $PSScriptRoot -Parent) 'ops\chain-steps.json') -ChainFile $PSCommandPath) } catch { $cacCso = @('threw: ' + $_.Exception.Message) }
+  foreach ($l in @($cacCso | Where-Object { $_ -is [string] })) { Write-Output ('    ' + $l) }
+  Test-CacCase 'WIRING  ops\chain-steps.json is this file''s step order and no declared step reads a file a later step writes (c6bafd: export-feed before top5-weekly)' { ($cacCso.Count -ge 2) -and ($cacCso[$cacCso.Count - 1] -is [bool]) -and $cacCso[$cacCso.Count - 1] }
   Test-CacCase 'WIRING  no pipeline outside the self-test runs export-feed into Out-Null' {
     $cacNeedle = 'export-feed' + '\.ps1'
     $pl = @($cacAst.FindAll({ param($n) $n -is [System.Management.Automation.Language.PipelineAst] }, $true) | Where-Object { (-not (Test-CacInSelfTest $_)) -and ($_.Extent.Text -match $cacNeedle) -and ($_.Extent.Text -match 'Out-Null') })
@@ -440,7 +446,7 @@ try {
 # chain never rewrites, is held back and named there instead of refusing the whole commit. Taken here, before
 # any stage writes, so the mtime test at commit time can tell the chain's own writes from a session's. A snapshot
 # that cannot be taken holds nothing back (lib\pipeline-commit.ps1, Get-ForeignHeldPaths).
-$script:ChainStart = Get-Date
+$script:ChainStart = Get-Date; $env:TC_BOARD_PIN = $null   # an inherited board pin is never this run's (lib\board-pin.ps1)
 $script:ChainDirtyAtStart = $null
 if (-not $NoCommit) {
   try {
@@ -459,7 +465,7 @@ $script:ChainFeedRefused = ''
 . (Join-Path $root 'fanout-lib.ps1')   # Invoke-Fanout / Get-FanoutRecord / Test-FanoutComplete: the inspect fan-out
 . (Join-Path (Split-Path $root -Parent) 'meal-prep\lib\gated-republish-lib.ps1')   # Invoke-TcGatedRepublish: the close-the-loop republish, per slug (I234). No param() block, so it cannot reset this script's switches
 . (Join-Path $root 'ad-schedule-backing-lib.ps1')   # Get-AdScheduleBacking / Get-AdScheduleAlertText: schedule vs the capture that ADVANCED it (2026-09-18, de39ec)
-
+. (Join-Path (Split-Path $root -Parent) 'lib\board-pin.ps1')   # New-/Step-TcBoardPin: this run pins ONE board generation and every consumer reads it (2026-10-02, D2 = A)
 . (Join-Path $PSScriptRoot 'check-ad-cycles\runner.ps1')
 
 # Price signature of the current board: sorted id|store|per_unit|type over the latest comparison, hashed.
@@ -491,7 +497,7 @@ function Invoke-GuardsGate([switch]$Silent) {
   $apRc = 2
   try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $OutDir | ForEach-Object { Log ('quarantine: ' + $_) }; $apRc = $LASTEXITCODE } catch { Log ('apply-cell-quarantine threw: ' + $_.Exception.Message) }
   if ($apRc -ne 0) { $res.why = ('the quarantine could not be applied (rc ' + $apRc + ')'); Log ('QUARANTINE NOT APPLIED (rc ' + $apRc + ') - the board is held, as a guards failure always held it'); return $res }
-  $res.applied = $true
+  $res.applied = $true; try { Step-TcBoardPin -Reason 'quarantine' | ForEach-Object { Log $_ } } catch { Log ('board-pin advance threw, so the next consumer refuses the rewritten board (BOARD-PIN MISMATCH): ' + $_.Exception.Message) }
   # RE-DERIVE THE DRIFT VERDICTS OVER THE QUARANTINED BOARD before guards reads it again. The apply rewrote
   # comparison-*.json, which makes out\name-drift.json older than the board it describes, and audit-tile-integrity
   # then HOLDS on purpose rather than grade today's tiles against stale flags. Found by the first live run of this
@@ -514,7 +520,7 @@ function Invoke-GuardsGate([switch]$Silent) {
       $ap2 = 2
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'apply-cell-quarantine.ps1') -OutDir $OutDir | ForEach-Object { Log ('quarantine: ' + $_) }; $ap2 = $LASTEXITCODE } catch { Log ('apply-cell-quarantine (reapply) threw: ' + $_.Exception.Message) }
       if ($ap2 -ne 0) { $res.why = ('the re-applied quarantine could not be applied (rc ' + $ap2 + ')'); Log ('REAPPLY NOT APPLIED (rc ' + $ap2 + ') - the board is held'); return $res }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch { Log ('name-drift re-derive after the reapply threw: ' + $_.Exception.Message) }
+      try { Step-TcBoardPin -Reason 'reapply' | ForEach-Object { Log $_ } } catch { Log ('board-pin advance threw, so the next consumer refuses the rewritten board (BOARD-PIN MISMATCH): ' + $_.Exception.Message) }; try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch { Log ('name-drift re-derive after the reapply threw: ' + $_.Exception.Message) }
       try {
         if ($Silent) { & powershell -ExecutionPolicy Bypass -File $gPath -Quiet | Out-Null }
         else { & powershell -ExecutionPolicy Bypass -File $gPath | ForEach-Object { Log ('guards: ' + $_) } }
@@ -1013,6 +1019,8 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # Deterministic PS (no LLM); only runs when this week's verdicts exist. Non-fatal.
       $cmpNow = Get-ChildItem (Join-Path $OutDir 'comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
       if ($cmpNow) { try { $wkNow = (Read-JsonFile $cmpNow.FullName).week_of; if (Test-Path (Join-Path $OutDir ("verify-verdicts-" + $wkNow + ".json"))) { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'verify-apply.ps1') | Out-Null; Log 'verify-apply re-applied verdicts to fresh board' } } catch { Log ('verify-apply threw: ' + $_.Exception.Message) } }
+      # PIN THE GENERATION HERE, after the last board writer before any consumer (lib\board-pin.ps1). No pin = every consumer chooses as before.
+      try { $bpPin = New-TcBoardPin -OutDir $OutDir -RunId ($asofS + 'T' + $script:ChainStart.ToString('HHmmss') + '-' + $PID); $env:TC_BOARD_PIN = $bpPin.path; Log ('board-pin: generation 1 ships ' + $bpPin.board.kind + ' ' + (Split-Path $bpPin.board.path -Leaf) + ', judged on ' + (Split-Path $bpPin.comparison.path -Leaf)) } catch { $env:TC_BOARD_PIN = $null; Log ('board-pin NOT taken, so each consumer chooses its own board as before: ' + $_.Exception.Message) }
       # overlay this week's ad-sales onto the everyday recipe-ingredient board (catches recipe items on sale;
       # reverts automatically when a sale ends). MUST run BEFORE resolve-worklist so the link worklist reflects
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
@@ -1235,8 +1243,7 @@ price-history.json is a reconciled copy of the comparison boards on disk. A boar
       # it ~270 lines LATER in this same run. So compute-v2 resolved YESTERDAY's feed every single day and
       # its freshness rule refused the manifest: the 2026-08-22 08:12 run logged
       # "compute-v2 REFUSED to recompute the manifest - stale price feed: ... freshness: STALE_VS_CLOCK".
-      # export-feed reads the comparison, the recipe board, sale-windows, product-urls and recipe-costs -
-      # all final by this point - and reads NOTHING compute-v2 writes, so there is no cycle to create.
+      # NOT all it reads is final here: recipe-costs.json (top5-weekly) and v2-perserving.json (compute-v2) move later, so it runs again after top5-weekly (c6bafd).
       # AND READ ITS EXIT CODE (2026-09-23). This line was `| Out-Null; Log 'smp-feed exported'`, so from a1493be0d, when
       # export-feed began REFUSING (exit 3, nothing written) on a missing input or a section fall over 10%, a refusal
       # left yesterday's feed served under a log line saying it was exported. Invoke-ChainFeedExport logs the refusal
@@ -1863,10 +1870,9 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # product path was ~6-7. Under Task Scheduler's 2h ceiling - and under any late throw - the day's
       # prices were held hostage by auditing that could never block a publish anyway. Ship first, inspect
       # after: a crash below this line now costs a report, not a board.
-      # KEEP THE ORDER ABOVE. It is a dependency chain, not a preference: export-feed BEFORE compute-v2
-      # (it writes the feed compute-v2 resolves), and audit-name-drift BEFORE guards - guard 3's
-      # WRONG-PRODUCT hard fail reads out\name-drift.json and generate-board-overrides refuses pins from
-      # links it flags, so moving name-drift below makes that gate structurally unfirable.
+      # KEEP THE ORDER ABOVE: ops\chain-steps.json declares it and this file's -SelfTest refuses a push that breaks it (2026-10-02).
+      # Not declared there: audit-name-drift BEFORE guards - guard 3's WRONG-PRODUCT hard fail reads out\name-drift.json and
+      # generate-board-overrides refuses pins from links it flags, so moving name-drift below makes that gate unfirable.
       # ================================================================================================
       $script:DownstreamRan = $true
       $shipSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
@@ -1938,7 +1944,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # board, while the live feed still read week_of 2026-09-06. Readers saw card prices from a board
       # they could not see. These three write to Ghost; a held board must hold them too.
       if ($guardsBlocked) { Log 'held: guards blocked - hub/rotation not republished from a refused board (top5-weekly, rotate-free-dinners, build-hub-grid -Publish all skipped)'; $summary += 'HELD      guards blocked the board, so the hub Top 5, the free rotation and the 591 recipe cards were NOT republished from it' }
-      if (-not $guardsBlocked) { if (-not $NoPublish) { try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') -Stale 'the weekly cheapest-recipe rotation and recipe-costs.json' -OkLog 'top5-weekly refreshed' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) } } }
+      if (-not $guardsBlocked) { if (-not $NoPublish) { try { [void](Invoke-ChainReaderStep -ScriptPath (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') -Stale 'the weekly cheapest-recipe rotation and recipe-costs.json' -OkLog 'top5-weekly refreshed' -AsOf $asofS -NoAlert:$NoAlert) } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }; try { [void](Invoke-ChainFeedExport -ScriptPath (Join-Path $root 'export-feed.ps1') -Stage 'after top5-weekly' -AsOf $asofS -NoAlert:$NoAlert -AfterVerdict) } catch { Log ('export-feed after top5-weekly threw: ' + $_.Exception.Message) } } }   # re-export: the feed's recipe fields carry THIS run's recipe-costs.json (c6bafd, ops\chain-steps.json)
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
@@ -3639,7 +3645,7 @@ if (@($flips).Count -gt 0) { Write-Output ""; Write-Output ("Flipped this run: "
 # (hard-failed pull, -NoDownstream), and saying "ship not reached" is the honest wording for that.
 $totalSecs = [int]((Get-Date) - $script:ShipStart).TotalSeconds
 $shipNote = if ($script:DownstreamRan) { "ship=" + $shipSecs + "s" } else { "ship=not reached" }
-Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() + "; " + $shipNote + "; total=" + $totalSecs + "s")
+Log ("run complete; flips=" + (@($flips).Count) + "; pull=" + $pullNote.Trim() + "; " + $shipNote + "; total=" + $totalSecs + "s"); try { Write-TcBoardPinRunEnd | ForEach-Object { Log $_ } } catch { Log ('board-pin run-end threw: ' + $_.Exception.Message) }
 
 # THE BUS HEARTBEAT (WS 1b), and it is here for a reason worth stating. The event bus's other
 # two producers - a red gate and a closed alert - both fire only on TROUBLE, so a healthy
@@ -3660,16 +3666,10 @@ try {
   }
 } catch { }   # a heartbeat must never be the reason the daily chain reports failure
 
-# *** THIS FILE'S EXIT CODE WAS AN ACCIDENT UNTIL NOW (2026-08-23). *** There was no `exit` statement
-# anywhere in 2,467 lines, so `powershell -File check-ad-cycles.ps1` returned 0 on a normal finish and 1
-# on any terminating error - and every caller (capture-run's FAILED LANES, daily.yml) reads that code as
-# the chain's verdict. A verdict nobody wrote is a verdict nobody can reason about: on 2026-08-23 the
-# only thing "downstream rc=1" actually meant was "something threw, somewhere, and we are not saying
-# where". Stating it here changes no behaviour - a crash still never reaches this line, so it still
-# exits 1 - but it makes the zero DELIBERATE: reaching this point means the whole chain ran, which is
-# exactly what the caller believes the code means. Findings live in $summary and in each audit's own
-# exit code; they have never made this script non-zero and must not start now, or a REVIEW line would
-# read to capture-run as a failed lane.
+# *** THIS FILE'S EXIT CODE IS DELIBERATE (2026-08-23). *** Until then it had no `exit`, so its 0 and 1 were accidents
+# that every caller (capture-run's FAILED LANES, daily.yml) read as the chain's verdict. A crash never reaches this point
+# and still exits 1; reaching it means the whole chain ran. Findings live in $summary and in each audit's own exit code
+# and must never make this script non-zero, or a REVIEW line would read to capture-run as a failed lane.
 
 # COMMIT WHAT THIS CHAIN OWNS, unless the caller is going to (2026-09-07). capture-run passes
 # -NoCommit and keeps committing in its own publish stage, untouched. Everyone else - a human, a

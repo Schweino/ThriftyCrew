@@ -17,10 +17,11 @@
           -SelfTest (hermetic fixture for the change gate; touches no data, publishes nothing)
 #>
 # Declared inputs of its -SelfTest (2026-09-23, lib\gate-input-key.ps1): read off the self-test block, which works in a temp sandbox and reads nothing else of this repo. Verify with: powershell -File lib\gate-input-key.ps1 -VerifyDeclared <this file>
-# gate-inputs: grocery\publish-deals-page.ps1, grocery\feed-served-lib.ps1, lib\git-blob-lib.ps1, lib\json-io.ps1
+# gate-inputs: grocery\publish-deals-page.ps1, grocery\feed-served-lib.ps1, lib\git-blob-lib.ps1, lib\json-io.ps1, lib\board-pin.ps1, lib\atomic-write.ps1, lib\append-line.ps1
 param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 15, [switch]$Force, [switch]$Draft, [switch]$BuildOnly, [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1')   # Resolve-TcBoardPin: a chain run's pinned board, or '' outside one (2026-10-02, D2 = A)
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 
@@ -146,7 +147,9 @@ $adminKey = if ($BuildOnly) { '' } elseif ($env:GHOST_ADMIN_KEY) { $env:GHOST_AD
   elseif (Test-Path (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey')) { (Get-Content (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey') -Raw).Trim() }
   else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl = 'https://map-to-success.ghost.io'
-if (-not $CompareFile) {
+# Inside a chain run the board is the pinned generation (an -CompareFile handed in is checked against it); outside one
+# Resolve-TcBoardPin returns -CompareFile unchanged and the legacy choice below runs exactly as before.
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'publish-deals-page' -Explicit $CompareFile)) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # prefer the semantically-verified board when it is at least as fresh as the raw comparison (see build-deals-page)

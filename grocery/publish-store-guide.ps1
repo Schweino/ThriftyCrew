@@ -15,8 +15,8 @@ $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
 $slug   = 'shop-smart-at-your-store'
-
-if (-not $CompareFile) {
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1')   # a chain run's pinned board, or -CompareFile unchanged outside one (2026-10-02)
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'publish-store-guide' -Explicit $CompareFile)) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # prefer the semantically-verified board when it is at least as fresh as the raw comparison (see build-deals-page)

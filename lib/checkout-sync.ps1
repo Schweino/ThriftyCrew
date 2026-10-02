@@ -181,7 +181,7 @@ $script:TcCheckoutSyncStartupFiles = @(
   'grocery/native-lib.ps1',
   'grocery/run-log-lib.ps1',
   'lib/append-line.ps1',
-  'lib/atomic-write.ps1',
+  'lib/atomic-write.ps1', 'lib/board-pin.ps1',
   'lib/bot-paths.ps1',
   'lib/chain-code-currency.ps1',
   'lib/chain-verdict-lib.ps1',

@@ -28,6 +28,8 @@ $SITE = 'https://www.thriftycrew.com'
 
 # ---- same board-file selection as build-deals-page.ps1, so the email can never quote a different
 # board than the page it links to (prefer the semantically-verified snapshot when it is fresh). ----
+. (Join-Path $root '..\lib\board-pin.ps1')   # a chain run's pinned board, or '' outside one (2026-10-02)
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'build-friday-email')) {
 $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
 try {
@@ -35,6 +37,7 @@ try {
   $verF = Join-Path $OutDir ("verified-" + $wk0 + ".json")
   if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF }
 } catch {}
+}
 
 $doc  = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of

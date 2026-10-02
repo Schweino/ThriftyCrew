@@ -350,7 +350,7 @@ $null = Register-Kid 'ended-window'        'audit-ended-window.ps1'         @()
 # winning cell quarantines THAT cell here instead of holding the whole post in publish-deals-page. It joins against the
 # SAME board this file grades (the selection below is $cmpF's, further down), passed by path so the two cannot differ.
 # Cost: one cached soundness sweep, about 2 s measured in publish-deals-page's stage table, run beside the others.
-$msCellBoard = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1'); $bpCmp = Resolve-TcBoardPin -OutDir (Join-Path $root 'out') -Role comparison -Consumer 'guards'; $msCellBoard = if ($bpCmp) { Get-Item -LiteralPath $bpCmp } else { Get-ChildItem (Join-Path $root 'out\comparison-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1 }   # inside a chain run: the pinned generation, verified by sha256 or a HARD FAIL (lib\board-pin.ps1)
 $msCellArgs = @('-CellScope'); if ($msCellBoard) { $msCellArgs += @('-CompareFile', $msCellBoard.FullName) }
 $null = Register-Kid 'match-soundness-cells' 'audit-match-soundness.ps1'    $msCellArgs
 $null = Register-Kid 'st-walmart-deals'     'build-walmart-deals.ps1'        @('-SelfTest')
@@ -666,7 +666,7 @@ foreach ($g in @(
 }
 
 # ---------------------------------------------------------------- shared: the board + the links
-$cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1
+$cmpF = if ($bpCmp) { Get-Item -LiteralPath $bpCmp } else { Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1 }   # $bpCmp: the pinned board, above
 $cmp  = Read-JsonFile $cmpF.FullName
 $pu   = (Read-JsonFile (Join-Path $root 'product-urls.json')).items
 

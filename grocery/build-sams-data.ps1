@@ -12,6 +12,8 @@ $root = 'C:\Codex\ThriftyCrew\grocery'
 $outDir = Join-Path $root 'out'
 
 # ---- pick the weekly board (mirror build-deals-page.ps1 selection) ----
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1')   # a chain run's pinned board, or '' outside one (2026-10-02)
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $outDir -Role board -Consumer 'build-sams-data')) {
 $cmpF = (Get-ChildItem (Join-Path $outDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
 $CompareFile = $cmpF.FullName
 try {
@@ -19,6 +21,7 @@ try {
   $verF = Join-Path $outDir ("verified-" + $wk + ".json")
   if ((Test-Path $verF) -and ((Get-Item $verF).LastWriteTime -ge $cmpF.LastWriteTime)) { $CompareFile = $verF }
 } catch {}
+}
 Write-Host "board: $CompareFile"
 $doc = Read-JsonFile $CompareFile
 $week = [string]$doc.week_of

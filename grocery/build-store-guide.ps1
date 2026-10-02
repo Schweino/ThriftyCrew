@@ -17,7 +17,8 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-if (-not $CompareFile) {
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1')   # a chain run's pinned board, or -CompareFile unchanged outside one (2026-10-02)
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'build-store-guide' -Explicit $CompareFile)) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # Prefer the semantically-verified board (wrong-product winners dropped/de-crowned by the verify pass) when

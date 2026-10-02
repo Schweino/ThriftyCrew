@@ -26,7 +26,11 @@ function Invoke-ChainFeedExport {
     # whose cells were quarantined).
     [Parameter(Mandatory = $true)][string]$Stage,
     [string]$AsOf = (Get-Date).ToString('yyyy-MM-dd'),
-    [switch]$NoAlert
+    [switch]$NoAlert,
+    # The re-export after top5-weekly (2026-10-02, queue 2026-09-28-c6bafd) runs AFTER Write-ChainVerdict, so a refusal there
+    # changes no verdict and holds nothing: the feed this run already exported stands, its recipe fields one run behind. Its
+    # log and page say that, never "feed_refreshed=false", which would be a claim about a verdict it did not write.
+    [switch]$AfterVerdict
   )
   $out = [pscustomobject]@{ rc = -1; refreshed = $false; why = ''; paged = $false }
   $res = Invoke-NativeScript $ScriptPath
@@ -58,13 +62,15 @@ function Invoke-ChainFeedExport {
   $copies = 'Neither copy of the feed (public\smp-feed.json, grocery\out\smp-feed.json) was rewritten, so the served feed still carries the previous run''s prices.'
   if ($out.why -match 'WAS rewritten') { $copies = 'export-feed says the served copy public\smp-feed.json WAS rewritten with this build and only the local grocery\out\smp-feed.json copy is stale (see the line above).' }
   elseif ($out.why -notmatch '^export-feed: (REFUSED|FAILED)') { $copies = 'export-feed stopped without a verdict, so which copy of the feed (public\smp-feed.json, grocery\out\smp-feed.json) it rewrote is NOT known: compare their generated stamps before trusting either.' }
+  $held = if ($AfterVerdict) { 'This export ran after the chain verdict to carry top5-weekly''s recipe-costs.json into the feed; it holds nothing. The feed this run exported earlier stands and ships beside today''s board, its recipe fields one run behind.' }
+          else { 'The chain verdict records feed_refreshed=false, so capture-run and push-data stage inputs only and today''s public\board.json does not ship beside the old feed, and the board post is held.' }
   Log ('smp-feed NOT exported (' + $Stage + '): export-feed exited ' + $out.rc + ' - ' + $out.why +
-       ' - ' + $copies + ' The chain verdict records feed_refreshed=false so public\board.json does not ship beside it')
+       ' - ' + $copies + ' ' + $(if ($AfterVerdict) { 'It ran after the chain verdict and holds nothing: the earlier export stands' } else { 'The chain verdict records feed_refreshed=false so public\board.json does not ship beside it' }))
   if (-not $NoAlert) {
     $body = ('grocery\export-feed.ps1 exited ' + $out.rc + ' during the ' + $Stage + ' export on ' + $AsOf + '.' + "`n`n" +
              $out.why + "`n`n" +
              $copies + ' ' +
-             'The chain verdict records feed_refreshed=false, so capture-run and push-data stage inputs only and today''s public\board.json does not ship beside the old feed, and the board post is held.' + "`n`n" +
+             $held + "`n`n" +
              'Fix the input export-feed names (a missing file is usually a checkout that was not seeded or a producer that did not run; a section drop over 10% is a real fall to investigate, or pass -AcceptShrink ''<reason>'' when it is intended), then re-run grocery\check-ad-cycles.ps1.')
     try {
       Send-Alert -Subject ('Grocery: smp feed export refused - ' + $AsOf) -Body $body | Out-Null

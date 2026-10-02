@@ -2260,8 +2260,8 @@ if ($shipServed -and $pushed) {
 # ---- THE DEFERRED POST (2026-09-22, queue 2026-09-22-81d955): the pointer is written only after the object is live -----
 $postDecision = Get-DeferredPostDecision -Deferred ([bool]$postDeferred) -ObjectLanded ([bool]($shipServed -and $botCommitted -and $pushed)) -EdgeBoard ([string]$bv) -EdgeFeed ([string]$fv)
 if ($postDecision -eq 'publish') {
-  $pdOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')
-  $pdRc = $LASTEXITCODE
+  try { . (Join-Path (Split-Path $root -Parent) 'lib\board-pin.ps1'); $env:TC_BOARD_PIN = Get-TcBoardPinForCaller -OutDir (Join-Path $root 'out') -Since $script:RunStart } catch { $env:TC_BOARD_PIN = $null; Write-Output ('  board-pin: the post could not be handed this run''s pin, so it chooses its own board as before: ' + $_.Exception.Message) }; $pdOut = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   # the post reads THIS run's pinned board (2026-10-02, D2 = A)
+  $pdRc = $LASTEXITCODE; $env:TC_BOARD_PIN = $null
   foreach ($l in @(@($pdOut) | Where-Object { $null -ne $_ -and ([string]$_) -match '^(ERROR|HELD|WARN|CURRENT|PUBLISHED)' })) { Write-Output ('  publish-verdict: ' + ([string]$l).Trim()) }
   if ($pdRc -eq 0) {
     Write-Output 'POST PUBLISHED after its data: board.json and smp-feed.json were byte-identical at the edge first'

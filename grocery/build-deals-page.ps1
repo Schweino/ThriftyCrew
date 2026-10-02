@@ -8,10 +8,10 @@
 #>
 param([string]$CompareFile = "", [string]$OutDir = "", [string]$Out = "", [switch]$Embed)
 $ErrorActionPreference = 'Stop'
-. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\board-pin.ps1'); . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-if (-not $CompareFile) {
+if (-not ($CompareFile = Resolve-TcBoardPin -OutDir $OutDir -Role board -Consumer 'build-deals-page' -Explicit $CompareFile)) {   # a chain run's pinned board (lib\board-pin.ps1); outside one, -CompareFile unchanged
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
   # Prefer the semantically-verified board (wrong-product winners dropped/de-crowned by the verify pass) when
