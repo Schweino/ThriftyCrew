@@ -635,7 +635,8 @@ if ($SelfTest) {
       $argv = @('-In', $inP, '-Out', $outP, '-Today', '1999-01-01') + @($extra)
       $run = Invoke-NativeScript $selfP @argv
       $doc = $null
-      if (Test-Path -LiteralPath $outP) { $doc = @(Get-Content -LiteralPath $outP -Raw -Encoding UTF8 | ConvertFrom-Json) }
+      # assign, then wrap: @(... | ConvertFrom-Json) is ONE element under PS 5.1 when the file is a top-level array
+      if (Test-Path -LiteralPath $outP) { $parsed = Get-Content -LiteralPath $outP -Raw -Encoding UTF8 | ConvertFrom-Json; $doc = @($parsed) }
       return @{ rc = $run.ExitCode; lines = @($run.Lines | ForEach-Object { [string]$_ }); doc = $doc }
     }
     $e1 = _FwRun 'ok' (_FwLine '531573' '531573') @()

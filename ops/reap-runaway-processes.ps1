@@ -199,15 +199,20 @@ function Get-AlertPlan {
 function Get-ProcessSample {
   <# .SYNOPSIS Live. Every process with its parent's liveness, CPU-minutes and share of one core,
      measured over $Seconds. Returns an ARRAY of records. Never throws on a process that exits
-     under it: a race there is the ordinary case, not a failure. #>
-  param([int]$Seconds = 3, [string[]]$Names = @())
+     under it: a race there is the ordinary case, not a failure.
+     $ReadCpu IS THE SEAM a self-test swaps (2026-10-02, queue 2026-10-01-c12baf): called as
+     & $ReadCpu <Process> 'first'|'second', it returns that process's CPU seconds. Production passes nothing and reads
+     Process.CPU. A real spinner's share is a property of the BOX, not of this code: on a loaded box the MUST FIRE that
+     asserted a real spinner at 50% or more measured 48.4% and refused a push. #>
+  param([int]$Seconds = 3, [string[]]$Names = @(), [scriptblock]$ReadCpu = $null)
+  if (-not $ReadCpu) { $ReadCpu = { param($p, $when) if ($when -eq 'second') { $p.Refresh() }; $p.CPU } }
   $procs = @()
   try {
     if ($Names.Count -gt 0) { $procs = @(Get-Process -Name $Names -ErrorAction SilentlyContinue) }
     else { $procs = @(Get-Process -ErrorAction SilentlyContinue) }
   } catch { return @() }
   $first = @{}
-  foreach ($p in $procs) { try { if ($null -ne $p.CPU) { $first[$p.Id] = [double]$p.CPU } } catch { } }
+  foreach ($p in $procs) { try { $c0 = & $ReadCpu $p 'first'; if ($null -ne $c0) { $first[$p.Id] = [double]$c0 } } catch { } }
   if ($first.Count -eq 0) { return @() }
   Start-Sleep -Seconds $Seconds
   $live = @{}
@@ -227,7 +232,7 @@ function Get-ProcessSample {
     if ($live.ContainsKey($p.Id)) { $cim = $live[$p.Id] }
     if ($null -eq $cim) { continue }                      # exited during the sample: nothing to reap
     $now = $null
-    try { $p.Refresh(); $now = [double]$p.CPU } catch { continue }
+    try { $c1 = & $ReadCpu $p 'second'; if ($null -ne $c1) { $now = [double]$c1 } } catch { continue }
     if ($null -eq $now -or -not $first.ContainsKey($p.Id)) { continue }
     $ppid = [int]$cim.ParentProcessId
     # OWNED, not merely "has a parent": the walk skips same-named ancestors (git's wrapper) and refuses a
@@ -430,10 +435,27 @@ if ($SelfTest) {
       _T 'the end-to-end fixture spawned exactly one orphaned spinner' $false "found $($found.Count)"
     } else {
       $spinner = [int]$found[0].ProcessId
-      $sample = @(Get-ProcessSample -Seconds 3 -Names @('powershell'))
+      # THE SHARE GOES THROUGH THE SEAM, FIXED (2026-10-02, queue 2026-10-01-c12baf). This case asserted the REAL
+      # spinner at 50% or more of a core, and on a loaded box it measured 48.4% and refused a push: the bar it read
+      # was the box's, not this code's (og-36). The spinner's two readings are now fixed 2.25 s apart over the 3 s window,
+      # (binary-exact: 75% and 10.5 CPU-minutes, og-06), so the case proves the sampler's arithmetic and plumbing whatever the load; every other process is read for
+      # real. The bar itself stays pinned on the pure Get-ReapVerdict above (AT THE BAR, and a step past it).
+      $realCpu = @{}
+      $fixedShare = { param($p, $when)
+        if ($when -eq 'second') { $p.Refresh() }
+        $real = $p.CPU
+        if ($p.Id -ne $spinner) { return $real }
+        if ($when -eq 'first') { $realCpu.first = $real; return 627.75 }
+        $realCpu.second = $real; return 630.0
+      }.GetNewClosure()
+      $sample = @(Get-ProcessSample -Seconds 3 -Names @('powershell') -ReadCpu $fixedShare)
       $rec = @($sample | Where-Object { $_.Id -eq $spinner })
       _T 'MUST FIRE the sampler finds the real orphan and reads its PARENT as gone' ($rec.Count -eq 1 -and -not $rec[0].ParentAlive) "records=$($rec.Count) parentAlive=$(if ($rec.Count) { $rec[0].ParentAlive } else { 'n/a' })"
-      _T 'MUST FIRE the sampler measures the spinner at 50% or more of one core' ($rec.Count -eq 1 -and $rec[0].CoreSharePct -ge 50) "share=$(if ($rec.Count) { $rec[0].CoreSharePct } else { 'n/a' })"
+      _T 'MUST FIRE a spinner whose CPU reads 2.25 s apart over the 3 s window is measured at 75% of a core and 10.5 CPU-minutes' ($rec.Count -eq 1 -and $rec[0].CoreSharePct -eq 75 -and $rec[0].CpuMinutes -eq 10.5) "share=$(if ($rec.Count) { $rec[0].CoreSharePct } else { 'n/a' }) minutes=$(if ($rec.Count) { $rec[0].CpuMinutes } else { 'n/a' })"
+      # The real reader, held to a LOWER bar only, which load can shrink but not cross: the spinner's real CPU
+      # counter MOVED across the window. No share is asserted, so a busy box cannot turn this red.
+      $moved = ($null -ne $realCpu.first -and $null -ne $realCpu.second -and [double]$realCpu.second -gt [double]$realCpu.first)
+      _T 'CLEAN TWIN the real CPU reader still reads the real spinner: its counter rose across the window' $moved "first=$($realCpu.first) second=$($realCpu.second)"
       # CLEAN TWIN: this self-test's OWN process has a live parent, so the sampler must not call it an orphan.
       $self = @($sample | Where-Object { $_.Id -eq $PID })
       _T 'CLEAN TWIN the sampler reads THIS self-test, which has a live parent, as owned' ($self.Count -eq 1 -and $self[0].ParentAlive) "self records=$($self.Count) parentAlive=$(if ($self.Count) { $self[0].ParentAlive } else { 'n/a' })"

@@ -148,7 +148,7 @@ story in the history file or a memory, never here. `ops/audit-rule-format.ps1` r
   poll with a deadline, a barrier with a timeout, or a timer racing a retry window is the same bar: wait on an event
   the subject produces, end a wait from inside a swappable seam, and give the real timer its own twin. Hold a
   subject open on a CONDITION the test controls (a stop file), sample, and read it still running before releasing
-  it. A definition is not a registration: check `Get-ScheduledTask`. (channel: judgement; full: og-36)
+  it. A definition is not a registration: check `Get-ScheduledTask`. (channel: gate ops/audit-selftest-load-bars.ps1; full: og-36)
 - **A timed lock wait is a BRANCH**: read `WaitOne`'s answer and refuse on `$false`; its timed-out branch gets a
   MUST FIRE held from another process (`lib/mutex-hold.ps1`). **An append is not a locked write**: a file several
   processes append to goes through `Add-TcLine` (`lib/append-line.ps1`). (channel: gate ops/audit-unread-wait.ps1; full: og-37)

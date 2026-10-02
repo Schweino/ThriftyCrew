@@ -290,7 +290,10 @@ $labels = @{}
 $comFile = if ($CommoditiesFile -ne '') { $CommoditiesFile } else { Join-Path $root 'commodities.json' }
 if (Test-Path $comFile) {
   $craw = ((Get-Content -LiteralPath $comFile -Raw -Encoding UTF8) + '').Trim()
-  if ($craw -ne '') { foreach ($cr in @($craw | ConvertFrom-Json)) { if ($cr -and [string]$cr.id -ne '') { $labels[[string]$cr.id] = [string]$cr.label } } }
+  # ASSIGN, THEN WRAP (2026-10-02, queue 2026-09-28-3849bc). This was foreach over @($craw | ConvertFrom-Json), which
+  # under PS 5.1 is ONE element holding the whole 599-row array, so $labels got one key ("id1 id2 ...") and no
+  # commodity label ever joined the consensus below. ops\audit-readjson-inline-wrap.ps1 now ratchets the shape.
+  if ($craw -ne '') { $cparsed = $craw | ConvertFrom-Json; foreach ($cr in @($cparsed)) { if ($cr -and [string]$cr.id -ne '') { $labels[[string]$cr.id] = [string]$cr.label } } }
 }
 
 $scored = New-Object 'System.Collections.Generic.List[object]'

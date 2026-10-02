@@ -15,7 +15,7 @@ $ids = @()
 foreach ($f in @('out\r300\r300-ids.txt','out\r300\batch8-ids.txt')) { $fp = Join-Path $g $f; if (Test-Path $fp) { $ids += ((Get-Content $fp -Raw).Trim() -split ',') } }
 $ids = @($ids | Where-Object { $_ })
 $cands = @()
-foreach ($f in @('out\r300\batch-r300.json','out\r300\batch8-proxy.json')) { $fp = Join-Path $g $f; if (Test-Path $fp) { $cands += @(Get-Content $fp -Raw | ConvertFrom-Json) } }
+foreach ($f in @('out\r300\batch-r300.json','out\r300\batch8-proxy.json')) { $fp = Join-Path $g $f; if (Test-Path $fp) { $parsed = Get-Content $fp -Raw | ConvertFrom-Json; $cands += @($parsed) } }
 $candById = @{}; foreach ($c in $cands) { $candById[[string]$c.id] = $c }
 $com = Get-Content (Join-Path $g 'commodities.json') -Raw | ConvertFrom-Json
 $comById = @{}; foreach ($c in $com) { $comById[[string]$c.id] = $c }

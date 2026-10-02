@@ -1,0 +1,14 @@
+{
+    "note":  "HIGH-WATER MARK for self-test assertions of an upper wall-clock bar or a CPU share (ops\\audit-selftest-load-bars.ps1, rule og-36, queue 2026-10-01-c12baf). It may only go DOWN; a fall is recorded only by -Tighten, and a fall to zero or over 60% in one run needs -AcceptDrop (lib\\ratchet.ps1).",
+    "generated":  "2026-10-02T14:40:14",
+    "sites":  1,
+    "names":  [
+                  "meal-prep\\test-scale-hardening.ps1 :: clock-upper :: $t.Elapsed.TotalSeconds -lt 5"
+              ],
+    "history":  [
+                    {
+                        "date":  "2026-10-02T14:40:14",
+                        "count":  1
+                    }
+                ]
+}

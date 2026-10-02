@@ -254,7 +254,7 @@ if ($runSelfTest) {
     # case-insensitive and script-scoped here, and assigning an Object[] over it made the final
     # `if ($bad -gt 0)` throw "Cannot compare System.Object[]". Same family as this estate's
     # $script:REJECTED_STATES clobbering. Give a fixture local a name no counter would take.
-    $nestedRows  = @(Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json)
+    $nestedRows  = @(Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json)   # readjson-wrap:allow MUST FIRE probe that the nesting trap is live
     $properRows  = Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json
     Remove-Item $bf3 -Force -ErrorAction SilentlyContinue
     T 'MUST FIRE  @(pipeline | ConvertFrom-Json) NESTS a 3-row array into one Object[] element' (

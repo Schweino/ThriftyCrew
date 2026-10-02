@@ -546,6 +546,11 @@ else { Bad ('pull-regular-hyvee -SelfTest failed (rc=' + $r.rc + ') - the Hy-Vee
 if (Use-Unit 'u128-the-precompiled-matcher') {
 $r = Get-Early 'early:match-lib' (Join-Path $root 'test-match-lib.ps1') @('-Quiet')
 if ($r.rc -eq 0 -and $r.text -match 'MATCH-LIB PASSED') { Ok 'match-lib decides identically to the original Match-Category on every distinct product name (compiled path and fallback)' }
+# LOAD-BLIND IS A SKIP, NEVER A PASS AND NEVER A BLIND WATCHER (2026-10-02, queue 2026-09-27-ae8b7a part b). This suite
+# runs inside the daily chain, so a chain-peak storm read as a drifted matcher. test-match-lib now says BLIND (rc 3) only
+# when every red is a still-blind name AND more blind looks recovered on the re-look than stayed blind; that is counted
+# on the SKIP line of both summaries. DRIFT, UNRECORDED and a still-blind name with no recovery beside it still FAIL.
+elseif ($r.rc -eq 3 -and $r.text -match 'MATCH-LIB BLIND \(load') { Skip ('test-match-lib could not evaluate under load (rc 3), proved nothing this run: ' + (($r.text -split "`n" | Where-Object { $_ -match '^MATCH-LIB BLIND' } | Select-Object -First 1) -join '')) }
 else { Bad ('test-match-lib FAILED (rc=' + $r.rc + ') - the fast matcher has drifted from the reference, so the board may be assigning products to the wrong commodity: ' + (($r.text -split "`n" | Where-Object { $_ -match 'FAIL|diverg' } | Select-Object -First 4) -join ' | ')) }
 
 # THE SECOND COPY OF THE EXCLUDE RULE, PROVEN AGAINST THE FIRST (2026-09-19, plan L2 phase 0).

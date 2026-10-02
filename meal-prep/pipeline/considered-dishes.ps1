@@ -197,7 +197,7 @@ if ($runSelfTest) {
         @{ key='a'; name='Creamy Tuscan Chicken'; protein='chicken'; method='skillet' },
         @{ key='b'; name='Korean Beef Bulgogi';   protein='beef';    method='skillet' },
         @{ key='c'; name='Pork Chops with Apples';protein='pork';    method='skillet' }) -Depth 4) | Set-Content $bf3 -Encoding utf8
-    $bad3  = @(Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json)
+    $bad3  = @(Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json)   # readjson-wrap:allow MUST FIRE probe that the nesting trap is live
     $good3 = Get-Content $bf3 -Raw -Encoding utf8 | ConvertFrom-Json
     Remove-Item $bf3 -Force -ErrorAction SilentlyContinue
     T 'MUST FIRE  @(pipeline | ConvertFrom-Json) NESTS a 3-row array into one Object[] element' (@($bad3).Count -eq 1 -and $bad3[0] -is [object[]]) ('count=' + @($bad3).Count)

@@ -186,6 +186,35 @@ roll-up plus an item.
    with c12baf's reaper case as MUST FIRE.
 3. **Bar:** 0 gate refusals attributed to box load over 14 days, from the push ledger.
 
+**Status 2026-10-02: BUILT on branch `weekly-root-families-p6`, not landed.** What changed against the steps above, and why:
+- Step 1 is held at ZERO in the existing `ops/audit-readjson-inline-wrap.ps1`, not ratcheted. Read off the AST, the "90
+  sites" were 7 in 775 scripts: the text regex also matched comments and `@((x | ConvertFrom-Json))`, which unrolls.
+  Five of the 7 read a top-level array and were fixed in the same change (`build-arrivals-docket` had never loaded a
+  commodity label: one key holding all 599 ids); two are deliberate MUST FIRE probes, now marked. With no backlog a
+  ratchet's mark is 0, which is this same gate with a baseline file to keep. The `@(Get-...)` shape (rule og-08) is NOT
+  held: 711 single-command wraps, 518 calling something other than a built-in cmdlet, 36 whose callee name returns with
+  a leading comma somewhere in the tree. Names collide across files, so a count mixes the correct idiom with the trap.
+  It needs per-file dot-source resolution; that is open.
+- Step 2 is a new `ops/audit-selftest-load-bars.ps1` (no existing audit fitted), a ratchet at 1 site
+  (`meal-prep/test-scale-hardening.ps1`, a live-network 404 held under 5 s). Rule og-36's tag now names it.
+- c12baf is fixed at source: the reaper's MUST FIRE reads a fixed share through a new `-ReadCpu` seam; its 50% bar stays
+  on the pure `Get-ReapVerdict`.
+- ae8b7a part (b): test-match-lib reads BLIND (rc 3, `blind=matcher-load`) when its only red is still-blind names and
+  more blind looks recovered on the re-look than stayed blind; test-auditors counts that as a SKIP. Part (a) stays open.
+
+**Bar window: opens on the day this lands on origin/main and closes 14 days later. Baseline, the 14 days before
+2026-10-02: 4 refusals attributed to load, all `ops\reap-runaway-processes.ps1` (2026-09-27, 09-29, 10-01, 10-02; the
+spinner's share read 46.9, 43.8, 48.4 and 48.4 against 50).** How to read it:
+- The ledger is `%LOCALAPPDATA%\ThriftyCrew\push-ledger\pushes-<yyyy-MM-dd>.jsonl` (`lib/push-ledger.ps1`), one file a
+  day, outside every checkout. The counted rows are `event = hook-refused`. Each names `gate`, `rc`, `blind`,
+  `local_sha` and `log`, the gate log the pre-push hook keeps for a refusal.
+- A refusal is ATTRIBUTED TO LOAD when either (1) its `blind` token is `no-gate-worker-slot`, or (2) the FAIL line in
+  its `log` is a case whose subject is the box rather than the code: a CPU share, a wall-clock bar, or a match-lib
+  still-blind name. A case of kind (2) must also pass when its gate's self-test is re-run at rest at the same
+  `local_sha`. Every other refusal is the code's and is not counted.
+- NOT COUNTABLE, stated: push-main's own `refused-gate-red` rows (162 since 2026-09-12) do not name the failing gate,
+  so this bar cannot see them. A `gate` field on that row is the fix; it is open.
+
 ### Phase 7. Capture coverage (after R11 and the 3b decision)
 
 The 86-day rotation stays as ruled. The paced 3b trial answers its two COULD NOT VERIFY criteria, then Brad rules

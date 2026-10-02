@@ -127,13 +127,24 @@ function Get-MatchLibVerdict {
   # message, so the still-blind names ride ON the FAILED line (up to 15, each cut to 80 characters).
   # -Drift / -Unrecorded: the re-looked divergence rows (06cd9b). -Diff counts divergences NOT re-looked (0 in the live
   # run since 06cd9b; kept for callers that have no re-look). -ListFile: where the full per-class lists were written.
+  # -Retried: blind looks that RESOLVED AND AGREED on the re-look (load that passed).
+  # A LOAD-BLIND RUN IS COULD-NOT-EVALUATE, NEVER A FAILURE AND NEVER A PASS (2026-10-02, queue 2026-09-27-ae8b7a part b,
+  # Phase 6 of design\PLAN-weekly-root-families-2026-10-02.md). test-auditors runs this census inside the daily chain, so
+  # a chain-peak load storm paged as a red matcher (2 in 30 days). When the ONLY red is still-blind names AND more blind
+  # looks recovered on the re-look than stayed blind, the run is the box's, not the matcher's: rc 3, MATCH-LIB BLIND, and
+  # test-auditors counts it as a SKIP. A still-blind name with no recovery beside it (the I208 ReDoS shape, which stays
+  # blind at rest) still FAILS rc 1, and any DRIFT, UNRECORDED, detail or text divergence fails whatever the load.
   param([int]$Diff, [int]$DetailDiff, [int]$DetailNoHit, [object[]]$StillBlind, [int]$TextDiff, [int]$RetryDiverged,
-        [object[]]$Drift, [object[]]$Unrecorded, [string]$ListFile)
+        [object[]]$Drift, [object[]]$Unrecorded, [string]$ListFile, [int]$Retried = 0)
   $sb = @($StillBlind | Where-Object { $null -ne $_ })
   $dr = @($Drift | Where-Object { $null -ne $_ }); $un = @($Unrecorded | Where-Object { $null -ne $_ })
   $fast = $Diff + $RetryDiverged + $dr.Count + $un.Count
   $total = $fast + $DetailDiff + $DetailNoHit + $sb.Count + $TextDiff
   if ($total -eq 0) { return [pscustomobject]@{ rc = 0; line = 'MATCH-LIB PASSED' } }
+  if ($total -eq $sb.Count -and $Retried -gt $sb.Count) {
+    $named = @($sb | Select-Object -First 15 | ForEach-Object { $t = ([string]$_.name -replace '\s+', ' '); if ($t.Length -gt 80) { $t = $t.Substring(0, 80) + '...' }; ("'{0}' [{1}]" -f $t, $_.path) })
+    return [pscustomobject]@{ rc = 3; line = ("MATCH-LIB BLIND (load: {0} blind look(s) resolved and agreed on the re-look, {1} still blind at the same bound; 0 DRIFT, 0 UNRECORDED) - could not evaluate, never a pass | still blind: {2}" -f $Retried, $sb.Count, ($named -join '; ')) }
+  }
   $line = ("MATCH-LIB FAILED ({0} divergence(s): {1} fast-path, {2} detail-winner, {3} detail-no-include-hit, {4} could-not-look, {5} Get-MatchTexts) - match-lib must not be used by the engine until it decides identically" -f $total, $fast, $DetailDiff, $DetailNoHit, $sb.Count, $TextDiff)
   # THE CLASS OF THE RED, on the line test-auditors keeps: DRIFT is a real matcher gap, UNRECORDED is match-lib
   # answering differently with no recorded timeout (a money-lane question), still-blind is load or a pattern.
@@ -216,6 +227,14 @@ if ($SelfTest) {
   $r = Invoke-MatchLibBlindRetry -Blind $many -Reference $refBreast -NewMatcher $newM
   $v = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $r.still -TextDiff 0 -RetryDiverged $r.diverged.Count -Drift $r.drift -Unrecorded $r.unrecorded
   _ST 'CLEAN TWIN  51 load-blind looks (one past the removed cap of 50) all re-looked, all agree, pass rc 0' (($v.rc -eq 0) -and ($r.retried.Count -eq 51) -and ($r.still.Count -eq 0)) ("rc=" + $v.rc + " retried=" + $r.retried.Count + " still=" + $r.still.Count)
+  # ae8b7a part b (2026-10-02): a still-blind-only run where MORE looks recovered than stayed blind is load: BLIND, rc 3.
+  $two = @([pscustomobject]@{ name = 'a'; path = 'compiled' }, [pscustomobject]@{ name = 'b'; path = 'fallback' })
+  $vAt = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $two -TextDiff 0 -RetryDiverged 0 -Retried 2
+  _ST 'AT THE BAR  2 still-blind beside 2 recovered (recovered not MORE than still) is not load evidence: FAILED rc 1' (($vAt.rc -eq 1) -and ($vAt.line -like 'MATCH-LIB FAILED*')) ("rc=" + $vAt.rc + " " + $vAt.line)
+  $vPast = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $two -TextDiff 0 -RetryDiverged 0 -Retried 3
+  _ST 'MUST FIRE  ONE PAST: 2 still-blind beside 3 recovered reads BLIND rc 3, never a pass, the names kept' (($vPast.rc -eq 3) -and ($vPast.line -like 'MATCH-LIB BLIND (load: 3 blind look(s) resolved*2 still blind*') -and ($vPast.line -like "*'a' [[]compiled[]]*")) ("rc=" + $vPast.rc + " " + $vPast.line)
+  $vDr = Get-MatchLibVerdict -Diff 0 -DetailDiff 0 -DetailNoHit 0 -StillBlind $two -TextDiff 0 -RetryDiverged 0 -Retried 500 -Drift @([pscustomobject]@{ name = 'c'; path = 'compiled'; class = 'DRIFT'; first_reference = 'x'; first_fast = 'y' })
+  _ST 'MUST NOT FIRE  load never launders a DRIFT row: 2 still-blind + 1 DRIFT beside 500 recovered stays FAILED rc 1' (($vDr.rc -eq 1) -and ($vDr.line -match '1 DRIFT')) ("rc=" + $vDr.rc + " " + $vDr.line)
   if ($stBad -eq 0) { Write-Output ("test-match-lib SELF-TEST PASSED ({0} of {0} case(s))" -f $stRan); exit 0 }
   Write-Output ("test-match-lib SELF-TEST FAILED ({0} of {1} case(s))" -f $stBad, $stRan); exit 1
 }
@@ -795,7 +814,11 @@ if (-not $Quiet) {
 }
 # Every $diff row was re-looked and sits in exactly one of drift, unrecorded or still, so -Diff is 0 here.
 if (-not $Quiet) { Write-Output ("  re-look (06cd9b)        : {0,7:N1}s   {1} divergence(s) re-looked: {2} DRIFT, {3} UNRECORDED, {4} blind again{5}" -f $tRelook, $diff.Count, @($retry.drift).Count, @($retry.unrecorded).Count, @($retry.still | Where-Object { $_.first_fast -ne '' -or $_.first_reference -ne '' }).Count, $(if ($relookFile) { '; lists: ' + $relookFile } else { '' })) }
-$verdict = Get-MatchLibVerdict -Diff 0 -DetailDiff $detailDiff.Count -DetailNoHit $detailNoHit.Count -StillBlind $retry.still -TextDiff $textDiff.Count -RetryDiverged $retry.diverged.Count -Drift $retry.drift -Unrecorded $retry.unrecorded -ListFile $relookFile
+$verdict = Get-MatchLibVerdict -Diff 0 -DetailDiff $detailDiff.Count -DetailNoHit $detailNoHit.Count -StillBlind $retry.still -TextDiff $textDiff.Count -RetryDiverged $retry.diverged.Count -Drift $retry.drift -Unrecorded $retry.unrecorded -ListFile $relookFile -Retried $retry.retried.Count
+if ($verdict.rc -eq 3) {
+  Write-Output $verdict.line
+  Exit-Guard -Name 'match-lib' -Summary ("names=$($list.Count) still_blind=$($retry.still.Count) retried=$($retry.retried.Count) blind=matcher-load") -Code 3
+}
 if ($verdict.rc -ne 0) {
   $total = @($retry.drift).Count + @($retry.unrecorded).Count + $retry.diverged.Count + $detailDiff.Count + $detailNoHit.Count + $retry.still.Count + $textDiff.Count
   Write-Output $verdict.line

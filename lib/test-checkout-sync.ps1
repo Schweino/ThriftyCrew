@@ -995,7 +995,7 @@ try {
     T 'MUST FIRE: HEAD equals origin/main and each path holds upstream''s bytes' (((GitR $E.bot @('rev-parse', 'HEAD')).out -eq (GitR $E.bot @('rev-parse', 'origin/main')).out) -and ((ReadOr (Join-Path $E.bot 'tools\verifier.txt')) -eq "strict-UP`n") -and ((ReadOr (Join-Path $E.bot 'lib\test-asof-evidence-scope.ps1')) -eq "upstream scope test`n")) (ReadOr (Join-Path $E.bot 'tools\verifier.txt'))
     $copiesOk = $true; foreach ($r in $script:fxIntrPaths) { if ((Md5 (InTree $s ('intruder\' + ($r -replace '/', '\')))) -ne $md[$r]) { $copiesOk = $false } }
     T 'MUST FIRE: each set-aside copy is byte-identical to the session''s file' $copiesOk ($s.tree)
-    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { @([IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json) } else { @() }
+    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { $manParsed = [IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json; @($manParsed) } else { @() }
     T 'MUST FIRE: the manifest carries one intruder row per path' (@($man | Where-Object { $_.class -eq 'intruder' }).Count -eq 3) ('' + @($man).Count + ' rows')
     T 'CLEAN TWIN: the checkout is clean afterwards (nothing half-restored)' ((Status $E.bot) -eq '') (Status $E.bot)
   }
@@ -1028,7 +1028,7 @@ try {
     W $E.bot 'lib/code.ps1' "line1-STAGED`nline2`nline3`nline4`nline5`n"; $null = GitOk $E.bot @('add', 'lib/code.ps1')
     $stagedBlob = (GitR $E.bot @('rev-parse', ':lib/code.ps1')).out; $cmd = Md5 (Join-Path $E.bot 'lib\code.ps1')
     $s = Sync $E @{ IntruderPolicy = 'set-aside'; IsRegisteredPath = { param($p) $false } }
-    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { @([IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json) } else { @() }
+    $man = if ($s.tree -and (Test-Path (Join-Path $s.tree 'manifest.json'))) { $manParsed = [IO.File]::ReadAllText((Join-Path $s.tree 'manifest.json')) | ConvertFrom-Json; @($manParsed) } else { @() }
     T 'MUST FIRE: synced, the copy holds the staged bytes, and the manifest records the staged blob' (($s.outcome -eq 'synced') -and ((Md5 (InTree $s 'intruder\lib\code.ps1')) -eq $cmd) -and (@($man | Where-Object { $_.class -eq 'intruder' -and $_.index_blob -eq $stagedBlob }).Count -eq 1)) ($s.outcome + '/' + $s.class + ': ' + $s.why)
     T 'MUST FIRE: lib/code.ps1 holds upstream''s bytes and the checkout is clean' (((ReadOr (Join-Path $E.bot 'lib\code.ps1')) -eq "line1-UP`nline2`nline3`nline4`nline5`n") -and ((Status $E.bot) -eq '')) (Status $E.bot)
     $E2 = New-Estate 'intr-mm'
