@@ -245,6 +245,19 @@ function Get-MismatchAdvice {
     return 'The sink holds FEWER characters than the page built, so suspect the COUNT, not the payload - a decoding fault cannot remove characters. Most likely the page sent the old wire-length workaround (csv.replace(/\n/g,''\r\n'').length + 2) instead of a plain csv.length; the sink already undoes that envelope.'
 }
 
+# WHICH REQUESTS WRITE A FILE (2026-10-02, design/PLAN-browser-refresh-hardening-2026-10-02.md W9).
+# Every top-level form post navigates the tab to this listener, and Chrome then asks the same origin
+# for /favicon.ico. Before this, that request was written like a capture: 4 empty favicon.ico.txt
+# files on the 2026-10-02 morning run, each one a file in the sink directory that is not a capture
+# and that a reader of the directory has to recognise and skip. 'ignore' answers 404 and writes
+# nothing; 'drop' is every other name, written exactly as before. The loop refuses a route it has no
+# branch for (og-16), so a route added here alone cannot fall through to a write.
+function Get-CaptureSinkRoute {
+    param([string] $Name)
+    if ([string]::Equals($Name, 'favicon.ico', [StringComparison]::OrdinalIgnoreCase)) { return 'ignore' }
+    return 'drop'
+}
+
 # WHERE THE SINK WRITES (2026-09-21). No -OutDir means grocery\out\captures\_sink beside this script,
 # resolved here in the body because a param default cannot see $PSScriptRoot under [CmdletBinding()].
 # A path counts as rooted only when it names its drive AND starts at that drive's root, or is UNC:
@@ -515,6 +528,82 @@ if ($SelfTest) {
         Remove-Item -LiteralPath $scratch -Recurse -Force -ErrorAction SilentlyContinue
     }
 
+    # ---- THE FAVICON REQUEST WRITES NOTHING (2026-10-02, PLAN-browser-refresh-hardening W9). Pure half:
+    # the route. Live half: a child sink on a free port, sent the same two requests a morning run makes.
+    $iconName = 'favicon' + '.ico'
+    if ((Get-CaptureSinkRoute -Name $iconName) -eq 'ignore' -and (Get-CaptureSinkRoute -Name $iconName.ToUpperInvariant()) -eq 'ignore') {
+        Write-Output 'ok    MUST NOT FIRE  favicon.ico routes to ignore, in either case'
+    } else {
+        Write-Output 'FAIL  favicon.ico no longer routes to ignore'; $fail++
+    }
+    $realNames = @('walmart-capture', 'aldi-capture-2026-10-02', 'favicon.ico.bak', 'drop')
+    $notDrop = @($realNames | Where-Object { (Get-CaptureSinkRoute -Name $_) -ne 'drop' })
+    if ($notDrop.Count) {
+        Write-Output ('FAIL  a capture name no longer routes to drop: ' + ($notDrop -join ', ')); $fail++
+    } else {
+        Write-Output ('ok    CLEAN TWIN  ' + $realNames.Count + ' capture name(s) still route to drop')
+    }
+    function Invoke-SinkRequest {
+        param([string] $Url, [string] $Method, [string] $Body)
+        $rq = [System.Net.HttpWebRequest]::Create($Url)
+        $rq.Method = $Method
+        $rq.Timeout = 30000
+        if ($Body) {
+            $bytes = [System.Text.Encoding]::UTF8.GetBytes($Body)
+            $rq.ContentType = 'text/plain'
+            $rq.ContentLength = $bytes.Length
+            $st = $rq.GetRequestStream(); $st.Write($bytes, 0, $bytes.Length); $st.Close()
+        }
+        try { $rs = $rq.GetResponse() } catch [System.Net.WebException] { $rs = $_.Exception.Response }
+        if ($null -eq $rs) { return -1 }
+        $code = [int]$rs.StatusCode
+        $rs.Close()
+        return $code
+    }
+    $scratch2 = Join-Path $env:TEMP ('csf-' + [guid]::NewGuid().ToString('N').Substring(0, 12))
+    $child2 = $null
+    try {
+        New-Item -ItemType Directory -Path $scratch2 -ErrorAction Stop | Out-Null
+        $sinkDir = Join-Path $scratch2 'sink'
+        $probe = New-Object System.Net.Sockets.TcpListener ([System.Net.IPAddress]::Loopback), 0
+        $probe.Start(); $port2 = ([System.Net.IPEndPoint]$probe.LocalEndpoint).Port; $probe.Stop()
+        $out2 = Join-Path $scratch2 'child.txt'
+        $argv2 = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $PSCommandPath + '"'),
+                   '-Port', [string]$port2, '-MaxIdleMinutes', '1', '-OutDir', ('"' + $sinkDir + '"'))
+        $child2 = Start-Process powershell.exe -ArgumentList $argv2 -WorkingDirectory $scratch2 `
+                      -RedirectStandardOutput $out2 -WindowStyle Hidden -PassThru
+        $null = $child2.Handle
+        $up = $false
+        $deadline2 = (Get-Date).AddSeconds(90)
+        while ((Get-Date) -lt $deadline2 -and -not $child2.HasExited) {
+            if ((Test-Path -LiteralPath $out2) -and (Get-Content -LiteralPath $out2 -ErrorAction SilentlyContinue | Where-Object { $_ -match 'LISTENING' })) { $up = $true; break }
+            Start-Sleep -Milliseconds 200
+        }
+        if (-not $up) { throw 'the child sink never printed LISTENING' }
+        $base = 'http://localhost:' + $port2 + '/'
+        $iconCode = Invoke-SinkRequest -Url ($base + $iconName) -Method 'GET' -Body ''
+        $dropCode = Invoke-SinkRequest -Url ($base + 'real-capture?chars=3') -Method 'POST' -Body 'csv=abc'
+        $iconFile = Join-Path $sinkDir ($iconName + '.txt')
+        $dropFile = Join-Path $sinkDir 'real-capture.txt'
+        if ($iconCode -eq 404 -and -not (Test-Path -LiteralPath $iconFile)) {
+            Write-Output 'ok    MUST NOT FIRE  a live GET /favicon.ico answers 404 and writes no file'
+        } else {
+            Write-Output ('FAIL  a live GET /favicon.ico answered ' + $iconCode + ', file written: ' + (Test-Path -LiteralPath $iconFile)); $fail++
+        }
+        $dropText = $null
+        if (Test-Path -LiteralPath $dropFile) { $dropText = [System.IO.File]::ReadAllText($dropFile) }
+        if ($dropCode -eq 200 -and [string]::Equals($dropText, 'abc', [StringComparison]::Ordinal)) {
+            Write-Output 'ok    CLEAN TWIN  a live POST to a real name still writes its payload, envelope undone'
+        } else {
+            Write-Output ('FAIL  a live POST to a real name answered ' + $dropCode + ' and wrote ' + [string]$dropText); $fail++
+        }
+    } catch {
+        Write-Output ('FAIL  the favicon child run could not complete: ' + $_.Exception.Message); $fail++
+    } finally {
+        if ($child2 -and -not $child2.HasExited) { Stop-Process -Id $child2.Id -Force -ErrorAction SilentlyContinue; $null = $child2.WaitForExit(15000) }
+        Remove-Item -LiteralPath $scratch2 -Recurse -Force -ErrorAction SilentlyContinue
+    }
+
     # ---- WHICH PROCESSES -Stop KILLS, frozen against the 2026-09-11 reproduction. Pids are the ones
     # observed; command lines are shortened to the parts the rule reads. The stopping process is pid
     # 5000, a child of the calling tool shell. Pure over rows: nothing here touches a real process.
@@ -729,6 +818,17 @@ try {
             $name = ($name -replace '[^A-Za-z0-9._-]', '_')
             $name = $name.TrimStart('.')
             if ([string]::IsNullOrWhiteSpace($name)) { $name = 'drop' }
+
+            # Not a switch: `continue` inside a PowerShell switch leaves the switch, not this loop.
+            $route = Get-CaptureSinkRoute -Name $name
+            if ($route -eq 'ignore') {
+                $resp = $ctx.Response
+                $resp.StatusCode = 404
+                $resp.ContentLength64 = 0
+                $resp.OutputStream.Close()
+                continue
+            }
+            if ($route -ne 'drop') { throw "unknown capture-sink route: $route" }
 
             # ALWAYS decode as UTF-8 - never $req.ContentEncoding.
             #
