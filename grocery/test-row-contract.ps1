@@ -40,6 +40,8 @@ try {
 
   $res = Get-TcRowContract (RcRow "Sam's Club" "Member's Mark Olive Oil Cooking Spray, 7 oz., 2 pk." '$6.98' '14 fl oz') (RcCom 'cooking-spray' 'oz'); $s = Show $res
   T 'MUST FIRE  a fl oz size LABEL beside a name stating the same number as weight (7 oz., 2 pk. = 14) is KIND-LABELS-DISAGREE, never silently weight' (((Codes $res) -eq 'KIND-LABELS-DISAGREE') -and $res.unit_kind.value -eq 'disputed') $s
+  $res = Get-TcRowContract (RcRow 'Aldi' 'Chef S Cupboard New England Clam Chowder 18.8 OZ' '$1.95' '18.8 fl oz') (RcCom 'clam-chowder' 'oz') -KindReviewed; $s = Show $res
+  T 'CLEAN TWIN  a size string reviewed in basis-kind-allowlist.json is accepted even when the name states the weight (clam-chowder / Aldi 18.8 fl oz)' ($res.verdict -eq 'accept') $s
   $res = Get-TcRowContract (RcRow 'Aldi' 'Duke S Mayonnaise Real 32 OZ' '$4.47' '30 fl oz') (RcCom 'mayonnaise' 'oz'); $s = Show $res
   T 'CLEAN TWIN  a name weight that does NOT equal the size (32 OZ against 30 fl oz) settles nothing: KIND-VOLUME-ON-WEIGHT' ((Codes $res) -eq 'KIND-VOLUME-ON-WEIGHT') $s
   $res = Get-TcRowContract (RcRow 'Hy-Vee' '93% Lean 7% Fat Extra Lean Ground Beef' '$9.99' ' lbs ($9.99/lb)' 9.99) (RcCom 'ground-beef-93-7' 'lb'); $s = Show $res
@@ -142,7 +144,7 @@ try {
   $missing = @($all | Where-Object { -not $script:fired.ContainsKey($_) })
   T 'MUST NOT FIRE  no refusal or reprice code in the lib is left unfired by the cases above' ($missing.Count -eq 0) ($missing -join ',')
 } catch { $script:f++; Write-Output ('  FAIL  threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.ScriptLineNumber) }
-$want = 41
+$want = 42
 if ($script:n -ne $want) { $script:f++; Write-Output "  FAIL  ran $($script:n) of $want cases" }
 if ($script:f) { Write-Output ("test-row-contract self-test FAIL: {0} check(s)" -f $script:f); exit 1 }
 Write-Output ("test-row-contract self-test pass: {0} cases" -f $script:n)

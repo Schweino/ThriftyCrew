@@ -209,7 +209,7 @@ function Get-TcRowContract {
       # (Sam's 'Member's Mark Olive Oil Cooking Spray, 7 oz., 2 pk.' with size '14 fl oz': 7 x 2 = 14 weight oz)
       if (($ckind -eq 'weight' -and $kind -eq 'volume') -or ($ckind -eq 'volume' -and $kind -eq 'weight')) {
         $nAmt = Get-SizeAmount $r.name $unit
-        if ($src -eq 'size_text' -and -not $twoSizes -and $null -ne $nAmt -and (Get-SizeMeasureKind -Size $r.name -Unit $unit) -eq $ckind -and (Test-TcNear $amt $nAmt 0.01)) {
+        if (-not $dens -and -not $KindReviewed -and $src -eq 'size_text' -and -not $twoSizes -and $null -ne $nAmt -and (Get-SizeMeasureKind -Size $r.name -Unit $unit) -eq $ckind -and (Test-TcNear $amt $nAmt 0.01)) {
           # NOT an acceptance: the size field and the name are two parties stating two KINDS for one number, and a store
           # name that drops "fl" off a liquid is as common as a builder that adds it. Its own code, so a ruling can take it.
           _Refuse 'KIND-LABELS-DISAGREE' 'unit_kind' ('the size field says ' + $txt + ' (' + $kind + ') and the name states ' + $nAmt + ' ' + $unit + ' as a ' + $ckind + '; nothing proves which')
