@@ -98,8 +98,8 @@ WHO and HOW MUCH, never WHAT: every item still gets its root cause and its class
    returns and never alongside it, because both commit in one checkout.
    Since 2026-09-22 (Brad) both lanes run Opus 5.5 at MEDIUM effort; the depth is spent in planning,
    where triage-reviewer ran Opus 5.5 at high from 2026-09-24 and runs it at MEDIUM since 2026-09-29 (Brad: every Opus and Sonnet agent runs Medium; it was down from `xhigh`: 164k output tokens of its own reasoning were most of the context it re-read on the 09-24 run). The pins live in each agent's frontmatter.
-3. **Items triage creates go to a WEEKLY LANE.** Every residual or finding a run files goes through
-   `send-alert.ps1 -Lane weekly`. `triage-due.ps1` lists weekly items every day but makes the run DUE for them
+3. **Items triage creates go to a WEEKLY LANE.** Every residual or finding a run files (unless a ruled step owns
+   it, rule 4) goes through `send-alert.ps1 -Lane weekly`. `triage-due.ps1` lists weekly items every day but makes the run DUE for them
    only when the lane is: its stamp `grocery\triage-weekly-lane-stamp.txt` is missing or 7 or more days old, or
    an item has waited 21 days. A LIVE condition behind a weekly item still pages daily through its own emitter
    (test-auditors, the capture watchdog, guards), so PULL FORWARD: when a daily alert is the live symptom of an
@@ -178,6 +178,16 @@ left open for three days of follow-on work, 402M across 56 spawns, none of it on
   The spawn guard refuses a SendMessage to a triage agent whose last context is over 60,000 tokens.
 - The report gives the run's cost_units against the budget, and `triage-cost.py --report` lines for today's
   plans (cost per done item). Revisit the budget, the ceilings and the 7/21-day numbers after five runs.
+4. **A residual whose family a RULED, UNBUILT STEP already owns is not minted** (2026-10-02, Brad's ruling D3 A,
+   `design/PLAN-weekly-root-families-2026-10-02.md` Phase 1). Measured that day: triage minted 81 residual items in
+   15 days against a weekly lane that works about 4 a week, and most were symptoms of steps 8, 9 and 11, ruled
+   2026-09-10 and never built. Look the family up in `grocery\ruled-steps.json`; when a step there (or any step of a
+   plan whose Status reads RULED or under way) will prevent it, write `leaves_open_followup:
+   "step:<plan>#<step label>"` with the measurement in `leaves_open`. No queue item: the census counts it against
+   the step and pages the step if it is still not under way 14 days after its ruling. `validate-triage-plan.ps1
+   -Closing` refuses a step owner on a DONE, PROPOSED or missing plan, or a step heading that reads `[DONE`; that
+   residual is live work and goes to the weekly lane (rule 3). An open queue item a ruled step owns closes with
+   `triage-close.ps1 -Disposition owned-by-step`, its notes naming `step:<plan>#<label>`.
 
 The handoff is a FILE, never a message: `grocery/triage-plans/plan-<yyyy-MM-dd>[-N].json`, schema in
 `grocery/triage-plans/README.md`. Read that README once before you start so you can check the plan is
@@ -407,6 +417,11 @@ gate), and only then do you land. Why: push-main runs run-gates and THEN test-au
 was refused on 8 gates, they were fixed, and landing 2 was refused on 5 test-auditors cases nobody had seen; the run
 ended unlanded at 93% of budget. A rehearsal finds both layers before the landing spends its one retry. If the ops
 lane commits after the rehearsal started, its changes are covered by the landing itself, as before.
+**A FIX-UP COMMIT GETS ITS OWN REHEARSAL BEFORE THE LANDING (2026-10-02).** The fix for a rehearsal red changes the
+tree, so it can expose a red the first rehearsal could not see. On 10-02 a split that cleared two ratchet reds moved
+an unregistered Send-Alert out of check-ad-cycles.ps1, where audit-alert-registry was blind, and landing 1 was refused
+on it. A rehearsal costs wall time and no tokens; a refused landing spends the one retry, and the second parks the run.
+So after any commit made to clear a red, rehearse again, and land only on `gates=pass ta=pass` for the HEAD you land.
 
 STEP 3.9 - LAND THE RUN ONCE, WITH NO MODEL WAITING ON IT (2026-09-24). After STEP 3 and, when due, STEP 3.5:
   powershell -NoProfile -File C:\Codex\ThriftyCrew\grocery\triage-land.ps1 [-CheckFeed]

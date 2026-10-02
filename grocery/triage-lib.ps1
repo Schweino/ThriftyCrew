@@ -31,6 +31,11 @@
                  problem from a false alarm and wants a different fix (usually a quieter threshold).
     wont-fix     real, understood, and deliberately not being fixed. Counts as a hit: the detector
                  was right.
+    owned-by-step  real, and its root family is owned by a RULED build step that has not landed yet
+                 (2026-10-02, Brad's ruling D3 A, design/PLAN-weekly-root-families-2026-10-02.md Phase 1). The
+                 notes must carry the owner as step:<plan>#<step label>; triage-close.ps1 refuses one that does
+                 not resolve (grocery\ruled-step-lib.ps1 Test-StepOwner), and the census counts it against that
+                 step. Counts as a hit: the detector was right, and the fix is scheduled, not forgotten.
 
   NO param() BLOCK HERE, DELIBERATELY. In PS 5.1 dot-sourcing runs a param() block in the CALLER's
   scope, so a param([switch]$SelfTest) in a library steals the caller's own switches. Same trap
@@ -43,8 +48,8 @@
 # A hit is an alert that was RIGHT. wont-fix is a hit - the detector found a real thing and a human
 # decided not to act. by-design is NOT: the condition is real but the alert should not have been sent,
 # and counting it as a hit would reward a detector for crying wolf accurately.
-$script:TC_DISPOSITIONS = @('confirmed', 'false-alarm', 'superseded', 'by-design', 'wont-fix')
-$script:TC_HIT          = @('confirmed', 'wont-fix')
+$script:TC_DISPOSITIONS = @('confirmed', 'false-alarm', 'superseded', 'by-design', 'wont-fix', 'owned-by-step')
+$script:TC_HIT          = @('confirmed', 'wont-fix', 'owned-by-step')
 $script:TC_MISS         = @('false-alarm')
 $script:TC_NEITHER      = @('superseded', 'by-design')
 
@@ -94,6 +99,12 @@ function Close-TcQueueItem {
   # and "ok" closing an alert is how a queue becomes a rubber stamp.
   if (([string]$Notes).Trim().Length -lt 20) {
     return 'notes are required and must say what was actually established (20 characters or more)'
+  }
+  # AN OWNED-BY-STEP CLOSE NAMES ITS STEP (D3 A, 2026-10-02). Without the token the census cannot count it against the
+  # step, and an owner nobody can find owns the work the way an unread stamp checks it. Whether the step RESOLVES is
+  # the live path's question (triage-close.ps1, Test-StepOwner), because it reads a plan from disk.
+  if ($Disposition -eq 'owned-by-step' -and -not (([string]$Notes) -match 'step:\s*[^\s#]+#[^\s,;)]+')) {
+    return 'an owned-by-step close must name its owner in the notes as step:<plan>#<step label> (a ruled, unbuilt step; grocery\ruled-steps.json)'
   }
   $hit = @($Items | Where-Object { [string]$_.id -eq $Id })
   if (-not $hit.Count) { return ("no queue item with id '" + $Id + "'") }

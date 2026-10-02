@@ -94,6 +94,9 @@ if ($SelfTest) {
   T 'MUST FIRE  THE ONE THAT KEEPS THIS FROM BECOMING A RUBBER STAMP - a close with no real notes is refused' `
     ((Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'confirmed' -Notes 'ok') -like '*notes are required*') `
     (Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'confirmed' -Notes 'ok')
+  T 'MUST FIRE  an owned-by-step close whose notes name no step:<plan>#<label> is refused (D3 A, 2026-10-02)' `
+    ((Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'owned-by-step' -Notes 'the row contract will settle this one day') -like '*must name its owner*') `
+    (Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'owned-by-step' -Notes 'the row contract will settle this one day')
   T 'MUST FIRE  a refused close leaves the item OPEN - a refusal that half-wrote would be worse than no gate' `
     (([string]$items[0].status -eq 'open') -and (-not $items[0].PSObject.Properties['disposition'])) `
     ([string]$items[0].status)
@@ -114,8 +117,13 @@ if ($SelfTest) {
     T ('MUST NOT FIRE  ' + $d + ' is a legal disposition') ((Test-TcDisposition $d) -eq '') (Test-TcDisposition $d)
   }
 
+  $itemsS = NewItems
+  $whyS = Close-TcQueueItem -Items $itemsS -Id 'a1' -Disposition 'owned-by-step' -Notes 'owned by step:design/PLAN-zero-alert-days-remainder-2026-09-24.md#8 (fl oz read as weight oz)' -Now '2026-10-02T09:00:00'
+  T 'MUST NOT FIRE  an owned-by-step close naming step:<plan>#<label> in its notes is accepted' `
+    (($whyS -eq '') -and ([string]$itemsS[0].disposition -eq 'owned-by-step')) ($whyS + ' / ' + [string]$itemsS[0].disposition)
+
   # CLEAN TWIN - adjacent behaviour that still works.
-  $why2 = Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'confirmed' -Notes 'AMENDED - round one was wrong and this is why' -Now '2026-09-08T09:00:00'
+  $why2 =Close-TcQueueItem -Items $items -Id 'a1' -Disposition 'confirmed' -Notes 'AMENDED - round one was wrong and this is why' -Now '2026-09-08T09:00:00'
   T 'CLEAN TWIN an AMENDED verdict is accepted, because the live queue already carries one' `
     (($why2 -eq '') -and ([string]$items[0].disposition -eq 'confirmed')) ($why2 + ' / ' + [string]$items[0].disposition)
   T 'CLEAN TWIN the amendment keeps the FIRST close time, so the queue history stays readable' `
@@ -205,7 +213,7 @@ if ($SelfTest) {
   }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: four refusals including the rubber-stamp guard, the five legal dispositions, the amendment twin, the E20 denominator rule and the E21 too-few-cases rule, the cutoff that keeps the gate green on day one, and the queue lock refusal'
+  Write-Output 'SELF-TEST PASS: five refusals including the rubber-stamp guard and the unnamed step owner, the six legal dispositions and a named owned-by-step close, the amendment twin, the E20 denominator rule and the E21 too-few-cases rule, the cutoff that keeps the gate green on day one, and the queue lock refusal'
   exit 0
 }
 
@@ -219,6 +227,14 @@ foreach ($req in @(@{ n = 'Id'; v = $Id }, @{ n = 'Disposition'; v = $Dispositio
 if (-not (Test-Path -LiteralPath $QueueFile)) {
   Write-Output ("TRIAGE CLOSE COULD NOT EVALUATE: {0} does not exist." -f $QueueFile)
   exit 3
+}
+# AN OWNED-BY-STEP OWNER MUST RESOLVE (D3 A, 2026-10-02): the plan exists in this checkout, reads RULED or under way, and
+# its step heading exists and is not [DONE. Checked before the lock is taken, so a refusal never holds up send-alert.
+if ($Disposition -eq 'owned-by-step' -and ($Notes -match '(step:\s*[^\s#]+#[^\s,;)]+)')) {
+  $stepOwner = $Matches[1]
+  . (Join-Path $PSScriptRoot 'ruled-step-lib.ps1')
+  $stepWhy = Test-StepOwner $stepOwner (Split-Path -Parent $PSScriptRoot)
+  if ($stepWhy) { Write-Output ("TRIAGE CLOSE REFUSED: " + $stepWhy); exit 1 }
 }
 # THE READ, THE CLOSE AND THE WRITE ARE ONE STEP UNDER THE QUEUE LOCK (2026-09-11) - the header says why. A lock not
 # taken is exit 3 with nothing written, never a write without it.

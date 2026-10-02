@@ -172,11 +172,15 @@ disagreements in `basis-reconcile-allowlist.json` with the reason.
   1. **Never happened, and an existing check would page on its first occurrence:**
      `leaves_open_followup: "watch:<repo-relative path of that check>"`. No queue item. The gate accepts
      this only at 0 occurrences and only for a path that exists.
-  2. **Has happened, or nothing would notice it:** enqueue it through
+  2. **Its root family is owned by a RULED, UNBUILT STEP** (2026-10-02, Brad's ruling D3 A; the steps and the
+     alert types each prevents are in `grocery\ruled-steps.json`): `leaves_open_followup:
+     "step:<plan>#<step label>"`. No queue item; the census counts it against the step. The gate refuses it
+     for a DONE, PROPOSED or missing plan, or a step heading that reads `[DONE`.
+  3. **Has happened, or nothing would notice it:** enqueue it through
      `grocery\send-alert.ps1 -Force -Lane weekly -BodyFile <file>` with the measurement in the body. Every
      item triage creates is born in the WEEKLY lane; a condition that is live still pages daily through
      its own emitter, so nothing waits that should not.
-  3. **Genuinely a ruling:** add it to `open_questions_for_brad` with an `id`.
+  4. **Genuinely a ruling:** add it to `open_questions_for_brad` with an `id`.
   Write that owner into `leaves_open_followup`, then run
   `powershell -File C:\Codex\ThriftyCrew\grocery\validate-triage-plan.ps1 -Plan <plan> -Closing -PreLanding`
   and get exit 0. `-PreLanding` because you never push: without it, closing now refuses an item whose `shipped_commit`

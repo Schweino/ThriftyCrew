@@ -45,8 +45,8 @@
                3 = BLIND: no plan file, unreadable, or zero items - proved nothing, do not hand over
   -Closing re-reads the plan AFTER the developer, against grocery\triage-queue.json (or -QueueFile), with
   the same exit codes. Run it before a triage run reports itself done. A residual's owner is a queue id, a
-  ruling id in open_questions_for_brad, or watch:<repo-relative path> for a residual whose
-  leaves_open_occurrences is 0 (2026-09-10).
+  ruling id in open_questions_for_brad, watch:<path> at 0 occurrences (2026-09-10), or step:<plan>#<label> of a
+  ruled, unbuilt step that owns its family (2026-10-02, D3 A; grocery\validate-triage-plan\step-owner.ps1).
   -Closing ALSO REQUIRES THE FIX ON origin/main (2026-09-28): a done or deviated item's shipped_commit must be on
   origin/main or have a patch-equivalent there (a rebased landing passes), and a value naming no hash passes when
   origin/main's copy of the plan carries the item as done. Closing FETCHES origin main first (-NoFetch to skip) and
@@ -95,6 +95,7 @@ param(
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path $PSScriptRoot 'validate-triage-plan\closing-checks.ps1')  # -Closing's cost ledger and fix-on-main checks, and their cases
+. (Join-Path $PSScriptRoot 'validate-triage-plan\step-owner.ps1')      # a residual owned by a ruled, unbuilt step (D3 A, 2026-10-02), and its cases
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 
 # A [string[]] PARAM DOES NOT SURVIVE `powershell -File` (2026-08-01). Called as
@@ -434,7 +435,7 @@ function Get-ResolvedOwnerWarnings { param($Items, $QueueItems)
 function Test-Plan {
   param($Doc, [string[]]$Expect, [string]$PlanDir, [switch]$Closing, $QueueIds = @(), [string]$RepoRoot = '',
         $QueueItems = $null, [datetime]$Now = [datetime]::MinValue, $Census = $null,
-        [string]$PlanName = '', $Tracked = $null, $MemoryDirs = $null)
+        [string]$PlanName = '', $Tracked = $null, $MemoryDirs = $null, [scriptblock]$StepStateOf = $null)
   if ($Now -eq [datetime]::MinValue) { $Now = Get-Date }
   $returns = New-Object System.Collections.Generic.List[string]
   $prevInfo = $null
@@ -674,7 +675,7 @@ function Test-Plan {
     if ($Closing -and $lo -and ($lo -notmatch '^nothing\b') -and (@('done','deviated') -contains [string]$i.status)) {
       $fu = ([string]$i.leaves_open_followup).Trim()
       if (-not $fu) {
-        $problems.Add("$id is $([string]$i.status) with an open residual and no leaves_open_followup - enqueue it through send-alert.ps1 -Lane weekly, file it as a ruling in open_questions_for_brad, or, if it has NEVER happened, name the check that pages on its first occurrence as watch:<repo-relative path>. The residual: $lo")
+        $problems.Add("$id is $([string]$i.status) with an open residual and no leaves_open_followup - if its root family already has a ruled, unbuilt step (grocery\ruled-steps.json), record it against that step as step:<plan>#<step label>; otherwise enqueue it through send-alert.ps1 -Lane weekly, file it as a ruling in open_questions_for_brad, or, if it has NEVER happened, name the check that pages on its first occurrence as watch:<repo-relative path>. The residual: $lo")
       } elseif ($fu -match '^watch:\s*(.+)$') {
         # A WATCH OWNS ONLY WHAT HAS NEVER HAPPENED (2026-09-10, Brad, after a 1.35M-token triage day). That
         # day's run minted six residual queue items to satisfy the owner rule above, two of them stating
@@ -700,8 +701,10 @@ function Test-Plan {
         } elseif (-not $RepoRoot -or -not (Test-Path -LiteralPath (Join-Path $RepoRoot $wPath) -PathType Leaf)) {
           $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - no check exists at that repo path")
         }
+      } elseif ($fu -match '^step:') {   # A RULED STEP OWNS ITS FAMILY (D3 A, 2026-10-02): validate-triage-plan\step-owner.ps1
+        $stepWhy = Test-StepOwner $fu $RepoRoot $StepStateOf; if ($stepWhy) { $problems.Add("$id leaves_open_followup: $stepWhy") }
       } elseif ((@($QueueIds) -notcontains $fu) -and ($ruleIds -notcontains $fu)) {
-        $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - it is neither an id in the triage queue, an id in open_questions_for_brad, nor a watch:<repo-relative path>")
+        $problems.Add("$id leaves_open_followup '$fu' resolves to nothing - it is neither an id in the triage queue, an id in open_questions_for_brad, a step:<plan>#<label> of a ruled plan, nor a watch:<repo-relative path>")
       }
     }
     # --- AND THE PROOF MUST REPRODUCE THE BUG --------------------------------------------------------
@@ -981,6 +984,7 @@ if ($SelfTest) {
     _CaseWatch 'at close, a watch naming an absolute path is rejected' $rootedWatch 2 'repo-relative'
     # CLEAN TWIN: a queue-id owner still resolves exactly as before, beside the new watch branch.
     _CaseWatch 'CLEAN TWIN at close, a residual owned by a real queue item still passes' $owned 0 $null
+    Invoke-StepOwnerSelfTest $closed   # grocery\validate-triage-plan\step-owner.ps1: RULED passes, DONE and PROPOSED refused (3)
   } finally { Remove-Item -LiteralPath $wRoot -Recurse -Force -ErrorAction SilentlyContinue }
 
   # --- RETURNS ARE FAILURES (2026-09-10, Brad's ruling 5) ----------------------------------------------------
@@ -1359,7 +1363,7 @@ if ($SelfTest) {
   # A LITERAL-CASE SUITE ASSERTS HOW MANY RAN (2026-09-23, with W5.3's 23 cases): the count above is still COUNTED for
   # the summary, and this is the other half - a case that silently stopped running is a defect, never a smaller suite.
   # Raise it with every case added.
-  $expectedRan = 116  # +8 on 2026-09-28: the fix is on main (Test-PlanLanded); +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
+  $expectedRan = 119  # +3 on 2026-10-02: a ruled step owns a residual (D3 A); +8 on 2026-09-28: the fix is on main (Test-PlanLanded); +3 on 2026-09-23: the resolved-owner warning (MUST FIRE, MUST NOT FIRE, CLEAN TWIN); +13 on 2026-09-24: budget, rounds and ledger; +3 on 2026-09-25: estimate history (W4)
   if ($ran -ne $expectedRan) { Write-Output "FAIL  ran $ran plan-gate cases, expected $expectedRan"; $fail++ }
   Write-Output ''
   if ($fail -gt 0) { Write-Output "SELF-TEST FAIL: $fail case(s) of $ran"; exit 1 }

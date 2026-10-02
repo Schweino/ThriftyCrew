@@ -25,6 +25,14 @@
   queue, so they are not counted per day. A "return" is a new id for a type that already has an earlier id
   closed as resolved.
 
+  RULED STEPS (2026-10-02, design/PLAN-weekly-root-families-2026-10-02.md Phase 1 step 3, Brad's ruling D3 A). One
+  line per step in grocery\ruled-steps.json: alerts attributed to it over the last 14 days and days since its ruling.
+  A ruled step NOT under way 14 days after its ruling, with attributed alerts, is STALLED, and on Mondays each one
+  pages once as 'Ruled step stalled: <ref>' (steps 8, 9 and 11 sat 22 days this way). If alerts were raised over 7
+  days and none was attributed to any step, the attribution is broken, the line reads BLIND and pages as such (og-13).
+  The rule is grocery\ruled-step-lib.ps1; its fixtures are grocery\test-ruled-step-lib.ps1. This is the census's ONE
+  page; everything else here is measurement.
+
   SCOPE OF A CLEAN REPORT: a MEASUREMENT, not a detector. It counts what reached triage-queue.json. An alert
   that never queued (a spool file, a crashed emitter, a check that stopped running) is invisible here, so a
   quiet day means "nothing queued", never "nothing was wrong". The heartbeat and spool checks own those.
@@ -36,7 +44,9 @@
 # The self-test is pure in-memory fixtures; the queue, archive and registry are read only by the live path.
 # gate-inputs: grocery\audit-alert-census.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
-param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '', [string]$ArchiveDir = '', [string]$RegistryFile = '', [string]$ClassOutFile = '')
+param([switch]$SelfTest, [string]$QueueFile = '', [string]$OutFile = '', [string]$Today = '', [string]$ArchiveDir = '', [string]$RegistryFile = '', [string]$ClassOutFile = '',
+      # the RULED STEPS line pages a stalled step on Mondays; -NoPage prints it and sends nothing (a hand run, a scratch replay)
+      [switch]$NoPage)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $repo = Split-Path $root -Parent
@@ -44,6 +54,7 @@ $repo = Split-Path $root -Parent
 . (Join-Path $repo 'lib\json-io.ps1')
 . (Join-Path $root 'triage-return-lib.ps1')   # Get-AlertCensusTypeDays: the one copy of days fired per type (ruling 6); Get-ClassReturnRows: the one return rule
 . (Join-Path $root 'alert-registry-lib.ps1')  # Get-AlertClassKey: a type's failure class through the registry and its lineage
+. (Join-Path $root 'ruled-step-lib.ps1')      # the RULED STEPS line: alerts attributed to each ruled step, and a stalled step (D3 A, 2026-10-02)
 
 # Ruling 4, 2026-09-10. Dates and counts are Brad's; kept here once so the report and the plan cannot disagree.
 $script:Targets = @(
@@ -412,6 +423,37 @@ foreach ($t in @($s.Recurring | Select-Object -First 10)) {
 }
 $dTxt = (@($s.Dispositions.Keys | Sort-Object | ForEach-Object { $_ + '=' + $s.Dispositions[$_] })) -join ' '
 Write-Output ("  CLOSES       last 30 by disposition: " + $(if ($dTxt) { $dTxt } else { 'none dated' }))
+
+# ---- RULED STEPS (2026-10-02, D3 A): the header says why; grocery\ruled-step-lib.ps1 is the rule ----
+$rsStalledN = 'none'; $rsBlindTok = 'none'
+$rsMap = Read-RuledSteps (Join-Path $root 'ruled-steps.json')
+if (-not $rsMap.ok) {
+  Write-Output ("  RULED STEPS  NOT MEASURED - " + $rsMap.why)
+} else {
+  $rsPlanItemsR = Read-TriagePlanStepOwners (Join-Path $root 'triage-plans')
+  $rsPlanItems = @($rsPlanItemsR)
+  $rsAtt = Get-RuledStepAttribution $rsMap.steps $merged $items $rsPlanItems $now 14
+  $rsVR = Get-RuledStepVerdicts $rsMap.steps $rsAtt $now $repo
+  $rsV = @($rsVR)
+  $rsSum = 0; foreach ($v in $rsV) { $rsSum += [int]$v.attributed }
+  $rsStalled = @($rsV | Where-Object { $_.stalled })
+  $rsStalledN = [string]$rsStalled.Count
+  Write-Output ("  RULED STEPS  {0}..{1}: {2} of {3} step(s) STALLED (ruled {4}+ days, not under way, alerts still arriving); {5} attribution(s) against {6} alert(s) raised in the window (grocery\ruled-steps.json)" -f $rsAtt.start, $rsAtt.end, $rsStalled.Count, $rsV.Count, $script:RuledStepStallDays, $rsSum, $rsAtt.total_alerts)
+  foreach ($v in $rsV) {
+    Write-Output ("    {0,-8} {1} ruled {2} ({3} days) {4}  attributed14={5} (census {6}, owned residuals {7})" -f $(if ($v.stalled) { 'STALLED' } elseif ($v.under_way) { 'underway' } else { 'waiting' }), $v.ref, $v.ruled, $v.days, $(if ($v.under_way) { 'under way' } else { 'NOT under way' }), $v.attributed, $v.census, $v.owned)
+  }
+  $rsBlind = Get-RuledStepBlind $rsMap.steps $merged $now
+  $rsBlindTok = if ($rsBlind) { '1' } else { '0' }
+  if ($rsBlind) { Write-Output ("  RULED STEPS  BLIND - " + $rsBlind) }
+  # ONCE A WEEK, ON MONDAYS: a stall is measured in weeks, and a daily page would be the noise this plan exists to cut.
+  if (-not $NoPage -and $now.DayOfWeek -eq [DayOfWeek]::Monday -and ($rsStalled.Count -gt 0 -or $rsBlind)) {
+    . (Join-Path $root 'alert-lib.ps1')
+    foreach ($v in $rsStalled) {
+      Send-Alert -Subject ("Ruled step stalled: " + $v.ref) -Body ("A step Brad ruled on {0} is not under way {1} days later, and {2} alert(s) it prevents arrived over {3}..{4} (census {5}, residuals owned by it {6}).`n`nStep: {0} ruling, {7}`nFamily: {8}`nEvidence that it started (none exists yet): {9}`n`nEither schedule the step or re-rule it. Each of those alerts was paid for at full diagnosis price. Source: grocery\audit-alert-census.ps1 RULED STEPS line, map grocery\ruled-steps.json, plan design\PLAN-weekly-root-families-2026-10-02.md Phase 1." -f $v.ruled, $v.days, $v.attributed, $rsAtt.start, $rsAtt.end, $v.census, $v.owned, $v.ref, $v.family, ((@($rsMap.steps | Where-Object { [string]$_.ref -eq $v.ref })[0].under_way_evidence) -join ', ')) | Out-Null
+    }
+    if ($rsBlind) { Send-Alert -Subject 'Ruled step attribution BLIND' -Body ($rsBlind + "`n`nUntil it is repaired, a stalled ruled step cannot page. Fix grocery\ruled-steps.json's type_prefixes against grocery\out\alert-census.jsonl. Source: grocery\audit-alert-census.ps1.") | Out-Null }
+  }
+}
 # The marker contract is unchanged and returnrate30 is ADDED to it, never a replacement: a reader keyed on
 # quiet7 or returns30 goes on working, and the scoreboard number is on the line a gate log keeps.
-Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6} returnrate30={7} classreturns30={8} classalerts30={9} classreturnrate30={10} minted30={11}" -f $s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count, $(if ($rate.measured) { ('{0:N1}%' -f $rate.pct) } else { 'none' }), $(if ($cm) { $cm.arm2.returns } else { 'none' }), $(if ($cm) { $cm.arm2.alerts } else { 'none' }), $(if ($classRate -and $classRate.measured) { ('{0:N1}%' -f $classRate.pct) } else { 'none' }), $(if ($cm) { $cm.minted_alerts } else { 'none' }))
+Exit-Guard -Name 'ALERT-CENSUS' -Code 0 -Summary ("quiet7={0}/{1} quiet30={2}/{3} alerts30={4} returns30={5} recurring={6} returnrate30={7} classreturns30={8} classalerts30={9} classreturnrate30={10} minted30={11} stalledsteps={12} stepsblind={13}" -f$s.W7.quiet, $s.W7.days, $s.W30.quiet, $s.W30.days, $s.W30.alerts, $s.Returns, $s.Recurring.Count, $(if ($rate.measured) { ('{0:N1}%' -f $rate.pct) } else { 'none' }), $(if ($cm) { $cm.arm2.returns } else { 'none' }), $(if ($cm) { $cm.arm2.alerts } else { 'none' }), $(if ($classRate -and $classRate.measured) { ('{0:N1}%' -f $classRate.pct) } else { 'none' }), $(if ($cm) { $cm.minted_alerts } else { 'none' }), $rsStalledN, $rsBlindTok)

@@ -157,6 +157,19 @@ def plan_state(text):
     raise ValueError("status word %r is in STATUS_WORD_RE and in no class" % word)
 
 
+def plan_state_file(path):
+    """(state, status text) for a plan FILE: 'missing' when it cannot be read. The one copy of the status rule for
+    callers outside this module (grocery/ruled-step-lib.ps1 asks it through --plan-state, design/
+    PLAN-weekly-root-families-2026-10-02.md Phase 1), so a step owner and a plan citation never read a status
+    differently."""
+    try:
+        with open(path, encoding="utf-8-sig") as f:
+            text = f.read()
+    except OSError:
+        return "missing", ""
+    return plan_state(text)
+
+
 def path_pattern(path):
     """A regex that finds `path` as a whole repo-relative path, either slash, any letter case."""
     parts = [re.escape(p) for p in path.replace("\\", "/").split("/") if p]
@@ -479,6 +492,13 @@ def selftest():
         case("MUST NOT FIRE a negated 'not ruled' and a first word of PROPOSED are not under way",
              plan_state(doc("**Status: PLAN, not ruled.**"))[0] == "unclassified"
              and plan_state(doc("**Status: PROPOSED; the earlier plan was ruled.**"))[0] == "not-yet")
+        pf = os.path.join(root, "PLAN-state-fixture.md")
+        with open(pf, "w", encoding="utf-8", newline="\n") as f:
+            f.write(doc("**Status: RULED 2026-10-02, Phase 0 under way.**"))
+        case("MUST FIRE --plan-state reads a RULED plan file as under way (the step-owner gate's question)",
+             plan_state_file(pf)[0] == "under-way")
+        case("CLEAN TWIN --plan-state reads a file that does not exist as missing, never as a state",
+             plan_state_file(os.path.join(root, "no-such-plan.md"))[0] == "missing")
         case("MUST NOT FIRE a plan with no Status line, or one only below its first ## heading, is not judged",
              plan_state("# PLAN\n\nWritten 2026-09-23.\n\n## 1. Work\n\nStatus: ruled\n")[0] == "no-status")
         case("CLEAN TWIN a Status after a sentence ('Date: ... Status: ruled') is read",
@@ -763,7 +783,7 @@ def selftest():
 
     for f in fails:
         print("  FAIL  " + f)
-    expected = 40
+    expected = 42
     if n != expected:
         fails.append("ran %d cases, expected %d" % (n, expected))
         print("  FAIL  ran %d cases, expected %d" % (n, expected))
@@ -779,6 +799,14 @@ def main(argv):
             pass
     if "--selftest" in argv:
         return selftest()
+    if "--plan-state" in argv:
+        i = argv.index("--plan-state")
+        if i + 1 >= len(argv):
+            print("usage: plan_citation.py --plan-state <plan file>", file=sys.stderr)
+            return 2
+        state, text = plan_state_file(argv[i + 1])
+        print("PLAN-STATE %s | %s" % (state, text))
+        return 3 if state == "missing" else 0
     if "--replay" in argv:
         i = argv.index("--replay")
         if i + 1 >= len(argv):

@@ -1,0 +1,97 @@
+{
+  "_why": "Ruled build steps that own a FAMILY of recurring alerts, and which census types each one prevents. Founded 2026-10-02 (design/PLAN-weekly-root-families-2026-10-02.md Phase 1, Brad's ruling D3 A): steps 8, 9 and 11 were ruled 2026-09-10 and sat unbuilt for 22 days while triage paid for their symptoms one at a time. Read by grocery/ruled-step-lib.ps1: grocery/audit-alert-census.ps1 prints each step's attributed alerts over 14 days and pages a ruled step that is not under way 14 days after its ruling, and grocery/validate-triage-plan.ps1 accepts a residual owner 'step:<ref>' only for a step listed here or any step of a plan whose Status reads RULED or under way.",
+  "_fields": {
+    "ref": "<repo-relative plan>#<label>. The label is the step heading's text up to its first '.' or ':', lower-cased, spaces as hyphens: '### 8. Ruling 2' is '8', '### Phase 5. Chain data flow' is 'phase-5', '### Stage 2: enforce' is 'stage-2'.",
+    "ruled": "the date Brad ruled the step (YYYY-MM-DD). The 14-day stall clock runs from it.",
+    "under_way_evidence": "repo-relative files whose existence means the build has started (the files the step creates first). Empty means nothing can show it started, so the step reads NOT under way.",
+    "type_prefixes": "census type keys (grocery/out/alert-census.jsonl 'type') this step prevents, matched as a prefix. A type belongs to ONE step: the one whose landing stops the ALERT. Review-class types go to step 11 (the packet adjudicates them) even where the defect they report is a family 1 or 2 root.",
+    "finished": "a step is finished when its plan heading carries '[DONE' (e.g. '### 8. Ruling 2, the row contract [DONE 2026-11-01]'). A bare 'DONE' does not count, because 3b's heading reads 'TRIAL DONE, NOT BUILT'."
+  },
+  "steps": [
+    {
+      "ref": "design/PLAN-zero-alert-days-remainder-2026-09-24.md#8",
+      "family": "1 row basis",
+      "ruled": "2026-09-10",
+      "under_way_evidence": ["grocery/row-contract-lib.ps1"],
+      "type_prefixes": [
+        "grocery a price band refused rows it cannot explain",
+        "grocery ingest shape new unit spelling unproved",
+        "grocery size strings the two per unit readers still disagree",
+        "grocery sam s began printing unit prices per fluid ounce",
+        "grocery sam s derived sizes the density band cannot see",
+        "grocery vegetable oil sam s quarantined band floor",
+        "band censorship ratchet"
+      ]
+    },
+    {
+      "ref": "design/PLAN-zero-alert-days-remainder-2026-09-24.md#9",
+      "family": "2 identity by name alone",
+      "ruled": "2026-09-10",
+      "under_way_evidence": ["grocery/audit-crown-identity-shadow.ps1"],
+      "type_prefixes": [
+        "recipe ingredient priced as a different food",
+        "grocery buttermilk claims",
+        "grocery beverage class absent",
+        "grocery beverage wrong class guard",
+        "baker s ad list brand only offers"
+      ]
+    },
+    {
+      "ref": "design/PLAN-zero-alert-days-remainder-2026-09-24.md#10",
+      "family": "2 identity by name alone (muffins)",
+      "ruled": "2026-09-10",
+      "under_way_evidence": [],
+      "type_prefixes": []
+    },
+    {
+      "ref": "design/PLAN-zero-alert-days-remainder-2026-09-24.md#11",
+      "family": "3 review alerts with no adjudication",
+      "ruled": "2026-09-10",
+      "under_way_evidence": ["grocery/review-adjudication-lib.ps1"],
+      "type_prefixes": [
+        "grocery new price flag s",
+        "grocery semantic sweep found product s no rule can see",
+        "grocery store s dropped from a commodity they carry",
+        "grocery matching soundness",
+        "grocery board cell s sit in the wrong store department",
+        "grocery page held match soundness"
+      ]
+    },
+    {
+      "ref": "design/PLAN-weekly-root-families-2026-10-02.md#phase-5",
+      "family": "5 chain data flow",
+      "ruled": "2026-10-02",
+      "under_way_evidence": ["lib/board-pin.ps1"],
+      "type_prefixes": [
+        "daily chain shipped artifacts built by code that changed mid run",
+        "smp feed edge did not pick up",
+        "board json edge did not pick up",
+        "grocery pipeline feed did not truly refresh",
+        "grocery the daily ship still writes the post before the board",
+        "grocery page does not match its shipped data",
+        "grocery page held after its data shipped",
+        "price surfaces disagree with the manifest"
+      ]
+    },
+    {
+      "ref": "design/PLAN-weekly-root-families-2026-10-02.md#phase-6",
+      "family": "6 traps enforced by memo",
+      "ruled": "2026-10-02",
+      "under_way_evidence": [],
+      "type_prefixes": [
+        "grocery a guard has gone blind test auditors failed"
+      ]
+    },
+    {
+      "ref": "design/PLAN-weekly-root-families-2026-10-02.md#phase-7",
+      "family": "4 capture coverage",
+      "ruled": "2026-10-02",
+      "under_way_evidence": [],
+      "type_prefixes": [
+        "grocery on sale item s have no everyday fallback",
+        "grocery family fare pull dropped a carried item review",
+        "grocery family fare catalog is degrading"
+      ]
+    }
+  ]
+}

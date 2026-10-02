@@ -2345,6 +2345,26 @@
    "emitter": "grocery/capture-run.ps1",
    "note": "2026-09-22, queue 2026-09-22-972de2. The ship path published the Ghost post, which carries board.json?v=<hash of the board that run built>, and the commit that deploys public/board.json did not land, so readers are served the PREVIOUS board underneath a post advertising a different one. Condition 1: the live board or feed is wrong. One page per run, never per file. The branch that raises it printed 'Readers keep the last good board' until this landed, a claim it had never tested.",
    "resolver": "lane:grocery/triage-due.ps1"
+  },
+  {
+   "id": "ruled-step-stalled",
+   "match": "prefix",
+   "key": "ruled step stalled",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/audit-alert-census.ps1",
+   "note": "2026-10-02, design/PLAN-weekly-root-families-2026-10-02.md Phase 1 step 3 (Brad's ruling D3 A). A step Brad ruled is not under way 14 days after its ruling while alerts it prevents keep arriving (grocery/ruled-steps.json, grocery/ruled-step-lib.ps1). Steps 8, 9 and 11 sat 22 days this way while triage paid for their symptoms one at a time. Once a week (Mondays), one page per stalled step. Condition 3: scheduled work did not run.",
+   "resolver": "ruling:open_questions_for_brad"
+  },
+  {
+   "id": "ruled-step-attribution-blind",
+   "match": "prefix",
+   "key": "ruled step attribution blind",
+   "class": "page",
+   "condition": "2 watcher-cannot-see",
+   "emitter": "grocery/audit-alert-census.ps1",
+   "note": "2026-10-02, same plan, rule og-13 (what the number does when its producer stops). Alerts were raised in the last 7 days and the census attributed none to any ruled step, so a type was renamed or grocery/ruled-steps.json no longer matches, and a stalled step cannot be seen. Once a week (Mondays).",
+   "resolver": "lane:grocery/triage-due.ps1"
   }
  ]
 }

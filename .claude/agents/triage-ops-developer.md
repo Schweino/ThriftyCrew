@@ -175,9 +175,11 @@ capture builders), or "none". The gate requires the line. When step 8 lands, thi
 Whatever you ship that leaves part of its class open writes `leaves_open` and `leaves_open_occurrences`,
 then takes the first owner that is true:
 1. never happened, and an existing check would page on its first occurrence: `watch:<repo-relative path>`;
-2. has happened, or nothing would notice it: `grocery\send-alert.ps1 -Force -Lane weekly -BodyFile <file>`
+2. its root family is owned by a RULED, UNBUILT STEP (2026-10-02, D3 A; `grocery\ruled-steps.json`):
+   `step:<plan>#<step label>`, no queue item, and the gate refuses a DONE, PROPOSED or missing plan;
+3. has happened, or nothing would notice it: `grocery\send-alert.ps1 -Force -Lane weekly -BodyFile <file>`
    with the measurement in the body, and name the new id;
-3. a ruling: `open_questions_for_brad` with an `id`.
+4. a ruling: `open_questions_for_brad` with an `id`.
 
 ## RETURNS ARE FAILURES
 

@@ -1,6 +1,6 @@
 # PLAN: stop the weekly pile at its source (six root families behind 27 open items)
 
-**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phase 0 under way.**
+**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phase 0 DONE (bar met, 25 of 27); Phase 1 built 2026-10-02, its 14-day bar window opens on landing; Phases 2 to 6 under way.**
 
 Written by the 2026-10-02 triage orchestrator at Brad's request ("26 weekly items screams systemic issue"). It is meant
 to be handed whole to a fresh session. That session reads this file, the plan it extends
@@ -89,6 +89,14 @@ the close names the measurement that shows the cause gone.
 4. For families 1 and 2, count how many alerts in the last 30 days came from each (the census by type, joined to the
    family rows). That count orders Phases 2 to 4.
 
+**Result, 2026-10-02** (`design/MEASURE-weekly-root-families-2026-10-02.md`): bar MET, 25 of 27 (92.6%) map to a
+family with a named preventing step; `a82e6c` (D4) and `1ed278` (recipe-side leftovers, no single owner) do not. A
+stricter reading (the step covers every instance inside the item) gives 21 of 27 and exposes one missing step: 5 of
+today's 8 no-fallback sale cells are Hy-Vee, which the Family Fare rotation does not explain (carried into Phase 7).
+30-day census by type: 154 of 473 alerts map to a ruled step (step 11 86, Phase 7 18, step 8 16, Phase 5 16, step 9
+11, Phase 6 7); 100 more are triage's own items. Family 1 (16 typed + 7 items) outranks family 2 (11 + 6), so
+Phase 2 leads Phase 3.
+
 ### Phase 1. Stop the queue feeding itself (needs D3; one session)
 
 1. **Owner by ruled step.** Teach `validate-triage-plan.ps1` to accept `leaves_open_followup: "step:<plan>#<n>"` when
@@ -109,6 +117,22 @@ the close names the measurement that shows the cause gone.
    Baseline measured 2026-10-02: 81 in the 15 days 2026-09-18 to 2026-10-02 (the queue holds no older rows, so the
    pre-landing window is re-counted on landing day from the queue, not taken from this line). Write both counts with
    their windows.
+
+**Built 2026-10-02.** Step 1: `validate-triage-plan.ps1` accepts `step:<plan>#<label>` through
+`grocery/ruled-step-lib.ps1` `Test-StepOwner`, which asks `plan_citation.py --plan-state` under `ops/` (one copy of the
+Status rule) and also refuses a step heading that reads `[DONE`; the cases live in the validator's piece
+`validate-triage-plan/step-owner.ps1`. `triage-close.ps1` gained the disposition `owned-by-step` (a hit), refused
+unless its notes name a step owner that resolves. Step 3: the census's RULED STEPS line, map `grocery/ruled-steps.json`,
+pages `Ruled step stalled: <ref>` and `Ruled step attribution BLIND` on Mondays (both registered). Its first live read
+(2026-10-02, -NoPage) put steps 8, 9 and 11 at STALLED, 22 days, with 15, 6 and 56 attributed alerts over 14 days:
+the founding case. The triage skill's COST CONTROLS (rule 4) and both developer agents teach the new owner.
+**Step 2 deviates on purpose:** an item's body is NOT appended into the remainder plan. Those bodies name about thirty
+repo paths (pricing-math-lib, compare-deals, the builders), and the plan-citation check would then ask every commit to
+those files to cite the remainder plan, the exact defect that plan's section 1 was written to avoid (83 of 86
+warnings). The bodies go to `design/EVIDENCE-weekly-root-families-2026-10-02.md`, which has no Status line and is not
+judged, with one pointer line per step in the plan.
+**Bar, counted 2026-10-02:** 81 triage-made items in the 14 days 2026-09-19..2026-10-02 (the queue's oldest row is
+2026-09-18), so the bar is at most 40 over the 14 days after landing, with returns30 at or below 149 (31.5% of 473).
 
 ### Phase 2. Step 8, the row contract (needs D1; several sessions)
 
