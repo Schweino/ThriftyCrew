@@ -150,7 +150,7 @@
       "lane": "money",
       "est_tool_calls": 45,
       "publish_batch": 1,
-      "status": "planned",
+      "status": "deviated",
       "resumed_from": "ROUTE line (triage-due-returns.txt): seeded with grocery/triage-plans/plan-2026-09-29-4.json item 2026-09-29-c70eb2 (prior status deviated), no fresh reviewer diagnosis",
       "evidence": [
         "Queue body 25cb66 (08:26:44, emitter check-ad-cycles.ps1): '- condensed-milk / Aldi: WITHHELD (the previously published value IS the value this guard condemned); today's candidate was 0.1636. Why: HARD FAIL: no cell wins a row while measured in a different KIND of quantity than the row (volume among weights) (see audit-unit-basis-outlier.ps1)'",
@@ -184,12 +184,14 @@
       },
       "blast_radius": {
         "measured_as": "engine-branch",
-        "measured_by": "not yet measured: the developer counts every row on candidates-2026-09-30 whose size kind differs from its commodity unit, before and after, and diffs every cell's per_unit in a scratch-clone rebuild",
-        "affected_now": 1,
+        "measured_by": "developer 2026-10-02: every candidate on candidates-2026-09-30.json (08:09:45) on an oz-unit commodity, with a size_text naming fl oz, a non-null unit_price and a 'size N oz' basis, i.e. every row the planned refusal would unprice",
+        "affected_now": 410,
+        "denominator": "19,860 oz-unit candidates, 35 commodities",
+        "by_commodity": "mayonnaise 78, pickles 76, coconut-oil 30, shaving-cream 27, evaporated-milk 26, relish 20, cooking-spray 18, tomato-soup 15, banana-peppers 12, yogurt 11, pickled-jalapenos 11, baby-food 11, air-freshener 9, pepperoncini 9, miracle-whip 8, insect-spray 6, taco-sauce 5, bbq-sauce 5, deodorant 4, cocktail-sauce 4, pizza-sauce 4, horseradish-sauce 3, whipped-cream 2, parmesan 2, feta 2, disinfectant-spray 2 (declared near-water), canned-beets 2, pasta-sauce 1, sour-cream 1, mustard 1, salsa 1, furniture-polish 1, condensed-milk 1, clam-chowder 1, vegetable-soup 1",
         "names": [
           "Baker S Corner Sweetened Condensed Milk 14 FL OZ"
         ],
-        "risk": "a kind reader change touches every row with a size; rows that today price 'fl oz' as weight on purpose (if any commodity relies on it) would lose their cell, so the full-board diff is mandatory before landing"
+        "risk": "the planned refuse-unless-declared default would unprice up to 410 candidates on 35 commodities; the plan named any move beyond condensed-milk/Aldi as a stop"
       },
       "proof": {
         "guard_or_fixture": "grocery/compare-deals.ps1 -SelfTest + grocery/test-guards.ps1",
@@ -210,18 +212,29 @@
       },
       "fixture_occurrences_note": "de4f72, 92e552 and b61b08 quarantined other cells for other causes and are cited as prior closes of the alert TYPE; the case table covers today's row and c70eb2's row, the two that share the two-readers shape.",
       "freshness": "measured 2026-10-02 against candidates-2026-09-30 (08:09:45) and comparison-2026-09-30 (08:23:07); re-pin the board before acting",
-      "leaves_open": "nothing planned beyond the fix; the developer writes leaves_open from the blast-radius count",
-      "leaves_open_occurrences": 0,
+      "leaves_open": "the two-readers class: 410 oz-unit candidates on 35 commodities priced by reading 'fl oz' as weight oz (candidates-2026-09-30); only condensed-milk/Aldi is caught today, and it is withheld",
+      "leaves_open_occurrences": "1 guard firing on this class (condensed-milk/Aldi, 2026-10-02) in 30 days of 'cells quarantined' queue items; the 4 prior closes de4f72, 92e552, b61b08, c70eb2 were other causes. 410 rows carry the latent mechanism.",
       "rollback": "revert the pricing-math-lib.ps1 and audit-unit-basis-outlier.ps1 hunks and the self-test cases; no data migration",
       "do_not_touch": [
         "guards.ps1 thresholds",
         "apply-cell-quarantine.ps1",
         "audit-unit-basis-outlier's HARD FAIL rule itself"
       ],
-      "premise_verified": null,
-      "deviation": null,
+      "premise_verified": true,
+      "deviation": "STOPPED BEFORE ANY ENGINE CHANGE on the plan's own stop condition. The exact_change (refuse 'fl oz' on an oz row unless the commodity declares an equivalence) expected one move, but the blast radius measures 410 candidates on 35 commodities. Defaulting to refuse would empty or re-crown mayonnaise, pickles and 33 more rows. Defaulting to allow needs a per-commodity density declaration: near 1 for brines and sauces, far from 1 for aerosols, and about 1.3 g/ml for condensed milk, where 14 fl oz is about 18.9 oz net weight, so near-water is physically false for it. Nobody has measured those declarations, and blast_radius.measured_as is engine-branch, not routing (developer rule 4). Declaring an equivalence for condensed-milk would publish an untruthful price, so none was declared. Live state is truthful without a change: origin/main public/board.json (080e1fbb1, daily 2026-10-02 09:02) shows condensed-milk/Aldi 'No price yet' (withheld by apply-cell-quarantine) and Walmart 0.166/oz cheapest. Batch 1 has no board change (177835 and 754693 were re-measure only), so the board was NOT republished: a rebuild would reproduce the published board. No code, data or fixture changed.",
       "shipped_commit": null,
-      "resolution_note": "Planned: Aldi's 'Baker S Corner Sweetened Condensed Milk 14 FL OZ' was priced by the engine as 14 weight ounces (0.1636/oz) and condemned by the unit-basis guard as volume, so the cell was withheld. The fix gives the engine and the guard one size-kind reader at the source (pricing-math-lib.ps1). Not the 754693 carrots crown, and not an 88bd45 soundness false positive."
+      "resolution_note": "Deviated, no code shipped. The cause reproduces: the engine reads Aldi's '14 fl oz' condensed milk as 14 weight oz (0.1636/oz), and the unit-basis guard reads it as volume. The planned shared kind reader would unprice 410 candidates on 35 oz-unit commodities, not the 1 the plan expected, and that is the plan's stop condition. The live board is already truthful: Aldi is withheld and Walmart 0.166/oz is cheapest. The class is owned by weekly item 2026-10-02-44c416, which carries the per-commodity counts and asks the reviewer to measure density per commodity before choosing refuse-by-default or allow-by-default.",
+      "premise_note": "Mechanism reproduced in code and data: candidates-2026-09-30 condensed-milk/Aldi 'Baker S Corner Sweetened Condensed Milk 14 FL OZ' size_text '14 fl oz' unit_price 0.1636 basis 'size 14 oz'; pricing-math-lib.ps1 Convert-ToUnit 'oz' arm accepts '^(oz|ounce|ounces|fl\\s*oz)$' as weight oz, while audit-unit-basis-outlier reads kind through pu-lib Get-SizeMeasureKind, which returns volume for 'fl oz'. FALSE premise: 'expected moves: condensed-milk/Aldi only' and affected_now 1. The same engine branch prices 410 candidates today.",
+      "leaves_open_followup": "2026-10-02-44c416",
+      "republished": false,
+      "live_check": {
+        "url": "https://www.thriftycrew.com/ (board.json, cache-busted)",
+        "commodity": "condensed-milk",
+        "store": "Aldi",
+        "expect": "Aldi chip 'No price yet' (withheld), never 0.1636/oz; cheapest Walmart 0.166/oz (17 cents/oz)"
+      },
+      "full_suite": "not-applicable: no code changed",
+      "actual_tool_calls": 21
     },
     {
       "queue_id": "2026-09-30-9b9cf1",
