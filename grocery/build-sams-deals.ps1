@@ -754,9 +754,30 @@ function Build-Row($raw, [string]$Club = '') {
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
 
-# ---- THE CLUB A CAPTURE WAS READ AT: Split-SamsCaptureStore, Read-SamsCapture, Get-SamsClubLabel and
-# Get-SamsSanctionedClub live in sams-capture-store-lib.ps1 (split out 2026-10-02; the account is its header and theirs).
+# ---- THE CLUB A CAPTURE WAS READ AT: Split-SamsCaptureStore, Get-SamsClubLabel and Get-SamsSanctionedClub live in
+# sams-capture-store-lib.ps1 (split out 2026-10-02; the account is its header and theirs).
 . (Join-Path $root 'sams-capture-store-lib.ps1')
+
+# The capture exactly as the build consumes it: the store line ruled on FIRST, then the rows read through capture-lib
+# from a per-run temp copy holding only the kept lines. One function, so the self-test drives the path the build runs.
+# Returns data and prints NOTHING (Import-CaptureCsv's rule); a refusal comes back in .refuse with no row read.
+function Read-SamsCapture {
+  param([string]$Path, [switch]$WaiveMissingStoreLine)
+  $lines = @(Get-Content -LiteralPath $Path -Encoding UTF8)
+  $cs = Split-SamsCaptureStore $lines
+  # Waives the MISSING line only, and only when there is no store line at all to disagree with. The text it keys on
+  # is pinned by this file's own self-test ('carries no #tc-store line').
+  $waived = [bool]($WaiveMissingStoreLine -and $cs.refuse -and $cs.rows -eq 0 -and $cs.refuse.Contains('carries no #tc-store line'))
+  if ($cs.refuse -and -not $waived) { return @{ refuse = $cs.refuse; cs = $cs; raw = @(); waived = $false } }
+  $tmp = Join-Path $env:TEMP ('sams-capture-clean-' + [guid]::NewGuid().ToString('N') + '.csv')
+  try {
+    [IO.File]::WriteAllText($tmp, (($cs.lines -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+    $read = Import-CaptureCsv -Path $tmp -Delimiter '|'
+  } finally { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
+  $raw = @($read)
+  return @{ refuse = ''; cs = $cs; raw = $raw; waived = $waived }
+}
+
 
 if ($SelfTest) {
   $fail = 0

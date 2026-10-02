@@ -5,6 +5,8 @@
   for word apart from the club-id pin that change added, because that pin pushed the builder past its file-size
   mark (ops\audit-file-size-budget.ps1). build-sams-deals.ps1 dot-sources this file and its self-test drives every
   function here (cases 12a to 12f); nothing else calls them. Reads stores.json beside this file; writes nothing.
+  Read-SamsCapture stays in the builder: it calls Import-CaptureCsv, whose drop counters the builder reports, and
+  ops/audit-capture-ingest-reporting.ps1 holds each caller of Import-CaptureCsv to that report.
 #>
 # ---- THE CLUB A CAPTURE WAS READ AT (2026-09-18, backlog I124) -------------------------------------------------
 # Sam's prices are per-club. samsIdentity() in pull-sams-instore.js has always READ the club off the page and nothing
@@ -114,26 +116,6 @@ function Get-SamsSanctionedClub([string]$Root) {
     if ([string]$st.name -eq "Sam's Club" -and $st.store_identity -and $st.store_identity.club_id) { return [string]$st.store_identity.club_id }
   }
   return ''
-}
-
-# The capture exactly as the build consumes it: the store line ruled on FIRST, then the rows read through capture-lib
-# from a per-run temp copy holding only the kept lines. One function, so the self-test drives the path the build runs.
-# Returns data and prints NOTHING (Import-CaptureCsv's rule); a refusal comes back in .refuse with no row read.
-function Read-SamsCapture {
-  param([string]$Path, [switch]$WaiveMissingStoreLine)
-  $lines = @(Get-Content -LiteralPath $Path -Encoding UTF8)
-  $cs = Split-SamsCaptureStore $lines
-  # Waives the MISSING line only, and only when there is no store line at all to disagree with. The text it keys on
-  # is pinned by this file's own self-test ('carries no #tc-store line').
-  $waived = [bool]($WaiveMissingStoreLine -and $cs.refuse -and $cs.rows -eq 0 -and $cs.refuse.Contains('carries no #tc-store line'))
-  if ($cs.refuse -and -not $waived) { return @{ refuse = $cs.refuse; cs = $cs; raw = @(); waived = $false } }
-  $tmp = Join-Path $env:TEMP ('sams-capture-clean-' + [guid]::NewGuid().ToString('N') + '.csv')
-  try {
-    [IO.File]::WriteAllText($tmp, (($cs.lines -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
-    $read = Import-CaptureCsv -Path $tmp -Delimiter '|'
-  } finally { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
-  $raw = @($read)
-  return @{ refuse = ''; cs = $cs; raw = $raw; waived = $waived }
 }
 
 # What the doc-level `club` says. The club READ when there is one; an explicit NOT RECORDED under the waiver.
