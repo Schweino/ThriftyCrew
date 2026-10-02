@@ -720,6 +720,16 @@
    "resolver": "lane:grocery/triage-due.ps1"
   },
   {
+   "id": "propagate-drain-incomplete",
+   "match": "exact",
+   "key": "recipe propagate drain did not complete",
+   "class": "page",
+   "condition": "3 scheduled-work-did-not-run-or-land",
+   "emitter": "grocery/propagate-drain-lib.ps1 (called by grocery/check-ad-cycles.ps1)",
+   "resolver": "lane:grocery/triage-due.ps1",
+   "note": "2026-10-02 (item 2026-09-30-9b9cf1): the daily chain's sync-recipesdb-cost + propagate-recipes.ps1 -Drain did not finish, so dirty recipe specs were not carried to their live pages; they stay dirty and the next run retries"
+  },
+  {
    "id": "cards-over-cap",
    "match": "exact",
    "key": "recipe cards moved over the daily cap",
