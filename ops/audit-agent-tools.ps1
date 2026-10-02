@@ -74,7 +74,7 @@ $KNOWN = @('Read', 'Grep', 'Glob', 'Bash', 'PowerShell', 'Edit', 'Write', 'WebFe
 # Write would not narrow what it can do; it would only move the write out of a sanctioned
 # repo-relative path into an unaudited shell call. The three that report through their RETURN VALUE
 # have no such need and are held to it.
-$VERDICT_NO_EDIT  = @('post-publish-reviewer', 'recipe-batch-auditor', 'recipe-dedup-selector',
+$VERDICT_NO_EDIT  = @('browser-refresh-reviewer', 'post-publish-reviewer', 'recipe-batch-auditor', 'recipe-dedup-selector',
                       'recipe-source-qa', 'triage-reviewer')
 $VERDICT_NO_WRITE = @('recipe-dedup-selector', 'recipe-source-qa', 'triage-reviewer')
 
@@ -86,6 +86,8 @@ $STORE_STEP_VARIANTS = @('CODE', 'ANALYSIS')
 # Which variants each agent carries, exactly. Named in plan W5.2 step 2: ANALYSIS for every agent whose job
 # is a verdict or a measurement, CODE for every agent that changes code, both where an agent does both.
 $STORE_STEP_REQUIRED = [ordered]@{
+  'browser-refresh-implementer' = @('CODE')
+  'browser-refresh-reviewer' = @('CODE', 'ANALYSIS')   # its Write is the plan file outside any checkout
   'commodity-registrar'      = @('CODE', 'ANALYSIS')
   'post-publish-reviewer'    = @('CODE', 'ANALYSIS')
   'recipe-batch-auditor'     = @('ANALYSIS')          # its Write is a verdict file, so ANALYSIS only
