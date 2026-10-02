@@ -2,10 +2,12 @@
      grocery\fill-browser-brief.ps1. design\PLAN-browser-refresh-hardening-2026-10-02.md W4. -->
 ## The store rule
 
-Sam's prices are per club, and Omaha has two. The board's club is **13130 L St, Omaha 68137** (Brad's ruling
-2026-10-02). `samsIdentity()` reads the club the session is on and refuses a page that names none. If the club is
-not L St, SWITCH THE CLUB to L St in the page's own club picker and run Step 1 again. `build-sams-deals` refuses a
-capture with no store line, an UNRECORDED one or two clubs, so post the emitter's output unaltered.
+Sam's prices are per club. The board's club is **#8146, 13130 L St, Omaha 68137** (Brad's ruling 2026-10-02,
+`stores.json` -> Sam's Club -> `store_identity`). The id is the discriminator, never the word "Omaha". Every search
+response is checked: the club its items can be picked up at must be 8146, so a term read at another club settles
+UNUSABLE with a `wrong-club` reason (and a response naming no club, `club-unproven`). If the first wait shows
+`wrong-club` terms, SWITCH THE CLUB to L St in the page's own club picker and run Step 1 again. `build-sams-deals`
+refuses a capture with no club id, any id but 8146, or two clubs, so post the emitter's output unaltered.
 
 ## Step 1: open the page
 

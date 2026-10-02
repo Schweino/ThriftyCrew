@@ -36,6 +36,18 @@
 const SAMS_STORAGE_KEY = 'TC_SAMS_SWEEP';
 
 /*
+  THE BOARD'S CLUB, BY ID (Brad's ruling 2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md W1):
+  13130 L St, Omaha 68137, which samsclub.com/club/omaha-ne-sams-club/8146 names "Omaha Sam's Club #8146".
+  Mirrors stores.json -> Sam's Club -> store_identity.club_id (a browser console cannot read a file), and
+  build-sams-deals.ps1's self-test fails when the two disagree. The id is the discriminator, never the word
+  "Omaha": until this ruling the builder passed any club whose label said Omaha, the Walmart-3153 shape.
+  WHERE THE ID IS READ: every search response's own item nodes, item.fulfillmentSummary[].storeId on the
+  PICKUP entry (see samsFulfillment and samsResponseClub below). 6279 is the ship-from node, never a club:
+  samsclub.com answers "the club number entered isn't correct" for it (fetched 2026-10-02).
+*/
+const SAMS_SANCTIONED_CLUB = '8146';
+
+/*
   Mirrors stores.json -> Sam's Club -> pull_profile, which is the source of truth. The console has no
   filesystem, so the numbers are duplicated here and audit-pull-profiles.ps1 fails if they disagree.
   Still `proposed`, not `measured`: 2600+/-1400ms was derived from the ceiling we hit, not from a
@@ -150,9 +162,40 @@ async function samsProbe(term) {
     let club;
     try { club = samsIdentity().club; }
     catch (e) { return { state: 'UNUSABLE', rows: [], why: 'club not readable at probe time: ' + String((e && e.message) || e).slice(0, 120) }; }
-    for (const row of rows) row.cl = club;
+    const ci = samsResponseClub(rows);
+    if (ci.why) return { state: 'UNUSABLE', rows: [], why: ci.why };
+    for (const row of rows) { row.cl = club; row.ci = ci.id; }
   }
   return rows.length ? { state: 'MATCHES', rows } : { state: 'EMPTY', rows: [], why: 'store returned no products' };
+}
+
+/*
+  THE CLUB THIS RESPONSE WAS READ AT, BY ID (2026-10-02, PLAN-browser-refresh-hardening W1). The search response
+  carries the session's club on every item a member can pick up there: fulfillmentSummary's PICKUP entry. Over the
+  13 captures 2026-09-20..10-02 (401 term responses), 398 named exactly one pickup club, 8146; 3 named none (every
+  row ship, delivery-from-6279 or perishable-only: crushed thai chili, fresh fennel twice); none named two.
+  The rule, per response, never per page:
+    one pickup id, the sanctioned one    -> the rows are kept, each stamped ci=<id>
+    one pickup id, any other              -> UNUSABLE: read at another club, nothing kept
+    two or more pickup ids                -> UNUSABLE: the response straddles clubs
+    no pickup id at all                   -> UNUSABLE: the response cannot prove its club. Its rows could not be
+                                             priced in-club anyway (build-sams-deals rules a row with no PICKUP
+                                             channel '' or ship-only, and compare-deals refuses both), so this
+                                             loses no board price; it costs the lib's retry backoff (about 140 s)
+                                             on about 1 term in 130.
+  UNUSABLE, never EMPTY: a club we could not confirm is our blindness, not evidence about the shelf.
+*/
+function samsResponseClub(rows) {
+  const ids = [];
+  for (const r of rows) {
+    for (const m of String((r && r.ful) || '').matchAll(/(?:^|,)PICKUP@([A-Za-z0-9_-]+)/g)) {
+      if (!ids.includes(m[1])) ids.push(m[1]);
+    }
+  }
+  if (ids.length === 0) return { id: '', why: 'club-unproven: no item on this response is pickup-able at any club, so it names no club id (' + rows.length + ' row(s) not kept)' };
+  if (ids.length > 1) return { id: '', why: 'club-straddle: this response names ' + ids.length + ' pickup clubs (' + ids.join(', ') + '), not one' };
+  if (ids[0] !== SAMS_SANCTIONED_CLUB) return { id: ids[0], why: 'wrong-club: this response was read at club ' + ids[0] + ', not the board\'s ' + SAMS_SANCTIONED_CLUB + ' (13130 L St). Switch the club in the page and re-run' };
+  return { id: ids[0], why: '' };
 }
 
 /*
@@ -289,11 +332,13 @@ const pullSamsInStore    = (worklist, opts) => runPacedSweep(samsAgent, worklist
   THE CLUB TRAVELS WITH THE CAPTURE (2026-09-18, backlog I124; the Aldi and Walmart emitters did this
   first). The output OPENS with one line per distinct club the rows were read at, counted off each
   row's `cl`, then the column header, then the rows:
-      #tc-store store="15429 Blackwell Dr, Omaha, NE 68116" read="page" rows=152
+      #tc-store store="Omaha Sam's Club" id="8146" read="response" rows=152
       q|n|lp|up|id|was|ful
+  id is the club the search RESPONSE named (samsResponseClub, since 2026-10-02); store is the page's label for it.
   A row with no `cl` (persisted by an agent older than this) is counted as store="UNRECORDED" and is
-  never folded into a club it was not read at. build-sams-deals refuses a capture with no store line,
-  an UNRECORDED one, a non-Omaha one or more than one club. The line carries no '|'. Post this output
+  never folded into a club it was not read at; a row with no `ci` (an agent older than the club id) is
+  id="UNRECORDED". build-sams-deals refuses a capture with no store line, no id, an UNRECORDED one, any id but
+  the sanctioned club, or more than one club. The line carries no '|'. Post this output
   UNCHANGED: it already has its header, and pull-browser-stores.py prepends nothing to a body that
   opens with it. An empty sweep still returns '' so the driver's BLOCKED-versus-EMPTY branch fires.
 */
@@ -311,15 +356,16 @@ const samsSweepToCsv = () => {
   for (const [term, r] of Object.entries(res)) {
     if (r.v !== 'MATCHES') continue;
     for (const p of r.rows) {
-      const k = samsStoreField(p.cl) || 'UNRECORDED';
+      const k = (samsStoreField(p.cl) || 'UNRECORDED') + '\u0000' + (samsStoreField(p.ci) || 'UNRECORDED');
       clubs.set(k, (clubs.get(k) || 0) + 1);
       out.push([term, p.n, p.lp ?? '', p.up ?? '', p.id ?? '', p.was ?? '', p.ful ?? ''].join('|'));
     }
   }
   if (!out.length) return '';
   const head = [];
-  for (const [club, n] of clubs.entries()) {
-    head.push('#tc-store store="' + club + '" read="' + (club === 'UNRECORDED' ? 'UNRECORDED' : 'page') + '" rows=' + n);
+  for (const [k, n] of clubs.entries()) {
+    const [club, id] = k.split('\u0000');
+    head.push('#tc-store store="' + club + '" id="' + id + '" read="' + (id === 'UNRECORDED' ? 'UNRECORDED' : 'response') + '" rows=' + n);
   }
   return head.concat([SAMS_CAPTURE_COLUMNS], out).join('\n');
 };

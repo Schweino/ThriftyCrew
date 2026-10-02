@@ -617,6 +617,16 @@ function load(bodyText, pageHtml, kv) {
 
   const r = await a.samsProbe('cucumber');
   T('MUST FIRE  every row the probe keeps carries the club it read (cl)', r.state === 'MATCHES' && r.rows.length === 2 && r.rows.every(x => x.cl === BLK), r.state + ' ' + JSON.stringify(r.rows));
+  T('MUST NOT FIRE  a response whose pickup club is the sanctioned 8146 keeps its rows, each stamped ci=8146', r.rows.every(x => x.ci === '8146'), JSON.stringify(r.rows.map(x => x.ci)));
+
+  // THE CLUB BY ID (2026-10-02, PLAN-browser-refresh-hardening W1): read off each RESPONSE's PICKUP entries.
+  const at = (id) => [{ fulfillment: 'PICKUP', storeId: id }, { fulfillment: 'SHIPPING', storeId: '6279' }];
+  const wrong = await load(HEAD, html([item('W1', 'Seedless English Cucumbers, 3 ct.', at('6427')), item('W2', 'Mini Cucumbers, 2 lbs.', at('6427'))]), {}).samsProbe('cucumber');
+  T('MUST FIRE  a response read at another club (6427) keeps NO rows, settles UNUSABLE and names the club', wrong.state === 'UNUSABLE' && wrong.rows.length === 0 && /wrong-club/.test(wrong.why) && /6427/.test(wrong.why), wrong.state + ' / ' + wrong.why);
+  const both = await load(HEAD, html([item('B1', 'Cucumbers A', at('8146')), item('B2', 'Cucumbers B', at('6427'))]), {}).samsProbe('cucumber');
+  T('MUST FIRE  a response naming two pickup clubs is UNUSABLE, never folded into the sanctioned one', both.state === 'UNUSABLE' && both.rows.length === 0 && /club-straddle/.test(both.why), both.state + ' / ' + both.why);
+  const unproven = await load(HEAD, html([item('N1', 'Honey Mustard, 128 oz.', [{ fulfillment: 'SHIPPING', storeId: '6279' }]), item('N2', 'Fennel', [{ fulfillment: 'DELIVERY', storeId: '6279' }])]), {}).samsProbe('mustard');
+  T('MUST FIRE  a response naming no pickup club (the crushed thai chili and fennel shape) is UNUSABLE: our blindness, never EMPTY', unproven.state === 'UNUSABLE' && unproven.rows.length === 0 && /club-unproven/.test(unproven.why), unproven.state + ' / ' + unproven.why);
 
   const off = await load('Sam\'s Club\nSign in to choose a club', two, {}).samsProbe('cucumber');
   T('MUST FIRE  a page that names no Omaha club at probe time keeps NO rows, and says it could not look', off.state === 'UNUSABLE' && off.rows.length === 0 && /club not readable/.test(off.why || ''), off.state + ' / ' + off.why);
@@ -625,7 +635,7 @@ function load(bodyText, pageHtml, kv) {
   const kv = {};
   kv[KEY] = JSON.stringify({ cucumber: { v: 'MATCHES', why: null, rows: r.rows }, kale: { v: 'EMPTY', why: 'none', rows: [] } });
   const csv = load(HEAD, '', kv).samsSweepToCsv().split('\n');
-  T('CLEAN TWIN  the capture OPENS with the club line, counted', csv[0] === '#tc-store store="' + BLK + '" read="page" rows=2', csv[0]);
+  T('CLEAN TWIN  the capture OPENS with the club line: the page label, the response club id, counted', csv[0] === '#tc-store store="' + BLK + '" id="8146" read="response" rows=2', csv[0]);
   T('...then the seven-column header (ful appended), so the driver prepends nothing', csv[1] === 'q|n|lp|up|id|was|ful', csv[1]);
   T('...then exactly the rows, term first, in the builder\'s positional order', csv.length === 4 && csv[2] === 'cucumber|Seedless English Cucumbers, 3 ct.|$3.27|$1.09/ea|A1||PICKUP@8146,DELIVERY@8146,SHIPPING@6279', csv.join(' / '));
 
@@ -652,12 +662,12 @@ function load(bodyText, pageHtml, kv) {
   mixed[KEY] = JSON.stringify({ cucumber: { v: 'MATCHES', rows: [r.rows[0], { n: 'old row', lp: '$1.00', up: '$1.00/ea', id: 'OLD' }] } });
   const m = load(HEAD, '', mixed).samsSweepToCsv().split('\n');
   T('MUST FIRE  a row with no club read gets its own UNRECORDED line, never folded into its neighbour',
-    m[0] === '#tc-store store="' + BLK + '" read="page" rows=1' && m[1] === '#tc-store store="UNRECORDED" read="UNRECORDED" rows=1', m.slice(0, 2).join(' / '));
+    m[0] === '#tc-store store="' + BLK + '" id="8146" read="response" rows=1' && m[1] === '#tc-store store="UNRECORDED" id="UNRECORDED" read="UNRECORDED" rows=1', m.slice(0, 2).join(' / '));
 
   const hostile = {};
   hostile[KEY] = JSON.stringify({ t: { v: 'MATCHES', rows: [Object.assign({}, r.rows[0], { cl: '15429 "Blackwell|Dr"\n, Omaha' })] } });
   const h = load(HEAD, '', hostile).samsSweepToCsv().split('\n');
-  T('a club string carrying a quote, pipe or newline cannot break its line', h[0] === '#tc-store store="15429 Blackwell Dr , Omaha" read="page" rows=1', h[0]);
+  T('a club string carrying a quote, pipe or newline cannot break its line', h[0] === '#tc-store store="15429 Blackwell Dr , Omaha" id="8146" read="response" rows=1', h[0]);
 
   const none = {};
   none[KEY] = JSON.stringify({ kale: { v: 'EMPTY', rows: [] }, milk: { v: 'UNUSABLE', why: 'bot-wall', rows: [] } });
