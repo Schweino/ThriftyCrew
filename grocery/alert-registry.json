@@ -1155,6 +1155,17 @@
    "resolver": "lane:grocery/capture-policy-lib.ps1"
   },
   {
+   "id": "sale-no-fallback-worked",
+   "lineage_parent": "sale-no-fallback-unworked",
+   "match": "exact",
+   "key": "grocery on sale item s have no everyday fallback and their capture has not found one",
+   "class": "review",
+   "condition": "an owned, asked sale cell whose store capture has found no everyday row past the grace window",
+   "emitter": "grocery/check-ad-cycles.ps1",
+   "note": "2026-10-02, design/PLAN-weekly-root-families-2026-10-02.md Phase 7, queue e40f92 and e7f9b9: the unworked wording ('NO ONE IS WORKING THEM') was sent when every escalated cell was owned by its store's capture plan with terms_attempted=true (all 8 on 2026-10-02), which sent triage looking for a missing owner. It now names that case for what it is: does the store carry an everyday item, or can the capture not see it. The unworked wording stays for a cell with no owner or an unreadable ledger.",
+   "resolver": "lane:grocery/capture-policy-lib.ps1"
+  },
+  {
    "id": "ff-carry",
    "match": "exact",
    "key": "grocery family fare pull dropped a carried item review",
