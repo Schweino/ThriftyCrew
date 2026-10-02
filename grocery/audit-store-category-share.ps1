@@ -21,6 +21,7 @@
          .\audit-store-category-share.ps1 -SelfTest
 #>
 # gate-inputs: grocery\audit-store-category-share.ps1, grocery\store-department-lib.ps1, grocery\aisle-lib.ps1
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent drop (audit-arg-binding)
 param([string]$OutFile = '', [string]$DataRoot = '', [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot

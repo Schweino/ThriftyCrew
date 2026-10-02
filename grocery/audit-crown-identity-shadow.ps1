@@ -26,6 +26,7 @@
          .\audit-crown-identity-shadow.ps1 -SelfTest
 #>
 # gate-inputs: grocery\audit-crown-identity-shadow.ps1, grocery\store-department-lib.ps1, grocery\aisle-lib.ps1
+[CmdletBinding()]   # an undeclared argument must be a hard error, never a silent drop (audit-arg-binding)
 param([string]$Board = '', [string]$OutDir = '', [switch]$NoWrite, [switch]$SelfTest, [string]$DataRoot = '')
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
