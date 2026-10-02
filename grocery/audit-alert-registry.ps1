@@ -520,20 +520,20 @@ function Test-Fixture {
 '@
   $nFn = (Get-AlertCallSites (ConvertTo-ParsedAst $srcFn) 'fxfn.ps1').Count
   _T 'MUST NOT FIRE calls beside a nested stub (self-test block or fixture function) are not call sites' ((@($sSt | Where-Object { $_.line -eq 3 }).Count -eq 0) -and $nFn -eq 0) ("selftest-beside-stub=" + @($sSt | Where-Object { $_.line -eq 3 }).Count + " fixture-fn=" + $nFn)
-  # CLEAN TWIN: an alert-lib-style top-level transport definition still skips the file whole (fx6 above is the bare
+  # MUST NOT FIRE: an alert-lib-style top-level transport definition still skips the file whole (fx6 above is the bare
   # stub harness; this one carries a production-looking call after the transport, as alert-lib.ps1 does).
   $srcTx = @'
 function Send-Alert { param([string]$Subject, [string]$Body, [switch]$Force) & (Join-Path $PSScriptRoot 'send-alert.ps1') -Subject $Subject -Body $Body }
 function Send-AlertConditions { Send-Alert -Subject 'Grocery: an unregistered condition' -Body 'x' }
 '@
-  _T 'CLEAN TWIN a top-level transport definition still skips the file whole' ((Get-AlertCallSites (ConvertTo-ParsedAst $srcTx) 'fxtx.ps1').Count -eq 0) 'sites found'
+  _T 'MUST NOT FIRE a top-level transport definition still skips the file whole' ((Get-AlertCallSites (ConvertTo-ParsedAst $srcTx) 'fxtx.ps1').Count -eq 0) 'sites found'
   # MUST FIRE: an exact key the type-key form can never produce is an entry that cannot be applied (the 're-priced' key
-  # this same blindness hid). CLEAN TWIN: the same key in type-key form is accepted.
+  # this same blindness hid). MUST NOT FIRE: the same key in type-key form is accepted.
   $fxKey = [pscustomobject]@{ entries = @([pscustomobject]@{ id = 'rp'; match = 'exact'; key = 'board freshness ended sales not re-priced'; class = 'page'; condition = '3 scheduled-work-did-not-run-or-land'; emitter = 'x.ps1'; resolver = 'lane:x.ps1' }) }
   $kpRaw = Get-AlertRegistryEntryProblems $fxKey; $kp = @($kpRaw | Where-Object { $_ -match 'type-key form' })
   $fxKey.entries[0].key = 'board freshness ended sales not re priced'
   $kcRaw = Get-AlertRegistryEntryProblems $fxKey; $kc = @($kcRaw | Where-Object { $_ -match 'type-key form' })
-  _T 'MUST FIRE an exact key with a hyphen is refused; CLEAN TWIN its type-key form is accepted' ($kp.Count -eq 1 -and $kc.Count -eq 0) ("bad=" + $kp.Count + " good=" + $kc.Count)
+  _T 'MUST FIRE an exact key with a hyphen is refused; MUST NOT FIRE its type-key form is accepted' ($kp.Count -eq 1 -and $kc.Count -eq 0) ("bad=" + $kp.Count + " good=" + $kc.Count)
 
   Write-Output ''
   $expectCases = 48   # a deleted case must turn this red, not quietly shrink the tally
