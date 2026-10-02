@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-10-01 21:33",
+    "generated":  "2026-10-02 08:35",
     "board":  "comparison-2026-09-30.json",
-    "sidecar_generated":  "2026-10-01 21:33:32",
+    "sidecar_generated":  "2026-10-02 08:35:34",
     "device":  "cuda",
     "thresholds":  {
                        "identity_peer_ratio":  0.1,
@@ -9,9 +9,9 @@
                        "coverage_rerank_floor":  0.9
                    },
     "examined":  {
-                     "board_pairs":  2907,
-                     "corpus":  44564,
-                     "rule_invisible":  9194
+                     "board_pairs":  2910,
+                     "corpus":  44600,
+                     "rule_invisible":  9203
                  },
     "identity_count":  0,
     "coverage_count":  4,
@@ -104,8 +104,8 @@
                                   "commodity":  "Sirloin Steak",
                                   "store":  "Fareway",
                                   "product":  "USDA Choice Sirloin Tip Steak",
-                                  "cos":  0.6912,
-                                  "score":  0.928476,
+                                  "cos":  0.6968,
+                                  "score":  0.931843,
                                   "why":  "no rule matches it, but it reads as an instance of this commodity",
                                   "verdict":  "EXCLUDED",
                                   "detail":  "include \u0027(?:beef\\s+)?sirloin\u0027 matched, exclude \u0027\\bsirloin\\s+tip\\b\u0027 killed it"

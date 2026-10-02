@@ -1,8 +1,8 @@
 {
     "note":  "Band-refused rows no basis error explains that are NOT in band-refusals-backlog.json, with first_seen per key id|store|name. Written by every plain run of audit-band-refusals.ps1; read by resolve-match-worklist as kind band. A key pages once, on the first run it is open and not shadowed by a cheaper-or-equal standing cell at its own store (paged_on; shadowed_by names that cell\u0027s price); a match-verdicts.json verdict (band|key) removes it.",
     "from":  "flagged-2026-09-30.json",
-    "written":  "2026-10-01",
-    "count":  164,
+    "written":  "2026-10-02",
+    "count":  172,
     "rows":  [
                  {
                      "key":  "air-freshener|Baker\u0027s|Citrus Magic Orange Blast Odor Eliminating Natural Air Freshener Non-Aerosol Spray",
@@ -93,12 +93,23 @@
                      "shadowed_by":  1.99
                  },
                  {
+                     "key":  "apples|Sam\u0027s Club|Member\u0027s Mark Dried Apple Rings, 22 oz.",
+                     "first_seen":  "2026-10-02",
+                     "id":  "apples",
+                     "store":  "Sam\u0027s Club",
+                     "name":  "Member\u0027s Mark Dried Apple Rings, 22 oz.",
+                     "unit_price":  6.5309,
+                     "band_ref":  1,
+                     "paged_on":  "",
+                     "shadowed_by":  1.29
+                 },
+                 {
                      "key":  "apples|Walmart|Crunch Pak Fresh Organic Peeled Sliced Apples, Family Sized 12oz Featuring Bluey",
                      "first_seen":  "2026-10-01",
                      "id":  "apples",
                      "store":  "Walmart",
                      "name":  "Crunch Pak Fresh Organic Peeled Sliced Apples, Family Sized 12oz Featuring Bluey",
-                     "unit_price":  5.2933,
+                     "unit_price":  5.16,
                      "band_ref":  1,
                      "paged_on":  "",
                      "shadowed_by":  1
@@ -109,7 +120,7 @@
                      "id":  "apples",
                      "store":  "Walmart",
                      "name":  "Crunch Pak Fresh Organic Peeled Sliced Apples, Family Sized 12oz Featuring Bluey",
-                     "unit_price":  5.16,
+                     "unit_price":  5.2933,
                      "band_ref":  1,
                      "paged_on":  "",
                      "shadowed_by":  1
@@ -192,6 +203,17 @@
                      "shadowed_by":  null
                  },
                  {
+                     "key":  "canned-green-beans|Walmart|Del Monte® No Soy Teriyaki Whole Green Beans, 14.5 oz. Can",
+                     "first_seen":  "2026-10-02",
+                     "id":  "canned-green-beans",
+                     "store":  "Walmart",
+                     "name":  "Del Monte® No Soy Teriyaki Whole Green Beans, 14.5 oz. Can",
+                     "unit_price":  0.2903,
+                     "band_ref":  0.05485,
+                     "paged_on":  "",
+                     "shadowed_by":  0.0529
+                 },
+                 {
                      "key":  "cat-food|Hy-Vee|Sheba cat food, 2.6 or 2.64 oz., 10/ $10.00",
                      "first_seen":  "2026-09-28",
                      "id":  "cat-food",
@@ -214,6 +236,17 @@
                      "shadowed_by":  0.6584
                  },
                  {
+                     "key":  "chicken-breast|Walmart|Hillshire Reserve Mesquite Smoked Chicken Breast, All Natural* Lunch Meat, 7 oz Packet",
+                     "first_seen":  "2026-10-02",
+                     "id":  "chicken-breast",
+                     "store":  "Walmart",
+                     "name":  "Hillshire Reserve Mesquite Smoked Chicken Breast, All Natural* Lunch Meat, 7 oz Packet",
+                     "unit_price":  13.6229,
+                     "band_ref":  2.61,
+                     "paged_on":  "",
+                     "shadowed_by":  2.5684
+                 },
+                 {
                      "key":  "chocolate-milk|Walmart|Horizon Organic Shelf Stable Lactose Free No Added Sugar 1% Lowfat Chocolate Milk Boxes, 8 fl oz, 12 Count",
                      "first_seen":  "2026-10-01",
                      "id":  "chocolate-milk",
@@ -233,6 +266,28 @@
                      "unit_price":  0.8681,
                      "band_ref":  0.1561,
                      "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1408
+                 },
+                 {
+                     "key":  "cookies|Baker\u0027s|Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                     "first_seen":  "2026-10-02",
+                     "id":  "cookies",
+                     "store":  "Baker\u0027s",
+                     "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                     "unit_price":  1.0891,
+                     "band_ref":  0.1561,
+                     "paged_on":  "",
+                     "shadowed_by":  0.1408
+                 },
+                 {
+                     "key":  "cookies|Baker\u0027s|Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                     "first_seen":  "2026-10-02",
+                     "id":  "cookies",
+                     "store":  "Baker\u0027s",
+                     "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                     "unit_price":  0.9982,
+                     "band_ref":  0.1561,
+                     "paged_on":  "",
                      "shadowed_by":  0.1408
                  },
                  {
@@ -266,6 +321,17 @@
                      "unit_price":  0.8212,
                      "band_ref":  0.1178,
                      "paged_on":  "2026-09-26",
+                     "shadowed_by":  0.1156
+                 },
+                 {
+                     "key":  "crackers|Aldi|Specially Selected Seeded Crackers 5.5 OZ",
+                     "first_seen":  "2026-10-02",
+                     "id":  "crackers",
+                     "store":  "Aldi",
+                     "name":  "Specially Selected Seeded Crackers 5.5 OZ",
+                     "unit_price":  0.7255,
+                     "band_ref":  0.1178,
+                     "paged_on":  "",
                      "shadowed_by":  0.1156
                  },
                  {
@@ -511,6 +577,17 @@
                      "shadowed_by":  null
                  },
                  {
+                     "key":  "frozen-burritos|Walmart|Realgood Foods Co. 3 Cheese Burritos, 3 Count, 15 oz (Refrigerated)",
+                     "first_seen":  "2026-10-02",
+                     "id":  "frozen-burritos",
+                     "store":  "Walmart",
+                     "name":  "Realgood Foods Co. 3 Cheese Burritos, 3 Count, 15 oz (Refrigerated)",
+                     "unit_price":  2.9933,
+                     "band_ref":  0.55095,
+                     "paged_on":  "",
+                     "shadowed_by":  0.4775
+                 },
+                 {
                      "key":  "frozen-fruit|Baker\u0027s|Tru Fru Fresh Frozen Blueberries in Dark \u0026 White Chocolate",
                      "first_seen":  "2026-09-28",
                      "id":  "frozen-fruit",
@@ -670,7 +747,7 @@
                      "id":  "hot-sauce",
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "unit_price":  1.095,
+                     "unit_price":  0.898,
                      "band_ref":  0.1375,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
@@ -681,7 +758,7 @@
                      "id":  "hot-sauce",
                      "store":  "Baker\u0027s",
                      "name":  "TABASCO Original Red Pepper Sauce, Hot Sauce",
-                     "unit_price":  0.898,
+                     "unit_price":  1.095,
                      "band_ref":  0.1375,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  0.1085
@@ -1055,7 +1132,7 @@
                      "id":  "raisins",
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
-                     "unit_price":  0.0346,
+                     "unit_price":  0.0415,
                      "band_ref":  0.22395,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  null
@@ -1066,7 +1143,7 @@
                      "id":  "raisins",
                      "store":  "Fareway",
                      "name":  "Sun-Maid California Sun-Dried Raisins",
-                     "unit_price":  0.0415,
+                     "unit_price":  0.0346,
                      "band_ref":  0.22395,
                      "paged_on":  "2026-09-26",
                      "shadowed_by":  null
@@ -1168,6 +1245,17 @@
                      "unit_price":  6.9565,
                      "band_ref":  0.847,
                      "paged_on":  "2026-09-28",
+                     "shadowed_by":  0.938
+                 },
+                 {
+                     "key":  "rice|Hy-Vee|Tasty Bite Organic Coconut Rice 8.8 oz",
+                     "first_seen":  "2026-10-02",
+                     "id":  "rice",
+                     "store":  "Hy-Vee",
+                     "name":  "Tasty Bite Organic Coconut Rice 8.8 oz",
+                     "unit_price":  9.9818,
+                     "band_ref":  0.847,
+                     "paged_on":  "",
                      "shadowed_by":  0.938
                  },
                  {

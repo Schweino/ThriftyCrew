@@ -5,24 +5,24 @@
     "W":  1.5,
     "pinned_typed_bands":  false,
     "evidence_rows":  4729,
-    "derived_commodities":  107,
+    "derived_commodities":  108,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  1367
+                                "newly_refused_rows":  1372
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  938
+                                "newly_refused_rows":  944
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  658
+                                "newly_refused_rows":  662
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  510
+                                "newly_refused_rows":  512
                             }
                 },
     "typed_fields_ignored":  [
@@ -42,11 +42,6 @@
                              {
                                  "id":  "garlic-herb-cheese-spread",
                                  "rows":  1,
-                                 "override":  null
-                             },
-                             {
-                                 "id":  "milk",
-                                 "rows":  2,
                                  "override":  null
                              },
                              {
@@ -204,12 +199,20 @@
                               "derived":  "0.099-2.475"
                           },
                           {
-                              "id":  "canned-sweet-corn",
+                              "id":  "butter",
                               "store":  "Sam\u0027s Club",
-                              "name":  "Del Monte Whole Kernel Corn, 106 oz.",
-                              "per_unit":  6.28,
+                              "name":  "Member\u0027s Mark Garlic Butter With Parmesan Cheese \u0026 Basil,10 oz.",
+                              "per_unit":  0.644,
                               "typed":  "none",
-                              "derived":  "0.16-4"
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Patagonian Delight Argentine Sea Scallops and Red Argentine Shrimp with Garlic Parmesan Butter, priced per pound",
+                              "per_unit":  0.6025,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
                           },
                           {
                               "id":  "apple",
@@ -218,6 +221,22 @@
                               "per_unit":  5.29,
                               "typed":  "none",
                               "derived":  "0.1639-4.0975"
+                          },
+                          {
+                              "id":  "butter",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Butter Garlic Grilling Blend 5.5 OZ",
+                              "per_unit":  0.5982,
+                              "typed":  "none",
+                              "derived":  "0.01858-0.4645"
+                          },
+                          {
+                              "id":  "brown-sugar",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
+                              "per_unit":  0.3269,
+                              "typed":  "none",
+                              "derived":  "0.01238-0.3095"
                           },
                           {
                               "id":  "honey",
@@ -238,14 +257,6 @@
                           {
                               "id":  "butter",
                               "store":  "Aldi",
-                              "name":  "Stonemill Butter Garlic Grilling Blend 5.5 OZ",
-                              "per_unit":  0.5982,
-                              "typed":  "none",
-                              "derived":  "0.01858-0.4645"
-                          },
-                          {
-                              "id":  "butter",
-                              "store":  "Aldi",
                               "name":  "Fremont Fish Market Salted Butter Garlic Toss N Serve Shrimp 12 OZ",
                               "per_unit":  0.5825,
                               "typed":  "none",
@@ -258,14 +269,6 @@
                               "per_unit":  6.8571,
                               "typed":  "none",
                               "derived":  "0.099-2.475"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
-                              "per_unit":  0.3269,
-                              "typed":  "none",
-                              "derived":  "0.01238-0.3095"
                           },
                           {
                               "id":  "carrots",
@@ -332,14 +335,6 @@
                               "derived":  "0.01858-0.4645"
                           },
                           {
-                              "id":  "peanut-butter",
-                              "store":  "Aldi",
-                              "name":  "Kind Protein Bars Breakfast Peanut Butter Banana Dark Chocolate 2 EA",
-                              "per_unit":  2.8125,
-                              "typed":  "none",
-                              "derived":  "0.02128-0.532"
-                          },
-                          {
                               "id":  "honey",
                               "store":  "Aldi",
                               "name":  "Specially Selected Manuka Honey 8.8 OZ",
@@ -386,6 +381,14 @@
                               "per_unit":  4.99,
                               "typed":  "none",
                               "derived":  "0.1639-4.0975"
+                          },
+                          {
+                              "id":  "potato",
+                              "store":  "Aldi",
+                              "name":  "Organic Yellow Potato Bag 24 OZ",
+                              "per_unit":  2.66,
+                              "typed":  "none",
+                              "derived":  "0.099-2.475"
                           },
                           {
                               "id":  "honey",
@@ -1206,6 +1209,14 @@
                           {
                               "id":  "carrots",
                               "store":  "Family Fare",
+                              "name":  "Beneful Freshly Prepared Meals Simmered Chicken Medley With Carrots Green Beans \u0026 Wild Rice Dog Food 10 Oz",
+                              "per_unit":  5.104,
+                              "typed":  "none",
+                              "derived":  "0.199-4.975"
+                          },
+                          {
+                              "id":  "carrots",
+                              "store":  "Family Fare",
                               "name":  "Fancy Feast Purina Fancy Feast Medleys White Meat Chicken Primavera With Tomatoes, Carrots And Spinach In A Silky Broth 3 Oz",
                               "per_unit":  6.88,
                               "typed":  "none",
@@ -1359,14 +1370,6 @@
                               "id":  "carrots",
                               "store":  "Family Fare",
                               "name":  "Beneful Freshly Prepared Meals Roasted Chicken Recipe With Brown Rice Carrots \u0026 Spinach Dog Food 10 Oz",
-                              "per_unit":  5.424,
-                              "typed":  "none",
-                              "derived":  "0.199-4.975"
-                          },
-                          {
-                              "id":  "carrots",
-                              "store":  "Family Fare",
-                              "name":  "Beneful Freshly Prepared Meals Simmered Chicken Medley With Carrots Green Beans \u0026 Wild Rice Dog Food 10 Oz",
                               "per_unit":  5.424,
                               "typed":  "none",
                               "derived":  "0.199-4.975"
@@ -1862,16 +1865,40 @@
                           {
                               "id":  "honey",
                               "store":  "Walmart",
-                              "name":  "Busy Bee Raw Honey, 100% Traceable USA Honey, Convenient To Go Packets (40 Packets Total)",
-                              "per_unit":  0.833,
+                              "name":  "Jack Daniels Tennessee Honey Boneless Pork Ribs, Refrigerated Entree, 16 oz",
+                              "per_unit":  0.6606,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
                           },
                           {
+                              "id":  "ginger",
+                              "store":  "Walmart",
+                              "name":  "Lee Kum Kee Minced Ginger, 7.5 oz, Pack of 12",
+                              "per_unit":  157.12,
+                              "typed":  "none",
+                              "derived":  "0.798-19.95"
+                          },
+                          {
+                              "id":  "green-beans",
+                              "store":  "Walmart",
+                              "name":  "Del Monte® No Soy Teriyaki Whole Green Beans, 14.5 oz. Can",
+                              "per_unit":  0.2903,
+                              "typed":  "none",
+                              "derived":  "0.01097-0.27425"
+                          },
+                          {
+                              "id":  "green-beans",
+                              "store":  "Walmart",
+                              "name":  "Green Giant Kitchen Sliced Green Beans, Shelf Stable, 4 Pack, 14.5 oz",
+                              "per_unit":  0.3447,
+                              "typed":  "none",
+                              "derived":  "0.01097-0.27425"
+                          },
+                          {
                               "id":  "honey",
                               "store":  "Walmart",
-                              "name":  "Jack Daniels Tennessee Honey Boneless Pork Ribs, Refrigerated Entree, 16 oz",
-                              "per_unit":  0.6606,
+                              "name":  "Busy Bee Raw Honey, 100% Traceable USA Honey, Convenient To Go Packets (40 Packets Total)",
+                              "per_unit":  0.833,
                               "typed":  "none",
                               "derived":  "0.02091-0.52275"
                           },

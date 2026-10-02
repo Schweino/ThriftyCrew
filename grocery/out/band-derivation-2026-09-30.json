@@ -4,25 +4,25 @@
     "K":  5,
     "W":  1.5,
     "pinned_typed_bands":  false,
-    "evidence_rows":  38581,
+    "evidence_rows":  38607,
     "derived_commodities":  562,
     "typed_commodities":  0,
     "k_sweep":  {
                     "K=3":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  7904
+                                "newly_refused_rows":  7920
                             },
                     "K=4":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  4986
+                                "newly_refused_rows":  4995
                             },
                     "K=5":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  3403
+                                "newly_refused_rows":  3415
                             },
                     "K=6":  {
                                 "newly_admitted_rows":  0,
-                                "newly_refused_rows":  2460
+                                "newly_refused_rows":  2471
                             }
                 },
     "typed_fields_ignored":  [
@@ -667,6 +667,38 @@
                               "derived":  "0.02057-0.51425"
                           },
                           {
+                              "id":  "apples",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Member\u0027s Mark Dried Apple Rings, 22 oz.",
+                              "per_unit":  6.5309,
+                              "typed":  "none",
+                              "derived":  "0.2-5"
+                          },
+                          {
+                              "id":  "fruit-snacks",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Honey Stinger Organic Energy Chew, Citrus Splash, Caffeine Free Healthy Fruit Snack, 1.8 oz., 12 pk.",
+                              "per_unit":  1.9983,
+                              "typed":  "none",
+                              "derived":  "0.04552-1.138"
+                          },
+                          {
+                              "id":  "all-purpose-cleaner",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
+                              "per_unit":  1.2907,
+                              "typed":  "none",
+                              "derived":  "0.01744-0.436"
+                          },
+                          {
+                              "id":  "sugar",
+                              "store":  "Sam\u0027s Club",
+                              "name":  "Fresh Sugar Face Polish, 4.4 oz.",
+                              "per_unit":  176.2909,
+                              "typed":  "none",
+                              "derived":  "0.15021-3.75525"
+                          },
+                          {
                               "id":  "pasta-sauce",
                               "store":  "Sam\u0027s Club",
                               "name":  "Member\u0027s Mark Calzones with Marinara Sauce, 4 ct., priced per pound",
@@ -705,14 +737,6 @@
                               "per_unit":  0.0028,
                               "typed":  "none",
                               "derived":  "0.04461-1.11525"
-                          },
-                          {
-                              "id":  "all-purpose-cleaner",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Pledge® Multisurface Cleaner, Everyday Clean™, Aerosol, Rainshower Scent, 9.7 oz, Pack of 3",
-                              "per_unit":  1.2907,
-                              "typed":  "none",
-                              "derived":  "0.01744-0.436"
                           },
                           {
                               "id":  "bread",
@@ -801,14 +825,6 @@
                               "per_unit":  0.0082,
                               "typed":  "none",
                               "derived":  "0.18266-4.5665"
-                          },
-                          {
-                              "id":  "sugar",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Fresh Sugar Face Polish, 4.4 oz.",
-                              "per_unit":  176.2909,
-                              "typed":  "none",
-                              "derived":  "0.15021-3.75525"
                           },
                           {
                               "id":  "oatmeal",
@@ -1185,14 +1201,6 @@
                               "per_unit":  0.31,
                               "typed":  "none",
                               "derived":  "0.01216-0.304"
-                          },
-                          {
-                              "id":  "honey",
-                              "store":  "Sam\u0027s Club",
-                              "name":  "Nate\u0027s Honey New Zealand Manuka Honey, 13.2 oz.",
-                              "per_unit":  1.2864,
-                              "typed":  "none",
-                              "derived":  "0.04984-1.246"
                           },
                           {
                               "id":  "honey",
@@ -1944,7 +1952,7 @@
                               "name":  "Three Bridges Egg and Sausage Breakfast Burrito, 8 oz., 4 ct.",
                               "per_unit":  3.6425,
                               "typed":  "none",
-                              "derived":  "0.12544-3.136"
+                              "derived":  "0.11019-2.75475"
                           },
                           {
                               "id":  "marshmallows",
@@ -2163,68 +2171,20 @@
                               "derived":  "0.16705-4.17625"
                           },
                           {
+                              "id":  "bananas",
+                              "store":  "Aldi",
+                              "name":  "Chocolate Peanutbutter Banana",
+                              "per_unit":  7.517,
+                              "typed":  "none",
+                              "derived":  "0.1-2.5"
+                          },
+                          {
                               "id":  "flour",
                               "store":  "Aldi",
                               "name":  "Carlini Baking Non Stick Spray With Flour 5 OZ",
                               "per_unit":  7.968,
                               "typed":  "none",
                               "derived":  "0.0955-2.3875"
-                          },
-                          {
-                              "id":  "crackers",
-                              "store":  "Aldi",
-                              "name":  "Specially Selected Mini Brioche Toast Cracker Original 2.82 OZ",
-                              "per_unit":  0.5993,
-                              "typed":  "none",
-                              "derived":  "0.02356-0.589"
-                          },
-                          {
-                              "id":  "fruit-cocktail",
-                              "store":  "Aldi",
-                              "name":  "Southern Grove Pineapple OR Mixed Fruit CH Fruit Chips 1.41 OZ",
-                              "per_unit":  2.8298,
-                              "typed":  "none",
-                              "derived":  "0.0194-0.485"
-                          },
-                          {
-                              "id":  "salt",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Salt Pepper Garlic Grilling Blend 6 OZ",
-                              "per_unit":  0.5483,
-                              "typed":  "none",
-                              "derived":  "0.00766-0.1915"
-                          },
-                          {
-                              "id":  "brown-sugar",
-                              "store":  "Aldi",
-                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
-                              "per_unit":  5.2299,
-                              "typed":  "none",
-                              "derived":  "0.198-4.95"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Aldi",
-                              "name":  "Head Shoulders Classic Clean Daily Shampoo 12.5 FL OZ",
-                              "per_unit":  0.5576,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Aldi",
-                              "name":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
-                              "per_unit":  0.4775,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
-                          },
-                          {
-                              "id":  "shampoo",
-                              "store":  "Aldi",
-                              "name":  "Head Shoulders 2 IN 1 Tea Tree Oil Hair Shampoo 12.5 FL OZ",
-                              "per_unit":  0.5576,
-                              "typed":  "none",
-                              "derived":  "0.01882-0.4705"
                           },
                           {
                               "id":  "crackers",
@@ -2253,6 +2213,14 @@
                           {
                               "id":  "crackers",
                               "store":  "Aldi",
+                              "name":  "Simply Nature Sea Salt Cauliflower Crackers 4 OZ",
+                              "per_unit":  0.7225,
+                              "typed":  "none",
+                              "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "crackers",
+                              "store":  "Aldi",
                               "name":  "Savoritz Almond Flour Cracker Sea Salt 4.25 OZ",
                               "per_unit":  0.8212,
                               "typed":  "none",
@@ -2261,10 +2229,66 @@
                           {
                               "id":  "crackers",
                               "store":  "Aldi",
-                              "name":  "Simply Nature Sea Salt Cauliflower Crackers 4 OZ",
-                              "per_unit":  0.7225,
+                              "name":  "Specially Selected Mini Brioche Toast Cracker Original 2.82 OZ",
+                              "per_unit":  0.5993,
                               "typed":  "none",
                               "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "crackers",
+                              "store":  "Aldi",
+                              "name":  "Specially Selected Seeded Crackers 5.5 OZ",
+                              "per_unit":  0.7255,
+                              "typed":  "none",
+                              "derived":  "0.02356-0.589"
+                          },
+                          {
+                              "id":  "brown-sugar",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Smoky Brown Sugar Rub 6.7 OZ",
+                              "per_unit":  5.2299,
+                              "typed":  "none",
+                              "derived":  "0.198-4.95"
+                          },
+                          {
+                              "id":  "salt",
+                              "store":  "Aldi",
+                              "name":  "Stonemill Salt Pepper Garlic Grilling Blend 6 OZ",
+                              "per_unit":  0.5483,
+                              "typed":  "none",
+                              "derived":  "0.00766-0.1915"
+                          },
+                          {
+                              "id":  "fruit-cocktail",
+                              "store":  "Aldi",
+                              "name":  "Southern Grove Pineapple OR Mixed Fruit CH Fruit Chips 1.41 OZ",
+                              "per_unit":  2.8298,
+                              "typed":  "none",
+                              "derived":  "0.0194-0.485"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Aldi",
+                              "name":  "Head Shoulders Classic Clean Daily Shampoo 12.5 FL OZ",
+                              "per_unit":  0.5576,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Aldi",
+                              "name":  "Pantene Classic Clean 2 N 1 IN Shampoo Conditioner 12 FL OZ",
+                              "per_unit":  0.4775,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
+                          },
+                          {
+                              "id":  "shampoo",
+                              "store":  "Aldi",
+                              "name":  "Head Shoulders 2 IN 1 Tea Tree Oil Hair Shampoo 12.5 FL OZ",
+                              "per_unit":  0.5576,
+                              "typed":  "none",
+                              "derived":  "0.01882-0.4705"
                           },
                           {
                               "id":  "toilet-paper",
@@ -2987,6 +3011,30 @@
                               "derived":  "0.01882-0.4705"
                           },
                           {
+                              "id":  "tomatoes",
+                              "store":  "Baker\u0027s",
+                              "name":  "Simple Truth Organic Tomato Medley Snacking Tomatoes",
+                              "per_unit":  6.384,
+                              "typed":  "none",
+                              "derived":  "0.25014-6.2535"
+                          },
+                          {
+                              "id":  "canned-corn",
+                              "store":  "Baker\u0027s",
+                              "name":  "Del Monte Summer Crisp Whole Kernel Corn Golden Sweet Corn",
+                              "per_unit":  0.2718,
+                              "typed":  "none",
+                              "derived":  "0.01049-0.26225"
+                          },
+                          {
+                              "id":  "canned-corn",
+                              "store":  "Baker\u0027s",
+                              "name":  "Del Monte Summer Crisp No Salt Added Whole Kernel Golden Sweet Corn",
+                              "per_unit":  0.2718,
+                              "typed":  "none",
+                              "derived":  "0.01049-0.26225"
+                          },
+                          {
                               "id":  "air-freshener",
                               "store":  "Baker\u0027s",
                               "name":  "Citrus Magic Orange Blast Odor Eliminating Natural Air Freshener Non-Aerosol Spray",
@@ -3153,6 +3201,22 @@
                               "per_unit":  0.998,
                               "typed":  "none",
                               "derived":  "0.0275-0.6875"
+                          },
+                          {
+                              "id":  "cookies",
+                              "store":  "Baker\u0027s",
+                              "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                              "per_unit":  0.9982,
+                              "typed":  "none",
+                              "derived":  "0.03122-0.7805"
+                          },
+                          {
+                              "id":  "cookies",
+                              "store":  "Baker\u0027s",
+                              "name":  "Simple Mills Crunchy Chocolate Chip Almond Flour Cookies",
+                              "per_unit":  1.0891,
+                              "typed":  "none",
+                              "derived":  "0.03122-0.7805"
                           },
                           {
                               "id":  "cookies",
@@ -3579,22 +3643,6 @@
                               "derived":  "0.00592-0.148"
                           },
                           {
-                              "id":  "canned-corn",
-                              "store":  "Baker\u0027s",
-                              "name":  "Del Monte Summer Crisp Whole Kernel Corn Golden Sweet Corn",
-                              "per_unit":  0.2718,
-                              "typed":  "none",
-                              "derived":  "0.01049-0.26225"
-                          },
-                          {
-                              "id":  "canned-corn",
-                              "store":  "Baker\u0027s",
-                              "name":  "Del Monte Summer Crisp No Salt Added Whole Kernel Golden Sweet Corn",
-                              "per_unit":  0.2718,
-                              "typed":  "none",
-                              "derived":  "0.01049-0.26225"
-                          },
-                          {
                               "id":  "tortilla-chips",
                               "store":  "Baker\u0027s",
                               "name":  "Siete Sea Salt Tortilla Chips",
@@ -3833,14 +3881,6 @@
                               "per_unit":  0.4738,
                               "typed":  "none",
                               "derived":  "0.00244-0.061"
-                          },
-                          {
-                              "id":  "tomatoes",
-                              "store":  "Baker\u0027s",
-                              "name":  "Simple Truth Organic Tomato Medley Snacking Tomatoes",
-                              "per_unit":  6.384,
-                              "typed":  "none",
-                              "derived":  "0.25014-6.2535"
                           },
                           {
                               "id":  "dried-oregano",
@@ -4144,7 +4184,7 @@
                               "name":  "Primal Kitchen Caesar Dressing \u0026 Marinade Made with Avocado Oil",
                               "per_unit":  0.8738,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "deodorant",
@@ -6091,6 +6131,14 @@
                               "derived":  "0.02356-0.589"
                           },
                           {
+                              "id":  "dog-food",
+                              "store":  "Family Fare",
+                              "name":  "Beneful Freshly Prepared Meals Simmered Chicken Medley With Carrots Green Beans \u0026 Wild Rice Dog Food 10 Oz",
+                              "per_unit":  5.104,
+                              "typed":  "none",
+                              "derived":  "0.15836-3.959"
+                          },
+                          {
                               "id":  "toothpaste",
                               "store":  "Family Fare",
                               "name":  "Sensodyne Fresh Mint Toothpaste 4 Oz",
@@ -7361,14 +7409,6 @@
                               "per_unit":  0.57,
                               "typed":  "none",
                               "derived":  "0.01291-0.32275"
-                          },
-                          {
-                              "id":  "dog-food",
-                              "store":  "Family Fare",
-                              "name":  "Beneful Freshly Prepared Meals Simmered Chicken Medley With Carrots Green Beans \u0026 Wild Rice Dog Food 10 Oz",
-                              "per_unit":  5.424,
-                              "typed":  "none",
-                              "derived":  "0.15836-3.959"
                           },
                           {
                               "id":  "dog-food",
@@ -9176,7 +9216,7 @@
                               "name":  "Chosen Foods Steakhouse Caesar Dressing and Marinade",
                               "per_unit":  0.8738,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "ranch-dressing",
@@ -9366,7 +9406,7 @@
                               "id":  "rice",
                               "store":  "Hy-Vee",
                               "name":  "Tasty Bite Organic Coconut Rice 8.8 oz",
-                              "per_unit":  9.0727,
+                              "per_unit":  9.9818,
                               "typed":  "none",
                               "derived":  "0.1694-4.235"
                           },
@@ -9417,6 +9457,110 @@
                               "per_unit":  0.1628,
                               "typed":  "none",
                               "derived":  "0.314-7.85"
+                          },
+                          {
+                              "id":  "french-bread",
+                              "store":  "Walmart",
+                              "name":  "Schar Gluten Free Full Baguette French Bread Loaf, Regular, Shelf-Stable, 12.3 oz (2 Count)",
+                              "per_unit":  11.76,
+                              "typed":  "none",
+                              "derived":  "0.398-9.95"
+                          },
+                          {
+                              "id":  "chicken-breast",
+                              "store":  "Walmart",
+                              "name":  "Hillshire Reserve Mesquite Smoked Chicken Breast, All Natural* Lunch Meat, 7 oz Packet",
+                              "per_unit":  13.6229,
+                              "typed":  "none",
+                              "derived":  "0.522-13.05"
+                          },
+                          {
+                              "id":  "horseradish",
+                              "store":  "Walmart",
+                              "name":  "HENGSTENBERG, HORSERADISH, 5.25 OZ, (Pack of 12)",
+                              "per_unit":  16.4699,
+                              "typed":  "none",
+                              "derived":  "0.09976-2.494"
+                          },
+                          {
+                              "id":  "cajun-seasoning",
+                              "store":  "Walmart",
+                              "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose for Cooking and Grilling - Small 2.8 oz Bottle",
+                              "per_unit":  2.1286,
+                              "typed":  "none",
+                              "derived":  "0.07476-1.869"
+                          },
+                          {
+                              "id":  "jalapenos",
+                              "store":  "Walmart",
+                              "name":  "McCormick Crushed Jalapeno Pepper, 1.37 oz Bottle",
+                              "per_unit":  38.3066,
+                              "typed":  "none",
+                              "derived":  "0.398-9.95"
+                          },
+                          {
+                              "id":  "jalapenos",
+                              "store":  "Walmart",
+                              "name":  "Badia Ground Jalapeno Pepper, 2 oz Bottle",
+                              "per_unit":  68,
+                              "typed":  "none",
+                              "derived":  "0.398-9.95"
+                          },
+                          {
+                              "id":  "flour",
+                              "store":  "Walmart",
+                              "name":  "White Lily All Purpose Flour, 5 lb Bag",
+                              "per_unit":  2.99,
+                              "typed":  "none",
+                              "derived":  "0.0955-2.3875"
+                          },
+                          {
+                              "id":  "bread",
+                              "store":  "Walmart",
+                              "name":  "King Arthur Baking Company Non-GMO Project Verified Unbleached Bread Flour, 10 lb Bag",
+                              "per_unit":  11.98,
+                              "typed":  "none",
+                              "derived":  "0.314-7.85"
+                          },
+                          {
+                              "id":  "flour",
+                              "store":  "Walmart",
+                              "name":  "Gold Medal Wondra Quick Mixing All Purpose Flour, 13.5 oz",
+                              "per_unit":  5.0133,
+                              "typed":  "none",
+                              "derived":  "0.0955-2.3875"
+                          },
+                          {
+                              "id":  "flour",
+                              "store":  "Walmart",
+                              "name":  "Martha White All Purpose Flour, 2 lb Bag",
+                              "per_unit":  7.275,
+                              "typed":  "none",
+                              "derived":  "0.0955-2.3875"
+                          },
+                          {
+                              "id":  "dried-dill",
+                              "store":  "Walmart",
+                              "name":  "McCormick Kosher Dill Weed, 0.3 oz Bottle",
+                              "per_unit":  29.6667,
+                              "typed":  "none",
+                              "derived":  "0.79734-19.9335"
+                          },
+                          {
+                              "id":  "canned-green-beans",
+                              "store":  "Walmart",
+                              "name":  "Del Monte® No Soy Teriyaki Whole Green Beans, 14.5 oz. Can",
+                              "per_unit":  0.2903,
+                              "typed":  "none",
+                              "derived":  "0.01097-0.27425"
+                          },
+                          {
+                              "id":  "canned-green-beans",
+                              "store":  "Walmart",
+                              "name":  "Green Giant Kitchen Sliced Green Beans, Shelf Stable, 4 Pack, 14.5 oz",
+                              "per_unit":  0.3447,
+                              "typed":  "none",
+                              "derived":  "0.01097-0.27425"
                           },
                           {
                               "id":  "french-bread",
@@ -9573,34 +9717,10 @@
                           {
                               "id":  "jalapenos",
                               "store":  "Walmart",
-                              "name":  "McCormick Crushed Jalapeno Pepper, 1.37 oz Bottle",
-                              "per_unit":  38.3066,
-                              "typed":  "none",
-                              "derived":  "0.398-9.95"
-                          },
-                          {
-                              "id":  "jalapenos",
-                              "store":  "Walmart",
                               "name":  "(4 pack) McCormick Crushed Jalapeno Pepper, 1.37 oz Bottle",
                               "per_unit":  38.3066,
                               "typed":  "none",
                               "derived":  "0.398-9.95"
-                          },
-                          {
-                              "id":  "cajun-seasoning",
-                              "store":  "Walmart",
-                              "name":  "Dan-O\u0027s Cajun Seasoning - All-Purpose for Cooking and Grilling - Small 2.8 oz Bottle",
-                              "per_unit":  2.1286,
-                              "typed":  "none",
-                              "derived":  "0.07476-1.869"
-                          },
-                          {
-                              "id":  "horseradish",
-                              "store":  "Walmart",
-                              "name":  "HENGSTENBERG, HORSERADISH, 5.25 OZ, (Pack of 12)",
-                              "per_unit":  16.4699,
-                              "typed":  "none",
-                              "derived":  "0.09976-2.494"
                           },
                           {
                               "id":  "horseradish-sauce",
@@ -9768,7 +9888,7 @@
                               "name":  "Eggylicious Egg White (Albumin) Powder, Dried Natural Protein Powder, Made from Fresh Eggs, Non-GMO, No Additives, Used for Baking Icing,1lbs(16oz)",
                               "per_unit":  2.1869,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "egg-whites",
@@ -9784,7 +9904,7 @@
                               "name":  "Eggylicious- PACK of 4 - Meringue Powder  Made w/ Pure Egg Whites - Gives Body \u0026 Stability to a variety of icings  Ideal for Homemade Filling/Royal Icing/Cake Decorations \u0026 More  1lb Jar",
                               "per_unit":  1.5623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "enchilada-sauce",
@@ -9809,14 +9929,6 @@
                               "per_unit":  20.6935,
                               "typed":  "none",
                               "derived":  "0.664-16.6"
-                          },
-                          {
-                              "id":  "dried-dill",
-                              "store":  "Walmart",
-                              "name":  "McCormick Kosher Dill Weed, 0.3 oz Bottle",
-                              "per_unit":  29.6667,
-                              "typed":  "none",
-                              "derived":  "0.79734-19.9335"
                           },
                           {
                               "id":  "dried-guajillo-chiles",
@@ -12507,26 +12619,10 @@
                               "derived":  "0.00244-0.061"
                           },
                           {
-                              "id":  "bread",
-                              "store":  "Walmart",
-                              "name":  "King Arthur Baking Company Non-GMO Project Verified Unbleached Bread Flour, 10 lb Bag",
-                              "per_unit":  11.98,
-                              "typed":  "none",
-                              "derived":  "0.314-7.85"
-                          },
-                          {
                               "id":  "flour",
                               "store":  "Walmart",
                               "name":  "White Lily All Purpose Flour, 5 lb Bag",
                               "per_unit":  3.198,
-                              "typed":  "none",
-                              "derived":  "0.0955-2.3875"
-                          },
-                          {
-                              "id":  "flour",
-                              "store":  "Walmart",
-                              "name":  "Gold Medal Wondra Quick Mixing All Purpose Flour, 13.5 oz",
-                              "per_unit":  5.0133,
                               "typed":  "none",
                               "derived":  "0.0955-2.3875"
                           },
@@ -12560,7 +12656,15 @@
                               "name":  "Betty Crocker Gluten Free Whipped Vanilla Frosting, 12 oz.",
                               "per_unit":  0.6542,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
+                          },
+                          {
+                              "id":  "frozen-burritos",
+                              "store":  "Walmart",
+                              "name":  "Realgood Foods Co. 3 Cheese Burritos, 3 Count, 15 oz (Refrigerated)",
+                              "per_unit":  2.9933,
+                              "typed":  "none",
+                              "derived":  "0.11019-2.75475"
                           },
                           {
                               "id":  "frozen-lasagna",
@@ -12568,7 +12672,7 @@
                               "name":  "Mountain House Lasagna w/Meat Sauce, Freeze-Dried Camping \u0026 Backpacking Food, 2 Serving",
                               "per_unit":  3.0197,
                               "typed":  "none",
-                              "derived":  "0.03108-0.777"
+                              "derived":  "0.03242-0.8105"
                           },
                           {
                               "id":  "fruit-punch",
@@ -15184,7 +15288,7 @@
                               "name":  "(6 pack) Fresh Bellies Toddler Treat, Strawberry Feels Forever, 0.75oz.",
                               "per_unit":  7.96,
                               "typed":  "none",
-                              "derived":  "0.03986-0.9965"
+                              "derived":  "0.03706-0.9265"
                           },
                           {
                               "id":  "bread",
@@ -15920,7 +16024,7 @@
                               "name":  "Ken\u0027s Steak House Simply Vinaigrette Caesar Salad Dressing 16 fl oz",
                               "per_unit":  0.8731,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "caesar-dressing",
@@ -15928,7 +16032,7 @@
                               "name":  "Caesar Cardini\u0027s Garlic Lemon Caesar Dressing",
                               "per_unit":  1.04,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "caesar-dressing",
@@ -15936,7 +16040,7 @@
                               "name":  "Wish-Bone Light Creamy Caesar Salad Dressing, 15 fl oz",
                               "per_unit":  0.8993,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "rice",
@@ -18128,7 +18232,7 @@
                               "name":  "Pillsbury Funfetti Holiday Green Vanilla Frosting, 15.6 oz Tub",
                               "per_unit":  0.641,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "evaporated-milk",
@@ -20056,7 +20160,7 @@
                               "name":  "Ken\u0027s Steak House Simply Vinaigrette Caesar Salad Dressing 16 fl oz",
                               "per_unit":  0.905,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "balsamic-vinegar",
@@ -21152,7 +21256,7 @@
                               "name":  "bettergoods Organic Dried Strawberries, 5 oz",
                               "per_unit":  1.394,
                               "typed":  "none",
-                              "derived":  "0.03986-0.9965"
+                              "derived":  "0.03706-0.9265"
                           },
                           {
                               "id":  "yogurt",
@@ -23565,14 +23669,6 @@
                           {
                               "id":  "flour",
                               "store":  "Walmart",
-                              "name":  "White Lily All Purpose Flour, 5 lb Bag",
-                              "per_unit":  2.99,
-                              "typed":  "none",
-                              "derived":  "0.0955-2.3875"
-                          },
-                          {
-                              "id":  "flour",
-                              "store":  "Walmart",
                               "name":  "White Lily All Purpose Flour, 2 lb Bag",
                               "per_unit":  6.975,
                               "typed":  "none",
@@ -24696,7 +24792,7 @@
                               "name":  "Annie\u0027s Organic Fruit Tape, Swirly Strawberry and Bendy Berry Flavors, 12 Rolls, 9 oz",
                               "per_unit":  1.0644,
                               "typed":  "none",
-                              "derived":  "0.03986-0.9965"
+                              "derived":  "0.03706-0.9265"
                           },
                           {
                               "id":  "vegetable-soup",
@@ -25096,7 +25192,7 @@
                               "name":  "Chosen Foods Steakhouse Caesar Dressing and Marinade made with 100% Pure Avocado Oil 8 fl Oz",
                               "per_unit":  1.2488,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "caesar-dressing",
@@ -25104,7 +25200,7 @@
                               "name":  "Primal Kitchen Caesar Dressing, 16 oz",
                               "per_unit":  0.8744,
                               "typed":  "none",
-                              "derived":  "0.03481-0.87025"
+                              "derived":  "0.03439-0.85975"
                           },
                           {
                               "id":  "crackers",
@@ -25896,7 +25992,7 @@
                               "name":  "Antonina\u0027s Gluten-Free Bakery Yellow Cupcakes with Vanilla Buttercream Frosting, 4 Count, 10.5oz",
                               "per_unit":  0.6552,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -25904,7 +26000,7 @@
                               "name":  "Pillsbury Funfetti Valentine\u0027s Day Vanilla Frosting, 15.6 oz Tub",
                               "per_unit":  0.641,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -25912,7 +26008,7 @@
                               "name":  "Pillsbury Funfetti Bold Purple Vanilla Frosting, 15.6 oz Tub",
                               "per_unit":  0.8641,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -25920,7 +26016,7 @@
                               "name":  "Birch Benders Keto Vanilla Frosting, 10oz",
                               "per_unit":  1.062,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "chicken-broth",
@@ -26824,7 +26920,7 @@
                               "name":  "Great Value White Cupcake Icing, 8.4 oz",
                               "per_unit":  0.6524,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26832,7 +26928,7 @@
                               "name":  "Great Value Pink Cupcake Icing, 8.4 oz",
                               "per_unit":  0.6524,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26840,7 +26936,7 @@
                               "name":  "Great Value Red Cupcake Icing, 8.4 oz",
                               "per_unit":  0.6524,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26848,7 +26944,7 @@
                               "name":  "Great Value Green Decorating Cupcake Icing, 8.4 oz",
                               "per_unit":  0.6524,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26856,7 +26952,7 @@
                               "name":  "Great Value White Decorating Icing, 4.25 oz",
                               "per_unit":  0.6306,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26864,7 +26960,7 @@
                               "name":  "Great Value Purple Decorating Icing, 4.25 oz",
                               "per_unit":  0.623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26872,7 +26968,7 @@
                               "name":  "Great Value Yellow Decorating Icing, 4.25 oz",
                               "per_unit":  0.6306,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26880,7 +26976,7 @@
                               "name":  "Great Value Red Decorating Icing, 4.25 oz",
                               "per_unit":  0.623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26888,7 +26984,7 @@
                               "name":  "Great Value Pink Decorating Icing, 4.25 oz",
                               "per_unit":  0.6306,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26896,7 +26992,7 @@
                               "name":  "Great Value Blue Decorating Icing, 4.25 oz",
                               "per_unit":  0.623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26904,7 +27000,7 @@
                               "name":  "Great Value Green Decorating Icing, 4.25 oz",
                               "per_unit":  0.623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26912,7 +27008,7 @@
                               "name":  "Great Value Black Decorating Icing, 4.25 oz",
                               "per_unit":  0.623,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "frosting",
@@ -26920,7 +27016,7 @@
                               "name":  "Great Value Writing Icing, Classic Multicolor, 2.7 oz",
                               "per_unit":  1.4201,
                               "typed":  "none",
-                              "derived":  "0.02456-0.614"
+                              "derived":  "0.02462-0.6155"
                           },
                           {
                               "id":  "tea-bags",

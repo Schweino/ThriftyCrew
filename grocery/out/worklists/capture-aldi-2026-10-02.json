@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-10-06; next_pull 2026-10-07",
-    "cursor_start":  258,
-    "cursor_next":  266,
+    "cursor_start":  266,
+    "cursor_next":  274,
     "total_terms":  641,
     "rotation_terms":  [
-                           "floor cleaner",
-                           "all purpose flour",
-                           "french bread",
-                           "fresh basil",
-                           "fresh cranberries",
-                           "fresh dill",
-                           "ginger root",
-                           "fresh green beans"
+                           "fresh mint",
+                           "fresh oregano",
+                           "fresh parsley bunch",
+                           "fresh rosemary",
+                           "fresh sage",
+                           "fresh stir fry vegetables",
+                           "sweet Italian turkey sausage",
+                           "fresh thyme"
                        ],
     "sale_terms":  [
 
@@ -44,13 +44,14 @@
                   "frozen sweet peas",
                   "teriyaki sauce",
                   "prepared horseradish",
-                  "floor cleaner",
-                  "all purpose flour",
-                  "fresh basil",
-                  "fresh cranberries",
-                  "fresh dill",
-                  "ginger root",
-                  "fresh green beans"
+                  "fresh mint",
+                  "fresh oregano",
+                  "fresh parsley bunch",
+                  "fresh rosemary",
+                  "fresh sage",
+                  "fresh stir fry vegetables",
+                  "sweet Italian turkey sausage",
+                  "fresh thyme"
               ],
     "commodities":  [
                         "cherries",
@@ -75,13 +76,14 @@
                         "frozen-peas",
                         "teriyaki-sauce",
                         "horseradish",
-                        "floor-cleaner",
-                        "flour",
-                        "fresh-basil",
-                        "fresh-cranberries",
-                        "fresh-dill",
-                        "fresh-ginger",
-                        "fresh-green-beans"
+                        "fresh-mint",
+                        "fresh-oregano",
+                        "fresh-parsley",
+                        "fresh-rosemary",
+                        "fresh-sage",
+                        "fresh-stir-fry-blend",
+                        "fresh-sweet-italian-turkey-sausage",
+                        "fresh-thyme"
                     ],
     "ruling_terms":  [
 

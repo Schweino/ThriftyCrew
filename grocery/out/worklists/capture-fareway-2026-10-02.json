@@ -5,18 +5,18 @@
     "full_recapture":  false,
     "ad_rollover":  false,
     "ad_note":  "ad current until 2026-10-03; next_pull 2026-10-04",
-    "cursor_start":  271,
-    "cursor_next":  279,
+    "cursor_start":  279,
+    "cursor_next":  287,
     "total_terms":  641,
     "rotation_terms":  [
-                           "fresh stir fry vegetables",
-                           "sweet Italian turkey sausage",
-                           "fresh thyme",
-                           "whole nutmeg",
-                           "vanilla frosting",
-                           "frozen broccoli florets",
-                           "frozen broccoli florets",
-                           "frozen burritos"
+                           "frozen cauliflower florets",
+                           "frozen sweet corn",
+                           "frozen french fries",
+                           "frozen mixed berries",
+                           "frozen cut green beans",
+                           "frozen lasagna",
+                           "frozen lima beans",
+                           "frozen meatballs"
                        ],
     "sale_terms":  [
 
@@ -42,13 +42,14 @@
                   "italian sausage",
                   "lemonade",
                   "sirloin steak",
-                  "fresh stir fry vegetables",
-                  "sweet Italian turkey sausage",
-                  "fresh thyme",
-                  "whole nutmeg",
-                  "vanilla frosting",
-                  "frozen broccoli florets",
-                  "frozen burritos"
+                  "frozen cauliflower florets",
+                  "frozen sweet corn",
+                  "frozen french fries",
+                  "frozen mixed berries",
+                  "frozen cut green beans",
+                  "frozen lasagna",
+                  "frozen lima beans",
+                  "frozen meatballs"
               ],
     "commodities":  [
                         "ground-allspice",
@@ -71,13 +72,14 @@
                         "italian-sausage",
                         "lemonade",
                         "sirloin-steak",
-                        "fresh-stir-fry-blend",
-                        "fresh-sweet-italian-turkey-sausage",
-                        "fresh-thyme",
-                        "fresh-whole-nutmeg",
-                        "frosting",
-                        "frozen-broccoli",
-                        "frozen-burritos"
+                        "frozen-cauliflower-florets",
+                        "frozen-corn",
+                        "frozen-fries",
+                        "frozen-fruit",
+                        "frozen-green-beans",
+                        "frozen-lasagna",
+                        "frozen-lima-beans",
+                        "frozen-meatballs"
                     ],
     "ruling_terms":  [
 

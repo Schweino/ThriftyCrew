@@ -873,6 +873,15 @@
         "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027baking\u0027"
     },
     {
+        "id":  "corned-beef-brisket",
+        "store":  "Family Fare",
+        "product":  "Corned Beef Brisket, Point Cut Skylark",
+        "dept":  "meat",
+        "aisle":  "meat/beef",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027meat\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
         "id":  "corned-beef-hash",
         "store":  "Family Fare",
         "product":  "Our Family Corned Beef Hash",
@@ -1593,6 +1602,15 @@
         "reason":  "\u0027fresh_fruits_vegetables\u0027 is an allowed department for category \u0027fruit\u0027"
     },
     {
+        "id":  "horseradish-sauce",
+        "store":  "Family Fare",
+        "product":  "Silver Spring Sassy Horseradish Sauce 9.25 Oz",
+        "dept":  "pantry",
+        "aisle":  "pantry/condiments_dressing",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027condiments\u0027"
+    },
+    {
         "id":  "hot-cocoa",
         "store":  "Family Fare",
         "product":  "Milk Chocolate Hot Cocoa Mix Our Family (10 Ct)",
@@ -2241,6 +2259,15 @@
         "reason":  "\u0027health_beauty\u0027 is an allowed department for category \u0027personal\u0027"
     },
     {
+        "id":  "ready-to-serve-long-grain-wild-rice-pouch",
+        "store":  "Family Fare",
+        "product":  "Uncle Bens Ready Rice Rice, Long Grain \u0026 Wild",
+        "dept":  "pantry",
+        "aisle":  "pantry/dry_goods",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027pantry\u0027 is an allowed department for category \u0027grains\u0027"
+    },
+    {
         "id":  "red-pepper-flakes",
         "store":  "Family Fare",
         "product":  "Our Family Red Pepper, Crushed 1.5 Oz",
@@ -2329,6 +2356,15 @@
         "aisle":  "deli/ready_to_go_hot",
         "verdict":  "ALLOW",
         "reason":  "\u0027deli\u0027 is an allowed department for category \u0027meat\u0027"
+    },
+    {
+        "id":  "rye-bread",
+        "store":  "Family Fare",
+        "product":  "Beefsteak Bread, Hearty Rye, Seeded 18 Oz",
+        "dept":  "bakery",
+        "aisle":  "bakery/packaged_bread",
+        "verdict":  "ALLOW",
+        "reason":  "\u0027bakery\u0027 is an allowed department for category \u0027bakery\u0027"
     },
     {
         "id":  "sandwich-bags",

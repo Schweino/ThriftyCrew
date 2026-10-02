@@ -1,21 +1,21 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
     "week_of":  "2026-09-30",
-    "rotated_at":  "2026-10-01T08:18:33",
+    "rotated_at":  "2026-10-02T08:28:05",
     "free":  [
                  {
                      "slug":  "chicken-pot-pie-biscuit-casserole",
                      "protein":  "chicken",
                      "rank":  1,
                      "name":  "Chicken Pot Pie Casserole with Biscuits",
-                     "per_serving":  1.87
+                     "per_serving":  1.91
                  },
                  {
                      "slug":  "poppy-seed-chicken-and-rice-casserole",
                      "protein":  "chicken",
                      "rank":  2,
                      "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.96
+                     "per_serving":  1.99
                  },
                  {
                      "slug":  "free-chicken-alfredo",
@@ -32,11 +32,11 @@
                      "per_serving":  2.01
                  },
                  {
-                     "slug":  "slow-cooker-crack-chicken-bowls",
+                     "slug":  "creamy-tuscan-chicken-skillet",
                      "protein":  "chicken",
                      "rank":  5,
-                     "name":  "Slow Cooker Crack Chicken Bowls",
-                     "per_serving":  2.01
+                     "name":  "Creamy Tuscan Chicken Skillet",
+                     "per_serving":  2.02
                  },
                  {
                      "slug":  "haluski-and-kielbasa-cabbage-noodles",
@@ -57,7 +57,7 @@
                      "protein":  "turkey",
                      "rank":  3,
                      "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
-                     "per_serving":  2.12
+                     "per_serving":  2.15
                  },
                  {
                      "slug":  "turkey-alfredo-rotini-bake",
@@ -81,32 +81,32 @@
                      "per_serving":  2.07
                  },
                  {
-                     "slug":  "beef-potato-au-gratin-casserole",
-                     "protein":  "beef",
-                     "rank":  2,
-                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
-                     "per_serving":  2.15
-                 },
-                 {
                      "slug":  "low-carb-taco-cabbage-beef-skillet",
                      "protein":  "beef",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Low Carb Taco Cabbage Beef Skillet",
                      "per_serving":  2.16
+                 },
+                 {
+                     "slug":  "beef-potato-au-gratin-casserole",
+                     "protein":  "beef",
+                     "rank":  3,
+                     "name":  "Slow Cooker Beef and Potato Au Gratin Casserole",
+                     "per_serving":  2.19
                  },
                  {
                      "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  4,
                      "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.31
+                     "per_serving":  2.38
                  },
                  {
                      "slug":  "keto-cheeseburger-skillet",
                      "protein":  "beef",
                      "rank":  5,
                      "name":  "Keto Cheeseburger Casserole Skillet",
-                     "per_serving":  2.37
+                     "per_serving":  2.4
                  },
                  {
                      "slug":  "orecchiette-italian-sausage-broccoli",
@@ -123,17 +123,17 @@
                      "per_serving":  1.6
                  },
                  {
-                     "slug":  "spicy-italian-sausage-orzo",
+                     "slug":  "zuppa-toscana-sausage-potato-kale-soup",
                      "protein":  "pork",
                      "rank":  3,
-                     "name":  "Spicy Italian Sausage Orzo",
+                     "name":  "Zuppa Toscana (Sausage, Potato and Kale Soup)",
                      "per_serving":  1.73
                  },
                  {
-                     "slug":  "zuppa-toscana-sausage-potato-kale-soup",
+                     "slug":  "spicy-italian-sausage-orzo",
                      "protein":  "pork",
                      "rank":  4,
-                     "name":  "Zuppa Toscana (Sausage, Potato and Kale Soup)",
+                     "name":  "Spicy Italian Sausage Orzo",
                      "per_serving":  1.76
                  },
                  {

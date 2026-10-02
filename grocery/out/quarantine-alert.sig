@@ -1,1 +1,1 @@
-﻿bacon|Fareway|withheld
+﻿condensed-milk|Aldi|withheld
