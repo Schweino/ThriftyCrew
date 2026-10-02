@@ -204,9 +204,30 @@ function Get-MatcherRevealed($BeforeCommodities, $AfterCommodities, [string[]]$G
   }
   return ,($out.ToArray())
 }
+function Get-BlindBoardVerdict {
+  <# Pure. With no corpus to measure visibility, each KIND in the batch is judged by its own board effect, as the header
+     says each pattern is (2026-10-02): a widening (include or relax) must add a cell or make one cheaper, and an
+     exclude must REMOVE a cell, because that is the whole of what an exclude is for. Until this, the fallback asked
+     only the widening's question, so no exclude could ever pass while the sidecar was down: the fresh-cranberries
+     exclude of 2026-10-02 removed exactly the wrong cell (Baker's 1 -> 0, 0 crown changes) and was reverted for
+     "the board did not move". '' when every kind present moved the board, else why not. #>
+  param([int]$Gained, [int]$Lost, [int]$Cheaper, [int]$Widenings, [int]$Excludes)
+  $why = @()
+  if ($Widenings -gt 0 -and $Gained -eq 0 -and $Cheaper -eq 0) { $why += 'its widening(s) added no cell and made none cheaper' }
+  if ($Excludes -gt 0 -and $Lost -eq 0) { $why += 'its exclude(s) removed no cell' }
+  if ($Widenings -eq 0 -and $Excludes -eq 0) { $why += 'it carries no rule' }
+  if ($why.Count -eq 0) { return '' }
+  return ('blind on visibility AND ' + ($why -join ' and ') + ' - nothing proves this batch bought anything')
+}
+
 if ($SelfTest) {
   $bad = 0; $n = 0
   function _BT([string]$label, [bool]$ok) { $script:n++; if ($ok) { Write-Output ('  ok   ' + $label) } else { Write-Output ('  FAIL ' + $label); $script:bad++ } }
+  # Get-BlindBoardVerdict (2026-10-02): the founding case is the fresh-cranberries exclude, 1 cell lost, 0 gained
+  _BT 'MUST NOT FIRE  blind, an exclude-only batch that removed 1 cell (the fresh-cranberries founding case) is kept' ((Get-BlindBoardVerdict 0 1 0 0 1) -eq '')
+  _BT 'MUST FIRE  blind, an exclude-only batch that removed nothing is reverted' ((Get-BlindBoardVerdict 0 0 0 0 1) -like '*exclude(s) removed no cell*')
+  _BT 'CLEAN TWIN  blind, an include-only batch that added a cell is kept, and one that moved nothing is still reverted' (((Get-BlindBoardVerdict 1 0 0 1 0) -eq '') -and ((Get-BlindBoardVerdict 0 0 0 1 0) -like '*widening(s) added no cell*'))
+  _BT 'MUST FIRE  blind, a mixed batch whose include bought nothing is reverted even though its exclude removed a cell' ((Get-BlindBoardVerdict 0 1 0 1 1) -like '*widening(s) added no cell*')
   # frozen from guards.ps1 on the seeded comparison-2026-09-22 (08:13 generation), the founding run
   $baseL = @('  QUARANTINE  vegetable-oil / Sam''s Club [selection]  HARD FAIL: no NEW cell publishes a dearer price because the band refused ...', 'GUARDS QUARANTINE-REQUIRED: 1 hard failure(s), every one scoped to 1 cell(s) and 0 store(s)')
   $base = Get-BatchQuarantineCells $baseL
@@ -590,7 +611,8 @@ if (Test-Path $corpusFile) {
   # rather than silently passing an unmeasured batch.
   $blind = $true
   Write-Output '    BLIND: no sidecar corpus - cannot measure visibility; falling back to board effect'
-  if ($gained -eq 0 -and $cheaper -eq 0) { Revert 'blind on visibility AND the board did not move - nothing proves this batch bought anything' }
+  $blindWhy = Get-BlindBoardVerdict $gained $lost $cheaper (@($Patterns.Keys).Count + @($Relax.Keys).Count) @($Excludes.Keys).Count
+  if ($blindWhy) { Revert $blindWhy }
 }
 
 # ---- gate 2c: THEFT. Matching is first-match-wins by array order, so a widened rule in an earlier
