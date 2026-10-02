@@ -87,11 +87,14 @@ basis, identity and freshness failures, and assigning it whole to step 8 would o
 
 ## 3. Harness
 
+Harness: `grocery/ruled-step-lib.ps1` blob 5770c80445fa0d9971654f8fa0e2e922057d75df and `grocery/ruled-steps.json`
+blob bd0c3abce2d1c75539782edecc548486c4338d59, run 2026-10-02 (blobs, not a commit hash, so a rebase cannot move them).
+
 The family counts come from the committed map and library, so they can be re-run:
 `grocery/ruled-steps.json` (type prefixes per step) and `grocery/ruled-step-lib.ps1` `Get-RuledStepAttribution`, over a
 scratch copy of `grocery/out/alert-census.jsonl` as of 2026-10-02 (554 day/type rows in the 30-day window), with
 `-Days 30` and `-Days 14`. The census prints the 14-day figure daily (its RULED STEPS line); on this day it read 100
-of 330 alerts attributed, steps 8, 9 and 11 STALLED. Blobs are named in the commit that lands this file, per rule ms-07.
+of 330 alerts attributed, steps 8, 9 and 11 STALLED.
 Variants tried: one map. Two prefixes were left out deliberately (guards failed, board cells quarantined: mixed causes).
 
 ## 4. Open items this measurement leaves
