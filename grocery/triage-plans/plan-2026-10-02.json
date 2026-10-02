@@ -275,7 +275,7 @@
       "rollback": "remove the chain step; the queue returns to hand-run drains",
       "premise_verified": true,
       "deviation": "Shipped wider than the plan, same gates. (1) The per-run slug file is written by propagate-recipes.ps1 itself under a new -Drain switch (dirty minus held-recipes.json, handed to the existing -SlugsFile narrowing; refuses -SlugsFile/-AllowCreateFile/-AllowCatalogue, refuses over -DrainMax 150, fails closed on an unparseable held list), and check-ad-cycles calls sync-recipesdb-cost then propagate -Drain after the re-anchor loop (skipped when compute-v2 failed or under -NoPublish, pages 'Recipe propagate drain did not complete'). (2) After the instance drain queue-depth still read STUCK at 7, all held: grocery/queue-depth.ps1 now lifts Read-HeldSlugs/Get-DrainScope from propagate so the alarm counts exactly what the drain carries; it reads empty now. (3) lib/bot-paths.ps1 served paths gain propagate-stamps.json and planner-data.js, the drain's two new chain writes.",
-      "shipped_commit": null,
+      "shipped_commit": "31ec588e8",
       "resolution_note": "Instance: sync-recipesdb-cost -Apply (0 fields moved), then propagate-recipes.ps1 -SlugsFile <26 unheld dirty specs>: every gate passed (db-agreement issues=0, buy-label plurals 0, FEEDCOV clean over 26, allergen line 26/26), published+verified OK 26/26 to Ghost, PUBLISH-UNSTAMPABLE empty, 26 stamps advanced; 7 held specs left dirty on purpose. Live: chicken-tetrazzini 200 with live-price spans, cache-busted; layout unchanged (spec-content republish through the existing renderer), so no 375px check was needed. Root fix: daily drain step in check-ad-cycles (propagate -Drain), held specs excluded from the queue-depth alarm. Proof: propagate-recipes -SelfTest PASS (7 new -Drain cases incl. MUST FIRE stuck->named, CLEAN TWIN held stays put, at-bar/past-bar, real -File road, chain-caller pin); queue-depth -SelfTest PASS (held MUST FIRE + CLEAN TWIN); bot-paths -SelfTest PASS; audit-alert-registry PASSED findings=0; queue-depth live: recipe-specs-awaiting-propagate empty. full_suite: deferred-to-land. The chain step itself is first exercised on the next daily run.",
       "blast_radius": {
         "measured_as": "publish-scope",
@@ -290,7 +290,7 @@
       "live_check": "https://www.thriftycrew.com/chicken-tetrazzini/?cb=<fresh> returns 200 with data-tc-live-price spans (3 seen 2026-10-02); grocery/queue-depth.ps1 reads recipe-specs-awaiting-propagate 'empty'",
       "republished": "26 recipe posts via propagate (Ghost, not a git landing); board not republished",
       "full_suite": "deferred-to-land",
-      "actual_tool_calls": 52
+      "actual_tool_calls": 56
     }
   ],
   "queue_ids_seen": [
