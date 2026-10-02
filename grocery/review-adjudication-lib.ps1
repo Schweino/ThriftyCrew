@@ -715,7 +715,10 @@ if ($__ralSelfTest) {
       function _Send([string]$subj, [string]$body) {
         $bf = Join-Path $sb ('b-' + [guid]::NewGuid().ToString('N').Substring(0, 6) + '.txt')
         [IO.File]::WriteAllText($bf, $body, $u8)
-        $o = & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $sbG 'send-alert.ps1') -Subject $subj -BodyFile $bf -QueueMutexName $mxN
+        # the sandbox's own send-alert, driven as a child on purpose (the end-to-end case); the body travels by -BodyFile,
+        # never the command line, so test-auditors u011's 32,767-character defect cannot occur here
+        $saSandbox = Join-Path $sbG 'send-alert.ps1'
+        $o = & powershell -NoProfile -ExecutionPolicy Bypass -File $saSandbox -Subject $subj -BodyFile $bf -QueueMutexName $mxN
         return [pscustomobject]@{ rc = $LASTEXITCODE; out = ((@($o) | ForEach-Object { [string]$_ }) -join ' | ') }
       }
       function _Q { if (Test-Path -LiteralPath $sbQ) { return @((Get-Content -LiteralPath $sbQ -Raw -Encoding UTF8 | ConvertFrom-Json).items) }; return @() }
