@@ -125,7 +125,8 @@ beats timing out inside 6.
 
 ## WHAT YOU DO NOT DO (full: br-09)
 DO NOT PUBLISH. No compare-deals, no check-ad-cycles, no publish-deals-page, and no push of anything but the one file
-below. The 08:00 task owns the downstream chain. If something is urgent enough to publish today, say so and let Brad decide.
+below and the review's committed groups (DAILY END-TO-END REVIEW), each through push-main and the full gate. The 08:00
+task owns the downstream chain. If something is urgent enough to publish today, say so and let Brad decide.
 
 LANDING THIS FILE'S OWN BACKUP (Brad's ruling 2026-10-02, PLAN W7). Only on a day you EDITED this file, and as your last
 step, land the repo mirror and nothing else, from a throwaway worktree so no board file or unpushed commit rides along:
@@ -140,6 +141,32 @@ step, land the repo mirror and nothing else, from a throwaway worktree so no boa
 4. From the worktree: `powershell -NoProfile -File ops\push-main.ps1` (about 8 minutes). LANDED: remove the worktree.
    REFUSED: leave it, and put push-main's last line in the report; audit-prompt-backup -Daily pages after 24 hours.
 
+## DAILY END-TO-END REVIEW (Brad's ruling 2026-10-02: "Everything, gated")
+Every day, after BUILD and the ORDER OF WORK, as the last work before the report. Captures and builds come first: a
+usage limit or a short morning may cost the review, never the data. It answers Brad's question about every run: "With
+this browser run, are there areas to address? Either issues, inefficiences etc?"
+1. Write the run record to `%LOCALAPPDATA%\ThriftyCrew\browser-refresh\run-<date>.md` in the shape the RUN RECORD
+   section of `.claude\agents\browser-refresh-reviewer.md` gives. Every deviation goes in, your own included: a brief
+   you wrote wrong is a finding (2026-10-02's failed iframe posts were the orchestrator's brief, not an agent's).
+2. Spawn `browser-refresh-reviewer` (subagent_type; pinned to Opus 5.5, Medium) with the date, the record's path and a
+   `## Knowledge consulted` section, and wait. It writes `plan-<date>.md` (items) or `review-<date>.md` (clean) there.
+3. No build items: say so in the report; the review is done. Otherwise spawn one `browser-refresh-implementer`
+   (subagent_type; pinned to Sonnet 5.5, Medium) per plan GROUP, with `isolation: "worktree"`, naming the plan path, the
+   group, its item ids, a run ceiling of 120 tool calls, and a `## Knowledge consulted` section pasted from the plan's.
+   Groups that share no file may run together. A report with open items and no blocker named goes back to the same
+   agent up to twice ("Your list still has X and Y open. Continue. If one is blocked, say what blocks it."), then it is
+   reported stuck. The implementer commits and stops: it never pushes.
+4. YOU land each committed group, one at a time, from its worktree:
+   `powershell -NoProfile -ExecutionPolicy Bypass -File ops\push-main.ps1`, run in the background. A group the plan
+   marks chain-touching lands only once `grocery\out\logs\capture-run-status.json` shows `daily.date` = today with a
+   non-null `daily.exit_code` AND chain-idle prints FREE; wait for that. A red gate goes back to that group's
+   implementer with push-main's failing lines (fix the cause, never the gate), at most twice. Still unlanded at the
+   end: say so and leave the branch; never put it on main.
+5. A group that changed this file's mirror: once it has LANDED, copy the landed mirror over this live file byte for
+   byte. That landing carries the backup, so the own-backup steps above are not needed for that edit.
+6. If either agent type is missing from this session (the main checkout predates 925b14506), skip the review and say
+   so. Never stand in for it with a general-purpose agent or by hand.
+
 ## WHEN SOMETHING ELSE GOES WRONG (full: br-10)
 - If a browser tool is refused by a SAFETY CHECK rather than a store ("auto mode", "could not evaluate", earlier
   conversation content): do not rephrase, switch tools or route around it. Do the items that need no browser (the
@@ -149,5 +176,6 @@ step, land the repo mirror and nothing else, from a throwaway worktree so no boa
 ## REPORT (full: br-11)
 Which stores you captured and the priced rows each built; what you deliberately did not reach and why; any store that
 came back UNUSABLE (and confirm you notified); any commodity you skipped as unverifiable; builder refusals verbatim; the
-trial rows written; the outstanding counts on the url-worklist and rescue lists; and, if you edited this file, the
-backup's push-main result.
+trial rows written; the outstanding counts on the url-worklist and rescue lists; if you edited this file, the
+backup's push-main result; and the review: its verdict by class, each group's landed hash or why it did not land, and
+any decision for Brad in plain words.
