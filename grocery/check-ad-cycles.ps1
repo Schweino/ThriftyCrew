@@ -2079,6 +2079,8 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # Paced at 1.5 s because discover-hyvee reads the same API in parallel. ~560 requests, so the budget is 1500 s.
       New-FanoutLane -Name 'hyvee-flyer-link'    -File (Join-Path $root 'hyvee-flyer-link.ps1')           -TimeoutSec 1500 -Arguments @('-Variant','2','-PaceMs','1500') -Marker 'FLYER-LINK-COMPLETE'
         New-FanoutLane -Name 'store-taxonomy'      -File (Join-Path $root 'audit-store-taxonomy.ps1')       -Arguments @('-OutDir', $OutDir) -Marker 'STORE-TAXONOMY-COMPLETE'
+        # STEP 9 SHADOW (design\PLAN-zero-alert-days-remainder-2026-09-24.md): refuses nothing, writes only out\crown-identity-shadow\ (gitignored).
+        New-FanoutLane -Name 'crown-identity-shadow' -File (Join-Path $root 'audit-crown-identity-shadow.ps1') -Arguments @('-OutDir', (Join-Path $OutDir 'crown-identity-shadow')) -Marker 'CROWN-IDENTITY-SHADOW-COMPLETE'
         New-FanoutLane -Name 'sale-fallback'       -File (Join-Path $root 'audit-sale-fallback.ps1') -Marker 'SALE-FALLBACK-COMPLETE'
         # the zero-alert-days scoreboard (design\PLAN-zero-alert-days-2026-09-10.md, Phase 0): a measurement,
         # never an alert. Run here so quiet days are counted even when the Claude app, and so triage, is closed.
@@ -2644,6 +2646,9 @@ The chain re-derives every store''s link prices from the rows the board priced, 
           }
         }
       } catch { Log ('store-taxonomy guard threw: ' + $_.Exception.Message) }
+      # ---- STEP 9 CROWN IDENTITY SHADOW: logged only; no summary line, alert or hold until Brad's enforcement bar is read.
+      try { $cisR = Get-FanoutRecord 'crown-identity-shadow' $fanRecs; foreach ($l in @($cisR.Output)) { Log ('crown-identity-shadow: ' + $l) }
+        if ($cisR.ExitCode -ne 0) { Log ('crown-identity-shadow exited ' + $cisR.ExitCode + ' (3 = BLIND) - no shadow day recorded; the board is unaffected') } } catch { Log ('crown-identity-shadow threw: ' + $_.Exception.Message + ' - the board is unaffected') }
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them, and since 2026-09-22 (plan-2026-09-22-9) each gap is OWED in its store's own
       # capture plan (Get-CapturePlan.SaleFallbacks), asked while the sale still runs. De-duped alert.
