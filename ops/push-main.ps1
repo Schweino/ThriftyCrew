@@ -2063,7 +2063,7 @@ function Invoke-TcPushMain {
         }
         Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
         Say ("push-main: REFUSED - {0} before the lock was taken, so this push never entered the queue and nothing else on this box was held up. Fix the cause and run this again." -f $redWhy)
-        $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase
+        $outcome = 'refused-gate-red'; $ledgerState = 'not-taken'; $pmRow['phase'] = $legPhase; $rgFailed = Get-TcRunGatesFailed (Get-TcOptionalProp $g 'RgLines'); $pmRow['rg_failed'] = [string[]]@($rgFailed)
         & $writeRow
         return 1
       }
@@ -2393,7 +2393,7 @@ if ($SelfTest) {
   # MUST NOT FIRE and a CLEAN TWIN), W9.4's 5 (the queue member's hand-back case lands with W9.2), and W3.2 with W3.4a
   # step 3's 7, W4.1 step 7's 3, W9.1's push-main half's 5, W9.3's 11, and W9.2's 14 (W9.4's queue-member hand-back among
   # them) and the rh_key reader's 1, and the split plan D3's 3 (the re-exec key over host and pieces); read off this file, not added up.
-  $expectedCases = 177
+  $expectedCases = 179
   if ($cases -ne $expectedCases) { Write-Output ("FAIL  the suite ran {0} case(s) where this file holds {1}, so a case was skipped or lost" -f $cases, $expectedCases); $f++ }
   if ($f) { Write-Output ("push-main self-test FAIL: {0} of {1} check(s)" -f $f, $cases); exit 1 }
   Write-Output ("push-main self-test PASS: {0} cases - led by a branch whose base the remote moved past landing on its FIRST attempt, and by a conflicting rebase being aborted rather than left half-finished under the lock" -f $cases)

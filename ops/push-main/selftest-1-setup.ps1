@@ -61,6 +61,13 @@
   T ($kMF + '  a replayed whole verdict is read as WholeRun, so the leg records 0 seconds, and its numbers stay null') ($rgw.WholeRun -and $null -eq $rgw.Reused) ("whole={0} reused={1}" -f $rgw.WholeRun, $rgw.Reused)
   T ($kMNF + '  output with no reuse line leaves all three numbers null, never zero') ($null -eq $rgn.Reused -and $null -eq $rgn.SelfTests -and $null -eq $rgn.Unkeyable -and -not $rgn.WholeRun) ("reused={0} whole={1}" -f $rgn.Reused, $rgn.WholeRun)
 
+  $rgfR = Get-TcRunGatesFailed -Lines @('  FAIL  ops\audit-x.ps1  (exit 2) - why', '  failed: ops\audit-x.ps1', '  failed: push-cost-budget', 'RUN-GATES-COMPLETE pass=5 fail=2')
+  $rgf = @($rgfR)
+  T ($kMF + '  a red run''s "failed:" lines are read into the gate names, in order (the refused-gate-red row names them)') ($rgf.Count -eq 2 -and $rgf[0] -ceq 'ops\audit-x.ps1' -and $rgf[1] -ceq 'push-cost-budget') ($rgf -join ' | ')
+  $rgf0R = Get-TcRunGatesFailed -Lines @('  ok    ops\audit-x.ps1', 'RUN-GATES-COMPLETE pass=7 fail=0')
+  $rgf0 = @($rgf0R)
+  T ($kMNF + '  a run with no "failed:" line names no gate') ($rgf0.Count -eq 0) ("count=" + $rgf0.Count)
+
   $htRan = Get-TcHookTestAuditors -Text "prepush-test-auditors: FULL RUN - fixture`nprepush-test-auditors: running the suite in full (measured 500s)"
   $htReu = Get-TcHookTestAuditors -Text 'prepush-test-auditors: REUSED key=0123456789abcdef - fixture'
   $htNn = Get-TcHookTestAuditors -Text 'prepush-test-auditors: NOT NEEDED - 2 pushed path(s) across 1 ref(s), none is a test-auditors input'

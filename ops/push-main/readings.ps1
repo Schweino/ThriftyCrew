@@ -98,6 +98,20 @@ function Get-TcPushRejectClass {
   return [pscustomobject]@{ Rc = $rc; Class = 'unknown'; Lines = (Get-TcRejectLinesCapped $lines) }
 }
 
+function Get-TcRunGatesFailed {
+  <# The gates run-gates named as failed ("  failed: <gate>" lines), so a refused-gate-red ledger row says WHICH gate
+     refused it (2026-10-02, Phase 6 of design/PLAN-weekly-root-families-2026-10-02.md: 162 such rows named none, so a
+     load-caused refusal could not be told from a real red when its bar was counted). At most 20, in order. Empty when
+     no such line was printed, which is "not recorded", never "none failed". #>
+  param($Lines)
+  $out = New-Object System.Collections.Generic.List[string]
+  foreach ($l in @($Lines)) {
+    $m = [regex]::Match([string]$l, '^\s+failed: (\S.*?)\s*$')
+    if ($m.Success -and $out.Count -lt 20) { $out.Add($m.Groups[1].Value) }
+  }
+  return , $out.ToArray()
+}
+
 function Get-TcRunGatesReading {
   <# What run-gates said about reuse, from its own lines (rg_reused, rg_selftests, rg_unkeyable): its "<x> of <y>
      self-test(s) already passed over these exact inputs ...; <z> could not be keyed" line (ops\run-gates.ps1, printed
