@@ -2650,6 +2650,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       # ---- STEP 9 CROWN IDENTITY SHADOW: logged only; no summary line, alert or hold until Brad's enforcement bar is read.
       try { $cisR = Get-FanoutRecord 'crown-identity-shadow' $fanRecs; foreach ($l in @($cisR.Output)) { Log ('crown-identity-shadow: ' + $l) }
         if ($cisR.ExitCode -ne 0) { Log ('crown-identity-shadow exited ' + $cisR.ExitCode + ' (3 = BLIND) - no shadow day recorded; the board is unaffected') } } catch { Log ('crown-identity-shadow threw: ' + $_.Exception.Message + ' - the board is unaffected') }
+      try { $rcsR = Get-FanoutRecord 'row-contract-shadow' $fanRecs; foreach ($l in @($rcsR.Output)) { Log ('row-contract-shadow: ' + $l) }; if ($rcsR.ExitCode -ne 0) { Log ('row-contract-shadow exited ' + $rcsR.ExitCode + ' (3 = BLIND) - no step 8 shadow day recorded; the board is unaffected') } } catch { Log ('row-contract-shadow threw: ' + $_.Exception.Message + ' - the board is unaffected') }   # STEP 8 SHADOW: logged only, like step 9's lane above
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them, and since 2026-09-22 (plan-2026-09-22-9) each gap is OWED in its store's own
       # capture plan (Get-CapturePlan.SaleFallbacks), asked while the sale still runs. De-duped alert.
