@@ -39,6 +39,16 @@
   $script:CLIMB_REFUSE_RUN or more consecutive non-empty terms rise at every step - the accumulating shape itself, which
   a waived old capture is still held to. See Get-FarewayCaptureScope for the bar and what else was tried.
 
+  A TERM THAT SELECTS NOTHING IS WRITTEN DOWN, NEVER RULED ON (2026-10-02, design/PLAN-browser-refresh-hardening-2026-10-02.md
+  W5). Each run writes out\fareway\fareway-no-match-<date>.jsonl beside the shop file, one row per commodity that
+  selected nothing: {date, id, term, reason, candidate_count, candidates[{name,price,size,url}]}, reason one of
+  no-candidates (the search returned nothing: gr-17's four causes, none of them checked here), no-name-match (nothing
+  passed include/exclude) or all-matches-size-refused. A clean run writes the file EMPTY, so "nothing missed" and "the
+  selector never ran" differ on disk. It is evidence for a later reader with its own rules, NEVER a not-carried ruling:
+  a selector's include list missing a real product would otherwise retire a real cell. Not a field in the shop file,
+  which build-fareway-regular, graph/import/importers.py and audit-asof-evidence read as a JSON ARRAY of rows, and not a
+  .json name, which test-matcher-parity and lint_adjacency glob as prices (out\fareway\*.json).
+
     .\select-fareway-shop.ps1 -In <capture.jsonl> -Today 2026-09-10
     .\select-fareway-shop.ps1 -SelfTest          frozen coconut fixture + clean twins, no data read
 #>
@@ -431,6 +441,15 @@ function Get-FarewayCaptureScope {
   return @{ refuse = $why; nostamp = ($total -gt 0 -and $stamped -eq 0); total = $total; climb = $best }
 }
 
+# ---- A COMMODITY THAT SELECTED NOTHING, as a pure function (2026-10-02, see the header) ------------------------------
+function ConvertTo-NoMatchRow {
+  param([string]$Id, $Line, $Refused, [string]$Date)
+  $cands = @(@($Line.candidates) | Where-Object { $null -ne $_ })
+  $reason = if ($cands.Count -eq 0) { 'no-candidates' } elseif (@($Refused).Count) { 'all-matches-size-refused' } else { 'no-name-match' }
+  $list = @(foreach ($c in $cands) { [ordered]@{ name = [string]$c.name; price = [string]$c.price; size = [string]$c.size; url = [string]$c.url } })
+  return [ordered]@{ date = $Date; id = $Id; term = [string]$Line.term; reason = $reason; candidate_count = $cands.Count; candidates = $list }
+}
+
 # ---- THE SELECTED ROW, as a pure function so -SelfTest drives the code the main loop runs --------------------------
 # THE STORE'S OWN SALE COUNTDOWN RIDES THE ROW (2026-09-18, backlog I223). farewayShopExtract reads "Sale ends in N
 # days" out of the page's Apollo cache and emits it as sale_ends_days (the integer) and sale_note (the text), and
@@ -656,12 +675,32 @@ if ($SelfTest) {
     T 'CLEAN TWIN  -WaiveMissingScopeStamp re-selects a capture made before the scope stamp' ($e8.rc -eq 0 -and $e8.made -and (@($e8.lines | Where-Object { $_ -like 'scope: NOT RECORDED*' }).Count -eq 1)) ('rc=' + $e8.rc + ' | ' + ($e8.lines -join ' / '))
     $e9 = _FwRunLines 'climb' (_FwRising $script:CLIMB_REFUSE_RUN $false) @('-WaiveMissingScopeStamp')
     T 'MUST FIRE  end to end, the waiver does not waive a climbing capture: exit 1, REFUSED, no shop file' ($e9.rc -eq 1 -and -not $e9.made -and (@($e9.lines | Where-Object { $_ -like 'REFUSED:*rise at every step*' }).Count -eq 1)) ('rc=' + $e9.rc + ' | ' + ($e9.lines -join ' / '))
+    # THE NO-MATCH RECORD (2026-10-02). A three-term capture: coconut selects, kale's only candidate is a coconut (no
+    # name match), spinach's search came back empty. The record is read from where the script writes it, beside -Out.
+    $nmFile = Join-Path $stT 'fareway-no-match-1999-01-01.jsonl'
+    $kaleC = $coconut.PSObject.Copy()
+    $kaleC | Add-Member -NotePropertyName loc -NotePropertyValue '531573' -Force
+    $kaleC | Add-Member -NotePropertyName scope_query -NotePropertyValue 'kale' -Force
+    $kaleLine = [pscustomobject]@{ id = 'kale'; term = 'kale'; candidates = @($kaleC) }
+    $spinLine = [pscustomobject]@{ id = 'spinach'; term = 'spinach'; candidates = @() }
+    $e10 = _FwRunLines 'nomatch' @((_FwLine '531573' '531573'), $kaleLine, $spinLine) @()
+    $nm = @()
+    if (Test-Path -LiteralPath $nmFile) { $nm = @(Get-Content -LiteralPath $nmFile -Encoding UTF8 | Where-Object { $_ } | ForEach-Object { $_ | ConvertFrom-Json }) }
+    $nmK = @($nm | Where-Object { $_.id -eq 'kale' }); $nmS = @($nm | Where-Object { $_.id -eq 'spinach' })
+    T 'MUST FIRE  end to end, kale (a candidate, no name match) and spinach (no candidates) are written to the no-match record with their reason and candidates' ($e10.rc -eq 0 -and $nm.Count -eq 2 -and $nmK.Count -eq 1 -and $nmK[0].reason -eq 'no-name-match' -and $nmK[0].term -eq 'kale' -and $nmK[0].candidate_count -eq 1 -and [string]@($nmK[0].candidates)[0].name -eq 'Coconut' -and $nmS.Count -eq 1 -and $nmS[0].reason -eq 'no-candidates' -and $nmS[0].candidate_count -eq 0) ('rc=' + $e10.rc + ' rows=' + $nm.Count + ' | ' + (($nm | ForEach-Object { $_ | ConvertTo-Json -Compress -Depth 5 }) -join ' / '))
+    $e10Doc = $null
+    if (Test-Path -LiteralPath (Join-Path $stT 'nomatch.json')) { $e10Raw = Get-Content -LiteralPath (Join-Path $stT 'nomatch.json') -Raw -Encoding UTF8 | ConvertFrom-Json; $e10Doc = @($e10Raw) }
+    T 'CLEAN TWIN  the same run''s shop file holds only the selected Coconut, and the console still names the no-match ids' ($e10Doc -and @($e10Doc).Count -eq 1 -and [string]@($e10Doc)[0].id -eq 'coconut' -and (@($e10.lines | Where-Object { $_ -like '*no-match ids: kale, spinach*' }).Count -eq 1)) ('doc=' + ($e10Doc | ConvertTo-Json -Compress -Depth 5) + ' | ' + ($e10.lines -join ' / '))
+    $e11 = _FwRun 'clean' (_FwLine '531573' '531573') @()
+    $nmLen = -1
+    if (Test-Path -LiteralPath $nmFile) { $nmLen = ([IO.File]::ReadAllBytes($nmFile)).Length }
+    T 'MUST NOT FIRE  a capture where every term selects writes the no-match record EMPTY, not absent' ($e11.rc -eq 0 -and $nmLen -eq 0) ('rc=' + $e11.rc + ' bytes=' + $nmLen)
   } finally { Remove-Item -LiteralPath $stT -Recurse -Force -ErrorAction SilentlyContinue }
 
-  $stTotal = 10 + 2 + 10 + $tblS.Count + 3 + 7 + 6 + 3
+  $stTotal = 10 + 2 + 10 + $tblS.Count + 3 + 7 + 6 + 3 + 3
   if ($script:stRan -ne $stTotal) { Write-Output ('FAIL  the suite ran ' + $script:stRan + ' case(s), not the ' + $stTotal + ' it lists'); $script:stFail++ }
   if ($script:stFail) { Write-Output ('select-fareway-shop SELF-TEST FAIL (' + $script:stFail + ' of ' + $stTotal + ')'); exit 1 }
-  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', scope and climb x7, end to end x9)')
+  Write-Output ('select-fareway-shop SELF-TEST PASS (' + $stTotal + ' of ' + $stTotal + ': slug demotion, demotion logged, founding bug reachable, demote-not-delete, cheapest wins, clean slugs demote nothing, no-url, slug parse, sale countdown kept x2, size contradicts its link x10, store ruling x' + ($tblS.Count + 3) + ', scope and climb x7, end to end x9, no-match record x3)')
   exit 0
 }
 
@@ -708,6 +747,7 @@ foreach ($r in $rows) { $byIdRaw[[string]$r.id] = $r }
 
 $outRows = New-Object System.Collections.ArrayList
 $dropped = @()
+$noMatch = New-Object System.Collections.ArrayList
 $demotedTotal = 0
 $sizeRefusedTotal = 0
 foreach ($id in $byIdRaw.Keys) {
@@ -715,10 +755,20 @@ foreach ($id in $byIdRaw.Keys) {
   $sel = Select-ShopCandidate -Candidates $byIdRaw[$id].candidates -Include $incMap[$id] -Exclude $excMap[$id] -Unit $unitMap[$id]
   foreach ($dl in @($sel.demoted)) { Write-Output ('  [' + $id + '] ' + $dl); $demotedTotal++ }
   foreach ($rl in @($sel.refused)) { Write-Output ('  [' + $id + '] SIZE-CONTRADICTS-LINK ' + $rl); $sizeRefusedTotal++ }
-  if ($null -eq $sel.best) { $dropped += $id; continue }
+  if ($null -eq $sel.best) {
+    $dropped += $id
+    [void]$noMatch.Add((ConvertTo-NoMatchRow -Id $id -Line $byIdRaw[$id] -Refused $sel.refused -Date $asof))
+    continue
+  }
   [void]$outRows.Add((ConvertTo-ShopRow -Id $id -Best $sel.best -Term ([string]$byIdRaw[$id].term) -StoreLoc $storeLoc))
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 ($outRows | ConvertTo-Json -Depth 5) | Set-Content $Out -Encoding UTF8
 Write-Output ("fareway-shop-$asof.json: $($outRows.Count) commodities selected (from $($byIdRaw.Count) captured); $($dropped.Count) had no include-match; $demotedTotal candidate(s) slug-demoted; $sizeRefusedTotal candidate(s) refused SIZE-CONTRADICTS-LINK")
 if ($dropped.Count) { Write-Output ("  no-match ids: " + ($dropped -join ', ')) }
+# The no-match record, LF, empty when nothing was missed (see the header). Nothing reads it yet, so a plain replace.
+$noMatchOut = Join-Path $outDir ("fareway-no-match-$asof.jsonl")
+$nmText = (@($noMatch) | ForEach-Object { $_ | ConvertTo-Json -Depth 5 -Compress }) -join "`n"
+if ($noMatch.Count) { $nmText += "`n" }
+[IO.File]::WriteAllText($noMatchOut, $nmText, (New-Object Text.UTF8Encoding($false)))
+Write-Output ("  no-match record: " + $noMatch.Count + " row(s) -> " + $noMatchOut)
