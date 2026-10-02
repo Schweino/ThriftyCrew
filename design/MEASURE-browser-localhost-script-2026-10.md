@@ -4,6 +4,9 @@ design/PLAN-browser-refresh-hardening-2026-10-02.md W3 step 1. The question: for
 the page load `<script src="http://localhost:...">`, so the capture sink could serve the committed scripts and the
 model would never retype them (step 2a)?
 
+Harness: the probe file and server command in the method section below (a one-off, kept as a description per
+.claude/rules/measurement.md ms-07), run 2026-10-02 in Brad's Chrome 154.
+
 ## Knowledge consulted
 
 - The plan's W3 section, and `skills/mcp-craft/intelligence-budget.md` section 6 (scripted orchestration: keep
