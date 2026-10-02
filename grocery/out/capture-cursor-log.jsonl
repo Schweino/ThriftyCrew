@@ -298,3 +298,9 @@
 {"at":"2026-10-01T08:01:13","store":"Hy-Vee (products)","from":0,"to":20,"day":"2026-10-01","caller":"pull-regular-hyvee.ps1","pid":50208}
 {"at":"2026-10-01T08:02:05","store":"Family Fare","from":467,"to":470,"day":"2026-10-01","caller":"pull-regular-familyfare.ps1","pid":49504}
 {"at":"2026-10-01T08:02:23","store":"Baker\u0027s","from":270,"to":278,"day":"2026-10-01","caller":"pull-regular-bakers-api.ps1","pid":26124}
+{"at":"2026-10-01T10:34:45","store":"Family Fare","from":470,"to":473,"day":"2026-10-01","caller":"pull-regular-familyfare.ps1","pid":32592}
+{"at":"2026-10-02T06:30:11","store":"Sam\u0027s Club","from":293,"to":301,"day":"2026-10-02","caller":"build-sams-deals.ps1","pid":3888}
+{"at":"2026-10-02T06:31:34","store":"Walmart","from":258,"to":266,"day":"2026-10-02","caller":"build-walmart-deals.ps1","pid":51776}
+{"at":"2026-10-02T06:39:04","store":"Fareway","from":271,"to":279,"day":"2026-10-02","caller":"build-fareway-regular.ps1","pid":42068}
+{"at":"2026-10-02T06:39:36","store":"Aldi","from":258,"to":266,"day":"2026-10-02","caller":"build-aldi-regular.ps1","pid":29204}
+{"at":"2026-10-02T07:01:25","store":"Family Fare","from":473,"to":476,"day":"2026-10-02","caller":"pull-regular-familyfare.ps1","pid":5444}
