@@ -1,0 +1,284 @@
+{
+  "generated": "2026-10-02T09:30:00",
+  "round": 1,
+  "board_week": "2026-09-30",
+  "routing_artifact": null,
+  "knowledge_consulted": [
+    "searched \"triage resume transcribe plan item\" (knowledge-search --estate)",
+    "memory:triage-plan-has-no-lock (C--Codex store): before transcribing a RESUME, check git log for a commit after the prior plan's date; if the residual already landed, say so and size the item from what is left. Checked: dde97c300 (177835) and be71414b1 (754693) and 10264e10d (3851d2 ruling A) are on origin/main.",
+    "memory:triage-cost-controls (C--Codex store): zero-occurrence leftovers get leaves_open_occurrences 0 and a watch:<path> followup; budget overflow is planned deferred-budget, never a new queue item.",
+    ".claude/rules/grocery.md ('A BAD CELL QUARANTINES ITSELF'): WITHHELD when the published value is the value a VALUE guard condemned; teaching a guard to scope is a per-guard change with its own fixture.",
+    ".claude/rules/meal-prep.md ('Recost aftercare'): sync-recipesdb-cost BEFORE propagate; a hand run refuses without -SlugsFile or -AllowCatalogue."
+  ],
+  "ship_sequence": [
+    "1. [money] 2026-09-26-177835: re-measure only. The carried surface fix and root fix (audit-ingredient-routes.ps1 / -RoutesOnly in run-gates $static) are on origin/main (dde97c300); re-run audit-ingredient-routes.ps1 and audit-ingredient-identity against comparison-2026-09-30, confirm the alert's three rows do not reproduce, write close_disposition. Residuals stay with 2026-09-26-a7dbb1 and 2026-09-29-465acc.",
+    "2. [money] 2026-09-29-754693: re-measure only. The V1 excludes landed (be71414b1); verify board.json and the feed carry carrots p[0] not the Aldi medley, run audit-live-page-parity (the post-landing step the prior deviation deferred), write close_disposition.",
+    "3. [money] 2026-10-02-25cb66 (RETURN, 4 prior closes): measure the condensed-milk/Aldi row on candidates-2026-09-30 ('Baker S Corner Sweetened Condensed Milk 14 FL OZ', size_text '14 fl oz', basis 'size 14 oz', 0.1636/oz); ship one size-KIND reader shared by the engine and audit-unit-basis-outlier in grocery/pricing-math-lib.ps1, with a compare-deals -SelfTest MUST FIRE and CLEAN TWIN; rebuild in a scratch clone (chain copied from check-ad-cycles.ps1) and diff every cell's per_unit against comparison-2026-09-30; land only through ops\\push-main.ps1.",
+    "4. [money] 2026-09-30-9b9cf1: instance first (sync-recipesdb-cost, then propagate-recipes.ps1 -DryRun -SlugsFile <the dirty specs>, then the real run); then the class fix, a scheduled scoped drain step behind propagate's existing gates, with its self-test; land through ops\\push-main.ps1."
+  ],
+  "open_questions_for_brad": [],
+  "items": [
+    {
+      "queue_id": "2026-09-26-177835",
+      "subject": "Recipe ingredient priced as a different food",
+      "classification": "wrong-product",
+      "lane": "money",
+      "est_tool_calls": 34,
+      "publish_batch": 1,
+      "status": "done",
+      "resumed_from": "grocery/triage-plans/plan-2026-09-29-3.json (status there: deviated); transcribed 2026-10-02 with its root cause carried forward, no fresh diagnosis",
+      "evidence": [
+        "Prior item (plan-2026-09-29-3.json) premise_check: 'audit-ingredient-identity -BoardFile comparison-2026-09-29 exit 2, 8 finding(s) [PROXY=2 UNROUTED=6], RISE 3 over mark 86. The alert's three rows (Lo Mein, dangmyeon, Blackened) NO LONGER REPRODUCE ... audit-ingredient-routes.ps1 exists, is in run-gates $static, and exits 0 (354 rows, 599 commodities, 0 refused, 0 spoken).'",
+        "Prior deviation: 'Steps A to G and the root fix had already landed on 2026-09-26 (verified above), so nothing of the carried surface or root fix was re-done. The work today is the 59b8fc fold-in.' Its shipped_commit efcfbc7e4 was a worktree hash; the landed commit is dde97c300 ('triage 2026-09-29 177835: freeze the 59b8fc identity rows ...'), confirmed on origin/main 2026-10-02 by git branch -r --contains.",
+        "So nothing of the root fix is left to land. What remains is the re-measure on today's board (comparison-2026-09-30, built 2026-10-02 08:23:07) and the close; est_tool_calls is sized to that."
+      ],
+      "root_cause": "A commodity registration and the recipe vocabulary that names the same food are two records written by two tools on two days, and nothing compared them when either landed: run-gates ran audit-ingredient-identity only as -SelfTest, and apply-coverage-batch.ps1, new-commodity.ps1 and add-commodity-rule.ps1 never read db/ingredients.json. (Carried from plan-2026-09-26-2 via plan-2026-09-29-3.)",
+      "root_fix": {
+        "what": "audit-ingredient-identity.ps1 -RoutesOnly (Get-IdentityRouteChanges in ingredient-identity-lib.ps1) refuses an on-bid -> off-bid, unrouted -> proxy or proxy -> another id route change at push time; wrapper meal-prep/pipeline/audit-ingredient-routes.ps1 in run-gates $static. LANDED (plan-2026-09-26-2; confirmed live in plan-2026-09-29-3). Today: verify only.",
+        "files": [
+          "meal-prep/pipeline/audit-ingredient-identity.ps1",
+          "meal-prep/pipeline/ingredient-identity-lib.ps1",
+          "meal-prep/pipeline/audit-ingredient-routes.ps1"
+        ],
+        "exact_change": "none today unless the re-measure finds the -RoutesOnly push check absent or red; then restore it from dde97c300's parent chain and stop the item"
+      },
+      "proof": {
+        "guard_or_fixture": "meal-prep/pipeline/audit-ingredient-identity.ps1 -SelfTest (-RoutesOnly cases)",
+        "must_fire_case": "MUST FIRE -RoutesOnly: Lo Mein Noodles marked unrouted on egg-noodles now routes to lo-mein-noodles (the 4880ebc98 re-shape) and is REFUSED, naming both; MUST FIRE Pepperoncini bid banana-peppers under the split rules is REFUSED",
+        "clean_twin": "CLEAN TWIN Egg Noodles still routes to egg-noodles beside the lo-mein-noodles include; MUST NOT FIRE Pepperoncini rebid onto pepperoncini is silent",
+        "commands": [
+          "powershell -File meal-prep\\pipeline\\audit-ingredient-identity.ps1 -SelfTest",
+          "powershell -File meal-prep\\pipeline\\audit-ingredient-routes.ps1",
+          "powershell -File meal-prep\\pipeline\\audit-ingredient-identity.ps1 -BoardFile grocery\\out\\comparison-2026-09-30.json"
+        ]
+      },
+      "freshness": "prior measurement against comparison-2026-09-29; re-measure against comparison-2026-09-30 (built 2026-10-02 08:23:07) before closing",
+      "leaves_open": "(a) the -RoutesOnly check cannot see a union cell admitting another member while the row's name still routes to its bid; (b) dangmyeon has no Omaha cell, 3 recipes held NO PRICE BASIS; (d) dirty specs unpropagated; (e) identity mark not tightened; (f) rebid-ingredient cache invalidation keys on the OLD ID; (g) recipe-board-everyday.json pepperoncini floor row [a-g owned by 2026-09-26-a7dbb1]; (h) 3 identity cells await a product-detail read of their form [owned by 2026-09-29-465acc, weekly].",
+      "leaves_open_occurrences": "(a) 61 rows bidding a two-name label (30-day window); (b) 1; (d) 10 held recipes; (e) 0; (f) 1; (g) 0 live; (h) 3 cells on comparison-2026-09-29",
+      "leaves_open_followup": "2026-09-26-a7dbb1",
+      "rollback": "nothing ships today; the landed fix's rollback is in plan-2026-09-26-2",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "dde97c300",
+      "resolution_note": "Verified on 2026-10-02 against comparison-2026-09-30. The -RoutesOnly push check (audit-ingredient-routes.ps1, in run-gates $static) exits 0 with 0 refused, the self-test passes 80 cases, and the full identity audit exits 0 with 0 BLIND. The alert's three rows (Lo Mein, dangmyeon, Blackened) do not reproduce. Nothing shipped today. The residuals stay with 2026-09-26-a7dbb1 and 2026-09-29-465acc.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no change ships today (verify only); the landed change's routing measurement is plan-2026-09-26-2.routing.json over 59,506 names",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from today's work: no file changes unless the re-measure finds the landed check absent",
+        "cell_effects": []
+      },
+      "premise_check": "2026-10-02: dde97c300 is an ancestor of origin/main (git merge-base --is-ancestor). ops/run-gates.ps1:302 carries meal-prep\\pipeline\\audit-ingredient-routes.ps1 in $static. audit-ingredient-identity -SelfTest exit 0, 'SELF-TEST PASS (80 cases)' incl. the -RoutesOnly Lo Mein MUST FIRE and its CLEAN TWIN. audit-ingredient-routes.ps1 exit 0: '354 vocabulary row(s) routed under 599 commodities ... 0 refused, 0 spoken'. audit-ingredient-identity -BoardFile comparison-2026-09-30 -RecipeBoardFile out/recipe-board.json -AliasMapFile recipe-floor-id-map.json exit 0: '(a)+(b) 8 finding(s) [PROXY=2 UNROUTED=6]; check (d) 9 finding key(s) over 1460 store cell(s) ... 0 BLIND'. Lo Mein / dangmyeon / Blackened: 0 lines in its output, so the alert's three rows do not reproduce. (A first run without -RecipeBoardFile/-AliasMapFile exited 3 COULD NOT EVALUATE; it was re-run with the args check-ad-cycles passes.)",
+      "close_disposition": "confirmed: root fix live on origin/main (dde97c300), founding rows absent on comparison-2026-09-30; no code or data change today",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 5
+    },
+    {
+      "queue_id": "2026-09-29-754693",
+      "subject": "Grocery matching soundness: CONTESTED CROWN (carrots @ Aldi)",
+      "classification": "wrong-product",
+      "lane": "money",
+      "est_tool_calls": 35,
+      "publish_batch": 1,
+      "status": "done",
+      "resumed_from": "grocery/triage-plans/plan-2026-09-29-4.json (status there: deviated); transcribed 2026-10-02 with its root cause carried forward, no fresh diagnosis",
+      "evidence": [
+        "Founding row (plan-2026-09-29-4): carrots | Aldi | 'Specially Selected Carrots Sweet Potatoes 16 OZ' | $0.29 | 16 oz | 0.29/lb everyday; Aldi's own page titles it 'Specially Selected Roasted Vegetables, Crts & Swt Pot', a roasted medley.",
+        "Prior deviation: '(3) publish-deals-page exited 2 HELD by design: the post names board.json?v=9030dce4d4 and the edge serves v=914ca8facf until the orchestrator lands, so the Ghost post publish (and audit-live-page-parity for 57bc1d) runs after triage-land.' Its shipped_commit 0cf2cb927 was a worktree hash; the landed commit is be71414b1 ('grocery: carrot + sweet potato medley leaves carrots and sweet-potatoes (triage 2026-09-29-754693)'), on origin/main 2026-10-02.",
+        "So the root fix is live; what remains is the post-landing verification the deviation deferred (feed carrots p[0] not the Aldi medley, live-page parity) and the close. est_tool_calls is sized to that."
+      ],
+      "root_cause": "carrots' composite excludes are a closed word list ('medley', 'mixed veg', 'blend', 'broccoli', 'cauliflower', a fruit/flavour pair list) with no vegetable-pair shape, so a two-vegetable product whose capture name drops the 'and' and the 'roasted' is admitted by the bare carrots include and, as the cheapest row, takes the crown. (Carried from plan-2026-09-29-4.)",
+      "root_fix": {
+        "what": "exclude the carrot + sweet-potato pair shape on both commodities (V1). LANDED as be71414b1. Today: verify only.",
+        "files": [
+          "grocery/commodities.json"
+        ],
+        "exact_change": "none today; the V1 excludes and their _RT fixtures are on origin/main"
+      },
+      "prior_closes": [
+        "2026-09-24-f44c88"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/commodities.json"
+        ],
+        "what": "one prior close (f44c88, a no-code carry-forward review), so a rule source is admissible; the structural prevention (a cell-scoped soundness finding quarantines its cell instead of holding the post) is now live as ruling A (10264e10d, 3851d2)",
+        "exact_change": "the V1 pair excludes plus the _RT routing fixtures (landed be71414b1)"
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/test-match-lib.ps1 _RT routing fixtures",
+        "must_fire_case": "MUST FIRE: _RT 'Specially Selected Carrots Sweet Potatoes 16 OZ' routes to none (neither carrots nor sweet-potatoes); red on a revert, since before the fix it routed carrots",
+        "clean_twin": "CLEAN TWIN: _RT 'Carrot 2 Lbs' -> carrots, 'Our Family Whole Carrots 32 Oz' -> carrots, 'Sweet Potato (Yam)' -> sweet-potatoes",
+        "fixture_occurrences": [
+          "2026-09-24-f44c88",
+          "2026-09-29-754693"
+        ],
+        "commands": [
+          "powershell -File grocery\\test-match-lib.ps1",
+          "powershell -File grocery\\audit-match-soundness.ps1 (cell_by_contest 0)",
+          "powershell -File grocery\\audit-live-page-parity.ps1"
+        ]
+      },
+      "freshness": "prior measurement against comparison-2026-09-29; re-measure against comparison-2026-09-30 (built 2026-10-02 08:23:07) and the live feed before closing",
+      "leaves_open": "9 composite names still route to carrots (6 canned peas-and-carrots, Member's Mark pot roast with carrots and potatoes, Celery And Carrot Sticks, Birds Eye corn/carrots/asparagus); 0 of them wins a carrots cell.",
+      "leaves_open_occurrences": 0,
+      "leaves_open_followup": "watch:grocery/audit-match-soundness.ps1",
+      "rollback": "nothing ships today; revert be71414b1's four exclude strings and baseline hunk to undo the landed fix",
+      "premise_verified": true,
+      "deviation": null,
+      "shipped_commit": "be71414b1",
+      "resolution_note": "Verified on 2026-10-02. The carrot + sweet potato pair excludes (be71414b1) are on origin/main and their _RT fixtures pass. The medley is absent from comparison-2026-09-30, and the local board and feed both crown carrots at Family Fare $0.458/lb (Aldi $0.995). Soundness reports 0 moved, 0 dropped. The live-page parity check runs after landing (see live_check). leaves_open is unchanged and keeps its watch owner.",
+      "blast_radius": {
+        "measured_as": "routing",
+        "measured_by": "no change ships today (verify only); the landed change moved exactly 1 of 37,195 distinct names across 11 files dated 2026-09-29 (plan-2026-09-29-4.routing.json)",
+        "affected_now": 0,
+        "names": [],
+        "risk": "none from today's work",
+        "cell_effects": []
+      },
+      "premise_check": "2026-10-02: be71414b1 is an ancestor of origin/main. test-match-lib.ps1 exit 0 'MATCH-LIB PASSED' (45,695 names, 0 divergences), incl. _RT 754693 MUST FIRE (medley -> <none>) and CLEAN TWIN (Carrot 2 Lbs -> carrots) at lines 518-519. comparison-2026-09-30: 0 occurrences of 'Carrots Sweet Potatoes' (utf-8-sig read). Local public/board.json carrots p[0] chip = Family Fare $0.46/lb sale (Our Family Whole Carrots 32 Oz). Local public/smp-feed.json (week_of 2026-09-30) carrots cheapest 0.458 Family Fare; Aldi 0.995/lb, not the $0.29 medley. audit-match-soundness exit 0: MOVED=0 DROPPED=0 drift-vs-engine=0; its 16 new-contested include 'Del Monte Peas And Carrots 8.5 Oz' (carrots > frozen-vegetables), one of the 9 composite names already in leaves_open, which wins no carrots cell. audit-live-page-parity is post-landing by definition (the edge serves the old v= until triage-land), so it is handed to the orchestrator as live_check.",
+      "close_disposition": "confirmed: V1 excludes live on origin/main (be71414b1); local board and feed carry carrots p[0] Family Fare, not the Aldi medley; live parity left to the orchestrator via live_check",
+      "live_check": "After triage-land: GET https://feed.thriftycrew.com/smp-feed.json?cb=<fresh> -> commodities 'carrots': store must NOT be the Aldi 'Specially Selected Carrots Sweet Potatoes' medley at 0.29/lb; expected (comparison-2026-09-30) cheapest 0.458 /lb at Family Fare, with stores.Aldi 0.995. The same cell on the board page's board.json (page's own ?v= hash plus a cache-buster): carrots p[0] chip 'Family Fare $0.46/lb'. Then run grocery\\audit-live-page-parity.ps1 and expect a PARITY verdict. If 2026-10-02-25cb66's rebuild in this batch moves carrots, the invariant is only 'not the Aldi medley'.",
+      "full_suite": "deferred-to-land",
+      "actual_tool_calls": 5
+    },
+    {
+      "queue_id": "2026-10-02-25cb66",
+      "subject": "Grocery: board cells quarantined - 2026-10-02",
+      "classification": "parse-basis-bug",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "publish_batch": 1,
+      "status": "planned",
+      "resumed_from": "ROUTE line (triage-due-returns.txt): seeded with grocery/triage-plans/plan-2026-09-29-4.json item 2026-09-29-c70eb2 (prior status deviated), no fresh reviewer diagnosis",
+      "evidence": [
+        "Queue body 25cb66 (08:26:44, emitter check-ad-cycles.ps1): '- condensed-milk / Aldi: WITHHELD (the previously published value IS the value this guard condemned); today's candidate was 0.1636. Why: HARD FAIL: no cell wins a row while measured in a different KIND of quantity than the row (volume among weights) (see audit-unit-basis-outlier.ps1)'",
+        "candidates-2026-09-30.json (08:09:45): condensed-milk (unit oz, label 'Sweetened Condensed Milk') | Aldi | 'Baker S Corner Sweetened Condensed Milk 14 FL OZ' | price_text '$2.29' | size_text '14 fl oz' | unit_price 0.1636 | basis 'size 14 oz' | everyday. The engine priced the fluid-ounce size as the row's weight ounce; the guard read the same token as volume.",
+        "NOT the same cell or cause as 2026-09-29-754693: that was carrots/Aldi, a wrong product crowned by contest (soundness CROWN-BY-CONTEST); this is condensed-milk/Aldi, a right product whose size token's KIND two readers disagree on, caught by audit-unit-basis-outlier, a VALUE guard. The ids stay separate.",
+        "Weekly 2026-09-30-88bd45 (soundness cell-quarantine false-positive rate) is NOT this item's live symptom: 88bd45 measures quarantines raised by a match-soundness cell_by_contest finding under ruling A; today's quarantine was raised by the unit-basis guard and WITHHELD (not held), and the Aldi row is the correct food, so it is not a soundness false positive.",
+        "The routed seed's cause does NOT reproduce here: c70eb2 was Get-ItemPrice reading '(only $3.99/lb)' from the NAME (bacon/Fareway, landed 57033801d's equivalent). Its class, 'one reader, two texts', is the shared shape: here one size token ('fl oz') is read as weight by the engine and as volume by the guard. The condensed-milk/Aldi cell appears in the queue once (today); no prior close was this cell.",
+        "RETURN line: 'grocery board cells quarantined was closed 4 time(s) in 30 days (2026-09-21-de4f72, 2026-09-23-92e552, 2026-09-28-b61b08, 2026-09-29-c70eb2)'."
+      ],
+      "root_cause": "The engine and the guards each read a capture's size token and decide its KIND (weight, volume, count) separately, so a token they disagree on ('14 fl oz' on a weight-unit row, 'only $3.99/lb' in a name) prices a cell the guard then condemns: the cell wins the row in the engine and is quarantined at publish. Each prior close fixed one token at one store (de4f72, 92e552, b61b08, c70eb2) and none made the two readers one; the routed c70eb2 fix moved the price reader, not the kind reader.",
+      "root_fix": {
+        "what": "one size-KIND reader for the engine and audit-unit-basis-outlier: the engine refuses (or converts only by a declared commodity equivalence) a size whose kind differs from the row's unit before the row is crowned, so the guard and the engine cannot disagree and no such cell reaches publish",
+        "files": [
+          "grocery/pricing-math-lib.ps1",
+          "grocery/audit-unit-basis-outlier.ps1"
+        ],
+        "exact_change": "Export one function in pricing-math-lib.ps1 (e.g. Get-SizeKind) that classifies a size token as weight | volume | count; the engine's size branch calls it and, for an oz (weight) row, refuses a 'fl oz' size unless the commodity declares a fl-oz-as-weight equivalence; audit-unit-basis-outlier lifts the same function instead of its own classifier. Before landing: scratch-clone rebuild (chain copied from check-ad-cycles.ps1) and a full per_unit diff against comparison-2026-09-30; expected moves: condensed-milk/Aldi only. Any other move stops the item and is measured."
+      },
+      "prior_closes": [
+        "2026-09-21-de4f72",
+        "2026-09-23-92e552",
+        "2026-09-28-b61b08",
+        "2026-09-29-c70eb2"
+      ],
+      "prevention": {
+        "source": [
+          "grocery/pricing-math-lib.ps1"
+        ],
+        "what": "the engine's size reader, the producer of the per-unit the guard condemns: one KIND classification shared by engine and guard, so a cell the guard would refuse is never crowned",
+        "exact_change": "as root_fix, plus compare-deals -SelfTest cases built from the frozen Aldi condensed-milk row and the frozen c70eb2 Fareway bacon row"
+      },
+      "blast_radius": {
+        "measured_as": "engine-branch",
+        "measured_by": "not yet measured: the developer counts every row on candidates-2026-09-30 whose size kind differs from its commodity unit, before and after, and diffs every cell's per_unit in a scratch-clone rebuild",
+        "affected_now": 1,
+        "names": [
+          "Baker S Corner Sweetened Condensed Milk 14 FL OZ"
+        ],
+        "risk": "a kind reader change touches every row with a size; rows that today price 'fl oz' as weight on purpose (if any commodity relies on it) would lose their cell, so the full-board diff is mandatory before landing"
+      },
+      "proof": {
+        "guard_or_fixture": "grocery/compare-deals.ps1 -SelfTest + grocery/test-guards.ps1",
+        "must_fire_case": "MUST FIRE: frozen row {store Aldi, name 'Baker S Corner Sweetened Condensed Milk 14 FL OZ', price_text '$2.29', size_text '14 fl oz'} on the oz-unit condensed-milk row is refused (no cell) or carries a declared equivalence basis; never the bare 'size 14 oz' 0.1636 the pre-fix engine returns, so the case goes red on a revert",
+        "clean_twin": "CLEAN TWIN: a weight-labelled condensed milk row ('14 oz', e.g. the same brand with a net-weight size) still prices 2.29/14 = 0.1636 on the oz row; and the c70eb2 frozen Fareway bacon row still prices 3.99 or 3.988/lb",
+        "fixture_occurrences": [
+          "2026-09-21-de4f72",
+          "2026-09-23-92e552",
+          "2026-09-28-b61b08",
+          "2026-09-29-c70eb2",
+          "2026-10-02-25cb66"
+        ],
+        "commands": [
+          "powershell -File grocery\\compare-deals.ps1 -SelfTest",
+          "powershell -File grocery\\test-guards.ps1",
+          "powershell -File grocery\\guards.ps1 (after the rebuild: condensed-milk/Aldi no longer quarantined)"
+        ]
+      },
+      "fixture_occurrences_note": "de4f72, 92e552 and b61b08 quarantined other cells for other causes and are cited as prior closes of the alert TYPE; the case table covers today's row and c70eb2's row, the two that share the two-readers shape.",
+      "freshness": "measured 2026-10-02 against candidates-2026-09-30 (08:09:45) and comparison-2026-09-30 (08:23:07); re-pin the board before acting",
+      "leaves_open": "nothing planned beyond the fix; the developer writes leaves_open from the blast-radius count",
+      "leaves_open_occurrences": 0,
+      "rollback": "revert the pricing-math-lib.ps1 and audit-unit-basis-outlier.ps1 hunks and the self-test cases; no data migration",
+      "do_not_touch": [
+        "guards.ps1 thresholds",
+        "apply-cell-quarantine.ps1",
+        "audit-unit-basis-outlier's HARD FAIL rule itself"
+      ],
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "resolution_note": "Planned: Aldi's 'Baker S Corner Sweetened Condensed Milk 14 FL OZ' was priced by the engine as 14 weight ounces (0.1636/oz) and condemned by the unit-basis guard as volume, so the cell was withheld. The fix gives the engine and the guard one size-kind reader at the source (pricing-math-lib.ps1). Not the 754693 carrots crown, and not an 88bd45 soundness false positive."
+    },
+    {
+      "queue_id": "2026-09-30-9b9cf1",
+      "subject": "Automation silent-death: QUEUE STUCK (33 recipe specs, 75.5h)",
+      "classification": "infra",
+      "lane": "money",
+      "est_tool_calls": 45,
+      "publish_batch": 2,
+      "status": "planned",
+      "resumed_from": "grocery/triage-plans/plan-2026-10-01-2.json (status there: deferred-budget); transcribed 2026-10-02 with its root cause carried forward, no fresh diagnosis",
+      "evidence": [
+        "Prior item (plan-2026-10-01-2.json): 'no scheduled task and no chain step calls meal-prep/pipeline/propagate-recipes.ps1 (git grep: only self-tests and queue-depth lift from it; Get-ScheduledTask: no TC task runs it); propagate-stamps.json last committed 2026-09-26 ... a hand run refuses without -SlugsFile or -AllowCatalogue (PROPAGATE-SCOPE-REFUSED)'",
+        "plan-2026-10-01.json body quote: 'QUEUE STUCK: recipe-specs-awaiting-propagate - 33 item(s) have been waiting 75.5h, past the 72h this queue tolerates'",
+        "2026-10-02: git log since 2026-09-30 over meal-prep/pipeline/propagate-recipes.ps1 and propagate-stamps.json returns nothing, so the queue is still undrained.",
+        "Lane money: propagate publishes reader-facing recipe pages to Ghost; the prior item does not say it publishes nothing."
+      ],
+      "root_cause": "the propagate drain has no automated caller, so its queue drains only when a person runs it, and health-heartbeat's QUEUE STUCK is an alarm with no repair lane",
+      "root_fix": {
+        "what": "a scheduled scoped drain step behind propagate's existing gates: after the daily recost chain, sync-recipesdb-cost then propagate-recipes.ps1 -SlugsFile <the dirty set the queue-depth lift already computes>, never -AllowCatalogue, with every existing propagate gate (price-literal gate, paywall, scope line) left in force",
+        "files": [
+          "meal-prep/pipeline/propagate-recipes.ps1",
+          "grocery/check-ad-cycles.ps1 (or the meal-prep chain step that follows the recost)"
+        ],
+        "exact_change": "Instance: sync-recipesdb-cost.ps1, then propagate-recipes.ps1 -DryRun -SlugsFile <dirty specs> (read the scope line), then the real run. Class: add a drain step to the existing daily chain after the recost that writes the dirty slug list to a per-run file and calls propagate with -SlugsFile; it pages on a propagate refusal and never widens scope. Extend the chain rather than adding a scheduled task (Brad 2026-09-27: new machinery must pay for itself)."
+      },
+      "proof": {
+        "guard_or_fixture": "the drain step's self-test (or propagate-recipes.ps1 -SelfTest extended)",
+        "must_fire_case": "MUST FIRE: a fixture queue with dirty specs older than 72h and no drain step run leaves them dirty; with the drain step, the step invokes propagate with -SlugsFile naming exactly those slugs (red on a revert, since no caller exists today)",
+        "clean_twin": "CLEAN TWIN: an empty dirty set makes the step call nothing and exit 0; and a hand run of propagate without -SlugsFile still refuses PROPAGATE-SCOPE-REFUSED",
+        "commands": [
+          "powershell -File meal-prep\\pipeline\\propagate-recipes.ps1 -SelfTest",
+          "health-heartbeat queue-depth read after the instance drain: recipe-specs-awaiting-propagate under its 72h bar"
+        ]
+      },
+      "freshness": "prior measurement 2026-10-01 (33 specs, 75.5h); re-count the dirty set before the instance run",
+      "leaves_open": "nothing",
+      "leaves_open_occurrences": 0,
+      "rollback": "remove the chain step; the queue returns to hand-run drains",
+      "premise_verified": null,
+      "deviation": null,
+      "shipped_commit": null,
+      "resolution_note": "Planned: drain the stuck propagate queue with a scoped run (sync-recipesdb-cost first, -SlugsFile of the dirty specs), then add a scoped drain step to the daily chain behind propagate's existing gates so the queue no longer waits on a person.",
+      "blast_radius": {
+        "measured_as": "publish-scope",
+        "measured_by": "prior count 2026-10-01: 33 dirty recipe specs awaiting propagate for 75.5h; the developer re-counts with propagate-recipes.ps1 -DryRun -SlugsFile before the real run",
+        "affected_now": 33,
+        "names": [
+          "the 33 dirty recipe specs named by the recipe-specs-awaiting-propagate queue-depth lift"
+        ],
+        "risk": "propagate republishes reader-facing recipe pages; scope is held to -SlugsFile, never -AllowCatalogue, and every existing propagate gate stays in force. No price literal ships in a card (prices render from the feed), so a republish moves no price."
+      }
+    }
+  ],
+  "queue_ids_seen": [
+    "2026-09-26-177835",
+    "2026-09-29-754693",
+    "2026-10-02-25cb66",
+    "2026-09-30-9b9cf1"
+  ]
+}
