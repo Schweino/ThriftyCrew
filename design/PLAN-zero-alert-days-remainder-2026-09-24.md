@@ -249,7 +249,7 @@ stores dropped from a commodity, wrong store department. Since 2026-09-20 a revi
 lane and never mailed (`send-alert.ps1`, Brad's ruling of that day), so step 11 starts from there: it moves those
 queue items into the packet and adds the adjudication, rather than reclassifying anything.
 
-**Status: BUILT 2026-10-02, not yet landed; bar window opens 2026-10-03, closes 2026-10-17** (the 14 days 2026-10-03 to
+**Status: BUILT and LANDED 2026-10-02 (846e055cd); bar window opens 2026-10-03, closes 2026-10-17** (the 14 days 2026-10-03 to
 2026-10-16). The bar above is unchanged. What was built, for the reader of the bar:
 - The route is at `send-alert.ps1` once the registry class is known, so no emitter call site changed. A review-class
   alert whose registry entry is one of the five (the soundness entries by id or by `lineage_parent` match-soundness,

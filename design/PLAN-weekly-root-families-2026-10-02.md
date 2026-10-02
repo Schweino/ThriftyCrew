@@ -1,6 +1,6 @@
 # PLAN: stop the weekly pile at its source (six root families behind 27 open items)
 
-**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phase 0 DONE (bar met, 25 of 27); Phase 1 built 2026-10-02, its 14-day bar window opens on landing; Phases 2 to 6 under way.**
+**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phases 0 to 6 built and landed on origin/main 2026-10-02; their bar windows run 2026-10-02 to 2026-10-17 (dates in each phase). Phase 7: detective wording landed, three rulings waiting (`design/ready-for-brad/weekly-root-families-phase-7.md`).**
 
 Written by the 2026-10-02 triage orchestrator at Brad's request ("26 weekly items screams systemic issue"). It is meant
 to be handed whole to a fresh session. That session reads this file, the plan it extends
@@ -152,6 +152,19 @@ As ruled and barred in the remainder plan, section 2, step 8. Do not restate or 
 5. Turn on ruling 6: the weekly lane's `new_source_check` starts checking new stores, feeds and large batches against
    the contract.
 
+**Landed 2026-10-02** (937809e08 is the last of its commits on origin/main). `design/SPEC-capture-row-contract.md`,
+`grocery/row-contract-lib.ps1` (one validator over the existing parsers, 42 fixture cases from each instance's real row
+text), and a daily SHADOW lane `grocery/audit-row-contract-shadow.ps1` over the engine's candidates and all seven
+builders' outputs (no builder changed: every one already carries the source text the contract needs). Ruling 6 is live:
+`validate-triage-plan.ps1` refuses the old "no contract exists" wording and a new source with no shadow line quoted; the
+triage skill says so. First shadow run (candidates-2026-09-30): would refuse 431 of 22,280 engine-priced rows (1.9%) and
+empty 26 of 2,916 priced cells, 24 of them fl oz sizes on 11 oz-unit commodities (the 44c416 class); 23 of 1,317
+out-of-band rows carry a basis refusal code (ab2257's missing evidence). The rules were tuned twice against that file, so
+the next 7 daily runs are the independent test. Landing found the lane launched and never read (test-auditors u049); it
+is now read like step 9's. **Waiting:** 7 shadow days per store end 2026-10-09; enforcement for Walmart and Sam's waits on
+R18 and for Aldi and Fareway on R11 (D1), and the 11 oz-unit commodities need Brad's call (density, unit change, or let
+their fl oz rows leave the board), in `design/ready-for-brad/weekly-root-families-phase-7.md`.
+
 ### Phase 3. Step 9, two-signal identity (several sessions, mostly waiting on shadow)
 
 As ruled in the remainder plan, step 9, with its bar verbatim: measure each store's category coverage first, 14 days
@@ -160,11 +173,30 @@ products and enforcement empties no more than 2% of live cells. The second signa
 and replaces the single-signal quarantine trigger behind 88bd45. The shadow report should name every family 2 item, so
 the step's effect on them is visible before enforcement.
 
+**Landed 2026-10-02** (601e96fbc). `grocery/audit-store-category-share.ps1` and
+`grocery/audit-crown-identity-shadow.ps1`, wired once into the daily chain, shadow only. Coverage: 11,698 of 22,129
+captured rows (52.9%) carry a usable store department; Walmart, Sam's Club and Aldi capture none, so 476 of 577 crowns
+(82.5%) read no-signal and the second signal can judge 101. First shadow day: 99 agree, 2 disagree. One disagreement was a
+live wrong cell: fresh cranberries at Baker's held by "Kroger Sweetened Cranberries", a dried product, fixed the same day
+by a `\bsweetened\b` exclude (fresh-cranberries 1 -> 0 cells, no other move). For the family-2 items: Glad bags disagree
+(the signal would have caught 6fc290); Del Monte peas and carrots, olive oil mayo and the sun-dried jars agree (form
+questions inside one department, which this signal cannot settle); the rest read no-signal. **Waiting:** 14 shadow days
+end 2026-10-16, then the ruled hand check of 30 disagreements; at about 2 a day, mostly repeats, 30 distinct ones may take
+longer, which the step's own note records as an input for revisiting the first-guess bar.
+
 ### Phase 4. Step 11, the review packet (one or two sessions)
 
 As ruled in the remainder plan, step 11, with its bar verbatim: the five review types page on at most 4 of 14 days
 while the packet carries every row the alerts used to. Fold dc03c3 in: one condition writes one packet row, never a
 roll-up plus an item.
+
+**Landed 2026-10-02** (846e055cd). `grocery/review-adjudication-lib.ps1` runs the three ruled adjudications at
+send-alert's review route; the five types write one row per condition to `grocery/out/review-packet.json` (gitignored)
+and only an unexplained crown change or out-of-band move on a live cell still queues. dc03c3 is folded in (one condition,
+one row; the roll-up writes none). triage-due lists packet rows as Class C/D work; the census prints page days against the
+bar and per-type row parity. Baseline: the five types queued on 14 of the 14 days 2026-09-19..2026-10-02. **Bar window
+2026-10-03 to 2026-10-16, read 2026-10-17.** One reading Brad may want to narrow: a SANITY "cheapest moved" new price flag
+counts as a crown change, so an unexplained one still queues (new price flags alone queued on 6 of the last 14 days).
 
 ### Phase 5. Chain data flow (needs D2; one or two sessions)
 
@@ -177,6 +209,22 @@ roll-up plus an item.
    as CLEAN TWIN.
 4. 2bcd10 stays with the bot-dedicated-checkout plan; this phase does not duplicate it.
 
+**Landed 2026-10-02** (f3b1b47da). `lib/board-pin.ps1`: the chain pins one board generation after its last board
+writer and before any consumer; guards, export-feed, publish-deals-page, build-deals-page, build-store-guide,
+publish-store-guide, send-price-alerts, build-sams-data, build-friday-email and capture-run's deferred post read the pin
+inside a run and behave as before outside one; a consumer handed another generation stops with BOARD-PIN MISMATCH. On a
+quarantine day the pin re-derives the verified board, so the post carries the held cells (1d4206). `ops/chain-steps.json`
+declares 26 steps and `lib/chain-step-order.ps1` (inside check-ad-cycles' self-test) fails a read before its writer; on
+today's chain it fired three times: c6bafd, and the daily export reading `v2-perserving.json` before compute-v2 writes it
+(the 602457 fix had not closed per_serving). A second export after top5-weekly, on the not-blocked publishing path only,
+fixes all three. It does NOT close 871301 (its 8 sites are outside the chain steps), which stays in the queue.
+**Bar window: the 14 daily runs 2026-10-03 to 2026-10-16, read 2026-10-17** with
+`powershell -File lib\board-pin.ps1 -Report -OutDir grocery\out -Days 14`: diverged=0 and recipe_equal 14 of 14.
+**Residuals owned by this phase (D3: recorded here, not minted):** price history is banked from the board before guards
+can quarantine it; recipe-overlay reads the board before a quarantine; compute-v2 never sees quarantine-held ingredient
+prices; guards' delegated audits, recipe-overlay and build-sale-windows are not wired to the pin (they read the pinned file
+only because it is also the newest). Each was printed by the build on every run; none is measured yet.
+
 ### Phase 6. Traps into gates (one session)
 
 1. A ratchet on `@(... | ConvertFrom-Json)` and `@(Get-...)` inline wraps (rule og-08), mark set at today's 90 sites and
@@ -186,8 +234,8 @@ roll-up plus an item.
    with c12baf's reaper case as MUST FIRE.
 3. **Bar:** 0 gate refusals attributed to box load over 14 days, from the push ledger.
 
-**Status 2026-10-02: BUILT on branch `weekly-root-families-p6`, not landed.** What changed against the steps above, and why:
-- Step 1 is held at ZERO in the existing `ops/audit-readjson-inline-wrap.ps1`, not ratcheted. Read off the AST, the "90
+**Status 2026-10-02: LANDED (5754a876d).** What changed against the steps above, and why:
+- Step 1 is held at ZERO in the existing `audit-readjson-inline-wrap.ps1` under `ops/`, not ratcheted. Read off the AST, the "90
   sites" were 7 in 775 scripts: the text regex also matched comments and `@((x | ConvertFrom-Json))`, which unrolls.
   Five of the 7 read a top-level array and were fixed in the same change (`build-arrivals-docket` had never loaded a
   commodity label: one key holding all 599 ids); two are deliberate MUST FIRE probes, now marked. With no backlog a
@@ -205,7 +253,7 @@ roll-up plus an item.
 **Bar window: opens on the day this lands on origin/main and closes 14 days later. Baseline, the 14 days before
 2026-10-02: 4 refusals attributed to load, all `ops\reap-runaway-processes.ps1` (2026-09-27, 09-29, 10-01, 10-02; the
 spinner's share read 46.9, 43.8, 48.4 and 48.4 against 50).** How to read it:
-- The ledger is `%LOCALAPPDATA%\ThriftyCrew\push-ledger\pushes-<yyyy-MM-dd>.jsonl` (`lib/push-ledger.ps1`), one file a
+- The ledger is `%LOCALAPPDATA%\ThriftyCrew\push-ledger\pushes-<yyyy-MM-dd>.jsonl` (`push-ledger.ps1` under `lib/`), one file a
   day, outside every checkout. The counted rows are `event = hook-refused`. Each names `gate`, `rc`, `blind`,
   `local_sha` and `log`, the gate log the pre-push hook keeps for a refusal.
 - A refusal is ATTRIBUTED TO LOAD when either (1) its `blind` token is `no-gate-worker-slot`, or (2) the FAIL line in
@@ -221,6 +269,12 @@ The 86-day rotation stays as ruled. The paced 3b trial answers its two COULD NOT
 build or not; separately, Brad rules whether a sale cell with no everyday fallback may move its term to the front of
 the rotation (a priority change inside the same 7-a-day budget, not a bigger budget). e40f92 and e7f9b9 close
 when Family Fare everyday rows land for their cells, or when the cells are ruled not carried.
+
+**2026-10-02.** The detective half landed with this status update: when every escalated
+sale cell is owned and asked, the alert now says "their capture has not found one" instead of "NO ONE IS WORKING THEM",
+registered as sale-no-fallback-worked. Phase 0 found the family is wider than this phase: 5 of the 8 cells that day were
+Hy-Vee, which the Family Fare rotation does not explain, so a third call is waiting with the other two in
+`design/ready-for-brad/weekly-root-families-phase-7.md`.
 
 ## 4. What finished looks like
 
