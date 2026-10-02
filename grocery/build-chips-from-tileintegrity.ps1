@@ -21,6 +21,7 @@
 param([string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\lf-write.ps1')  # Write-TcLfFile
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
@@ -56,7 +57,8 @@ if (-not (Test-Path $dir)) { New-Item -ItemType Directory $dir | Out-Null }
 foreach ($st in ($byStore.Keys | Sort-Object)) {
   $sl = if ($slug.ContainsKey($st)) { $slug[$st] } else { ($st.ToLower() -replace '[^a-z0-9]', '') }
   $f = Join-Path $dir ("chips-$sl.json")
-  ($byStore[$st] | ConvertTo-Json -Depth 4) | Set-Content $f -Encoding UTF8
+  # chips-*.json are TRACKED, so LF with the BOM git already holds (og-39); Set-Content wrote CRLF.
+  [void](Write-TcLfFile -Path $f -Text ([string]($byStore[$st] | ConvertTo-Json -Depth 4)))
   Write-Output ("  {0,-14}{1,3} chip(s) -> url-inputs\chips-{2}.json" -f $st, $byStore[$st].Count, $sl)
 }
 Write-Output ''

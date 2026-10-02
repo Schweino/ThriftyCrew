@@ -54,14 +54,7 @@ foreach ($r in $cmp) { foreach ($s in $r.stores) { if ($s.store -eq 'Family Fare
 $puPath = Join-Path $root 'product-urls.json'
 $puDoc = Read-JsonFile $puPath
 
-function Score([string]$board, [string]$cand) {
-  $n = { param($x) (($x.ToLower() -replace '[^a-z0-9 ]', ' ') -replace '\s{2,}', ' ').Trim() }
-  $b = @((& $n $board) -split ' ' | Where-Object { $_.Length -gt 2 })
-  $c = (& $n $cand)
-  if (-not $b.Count) { return 0 }
-  $h = 0; foreach ($w in $b) { if ($c -match [regex]::Escape($w)) { $h++ } }
-  return [math]::Round($h / $b.Count, 3)
-}
+. (Join-Path $root 'ff-name-score-lib.ps1')   # Get-FfNameScore: shared with resolve-familyfare-urls.ps1
 
 $planPath = Join-Path $OutDir 'ff-link-plan.json'
 
@@ -126,7 +119,7 @@ foreach ($v in $viol) {
     try {
       $resp = Invoke-WebRequest -Uri $api -UseBasicParsing -TimeoutSec 25 -Headers @{'User-Agent' = 'Mozilla/5.0'; 'Accept' = 'application/json' }
       foreach ($it in (ConvertFrom-Json $resp.Content).items) {
-        $s = Score $board ([string]$it.name)
+        $s = Get-FfNameScore $board ([string]$it.name)
         if ($s -gt $bs) { $bs = $s; $best = $it }
       }
       $err = ''
