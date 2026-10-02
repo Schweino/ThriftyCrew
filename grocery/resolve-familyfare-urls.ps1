@@ -62,16 +62,19 @@ $script:FfHttp = { param([string]$Url) Invoke-WebRequest -Uri $Url -UseBasicPars
 $script:FfSleep = { param([int]$Ms) Start-Sleep -Milliseconds $Ms }
 $script:rules = @{}
 
-# The staple board's global exclude is hardcoded in compare-deals.ps1 (staples are never a beverage/candy/
-# prepared form); the recipe board relaxes juice/sauce/canned/frozen (recipe items legitimately are those)
-# and carries its own global_exclude in recipe-commodities.json. Apply the RIGHT one per id's board.
-$STAPLE_GEX = @('drink\s*mix','kool[\s-]?aid','probiotic','kombucha','\bdip\b','\bsauce\b','wrapped','\bbake\b','\bbaked\b','seasoned','marinated','stuffed','\bkit\b','flavored','\bsoup\b','helper','lunchable','smoothie','\bpudding\b','ice\s*cream','\bcreamer\b','\bfrozen\b','\bcanned\b','breaded','\bsnack\b','\bmeal\b','casserole','\bwrap\b','poppers','muffin','pretzel','filled','strudel','\bcake\b','drinkable','(?<!orange\s)\bjuice\b','\bsoda\b','sparkling','seltzer','\bwater\b','energy\s*drink','sports\s*drink','tonic','lemonade','cocktail','pop[\s-]?tart','pastr','toaster','\btart\b','cereal','granola\s*bar','fruit\s*snack','\bgum\b')
+# The staple board's global exclude is Get-TcGlobalExclude (global-exclude-lib.ps1, gr-04), the list compare-deals
+# reads; the recipe board carries its own global_exclude in recipe-commodities.json. Apply the RIGHT one per id's
+# board, and waive a token exactly as compare-deals' Match-Category does: a name is blocked unless EVERY global
+# token it hits is in the commodity's own relax_global. This file used to hold a stale hand copy of the staple list
+# and no relax, so on 2026-10-02 all 7 of its no-match verdicts (cereal, baked-beans, alfredo-sauce, pasta-sauce,
+# caesar-salad-kit, frozen-broccoli, coffee-creamer) were the commodity's own name hitting a token it relaxes.
+. (Join-Path $root 'global-exclude-lib.ps1')   # Get-TcGlobalExclude
 
 function MatchesRules($name, $id) {
   $n = ([string]$name).ToLower()
   if (-not $script:rules.ContainsKey($id)) { return $true }
   $r = $script:rules[$id]
-  foreach ($g in $r.gex) { if ($g -and $n -match $g) { return $false } }      # board-appropriate global exclude first
+  foreach ($g in $r.gex) { if ($g -and $n -match $g -and $r.relax -notcontains $g) { return $false } }   # board's global exclude, less relax_global
   $hit = $false; foreach ($inc in $r.include) { if ($inc -and $n -match $inc) { $hit = $true; break } }
   if ($r.include.Count -gt 0 -and -not $hit) { return $false }
   foreach ($exc in $r.exclude) { if ($exc -and $n -match $exc) { return $false } }
@@ -301,6 +304,15 @@ if ($SelfTest) {
     $urlDoc = Read-JsonFile (Join-Path $tmp 'url-inputs\store-ff-urls.json'); $urlRows = @($urlDoc)
     Check 'MUST NOT FIRE: with nothing resolved, store-ff-urls.json is an empty array, not an empty file' ($urlRows.Count -eq 0) ("rows=" + $urlRows.Count)
 
+    # relax_global, as compare-deals' Match-Category applies it: every global token a name hits must be relaxed.
+    $script:rules['cereal'] = @{ include = @('\bcereal\b'); exclude = @(); unit = 'oz'; gex = @('cereal', '\bfrozen\b'); relax = @('cereal') }
+    $script:FfHttp = { param($u) Resp 200 (Items @((Item 'Our Family Cereal, Apple Rolls 32 Oz' '4.99' '32 oz' 'u/cereal'))) }
+    $r = Resolve-FfChip ([pscustomobject]@{ id = 'cereal'; board_item = 'Our Family Cereal, Apple Rolls 32 Oz'; price_per_unit = 0.156; unit = 'oz' }) 'cereal' 0.75
+    Check 'MUST FIRE: a global token the commodity relaxes (cereal) does not block its own product - never a false no-match' ($r.verdict -eq 'resolved-board') $r.verdict
+    $script:FfHttp = { param($u) Resp 200 (Items @((Item 'Frozen Cereal Bites' '4.99' '32 oz' 'u/fz'))) }
+    $r = Resolve-FfChip ([pscustomobject]@{ id = 'cereal'; board_item = ''; price_per_unit = 0.156; unit = 'oz' }) 'cereal' 0.75
+    Check 'MUST NOT FIRE: a second global token the commodity does NOT relax (frozen) still blocks the row' ($r.verdict -eq 'no-match') $r.verdict
+
     $wlChips = @((& $mk 'a'), (& $mk 'b'), (& $mk 'c'))
     $sl = Select-FfChips $wlChips 'c, a'
     Check 'CLEAN TWIN: -Ids keeps worklist order and only the named chips' ((@($sl | ForEach-Object { $_.id }) -join ',') -eq 'a,c') (@($sl | ForEach-Object { $_.id }) -join ',')
@@ -313,7 +325,7 @@ if ($SelfTest) {
   } finally {
     if (Test-Path -LiteralPath $tmp) { Remove-Item -LiteralPath $tmp -Recurse -Force }
   }
-  $expect = 20
+  $expect = 22
   if ($cases -ne $expect) { $fail++; Write-Output "FAIL  ran $cases cases, expected $expect" }
   if ($fail) { Write-Output "resolve-familyfare-urls self-test FAIL ($fail of $cases)"; exit 1 }
   Write-Output "resolve-familyfare-urls self-test pass ($cases cases)"
@@ -326,13 +338,14 @@ $ffAll = @($wl.stores.'Family Fare')
 $ff = Select-FfChips $ffAll $Ids
 $terms = (Read-JsonFile (Join-Path $root 'commodity-search.json')).terms
 
-# rules: id -> @{include;exclude;unit;gex}   gex = the global-exclude list for that id's board
+# rules: id -> @{include;exclude;unit;gex;relax}   gex = the global-exclude list for that id's board, relax = its relax_global
 $sdoc = Read-JsonFile (Join-Path $root 'commodities.json')
 $slist = if ($sdoc.PSObject.Properties['commodities']) { $sdoc.commodities } else { $sdoc }
-foreach ($c in $slist) { $script:rules[[string]$c.id] = @{ include = @($c.include); exclude = @($c.exclude); unit = [string]$c.unit; gex = $STAPLE_GEX } }
+$sgex = Get-TcGlobalExclude
+foreach ($c in $slist) { $script:rules[[string]$c.id] = @{ include = @($c.include); exclude = @($c.exclude); unit = [string]$c.unit; gex = $sgex; relax = @($c.relax_global | Where-Object { $_ }) } }
 $rdoc = Read-JsonFile (Join-Path $root 'recipe-commodities.json')
 $rgex = @($rdoc.global_exclude)
-foreach ($c in $rdoc.commodities) { if (-not $script:rules.ContainsKey([string]$c.id)) { $script:rules[[string]$c.id] = @{ include = @($c.include); exclude = @($c.exclude); unit = [string]$c.unit; gex = $rgex } } }
+foreach ($c in $rdoc.commodities) { if (-not $script:rules.ContainsKey([string]$c.id)) { $script:rules[[string]$c.id] = @{ include = @($c.include); exclude = @($c.exclude); unit = [string]$c.unit; gex = $rgex; relax = @($c.relax_global | Where-Object { $_ }) } } }
 
 # Get-PrimarySearchTerm: [string]$terms.$id JOINS a multi-term commodity into one dead search string.
 $termFor = { param($id) if ($terms.PSObject.Properties[$id]) { Get-PrimarySearchTerm $terms $id } else { $id -replace '-', ' ' } }
