@@ -1,0 +1,31 @@
+# One-off blast radius: for every Family Fare worklist chip, does its board item pass the staple rules under the
+# OLD resolver gate (hand-copied list, no relax) and the NEW one (Get-TcGlobalExclude + relax_global)?
+param([string]$Wt)
+$ErrorActionPreference = 'Stop'
+. (Join-Path $Wt 'lib\json-io.ps1')
+. (Join-Path $Wt 'grocery\global-exclude-lib.ps1')
+$sdoc = Read-JsonFile (Join-Path $Wt 'grocery\commodities.json')
+$slist = if ($sdoc.PSObject.Properties['commodities']) { $sdoc.commodities } else { $sdoc }
+$byId = @{}; foreach ($c in $slist) { $byId[[string]$c.id] = $c }
+$rdoc = Read-JsonFile (Join-Path $Wt 'grocery\recipe-commodities.json')
+$rById = @{}; foreach ($c in $rdoc.commodities) { $rById[[string]$c.id] = $c }
+$rgex = @($rdoc.global_exclude)
+$old = @('drink\s*mix','kool[\s-]?aid','probiotic','kombucha','\bdip\b','\bsauce\b','wrapped','\bbake\b','\bbaked\b','seasoned','marinated','stuffed','\bkit\b','flavored','\bsoup\b','helper','lunchable','smoothie','\bpudding\b','ice\s*cream','\bcreamer\b','\bfrozen\b','\bcanned\b','breaded','\bsnack\b','\bmeal\b','casserole','\bwrap\b','poppers','muffin','pretzel','filled','strudel','\bcake\b','drinkable','(?<!orange\s)\bjuice\b','\bsoda\b','sparkling','seltzer','\bwater\b','energy\s*drink','sports\s*drink','tonic','lemonade','cocktail','pop[\s-]?tart','pastr','toaster','\btart\b','cereal','granola\s*bar','fruit\s*snack','\bgum\b')
+$new = Get-TcGlobalExclude
+$wl = Read-JsonFile 'C:\Codex\ThriftyCrew\grocery\out\url-worklist.json'
+function Pass($n, $c, $gex, $relax) {
+  $n = ([string]$n).ToLower()
+  foreach ($g in $gex) { if ($g -and $n -match $g -and $relax -notcontains $g) { return "blocked by $g" } }
+  $hit = $false; foreach ($i in @($c.include)) { if ($i -and $n -match $i) { $hit = $true } }
+  if (-not $hit) { return 'no include hit' }
+  foreach ($e in @($c.exclude)) { if ($e -and $n -match $e) { return "excluded by $e" } }
+  return 'PASS'
+}
+foreach ($chip in @($wl.stores.'Family Fare')) {
+  $id = [string]$chip.id; $b = [string]$chip.board_item
+  if ($byId.ContainsKey($id)) { $c = $byId[$id]; $o = Pass $b $c $old @(); $nw = Pass $b $c $new @($c.relax_global | Where-Object { $_ }); $kind = 'staple' }
+  elseif ($rById.ContainsKey($id)) { $c = $rById[$id]; $o = Pass $b $c $rgex @(); $nw = Pass $b $c $rgex @($c.relax_global | Where-Object { $_ }); $kind = 'recipe' }
+  else { $o = 'no rules'; $nw = 'no rules'; $kind = 'none' }
+  "{0}`t{1}`t{2}`t{3}`t{4}" -f $kind, $id, $o, $nw, $b
+}
+

@@ -1,0 +1,72 @@
+"""Build one row per Family Fare chip for the 2026-10-02 re-run, from the run's own artifacts."""
+import json, re, sys, glob, os, collections
+
+sp, wt, out = sys.argv[1], sys.argv[2], sys.argv[3]
+orig = {}
+with open(os.path.join(sp, "orig.jsonl"), encoding="utf-8-sig") as f:
+    for line in f:
+        r = json.loads(line)
+        if r["store"] == "Family Fare":
+            orig[r["id"]] = r
+wl = json.load(open(r"C:\Codex\ThriftyCrew\grocery\out\url-worklist.json", encoding="utf-8-sig"))
+chips = wl["stores"]["Family Fare"]
+
+# verdict lines and resolved rows per slice; the LAST answered slice for an id wins (blocked ids were re-queued)
+verdict, said, slice_of, resolved = {}, {}, {}, {}
+for d in sorted(glob.glob(os.path.join(sp, "w8b-out", "slice-*"))):
+    name = os.path.basename(d)
+    for line in open(os.path.join(d, "stdout.txt"), encoding="utf-8-sig"):
+        m = re.match(r"^(OK|NO-MATCH|UNPRICEABLE|EMPTY|BLOCKED|NOT-ATTEMPTED)\s+(\S+)\s*(.*)$", line.rstrip())
+        if not m:
+            continue
+        v, cid, rest = m.groups()
+        if v in ("BLOCKED", "NOT-ATTEMPTED") and cid in verdict and verdict[cid] not in ("blocked", "not-attempted"):
+            continue
+        verdict[cid] = {"OK": "resolved", "NO-MATCH": "no-match", "UNPRICEABLE": "unpriceable", "EMPTY": "empty",
+                        "BLOCKED": "blocked", "NOT-ATTEMPTED": "not-attempted"}[v]
+        said[cid] = rest.strip()
+        slice_of[cid] = name
+    rows = json.load(open(os.path.join(d, "store-ff-urls.json"), encoding="utf-8-sig"))
+    for r in rows or []:
+        resolved[r["id"]] = r
+
+hand = {}
+with open(os.path.join(sp, "w8b-handcheck.tsv"), encoding="utf-8") as f:
+    next(f)
+    for line in f:
+        p = line.rstrip("\n").split("\t")
+        hand[p[0]] = {"page_heading": p[1], "vs_commodity": p[2], "opens_board_item": p[3] == "yes", "note": p[4] if len(p) > 4 else ""}
+
+rules = {}
+for line in open(os.path.join(sp, "relax-all.txt"), encoding="utf-8-sig"):
+    p = line.rstrip("\n").split("\t")
+    if len(p) >= 4:
+        rules[p[1]] = {"old": p[2], "new": p[3]}
+
+n = collections.Counter()
+with open(out, "w", encoding="utf-8", newline="\n") as f:
+    for c in chips:
+        cid = c["id"]
+        v = verdict.get(cid, "unchecked")
+        if v in ("blocked", "not-attempted"):
+            v = "unchecked"
+        res = resolved.get(cid) if v == "resolved" else None
+        h = hand.get(cid) if res else None
+        row = {
+            "store": "Family Fare", "id": cid, "commodity": c["commodity"], "board_item": c["board_item"],
+            "run1_outcome": orig.get(cid, {}).get("outcome"), "run1_hand_check": orig.get(cid, {}).get("hand_check"),
+            "rerun_verdict": v, "rerun_slice": slice_of.get(cid), "rerun_said": said.get(cid) if v == "unchecked" else None,
+            "resolved_match": res.get("match") if res else None, "resolved_name": res.get("name") if res else None,
+            "resolved_url": res.get("url") if res else None,
+            "hand_check": (h["vs_commodity"] if h else ("not-resolved" if v != "resolved" else "missing")),
+            "opens_board_item": h["opens_board_item"] if h else None, "page_heading": h["page_heading"] if h else None,
+            "hand_note": h["note"] if h and h["note"] else None,
+            "rules_old_gate": rules.get(cid, {}).get("old"), "rules_new_gate": rules.get(cid, {}).get("new"),
+        }
+        f.write(json.dumps(row, ensure_ascii=False) + "\n")
+        n[row["rerun_verdict"]] += 1
+        n["hand:" + row["hand_check"]] += 1
+        if row["opens_board_item"]:
+            n["opens_board_item"] += 1
+print(len(chips), dict(n))
+

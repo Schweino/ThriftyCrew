@@ -1,0 +1,42 @@
+# W8 re-measurement harness: run the fixed Family Fare resolver over the 65 worklist chips in slices, in a scratch
+# clone, accumulating one verdict line per chip. A chip that came back blocked or not-attempted returns to the pool.
+param([string]$Clone, [string]$Out, [string]$StartAt = '10:50', [string]$StopAt = '17:00', [int]$Slice = 10, [int]$WaitMin = 30)
+$ErrorActionPreference = 'Stop'
+$start = [datetime]::ParseExact($StartAt, 'HH:mm', $null); $stop = [datetime]::ParseExact($StopAt, 'HH:mm', $null)
+New-Item -ItemType Directory -Force -Path $Out | Out-Null
+$log = Join-Path $Out 'harness.log'
+function L($m) { $line = (Get-Date -Format 'HH:mm:ss') + ' ' + $m; Add-Content -LiteralPath $log -Value $line -Encoding utf8; Write-Output $line }
+while ((Get-Date) -lt $start) { Start-Sleep -Seconds 30 }
+$wl = Get-Content -Raw -Encoding utf8 (Join-Path $Clone 'grocery\out\url-worklist.json') | ConvertFrom-Json
+$pool = New-Object System.Collections.Generic.List[string]
+foreach ($c in @($wl.stores.'Family Fare')) { $pool.Add([string]$c.id) }
+$final = @{}   # id -> verdict line
+$n = 0
+L ("start: " + $pool.Count + " chips")
+while ($pool.Count -gt 0 -and (Get-Date) -lt $stop) {
+  $n++
+  $take = @($pool | Select-Object -First $Slice)
+  $sdir = Join-Path $Out ("slice-{0:00}" -f $n)
+  New-Item -ItemType Directory -Force -Path $sdir | Out-Null
+  Push-Location $Clone
+  try {
+    $lines = & powershell -NoProfile -File 'grocery\resolve-familyfare-urls.ps1' -Ids ($take -join ',')
+    $code = $LASTEXITCODE
+  } finally { Pop-Location }
+  Set-Content -LiteralPath (Join-Path $sdir 'stdout.txt') -Value $lines -Encoding utf8
+  Copy-Item (Join-Path $Clone 'grocery\out\url-inputs\store-ff-urls.json') $sdir
+  Copy-Item (Join-Path $Clone 'grocery\out\ff-notcarry.json') $sdir
+  $answered = 0
+  foreach ($id in $take) {
+    $ln = @($lines | Where-Object { $_ -match ('^\S+\s+' + [regex]::Escape($id) + '\s') }) | Select-Object -First 1
+    if (-not $ln) { L "  no line for $id (exit $code)"; continue }
+    if ($ln -match '^(BLOCKED|NOT-ATTEMPTED)\s') { continue }
+    $final[$id] = $ln; [void]$pool.Remove($id); $answered++
+  }
+  L ("slice $n exit=$code answered $answered of " + $take.Count + "; pool now " + $pool.Count + "; " + (@($lines) | Select-Object -Last 2 | Select-Object -First 1))
+  if ($pool.Count -and $answered -lt $take.Count) { L "  wall: waiting $WaitMin min"; Start-Sleep -Seconds ($WaitMin * 60) }
+}
+$all = @($wl.stores.'Family Fare' | ForEach-Object { $id = [string]$_.id; if ($final.ContainsKey($id)) { $final[$id] } else { 'UNCHECKED     ' + $id } })
+Set-Content -LiteralPath (Join-Path $Out 'verdicts.txt') -Value $all -Encoding utf8
+L ("done: answered " + $final.Count + " of " + @($wl.stores.'Family Fare').Count + "; unchecked " + $pool.Count)
+
