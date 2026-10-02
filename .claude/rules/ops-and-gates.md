@@ -142,13 +142,13 @@ story in the history file or a memory, never here. `ops/audit-rule-format.ps1` r
 - **A self-test the census cannot find can lose its must-fires and stay green.** Open a new suite in a shape
   `Get-SelfTestBlock` reads: an `if` on a self-test switch, the code after `if (-not $SelfTest) { ...; exit }`, a
   function `Invoke-<name>SelfTest`, or a file named `test-*.ps1`. (channel: gate ops/audit-mustfire-census.ps1; full: og-35)
-- **A hermetic self-test never asserts an UPPER wall-clock bar**: the box is shared and load makes it red. Prove
+- **A hermetic self-test never asserts an UPPER wall-clock bar**: load on the shared box makes it red. Prove
   concurrency by OVERLAP (`lib/concurrency-probe.ps1`); a clock survives only as a generous hang guard or a LOWER
-  bar. Prove a regex bound by the timeout the code RECORDS, with a victim whose unbounded cost is a few seconds. A
-  poll with a deadline, a barrier with a timeout, or a timer racing a retry window is the same bar: wait on an event
-  the subject produces, end a wait from inside a swappable seam, and give the real timer its own twin. Hold a
-  subject open on a CONDITION the test controls (a stop file), sample, and read it still running before releasing
-  it. A definition is not a registration: check `Get-ScheduledTask`. (channel: gate ops/audit-selftest-load-bars.ps1; full: og-36)
+  bar. Prove a regex bound by the timeout the code RECORDS, with a victim whose unbounded cost is seconds. A
+  poll deadline, a barrier timeout or a timer racing a retry window is the same bar: wait on an event the subject
+  produces, end a wait from inside a swappable seam, and give the real timer its own twin. Hold a subject open on a
+  CONDITION the test controls (a stop file), sample, and see it still running before release. A definition is not a
+  registration: check `Get-ScheduledTask`. (channel: gate ops/audit-selftest-load-bars.ps1; full: og-36)
 - **A timed lock wait is a BRANCH**: read `WaitOne`'s answer and refuse on `$false`; its timed-out branch gets a
   MUST FIRE held from another process (`lib/mutex-hold.ps1`). **An append is not a locked write**: a file several
   processes append to goes through `Add-TcLine` (`lib/append-line.ps1`). (channel: gate ops/audit-unread-wait.ps1; full: og-37)

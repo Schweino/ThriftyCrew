@@ -39,6 +39,8 @@
     .\audit-selftest-load-bars.ps1 -Tighten   also record a believable fall (or the first baseline)
 #>
 [CmdletBinding()]
+# The self-test builds its tree and baselines in a per-run temp directory; beyond this file it reads only the libraries below.
+# gate-inputs: ops\audit-selftest-load-bars.ps1, lib\guard-contract.ps1, lib\ratchet.ps1, lib\tree-walk.ps1, lib\lf-write.ps1, lib\selftest-lib.ps1
 param([switch]$SelfTest, [switch]$Tighten, [switch]$AcceptDrop, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
