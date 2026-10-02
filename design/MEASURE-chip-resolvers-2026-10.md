@@ -3,6 +3,10 @@
 Plan: `design/PLAN-browser-refresh-hardening-2026-10-02.md`, W8 step 1. Measurement only: nothing is wired,
 nothing ran in a landing checkout, and nothing here changes a resolver.
 
+Harness: `grocery/resolve-familyfare-urls.ps1` at blob e8f4996aaefaec7e2d28ab0b5098beeb37bb5e46 and
+`grocery/resolve-chips-hyvee.ps1` at blob 4528d4fedfab7c329a794588375e330cea2eab6f, run 2026-10-02 in a scratch clone;
+the exact commands are in the method section below.
+
 ## Question
 
 `grocery/out/url-worklist.json` holds the product-link chips the browser task never reaches. Two of the four stores
