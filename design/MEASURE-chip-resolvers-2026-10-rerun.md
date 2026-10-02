@@ -124,7 +124,10 @@ for the commodity where the board itself is wrong, and making it disagree with t
 4. **A new throttle shape.** Some blocked answers were HTTP 200 with no `items` array at all
    (pepperoni, slice 4). The resolver counts that as blocked. The price pull's `Get-FreshopItems` tests
    `@($r.items).Count -eq 0`, and for a missing array that count is 1 (`@($null)`), so such an answer is recorded
-   neither as an empty 200 nor as a refusal. What the pull then does with the one `$null` row was not checked.
+   neither as an empty 200 nor as a refusal. Read from the code afterwards (not run): it returns that one `$null`
+   element, the term loop's `if (@($items).Count -eq 0)` is false, so the term is scored `$termSuccess = today`, and
+   `Ingest-Items` skips the `$null` row. A throttled term is recorded as freshly bought with no rows. Filed as its own
+   task; how often it has happened was not measured.
 
 ## Not done, and why
 
