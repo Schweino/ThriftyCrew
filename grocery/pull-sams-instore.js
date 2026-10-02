@@ -325,3 +325,18 @@ const samsSweepToCsv = () => {
 };
 const samsSweepVerdicts  = () => sweepVerdicts(SAMS_STORAGE_KEY);
 const samsSweepRemaining = wl => sweepRemaining(SAMS_STORAGE_KEY, wl);
+
+/* THE FINISH (2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md W4). Builds the capture, refuses to post
+   one that names no store or carries no rows, and posts it UNALTERED through the lib's tcPostToSink, which is the
+   only tested route to the sink. THE TAB NAVIGATES to the sink's reply, so this is the agent's LAST call in it.
+   Returns what the page sent ({name, chars, lines, first, action}) to report against the sink's RECV line. */
+const samsFinish = (name) => {
+  if (!/^sams-[A-Za-z0-9._-]+$/.test(String(name))) throw new Error('samsFinish: the sink name must start sams-: ' + name);
+  const csv = samsSweepToCsv();
+  if (!csv.startsWith('#tc-store ')) throw new Error('samsFinish: no MATCHES rows, so no #tc-store line; nothing was posted');
+  return tcPostToSink(name, csv);
+};
+/* Reachable after an inject wrapper's block closes (its entry points are block-scoped consts). */
+if (typeof window !== 'undefined') {
+  Object.assign(window, { pullSamsInStore, samsIdentity, samsSweepToCsv, samsSweepVerdicts, samsSweepRemaining, samsFinish });
+}

@@ -126,3 +126,7 @@ const pullFarewayInStore     = (worklist, opts) => runPacedSweep(farewayAgent, w
 const farewaySweepToCsv      = () => sweepToCsv(FAREWAY_STORAGE_KEY, p => [p.n, p.lp ?? '', p.up ?? '', p.id ?? '']);
 const farewaySweepVerdicts   = () => sweepVerdicts(FAREWAY_STORAGE_KEY);
 const farewaySweepRemaining  = wl => sweepRemaining(FAREWAY_STORAGE_KEY, wl);
+
+/* Reachable after an inject wrapper's block closes (2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md W4):
+   the Fareway brief asserts the store with farewayIdentity() before it starts farewaySweep. */
+if (typeof window !== 'undefined') Object.assign(window, { farewayIdentity, pullFarewayInStore, farewaySweepVerdicts });

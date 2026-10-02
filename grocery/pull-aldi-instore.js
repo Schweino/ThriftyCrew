@@ -366,3 +366,19 @@ const aldiSearchToCsv = (idByTerm) => {
   return head.concat([ALDI_CAPTURE_COLUMNS], out).join('\n');
 };
 const aldiSearchVerdicts = () => sweepVerdicts(ALDI_SEARCH_STORAGE_KEY);
+
+/* THE FINISH (2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md W4). Builds the capture, refuses to post
+   one that names no store or carries no rows, and posts it UNALTERED through the lib's tcPostToSink, which is the
+   only tested route to the sink. THE TAB NAVIGATES to the sink's reply, so this is the agent's LAST call in it.
+   Returns what the page sent ({name, chars, lines, first, action}) to report against the sink's RECV line. */
+const aldiFinish = (name, idByTerm) => {
+  if (!/^aldi-[A-Za-z0-9._-]+$/.test(String(name))) throw new Error('aldiFinish: the sink name must start aldi-: ' + name);
+  if (!idByTerm || typeof idByTerm !== 'object') throw new Error('aldiFinish: pass the worklist\'s term -> commodity id map; the first column is the commodity id');
+  const csv = aldiSearchToCsv(idByTerm);
+  if (!csv.startsWith('#tc-store ')) throw new Error('aldiFinish: no MATCHES rows, so no #tc-store line; nothing was posted');
+  return tcPostToSink(name, csv);
+};
+/* Reachable after an inject wrapper's block closes (its entry points are block-scoped consts). */
+if (typeof window !== 'undefined') {
+  Object.assign(window, { pullAldiSearch, assertInStore, aldiSearchToCsv, aldiSearchVerdicts, aldiFinish });
+}

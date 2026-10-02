@@ -349,3 +349,96 @@ function sweepRemaining(storageKey, worklist) {
   const res = JSON.parse(localStorage.getItem(storageKey) || '{}');
   return worklist.filter(t => !res[t] || res[t].v === 'UNUSABLE');
 }
+
+/*
+  ---------------------------------------------------------------------------------------------
+  THE ONE WAY A CAPTURE REACHES THE SINK: tcPostToSink(name, text)  (2026-10-02)
+  ---------------------------------------------------------------------------------------------
+  design\PLAN-browser-refresh-hardening-2026-10-02.md W4. Until this, every agent hand-built the form from the
+  task file's prose, and the prose was re-composed by the orchestrator each morning. On 2026-10-02 the brief
+  said to target a hidden iframe and "not navigate the tab": all four stores' posts failed (8 attempts).
+  walmart.com's frame-src blocks localhost; Aldi, Sam's and Fareway failed silently, no console error. The
+  same form with NO target landed chars=AGREE on the first try for all four. A committed function cannot be
+  re-composed wrong, so this is the only route, and every store's finish function calls it.
+
+  WHAT IT DOES, AND WHY EACH PART:
+    - A <form> on the tab's OWN document (never an iframe's: 2026-09-19, a form inside an injected iframe
+      inherits the frame's origin rules and the post did not arrive).
+    - NO target. It submits top-level and THE TAB NAVIGATES to the sink's reply, so it is the LAST call an
+      agent makes in that tab: read everything you need from the page first.
+    - method POST, enctype text/plain, one <textarea name="csv">. A form post is not covered by connect-src
+      (walmart.com sets connect-src 'self', so fetch and sendBeacon are out). A textarea, not an <input>,
+      because an input's value drops line breaks. The browser rewrites LF to CRLF and wraps the value as
+      csv=<value><CRLF>; capture-sink.ps1 undoes exactly that envelope.
+    - ?chars=text.length, the plain length of the string built here. The sink compares it after undoing
+      the envelope and prints chars=AGREE or chars=MISMATCH; do not try to predict the wire length.
+    - submit() inside setTimeout(..., 0), so the tool call returns before the navigation starts.
+  Returns what the page sent ({name, chars, lines, first, action}) so the agent can report it against the
+  sink's RECV line. opts: port (8791), document and schedule (tests supply both).
+*/
+function tcPostToSink(name, text, opts = {}) {
+  if (typeof name !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(name)) {
+    throw new Error('tcPostToSink: the sink name must be letters, digits, dot, dash or underscore: ' + name);
+  }
+  if (typeof text !== 'string' || !text.length) throw new Error('tcPostToSink: nothing to post for ' + name);
+  const doc = opts.document || document;
+  const port = opts.port || 8791;
+  const schedule = opts.schedule || (fn => setTimeout(fn, 0));
+  const form = doc.createElement('form');
+  form.method = 'POST';
+  form.enctype = 'text/plain';
+  form.action = 'http://localhost:' + port + '/' + name + '?chars=' + text.length;
+  form.style.display = 'none';
+  const field = doc.createElement('textarea');
+  field.name = 'csv';
+  field.value = text;
+  form.appendChild(field);
+  doc.body.appendChild(form);
+  schedule(() => form.submit());
+  return { name, chars: text.length, lines: text.split('\n').length, first: text.split('\n', 1)[0], action: form.action };
+}
+
+/*
+  ---------------------------------------------------------------------------------------------
+  START ONCE, THEN WAIT INSIDE THE PAGE: tcStart(label, start, progress) and tcWait(maxMs)  (2026-10-02)
+  ---------------------------------------------------------------------------------------------
+  design\PLAN-browser-refresh-hardening-2026-10-02.md W3/W4. The tool call times out at 45 s, so a sweep is a
+  background promise that is polled. Agents polled with a fresh short call every ~30 s, and every call re-bills
+  the whole context, which is most of a store agent's cost (2026-10-02: 123 calls, 614,026 tokens over four
+  stores). tcWait spends up to maxMs (default 40 s) waiting INSIDE the page and returns as soon as the run ends,
+  so a 20-minute sweep is a start call, a handful of waits and a finish call.
+  start: () => promise (a sweep). progress: optional () => object read on every wait (Fareway's __fwSweep).
+  A run that throws is DONE with its error kept, never a silent hang.
+*/
+function tcStart(label, start, progress) {
+  const st = { label: String(label), done: false, error: null, summary: null, startedAt: Date.now(), progress: progress || null };
+  st.promise = Promise.resolve()
+    .then(start)
+    .then(s => { st.summary = s; st.done = true; }, e => { st.error = String((e && e.message) || e); st.done = true; });
+  if (typeof window !== 'undefined') window.__tcRun = st;
+  else tcStart.last = st;
+  return { label: st.label, started: new Date(st.startedAt).toISOString() };
+}
+
+async function tcWait(maxMs = 40000) {
+  const st = (typeof window !== 'undefined') ? window.__tcRun : tcStart.last;
+  if (!st) throw new Error('tcWait: nothing was started (call tcStart first)');
+  if (!st.done) await Promise.race([st.promise, sleep(maxMs)]);
+  let prog = null;
+  try { prog = st.progress ? st.progress() : null; } catch (e) { prog = { error: String((e && e.message) || e) }; }
+  const s = st.summary;
+  const brief = (s && typeof s === 'object')
+    ? { matches: s.matches, empty: s.empty, unusable: s.unusable, remaining: s.remaining,
+        i: s.i, n: s.n, lines: Array.isArray(s.lines) ? s.lines.length : undefined,
+        errors: Array.isArray(s.errors) ? s.errors.length : undefined, aborted: s.aborted, timing: s.timing ? s.timing.verdict : undefined }
+    : s;
+  // A bot wall blocks the sweep inside awaitWallCleared until window.__tcResume is set; surface it on every wait so
+  // the agent runs the Windows prompt (notify-desktop.ps1) instead of polling a sweep that cannot move.
+  const wall = (typeof window !== 'undefined' && window.__tcWall) ? window.__tcWall : null;
+  return { label: st.label, done: st.done, error: st.error, elapsedMs: Date.now() - st.startedAt,
+           progress: prog, wall, summary: st.done ? brief : null };
+}
+
+/* Reachable after an inject wrapper's function scope closes. In the Python driver's global-scope inject these
+   are globals already, and in node there is no window, so both are no-ops. */
+if (typeof window !== 'undefined') Object.assign(window, { tcPostToSink, tcStart, tcWait });

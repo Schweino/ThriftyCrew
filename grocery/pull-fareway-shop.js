@@ -304,8 +304,26 @@ function farewaySweepJsonl() {
   return st.lines.map(l => JSON.stringify(l)).join('\n') + (st.lines.length ? '\n' : '');
 }
 
+/* THE FINISH (2026-10-02, design\PLAN-browser-refresh-hardening-2026-10-02.md W4). Builds the capture, refuses to post
+   one that names no store or carries no rows, and posts it UNALTERED through the lib's tcPostToSink, which is the
+   only tested route to the sink. THE TAB NAVIGATES to the sink's reply, so this is the agent's LAST call in it.
+   Returns what the page sent ({name, chars, lines, first, action}) to report against the sink's RECV line.
+   Fareway's capture is the sweep's JSON lines; a stopped (aborted) sweep still posts the lines it read before the
+   stop, all at the asserted store, and reports the abort and the error count beside the post. */
+function farewayFinish(name) {
+  if (!/^fareway-[A-Za-z0-9._-]+$/.test(String(name))) throw new Error('farewayFinish: the sink name must start fareway-: ' + name);
+  const jsonl = farewaySweepJsonl();
+  if (!jsonl) throw new Error('farewayFinish: the sweep read no term, so there is nothing to post');
+  const st = window.__fwSweep;
+  const sent = tcPostToSink(name, jsonl);
+  sent.errors = st.errors.length;
+  sent.aborted = st.aborted;
+  return sent;
+}
+if (typeof window !== 'undefined') Object.assign(window, { farewaySweep, farewaySweepJsonl, farewayFinish });
+
 /* Node/test surface. In the browser these are just globals; the PowerShell self-test requires the file. */
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { farewaySaleEndsDays, farewayShopExtract, farewayItemNodes, farewayReadLocation,
-                     farewayNormQuery, farewayQueryItemIds, farewayScopedCount, farewaySweep, farewaySweepJsonl };
+                     farewayNormQuery, farewayQueryItemIds, farewayScopedCount, farewaySweep, farewaySweepJsonl, farewayFinish };
 }
