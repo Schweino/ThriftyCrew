@@ -49,7 +49,7 @@ already fixed in the live task file (the "AND NEVER TARGET AN IFRAME EITHER" par
 Ordered by risk of a wrong number on the board first, then cost per run, then upkeep. W1 waits on a ruling; everything
 else can start at once. One branch per item, named `browser-refresh/w<N>-<slug>`, landed through `ops\push-main.ps1`.
 
-### W1. Pin Sam's Club to one club, by id (accuracy) - NEEDS BRAD'S RULING FIRST
+### W1. Pin Sam's Club to one club, by id (accuracy) - RULED 2026-10-02: 13130 L St, 68137
 
 **The problem.** Today's capture says `#tc-store store="Omaha Sam's Club"`. `samsIdentity()` in
 `grocery\pull-sams-instore.js` (line 56) reads the club from page TEXT, falling back to any line containing "Omaha", and
@@ -180,7 +180,7 @@ before and after and accounting for each one.
 **Rejected:** leaving it and relying on "THE SHAPE overrides". A Sonnet-run future, or a tired orchestrator, follows
 the wrong paragraph; the cost is every morning's read.
 
-### W7. Land the task file's own backup (upkeep) - NEEDS BRAD'S RULING
+### W7. Land the task file's own backup (upkeep) - RULED 2026-10-02: yes
 
 The repo mirror (`ops/prompt-backup/scheduled-tasks/grocery-browser-stores-refresh/SKILL.md`) was already behind and
 uncommitted before today, and the task's own rule "DO NOT ... push" means it can never land an edit to itself.
@@ -228,6 +228,11 @@ not belong in it.
    in your Chrome when it drifts, as Walmart is. W1 cannot start without this.
 2. **May the morning task push one file, its own backup, on days it edits itself?** It would push from a clean side
    copy, never the board. Recommendation: **yes** (W7).
+
+**RULED 2026-10-02 (Brad, implementation session, answering the two questions above):** decision 1, *"13130 L St
+(Recommended)"*: the board's Sam's Club is 13130 L St, Omaha 68137. Decision 2, *"Yes (Recommended)"*: the morning task
+lands its own backup, and only that file, on days it edits itself. W1 and W7 are unblocked.
+
 3. **(Later, only if W2's measurement passes its bar.)** May Walmart's in-store price per unit be worked out from the
    price and the size in the product's own name, when Walmart prints none? Recommendation: decide after the numbers.
 
