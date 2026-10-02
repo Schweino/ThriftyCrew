@@ -65372,7 +65372,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\bsweetened\\b"
                     ]
     },
     {
