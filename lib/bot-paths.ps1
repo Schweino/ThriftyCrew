@@ -121,7 +121,11 @@ function Get-BotServedPaths {
     'meal-prep/db/recipes',
     'meal-prep/cheapnow-data.js', 'meal-prep/dinner-data.js', 'meal-prep/stretcher-data.js',
     'site/tools/cheap-dinners-tool.html', 'site/tools/dinner-tonight-tool.html',
-    'site/tools/payday-stretcher-tool.html'
+    'site/tools/payday-stretcher-tool.html',
+    # THE PROPAGATE DRAIN, ADDED 2026-10-02 (triage 2026-09-30-9b9cf1): check-ad-cycles now runs
+    # propagate-recipes.ps1 -Drain, which advances these two after a publish. Same lesson as above: a new
+    # writer in the chain is invisible to this list until it is named here.
+    'meal-prep/pipeline/propagate-stamps.json', 'meal-prep/planner-data.js'
   )
 }
 

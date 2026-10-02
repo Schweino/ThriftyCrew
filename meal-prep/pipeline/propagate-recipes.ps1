@@ -47,9 +47,9 @@
 # caller passes -AllowCatalogue. See Test-PropagateScope below for why.
 # The self-test copies lib\*.ps1 into a sandbox, runs the allergen gate on a temp card against allergens.json, reads the reanchor patterns as text, and its -DryRun child reads the stamps:
 # gate-inputs: lib\*.ps1, meal-prep\lib\allergen-lib.ps1, meal-prep\db\allergens.json, meal-prep\pipeline\audit-allergen-line.ps1, meal-prep\pipeline\propagate-stamps.json
-# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1
+# gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1, grocery\check-ad-cycles.ps1
 param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
-      [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue)
+      [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue, [switch]$Drain, [int]$DrainMax = 150)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -155,6 +155,33 @@ function Read-SlugFile([string]$Path, [string]$Label) {
   if (-not $Path) { return @() }
   if (-not (Test-Path -LiteralPath $Path)) { throw "propagate: $Label named $Path but it does not exist - refusing, because an unreadable scope is not an empty one" }
   return @(Get-Content -LiteralPath $Path -Encoding UTF8 | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+}
+
+# ---- -Drain: THE SCHEDULED DRAIN NAMES ITS OWN SCOPE, AND IT IS THE NARROW ONE (2026-10-02, triage 2026-09-30-9b9cf1) ----
+# THE GAP. Nothing called this script on a schedule, so its queue drained only when a person ran it: 33 specs sat
+# dirty 75.5h past the 72h health-heartbeat's QUEUE STUCK tolerates, an alarm with no repair lane. The daily chain
+# (grocery\check-ad-cycles.ps1, after the re-anchor loop) now runs `-Drain`. -Drain does not add a scope rule: it
+# NAMES the dirty set minus db\held-recipes.json in a per-run slug file and hands that to the existing -SlugsFile
+# narrowing, so every stage and gate below runs exactly as for a hand run. A held spec is not named, so it is left
+# dirty, unbuilt and unstamped (publish would refuse it anyway; leaving it out also keeps it off the build).
+# It refuses -SlugsFile, -AllowCreateFile and -AllowCatalogue (it never creates a post and never widens), and it
+# refuses outright over -DrainMax named specs. THE BAR: 150, the same sanity cap the chain's re-anchor republish
+# uses (check-ad-cycles $CAP) for "a human should look before this many live pages are rewritten unattended";
+# chosen as policy, not from a sweep; no other value was tried. The founding backlog was 33; 2026-09-19 was 447.
+# WHEN THE PRODUCER STOPS: nothing dirty names nothing and the run prints 'nothing to propagate'. A held list it
+# cannot parse THROWS (fails closed): an unreadable hold is not an empty one, and this run is unattended.
+function Read-HeldSlugs([string]$Path) {
+  if (-not (Test-Path -LiteralPath $Path)) { return @() }
+  $hd = Get-Content -LiteralPath $Path -Raw -Encoding UTF8 | ConvertFrom-Json
+  return @(@($hd.held) | Where-Object { $_ -and $_.slug } | ForEach-Object { [string]$_.slug })
+}
+function Get-DrainScope {
+  param($Dirty, $Held, [int]$Max)
+  $heldSet = @{}
+  foreach ($h in @($Held)) { if ($h) { $heldSet[[string]$h] = $true } }
+  $named = @(@($Dirty) | Where-Object { $_ -and -not $heldSet.ContainsKey([string]$_) })
+  $kept = @(@($Dirty) | Where-Object { $_ -and $heldSet.ContainsKey([string]$_) })
+  return [pscustomobject]@{ Named = $named; Held = $kept; Max = $Max; Refuse = ($named.Count -gt $Max) }
 }
 
 # ---- THE ALLERGEN LINE, CHECKED ON THE CARD THAT SHIPS (2026-09-18) ------------------------------------
@@ -438,6 +465,42 @@ if ($SelfTest) {
     $iCalc = $pSrc.IndexOf('$scope = Test-Propagate' + 'Scope')
     T 'MUST FIRE  the live scope check is computed from Test-PropagateScope and refuses BEFORE the first stage' `
       (($iCalc -ge 0) -and ($iScope -gt $iCalc) -and ($iStage -gt $iScope)) ("calc@{0} refuse@{1} firstStage@{2}" -f $iCalc, $iScope, $iStage)
+
+    # ---- -Drain, THE SCHEDULED DRAIN (2026-10-02, triage 2026-09-30-9b9cf1). Founding row: 33 specs dirty 75.5h
+    # with no caller; 7 of them were in db\held-recipes.json, so the drain must name 26 and leave those 7. ----
+    $ds = Get-DrainScope -Dirty @('stuck-a', 'stuck-b', 'held-h') -Held @('held-h', 'held-not-dirty') -Max 150
+    T 'MUST FIRE  -Drain names every dirty spec past tolerance that is not held (the stuck queue is drained)' `
+      (((@($ds.Named) | Sort-Object) -join ',') -eq 'stuck-a,stuck-b' -and (-not $ds.Refuse)) ("named=" + (@($ds.Named) -join ',') + " refuse=" + $ds.Refuse)
+    T 'CLEAN TWIN a HELD dirty spec stays put: not named, reported as held, and a held spec that is not dirty is not invented' `
+      ((@($ds.Held) -join ',') -eq 'held-h' -and (@($ds.Named) -notcontains 'held-h')) ("held=" + (@($ds.Held) -join ','))
+    $ds = Get-DrainScope -Dirty @() -Held @('held-h') -Max 150
+    T 'MUST NOT FIRE an empty dirty set names nothing and is not refused' ((@($ds.Named).Count -eq 0) -and (-not $ds.Refuse)) ("named=" + @($ds.Named).Count)
+    $ds = Get-DrainScope -Dirty @('a', 'b') -Held @() -Max 2
+    T 'MUST NOT FIRE exactly AT the -DrainMax bar (2 named, bar 2) the drain runs' (-not $ds.Refuse) 'refused at the bar'
+    $ds = Get-DrainScope -Dirty @('a', 'b', 'c') -Held @() -Max 2
+    T 'MUST FIRE  one step PAST the -DrainMax bar (3 named, bar 2) the drain is refused' $ds.Refuse 'ran past the bar'
+    Set-Content (Join-Path $sbxMp 'db\held-recipes.json') '{"held":[{"slug":"other-a","reason":"selftest hold"}]}' -Encoding UTF8
+    $dd = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -DryRun -Drain)
+    $ddRc = $LASTEXITCODE
+    $ddLine = @($dd | Where-Object { $_ -match '^propagate scope:' }) -join ''
+    $ddList = @($dd | Where-Object { $_ -match '^  \S' -and $_ -notmatch 'left dirty|held, not drained' } | ForEach-Object { $_.Trim() })
+    T 'MUST FIRE  through the real -File call, -Drain NARROWS to the two unheld dirty specs and leaves the held one dirty' `
+      ($ddRc -eq 0 -and $ddLine -match '^propagate scope: NARROWED by -SlugsFile - carrying 2 of 3 dirty' -and (($ddList | Sort-Object) -join ',') -eq 'wave-one,wave-two' -and (@($dd) -join '|') -match 'held, not drained: other-a') ("line='" + $ddLine + "' list=" + ($ddList -join ',') + " rc=" + $ddRc)
+    $dx = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -Drain -SlugsFile $scopeFile)
+    $dxRc = $LASTEXITCODE
+    T 'MUST FIRE  -Drain with a caller scope is refused before any stage (it never widens or merges scopes)' `
+      ($dxRc -eq 2 -and (@($dx) -join '|') -match ('PROPAGATE-DRAIN-' + 'REFUSED') -and (@($dx) -join '|') -notmatch '^-- |\|-- ') ("rc=" + $dxRc)
+    Set-Content (Join-Path $sbxMp 'db\held-recipes.json') '{"held":[' -Encoding UTF8
+    $eapWas = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $dz = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $sbxMp -DryRun -Drain 2>$null); $dzRc = $LASTEXITCODE }
+    finally { $ErrorActionPreference = $eapWas }
+    T 'MUST FIRE  an unparseable held list makes -Drain fail closed (non-zero, nothing listed)' `
+      ($dzRc -ne 0 -and (@($dz) -join '|') -notmatch 'propagate scope:') ("rc=" + $dzRc)
+    # THE CALLER EXISTS: the daily chain runs -Drain. Red on a revert of the chain step. Needle by concatenation.
+    $chainSrc = Get-Content (Join-Path (Split-Path $mp -Parent) 'grocery\check-ad-cycles.ps1') -Raw -Encoding UTF8
+    T 'MUST FIRE  grocery\check-ad-cycles.ps1 calls propagate-recipes.ps1 -Drain (the queue has an automated caller)' `
+      ($chainSrc -match ("propagate-recipes\.ps1'\)\s+-" + 'Drain')) 'no -Drain call in the daily chain'
   } finally { Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue }
   if ($f -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output "SELF-TEST FAIL: $f case(s)"; exit 1 }
 }
@@ -459,6 +522,22 @@ if ($Baseline) {
 
 $dirty = @(Get-DirtySlugs $stamps $files)
 Write-Output ("propagate: {0} dirty spec(s) of {1}" -f $dirty.Count, $files.Count)
+if ($Drain) {
+  if ($SlugsFile -or $AllowCreateFile -or $AllowCatalogue) {
+    Write-Output 'PROPAGATE-DRAIN-REFUSED: -Drain names its own scope and takes no -SlugsFile, -AllowCreateFile or -AllowCatalogue. Nothing ran and no stamp moved.'
+    exit 2
+  }
+  $heldNow = Read-HeldSlugs (Join-Path $mp 'db\held-recipes.json')
+  $ds = Get-DrainScope -Dirty $dirty -Held $heldNow -Max $DrainMax
+  $ds.Held | ForEach-Object { Write-Output ('  held, not drained: ' + $_) }
+  if ($ds.Refuse) {
+    Write-Output ("PROPAGATE-DRAIN-REFUSED: {0} dirty spec(s) to drain, over the unattended bar of {1}. Nothing ran and no stamp moved; review them, then run with -SlugsFile." -f $ds.Named.Count, $ds.Max)
+    exit 2
+  }
+  $SlugsFile = Join-Path $env:TEMP ('propagate-drain-' + (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 6) + '.txt')
+  [IO.File]::WriteAllText($SlugsFile, ((@($ds.Named) -join "`n") + "`n"), (New-Object Text.UTF8Encoding($false)))
+  Write-Output ("propagate drain: naming {0} dirty spec(s), {1} held left dirty, in {2}" -f $ds.Named.Count, $ds.Held.Count, $SlugsFile)
+}
 $scopeA = Read-SlugFile $SlugsFile '-SlugsFile'; $scopeB = Read-SlugFile $AllowCreateFile '-AllowCreateFile'
 $scopeNamed = @(@($scopeA) + @($scopeB) | Where-Object { $_ })
 $scope = Test-PropagateScope -Dirty $dirty -Named $scopeNamed -Max $MaxUnnamed -AllowCatalogue ([bool]$AllowCatalogue) -Narrow ([bool]$SlugsFile)

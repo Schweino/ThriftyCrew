@@ -42,8 +42,10 @@
   the specs dirty on the first run inherit the stamps file's mtime, which is what the old measure read, so
   arming never ages a backlog younger than before. Writing that ledger is bookkeeping, not draining.
 #>
-# WHAT THE SELF-TEST READS: only in-file fixture depths and fixed dates; the live queues are read below the self-test branch.
+# WHAT THE SELF-TEST READS: in-file fixture depths and fixed dates, plus propagate-recipes.ps1 as TEXT (the held-spec
+# lift) and a temp held list it writes; the live queues are read below the self-test branch.
 # gate-inputs: grocery\queue-depth.ps1
+# gate-inputs-text: meal-prep\pipeline\propagate-recipes.ps1
 param([switch]$SelfTest, [switch]$Json)
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -127,6 +129,20 @@ function Update-TcWaitLedger {
 
 # ------------------------------------------------------------------------------------- live probes
 $script:TcPropagateDirty = $null
+# HELD SPECS ARE DIRTY ON PURPOSE AND ARE NOT QUEUE (2026-10-02, triage 2026-09-30-9b9cf1). After the scoped drain
+# of 26 specs, this queue still read STUCK at 7, and all 7 were in meal-prep\db\held-recipes.json: a hold is a
+# deliberate takedown that publish refuses, so counting it pages forever on a queue nobody may drain. The queue
+# now counts exactly what `propagate-recipes.ps1 -Drain` would carry, by LIFTING its Read-HeldSlugs and
+# Get-DrainScope (the Get-SpecHash rule below: one copy, or the alarm and the drain disagree). Returns source
+# text; the caller runs it with Invoke-Expression so the functions land in the caller's scope.
+function Get-TcPropagateDrainSource {
+  $src = Get-Content (Join-Path $repo 'meal-prep\pipeline\propagate-recipes.ps1') -Raw -Encoding UTF8
+  $a = [regex]::Match($src, '(?s)function Read-HeldSlugs\(\[string\]\$Path\)\s*\{.*?\n\}')
+  $b = [regex]::Match($src, '(?s)function Get-DrainScope \{.*?\n\}')
+  if (-not ($a.Success -and $b.Success)) { throw 'could not lift Read-HeldSlugs / Get-DrainScope from propagate-recipes.ps1' }
+  return ($a.Value + "`n" + $b.Value)
+}
+
 function Get-TcLiveDepth {
   param([string]$Name)
   switch ($Name) {
@@ -149,9 +165,15 @@ function Get-TcLiveDepth {
       foreach ($f in (Get-ChildItem (Join-Path $repo 'meal-prep\db\recipes') -Filter *.json -ErrorAction SilentlyContinue)) {
         if (-not $h.ContainsKey($f.BaseName) -or $h[$f.BaseName] -ne (Get-SpecHash $f.FullName)) { $dirty.Add($f.BaseName) }
       }
+      # Held specs leave the count (see Get-TcPropagateDrainSource). An unreadable held list THROWS, which this
+      # file already reads as a failed probe, never as an empty queue.
+      Invoke-Expression (Get-TcPropagateDrainSource)
+      $dirtyArr = $dirty.ToArray()
+      $dsq = Get-DrainScope -Dirty $dirtyArr -Held (Read-HeldSlugs (Join-Path $repo 'meal-prep\db\held-recipes.json')) -Max ([int]::MaxValue)
+      $named = @($dsq.Named)
       # Get-TcLiveDrain ages this queue by these names; Measure-TcQueue always reads depth first.
-      $script:TcPropagateDirty = $dirty.ToArray()
-      return $dirty.Count
+      $script:TcPropagateDirty = $named
+      return $named.Count
     }
     'staged-ghost-writes' {
       $q = Join-Path $repo 'ops\staged-writes.jsonl'
@@ -278,8 +300,22 @@ if ($SelfTest) {
   $wNone = Update-TcWaitLedger -Ledger $wL -Dirty @() -Now $wNow
   T 'MUST NOT FIRE  nothing dirty empties the ledger and names no oldest' (($wNone.Ledger.Count -eq 0) -and ($null -eq $wNone.Oldest)) ([string]$wNone.Ledger.Count)
 
+  # ---- HELD SPECS ARE NOT QUEUE (2026-10-02): the founding row was 7 held specs reading STUCK at 123.2h after the
+  # drain. The real propagate source is lifted, so a rename of either function there turns this red.
+  Invoke-Expression (Get-TcPropagateDrainSource)
+  $hDir = Join-Path $env:TEMP ('qd-held-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+  New-Item -ItemType Directory -Force $hDir -ErrorAction Stop | Out-Null
+  try {
+    $hFile = Join-Path $hDir 'held-recipes.json'
+    Set-Content $hFile '{"held":[{"slug":"held-h","reason":"fixture"}]}' -Encoding UTF8
+    $qs = Get-DrainScope -Dirty @('stuck-a', 'held-h') -Held (Read-HeldSlugs $hFile) -Max ([int]::MaxValue)
+    T 'MUST FIRE  a HELD dirty spec is not counted as queue (it is dirty on purpose and publish refuses it)' `
+      (@($qs.Named) -notcontains 'held-h') (@($qs.Named) -join ',')
+    T 'CLEAN TWIN  an unheld dirty spec beside it is still counted' ((@($qs.Named) -join ',') -eq 'stuck-a') (@($qs.Named) -join ',')
+  } finally { Remove-Item $hDir -Recurse -Force -ErrorAction SilentlyContinue }
+
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} check(s)" -f $f); exit 1 }
-  Write-Output 'SELF-TEST PASS: 7 must-fire cases led by the five-day backlog this file was written for, a failed probe never reading as empty and a partial drain never resetting the clock, 6 must-not-fire cases including two inclusive boundaries, and 5 clean twins'
+  Write-Output 'SELF-TEST PASS: 8 must-fire cases led by the five-day backlog this file was written for, a failed probe never reading as empty, a partial drain never resetting the clock and a held spec never counted, 6 must-not-fire cases including two inclusive boundaries, and 6 clean twins'
   exit 0
 }
 
