@@ -299,7 +299,7 @@ if ($SelfTest) {
     $bytes = [IO.File]::ReadAllBytes($ncPath)
     Check 'MUST FIRE: ff-notcarry.json is written LF (no CR byte)' (-not ($bytes -contains 13)) 'found a CR'
     $urlDoc = Read-JsonFile (Join-Path $tmp 'url-inputs\store-ff-urls.json'); $urlRows = @($urlDoc)
-    Check 'CLEAN TWIN: with nothing resolved, store-ff-urls.json is an empty array, not an empty file' ($urlRows.Count -eq 0) ("rows=" + $urlRows.Count)
+    Check 'MUST NOT FIRE: with nothing resolved, store-ff-urls.json is an empty array, not an empty file' ($urlRows.Count -eq 0) ("rows=" + $urlRows.Count)
 
     $wlChips = @((& $mk 'a'), (& $mk 'b'), (& $mk 'c'))
     $sl = Select-FfChips $wlChips 'c, a'
