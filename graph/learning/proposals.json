@@ -364,6 +364,19 @@
     "target_id": "dog-food-dry"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-10-01T21:38:48",
+    "derived_from": "[]",
+    "id": "lp:15c9f76a0a868166c1f8",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"artichokes\\\\s+hrt|artichokes\\\\s+in\\\\s+brine|quartered\\\\s+artichokes\"}",
+    "queue_hash": "ae49d89eb3d10ae693471a553e9876fbd780346f52645521a4ca9b29cae56462",
+    "rationale": "Matches multiple variations of canned artichoke hearts including abbreviations ('HRTS') and specific cuts ('Quartered').",
+    "status": "proposed",
+    "target_id": "artichoke-hearts-canned-jarred"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "derived_from": null,
@@ -3809,6 +3822,19 @@
     "target_id": "commodity:staple:cranberry-juice"
   },
   {
+    "confidence": 0.85,
+    "created_at": "2026-10-01T21:38:48",
+    "derived_from": "[]",
+    "id": "lp:d177375e0843f159cb70",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"cajun\\\\s+(spice|seasoning)\"}",
+    "queue_hash": "ae49d89eb3d10ae693471a553e9876fbd780346f52645521a4ca9b29cae56462",
+    "rationale": "Matches 'Rib Rack Cajun Spice Rub' and 'Tony's Cajun Kick Seasoning' by anchoring on the flavor profile and product type.",
+    "status": "proposed",
+    "target_id": "cajun-seasoning"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-20T16:56:01",
     "derived_from": null,
@@ -4212,6 +4238,19 @@
     "target_id": "buffalo-wing-sauce"
   },
   {
+    "confidence": 0.8,
+    "created_at": "2026-10-01T21:38:48",
+    "derived_from": "[]",
+    "id": "lp:ebe574c51a823898914c",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"beet$\"}",
+    "queue_hash": "ae49d89eb3d10ae693471a553e9876fbd780346f52645521a4ca9b29cae56462",
+    "rationale": "Matches 'Organic Gold Grim Beet' by anchoring on the food name at the end of the string.",
+    "status": "proposed",
+    "target_id": "beets-fresh"
+  },
+  {
     "confidence": 0.9,
     "created_at": "2026-08-24T21:32:21",
     "derived_from": null,
@@ -4249,6 +4288,19 @@
     "rationale": "brand-anchored 2-in-1 shampoo bottles whose titles omit the word 'shampoo'",
     "status": "applied",
     "target_id": "commodity:staple:shampoo"
+  },
+  {
+    "confidence": 0.9,
+    "created_at": "2026-10-01T21:38:48",
+    "derived_from": "[]",
+    "id": "lp:edbcfa8aef3a0ec0a16a",
+    "kind": "add_alias",
+    "model": "local-primary",
+    "payload_json": "{\"payload\": \"chili$\"}",
+    "queue_hash": "ae49d89eb3d10ae693471a553e9876fbd780346f52645521a4ca9b29cae56462",
+    "rationale": "Matches listings ending in 'Chili' (e.g., 'Amy's Organic Black Bean Chili', 'Wendy's Bacon Bean Beef Chilli') while avoiding matches for 'Chili Powder' or 'Chili Sauce'.",
+    "status": "proposed",
+    "target_id": "canned-chili"
   },
   {
     "confidence": 0.9,

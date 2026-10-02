@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30T21:42:16",
+  "generated_at": "2026-10-01T21:39:08",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -909,6 +909,18 @@
       }
     },
     {
+      "proposal_id": "lp:edbcfa8aef3a0ec0a16a",
+      "kind": "add_alias",
+      "target": "canned-chili",
+      "target_label": null,
+      "payload": "chili$",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches listings ending in 'Chili' (e.g., 'Amy's Organic Black Bean Chili', 'Wendy's Bacon Bean Beef Chilli') while avoiding matches for 'Chili Powder' or 'Chili Sauce'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:c5a0e98911b2e1a0b373",
       "kind": "add_alias",
       "target": "frozen-broccoli-florets",
@@ -1098,6 +1110,30 @@
       }
     },
     {
+      "proposal_id": "lp:d177375e0843f159cb70",
+      "kind": "add_alias",
+      "target": "cajun-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+(spice|seasoning)",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches 'Rib Rack Cajun Spice Rub' and 'Tony's Cajun Kick Seasoning' by anchoring on the flavor profile and product type.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:15c9f76a0a868166c1f8",
+      "kind": "add_alias",
+      "target": "artichoke-hearts-canned-jarred",
+      "target_label": null,
+      "payload": "artichokes\\s+hrt|artichokes\\s+in\\s+brine|quartered\\s+artichokes",
+      "stage1_confidence": 0.85,
+      "rationale": "Matches multiple variations of canned artichoke hearts including abbreviations ('HRTS') and specific cuts ('Quartered').",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
       "proposal_id": "lp:a5c91ae0c05071d0dcde",
       "kind": "add_alias",
       "target": "frozen-cut-green-beans",
@@ -1210,6 +1246,18 @@
       "payload": "ravioli.*canned\\s+pasta|canned\\s+pasta.*ravioli",
       "stage1_confidence": 0.8,
       "rationale": "Matches 'Annie's Organic Cheesy Ravioli Tomato and Cheese Sauce Canned Pasta'. Anchors on 'ravioli' and 'canned pasta' to distinguish from fresh ravioli or other canned soups.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:ebe574c51a823898914c",
+      "kind": "add_alias",
+      "target": "beets-fresh",
+      "target_label": null,
+      "payload": "beet$",
+      "stage1_confidence": 0.8,
+      "rationale": "Matches 'Organic Gold Grim Beet' by anchoring on the food name at the end of the string.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
