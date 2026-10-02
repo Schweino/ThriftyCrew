@@ -12822,7 +12822,12 @@ def _wc_probe_hit_cap():
 def _wc_writer_tier():
     """MUST FIRE. Until 2026-09-29 this pinned the writer OFF opus (fable was 15.3 s a round trip to
     opus's 27.9). Brad's ruling that day (f6197448d, 80d746246) put EVERY agent, the writer included,
-    on claude-opus-5-5 at effort medium, so this now pins each .claude/agents definition to it."""
+    on claude-opus-5-5 at effort medium, so this now pins each .claude/agents definition to it.
+    One later, narrower ruling is pinned by name rather than exempted: Brad, 2026-10-02, the daily
+    browser-refresh review "uses Opus 5.5 on Medium to create a plan, and then it hands it off to a
+    implementation agent using Sonnet 5.5 on Medium", so browser-refresh-implementer is held to exactly that."""
+    later = {"browser-refresh-implementer": (("claude-sonnet-5-5", "medium"),
+                                             "Brad's ruling, 2026-10-02: the browser-refresh implementer on Sonnet 5.5 Medium")}
     base = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "agents")
     try:
         names = sorted(n for n in os.listdir(base) if n.endswith(".md"))
@@ -12833,9 +12838,16 @@ def _wc_writer_tier():
             "recipe-writer.md" in names, "%d definitions" % len(names))]
     for n, body in bodies:
         got = tuple((re.search(r"(?m)^%s:\s*(\S+)" % k, body) or [None, ""])[1] for k in ("model", "effort"))
+        if n[:-3] in later:
+            want, why = later[n[:-3]]
+            res.append(("MUST FIRE  %s is pinned to %s at effort %s (%s)" % ((n[:-3],) + want + (why,)),
+                        got == want, "model=%s effort=%s" % got))
+            continue
         res.append(("MUST FIRE  %s is pinned to claude-opus-5-5 at effort medium (Brad's ruling, "
                     "2026-09-29: every agent on Opus 5.5 Medium)" % n[:-3],
                     got == ("claude-opus-5-5", "medium"), "model=%s effort=%s" % got))
+    res.append(("MUST FIRE  every agent the later-ruling table names still exists, so a pin cannot outlive its agent",
+                all((k + ".md") in names for k in later), ", ".join(sorted(later))))
     return res
 
 

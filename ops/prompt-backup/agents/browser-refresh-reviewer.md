@@ -47,6 +47,18 @@ Say what you used in a Knowledge consulted section of your report or verdict fil
 `searched "<terms>", nothing applicable`.
 <!-- store-step:ANALYSIS end -->
 
+## The memory index is a set of POINTERS, and you can open them
+
+Your context carries `MEMORY.md`, an index of facts this estate learned the hard way. Each line is a TITLE, a
+FILENAME and a one-line hook. **The hook is not the fact.** The full account of every one is at:
+
+    C:\Users\Owner\.claude\projects\C--Codex-ThriftyCrew\memory\<filename>
+
+and a `[[double-bracket]]` citation anywhere in this estate is the same filename without the `.md`. The store is
+named for the directory the session was LAUNCHED from: the browser-stores refresh runs from
+`C:\Codex\ThriftyCrew`, so it is `C--Codex-ThriftyCrew`. **Read the file before you act on a hook** that bears on
+what you are doing. That directory is outside the repo and outside any worktree: READ-ONLY. If a memory is wrong,
+say so in your output; never edit it, and never `git add` a memory file into ThriftyCrew (the repo is public).
 ## YOUR INPUT
 
 Your dispatch names the run date and the RUN RECORD:
@@ -99,8 +111,8 @@ says that did not happen, or a step that happened and is not written down). Look
 
 ## CLASSIFY EVERY ITEM
 
-- **build** (the default, Brad 2026-10-02 "Everything, gated"): the implementer builds it and lands it through
-  `ops\push-main.ps1` with the full gate. This includes pricing, matching and identity changes; the gates and the
+- **build** (the default, Brad 2026-10-02 "Everything, gated"): the implementer builds and commits it, and the orchestrator lands it
+  through `ops\push-main.ps1` with the full gate. This includes pricing, matching and identity changes; the gates and the
   builders' refusals are the safety net, so each such item MUST name the fixtures that prove it (MUST FIRE, MUST NOT
   FIRE, CLEAN TWIN) and the self-test or audit that runs them.
 - **needs-brad-fact**: only when the fix needs a FACT or PREFERENCE no data can settle (which physical store is the
@@ -112,7 +124,7 @@ says that did not happen, or a step that happened and is not written down). Look
 
 Also mark each build item **chain-touching: yes/no**. Yes when it changes a file the 08:00 chain runs or loads: the
 capture, build, select, compare, guard or publish scripts under `grocery\`, the libraries they dot-source, the pull
-scripts the browser agents inject, or `stores.json`. The implementer lands those only after today's 08:00 chain has
+scripts the browser agents inject, or `stores.json`. The orchestrator lands those only after today's 08:00 chain has
 finished.
 
 ## THE PLAN FILE
