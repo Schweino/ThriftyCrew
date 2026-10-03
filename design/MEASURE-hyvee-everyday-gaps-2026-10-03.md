@@ -122,7 +122,10 @@ five-spice-powder, and for none of the five (my first lookup read the top level,
 broken before it carried anything). In `hyvee-regular-2026-10-02.json` the same name scan that found 0 drumstick,
 gruyere and quinoa rows found 2 cauliflower and 11 wine rows, all fresh heads, vinegars and mustards.
 
-## 6. Knowledge consulted
+## Knowledge consulted
+
+- Searched (knowledge-search `--estate`) "hy-vee carried everyday measurement discovery product id"; the memory leg
+  returned `hyvee-discovery-f1`, `pull-depth-findings` and `grocery-method-hyvee`, used below.
 
 - `.claude/rules/grocery.md` gr-17: "A 200 with a correct selector and ZERO ROWS has FOUR causes ... UNCHECKED IS
   NEVER NOT-CARRIED ... Prefer the page's own Fetch/XHR JSON call." Used: both requests are the store's JSON APIs.
