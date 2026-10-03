@@ -1,0 +1,120 @@
+"""Family Fare aisle-admission BLIND measurement over the probe of a replica of the 2026-10-02 08:10 board build.
+One row per (commodity, Family Fare row) pair reaching the aisle check -> probe json. Cells joined by (id, item)."""
+import json, sys, re, collections, unicodedata
+S = sys.argv[1]
+IN = S + '/in0802'
+probe = json.load(open(S + '/probe-0802.json', encoding='utf-8-sig'))
+board = json.load(open(IN + '/comparison-2026-09-30.json', encoding='utf-8-sig'))
+reg = json.load(open(IN + '/regular/family-fare-regular-2026-10-02.json', encoding='utf-8-sig'))['deals']
+hun = json.load(open(IN + '/regular/hunter-familyfare-regular-2026-08-16.json', encoding='utf-8-sig'))['deals']
+
+def aisle_dept(u):
+    m = re.search(r'/shop/([^/]+)/(?!p/)[^/]+/', u or '')
+    return m.group(1).lower() if m else ''
+
+# ---- rebuild the shelf index exactly as Add-AisleShelfRow does (file order; newest wins = last write)
+by_id, by_name = {}, {}
+for r in hun + reg:   # load order is not material for the size check; reported below
+    d = r.get('dept') or aisle_dept(r.get('canonical_url'))
+    if not d: continue
+    if r.get('product_id'): by_id[str(r['product_id'])] = d
+    n = (r.get('item') or '').strip()
+    if n: by_name[n] = d
+print(f'rebuilt index: by_id={len(by_id)} by_name={len(by_name)} (engine printed 3846 / 3861)')
+
+# ---- task 1: admitted pairs
+refused = [p for p in probe if p['dept_verdict'] == 'BLOCK']
+adm = [p for p in probe if p['dept_verdict'] != 'BLOCK']
+print(f'\nTASK 1  pairs reaching the aisle check: {len(probe)}; refused BLOCK {len(refused)}; admitted {len(adm)}')
+for pt in ('everyday', 'sale'):
+    a = [p for p in adm if p['price_type'] == pt]
+    bl = [p for p in a if not p['dept']]
+    print(f'  {pt:8s} admitted {len(a):5d}  no department {len(bl):5d} ({100*len(bl)/max(1,len(a)):.1f}%)  '
+          f'dept ALLOW {sum(1 for p in a if p["dept_verdict"]=="ALLOW")}  dept-but-BLIND-category {sum(1 for p in a if p["dept"] and p["dept_verdict"]=="BLIND")}')
+bl_all = [p for p in adm if not p['dept']]
+print(f'  ALL      admitted {len(adm):5d}  no department {len(bl_all):5d} ({100*len(bl_all)/len(adm):.1f}%)')
+
+# ---- cells and crowns
+cells = []
+for c in board['comparison']:
+    for s in c['stores']:
+        if s['store'] != 'Family Fare': continue
+        crown = c.get('cheapest_store') == 'Family Fare' or 'Family Fare' in (c.get('cheapest_tie_with') or [])
+        rows = [p for p in adm if p['id'] == c['id'] and p['name'] == s['item']]
+        cells.append(dict(id=c['id'], item=s['item'], type=s['type'], crown=crown, rows=rows, link=s.get('link', ''), link_source=s.get('link_source', '')))
+unjoined = [x for x in cells if not x['rows']]
+print(f'\nFF cells {len(cells)}; joined to a probe row {len(cells)-len(unjoined)}; unjoined {len(unjoined)}')
+for x in unjoined[:10]: print('  UNJOINED', x['id'], x['item'])
+def blind(x): return x['rows'] and all(not p['dept'] for p in x['rows'])
+print('cell table (type, cells, no-dept cells, crowns, no-dept crowns):')
+for pt in ('everyday', 'sale'):
+    cs = [x for x in cells if x['type'] == pt]
+    print(f'  {pt:8s} cells {len(cs):4d}  no-dept {sum(1 for x in cs if blind(x)):4d}  crowns {sum(1 for x in cs if x["crown"]):4d}  no-dept crowns {sum(1 for x in cs if blind(x) and x["crown"]):4d}')
+cs = cells
+print(f'  ALL      cells {len(cs):4d}  no-dept {sum(1 for x in cs if blind(x)):4d}  crowns {sum(1 for x in cs if x["crown"]):4d}  no-dept crowns {sum(1 for x in cs if blind(x) and x["crown"]):4d}')
+# proxy cross-check: cells with no link vs no dept
+nolink = [x for x in cells if not x['link']]
+print(f'  proxy: cells with no link {len(nolink)}; no-dept cells with a link {sum(1 for x in cells if blind(x) and x["link"])}; linked-dept cells with no link {sum(1 for x in cells if not blind(x) and not x["link"])}')
+named = {('iced-tea', 'Twisted Tea'), ('ground-cinnamon', 'Cinnamon Twirls'), ('sponges', 'Magic Eraser')}
+for x in cells:
+    for i, frag in named:
+        if x['id'] == i and frag.lower() in x['item'].lower():
+            print(f'  founding case {i}: "{x["item"]}" type={x["type"]} crown={x["crown"]} no-dept={blind(x)}')
+
+# ---- task 2: everyday URL-less rows
+print('\nTASK 2  everyday file rows')
+nourl = [r for r in reg if not r.get('canonical_url')]
+print(f'  rows {len(reg)}; no canonical_url {len(nourl)}; of those carried_forward {sum(1 for r in nourl if r.get("carried_forward"))}; product_id {sum(1 for r in nourl if r.get("product_id"))}; dept {sum(1 for r in nourl if r.get("dept"))}')
+asof = collections.Counter((r.get('as_of') or '')[:7] for r in nourl)
+print('  no-url rows by as_of month:', sorted(asof.items()))
+asofd = sorted((r.get('as_of') or '') for r in nourl)
+print(f'  no-url as_of range {asofd[0]} .. {asofd[-1]}; median {asofd[len(asofd)//2]}')
+print('  no-url rows with as_of older than 2026-07-04 (>90 days at 2026-10-02):', sum(1 for d in asofd if d and d < '2026-07-04'))
+withurl_asof = sorted((r.get('as_of') or '') for r in reg if r.get('canonical_url'))
+print(f'  url rows as_of range {withurl_asof[0]} .. {withurl_asof[-1]}')
+# does a no-url row's NAME exist on a url row (same product, captured both ways)?
+url_names = {(r.get('item') or '').strip() for r in reg if r.get('canonical_url')}
+print('  no-url rows whose exact name also exists on a url row:', sum(1 for r in nourl if (r.get('item') or '').strip() in url_names))
+bl_ev = [p for p in bl_all if p['price_type'] == 'everyday']
+print(f'  everyday no-dept admitted pairs {len(bl_ev)}; whose row has no url (by name in nourl set) {sum(1 for p in bl_ev if p["name"].strip() in {(r.get("item") or "").strip() for r in nourl})}')
+print('  everyday no-dept pairs with a dept-bearing link on the deal:', sum(1 for p in bl_ev if p['link_dept']), collections.Counter(p['link_verdict'] for p in bl_ev if p['link_dept']))
+print('  everyday no-dept pairs by link_source:', collections.Counter(p['link_source'] for p in bl_ev))
+
+# ---- task 3: ad rows
+def norm(s):
+    s = unicodedata.normalize('NFKD', s or '').encode('ascii', 'ignore').decode().lower()
+    s = re.sub(r'[^a-z0-9]+', ' ', s)
+    return ' '.join(s.split())
+def toks(s): return set(norm(s).split())
+print('\nTASK 3  ad (sale) pairs')
+sale = [p for p in adm if p['price_type'] == 'sale']
+sb = [p for p in sale if not p['dept']]
+print(f'  admitted sale pairs {len(sale)}; via id {sum(1 for p in sale if p["via"]=="id")}; via name {sum(1 for p in sale if p["via"]=="name")}; none {len(sb)}')
+print(f'  ad rows carrying a product_id {sum(1 for p in sale if p["product_id"])}')
+norm_idx = collections.defaultdict(set)
+for n, d in by_name.items(): norm_idx[norm(n)].add(d)
+nh = [p for p in sb if norm(p['name']) in norm_idx]
+print(f'  no-dept sale pairs rescued by a NORMALISED exact-name key: {len(nh)} of {len(sb)}')
+# token-containment: every shelf-name token set that is a superset of the ad name tokens, or Jaccard >= 0.8
+shelf = [(toks(n), d, n) for n, d in by_name.items()]
+def best(p):
+    t = toks(p['name']); bestj, bd, bn = 0, '', ''
+    for st, d, n in shelf:
+        if not st: continue
+        j = len(t & st) / len(t | st)
+        if j > bestj: bestj, bd, bn = j, d, n
+    return bestj, bd, bn
+bands = collections.Counter(); ex = []
+for p in sb:
+    j, d, n = best(p)
+    k = '>=0.8' if j >= 0.8 else '0.6-0.8' if j >= 0.6 else '0.4-0.6' if j >= 0.4 else '<0.4'
+    bands[k] += 1
+    ex.append((round(j, 2), p['id'], p['name'], n, d))
+print('  nearest shelf name (token Jaccard) for no-dept sale pairs:', dict(bands))
+ex.sort(reverse=True)
+for e in ex[:12]: print('   ', e)
+print('   ... lowest:')
+for e in ex[-8:]: print('   ', e)
+print('  no-dept sale pairs by source_ad:', collections.Counter(p['source_ad'] for p in sb).most_common(5))
+print('  no-dept sale pairs with a dept-bearing link:', sum(1 for p in sb if p['link_dept']), collections.Counter(p['link_verdict'] for p in sb if p['link_dept']))
+json.dump(dict(cells=[{k: v for k, v in x.items() if k != 'rows'} | {'no_dept': bool(blind(x))} for x in cells]), open(S + '/cells-0802.json', 'w'), indent=1)

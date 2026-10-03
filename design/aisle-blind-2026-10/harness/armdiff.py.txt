@@ -1,0 +1,25 @@
+"""Arm A (board as built) vs arm B (URL-less identities restored): every cell and crown that moves, all stores."""
+import json, sys
+S = sys.argv[1]
+def load(p):
+    b = json.load(open(p, encoding='utf-8-sig'))
+    cells, crowns = {}, {}
+    for c in b['comparison']:
+        crowns[c['id']] = (c.get('cheapest_store'), round(c.get('cheapest_price') or 0, 4))
+        for s in c['stores']:
+            cells[(c['id'], s['store'])] = (s['item'], round(s['per_unit'], 4), s['type'], s.get('link', ''))
+    return cells, crowns
+A, Ac = load(S + '/armA/comparison-2026-09-30.json')
+B, Bc = load(S + '/in0802/comparison-2026-09-30.json')
+lost = sorted(set(A) - set(B)); gained = sorted(set(B) - set(A))
+moved = sorted(k for k in set(A) & set(B) if A[k][:3] != B[k][:3])
+link = sorted(k for k in set(A) & set(B) if A[k][:3] == B[k][:3] and A[k][3] != B[k][3])
+print(f'cells A {len(A)} B {len(B)}; lost {len(lost)}; gained {len(gained)}; product/price moved {len(moved)}; link-only changes {len(link)}')
+for k in lost: print('  LOST ', k, A[k][:3])
+for k in gained: print('  GAINED', k, B[k][:3])
+for k in moved: print('  MOVED', k, A[k][:3], '->', B[k][:3])
+cr = sorted(k for k in Ac if Ac.get(k) != Bc.get(k))
+print(f'crowns changed {len(cr)}')
+for k in cr: print('  CROWN', k, Ac.get(k), '->', Bc.get(k))
+ff_link = [k for k in link if k[1] == 'Family Fare']
+print(f'Family Fare link-only changes {len(ff_link)}; of them A had no link {sum(1 for k in ff_link if not A[k][3])}')

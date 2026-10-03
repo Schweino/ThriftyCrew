@@ -1,0 +1,36 @@
+"""Emit (cell, recovered department) pairs for the engine's own Test-AisleAllowed to judge. No verdict here."""
+import json, sys, re, glob, collections
+S = sys.argv[1]
+REG = 'C:/Codex/ThriftyCrew/grocery/out/regular'
+cells = json.load(open(S + '/cells-0802.json'))['cells']
+probe = json.load(open(S + '/probe-0802.json', encoding='utf-8-sig'))
+rec = {}
+for line in open(S + '/recover-rows.jsonl'):
+    o = json.loads(line); rec[o['item'].strip()] = o
+def aisle_dept(u):
+    m = re.search(r'/shop/([^/]+)/(?!p/)[^/]+/', u or '')
+    return m.group(1).lower() if m else ''
+hist_name = collections.defaultdict(set)
+for f in glob.glob(REG + '/family-fare-regular-2026-*.json'):
+    if not re.search(r'-\d{4}-\d{2}-\d{2}\.json$', f): continue
+    for r in json.load(open(f, encoding='utf-8-sig'))['deals']:
+        d = r.get('dept') or aisle_dept(r.get('canonical_url'))
+        if d: hist_name[(r.get('item') or '').strip()].add(d)
+rows = []
+for x in cells:
+    if not x['no_dept']: continue
+    nm = x['item'].strip()
+    if x['type'] == 'everyday':
+        o = rec.get(nm); d = o['depts'][0] if o and len(o['depts']) == 1 else ''
+        src = 'history-key' if d else 'unrecovered'
+    else:
+        ds = hist_name.get(nm, set()); d = sorted(ds)[0] if len(ds) == 1 else ''
+        src = 'history-name' if d else 'unrecovered'
+    rows.append(dict(scope='cell', id=x['id'], item=x['item'], type=x['type'], crown=x['crown'], dept=d, src=src))
+# every admitted no-dept everyday PAIR too (rows that reach the aisle check but hold no cell)
+for p in probe:
+    if p['price_type'] != 'everyday' or p['dept'] or p['dept_verdict'] == 'BLOCK': continue
+    o = rec.get(p['name'].strip()); d = o['depts'][0] if o and len(o['depts']) == 1 else ''
+    rows.append(dict(scope='pair', id=p['id'], item=p['name'], type='everyday', crown=False, dept=d, src='history-key' if d else 'unrecovered'))
+json.dump(rows, open(S + '/pairs.json', 'w'), indent=0)
+print(len(rows), collections.Counter((r['scope'], r['type'], r['src']) for r in rows))

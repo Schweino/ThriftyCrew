@@ -1,0 +1,13 @@
+# Judge every (cell or pair, recovered department) in pairs.json with the ENGINE'S OWN Test-AisleAllowed, from the
+# scratch worktree the replica ran in. Never transcribe the rule: a hand copy skipped $AISLE_COMMODITY_DEPT once.
+param([Parameter(Mandatory)][string]$S, [Parameter(Mandatory)][string]$Grocery)
+$ErrorActionPreference = 'Stop'
+. (Join-Path $Grocery 'aisle-lib.ps1')
+$cm = Get-AisleCategoryMap -Root $Grocery
+$rows = Get-Content -Raw -LiteralPath (Join-Path $S 'pairs.json') -Encoding UTF8 | ConvertFrom-Json
+$out = foreach ($r in $rows) {
+  $v = if ($r.dept) { (Test-AisleAllowed -CatMap $cm -CommodityId $r.id -Dept $r.dept) } else { $null }
+  [pscustomobject]@{ scope=$r.scope; id=$r.id; item=$r.item; type=$r.type; crown=$r.crown; dept=$r.dept; src=$r.src; verdict=$(if ($v) { $v.verdict } else { 'BLIND' }); reason=$(if ($v) { $v.reason } else { '' }) }
+}
+[IO.File]::WriteAllText((Join-Path $S 'judged.json'), (ConvertTo-Json -InputObject @($out) -Depth 3), (New-Object Text.UTF8Encoding($false)))
+$out | Group-Object scope, type, verdict | Sort-Object Name | ForEach-Object { '{0,-30} {1}' -f $_.Name, $_.Count }

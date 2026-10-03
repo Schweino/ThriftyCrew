@@ -1,0 +1,24 @@
+import json, sys, re, glob, collections
+S = sys.argv[1]
+REG = 'C:/Codex/ThriftyCrew/grocery/out/regular'
+probe = json.load(open(S + '/probe-0802.json', encoding='utf-8-sig'))
+cells = json.load(open(S + '/cells-0802.json'))['cells']
+def aisle_dept(u):
+    m = re.search(r'/shop/([^/]+)/(?!p/)[^/]+/', u or '')
+    return m.group(1).lower() if m else ''
+hist_name = collections.defaultdict(set)
+for f in glob.glob(REG + '/family-fare-regular-2026-*.json'):
+    if not re.search(r'-\d{4}-\d{2}-\d{2}\.json$', f): continue
+    for r in json.load(open(f, encoding='utf-8-sig'))['deals']:
+        d = r.get('dept') or aisle_dept(r.get('canonical_url'))
+        if d: hist_name[(r.get('item') or '').strip()].add(d)
+sale_bl = [p for p in probe if p['price_type'] == 'sale' and not p['dept'] and p['dept_verdict'] != 'BLOCK']
+hit = [p for p in sale_bl if p['name'].strip() in hist_name]
+print(f'no-dept ad pairs {len(sale_bl)}; exact name found anywhere in 76 days of everyday history {len(hit)}')
+# No verdict here: a hand-copied rule skipped aisle-lib's per-commodity table once. judge.ps1 calls Test-AisleAllowed.
+print('\nno-dept CROWNS (12):')
+for x in cells:
+    if x['no_dept'] and x['crown']: print(f"  {x['type']:8s} {x['id']:22s} {x['item']}")
+print('\nno-dept SALE cells (29):')
+for x in cells:
+    if x['no_dept'] and x['type'] == 'sale': print(f"  {'CROWN ' if x['crown'] else '      '}{x['id']:22s} {x['item']}")

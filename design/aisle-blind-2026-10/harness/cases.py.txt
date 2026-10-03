@@ -1,0 +1,37 @@
+"""Write the committed case files: one row per Family Fare CELL (463) and one row per admitted no-department PAIR.
+Totals in the MEASURE doc are derived from these files, never typed."""
+import json, sys, collections
+S, OUT = sys.argv[1], sys.argv[2]
+probe = json.load(open(S + '/probe-0802.json', encoding='utf-8-sig'))
+cells = json.load(open(S + '/cells-0802.json'))['cells']
+judged = json.load(open(S + '/judged.json', encoding='utf-8-sig'))
+jc = {(j['id'], j['item']): j for j in judged if j['scope'] == 'cell'}
+adm = [p for p in probe if p['dept_verdict'] != 'BLOCK']
+with open(OUT + '/cells.jsonl', 'w', encoding='utf-8', newline='\n') as fh:
+    for x in cells:
+        rows = [p for p in adm if p['id'] == x['id'] and p['name'] == x['item']]
+        dept = next((p['dept'] for p in rows if p['dept']), '')
+        via = next((p['via'] for p in rows if p['dept']), 'none')
+        j = jc.get((x['id'], x['item']))
+        fh.write(json.dumps(dict(id=x['id'], item=x['item'], type=x['type'], crown=x['crown'], link_on_board=bool(x['link']),
+                                 dept_at_admission=dept, via=via,
+                                 recovered_dept=(j['dept'] if j else ''), recovered_src=(j['src'] if j else ''),
+                                 verdict_if_recovered=(j['verdict'] if j else '')), ensure_ascii=False) + '\n')
+jp = collections.defaultdict(list)
+for j in judged:
+    if j['scope'] == 'pair': jp[(j['id'], j['item'])].append(j)
+with open(OUT + '/blind-pairs.jsonl', 'w', encoding='utf-8', newline='\n') as fh:
+    for p in adm:
+        if p['dept']: continue
+        j = jp.get((p['id'], p['name']), [None])[0]
+        fh.write(json.dumps(dict(id=p['id'], name=p['name'], price_type=p['price_type'], source_ad=p['source_ad'],
+                                 product_id=p['product_id'], recovered_dept=(j['dept'] if j else ''),
+                                 verdict_if_recovered=(j['verdict'] if j else ('n/a ad row' if p['price_type'] == 'sale' else ''))), ensure_ascii=False) + '\n')
+# derive the headline table back from the files just written
+c = [json.loads(l) for l in open(OUT + '/cells.jsonl', encoding='utf-8')]
+for t in ('everyday', 'sale', None):
+    cs = [x for x in c if t is None or x['type'] == t]
+    print(t or 'all', len(cs), 'no-dept', sum(1 for x in cs if not x['dept_at_admission']), 'crowns', sum(1 for x in cs if x['crown']),
+          'no-dept crowns', sum(1 for x in cs if x['crown'] and not x['dept_at_admission']))
+b = [json.loads(l) for l in open(OUT + '/blind-pairs.jsonl', encoding='utf-8')]
+print('blind pairs', len(b), collections.Counter(x['price_type'] for x in b))

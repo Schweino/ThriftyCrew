@@ -1,0 +1,33 @@
+"""Instrument a SCRATCH copy of compare-deals.ps1: log every Family Fare (commodity,row) pair that reaches the
+aisle admission check, with the department it saw and how. Never applied to a tracked checkout."""
+import sys, io
+p = sys.argv[1]
+s = io.open(p, encoding='utf-8-sig').read()
+
+anchor = "$AisleRefused = New-Object System.Collections.Generic.List[object]\n"
+assert s.count(anchor) == 1, 'anchor1'
+probe_fn = anchor + r'''$script:AisleProbe = New-Object System.Collections.Generic.List[object]
+function Write-AisleProbe($c, $d, [string]$dept) {
+  $pid0 = [string]$d.product_id; $nm0 = ([string]$d.name).Trim()
+  $via = if ($pid0 -and $AisleShelf.by_id.ContainsKey($pid0)) { 'id' } elseif ($nm0 -and $AisleShelf.by_name.ContainsKey($nm0)) { 'name' } else { 'none' }
+  $ldept = Get-AisleDept ([string]$d.link)
+  $lv = ''
+  if ($ldept) { $lv = (Test-AisleAllowed -CatMap $AisleCatMap -CommodityId ([string]$c.id) -Dept $ldept).verdict }
+  $dv = ''
+  if ($dept) { $dv = (Test-AisleAllowed -CatMap $AisleCatMap -CommodityId ([string]$c.id) -Dept $dept).verdict }
+  $script:AisleProbe.Add([pscustomobject]@{ id=[string]$c.id; name=[string]$d.name; product_id=$pid0; price_type=[string]$d.price_type; split_from=[string]$d.split_from; source_ad=[string]$d.source_ad; src_file=[string]$d.src_file; link=[string]$d.link; link_source=[string]$d.link_source; dept=$dept; via=$via; dept_verdict=$dv; link_dept=$ldept; link_verdict=$lv; price_text=[string]$d.price_text; size_text=[string]$d.size_text })
+  return $dept
+}
+'''
+s = s.replace(anchor, probe_fn)
+
+call = "-Dept (Get-AisleShelfDept $AisleShelf ([string]$d.product_id) ([string]$d.name)))) {"
+assert s.count(call) == 1, 'anchor2'
+s = s.replace(call, "-Dept (Write-AisleProbe $c $d (Get-AisleShelfDept $AisleShelf ([string]$d.product_id) ([string]$d.name))))) {")
+
+dump_anchor = '$file = Join-Path $OutDir ($OutName + "-" + $today + ".json")\n'
+assert s.count(dump_anchor) == 1, 'anchor3'
+s = s.replace(dump_anchor, dump_anchor + r'''if ($env:AISLE_PROBE_OUT) { [IO.File]::WriteAllText($env:AISLE_PROBE_OUT, (ConvertTo-Json -InputObject $script:AisleProbe.ToArray() -Depth 4), (New-Object Text.UTF8Encoding($false))); Write-Output ("AISLE-PROBE rows=" + $script:AisleProbe.Count + " by_id=" + $AisleShelf.by_id.Count + " by_name=" + $AisleShelf.by_name.Count) }
+''')
+io.open(p, 'w', encoding='utf-8', newline='\n').write(s)
+print('patched')

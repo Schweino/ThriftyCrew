@@ -1,0 +1,43 @@
+"""Can the identity a URL-less carried Family Fare row lost be recovered from the dated file history, with no store
+request? Key: exact trimmed item + size + regular price. One row per URL-less row -> recover-rows.jsonl."""
+import json, sys, re, glob, collections, os
+S = sys.argv[1]
+REG = 'C:/Codex/ThriftyCrew/grocery/out/regular'
+cur = json.load(open(S + '/in0802/regular/family-fare-regular-2026-10-02.json', encoding='utf-8-sig'))['deals']
+probe = json.load(open(S + '/probe-0802.json', encoding='utf-8-sig'))
+cells = json.load(open(S + '/cells-0802.json'))['cells']
+sys.path.insert(0, S)
+
+def aisle_dept(u):
+    m = re.search(r'/shop/([^/]+)/(?!p/)[^/]+/', u or '')
+    return m.group(1).lower() if m else ''
+def key(r): return ((r.get('item') or '').strip(), (r.get('size') or '').strip().lower(), str(r.get('regular')))
+def nkey(r): return (r.get('item') or '').strip()
+
+hist = {}       # full key -> set of (canonical_url)
+hist_name = collections.defaultdict(set)
+files = sorted(f for f in glob.glob(REG + '/family-fare-regular-2026-*.json') if re.search(r'-\d{4}-\d{2}-\d{2}\.json$', f) and '2026-10-02' not in f)
+for f in files:
+    for r in json.load(open(f, encoding='utf-8-sig'))['deals']:
+        u = r.get('canonical_url')
+        if not u: continue
+        hist.setdefault(key(r), set()).add(u)
+        hist_name[nkey(r)].add(u)
+print('history files read', len(files), 'distinct keyed identities', len(hist))
+
+nourl = [r for r in cur if not r.get('canonical_url')]
+out = []
+for r in nourl:
+    us = hist.get(key(r), set())
+    un = hist_name.get(nkey(r), set())
+    depts = {aisle_dept(u) for u in us} - {''}
+    out.append(dict(item=r['item'], size=r.get('size'), regular=r.get('regular'), as_of=r.get('as_of'),
+                    by_key=len(us), by_name=len(un), depts=sorted(depts)))
+with open(S + '/recover-rows.jsonl', 'w') as fh:
+    for o in out: fh.write(json.dumps(o) + '\n')
+c = collections.Counter('one-url' if o['by_key'] == 1 else 'several-urls' if o['by_key'] > 1 else ('name-only' if o['by_name'] else 'none') for o in out)
+print(f'URL-less rows {len(out)}: {dict(c)}')
+amb_dept = sum(1 for o in out if len(o['depts']) > 1)
+print(f'  rows whose recovered URLs disagree on DEPARTMENT: {amb_dept}; rows recovered with a shelf department: {sum(1 for o in out if len(o["depts"]) == 1)}')
+
+# (verdicts are NOT computed here: judge.ps1 runs the engine's own Test-AisleAllowed over pairs.json)

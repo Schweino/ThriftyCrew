@@ -1,0 +1,33 @@
+"""ARM B input: the scratch copy of family-fare-regular-2026-10-02.json with each URL-less carried row's identity restored
+from the dated history, ONLY where exact item+size+regular resolves to exactly one URL. Prices, as_of and every other
+field are untouched (asserted). Writes into the SCRATCH input dir only."""
+import json, sys, re, glob, hashlib
+S = sys.argv[1]
+REG = 'C:/Codex/ThriftyCrew/grocery/out/regular'
+P = S + '/in0802/regular/family-fare-regular-2026-10-02.json'
+raw = open(P, 'rb').read()
+doc = json.loads(raw.decode('utf-8-sig'))
+def key(r): return ((r.get('item') or '').strip(), (r.get('size') or '').strip().lower(), str(r.get('regular')))
+hist = {}
+for f in sorted(glob.glob(REG + '/family-fare-regular-2026-*.json')):
+    if not re.search(r'-\d{4}-\d{2}-\d{2}\.json$', f) or '2026-10-02' in f: continue
+    for r in json.load(open(f, encoding='utf-8-sig'))['deals']:
+        if r.get('canonical_url'): hist.setdefault(key(r), set()).add(r['canonical_url'])
+def sig(r): return json.dumps({k: r.get(k) for k in ('item', 'ad_price', 'size', 'regular', 'source_ad', 'as_of', 'carried_forward')}, sort_keys=True)
+before = hashlib.md5(''.join(sig(r) for r in doc['deals']).encode()).hexdigest()
+n = 0
+for r in doc['deals']:
+    if r.get('canonical_url'): continue
+    us = hist.get(key(r), set())
+    if len(us) != 1: continue
+    u = next(iter(us))
+    m = re.search(r'/p/(\d+)', u)
+    d = re.search(r'/shop/([^/]+)/(?!p/)([^/]+)/', u)
+    r['canonical_url'] = u
+    if m: r['product_id'] = m.group(1)
+    if d: r['dept'] = d.group(1).lower(); r['aisle'] = (d.group(1) + '/' + d.group(2)).lower()
+    n += 1
+after = hashlib.md5(''.join(sig(r) for r in doc['deals']).encode()).hexdigest()
+assert before == after, 'a price-bearing field moved'
+open(P, 'w', encoding='utf-8', newline='\n').write(json.dumps(doc, ensure_ascii=False, indent=1))
+print('restored', n, 'rows; price-bearing fields unchanged md5', after)
