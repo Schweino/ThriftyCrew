@@ -270,6 +270,17 @@ build or not; separately, Brad rules whether a sale cell with no everyday fallba
 the rotation (a priority change inside the same 7-a-day budget, not a bigger budget). e40f92 and e7f9b9 close
 when Family Fare everyday rows land for their cells, or when the cells are ruled not carried.
 
+**Brad's rulings, 2026-10-03** (chat, AskUserQuestion; each recorded as asked):
+- **R7.1 Family Fare priority:** (RULED A by Brad, 2026-10-03, "Yes, jump the queue (Recommended)") a sale cell with no
+  everyday fallback moves its term to the front of the Family Fare rotation, inside the same 7-a-day budget.
+- **R7.2 3b trial:** (RULED A by Brad, 2026-10-03, "Run the trial (Recommended)") run the paced catalog-walk trial that
+  answers its two COULD NOT VERIFY criteria; Brad then rules build or not.
+- **R7.3 Hy-Vee gaps:** (RULED A by Brad, 2026-10-03, "Measure first (Recommended)") measure whether Hy-Vee carries the
+  five items at an everyday price before any change to its pull.
+- **R7.4 (step 8) liquid-ounce sizes:** (RULED A by Brad, 2026-10-03, "Give each a density (Recommended)") each of the 11
+  oz-unit commodities whose rows the row contract would refuse for a fluid-ounce size declares a sourced density, so the
+  sizes convert and no cell empties. No density is typed from memory: each carries its source.
+
 **2026-10-02.** The detective half landed with this status update: when every escalated
 sale cell is owned and asked, the alert now says "their capture has not found one" instead of "NO ONE IS WORKING THEM",
 registered as sale-no-fallback-worked. Phase 0 found the family is wider than this phase: 5 of the 8 cells that day were
