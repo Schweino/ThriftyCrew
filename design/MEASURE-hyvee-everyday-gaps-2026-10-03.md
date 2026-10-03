@@ -82,8 +82,10 @@ discovery must pick a plain product, as the table does.
 
 ## 5. Harness
 
-Harness: a one-off scratch script, not committed (ms-07: a one-off keeps its description). Run 2026-10-03 01:09 local,
-sequential, 600 ms between requests, 15 searches and 42 lookups, all read-only. It wrote only to a scratch directory.
+Harness: `grocery/discover-hyvee.ps1` (its search request) and `grocery/pull-regular-hyvee.ps1` (its lookup functions
+and its `-DryRun`), driven by a one-off scratch script that is not committed (ms-07: a one-off keeps its description).
+Run 2026-10-03 01:09 local, sequential, 600 ms between requests, 15 searches and 42 lookups, all read-only. It wrote
+only to a scratch directory.
 
 1. Search: the request verbatim from `grocery/discover-hyvee.ps1` `HV-Search`: POST
    `https://www.hy-vee.com/aisles-online/api/search/products`, body `pageNumber 1, pageSize 90, searchFilters [],
