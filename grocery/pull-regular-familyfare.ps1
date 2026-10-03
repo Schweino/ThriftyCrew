@@ -81,9 +81,6 @@ function Get-FfWindowBudget {
     FrontDeferred = ([math]::Max($FrontTerms, 0) - $front); Budget = ($RotationTerms + $front); Why = '' }
 }
 
-# PUT A BOUNDED FRONT AHEAD OF THE ROTATION. $Front is the ordered list of terms owed a place at the head of the
-# window (expiry terms first, then victims); only the first $Allowance of them move, the rest keep their rotation
-# positions and stay owed. Returns the reordered list and exactly which terms went to the front.
 # WHICH EXPIRING COMMODITIES DID THIS WINDOW ACTUALLY ASK? One whose terms reached the front and at least one of
 # them was attempted (answered or not: Set-SaleExpiryProcessed's rule is attempted-and-landed, and the landing is
 # the caller's own gate). An expiry left owed is re-offered at the front of the next window, oldest first.
@@ -97,39 +94,6 @@ function Get-FfExpiryIdsAsked {
     }
   }
   return ,$out.ToArray()
-}
-
-function Join-FfFront {
-  param([AllowEmptyCollection()][string[]]$TermList = @(), [AllowEmptyCollection()][string[]]$Front = @(), [int]$Allowance)
-  $set = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
-  $inList = New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::Ordinal)
-  foreach ($t in @($TermList)) { if ($null -ne $t) { [void]$inList.Add([string]$t) } }
-  $head = New-Object System.Collections.Generic.List[string]
-  foreach ($t in @($Front)) {
-    if ($head.Count -ge $Allowance) { break }
-    if (-not $t) { continue }
-    if (-not $inList.Contains([string]$t)) { continue }
-    if ($set.Add([string]$t)) { [void]$head.Add([string]$t) }
-  }
-  $rest = @(@($TermList) | Where-Object { -not $set.Contains([string]$_) })
-  return [pscustomobject]@{ Items = (@($head.ToArray()) + $rest); Prepended = $head.Count; Front = $head.ToArray() }
-}
-
-# R7.1 (Brad, 2026-10-03): A SALE FALLBACK THE FRONT COULD NOT HOLD TAKES A ROTATION SLOT. $Joined is Join-FfFront's answer;
-# the fallback terms it left out (in owed order) move to just behind its head, at most RotationTerms - 1 of them
-# (Get-SaleFallbackRotationTake, capture-policy-lib). The window budget is NOT raised: those terms are bought out of the
-# rotation's own drip, and because they count in Prepended, Get-FfNextCursor advances the cursor by exactly that many
-# fewer, so no rotation term is skipped. Expiries and victims are never moved by this.
-function Join-FfFallbackRotation {
-  param($Joined, [AllowEmptyCollection()][string[]]$FallbackTerms = @(), [int]$RotationTerms)
-  $inFront = @{}; foreach ($t in @($Joined.Front)) { if ($t) { $inFront[[string]$t] = $true } }
-  $inList = @{}; foreach ($t in @($Joined.Items)) { if ($t) { $inList[[string]$t] = $true } }
-  $left = @(@($FallbackTerms) | Where-Object { $_ -and -not $inFront.ContainsKey([string]$_) -and $inList.ContainsKey([string]$_) })
-  $takeA = Get-SaleFallbackRotationTake -Pending $left -RotationTerms $RotationTerms
-  $take = @($takeA)
-  if ($take.Count -eq 0) { return [pscustomobject]@{ Items = @($Joined.Items); Prepended = [int]$Joined.Prepended; Front = @($Joined.Front); FromRotation = @() } }
-  $j2 = Join-FfFront -TermList @($Joined.Items) -Front (@($Joined.Front) + $take) -Allowance ([int]$Joined.Prepended + $take.Count)
-  return [pscustomobject]@{ Items = @($j2.Items); Prepended = [int]$j2.Prepended; Front = @($j2.Front); FromRotation = $take }
 }
 
 # A MULTI-BUY HAS NO HONEST SINGLE PRICE, SO IT PRICES NOTHING (2026-09-19). Freshop sends an offer as text,
@@ -759,28 +723,11 @@ if ($SelfTest) {
   _T 'MUST-FIRE the front takes only its allowance (1 of 2 listed terms moves; an unknown term is ignored)' (($jf.Prepended -eq 1) -and (($jf.Items -join ',') -eq 'cherries,apples,bananas,dates'))
   $jf2 = Join-FfFront -TermList @('apples','bananas','cherries','dates') -Front @('cherries','apples') -Allowance 5
   _T 'CLEAN-TWIN with room, every owed term leads in the order owed and the rotation keeps its order behind them' (($jf2.Prepended -eq 2) -and (($jf2.Items -join ',') -eq 'cherries,apples,bananas,dates'))
-  # ---- R7.1 (Brad, 2026-10-03): a fallback the front could not hold takes a ROTATION slot, inside the same budget ----
-  # The 2026-09-27 07:00 shape in miniature: rotation 3, a front allowance of 2 filled by the expiries e1,e2, and the owed
-  # fallbacks f1,f2,f3 left out. The bar is RotationTerms - 1 = 2 fallback terms a window.
-  $r71List = @('r1','r2','r3','r4','e1','e2','f1','f2','f3')
-  $r71Front = Join-FfFront -TermList $r71List -Front @('e1','e2','f1','f2','f3') -Allowance 2
+  # R7.1 (2026-10-03): the window's other cases are in test-capture-policy.ps1; this one needs this file's budget and cursor.
+  $r71 = Join-FfFallbackRotation -Joined (Join-FfFront -TermList @('r1','r2','r3','r4','e1','e2','f1','f2','f3') -Front @('e1','e2','f1','f2','f3') -Allowance 2) -FallbackTerms @('f1','f2','f3') -RotationTerms 3
   $r71Win = Get-FfWindowBudget -RotationTerms 3 -FrontTerms 5 -CallCap 5 -AttemptCap 20
-  $r71 = Join-FfFallbackRotation -Joined $r71Front -FallbackTerms @('f1','f2','f3') -RotationTerms 3
-  _T 'MUST-FIRE a fallback the expiries crowded out of the front now takes a rotation slot (f1,f2 lead the rotation, behind the expiries)' (((@($r71.FromRotation) -join ',') -eq 'f1,f2') -and ((@($r71.Items) -join ',') -eq 'e1,e2,f1,f2,r1,r2,r3,r4,f3') -and $r71.Prepended -eq 4)
-  _T 'CLEAN-TWIN an expiry still goes first: the jump never moves a fallback ahead of e1,e2' ((@($r71.Items)[0] -eq 'e1') -and (@($r71.Items)[1] -eq 'e2'))
-  _T 'MUST-FIRE ONE PAST the bar (3 fallbacks left out, rotation 3): exactly 2 = RotationTerms - 1 jump, f3 keeps its rotation place and stays owed' ((@($r71.FromRotation).Count -eq 2) -and (@($r71.Items)[-1] -eq 'f3'))
-  $r71At = Join-FfFallbackRotation -Joined (Join-FfFront -TermList $r71List -Front @('e1','e2','f1','f2') -Allowance 2) -FallbackTerms @('f1','f2') -RotationTerms 3
-  _T 'CLEAN-TWIN AT the bar (2 fallbacks left out, rotation 3): both jump, none left owed by the window' ((@($r71At.FromRotation) -join ',') -eq 'f1,f2')
-  # MUST-NOT-FIRE the cap: the budget is the window's (rotation 3 + front 2 = 5), so the jump buys exactly the same number of
-  # terms, and the cursor advances 3 - 2 = 1 rotation position (Get-FfNextCursor over the 5 bought, minus the 4 prepended).
   $r71Next = Get-FfNextCursor 10 ($r71Win.Budget - 1 - $r71.Prepended) 641
-  _T 'MUST-NOT-FIRE the jump never raises the budget (5 = rotation 3 + front 2 = the ceiling 5) and the cursor advances 1, not 3, so no rotation term is skipped' (($r71Win.Front -eq 2) -and ($r71Win.Budget -eq 5) -and ($r71Win.Budget -le $r71Win.Ceiling) -and ($r71Next -eq 11))
-  $r71None = Join-FfFallbackRotation -Joined $r71Front -FallbackTerms @() -RotationTerms 3
-  _T 'CLEAN-TWIN no fallback pending: the rotation keeps all its slots and the window is exactly Join-FfFront''s' ((@($r71None.FromRotation).Count -eq 0) -and ((@($r71None.Items) -join ',') -eq (@($r71Front.Items) -join ',')) -and $r71None.Prepended -eq $r71Front.Prepended)
-  $r71Fit = Join-FfFallbackRotation -Joined (Join-FfFront -TermList $r71List -Front @('f1','f2') -Allowance 5) -FallbackTerms @('f1','f2') -RotationTerms 3
-  _T 'CLEAN-TWIN fallbacks the front already holds take no rotation slot (a quiet day keeps the drip whole)' ((@($r71Fit.FromRotation).Count -eq 0) -and $r71Fit.Prepended -eq 2)
-  $r71One = Join-FfFallbackRotation -Joined $r71Front -FallbackTerms @('f1','f2','f3') -RotationTerms 1
-  _T 'MUST-NOT-FIRE at a rotation of 1 nothing jumps: the drip always re-reads at least one term' (@($r71One.FromRotation).Count -eq 0)
+  _T 'MUST-NOT-FIRE R7.1 never raises the budget (5 = rotation 3 + front 2 = the ceiling 5); 2 fallbacks jump, so the cursor advances 1, not 3, and no rotation term is skipped' (($r71Win.Front -eq 2) -and ($r71Win.Budget -eq 5) -and ($r71.Prepended -eq 4) -and ($r71Next -eq 11))
   $tpFix = @([pscustomobject]@{ id = 'butter'; term = 'butter' }, [pscustomobject]@{ id = 'popsicles'; term = 'popsicles' }, [pscustomobject]@{ id = 'popsicles'; term = 'ice pops' }, [pscustomobject]@{ id = 'eggs'; term = 'eggs' })
   $askedIds = Get-FfExpiryIdsAsked -ExpiryIds @('butter', 'popsicles', 'eggs') -TermPairs $tpFix -Attempted @{ 'butter' = $true; 'ice pops' = $true }
   _T 'MUST-FIRE an expiry whose term was never attempted is NOT marked re-priced (eggs stays owed)' ((@($askedIds) -join ',') -eq 'butter,popsicles')

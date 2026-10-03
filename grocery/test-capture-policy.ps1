@@ -806,6 +806,24 @@ try {
     $r7T1 = Get-SaleFallbackRotationTake -Pending @('a','b') -RotationTerms 1; $r7T0 = Get-SaleFallbackRotationTake -Pending @() -RotationTerms 3
     if (@($r7T1).Count -eq 0 -and @($r7T0).Count -eq 0) { Ok 'MUST NOT FIRE  at a rotation of 1 nothing jumps (the drip always re-reads one term), and an empty pending list takes nothing' }
     else { Bad "R7.1 take: r1=$(@($r7T1).Count) empty=$(@($r7T0).Count)" }
+    # THE FAMILY FARE WINDOW (Join-FfFallbackRotation, capture-front-lib): the same shape in terms. Rotation 3, a front
+    # allowance of 2 filled by the expiries e1,e2, the owed fallbacks f1,f2,f3 left out. The cap and cursor case is in
+    # pull-regular-familyfare.ps1 -SelfTest, which owns Get-FfWindowBudget and Get-FfNextCursor.
+    $wL = @('r1','r2','r3','r4','e1','e2','f1','f2','f3')
+    $wFront = Join-FfFront -TermList $wL -Front @('e1','e2','f1','f2','f3') -Allowance 2
+    $wJ = Join-FfFallbackRotation -Joined $wFront -FallbackTerms @('f1','f2','f3') -RotationTerms 3
+    if ((@($wJ.FromRotation) -join ',') -eq 'f1,f2' -and (@($wJ.Items) -join ',') -eq 'e1,e2,f1,f2,r1,r2,r3,r4,f3' -and $wJ.Prepended -eq 4) { Ok 'MUST FIRE  window: fallbacks the expiries crowded out of the front take rotation slots (f1,f2 lead the rotation, behind e1,e2)' }
+    else { Bad "R7.1 window: from=[$(@($wJ.FromRotation) -join ',')] items=[$(@($wJ.Items) -join ',')] prepended=$($wJ.Prepended)" }
+    if (@($wJ.Items)[0] -eq 'e1' -and @($wJ.Items)[1] -eq 'e2' -and @($wJ.FromRotation).Count -eq 2 -and @($wJ.Items)[-1] -eq 'f3') { Ok 'CLEAN TWIN  window: the expiries still go first, and ONE PAST the bar (3 left out) exactly 2 jump while f3 keeps its rotation place' }
+    else { Bad "R7.1 window order: [$(@($wJ.Items) -join ',')]" }
+    $wAt = Join-FfFallbackRotation -Joined (Join-FfFront -TermList $wL -Front @('e1','e2','f1','f2') -Allowance 2) -FallbackTerms @('f1','f2') -RotationTerms 3
+    if ((@($wAt.FromRotation) -join ',') -eq 'f1,f2') { Ok 'CLEAN TWIN  window AT the bar (2 left out, rotation 3): both jump' } else { Bad "R7.1 window at bar: [$(@($wAt.FromRotation) -join ',')]" }
+    $wNone = Join-FfFallbackRotation -Joined $wFront -FallbackTerms @() -RotationTerms 3
+    $wFit = Join-FfFallbackRotation -Joined (Join-FfFront -TermList $wL -Front @('f1','f2') -Allowance 5) -FallbackTerms @('f1','f2') -RotationTerms 3
+    if (@($wNone.FromRotation).Count -eq 0 -and (@($wNone.Items) -join ',') -eq (@($wFront.Items) -join ',') -and @($wFit.FromRotation).Count -eq 0 -and $wFit.Prepended -eq 2) { Ok 'CLEAN TWIN  window: nothing pending, or fallbacks the front already holds, take no rotation slot' }
+    else { Bad "R7.1 window quiet: none=$(@($wNone.FromRotation).Count) fit=$(@($wFit.FromRotation).Count)/$($wFit.Prepended)" }
+    $wOne = Join-FfFallbackRotation -Joined $wFront -FallbackTerms @('f1','f2','f3') -RotationTerms 1
+    if (@($wOne.FromRotation).Count -eq 0 -and $wOne.Prepended -eq 2) { Ok 'MUST NOT FIRE  window at a rotation of 1: nothing jumps' } else { Bad "R7.1 window rotation 1: $(@($wOne.FromRotation).Count)" }
   } finally { $script:PolicyRoot = $r7RootWas; $script:StoreCallCap['Family Fare'] = $r7CapWas }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
