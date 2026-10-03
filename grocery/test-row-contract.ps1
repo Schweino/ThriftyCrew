@@ -138,13 +138,51 @@ try {
   $res = Get-TcRowContract (RcRow 'Walmart' 'Beans 25 oz, 4 pk' '$9.00' '104 oz') (RcCom 'beans' 'oz'); $s = Show $res
   T 'CLEAN TWIN  one step PAST the 3% bar (104 oz) is not proven the pack total; it is read as a package measure' (($res.verdict -eq 'accept') -and $res.pack.source -match 'package measure') ($s + ' src=' + $res.pack.source)
 
+  # ---- R7.4 (Brad, 2026-10-03): a declared density_g_ml converts a volume size to weight, in the CONTRACT and in the
+  # ENGINE (Get-UnitPrice) through the same reader, so the size the contract accepts is the divisor the engine uses.
+  # The arithmetic is asserted from its own inputs: 16 fl oz and 0.5 g/ml are binary-exact, the two constants are the
+  # ones Convert-ToUnit already uses (29.5735 ml per fl oz, 28.3495 g per oz).
+  $half = RcCom 'mayonnaise' 'oz' @{ density_g_ml = 0.5 }
+  $dRow = RcRow 'Walmart' 'Great Value Mayonnaise, 16 fl oz' '$4.00' '16 fl oz'
+  $wantOz = 16.0 * 29.5735 * 0.5 / 28.3495
+  $res = Get-TcRowContract $dRow $half; $s = Show $res
+  $eng = Get-UnitPrice $dRow ([pscustomobject]$half)
+  T 'MUST FIRE  R7.4 a 16 fl oz row on a commodity declaring density_g_ml 0.5 converts to 16 x 29.5735 x 0.5 / 28.3495 oz, in the contract and the engine alike' (($res.verdict -eq 'accept') -and ([math]::Abs($res.size.value - $wantOz) -lt 1e-9) -and ($res.unit_kind.source -match 'density_g_ml') -and ($null -ne $eng) -and ([math]::Abs($eng.unit_price - (4.0 / $wantOz)) -lt 1e-12) -and ($eng.size_override -match ' oz$') -and ($eng.basis -match 'density_g_ml')) ($s + ' size=' + $res.size.value + ' eng=' + $(if ($eng) { $eng.unit_price.ToString() + ' ' + $eng.basis } else { 'null' }))
+  $res = Get-TcRowContract $dRow (RcCom 'mayonnaise' 'oz'); $s = Show $res
+  $eng = Get-UnitPrice $dRow ([pscustomobject](RcCom 'mayonnaise' 'oz'))
+  T 'MUST NOT FIRE  R7.4 the same row on a commodity with NO density still refuses in shadow, and the engine prices it as before (4.00 / 16)' (((Codes $res) -eq 'KIND-VOLUME-ON-WEIGHT') -and ($eng.unit_price -eq 0.25) -and -not $eng.ContainsKey('size_override')) ($s + ' eng=' + $eng.unit_price)
+  $wRow = RcRow 'Walmart' 'Great Value Mayonnaise, 16 oz' '$4.00' '16 oz'
+  $res = Get-TcRowContract $wRow $half; $s = Show $res
+  $eng = Get-UnitPrice $wRow ([pscustomobject]$half)
+  T 'CLEAN TWIN  R7.4 a WEIGHT 16 oz row on the density commodity is unchanged: 16 oz, 0.25, no size override' (($res.verdict -eq 'accept') -and $res.size.value -eq 16 -and ($eng.unit_price -eq 0.25) -and -not $eng.ContainsKey('size_override')) ($s + ' eng=' + $eng.unit_price)
+  $gRow = RcRow "Sam's Club" "Member's Mark Mayonnaise, 1 gal." '$8.00' '1 gal'
+  $eng = Get-UnitPrice $gRow ([pscustomobject]$half)
+  T 'CLEAN TWIN  R7.4 a gallon on the density commodity converts through the floz arm (128 fl oz), where it was unpriceable before' (($null -ne $eng) -and ([math]::Abs($eng.unit_price - (8.0 / (128.0 * 29.5735 * 0.5 / 28.3495))) -lt 1e-12)) $(if ($eng) { [string]$eng.unit_price } else { 'null' })
+  $nw = RcCom 'disinfectant-spray' 'oz' @{ kind_equivalent = 'near-water' }
+  $eng = Get-UnitPrice (RcRow 'Walmart' 'Scrubbing Bubbles 32 fl oz' '$4.00' '32 fl oz') ([pscustomobject]$nw)
+  T 'CLEAN TWIN  R7.4 kind_equivalent near-water silences the kind question but moves no price: 32 fl oz stays 32 oz (0.125)' (($eng.unit_price -eq 0.125) -and -not $eng.ContainsKey('size_override')) ([string]$eng.unit_price)
+  # the name states the size's number as a WEIGHT: a density must not convert it (condensed milk 6 x 14 oz sized "84 fl oz")
+  $cmD = RcCom 'condensed-milk' 'oz' @{ density_g_ml = 1.2934 }
+  $mRow = RcRow "Sam's Club" "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk." '$21.00' '84 fl oz'
+  $res = Get-TcRowContract $mRow $cmD; $s = Show $res
+  $eng = Get-UnitPrice $mRow ([pscustomobject]$cmD)
+  T 'MUST FIRE  R7.4 a name stating the size''s number as weight (14 oz x 6 = 84) beats a density: KIND-LABELS-DISAGREE, and the engine keeps 84 (0.25), unconverted' ((((Codes $res) -eq 'KIND-LABELS-DISAGREE') -and $res.size.value -eq 84) -and ($eng.unit_price -eq 0.25) -and -not $eng.ContainsKey('size_override')) ($s + ' eng=' + $eng.unit_price)
+  # og-06: Test-TcKindLabelsDisagree's 1% bar. 100 vs 99 is AT it ((100-99)/100 is the double nearest 0.01, the same
+  # double the literal parses to); 100 vs 98 is one whole-ounce step PAST it.
+  $atRow = RcRow 'Walmart' 'Store Mayonnaise 99 oz' '$10.00' '100 fl oz'
+  $eng = Get-UnitPrice $atRow ([pscustomobject]$half)
+  T 'MUST NOT FIRE  AT the 1% labels bar (name 99 oz against 100 fl oz) the row is in dispute and is NOT converted (0.10)' (($eng.unit_price -eq 0.1) -and -not $eng.ContainsKey('size_override')) ([string]$eng.unit_price)
+  $pastRow = RcRow 'Walmart' 'Store Mayonnaise 98 oz' '$10.00' '100 fl oz'
+  $eng = Get-UnitPrice $pastRow ([pscustomobject]$half)
+  T 'CLEAN TWIN  one step PAST the 1% bar (name 98 oz) is no dispute: the 100 fl oz size converts at the density' (($null -ne $eng) -and $eng.ContainsKey('size_override') -and ([math]::Abs($eng.unit_price - (10.0 / (100.0 * 29.5735 * 0.5 / 28.3495))) -lt 1e-12)) $(if ($eng) { [string]$eng.unit_price + ' ' + $eng.basis } else { 'null' })
+
   # ---- every code in the lib's list fired at least once above (a code no case reaches is a refusal nobody tests)
   $codesA = Get-TcRowContractCodes; $codesB = Get-TcRowContractRepriceCodes
   $all = @($codesA) + @($codesB)
   $missing = @($all | Where-Object { -not $script:fired.ContainsKey($_) })
   T 'MUST NOT FIRE  no refusal or reprice code in the lib is left unfired by the cases above' ($missing.Count -eq 0) ($missing -join ',')
 } catch { $script:f++; Write-Output ('  FAIL  threw: ' + $_.Exception.Message + ' at ' + $_.InvocationInfo.ScriptLineNumber) }
-$want = 42
+$want = 50
 if ($script:n -ne $want) { $script:f++; Write-Output "  FAIL  ran $($script:n) of $want cases" }
 if ($script:f) { Write-Output ("test-row-contract self-test FAIL: {0} check(s)" -f $script:f); exit 1 }
 Write-Output ("test-row-contract self-test pass: {0} cases" -f $script:n)

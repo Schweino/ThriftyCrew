@@ -41,6 +41,10 @@ treat a fluid ounce as a weight ounce, which is close for watery foods and wrong
 **Recommendation: give each of the 11 a density** (one number per item) so the sizes convert properly and no cell
 empties. The alternatives are changing those items to be priced per fluid ounce, or letting those rows leave the board.
 Nothing is enforced until the shadow has run 7 days per store (from 2026-10-09).
+**Built 2026-10-03 for 7 of the 11** (status note R7.4 in the plan). One follow-up question:
+pickles, banana peppers, pepperoncini and pickled jalapenos have no trustworthy density, because every source measures the
+drained pieces, not the jar of pieces and brine, and using one would move those prices by up to 2.3 times. Options:
+price those four per fluid ounce instead, or let their fluid-ounce rows leave the board once the check is enforced.
 
 ## 5. Should an unexplained "cheapest price moved" flag still page? (step 11, the review packet)
 

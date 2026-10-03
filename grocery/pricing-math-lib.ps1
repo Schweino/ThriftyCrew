@@ -43,8 +43,23 @@ function Get-TcEachCountTokens() {
 function Get-TcWholePurchaseTokens() {
   return 'ct|count|ea|each|bunch|bunches|head|loaf'
 }
-function Convert-ToUnit([double]$num, [string]$token, [string]$unit) {
+# A VOLUME SIZE ON A WEIGHT COMMODITY CONVERTS ONLY THROUGH A DECLARED DENSITY (2026-10-03, Brad's R7.4 ruling,
+# design/PLAN-weekly-root-families-2026-10-02.md; queue 2026-10-02-44c416). Until today the 'oz' arm below read
+# "fl oz" as weight oz unchanged while pu-lib's Get-SizeMeasureKind read it as volume: two readers, two answers.
+# $densityGml is the commodity's declared density_g_ml (Get-TcDensityGml), 0 when it declares none, and then nothing
+# below changes: every caller that passes three arguments gets exactly yesterday's answer. With a density, a volume
+# token is read as fluid ounces by the floz arm, turned into grams (29.5735 ml per fl oz x g/ml) and then into the
+# weight unit. The two constants are the ones the floz and lb arms already use.
+function Convert-ToUnit([double]$num, [string]$token, [string]$unit, [double]$densityGml = 0) {
   $t = $token.ToLower().Trim().TrimEnd('.')
+  if ($densityGml -gt 0 -and ($unit -eq 'oz' -or $unit -eq 'lb') -and $t -match '^(fl\s*oz|floz|gal|gallon|gallons|qt|quart|quarts|pt|pint|pints|l|liter|liters|ltr|ml)$') {
+    $vf = Convert-ToUnit $num $t 'floz'
+    if ($null -ne $vf) {
+      $grams = $vf * 29.5735 * $densityGml
+      if ($unit -eq 'oz') { return $grams / 28.3495 }
+      return $grams / 453.592
+    }
+  }
   switch ($unit) {
     'lb' {
       if ($t -match '^(lb|lbs|pound|pounds|#)$') { return $num }
@@ -103,13 +118,59 @@ function Convert-ToUnit([double]$num, [string]$token, [string]$unit) {
   }
   return $null
 }
-function Get-SizeAmount([string]$sizeText, [string]$unit) {
+# A COMMODITY'S DENSITY DECLARATION, read in ONE place (2026-10-03, R7.4). It moved here from row-contract-lib.ps1,
+# which dot-sources this file, so the row contract and Get-UnitPrice read the same declaration through the same
+# function. Understood: a numeric density_g_ml > 0 (commodities.json, with density_source naming where the number
+# came from), and kind_equivalent 'near-water' (an allowlist of understood values, read the way
+# audit-unit-basis-outlier's Test-KindEquivalentSkip reads it, never "any value silences"). Anything else is NOT a
+# declaration. Returns @{ value; source } or $null.
+function Get-TcCommodityDensity($Commodity) {
+  if ($null -eq $Commodity) { return $null }
+  $p = $Commodity.PSObject.Properties
+  if ($Commodity -is [hashtable]) {
+    if ($Commodity.ContainsKey('density_g_ml')) { $d = 0.0; if ([double]::TryParse([string]$Commodity['density_g_ml'], [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -and $d -gt 0) { return @{ value = $d; source = 'commodity.density_g_ml' } } }
+    if ($Commodity.ContainsKey('kind_equivalent') -and [string]$Commodity['kind_equivalent'] -eq 'near-water') { return @{ value = 1.0; source = 'commodity.kind_equivalent=near-water' } }
+    return $null
+  }
+  if ($p['density_g_ml']) { $d = 0.0; if ([double]::TryParse([string]$Commodity.density_g_ml, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -and $d -gt 0) { return @{ value = $d; source = 'commodity.density_g_ml' } } }
+  if ($p['kind_equivalent'] -and [string]$Commodity.kind_equivalent -eq 'near-water') { return @{ value = 1.0; source = 'commodity.kind_equivalent=near-water' } }
+  return $null
+}
+# THE DENSITY THE ARITHMETIC USES: a NUMERIC density_g_ml on a weight commodity (oz, lb), else 0. 'near-water' is
+# deliberately 0 here: its declaration says the two units are interchangeable at the board's precision
+# (disinfectant-spray's kind_equivalent_why), which is exactly what the engine already does, so it silences the kind
+# question without moving a price. Only a measured, sourced number converts.
+function Get-TcDensityGml($Commodity) {
+  $d = Get-TcCommodityDensity $Commodity
+  if ($null -eq $d -or [string]$d.source -ne 'commodity.density_g_ml') { return 0.0 }
+  $u = ''
+  if ($Commodity -is [hashtable]) { $u = [string]$Commodity['unit'] } elseif ($Commodity.PSObject.Properties['unit']) { $u = [string]$Commodity.unit }
+  if ($u -ne 'oz' -and $u -ne 'lb') { return 0.0 }
+  return [double]$d.value
+}
+# TWO PARTIES, TWO KINDS, ONE NUMBER: the size field says a volume and the NAME states the commodity's weight at the
+# SAME amount ("Magnolia Sweetened Condensed Milk, 14 oz., 6 pk." with size "84 fl oz": 6 x 14 = 84 weight oz). A
+# density must NOT convert such a row: the store's own name says the number is already a weight, and converting it
+# would move the price by the density in whichever direction it happens to point (84 fl oz of condensed milk is 113 oz,
+# a 26% understatement). The row contract refuses it as KIND-LABELS-DISAGREE; the engine leaves its number as read.
+# Kinds come from pu-lib's Get-SizeMeasureKind and amounts from Get-SizeAmount without a density: no third reader.
+function Test-TcKindLabelsDisagree([string]$SizeText, [string]$Name, [string]$Unit) {
+  if (-not $SizeText -or -not $Name) { return $false }
+  if ($Unit -ne 'oz' -and $Unit -ne 'lb') { return $false }
+  if ((Get-SizeMeasureKind -Size $SizeText -Unit $Unit) -ne 'volume') { return $false }
+  if (Test-NameOffersTwoSizes $Name) { return $false }
+  if ((Get-SizeMeasureKind -Size $Name -Unit $Unit) -ne 'weight') { return $false }
+  $a = Get-SizeAmount $SizeText $Unit; $n = Get-SizeAmount $Name $Unit
+  if ($null -eq $a -or $null -eq $n -or $a -le 0) { return $false }
+  return ([math]::Abs($a - $n) / $a -le 0.01)
+}
+function Get-SizeAmount([string]$sizeText, [string]$unit, [double]$densityGml = 0) {
   if (-not $sizeText) { return $null }
   $s = ($sizeText -replace "`n", ' ').ToLower()
   # bare unit token (e.g. size just "lb" or "each") => the ad is priced PER that unit => amount = 1 unit
   $st = $s.Trim().TrimEnd('.')
   if ($st -match ('^(lb|lbs|pound|pounds|#|oz|ounce|ounces|fl\s*oz|floz|dozen|doz|gal|gallon|qt|quart|pt|pint|liter|litre|l|ml|' + (Get-TcWholePurchaseTokens) + ')$')) {
-    $one = Convert-ToUnit 1 $st $unit
+    $one = Convert-ToUnit 1 $st $unit $densityGml
     if ($one -ne $null) { return $one }
   }
   # fractional size like "1/2 gal" or "3/4 lb" -> 0.5 / 0.75 of that unit (must run before the plain-number match)
@@ -122,10 +183,10 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   if ($mf.Success -and ([double]$mf.Groups[2].Value -ne 0)) {
     $fa = [double]$mf.Groups[1].Value; $fb = [double]$mf.Groups[2].Value
     if ($fa -lt $fb) {
-      $conv = Convert-ToUnit ($fa / $fb) $mf.Groups[3].Value $unit
+      $conv = Convert-ToUnit ($fa / $fb) $mf.Groups[3].Value $unit $densityGml
       if ($conv -ne $null) { return $conv }
     } else {
-      $per = Convert-ToUnit $fb $mf.Groups[3].Value $unit
+      $per = Convert-ToUnit $fb $mf.Groups[3].Value $unit $densityGml
       if ($per -ne $null) { return $fa * $per }
     }
   }
@@ -186,7 +247,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
       if ($proved) { break }
     }
     if ($proved) {
-      $ptc = Convert-ToUnit $ptv $pttok $unit
+      $ptc = Convert-ToUnit $ptv $pttok $unit $densityGml
       if ($ptc -ne $null) { return $ptc }
     }
   }
@@ -194,7 +255,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:(?:ct|count|pk|packs?)\D+?|(?:x|\u00d7)\s*-?\s*)(\d+(?:\.\d+)?|\.\d+)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
   if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
     $cnt = [double]$mm.Groups[1].Value; $each = [double]$mm.Groups[2].Value; $tok = $mm.Groups[3].Value
-    $per = Convert-ToUnit $each $tok $unit
+    $per = Convert-ToUnit $each $tok $unit $densityGml
     if ($per -ne $null) { return $cnt * $per }
   }
   # Same pack-first shape on a COUNT commodity: "12 pk 2 oz" is 12 ITEMS (1 dozen), the per-item weight is
@@ -222,7 +283,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     # that must be right in the direction that costs the reader reads the SMALLER size, so the per-unit is the most a
     # shopper pays. Whether the two sizes are different PRODUCTS is not decidable from the line and is not attempted.
     $lo = [double]$rng.Groups[1].Value; $tok = $rng.Groups[3].Value
-    $rc = Convert-ToUnit $lo $tok $unit; if ($rc -ne $null) { return $rc }
+    $rc = Convert-ToUnit $lo $tok $unit $densityGml; if ($rc -ne $null) { return $rc }
   }
   # first "<number> <unit-token>" occurrence
   # The AREA tokens lead the alternation, longest form first, so "200 square feet" cannot be clipped to the
@@ -230,7 +291,7 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
   $m = [regex]::Match($s, '(\d+(?:\.\d+)?|\.\d+)\s*(square\s*feet|square\s*fee|sq\s*feet|sq\s*\.?\s*ft|sqft|fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|#|gal|gallon|qt|quart|pt|pint|liters|litres|liter|litre|ltr|\bl\b|ml|g|gram|grams|dozen|doz|ct|count|ea|each|pk|pack|pkg|bunch|head|loaf)\b')
   if ($m.Success) {
     $num = [double]$m.Groups[1].Value; $tok = $m.Groups[2].Value
-    $conv = Convert-ToUnit $num $tok $unit
+    $conv = Convert-ToUnit $num $tok $unit $densityGml
     # WEIGHT-FIRST multipack ("16 oz 6 pk", or "1.51 oz., 40 pk." via the name fallback): a pack count
     # elsewhere in the string multiplies a WEIGHT/VOLUME size. pu-lib step 4 has always done this; the engine
     # did not, so Bush's "16 oz 6 pk" priced as ONE can ($0.3988/oz, band-flagged) and Sam's grits PUBLISHED
@@ -299,6 +360,7 @@ function ConvertTo-DigitNumerals([string]$t) {
   if (-not $t) { return $t }
   return ($t -replace '(?i)\bone\b','1' -replace '(?i)\btwo\b','2' -replace '(?i)\bthree\b','3' -replace '(?i)\bfour\b','4' -replace '(?i)\bfive\b','5' -replace '(?i)\bsix\b','6' -replace '(?i)\bseven\b','7' -replace '(?i)\beight\b','8' -replace '(?i)\bnine\b','9' -replace '(?i)\bten\b','10')
 }
+. (Join-Path $PSScriptRoot 'pu-lib.ps1')   # Get-SizeMeasureKind: the ONE kind reader, for Test-TcKindLabelsDisagree (R7.4)
 . (Join-Path $PSScriptRoot 'ad-line-price-lib.ps1')   # Get-TcPerksPrice: the ONE Perks reading, shared with guards.ps1 10b (queue 2026-09-28-b61b08)
 function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   $p = ConvertTo-DigitNumerals ((("" + $priceText + " " + $nameText) -replace "`n", ' '))
@@ -1030,12 +1092,30 @@ function Get-UnitPrice($deal, $cat) {
     # AFTER the name-volume branch above, which already carries its own either/or refusal, so the 2026-09-10
     # gallon-jug path is untouched.
     if ($deal.name -and (Test-NameOffersTwoSizes ([string]$deal.name)) -and -not $deal.split_from) { return $null }
-    $amt = Get-SizeAmount $sizeForAmt $unit
+    # A DECLARED DENSITY CONVERTS A VOLUME SIZE TO WEIGHT (2026-10-03, R7.4; see Convert-ToUnit). 0 for every
+    # commodity that declares no numeric density_g_ml, and then the two lines below are yesterday's. A row whose
+    # NAME states the same number as a weight is left as read (Test-TcKindLabelsDisagree): the store says it is a
+    # weight already, and the row contract refuses it as KIND-LABELS-DISAGREE rather than guess.
+    $dg = Get-TcDensityGml $cat
+    if ($dg -gt 0 -and (Test-TcKindLabelsDisagree $sizeForAmt ([string]$deal.name) $unit)) { $dg = 0.0 }
+    $amt = Get-SizeAmount $sizeForAmt $unit $dg
+    $amtFrom = $sizeForAmt
     # The NAME is a last resort, and it is only usable when it states ONE size. An either/or ad names two
     # (see Test-NameOffersTwoSizes) and the first-match regex would silently pick the larger, cheaper-looking
     # one. Refuse instead: $amt stays null, the row returns UNPRICED and drops from the ranking.
-    if (($amt -eq $null) -and $deal.name -and -not (Test-NameOffersTwoSizes $deal.name)) { $amt = Get-SizeAmount $deal.name $unit }
-    if ($amt -ne $null -and $amt -gt 0) { return @{ unit_price=($pr.per_item/$amt); basis="size $([math]::Round($amt,3)) $unit"; note=$pr.note } }
+    if (($amt -eq $null) -and $deal.name -and -not (Test-NameOffersTwoSizes $deal.name)) { $amt = Get-SizeAmount $deal.name $unit $dg; $amtFrom = [string]$deal.name }
+    if ($amt -ne $null -and $amt -gt 0) {
+      if ($dg -gt 0) {
+        $amt0 = Get-SizeAmount $amtFrom $unit
+        if ($null -ne $amt0 -and [math]::Abs($amt0 - $amt) -gt 1e-9) {
+          # size_override puts the WEIGHT the price was divided by on the cell, so every reader of the cell's size
+          # (pu-lib, the kind audit) reads the quantity the arithmetic used, as the gallon-jug branch above does.
+          $aR = [math]::Round($amt, 3); $inv = [Globalization.CultureInfo]::InvariantCulture
+          return @{ unit_price=($pr.per_item/$amt); basis=("size $aR $unit (a volume size at " + $dg.ToString($inv) + " g/ml, commodity.density_g_ml)"); size_override=($aR.ToString($inv) + ' ' + $unit); note=$pr.note }
+        }
+      }
+      return @{ unit_price=($pr.per_item/$amt); basis="size $([math]::Round($amt,3)) $unit"; note=$pr.note }
+    }
     return $null
   }
   if ($unit -eq 'each') {

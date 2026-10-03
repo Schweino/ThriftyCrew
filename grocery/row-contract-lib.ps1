@@ -49,22 +49,8 @@ function Get-TcUnitKind([string]$Unit) {
   }
 }
 
-# A commodity's density declaration: the ONLY thing that lets a volume size price a weight unit (or the reverse).
-# Understood today: kind_equivalent 'near-water' (commodities.json, read the same way audit-unit-basis-outlier's
-# Test-KindEquivalentSkip reads it: an allowlist of understood values, never "any value silences"), and a numeric
-# density_g_ml > 0 if a commodity ever declares one. Anything else is NOT a declaration.
-function Get-TcCommodityDensity($Commodity) {
-  if ($null -eq $Commodity) { return $null }
-  $p = $Commodity.PSObject.Properties
-  if ($Commodity -is [hashtable]) {
-    if ($Commodity.ContainsKey('density_g_ml')) { $d = 0.0; if ([double]::TryParse([string]$Commodity['density_g_ml'], [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -and $d -gt 0) { return @{ value = $d; source = 'commodity.density_g_ml' } } }
-    if ($Commodity.ContainsKey('kind_equivalent') -and [string]$Commodity['kind_equivalent'] -eq 'near-water') { return @{ value = 1.0; source = 'commodity.kind_equivalent=near-water' } }
-    return $null
-  }
-  if ($p['density_g_ml']) { $d = 0.0; if ([double]::TryParse([string]$Commodity.density_g_ml, [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$d) -and $d -gt 0) { return @{ value = $d; source = 'commodity.density_g_ml' } } }
-  if ($p['kind_equivalent'] -and [string]$Commodity.kind_equivalent -eq 'near-water') { return @{ value = 1.0; source = 'commodity.kind_equivalent=near-water' } }
-  return $null
-}
+# A commodity's density declaration (Get-TcCommodityDensity) and the number the arithmetic uses (Get-TcDensityGml) live in
+# pricing-math-lib.ps1 since 2026-10-03 (R7.4), so this contract and the engine's Get-UnitPrice read ONE declaration.
 
 function Get-TcContractProp($Obj, [string]$Name) {
   if ($null -eq $Obj) { return $null }
@@ -107,11 +93,11 @@ function Test-TcNear([double]$a, [double]$b, [double]$tol) {
 
 # THE FIRST SINGLE MEASURE A TEXT STATES, read by Get-SizeAmount on that token alone, so a pack multiplier elsewhere
 # in the text never enters it. $null when the text names no weight or volume.
-function Get-TcSingleMeasure([string]$Text, [string]$Unit) {
+function Get-TcSingleMeasure([string]$Text, [string]$Unit, [double]$DensityGml = 0) {
   if (-not $Text) { return $null }
   $m = [regex]::Match($Text.ToLower(), '(\d+(?:\.\d+)?|\.\d+)\s*-?\s*(fl\.?\s*oz|floz|oz|ounces?|lbs?|pounds?|gal|gallons?|qt|quarts?|pt|pints?|liters?|litres?|ltr|ml|g|grams?)\b')
   if (-not $m.Success) { return $null }
-  return (Get-SizeAmount ($m.Groups[1].Value + ' ' + ($m.Groups[2].Value -replace '\.', '')) $Unit)
+  return (Get-SizeAmount ($m.Groups[1].Value + ' ' + ($m.Groups[2].Value -replace '\.', '')) $Unit $DensityGml)
 }
 
 # A count that is PER A CONTAINER OR A WEIGHT is a grade, not a pack: "21-25 ct. per pound", "24 ct. per box"
@@ -180,10 +166,16 @@ function Get-TcRowContract {
   if ($ckind -eq 'weight' -or $ckind -eq 'volume' -or $ckind -eq 'area' -or $unit -eq 'dozen') {
     # ---- SIZE: the size field first, the name only when the field states no usable amount (the engine's order) ----
     $src = 'none'; $txt = ''; $amt = $null
-    $a1 = Get-SizeAmount $r.size_text $unit
+    # THE ENGINE'S DENSITY, read the engine's way (R7.4): a numeric density_g_ml converts a volume size to the weight
+    # unit, except on a row whose name states the same number as a weight (Test-TcKindLabelsDisagree), so the size
+    # value here is the quantity Get-UnitPrice divides by.
+    $dgNum = Get-TcDensityGml $Commodity
+    $dgBlocked = ($dgNum -gt 0) -and (Test-TcKindLabelsDisagree $r.size_text $r.name $unit)
+    $dg = if ($dgBlocked) { 0.0 } else { $dgNum }
+    $a1 = Get-SizeAmount $r.size_text $unit $dg
     if ($null -ne $a1 -and $a1 -gt 0) { $src = 'size_text'; $txt = $r.size_text; $amt = $a1 }
     elseif (-not $twoSizes) {
-      $a2 = Get-SizeAmount $r.name $unit
+      $a2 = Get-SizeAmount $r.name $unit $dg
       if ($null -ne $a2 -and $a2 -gt 0) { $src = 'name'; $txt = $r.name; $amt = $a2 }
     }
     # a pint_oz declaration converts a bare dry pint to a weight (blueberries); the engine does the same
@@ -209,7 +201,9 @@ function Get-TcRowContract {
       # (Sam's 'Member's Mark Olive Oil Cooking Spray, 7 oz., 2 pk.' with size '14 fl oz': 7 x 2 = 14 weight oz)
       if (($ckind -eq 'weight' -and $kind -eq 'volume') -or ($ckind -eq 'volume' -and $kind -eq 'weight')) {
         $nAmt = Get-SizeAmount $r.name $unit
-        if (-not $dens -and -not $KindReviewed -and $src -eq 'size_text' -and -not $twoSizes -and $null -ne $nAmt -and (Get-SizeMeasureKind -Size $r.name -Unit $unit) -eq $ckind -and (Test-TcNear $amt $nAmt 0.01)) {
+        # A NUMERIC density does not settle this (R7.4): the name says the number is a weight already, so converting it
+        # would be a guess too. Only near-water (interchangeable units) and a reviewed size string still silence it.
+        if (((-not $dens) -or $dgBlocked) -and -not $KindReviewed -and $src -eq 'size_text' -and -not $twoSizes -and $null -ne $nAmt -and (Get-SizeMeasureKind -Size $r.name -Unit $unit) -eq $ckind -and (Test-TcNear $amt $nAmt 0.01)) {
           # NOT an acceptance: the size field and the name are two parties stating two KINDS for one number, and a store
           # name that drops "fl" off a liquid is as common as a builder that adds it. Its own code, so a ruling can take it.
           _Refuse 'KIND-LABELS-DISAGREE' 'unit_kind' ('the size field says ' + $txt + ' (' + $kind + ') and the name states ' + $nAmt + ' ' + $unit + ' as a ' + $ckind + '; nothing proves which')
@@ -217,7 +211,7 @@ function Get-TcRowContract {
         }
       }
       if ($ckind -eq 'weight' -and $kind -eq 'volume') {
-        if ($dens) { $out.unit_kind.source = $out.unit_kind.source + '; volume accepted by ' + $dens.source }
+        if ($dens) { $out.unit_kind.source = $out.unit_kind.source + '; volume accepted by ' + $dens.source + $(if ($dg -gt 0) { ' (converted at ' + $dg.ToString([Globalization.CultureInfo]::InvariantCulture) + ' g/ml)' } else { '' }) }
         elseif ($KindReviewed) { $out.unit_kind.source = $out.unit_kind.source + '; reviewed in basis-kind-allowlist.json' }
         else { _Refuse 'KIND-VOLUME-ON-WEIGHT' 'unit_kind' ('a volume size (' + $txt + ') on a ' + $unit + ' commodity that declares no density') }
       }
@@ -227,7 +221,7 @@ function Get-TcRowContract {
         else { _Refuse 'KIND-WEIGHT-ON-VOLUME' 'unit_kind' ('a weight size (' + $txt + ') on a ' + $unit + ' commodity that declares no density') }
       }
       # ---- PACK COUNT on a measure row ----
-      $single = Get-TcSingleMeasure $txt $unit
+      $single = Get-TcSingleMeasure $txt $unit $dg
       $txtNoGrade = if ($cpc) { $txt.ToLower().Replace($cpc, ' ') } else { $txt }
       if ($cpc) {
         $out.pack = [ordered]@{ count = 1; form = 'count-per-container'; source = 'name: ' + $cpc.Trim() }
@@ -249,7 +243,7 @@ function Get-TcRowContract {
           else { $wm = [regex]::Match($t.ToLower(), '(?<![\d.$])(\d+)\s*-?\s*(?:pk|pack)\b'); if ($wm.Success -and [int]$wm.Groups[1].Value -gt 1) { $n = [int]$wm.Groups[1].Value } }
           if ($n) { $cnt = $n; $cntFrom = $party[0]; break }
         }
-        $nameSingle = Get-TcSingleMeasure $r.name $unit
+        $nameSingle = Get-TcSingleMeasure $r.name $unit $dg
         if ($cnt -and $cnt -gt 1) {
           $form = 'pack'
           if ($nameSingle -and (Test-TcNear $amt ($cnt * $nameSingle) 0.03)) {

@@ -56,7 +56,9 @@ it; the first file an importer writes is attributed on the next run.
 
 Input: one row (the engine's candidate shape `name` / `price_text` / `size_text`, or a builder row `item` / `ad_price` /
 `size`, mapped by `ConvertTo-TcContractRow`) and its commodity: `unit` and the declarations `weight_is_one_unit`,
-`pack_is_package`, `pint_oz`, `kind_equivalent`, `density_g_ml` from `grocery/commodities.json`.
+`pack_is_package`, `pint_oz`, `kind_equivalent`, `density_g_ml` from `grocery/commodities.json`. The density is read by
+`Get-TcCommodityDensity` / `Get-TcDensityGml` in `pricing-math-lib.ps1`, the same functions `Get-UnitPrice` reads
+(section 6), so the size the contract states is the divisor the engine uses.
 
 | Field | Value | Source recorded |
 |---|---|---|
@@ -120,11 +122,10 @@ The verdict is `refuse` (any refusal code), `reprice` (the contract proves a bas
 - On a WEIGHT row a bare "ct" is pieces inside one package (nuggets, links); only an explicit pk or pack is a multipack.
   On a VOLUME row any count (ct, count, ea, pk, pack) counts containers. First plausible rule, not swept: the shadow
   measures its reach.
-- **Open for a ruling before enforcement, not decided here:** the 26 cells in section 5 are almost all
-  `KIND-VOLUME-ON-WEIGHT` / `KIND-LABELS-DISAGREE` on 11 oz-unit commodities (pickles, mayonnaise, relish,
-  evaporated-milk, coconut-oil and others). Each needs a density declaration, a unit change, or acceptance that its fl-oz
-  rows leave the board. That is 44c416's own ask ("measure density per commodity before choosing refuse-by-default or
-  allow-by-default"), now with the cells named.
+- **RULED 2026-10-03 (Brad, R7.4, "Give each a density"), built as section 6:** the 26 cells in section 5 were almost
+  all `KIND-VOLUME-ON-WEIGHT` / `KIND-LABELS-DISAGREE` on 11 oz-unit commodities. A numeric `density_g_ml` now converts a
+  volume size to weight in the contract AND in the engine through one reader; five of the 11 declare one, two are
+  reviewed size strings, and four (the brined jars) have no defensible source and are back with Brad. Section 6.
 - The candidates file carries no `sale_ends_days` or `ad_to`, so the shadow's deal terms have no TTL; the builders do
   carry it, and enforcement inside each builder reads it.
 
@@ -209,3 +210,98 @@ evidence, and the daily lane writes them. The rules were adjusted twice against 
 (a per-lb rate printed in the size, and the order of the reviewed-kind check), so this run is not an independent test of
 those two rules: the next 7 days are. The engine-priced denominator counts a row with any unit price, including rows
 the band later refuses.
+
+## 6. Densities (R7.4, built 2026-10-03)
+
+**The ruling**, Brad, 2026-10-03, "Give each a density (Recommended)": each of the 11 oz-unit commodities whose fl oz rows
+the contract would refuse declares a SOURCED density, so the sizes convert and no cell empties. No density is typed from
+memory; each carries its source.
+
+**One place, one reader.** The declaration is `density_g_ml` on the commodity in `grocery/commodities.json`, beside a
+`density_source` naming the USDA FoodData Central record and portion it came from. The contract already read that field
+(and nothing declared it); the engine did not read any density at all. `Get-TcCommodityDensity` moved from this lib into
+`pricing-math-lib.ps1`, and `Get-TcDensityGml` returns the number the arithmetic uses: a numeric `density_g_ml` on an oz
+or lb commodity, else 0. `meal-prep/db/densities.json` was considered and not used: it is keyed by recipe food name and
+household unit, not by commodity id, and the engine does not load it. `kind_equivalent: near-water` stays a declaration
+that silences the kind question without converting (its own text says the units are interchangeable at the board's
+precision), so no near-water price moves.
+
+**The arithmetic.** `Convert-ToUnit` and `Get-SizeAmount` take an optional density (default 0: every existing caller is
+unchanged). With one, a volume token (fl oz, gal, qt, pt, l, ml) is read by the floz arm, multiplied by 29.5735 ml per fl
+oz and the density, and divided by 28.3495 g per oz (or 453.592 g per lb). `Get-UnitPrice` passes the commodity's density
+and, when it moved the divisor, writes `size_override` with the weight it divided by and a basis naming the density, so
+pu-lib and the kind audit read the quantity the price used (the gallon-jug branch's precedent). The contract passes the
+same density to the same `Get-SizeAmount`, so its accepted size equals the engine's divisor (fixture-asserted).
+
+**A density never converts a row whose NAME states the size's number as a weight** (`Test-TcKindLabelsDisagree`, 1% bar,
+kinds from pu-lib's `Get-SizeMeasureKind`): Sam's "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk." sized "84 fl oz" is
+84 weight oz, and a density would understate it by 26%. The contract refuses such a row as `KIND-LABELS-DISAGREE` even
+on a density commodity; the engine leaves its number as read.
+
+### The 11, and what each got
+
+| Commodity | Declared | Source | Why a volume size really is a volume |
+|---|---|---|---|
+| mayonnaise | 0.9299 g/ml | FDC 171009 SR Legacy, 1 cup = 220 g (1 tbsp 13.8 g = 0.9333) | 175 FDC Branded mayonnaise records state the jar in fl oz or mL |
+| miracle-whip | 0.9933 g/ml | FDC 171403 SR Legacy (mayonnaise type, regular), 1 cup = 235 g (1 tbsp 0.9941; Kraft label 1 Tbsp = 15 g, 1.0144) | Kraft Heinz's own records state 12, 19, 30, 48 fl oz |
+| coconut-oil | 0.9214 g/ml | FDC 171412 SR Legacy, 1 cup = 218 g (1 tbsp 0.9197); NOT Foundation 330458 (0.7845, below any edible oil) | 148 records in fl oz or mL, 35 by weight (weight jars are not converted) |
+| evaporated-milk | 1.0651 g/ml | FDC 172194 SR Legacy, 0.5 cup = 126 g and 1 fl oz = 31.5 g (agree) | 129 records in fl oz or mL (12 fl oz/354 mL), 1 by weight |
+| relish | 1.0356 g/ml | FDC 168561 SR Legacy (sweet), 1 cup = 245 g (1 tbsp 1.0144) | 162 records in fl oz or mL, 17 by weight |
+| condensed-milk | NONE: reviewed size string instead | FDC 171275 would give 1.2934, but the category is sold by WEIGHT: 135 of 139 labelled records state the can by weight (14 oz/396 g) | the Aldi "14 FL OZ" row is a 14 oz can mislabelled; converted it would be an 18.9 oz can (26% understated, crown direction). `basis-kind-allowlist.json` entry condensed-milk / Aldi / 14 fl oz |
+| cooking-spray | NONE: reviewed size strings | an aerosol is labelled by net weight | Sam's names state 7 oz x 2 = 14 and 12 oz x 2 = 24 by weight; the builder wrote fl oz. Allowlist entries for 14 fl oz and 24 fl oz |
+| pickles, banana-peppers, pepperoncini, pickled-jalapenos | NONE: back to Brad | no defensible source (below) | |
+
+**Why the four brined jars have no density.** What is needed is the weight of a jar's CONTENTS (pieces and brine) per
+labelled fluid ounce. FDC's portions for these foods are drained pieces with air gaps: dill pickles 1 cup = 155 g (0.655
+g/ml), jalapenos solids and liquids 1 cup sliced = 104 g (0.44), hot pickled peppers 1/4 cup drained = 34 g (0.57).
+Branded label servings for one product family range 0.38 to 1.05 g/ml ("1/4 cup (30g)" against "2 Tbsp (30g)": a 30 g
+reference amount with a rounded household measure, not a measurement). Branded package strings that state both a volume
+and a weight either give a drained weight ("16 fl oz/347 g", 0.73; "46 fl oz/1.36 lbs", 0.45) or are the fl oz = oz
+conflation itself ("25.5 FL OZ/723 g" is exactly 25.5 weight oz, 0.9586). Declaring any of these would move those cells by
+up to 2.3x on a number that measures something else, so they are not declared and the choice goes back to Brad: a
+contents density from a source not yet found, a change of unit to floz, or letting their fl oz rows leave the board.
+
+### Blast radius, measured before landing
+
+Harness: a scratch clone of this branch outside the worktree, seeded from the main checkout, `compare-deals.ps1 -MinStores
+1 -IdentityNamespace staple -JudgeDate 2026-10-03` run twice over the same inputs (ads-2026-09-30 and the seeded captures):
+once at HEAD 252c523da (board A, candidates sha256 130F15CF...), once with the change (board B, candidates sha256
+79D7B94A...). Blobs of the change: `grocery/pricing-math-lib.ps1` 3ca1fbcae7fbe85ba5dde3b6983439002a9d5cc0,
+`grocery/row-contract-lib.ps1` 412305070061b4aa579207b04e4dd7c8f7761fbd, `grocery/commodities.json`
+b78f90a84d65865f5a5cf21e030b6c6b8f1a1b09, `grocery/basis-kind-allowlist.json` 04d216788de94c761646935187e347cf83a79a49,
+`grocery/pu-lib.ps1` ff69dea376da77cb168f532b4d509cb8fe6061e4, `grocery/audit-row-contract-shadow.ps1`
+b4c5ffaaf14eac6b73cdb649156664303ea5652a. Both builds exit 0.
+
+**24 of 2,910 priced cells move, on 5 commodities; 0 crowns change; no cell appears or disappears.** Every move is the
+density factor (density x 1.0432) and nothing else:
+
+| Commodity (factor on the divisor) | Cells, old -> new per oz |
+|---|---|
+| coconut-oil (+4.05%) | Aldi 0.3707 -> 0.3857; Baker's 0.3263 -> 0.3395; Fareway 0.5993 -> 0.6235; Walmart 0.2443 -> 0.2542 |
+| evaporated-milk (-10.0%) | Baker's 0.1075 -> 0.0968; Family Fare 0.1492 -> 0.1343; Fareway 0.2580 -> 0.2322; Hy-Vee 0.1483 -> 0.1335; Sam's Club 0.1092 -> 0.0983; Walmart 0.1483 -> 0.1335 |
+| mayonnaise (+3.1%) | Aldi 0.0963 -> 0.0993; Baker's 0.1330 -> 0.1371; Family Fare 0.1330 -> 0.1371; Fareway 0.2900 -> 0.2990; Hy-Vee 0.1327 -> 0.1368; Walmart 0.0990 -> 0.1021 |
+| miracle-whip (-3.5%) | Aldi 0.0963 -> 0.0930; Family Fare 0.2330 -> 0.2249; Fareway 0.3253 -> 0.3140 |
+| relish (-7.4%) | Aldi 0.1056 -> 0.0978; Baker's 0.1454 -> 0.1346; Family Fare 0.1990 -> 0.1842; Fareway 0.2250 -> 0.2083; Walmart 0.1550 -> 0.1435 |
+
+**Row-contract shadow on board B:** the contract would empty **9 of 2,915** priced cells, against 26 on board A: the 8
+brined-jar cells (banana-peppers Aldi, Baker's, Walmart; pepperoncini Baker's, Walmart; pickled-jalapenos Aldi; pickles
+Baker's, Hy-Vee) and donuts / Hy-Vee (DEAL-COUNT-UNSTATED, outside this ruling). Of the original 24 fl oz cells, 16 no
+longer empty (15 by density, condensed-milk / Aldi by its reviewed size string) and cooking-spray / Sam's Club no longer
+empties either. Engine-priced rows refused: 290 of 22,271 (1.3%), from 431 (1.9%).
+
+**guards.ps1 on board B: `GUARDS OK`, hard=0, warn=20, exit 0.** On board A, the same clone and inputs: hard=1, exit 2,
+`QUARANTINE-REQUIRED` on condensed-milk / Aldi (the kind guard: a volume cell crowning a weight row), which the reviewed
+size string clears. Guard 4's drift warning (a cell within 50% of its link but more than 2% off) reads 83 cells on B
+against 62 on A: the link's per-unit is pu-lib's `Get-LinkPerUnit`, which takes no commodity and so reads a linked
+"30 fl oz" as 30 oz. That is the remaining second reader (open item below); it fails nothing (guard 4 fails at 1.5x and
+0.67x, generate-board-overrides pins at 30%).
+
+**Measurement notes.** One build pair over one input set; the shadow numbers are one day, not the 7 the ruling's bar
+reads. The density list was changed once after the first measurement (condensed-milk was declared, measured to move the
+Aldi cell -25.9%, and withdrawn on the label evidence above), so this is the second variant measured.
+
+**Open:** (1) the four brined jars, Brad's call; (2) pu-lib's `Get-LinkPerUnit` does not know a density, so a link and its
+cell disagree by the density factor on linked cells of the five commodities (drift warnings only); (3) a store that writes
+a jar's fl oz as a bare "oz" (Hy-Vee "Sweet Relish 10 oz", Family Fare and Hy-Vee coconut oil "14 oz") is read as weight
+and not converted, so those cells sit up to the density factor dearer than converted peers (the safe direction, no crown
+affected on board B).

@@ -169,6 +169,30 @@
       "reviewed": "2026-09-19",
       "reviewed_by": "claude (grocery triage 2026-09-19, queue 2026-09-19-641ec6 follow-up, money lane)",
       "reason": "'Burman S Whipped Dressing 30 FL OZ': a 30 fl oz jar whose peers write the same jar size as '30 oz' (Fareway, Family Fare). The engine divided $2.89 by 30 (basis 'size 30 oz'), giving 0.0963. Every cell in the row is a 30-ounce jar divided by 30, so the comparison is like for like whichever way the label is read, and a whipped dressing near water density makes the two readings agree within a few percent. It crowns by about 2x against Fareway at 0.1993. Crowned on the 2026-09-19 rebuild under the provenance contract."
+    },
+    {
+      "id": "condensed-milk",
+      "store": "Aldi",
+      "size": "14 fl oz",
+      "reviewed": "2026-10-03",
+      "reviewed_by": "claude (R7.4 density ruling, design/PLAN-weekly-root-families-2026-10-02.md)",
+      "reason": "'Baker S Corner Sweetened Condensed Milk 14 FL OZ': the 14 is the can's NET WEIGHT and only the label says fluid. Sweetened condensed milk is sold by weight: of the FDC Branded records a 'sweetened condensed milk' search returned on 2026-10-03, 135 state the can by weight (the standard '14 oz/396 g', Walmart and Walgreens among them) and 4 in fl oz, and every other cell on this row is a 14 oz weight can (Walmart, Baker's, Family Fare, Fareway, Hy-Vee, Sam's 14 oz x 6). Read as fluid at the FDC density (1.2934 g/ml, fdcId 171275) the can would hold 18.9 oz, a size nobody sells, and the cell would understate by 26% in the crown-winning direction. That is why condensed-milk declares NO density under R7.4 and this size string is reviewed instead: the engine divides by 14, which is the number on the can."
+    },
+    {
+      "id": "cooking-spray",
+      "store": "Sam's Club",
+      "size": "14 fl oz",
+      "reviewed": "2026-10-03",
+      "reviewed_by": "claude (R7.4 density ruling, design/PLAN-weekly-root-families-2026-10-02.md)",
+      "reason": "'Member's Mark Olive Oil Cooking Spray, 7 oz., 2 pk.': the name states 7 oz x 2 = 14 by WEIGHT, which is how an aerosol can is labelled, and the Sam's builder wrote the same 14 as fl oz. The engine divides by 14 (basis 'size 14 oz'), the number the name states. A density would be wrong here: it would convert a weight that was only labelled fluid, so cooking-spray declares none under R7.4."
+    },
+    {
+      "id": "cooking-spray",
+      "store": "Sam's Club",
+      "size": "24 fl oz",
+      "reviewed": "2026-10-03",
+      "reviewed_by": "claude (R7.4 density ruling, design/PLAN-weekly-root-families-2026-10-02.md)",
+      "reason": "'PAM Original Cooking Spray, 12 oz., 2 pk.': the name states 12 oz x 2 = 24 by WEIGHT (an aerosol is labelled by net weight) and the Sam's builder wrote the same 24 as fl oz. The engine divides by 24 (basis 'size 24 oz'), the number the name states. Same reasoning as the 14 fl oz Member's Mark entry: not a density case."
     }
   ]
 }

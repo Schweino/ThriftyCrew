@@ -1,6 +1,6 @@
 # PLAN: stop the weekly pile at its source (six root families behind 27 open items)
 
-**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phases 0 to 6 built and landed on origin/main 2026-10-02; their bar windows run 2026-10-02 to 2026-10-17 (dates in each phase). Phase 7: detective wording landed, three rulings waiting (`design/ready-for-brad/weekly-root-families-phase-7.md`).**
+**Status: RULED 2026-10-02 (D1 A, D2 A, D3 A by Brad; D4 is his own read, outside this plan). Phases 0 to 6 built and landed on origin/main 2026-10-02; their bar windows run 2026-10-02 to 2026-10-17 (dates in each phase). Phase 7: detective wording landed, three rulings waiting (`design/ready-for-brad/weekly-root-families-phase-7.md`). R7.4 (densities) ruled 2026-10-03 and built for 7 of 11; 4 brined jars back with Brad (status note under Phase 7).**
 
 Written by the 2026-10-02 triage orchestrator at Brad's request ("26 weekly items screams systemic issue"). It is meant
 to be handed whole to a fresh session. That session reads this file, the plan it extends
@@ -162,8 +162,8 @@ empty 26 of 2,916 priced cells, 24 of them fl oz sizes on 11 oz-unit commodities
 out-of-band rows carry a basis refusal code (ab2257's missing evidence). The rules were tuned twice against that file, so
 the next 7 daily runs are the independent test. Landing found the lane launched and never read (test-auditors u049); it
 is now read like step 9's. **Waiting:** 7 shadow days per store end 2026-10-09; enforcement for Walmart and Sam's waits on
-R18 and for Aldi and Fareway on R11 (D1), and the 11 oz-unit commodities need Brad's call (density, unit change, or let
-their fl oz rows leave the board), in `design/ready-for-brad/weekly-root-families-phase-7.md`.
+R18 and for Aldi and Fareway on R11 (D1). The 11 oz-unit commodities were ruled on 2026-10-03 (R7.4, densities); see
+the R7.4 status note under Phase 7: 7 settled, the 4 brined jars back with Brad.
 
 ### Phase 3. Step 9, two-signal identity (several sessions, mostly waiting on shadow)
 
@@ -322,6 +322,27 @@ Hy-Vee, which the Family Fare rotation does not explain, so a third call is wait
   session" does not hold.
 - Open: land the script, then the lead registers the scheduled-session prompt in the trial doc as one task. It fires
   hourly from 20:05 to 01:05 on one night, at most one window a fire. Then Brad rules build or not.
+
+**R7.4, RULED 2026-10-03 by Brad ("Give each a density (Recommended)"); built on branch r74-commodity-densities, status
+2026-10-03.** Each of the 11 oz-unit commodities whose fl oz rows step 8's contract would refuse declares a sourced density,
+no number typed from memory. The declaration is `density_g_ml` + `density_source` in `grocery/commodities.json` (the field
+the contract already read); the engine now reads it too, through `Get-TcDensityGml` in `pricing-math-lib.ps1`, so
+`Convert-ToUnit` converts a volume size to weight on those commodities and the contract's size equals the engine's divisor.
+Five declare a USDA FDC SR Legacy density (mayonnaise 0.9299, miracle-whip 0.9933, coconut-oil 0.9214, evaporated-milk
+1.0651, relish 1.0356 g/ml). condensed-milk and cooking-spray are NOT density cases: their "fl oz" sizes are weights
+mislabelled (135 of 139 FDC condensed-milk records are labelled by weight; the Sam's spray names state 7 oz x 2 and 12 oz x
+2), so each gets a reviewed `basis-kind-allowlist.json` size string instead, and a density never converts a row whose name
+states the size's number as a weight. **Open for Brad:** pickles, banana-peppers, pepperoncini and pickled-jalapenos have
+no defensible source: FDC portions are drained pieces (0.44 to 0.66 g/ml) and branded jar labels give drained weights or
+the fl oz = oz conflation itself, so a declared number would move those cells by up to 2.3x on something else.
+**Measured** (scratch clone, same inputs, HEAD vs the change, `design/SPEC-capture-row-contract.md` section 6 for blobs and
+the full list): 24 of 2,910 priced cells move, all on the five, each by its density factor (coconut-oil +4.05%,
+mayonnaise +3.1%, miracle-whip -3.5%, relish -7.4%, evaporated-milk -10.0%); 0 crowns change; the shadow would empty 9 of
+2,915 cells instead of 26 (the 8 brined-jar cells and donuts / Hy-Vee); guards on the new board `GUARDS OK` hard=0 (HEAD's
+board in the same clone: hard=1, condensed-milk / Aldi kind quarantine, cleared by the reviewed size string). One build
+pair, one shadow day; the condensed-milk density was measured once (-25.9% on Aldi) and withdrawn, so this is the second
+variant. Remaining second reader: pu-lib's `Get-LinkPerUnit` has no density, so linked cells of the five drift from their
+link by the density factor (guard 4 drift 62 -> 83, warnings only).
 
 ## 4. What finished looks like
 

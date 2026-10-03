@@ -16003,6 +16003,8 @@
         "id":  "mayonnaise",
         "label":  "Mayonnaise",
         "unit":  "oz",
+        "density_g_ml":  0.9299,
+        "density_source":  "USDA FoodData Central fdcId 171009 (SR Legacy, 'Salad dressing, mayonnaise, regular'), portion '1 cup' = 220 g: 220 / 236.588 ml = 0.9299 g/ml. Its '1 tbsp' = 13.8 g reads 0.9333. Read from the FDC API on 2026-10-03 for Brad's R7.4 ruling (design/PLAN-weekly-root-families-2026-10-02.md). Why a volume size converts: of the FDC Branded records a 'mayonnaise' search returned that day, 175 state the package in fl oz or mL, so a jar's fl oz is a real volume.",
         "include":  [
                         "mayonnaise",
                         "\\bmayo\\b"
@@ -32291,6 +32293,8 @@
         "id":  "evaporated-milk",
         "label":  "Evaporated Milk",
         "unit":  "oz",
+        "density_g_ml":  1.0651,
+        "density_source":  "USDA FoodData Central fdcId 172194 (SR Legacy, 'Milk, canned, evaporated, with added vitamin A'), portions '1 fl oz' = 31.5 g and '0.5 cup' = 126 g: 126 / 118.294 ml = 1.0651 g/ml (both portions agree). Read from the FDC API on 2026-10-03 for Brad's R7.4 ruling. Why a volume size converts: of the FDC Branded records an 'evaporated milk' search returned that day, 129 state the can in fl oz or mL (12 fl oz/354 mL) and 1 by weight.",
         "relax_global":  [
                              "\\bcanned\\b"
                          ],
@@ -32629,6 +32633,8 @@
         "id":  "coconut-oil",
         "label":  "Coconut Oil",
         "unit":  "oz",
+        "density_g_ml":  0.9214,
+        "density_source":  "USDA FoodData Central fdcId 171412 (SR Legacy, 'Oil, coconut'), portion '1 cup' = 218 g: 218 / 236.588 ml = 0.9214 g/ml. Its '1 tbsp' = 13.6 g reads 0.9197. NOT the Foundation entry 330458, whose '1 tablespoon liquid oil' = 11.6 g reads 0.7845, below every edible oil (derived-size-density-lib's band floor reasoning). Read from the FDC API on 2026-10-03 for Brad's R7.4 ruling. Why a volume size converts: of the FDC Branded records a 'coconut oil' search returned that day, 148 state the jar in fl oz or mL and 35 by weight; a weight-labelled jar is not converted (only a volume token is).",
         "include":  [
                         "coconut\\s+oil"
                     ],
@@ -33436,6 +33442,8 @@
         "id":  "relish",
         "label":  "Sweet Relish",
         "unit":  "oz",
+        "density_g_ml":  1.0356,
+        "density_source":  "USDA FoodData Central fdcId 168561 (SR Legacy, 'Pickle relish, sweet'), portion '1 cup' = 245 g: 245 / 236.588 ml = 1.0356 g/ml. Its '1 tbsp' = 15 g reads 1.0144; the hamburger and hot dog relishes (169386, 168560) read 1.0313 per half cup. Read from the FDC API on 2026-10-03 for Brad's R7.4 ruling. Why a volume size converts: of the FDC Branded records a 'sweet relish' search returned that day, 162 state the jar in fl oz or mL and 17 by weight.",
         "include":  [
                         "relish"
                     ],
@@ -50748,6 +50756,8 @@
         "id":  "miracle-whip",
         "label":  "Miracle Whip (Salad Dressing Spread)",
         "unit":  "oz",
+        "density_g_ml":  0.9933,
+        "density_source":  "USDA FoodData Central fdcId 171403 (SR Legacy, 'Salad dressing, mayonnaise type, regular, with salt'), portion '1 cup' = 235 g: 235 / 236.588 ml = 0.9933 g/ml. Its '1 tbsp' = 14.7 g reads 0.9941; Kraft's own Miracle Whip label (FDC Branded 2561347, 30 fl oz) states 1 Tbsp = 15 g, 1.0144. Read from the FDC API on 2026-10-03 for Brad's R7.4 ruling. Why a volume size converts: Kraft Heinz's own FDC Branded records state the jar in fl oz (12, 19, 30, 48 fl oz).",
         "include":  [
                         "miracle\\s+whip",
                         "whipped\\s+(?:salad\\s+)?dressing"
