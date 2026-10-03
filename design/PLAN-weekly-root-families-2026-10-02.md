@@ -277,6 +277,17 @@ when Family Fare everyday rows land for their cells, or when the cells are ruled
   answers its two COULD NOT VERIFY criteria; Brad then rules build or not.
 - **R7.3 Hy-Vee gaps:** (RULED A by Brad, 2026-10-03, "Measure first (Recommended)") measure whether Hy-Vee carries the
   five items at an everyday price before any change to its pull.
+  **Measured 2026-10-03** (`design/MEASURE-hyvee-everyday-gaps-2026-10-03.md`): all five are CARRIED-EVERYDAY at Omaha
+  #02 (storeId 1466), 5 of 5 judged, 0 could-not-look, each with a plain product the store answered at a regular price
+  (15 searches through discover-hyvee's own request, 42 lookups through the pull's own GraphQL body). The gap is ours,
+  in three places: the pull re-reads known product ids only and none of the five has a Hy-Vee row or a Hy-Vee
+  `product-urls.json` entry, so its own dry run prints "sale fallbacks owed 5, 5 in today's plan, 0 promoted" with no
+  reason; `audit-sale-fallback`'s terms-attempted check returns true for every Hy-Vee gap, because Hy-Vee's
+  capture_terms are product keys and the check answers true when it knows no term; and discover-hyvee already
+  docketed four of the five with product ids, but its docket reaches no pull, while frozen-cauliflower-rice has no
+  search term at all. Recommendation, for the next ruling: admit one plain everyday product id per item through the
+  discovery docket into `product-urls.json`, add a term for frozen-cauliflower-rice, make the pull name a fallback it
+  cannot ask, and make the audit report UNPROVEN where it cannot test. Nothing is recorded not-carried.
 - **R7.4 (step 8) liquid-ounce sizes:** (RULED A by Brad, 2026-10-03, "Give each a density (Recommended)") each of the 11
   oz-unit commodities whose rows the row contract would refuse for a fluid-ounce size declares a sourced density, so the
   sizes convert and no cell empties. No density is typed from memory: each carries its source.
