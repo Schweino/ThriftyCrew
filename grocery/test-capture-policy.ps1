@@ -801,6 +801,7 @@ try {
     $r7Quiet = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-27' -OutDir $r7Out
     if (@($r7Quiet.SaleFallbacksFromRotation).Count -eq 0 -and @($r7Quiet.SaleFallbacks).Count -eq 3 -and $r7Quiet.TermBudget -eq 6) { Ok 'CLEAN TWIN  a quiet day (no expiries): all 3 fallbacks come from the allowance, none from the rotation (budget 3 + 3)' }
     else { Bad "R7.1 quiet day: fromRot=$(@($r7Quiet.SaleFallbacksFromRotation).Count) fb=$(@($r7Quiet.SaleFallbacks).Count) budget=$($r7Quiet.TermBudget)" }
+    # store-subset-ok: R7.1 is Family Fare's alone; the two other headless fallback consumers (Hy-Vee, Baker's) are the stores that could wrongly inherit it, and Test-SaleFallbackJumpsRotation is a key lookup that never branches on any other store
     if (-not (Test-SaleFallbackJumpsRotation 'Hy-Vee') -and -not (Test-SaleFallbackJumpsRotation "Baker's") -and (Test-SaleFallbackJumpsRotation 'Family Fare')) { Ok 'MUST NOT FIRE  the ruling is Family Fare''s: Hy-Vee and Baker''s fallbacks never take a rotation slot' }
     else { Bad 'R7.1 scope leaked past Family Fare' }
     $r7T1 = Get-SaleFallbackRotationTake -Pending @('a','b') -RotationTerms 1; $r7T0 = Get-SaleFallbackRotationTake -Pending @() -RotationTerms 3
