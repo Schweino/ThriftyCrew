@@ -1,14 +1,24 @@
 {
-  "muted": false,
-  "since": "2026-08-14",
+  "muted": true,
+  "since": "2026-10-03",
   "until": null,
-  "reason": "Brad asked to stop all email alerts (2026-08-14). This silences the inbox only - send-alert.ps1 still writes every alert to triage-queue.json, and the daily grocery-alert-triage agent still drains, diagnoses and fixes them.",
-  "how_to_resume_email": "Delete this file (or set muted to false). No code change or redeploy needed - send-alert.ps1 reads it on every call.",
-  "not_covered_by_this_file": [
-    "GitHub's own workflow-failure emails for daily.yml / heartbeat.yml (a GitHub account notification setting, not repo code)",
-    "The Cloudflare Worker /ops-alert relay (runs in the cloud, cannot see this file)",
-    "Member-facing mail: the /submit item-request form and the Friday email draft task - those are not alerts"
+  "reason": "Brad, 2026-10-03: ThriftyCrew is being decommissioned, stop the alerts from firing. This silences the inbox only: send-alert.ps1 still writes every alert to triage-queue.json, but nothing reads that queue now (grocery-alert-triage and every TC task were disabled the same day). No expiry on purpose: decom has no start date yet, and an expiring mute would resume mail by itself. Plan: design/PLAN-decom-2026-10-03.md.",
+  "how_to_resume_email": "Set muted to false (keep the file so the mute periods stay on the record). No code change or redeploy needed - send-alert.ps1 reads it on every call.",
+  "covers": [
+    "Every caller of grocery/send-alert.ps1 in this checkout, including -Force, hand runs, Claude sessions, git hooks and the shared knowledge store's recall-sleep.py (it runs this checkout's send-alert.ps1)",
+    "A worktree reads its OWN copy of this file, so a worktree made before this commit landed still mails until it is rebased"
   ],
-  "unmuted": "2026-08-31",
-  "unmuted_reason": "Brad asked for email alerts back on 2026-08-31, after the mute had run 17 days with no expiry and two items sat in the queue unseen. Kept as muted:false rather than deleting the file so the mute period stays on the record; send-alert.ps1 reads muted:false as the documented in-place off switch."
+  "not_covered_by_this_file": [
+    "The Cloudflare Worker (feed.thriftycrew.com): /ops-alert relay (only the dispatch-only GitHub workflows call it), the box-heartbeat cron (never configured: no BOX_KV binding, ops/out/boot-watch-state.json first_configured_utc null), and /submit + /notify, which are member-facing mail, not alerts",
+    "GitHub's own workflow-failure emails (all three workflows are workflow_dispatch-only, so none run on a clock)",
+    "Ghost staff notification emails (new member, paid signup, cancellation) and Stripe emails: account settings in those services, not repo code",
+    "Windows toasts and Claude desktop notifications from a live session"
+  ],
+  "history": [
+    {
+      "muted": "2026-08-14",
+      "unmuted": "2026-08-31",
+      "reason": "Brad asked to stop all email alerts (2026-08-14); he asked for them back on 2026-08-31, after the mute had run 17 days with no expiry and two items sat in the queue unseen."
+    }
+  ]
 }
