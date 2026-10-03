@@ -167,6 +167,19 @@ function Get-CircularCoverageReview {
   }
   return $lines.ToArray()
 }
+
+# ---- 5. A SEARCH 200 WITH NO `items` ARRAY IS A REFUSAL, NOT AN EMPTY ANSWER (2026-10-03) ----------------------
+# Freshop sometimes answers a throttled q= search with HTTP 200 and no `items` property at all (seen on q="Armour
+# Family Pack Pepperoni Slices 12" during a wall, design\MEASURE-chip-resolvers-2026-10-rerun.md finding 4). Read
+# naively, @($doc.items) is @($null): ONE element, so a caller testing Count scored the refusal as a found product.
+# answered=$false is that refusal. A present-but-null `items` is normalised to zero rows and IS an answer. Null
+# elements are dropped, because a null is not a product. ONE reading for every Freshop search caller:
+# pull-regular-familyfare.ps1 (Read-FfSearchAnswer) and resolve-familyfare-urls.ps1 (Invoke-FfSearch).
+function Read-FreshopSearchItems($Doc) {
+  if ($null -eq $Doc -or -not $Doc.PSObject.Properties['items']) { return [pscustomobject]@{ answered = $false; items = @() } }
+  $items = @(@($Doc.items) | Where-Object { $null -ne $_ })
+  return [pscustomobject]@{ answered = $true; items = $items }
+}
 if ($FfPriceSelfTest) {
   $bad = 0
   function T($label, $got, $want) {

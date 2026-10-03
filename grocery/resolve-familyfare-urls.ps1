@@ -50,6 +50,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 . (Join-Path $root 'pu-lib.ps1')               # Get-LinkPerUnit
 . (Join-Path $root 'ff-name-score-lib.ps1')    # Get-FfNameScore
 . (Join-Path $root 'search-terms-lib.ps1')     # Get-PrimarySearchTerm
+. (Join-Path $root 'ff-price-lib.ps1')         # Read-FreshopSearchItems: the one reading of a Freshop search answer
 
 $script:FfApiBase = 'https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&limit=25&q='
 # -File binds a list into one string, so the backoff list is a string split into a new variable (og-10).
@@ -95,9 +96,9 @@ function Invoke-FfSearch([string]$Query) {
       $sc = [int]$resp.StatusCode
       if ($sc -lt 200 -or $sc -ge 300) { $said = "HTTP $sc"; continue }
       $doc = ConvertFrom-Json ([string]$resp.Content)
-      if ($null -eq $doc -or -not $doc.PSObject.Properties['items']) { $said = "HTTP $sc without an items array"; continue }
-      $items = if ($null -eq $doc.items) { @() } else { @($doc.items) }   # @($null) is one row, not zero
-      return [pscustomobject]@{ answered = $true; items = $items; said = "HTTP $sc" }
+      $ans = Read-FreshopSearchItems $doc   # ff-price-lib: no items array is a refusal; @($null) is one row, not zero
+      if (-not $ans.answered) { $said = "HTTP $sc without an items array"; continue }
+      return [pscustomobject]@{ answered = $true; items = $ans.items; said = "HTTP $sc" }
     } catch {
       # The status is on the exception; the 400's BODY ({"error_code":429}) is in ErrorDetails under PS 5.1, because
       # the error stream is already consumed (the same read pull-regular-familyfare.ps1 makes).
