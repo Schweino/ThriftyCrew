@@ -76,7 +76,6 @@ function Get-DriftRows {
   return $out
 }
 
-
 # Get-CellNames and Select-CellByContest moved to soundness-publish-lib.ps1 on 2026-09-25 (queue 2026-09-23-80f302), so
 # the publish gate and this audit read "which names hold a cell" through ONE implementation. See that file's header.
 . (Join-Path $root 'soundness-publish-lib.ps1')
@@ -1209,7 +1208,6 @@ if ($Accept -or $ForceAccept) {
   if ($routeSb) { $carriedHashOut = $rulesHash }
   $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; carried_rules_hash = $carriedHashOut; names = $cf.names
                      contested = @($cf.contested.Keys | Sort-Object); last_seen = $cf.last_seen }
-  # BOM and an LF trailer, the bytes the tracked blob holds: Set-Content wrote ConvertTo-Json's CRLF (2026-10-03).
   [void](Write-TcAtomicFile -Path $baseF -Text ($obj | ConvertTo-Json -Depth 4) -Lf)
   Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
