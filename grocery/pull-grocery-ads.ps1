@@ -284,6 +284,25 @@ if ($SelfTest) {
   _T 'MUST NOT FIRE  a complete circular read adds no REVIEW line' (@($revFull | Where-Object { $_ }).Count -eq 0)
   $thr = $null; $thrErr = ''; try { $thr = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfDouble 1045 1045 $true 7) } catch { $thrErr = $_.Exception.Message }
   _T 'CLEAN TWIN  a throttle on request 7 (HTTP 400, error_code 429) stops the walk without throwing and keeps the 600 rows read, naming the status' (($thrErr -eq '') -and ($null -ne $thr) -and ($thr.unique -eq 600) -and ($thr.total -eq 1045) -and ($thr.stop -eq 'request-failed') -and ($thr.status -match '429'))
+  # ---- A PAGE WITH NO items PROPERTY IS A REFUSAL (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun finding 4). The double
+  # answers the honest skip= pages until request N, then the throttle body {"total":0} with no items array at all.
+  function New-FfNoItemsDouble([int]$Distinct, [int]$Total, [int]$NoItemsOnRequest, [string]$Body) {
+    $inner = New-FfDouble $Distinct $Total $true 0; $st = @{ n = 0 }
+    return { param($u) $st.n++; if ($st.n -ge $NoItemsOnRequest) { return ($Body | ConvertFrom-Json) }; return (& $inner $u) }.GetNewClosure()
+  }
+  $ni3 = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfNoItemsDouble 1045 1045 3 '{"total":0}')
+  _T 'MUST FIRE  a 200 with no items array on request 3 stops as refused-page, keeps the 200 rows, and keeps page 1''s total 1045 rather than the throttle body''s 0' (($ni3.stop -eq 'refused-page') -and ($ni3.unique -eq 200) -and ($ni3.total -eq 1045) -and ($ni3.status -match 'without an items array'))
+  $revNi3 = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = $ni3.unique; ad_total = $ni3.total; ad_pager_stop = $ni3.stop })
+  _T 'MUST FIRE  that refused walk reaches the review as a short read: Family Fare circular read 200 of 1045, stopped: refused-page' ((@($revNi3) -join ' ') -match 'read 200 of 1045.*refused-page')
+  $ni1 = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfNoItemsDouble 1045 1045 1 '{}')
+  $revNi1 = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = $ni1.unique; ad_total = $ni1.total; ad_pager_stop = $ni1.stop })
+  _T 'MUST FIRE  a 200 with no items array on the FIRST page is refused-page with no total, and the review names it instead of passing a zero-deal ad' (($ni1.stop -eq 'refused-page') -and ($ni1.unique -eq 0) -and ($ni1.total -eq -1) -and ((@($revNi1) -join ' ') -match 'refused after 0 row\(s\) before Freshop stated a total'))
+  $revRf1 = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = 0; ad_total = -1; ad_pager_stop = 'request-failed' })
+  _T 'MUST FIRE  a request that failed on the first page, with no total, also reaches the review' ((@($revRf1) -join ' ') -match 'refused after 0 row\(s\).*request-failed')
+  $emp = Get-FreshopPages -Uri 'https://x/1/products?circular_id=1' -PageSize 100 -MaxRequests 15 -DelayMs 0 -Fetch (New-FfNoItemsDouble 1045 1045 3 '{"total":1045,"items":[]}')
+  _T 'MUST NOT FIRE  a 200 with an EMPTY items array keeps its existing handling: stop=empty-page, 200 rows, total 1045' (($emp.stop -eq 'empty-page') -and ($emp.unique -eq 200) -and ($emp.total -eq 1045))
+  $revEmpNoTot = Get-CircularCoverageReview -Verification @([pscustomobject]@{ store = 'Family Fare'; status = 'PASS'; ad_unique = 0; ad_total = -1; ad_pager_stop = 'empty-page' })
+  _T 'MUST NOT FIRE  an empty-page walk with no total adds no REVIEW line (unchanged)' (@($revEmpNoTot | Where-Object { $_ }).Count -eq 0)
   $circs = @(
     [pscustomobject]@{ id = '3981377556770213679'; name = 'Week''s Ad Preview'; start_date = '2026-09-11T00:00:00-05:00'; finish_date = '2026-09-12T23:59:59-05:00' },
     [pscustomobject]@{ id = '3977578314389802074'; name = 'Current Ad'; start_date = '2026-09-06T00:00:00-05:00'; finish_date = '2026-09-12T23:59:59-05:00' }

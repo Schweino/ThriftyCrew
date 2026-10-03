@@ -88,6 +88,74 @@ function Get-ProbeRelevance([string]$Name, [string]$Term) {
   return $score
 }
 
+# A FRESHOP SEARCH ANSWER IS READ THROUGH Read-FreshopSearchItems (ff-price-lib.ps1, 2026-10-03). Freshop can
+# answer a throttled q= search with HTTP 200 and NO items property. Read as @($r.items) that was @($null), the
+# nameless row was skipped, and the probe returned state OK with zero hits, so the ladder walked on to EMPTY and the
+# pricer could take Family Fare as searched-and-not-found. Unchecked is never not-carried (gr-17): the refusal is
+# state REFUSED, which the ladder rules UNUSABLE and price_evidence.py maps to UNUSABLE (any transport state that is
+# not OK). A present items array, empty or null, is an answer and keeps state OK.
+function Read-FfProbeAnswer($Resp, [string]$t) {
+  $ans = Read-FreshopSearchItems $Resp
+  if (-not $ans.answered) {
+    return @{ store = 'Family Fare'; state = 'REFUSED'; note = 'HTTP 200 without an items array - Freshop''s throttle shape. This is BLOCKED, not absence; retry later.'; hits = @() }
+  }
+  $hits = @()
+  foreach ($it in $ans.items) {
+    if (-not $it.name) { continue }
+    $price = Get-FfPrice $it     # $null = no honest price (multi-buy offer text); keep the row, flag it
+    $nm = [string]$it.name
+    $hits += [pscustomobject]@{ item = $nm; price = $price; size = (Get-ProbeSize $it)
+                                relevance = (Get-ProbeRelevance $nm $t)
+                                url = [string]$it.canonical_url }
+  }
+  return @{ store = 'Family Fare'; state = 'OK'; note = 'Freshop catalog (store_id 6401, Omaha), pickup = the store''s own shelf price, NOT Instacart'; hits = @($hits | Sort-Object -Property @{E={$_.relevance};D=$true}, price) }
+}
+
+# ------------------------------------------------------------------------------------- the ladder driver
+# R2. One query is not a search. A term that lands 0-1 hits walks Get-RetryLadder until a rung satisfies,
+# and EVERY rung is recorded in `attempts` - a false absence has to be auditable, so the reader can see that
+# 'chipotle powder' returned nothing and 'chipotle' returned the jar. The ladder widens the CANDIDATE POOL
+# only; it never widens the ruling. Adjudication still belongs to the pricer agent.
+# It sits ABOVE the self-test (2026-10-03) so a fixture can drive it with a stubbed Probe-FamilyFareOnce: the
+# store probes it calls are resolved by name when it runs, and the real ones are defined below the self-test.
+function Invoke-ProbeLadder([string]$StoreKey, [string]$Term) {
+  $attempts = New-Object System.Collections.ArrayList
+  $last = $null
+  $lastRung = $Term
+  foreach ($rung in (Get-RetryLadder $Term)) {
+    $lastRung = $rung
+    $r = if ($StoreKey -eq 'bakers') { Probe-BakersOnce $rung } else { Probe-FamilyFareOnce $rung }
+    $last = $r
+    [void]$attempts.Add([pscustomobject]@{ term = $rung; state = [string]$r.state; hits = @($r.hits).Count })
+    # a store that cannot answer is UNUSABLE for this term - never keep laddering into a false absence
+    if ([string]$r.state -ne 'OK') {
+      # Freshop answers a rate-limited caller with a bare 400 on every query, which is indistinguishable
+      # from a bad request unless you say so. It is search-budget bound (its own puller carries a 45s
+      # cooldown after 15 empties), so a blanket 400 across unrelated terms means THROTTLED, not broken -
+      # and throttled is `blocked`, never `not-carried`.
+      $why = [string]$r.note
+      if ($why -match '\(400\)') { $why = $why + '  [likely Freshop throttling - it is search-budget bound; retry later. This is BLOCKED, not absence.]' }
+      return @{ store = $r.store; state = $r.state; note = $r.note
+                verdict = (New-SearchVerdict -State UNUSABLE -TermUsed $rung -Attempts $attempts.ToArray() -Reason $why)
+                hits = @() }
+    }
+    if (Test-LadderSatisfied @($r.hits)) {
+      return @{ store = $r.store; state = 'OK'; note = $r.note
+                verdict = (New-SearchVerdict -State MATCHES -TermUsed $rung -Attempts $attempts.ToArray() -Hits @($r.hits))
+                hits = @($r.hits) }
+    }
+  }
+  # every rung exhausted. A single surviving hit is reported as MATCHES-with-one (the caller sees hits=1 in
+  # attempts and can weigh it); zero across the whole ladder is the only honest EMPTY.
+  $finalHits = @($last.hits)
+  $state = if ($finalHits.Count -gt 0) { 'MATCHES' } else { 'EMPTY' }
+  $reason = if ($finalHits.Count -gt 0) { 'only one candidate survived the full ladder - weigh it, do not assume' }
+            else { ('no candidates on any of ' + @($attempts).Count + ' ladder rung(s)') }
+  return @{ store = $last.store; state = 'OK'; note = $last.note
+            verdict = (New-SearchVerdict -State $state -TermUsed $lastRung -Attempts $attempts.ToArray() -Hits $finalHits -Reason $reason)
+            hits = $finalHits }
+}
+
 if ($SelfTest) {
   # Hermetic: no network, no credentials, no capture files.
   $bad = 0
@@ -108,7 +176,26 @@ if ($SelfTest) {
   # the shared Freshop rule must be reachable from here
   if (-not (Get-Command Get-FfPrice -ErrorAction SilentlyContinue)) { Write-Output '  X Get-FfPrice not dot-sourced'; $bad++ }
   if ($null -ne (Get-FfPrice ([pscustomobject]@{ price = '4 for $5.00'; base_price = 5.0 }))) { Write-Output '  X the shared multi-buy rule did not apply'; $bad++ }
-  if ($bad -eq 0) { Write-Output 'probe-ingredient SELF-TEST PASS (size, relevance ranks the real jar over the decoys, shared Freshop rule reachable)'; exit 0 }
+  # ---- A SEARCH 200 WITH NO items ARRAY IS A REFUSAL, NEVER AN EMPTY SHELF (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun
+  # finding 4; the pepperoni body). Two mechanisms, a case each (og-18): Read-FfProbeAnswer's state, and the ladder's
+  # verdict over a stubbed Probe-FamilyFareOnce. Each stub answers every rung with the same frozen body.
+  $noItems = Read-FfProbeAnswer ('{"total":0}' | ConvertFrom-Json) 'pepperoni'
+  if ($noItems.state -ne 'REFUSED' -or @($noItems.hits).Count -ne 0) { Write-Output ("  X MUST FIRE: a 200 with no items array must read state REFUSED with no hits, got state " + $noItems.state); $bad++ }
+  $script:FfStubBody = '{"total":0}'; $script:FfStubCalls = 0
+  function Probe-FamilyFareOnce([string]$t) { $script:FfStubCalls++; return (Read-FfProbeAnswer ($script:FfStubBody | ConvertFrom-Json) $t) }
+  $lad = Invoke-ProbeLadder 'family-fare' 'pepperoni'
+  if ($lad.verdict.state -ne 'UNUSABLE' -or $lad.state -ne 'REFUSED' -or $script:FfStubCalls -ne 1) { Write-Output ("  X MUST FIRE: the ladder over a no-items 200 must stop on rung 1 as UNUSABLE (transport REFUSED), got verdict " + $lad.verdict.state + ', state ' + $lad.state + ', ' + $script:FfStubCalls + ' call(s)'); $bad++ }
+  $script:FfStubBody = '{"items":[{"id":"77","name":"Armour Pepperoni Slices","size":"12 oz","price":"$3.99","base_price":3.99,"canonical_url":"https://x/p/77"},{"id":"78","name":"Hormel Pepperoni Original","size":"6 oz","price":"$3.49","base_price":3.49,"canonical_url":"https://x/p/78"}],"total":2}'
+  $real = Read-FfProbeAnswer ($script:FfStubBody | ConvertFrom-Json) 'pepperoni'
+  $ladReal = Invoke-ProbeLadder 'family-fare' 'pepperoni'
+  if ($real.state -ne 'OK' -or @($real.hits).Count -ne 2 -or $ladReal.verdict.state -ne 'MATCHES' -or [double]@($real.hits | Where-Object { $_.item -eq 'Armour Pepperoni Slices' })[0].price -ne 3.99) { Write-Output ("  X CLEAN TWIN: a 200 with two real rows must read OK with both hits and ladder to MATCHES, got state " + $real.state + ', ' + @($real.hits).Count + ' hit(s), verdict ' + $ladReal.verdict.state); $bad++ }
+  foreach ($emptyBody in @('{"items":[],"total":0}', '{"items":null,"total":0}')) {
+    $script:FfStubBody = $emptyBody
+    $e = Read-FfProbeAnswer ($emptyBody | ConvertFrom-Json) 'ground sumac'
+    $ladE = Invoke-ProbeLadder 'family-fare' 'ground sumac'
+    if ($e.state -ne 'OK' -or @($e.hits).Count -ne 0 -or $ladE.verdict.state -ne 'EMPTY') { Write-Output ("  X MUST NOT FIRE: " + $emptyBody + ' is an answer, so it must keep state OK with no hits and ladder to EMPTY, got state ' + $e.state + ', verdict ' + $ladE.verdict.state); $bad++ }
+  }
+  if ($bad -eq 0) { Write-Output 'probe-ingredient SELF-TEST PASS (size, relevance ranks the real jar over the decoys, shared Freshop rule reachable, a no-items 200 is REFUSED and UNUSABLE)'; exit 0 }
   Write-Output ("probe-ingredient SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
 
@@ -175,60 +262,8 @@ function Probe-FamilyFareOnce([string]$t) {
       $uri = "$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($t) + "&limit=$Limit&fields=name,size,price,base_price,unit_price"
       $r = Invoke-RestMethod -Uri $uri -Headers $UA -TimeoutSec $TimeoutSec
     }
-    $hits = @()
-    foreach ($it in @($r.items)) {
-      if (-not $it.name) { continue }
-      $price = Get-FfPrice $it     # $null = no honest price (multi-buy offer text); keep the row, flag it
-      $nm = [string]$it.name
-      $hits += [pscustomobject]@{ item = $nm; price = $price; size = (Get-ProbeSize $it)
-                                  relevance = (Get-ProbeRelevance $nm $t)
-                                  url = [string]$it.canonical_url }
-    }
-    return @{ store = 'Family Fare'; state = 'OK'; note = 'Freshop catalog (store_id 6401, Omaha), pickup = the store''s own shelf price, NOT Instacart'; hits = @($hits | Sort-Object -Property @{E={$_.relevance};D=$true}, price) }
+    return (Read-FfProbeAnswer $r $t)
   } catch { return @{ store = 'Family Fare'; state = 'ERROR'; note = $_.Exception.Message; hits = @() } }
-}
-
-# ------------------------------------------------------------------------------------- the ladder driver
-# R2. One query is not a search. A term that lands 0-1 hits walks Get-RetryLadder until a rung satisfies,
-# and EVERY rung is recorded in `attempts` - a false absence has to be auditable, so the reader can see that
-# 'chipotle powder' returned nothing and 'chipotle' returned the jar. The ladder widens the CANDIDATE POOL
-# only; it never widens the ruling. Adjudication still belongs to the pricer agent.
-function Invoke-ProbeLadder([string]$StoreKey, [string]$Term) {
-  $attempts = New-Object System.Collections.ArrayList
-  $last = $null
-  $lastRung = $Term
-  foreach ($rung in (Get-RetryLadder $Term)) {
-    $lastRung = $rung
-    $r = if ($StoreKey -eq 'bakers') { Probe-BakersOnce $rung } else { Probe-FamilyFareOnce $rung }
-    $last = $r
-    [void]$attempts.Add([pscustomobject]@{ term = $rung; state = [string]$r.state; hits = @($r.hits).Count })
-    # a store that cannot answer is UNUSABLE for this term - never keep laddering into a false absence
-    if ([string]$r.state -ne 'OK') {
-      # Freshop answers a rate-limited caller with a bare 400 on every query, which is indistinguishable
-      # from a bad request unless you say so. It is search-budget bound (its own puller carries a 45s
-      # cooldown after 15 empties), so a blanket 400 across unrelated terms means THROTTLED, not broken -
-      # and throttled is `blocked`, never `not-carried`.
-      $why = [string]$r.note
-      if ($why -match '\(400\)') { $why = $why + '  [likely Freshop throttling - it is search-budget bound; retry later. This is BLOCKED, not absence.]' }
-      return @{ store = $r.store; state = $r.state; note = $r.note
-                verdict = (New-SearchVerdict -State UNUSABLE -TermUsed $rung -Attempts $attempts.ToArray() -Reason $why)
-                hits = @() }
-    }
-    if (Test-LadderSatisfied @($r.hits)) {
-      return @{ store = $r.store; state = 'OK'; note = $r.note
-                verdict = (New-SearchVerdict -State MATCHES -TermUsed $rung -Attempts $attempts.ToArray() -Hits @($r.hits))
-                hits = @($r.hits) }
-    }
-  }
-  # every rung exhausted. A single surviving hit is reported as MATCHES-with-one (the caller sees hits=1 in
-  # attempts and can weigh it); zero across the whole ladder is the only honest EMPTY.
-  $finalHits = @($last.hits)
-  $state = if ($finalHits.Count -gt 0) { 'MATCHES' } else { 'EMPTY' }
-  $reason = if ($finalHits.Count -gt 0) { 'only one candidate survived the full ladder - weigh it, do not assume' }
-            else { ('no candidates on any of ' + @($attempts).Count + ' ladder rung(s)') }
-  return @{ store = $last.store; state = 'OK'; note = $last.note
-            verdict = (New-SearchVerdict -State $state -TermUsed $lastRung -Attempts $attempts.ToArray() -Hits $finalHits -Reason $reason)
-            hits = $finalHits }
 }
 
 # ------------------------------------------------------------------------------------------- drive it

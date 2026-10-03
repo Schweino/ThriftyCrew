@@ -25,7 +25,7 @@
   passes are the primary defense). -Alert emails once per NEW victim-set.
 #>
 # Above its self-test this reads commodities.json and commodity-search.json, and the fixtures look commodities up in them:
-# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\search-terms-lib.ps1, grocery\commodities.json, grocery\commodity-search.json
+# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\search-terms-lib.ps1, grocery\ff-price-lib.ps1, grocery\commodities.json, grocery\commodity-search.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Alert, [switch]$SelfTest, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
@@ -58,6 +58,20 @@ function Emit-Coverage([int]$elig, [int]$exam, [string]$why) {
 }
 $probed = 0
 $throttled = 0
+$noItems = 0
+# A SEARCH 200 WITH NO items ARRAY IS NOT A PROBE (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun finding 4). The loop
+# read `$items = @($r.items); $probed++`, so Freshop's throttle answer (HTTP 200, no items property) counted as a term
+# examined: a fully throttled run recorded N of N probed and printed OK with no victims, where it had looked at nothing
+# and must be BLIND (exit 3, and a Blind coverage row). Read-FreshopSearchItems (ff-price-lib.ps1) tells the two apart;
+# this counts the refusal in its own `no_items` tally, beside the HTTP 400 throttle count, never in `probed`. A present
+# items array, empty or null, is an answer and still counts as probed. The answer object comes back whole, so its
+# items never unroll into a caller's @() (ps-null-count-is-one).
+. (Join-Path $root 'ff-price-lib.ps1')   # Read-FreshopSearchItems; its switch is -FfPriceSelfTest, so ours survives
+function Read-FfCarryProbe($Resp, $Tally) {
+  $ans = Read-FreshopSearchItems $Resp
+  if ($ans.answered) { $Tally['probed'] = 1 + [int]$Tally['probed'] } else { $Tally['no_items'] = 1 + [int]$Tally['no_items'] }
+  return $ans
+}
 $ff = $null; $doc = $null; $emptyTerms = @()
 # THE SELF-TEST MUST NOT DEPEND ON PULL STATE. Both early exits below sit ABOVE the fixture block, so a
 # -SelfTest run on any day with no FF file - or with no empty terms, which is the HEALTHY state - printed
@@ -330,17 +344,32 @@ if ($SelfTest) {
   # The needle is assembled here so this assertion does not match itself in the source it is reading.
   $badRemedy = 'Re-run pull-regular-familyfare' + '.ps1 (recovery should catch them)'
   if ([IO.File]::ReadAllText($PSCommandPath).Contains($badRemedy)) { $fails.Add('CLEAN-TWIN: the alert still tells the developer to re-run the sweep, which cannot buy a term far from the cursor') }
+  # ---- A SEARCH 200 WITH NO items ARRAY IS NOT A PROBE (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun finding 4). Each body is
+  # ConvertFrom-Json of a frozen answer, which is what Invoke-RestMethod hands the loop.
+  $ptNo = @{ probed = 0; no_items = 0 }
+  $aNo = Read-FfCarryProbe ('{"total":0}' | ConvertFrom-Json) $ptNo
+  # MUST FIRE: the throttle answer counts in no_items, never in probed, and yields no rows (a run of these is BLIND).
+  if ($ptNo['probed'] -ne 0 -or $ptNo['no_items'] -ne 1 -or @($aNo.items).Count -ne 0) { $fails.Add('MUST-FIRE: a 200 with no items array must count no_items=1 probed=0 with no rows, got probed=' + $ptNo['probed'] + ' no_items=' + $ptNo['no_items'] + ' rows=' + @($aNo.items).Count) }
+  # CLEAN TWIN: a 200 with a real row counts as probed and its row reaches the victim filter.
+  $ptYes = @{ probed = 0; no_items = 0 }
+  $aYes = Read-FfCarryProbe ('{"items":[{"name":"Our Family Old Fashioned Shredded Sauerkraut 14.4 Oz","price":"$1.69","base_price":1.69}],"total":1}' | ConvertFrom-Json) $ptYes
+  if ($ptYes['probed'] -ne 1 -or $ptYes['no_items'] -ne 0 -or @($aYes.items).Count -ne 1 -or [string]@($aYes.items)[0].name -ne 'Our Family Old Fashioned Shredded Sauerkraut 14.4 Oz') { $fails.Add('CLEAN-TWIN: a 200 with one real row must count probed=1 and hand that row on, got probed=' + $ptYes['probed'] + ' rows=' + @($aYes.items).Count) }
+  # MUST NOT FIRE: an empty items array is an answer with nothing in it, so it still counts as probed (its existing handling).
+  $ptEmp = @{ probed = 0; no_items = 0 }
+  $aEmp = Read-FfCarryProbe ('{"items":[],"total":0}' | ConvertFrom-Json) $ptEmp
+  if ($ptEmp['probed'] -ne 1 -or $ptEmp['no_items'] -ne 0 -or @($aEmp.items).Count -ne 0) { $fails.Add('MUST-NOT-FIRE: a 200 with an empty items array must still count probed=1 no_items=0, got probed=' + $ptEmp['probed'] + ' no_items=' + $ptEmp['no_items']) }
   if ($fails.Count) { foreach ($f in $fails) { Write-Output ('  SELF-TEST FAIL  ' + $f) }; Write-Output 'ff-carry SELF-TEST FAILED'; exit 2 }
   Write-Output 'ff-carry: own-feed-coverage and cheapest-pick fixtures both hold - SELF-TEST PASS'
   exit 0
 }
 $victims = New-Object System.Collections.Generic.List[object]
 $suppressed = 0
+$probeTally = @{ probed = 0; no_items = 0 }
 foreach ($term in $emptyTerms) {
   $c = $byId[$termToId[[string]$term]]
   if ($c -and (Has-FeedCoverage $c $ffDeals)) { $suppressed++; continue }
   $items = @()
-    # $probed is incremented INSIDE the try, after the call returns - so it counts probes that got a RESPONSE,
+    # $probed is counted INSIDE the try, after the call returns (Read-FfCarryProbe) - so it counts probes that got an ANSWER,
   # not times round the loop. That is the whole distinction the coverage ledger exists for: a run where
   # Freshop refuses every call would otherwise record 464 examined and look identical to a healthy run,
   # when in truth it examined nothing and proved nothing. Counted this way it records 0 of 464, which the
@@ -355,7 +384,8 @@ foreach ($term in $emptyTerms) {
   # $probed still only counts real responses, so a throttled run is still BLIND.
   try {
     $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString([string]$term) + "&limit=15&fields=name,price,base_price") -Headers $UA -TimeoutSec 25
-    $items = @($r.items); $probed++
+    $ans = Read-FfCarryProbe $r $probeTally
+    $items = $ans.items
   } catch {
     # $_.ErrorDetails.Message, NOT the response stream. Windows PowerShell 5.1
     # has already consumed the error body by the time the catch runs, so
@@ -369,6 +399,7 @@ foreach ($term in $emptyTerms) {
   $good = @($items | Where-Object { $_.name -and (Match-Local $c ([string]$_.name)) -and ($_.base_price -or $_.price) })
   if ($good.Count) { $victims.Add([pscustomobject]@{ term = [string]$term; commodity = $termToId[[string]$term]; product = [string]$good[0].name }) }
 }
+$probed = [int]$probeTally['probed']; $noItems = [int]$probeTally['no_items']
 # .ToArray(), NOT @($victims). In Windows PowerShell 5.1 the array-subexpression @( ) around a
 # System.Collections.Generic.List[object] throws "ArgumentException: Argument types do not match" - it is fine
 # around a List[string] and fine around the bare list, which is why this reads as harmless. It is not: this
@@ -411,6 +442,7 @@ $probeStat = ' (' + $probed + ' of ' + $emptyTerms.Count + ' empty term(s) re-pr
 # dead integration" and "we are asking for more than our budget allows". It changes no verdict: a throttled
 # run still probed nothing and is still BLIND.
 if ($throttled -gt 0) { $probeStat += '; ' + $throttled + ' RATE-LIMITED by Freshop (HTTP 400 carrying error_code 429)' }
+if ($noItems -gt 0) { $probeStat += '; ' + $noItems + ' REFUSED by Freshop (HTTP 200 without an items array, not counted as probed)' }
 $probeStat += ')'
 # ZERO PROBES IS NOT A CLEAN BILL OF HEALTH. Every Freshop call is wrapped in an empty catch, so a throttled
 # window returns 0 items for all of them, $victims stays empty, and this used to print the same confident

@@ -106,9 +106,15 @@ function Get-FreshopPages {
       $stop = 'request-failed'
       break
     }
-    if ($null -ne $resp -and $null -ne $resp.total) { $total = [int]$resp.total }
-    $items = @()
-    if ($null -ne $resp -and $null -ne $resp.items) { $items = @($resp.items) }
+    # A PAGE WITH NO items PROPERTY IS A REFUSAL, NOT THE END OF THE LIST (2026-10-03, section 5 below). Freshop's
+    # throttle can answer HTTP 200 with no items array; read as 'empty-page' it looked like the natural end, and on the
+    # FIRST page it recorded the ad as PASS with zero deals and no REVIEW line. Its `total` is not read either: a
+    # throttled body's total (0 or absent) must not overwrite the total an earlier page stated, or the short-read
+    # review goes silent. A present items array that is empty or null is still 'empty-page'.
+    $page = Read-FreshopSearchItems $resp
+    if (-not $page.answered) { $stop = 'refused-page'; $status = 'HTTP 200 without an items array (Freshop throttle shape) at skip=' + $skip; break }
+    if ($null -ne $resp.total) { $total = [int]$resp.total }
+    $items = $page.items
     if ($items.Count -eq 0) { $stop = 'empty-page'; break }
     $added = 0
     foreach ($it in $items) {
@@ -161,6 +167,14 @@ function Get-CircularCoverageReview {
     if ($names -notcontains 'ad_total') { continue }
     $tot = 0; [void][int]::TryParse([string]$v.ad_total, [ref]$tot)
     $uni = 0; [void][int]::TryParse([string]$v.ad_unique, [ref]$uni)
+    # A WALK THAT WAS REFUSED BEFORE FRESHOP STATED A TOTAL (2026-10-03). The short-read test below needs a total, and a
+    # refusal on the first page (a failed request, or a 200 with no items array) leaves none, so the ad recorded PASS
+    # with zero or few deals and no line here. Under 'empty-page' or 'complete' a missing total stays silent as before.
+    $stopWas = [string]$v.ad_pager_stop
+    if ($tot -le 0 -and ($stopWas -eq 'refused-page' -or $stopWas -eq 'request-failed')) {
+      $lines.Add('REVIEW    ' + $store + ' circular walk was refused after ' + $uni + ' row(s) before Freshop stated a total (the walk stopped: ' + $stopWas + ') - the rows read still ship, the ad''s size is unknown')
+      continue
+    }
     if ($tot -le 0 -or $uni -ge $tot) { continue }
     $pct = [math]::Round(100.0 * $uni / $tot, 1)
     $lines.Add('REVIEW    ' + $store + ' circular read ' + $uni + ' of ' + $tot + ' rows (' + $pct + '% coverage; the walk stopped: ' + [string]$v.ad_pager_stop + ') - the rows read still ship, the rest of the ad is missing from today''s board')

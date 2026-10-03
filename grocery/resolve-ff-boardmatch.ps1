@@ -55,23 +55,33 @@ function Get-FreshToken {
   return ''
 }
 $script:tok = Get-FreshToken
+# A SEARCH 200 WITH NO items ARRAY IS A REFUSAL (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun finding 4). The old test,
+# @($r.items).Count -gt 0, is TRUE for that answer (@($null) has one element), so the first throttled answer returned
+# @($null) at once: no re-mint, no retry, and the cell read MISS "no confident match" as if Freshop had answered.
+# Read-FreshopSearchItems (ff-price-lib.ps1) reads it as not answered, so it re-mints and retries like an empty answer,
+# and a search that never got an answer is counted, so its MISS line says the store was never asked, not that it lacks it.
+. (Join-Path $root 'ff-price-lib.ps1')   # Read-FreshopSearchItems; its switch is -FfPriceSelfTest
+$script:ffRefused = 0
 function Search-Freshop([string]$q) {
+  $answered = $false
   for ($try = 0; $try -lt 3; $try++) {
     $tq = if ($script:tok) { '&token=' + $script:tok } else { '' }
     try {
       $r = Invoke-RestMethod -Uri ('https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401' + $tq + '&limit=25&fields=name,size,base_price,canonical_url&q=' + [uri]::EscapeDataString($q)) -Headers $UA -TimeoutSec 25
-      if (@($r.items).Count -gt 0) { return @($r.items) }
+      $ans = Read-FreshopSearchItems $r
+      if ($ans.answered) { $answered = $true; if ($ans.items.Count -gt 0) { return $ans.items } }
     } catch {}
     $script:tok = Get-FreshToken
     Start-Sleep -Milliseconds 700
   }
+  if (-not $answered) { $script:ffRefused++ }
   return @()
 }
 $rows = New-Object System.Collections.Generic.List[object]; $miss = New-Object System.Collections.Generic.List[string]
 foreach ($c in $mm) { $id=[string]$c.id; if (-not $board.ContainsKey($id)) { $miss.Add("$id (no board item)"); continue }
   $bi = $board[$id].item; if (-not $bi) { $miss.Add("$id (blank board item)"); continue }
   $bwords = @((norm $bi) -split ' ' | Where-Object { $_.Length -gt 2 })
-  $best=$null; $bestScore=-1
+  $best=$null; $bestScore=-1; $refusedBefore = $script:ffRefused
   foreach ($p in (Search-Freshop $bi)) {
       $pn = norm $p.name; $hits = 0; foreach ($w in $bwords) { if ($pn -match ('\b'+[regex]::Escape($w)+'\b')) { $hits++ } }
       # bonus if size matches the board's size
@@ -105,7 +115,11 @@ foreach ($c in $mm) { $id=[string]$c.id; if (-not $board.ContainsKey($id)) { $mi
   if ($fb) {
     $rows.Add([pscustomobject]@{ id=$id; url=$fb.canonical_url; price=[math]::Round([double]$fb.base_price,2); size=$fb.size; name=$fb.name })
     "OK   {0,-22} board='{1}' -> label-fallback link='{2}' `${3} / {4}" -f $id,$bi,$fb.name,$fb.base_price,$fb.size
-  } else { $miss.Add("$id (board='$bi' no confident match, score=$bestScore)"); "MISS {0,-22} board='{1}'" -f $id,$bi }
+  } else {
+    $unanswered = $script:ffRefused - $refusedBefore
+    if ($unanswered -gt 0) { $miss.Add("$id (board='$bi' Freshop never answered $unanswered search(es) - blocked, not absent)"); "MISS {0,-22} board='{1}' (Freshop never answered {2} search(es): blocked, not absent)" -f $id,$bi,$unanswered }
+    else { $miss.Add("$id (board='$bi' no confident match, score=$bestScore)"); "MISS {0,-22} board='{1}'" -f $id,$bi }
+  }
 }
 $dir=Join-Path $OutDir 'url-inputs'; ($rows|ConvertTo-Json -Depth 4)|Set-Content (Join-Path $dir 'store-ff9-urls.json') -Encoding UTF8
-"---- matched $($rows.Count)/$($mm.Count); misses:"; $miss | ForEach-Object { "   $_" }
+"---- matched $($rows.Count)/$($mm.Count); Freshop searches never answered: $($script:ffRefused); misses:"; $miss | ForEach-Object { "   $_" }
