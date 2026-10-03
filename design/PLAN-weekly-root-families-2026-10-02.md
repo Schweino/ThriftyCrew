@@ -298,6 +298,17 @@ registered as sale-no-fallback-worked. Phase 0 found the family is wider than th
 Hy-Vee, which the Family Fare rotation does not explain, so a third call is waiting with the other two in
 `design/ready-for-brad/weekly-root-families-phase-7.md`.
 
+**R7.2, 2026-10-03: RULED "Run the trial (Recommended)"; PREPARED, NOT RUN.**
+- The trial is `design/TRIAL-familyfare-catalog-walk-paced-2026-10.md`. Its rubric was written before any request:
+  - C2 is MET when, after a 30-page walk in the same window, 20 of 20 rotation searches answer HTTP 200 with rows.
+  - C3 is MET when at least 95% of the id-bearing everyday rows are found in the walk.
+  - C1, re-measured as the precondition, is MET at 99% of `total`.
+- The instrument and scorer is `grocery/trial-ff-catalog-walk.ps1`, with a 34-case hermetic self-test.
+- No browser is needed. Family Fare capture is token-less PowerShell HTTP, so the ruling note's "needs a browser
+  session" does not hold.
+- Open: land the script, then the lead registers the scheduled-session prompt in the trial doc as one task. It fires
+  hourly from 20:05 to 01:05 on one night, at most one window a fire. Then Brad rules build or not.
+
 ## 4. What finished looks like
 
 - The remainder plan's steps 8, 9 and 11 read DONE with their bars met, and this plan's phases do too.
