@@ -13,6 +13,18 @@ Cases: `design/aisle-blind-2026-10/cells.jsonl` (one row per Family Fare board c
 `design/aisle-blind-2026-10/blind-pairs.jsonl` (one row per admitted Family Fare row with no department, 1,414).
 Every total below is derived from those files by `harness/cases.py.txt`.
 
+## Knowledge consulted
+
+- `searched "aisle admission blind family fare department"` (estate) and `"carried row lost canonical_url identity"`.
+- memory `aisle-test-built` (C--Codex): the aisle test gates on the store's own shelf department. Why the
+  measurement judges every row with `Test-AisleAllowed` and never with a similarity score.
+- memory `freshop-probes-share-the-production-budget`: "run Freshop measurement or resolver work after the 10:30
+  window ... never probe before 07:00". Why the circular's `canonical_url` is left unmeasured here.
+- memory `compare-deals-is-not-standalone`: the replica ran compare-deals alone, so both arms stop before the
+  chain's relink steps (stated under Results).
+- `.claude/rules/measurement.md` ms-04 and ms-07: one row per case (`cells.jsonl`, `blind-pairs.jsonl`) and the
+  harness named by blob.
+
 ## Question
 
 `Get-AisleAdmissionRefusal` admits any Family Fare row whose department it cannot find
