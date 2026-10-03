@@ -29,6 +29,7 @@ param(
   [string]$RegularDir = "",
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $MaxDays -and -not $SelfTest) {
@@ -120,7 +121,7 @@ function Invoke-SizeHeal([string]$prefix, [string]$dir, [int]$maxDays) {
   if ($healed -gt 0) {
     $note = ("size-heal: {0} row(s) re-sized from prior capture(s) (same item+price, capture had dropped the pack count); {1} skipped on price change" -f $healed, $skippedPrice)
     if ($new.PSObject.Properties['size_heal_note']) { $new.size_heal_note = $note } else { $new | Add-Member -NotePropertyName size_heal_note -NotePropertyValue $note }
-    $new | ConvertTo-Json -Depth 6 | Set-Content $newF.FullName -Encoding UTF8
+    $null = $new | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $newF.FullName -Lf
   }
   return "size-heal [$prefix]: healed=$healed skipped-on-price-change=$skippedPrice -> $($newF.Name)"
 }

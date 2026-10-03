@@ -68,6 +68,7 @@
   Usage: .\repair-measure-vs-grams.ps1 [-Apply]  |  -SelfTest  |  -Report
 #>
 param([switch]$Apply, [switch]$SelfTest, [switch]$Report, [string]$Root = "")
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
@@ -462,7 +463,7 @@ if ($Apply -and $res.slugs.Count) {
     # reads THAT, so a repair that stops at the specs leaves the Meal Plan Builder's grocery list showing
     # the old label indefinitely. sync-recipesdb-buy.ps1 refuses to carry anything it cannot prove; this
     # file is the proof, recording the exact rows this run rewrote, old and new byte for byte.
-    ($res.carry | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mp 'out\measure-vs-grams-carry.json') -Encoding UTF8
+    $null = ($res.carry | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $mp 'out\measure-vs-grams-carry.json') -NoBom
     Write-Output ('  carry manifest -> out\measure-vs-grams-carry.json (' + $res.carry.Count + ' row(s); sync-recipesdb-buy.ps1 reads this)')
 }
 exit 0

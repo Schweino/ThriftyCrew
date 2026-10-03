@@ -16,6 +16,7 @@
   Prints the ratio vs the band so the shape of the error is visible: an exact 2x/3x/12x/16x says PARSE-BUG loudly.
 #>
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -42,7 +43,7 @@ foreach ($g in $gapRows) {
   $ratio = if ($hi -gt 0 -and $pu -gt $hi) { [math]::Round($pu / $hi, 2) } elseif ($lo -gt 0 -and $pu -lt $lo) { -[math]::Round($lo / $pu, 2) } else { 0 }
   $out.Add([pscustomobject]@{ commodity = [string]$r.id; store = [string]$r.store; unit = [string]$r.unit; pu = $pu; band = [string]$r.band; ratio = $ratio; price_text = [string]$r.price_text; size_text = [string]$r.size_text; name = [string]$r.name })
 }
-([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $out.Count; rows = $out } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'outofband-triage.json') -Encoding UTF8
+$null = ([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $out.Count; rows = $out } | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path (Join-Path $OutDir 'outofband-triage.json')
 
 foreach ($r in ($out | Sort-Object { -[math]::Abs($_.ratio) })) {
   if ($r.note) { Write-Output ("  " + $r.commodity + ' / ' + $r.store + '  ' + $r.note); continue }

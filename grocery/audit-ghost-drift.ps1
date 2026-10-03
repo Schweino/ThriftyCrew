@@ -35,6 +35,8 @@
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$ShowDiff, [switch]$Discover, [string]$Accept = '', [switch]$Recipes, [int]$Limit = 0, [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -294,7 +296,7 @@ if ($Recipes) {
     Write-Output '  or a PUT that only partly landed. Republishing that slug overwrites whatever the difference is,'
     Write-Output '  so look before you rebuild: meal-prep\engine\publish.ps1 -Slugs <slug> -Force'
   }
-  ($rDrift | ConvertTo-Json -Depth 4) | Out-File (Join-Path $root 'out\ghost-drift-recipes.json') -Encoding utf8
+  $null = ($rDrift | ConvertTo-Json -Depth 4) | Write-TcAtomicFile -Path (Join-Path $root 'out\ghost-drift-recipes.json') -Lf -NoBom -NoNewline
   Write-GuardComplete -Name 'ghost-drift' -Summary ("recipes match={0} roundtrip={1} drift={2} blind={3}" -f $rMatch.Count, $rRoundTrip.Count, $rDrift.Count, $rBlind.Count)
   # blind anywhere means the sweep cannot claim a clean result, even for the slugs it did reach
   if ($rBlind.Count) { exit 3 }
@@ -340,8 +342,8 @@ if ($Discover) {
       Write-Output ("  {0,-34} -> NO CONFIDENT MATCH ({1} slices) - left out of the manifest rather than guessed" -f $lf.Name, $bestHits)
     }
   }
-  (@{ generated = (Get-Date -Format 'yyyy-MM-dd'); note = 'slug<->local source for the tool posts; rebuild with -Discover'; tools = $map } |
-    ConvertTo-Json -Depth 5) | Out-File $manifestPath -Encoding utf8
+  $null = (@{ generated = (Get-Date -Format 'yyyy-MM-dd'); note = 'slug<->local source for the tool posts; rebuild with -Discover'; tools = $map } |
+    ConvertTo-Json -Depth 5) | Write-TcLfFile -Path $manifestPath
   Write-Output ("manifest written: {0} tool(s) -> {1}" -f $map.Count, $manifestPath)
   Exit-Guard -Name 'ghost-drift' -Summary ("discover mapped={0}" -f $map.Count) -Code 0
 }

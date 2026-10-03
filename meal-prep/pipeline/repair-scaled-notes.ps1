@@ -67,6 +67,7 @@
   Usage: .\repair-scaled-notes.ps1 [-Apply]   |   .\repair-scaled-notes.ps1 -SelfTest
 #>
 param([switch]$Apply, [switch]$SelfTest, [string]$Root = "")
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $__jioRoot = $PSScriptRoot; while ($__jioRoot -and -not (Test-Path (Join-Path $__jioRoot 'lib\json-io.ps1'))) { $__jioRoot = Split-Path $__jioRoot -Parent }
 if (-not $__jioRoot) { throw 'json-io.ps1 not found walking up from ' + $PSScriptRoot + " - Read-JsonFile is unavailable and a bare Get-Content would decode a BOM-less file as cp1252" }
@@ -458,7 +459,7 @@ if ($Apply -and $res.slugs.Count) {
     # file is the proof. It records the precise rows this run rewrote, so the sync's scaled-note class
     # can only ever FINISH a repair that actually ran, on the exact rows it touched - never ratify a hand
     # edit, and never fire on a spec nobody reviewed.
-    ($res.carry | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $mp 'out\scaled-note-carry.json') -Encoding UTF8
+    $null = ($res.carry | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $mp 'out\scaled-note-carry.json')
     Write-Output ('  carry manifest -> out\scaled-note-carry.json (' + $res.carry.Count + ' row(s); sync-recipesdb-buy.ps1 -Apply reads this)')
 }
 exit 0

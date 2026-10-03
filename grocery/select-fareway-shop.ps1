@@ -70,6 +70,7 @@ param(
   [switch]$WaiveMissingScopeStamp,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -764,7 +765,7 @@ foreach ($id in $byIdRaw.Keys) {
   [void]$outRows.Add((ConvertTo-ShopRow -Id $id -Best $sel.best -Term ([string]$byIdRaw[$id].term) -StoreLoc $storeLoc))
 }
 $outDir = Split-Path $Out -Parent; New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-($outRows | ConvertTo-Json -Depth 5) | Set-Content $Out -Encoding UTF8
+$null = ($outRows | ConvertTo-Json -Depth 5) | Write-TcAtomicFile -Path $Out -Lf
 Write-Output ("fareway-shop-$asof.json: $($outRows.Count) commodities selected (from $($byIdRaw.Count) captured); $($dropped.Count) had no include-match; $demotedTotal candidate(s) slug-demoted; $sizeRefusedTotal candidate(s) refused SIZE-CONTRADICTS-LINK")
 if ($dropped.Count) { Write-Output ("  no-match ids: " + ($dropped -join ', ')) }
 # The no-match record, LF, empty when nothing was missed (see the header). Nothing reads it yet, so a plain replace.

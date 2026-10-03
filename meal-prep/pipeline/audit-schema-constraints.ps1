@@ -49,6 +49,7 @@
 # The self-test is frozen fixtures; it loads lib\guard-contract.ps1 through a nested path the key cannot parse.
 # gate-inputs: lib\guard-contract.ps1
 param([switch]$ShowAll, [switch]$SelfTest, [switch]$Baseline, [string]$Root = "")
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path (Split-Path $PSScriptRoot -Parent) -Parent) 'lib\guard-contract.ps1')
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -363,7 +364,7 @@ if ($Baseline) {
     if ($script:BACKLOG_CLASSES -contains $g.Name) { continue }
     $out[$g.Name] = $g.Count
   }
-  ($out | ConvertTo-Json -Depth 3) | Out-File $baselinePath -Encoding utf8
+  $null = ($out | ConvertTo-Json -Depth 3) | Write-TcLfFile -Path $baselinePath
   Write-Output ("schema-constraint baseline recorded: " + (($out.Keys | ForEach-Object { "$_=$($out[$_])" }) -join ', '))
   exit 0
 }

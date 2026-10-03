@@ -52,6 +52,7 @@
 # gate-inputs: grocery\audit-asof-evidence.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Baseline, [switch]$Quiet, [switch]$SelfTest, [string]$Root = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -301,7 +302,7 @@ if (Test-Path $basePath) {
 }
 
 $outPath = Join-Path $root 'out\asof-evidence.json'
-$res | ConvertTo-Json -Depth 6 | Set-Content $outPath -Encoding UTF8
+$null = $res | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $outPath
 
 if (-not $Quiet) {
   Write-Output 'as_of evidence (no published price may claim a date newer than the capture it came from)'

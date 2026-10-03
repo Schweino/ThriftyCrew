@@ -24,6 +24,7 @@
 
 # No Set-StrictMode here: this file is DOT-SOURCED, so a mode set here would follow the caller into
 # code that never asked for it and fail it on an unrelated line.
+. (Join-Path $PSScriptRoot 'atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $__cvLibRoot = Split-Path $PSScriptRoot -Parent
 . (Join-Path $__cvLibRoot 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 
@@ -158,7 +159,7 @@ function Write-ChainVerdict {
   $path = Join-Path $OutDir 'chain-verdict.json'
   # -Encoding utf8 under PS 5.1 emits a BOM; every reader here goes through Read-JsonFile, which
   # handles it, and audit-json-encoding pins the estate's expectation for this file.
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content -LiteralPath $path -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $path -Lf
   return $path
 }
 

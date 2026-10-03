@@ -14,6 +14,7 @@
   -> compare-deals -> audit-food-category -> build-vet-sheet -Ids <batch ids>.
 #>
 param([string]$RulesGlob = "out\staples500\rules\rules-*.json", [string]$CandidatesFile = "out\staples500\batch1.json", [switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -75,9 +76,9 @@ foreach ($r in $ok) {
   if ($r.term) { $searchDoc.terms | Add-Member -NotePropertyName $r.id -NotePropertyValue $r.term -Force }
   else { $searchDoc.terms | Add-Member -NotePropertyName $r.id -NotePropertyValue ($r.label.ToLower()) -Force }
 }
-($commods | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $root 'commodities.json') -Encoding UTF8
-($catDoc | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $root 'categories.json') -Encoding UTF8
-($searchDoc | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $root 'commodity-search.json') -Encoding UTF8
+$null = ($commods | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path (Join-Path $root 'commodities.json') -Lf -NoBom
+$null = ($catDoc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path (Join-Path $root 'categories.json') -Lf -NoBom
+$null = ($searchDoc | ConvertTo-Json -Depth 5) | Write-TcAtomicFile -Path (Join-Path $root 'commodity-search.json') -Lf -NoBom
 # validate all three round-trip as JSON
 $null = Read-JsonFile (Join-Path $root 'commodities.json')
 $null = Read-JsonFile (Join-Path $root 'categories.json')

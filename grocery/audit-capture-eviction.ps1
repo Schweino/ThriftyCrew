@@ -49,6 +49,7 @@
 # gate-inputs: lib\json-io.ps1, lib\guard-contract.ps1, grocery\known-wrong-lib.ps1, grocery\capture-depth-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CandidatesFile = '', [string]$CompareFile = '', [double]$Ratio = 1.25, [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -278,8 +279,8 @@ foreach ($f in ($ranked | Select-Object -First 25)) {
 if ($ranked.Count -gt 25) { Write-Output ("  ... and " + ($ranked.Count - 25) + " more (nothing truncated silently: rerun with -Ratio to widen or narrow)") }
 $outFile = Join-Path $OutDir 'capture-evictions.json'
 $generated = (Get-Date).ToString('s')
-@{ generated = $generated; candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
-  ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+$null = @{ generated = $generated; candidates_file = (Split-Path $CandidatesFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; findings = $ranked } |
+  ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $outFile
 Write-Output ("  -> $outFile")
 # THE STAMP IS WRITTEN LAST, after the report write succeeded under EAP=Stop, so a stamp on disk means this run wrote
 # its report in this checkout. Gitignored on purpose; the header says why it is a second file.

@@ -45,6 +45,7 @@ param(
   # though no kept bacon row has said it. So the mechanical pass proposes and a human picks.
   [string[]]$Ids = @()
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -331,12 +332,12 @@ foreach ($p in $toWrite) {
     from_weeks = $p.weeks; killed_items = $p.items; verdict_reason = $p.reason
   })
 }
-($commodities | ConvertTo-Json -Depth 10) | Set-Content $cPath -Encoding UTF8
+$null = ($commodities | ConvertTo-Json -Depth 10) | Write-TcAtomicFile -Path $cPath -Lf -NoBom
 $prov = [pscustomobject]@{
   readme = 'Provenance for excludes added by promote-verdicts.ps1. commodities.json is what the engine reads; this file records WHY each promoted rule exists, which weeks and items produced it, and is what you read before reverting one. A rule here was gated: it provably matched the dropped item and matched NO item the verify pass ever kept for that commodity.'
   rules  = $provRules.ToArray()
 }
-($prov | ConvertTo-Json -Depth 8) | Set-Content $provPath -Encoding UTF8
+$null = ($prov | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $provPath -Lf
 
 Write-Output ''
 Write-Output ("APPLIED: {0} rule(s) written to commodities.json (backup in out\commodities.backup-before-promote.json)" -f $written)

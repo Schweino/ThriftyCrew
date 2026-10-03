@@ -17,6 +17,7 @@
   Nothing is invented: every value here came from the Hy-Vee GraphQL pull performed today.
 #>
 param([switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -116,6 +117,6 @@ foreach ($c in ($changes | Select-Object -First 30)) { Write-Output $c }
 if ($changes.Count -gt 30) { Write-Output ("  ... and " + ($changes.Count - 30) + " more") }
 
 if ($WhatIf) { Write-Output ''; Write-Output 'WhatIf: product-urls.json not written'; return }
-($doc | ConvertTo-Json -Depth 8) | Set-Content $puF -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puF -Lf
 Write-Output ''
 Write-Output 'product-urls.json updated - the board and its Hy-Vee links now quote the same verified number.'

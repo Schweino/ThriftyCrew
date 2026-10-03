@@ -12,6 +12,7 @@
   the batch passes build-vet-sheet review.
 #>
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -67,7 +68,7 @@ foreach ($f in (Get-ChildItem (Join-Path $genDir 'agent-*.json') -ErrorAction Si
 }
 
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
-($keep | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $OutDir 'candidates-500.json') -Encoding UTF8
+$null = ($keep | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $OutDir 'candidates-500.json')
 $keep | Export-Csv (Join-Path $OutDir 'candidates-500.csv') -NoTypeInformation -Encoding UTF8
 
 Write-Output ("candidates kept: " + $keep.Count + "   rejected: " + $rejects.Count)

@@ -64,6 +64,7 @@
 # -AskLedgerFile (2026-09-25) points the ask ledger somewhere else; it exists so a -DryRun can show the order with a
 # seeded ledger and with none. Default: <OutDir>\hyvee-ask-ledger.json.
 param([string]$OutDir = "", [int]$StoreId = 0, [string]$LocationId = "", [switch]$Quick, [switch]$DryRun, [switch]$SelfTest, [string]$AskLedgerFile = "")
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'omaha-time.ps1')
@@ -2089,7 +2090,7 @@ $out = [ordered]@{
   capture_terms=$captureTerms.ToArray()
   deals=$deals.ToArray()
 }
-($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
+$null = ($out | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $file -Lf
 Write-Output ("Hy-Vee everyday prices -> " + $file)
 
 # THE ASK LEDGER IS WRITTEN AFTER THE FILE LANDED, and read again inside its lock (lib\ledger-lock.ps1), so a run that

@@ -33,6 +33,7 @@
   a synthetic board's report exactly where a human looks for the real one.
 #>
 param([switch]$Apply, [string]$Root = '', [string]$OutDir = '')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -186,8 +187,8 @@ $report = [pscustomobject]@{
   recipe_pool_ids = @($fallbackIds | Sort-Object -Unique)
   recipe_pool_cells = @($fallbackCells)
 }
-$report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $outDir 'recipe-floors-report.json') -Encoding UTF8
-$doc | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $outDir 'recipe-floors-proposed.json') -Encoding UTF8
+$null = $report | ConvertTo-Json -Depth 5 | Write-TcLfFile -Path (Join-Path $outDir 'recipe-floors-report.json')
+$null = $doc | ConvertTo-Json -Depth 8 | Write-TcLfFile -Path (Join-Path $outDir 'recipe-floors-proposed.json')
 if ($Apply) {
   Copy-Item (Join-Path $outDir 'recipe-floors-proposed.json') $floorF -Force
   Write-Output ("APPLIED to recipe-board-everyday.json - now run recipe-overlay.ps1 + publish-deals-page.ps1")

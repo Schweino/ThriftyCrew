@@ -88,6 +88,7 @@ param(
   [int]$MinProfile = 2,
   [string]$OutFile = ''
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -310,7 +311,7 @@ foreach ($r in ($out | Sort-Object verdict, id)) {
   Write-Output ("         {0}" -f $r.reason)
 }
 if (-not $OutFile) { $OutFile = Join-Path $root 'out\aisle-test.json' }
-($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $OutFile -Encoding UTF8
+$null = ($out.ToArray() | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $OutFile
 Write-Output "-> $OutFile"
 Exit-Guard -Name 'aisle-test' -Summary '' -Code 0
 

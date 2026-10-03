@@ -21,6 +21,7 @@
   Re-runnable and idempotent: run it before every publish so the corrections always reflect current data.
 #>
 param([double]$Tol = 0.30, [string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -215,7 +216,7 @@ $obj = [ordered]@{
   count = $cells.Count
   cells = $cells
 }
-$obj | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $root 'board-price-overrides.json') -Encoding UTF8
+$null = $obj | ConvertTo-Json -Depth 5 | Write-TcAtomicFile -Path (Join-Path $root 'board-price-overrides.json') -Lf
 Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree) basis-gap=$($skip.basisgap) board-confirmed-fresh=$([int]$skip.boardfresh))")
 
 

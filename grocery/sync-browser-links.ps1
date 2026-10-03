@@ -16,6 +16,7 @@
   for a product we have not re-verified.
 #>
 param([switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -105,4 +106,4 @@ Write-Output ("browser links synced to their board product: $set  (of which $hea
 if ($ambig -gt 0) { Write-Output ("ambiguous name+size, deliberately NOT linked: $ambig  (the store sells that name in several sizes and none matches the board's)") }
 foreach ($l in ($log | Select-Object -First 20)) { Write-Output $l }
 if ($WhatIf) { Write-Output ''; Write-Output 'WhatIf: product-urls.json not written'; return }
-if ($set -gt 0) { ($doc | ConvertTo-Json -Depth 8) | Set-Content $puF -Encoding UTF8; Write-Output ''; Write-Output "wrote product-urls.json" }
+if ($set -gt 0) { $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puF -Lf; Write-Output ''; Write-Output "wrote product-urls.json" }

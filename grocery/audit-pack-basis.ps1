@@ -46,6 +46,7 @@
 # list; the drill passes its own path.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [switch]$Strict, [string]$ReportDir = "", [string]$AllowFile = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -191,8 +192,8 @@ foreach ($r in $doc.comparison) {
 }
 
 $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'pack-basis-audit.json'
-([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; confirmed_count = $confirmedCount; findings = $findings } |
-  ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
+$null = ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf); finding_count = $findings.Count; confirmed_count = $confirmedCount; findings = $findings } |
+  ConvertTo-Json -Depth 5) | Write-TcLfFile -Path $rep
 
 $ruledNote = $(if ($ruledQuiet) { " ($ruledQuiet ruled in multipack-allowlist.json, not re-reported)" } else { '' })
 if ($findings.Count -eq 0) { Write-Output ('pack-basis: ok - no multipack cell owes its cheapest-in-Omaha rank to the count multiply' + $ruledNote); Write-GuardComplete -Name 'pack-basis' -Summary $ruledNote.Trim(); exit 0 }

@@ -44,6 +44,8 @@
 # gate-inputs: grocery\import-walmart-batch.ps1, grocery\stores.json, grocery\multipack-allowlist.json, grocery\unit-aliases.json
 param([string]$Raw = 'out\staples500\walmart-batch1-raw.txt', [switch]$SelfTest, [switch]$TrustNoSeller, [string]$OutRoot = '',
       [switch]$Reheal, [string]$Shape = '(?i)\bpacks?\s+of\s+\d+')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = $PSScriptRoot
@@ -469,7 +471,7 @@ if ($Reheal) {
     if ($docR.PSObject.Properties['deal_count']) { $docR.deal_count = $kept.Count }
     $stampR = [pscustomobject]@{ date=$today; raw=('reheal:' + $Shape); added=0; replaced=$healed; quarantined=0; rejected=$tossed; by='import-walmart-batch.ps1 -Reheal' }
     if ($docR.PSObject.Properties['batch_imports']) { $docR.batch_imports = @(@($docR.batch_imports) + $stampR) } else { $docR | Add-Member batch_imports @($stampR) -Force }
-    ($docR | ConvertTo-Json -Depth 6) | Set-Content $prevR.FullName -Encoding UTF8
+    $null = ($docR | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $prevR.FullName -Lf
     if ($rejR.Count) {
       $rf = Join-Path $outRootDir ("out\walmart-batch-rejects-$today.json")
       # ASSIGN FIRST, THEN WRAP. `@(Get-Content | ConvertFrom-Json)` does NOT unroll a bare top-level JSON
@@ -478,7 +480,7 @@ if ($Reheal) {
       # line the first time it ran. (Same trap, same fix, as add-known-wrong.ps1.)
       $existing = @()
       if (Test-Path $rf) { $prevRej = Get-Content $rf -Raw -Encoding UTF8 | ConvertFrom-Json; $existing = @($prevRej) }
-      ((@($existing) + @($rejR)) | ConvertTo-Json -Depth 4) | Set-Content $rf -Encoding UTF8
+      $null = ((@($existing) + @($rejR)) | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $rf
     }
   }
   Write-Output ("reheal[$Shape] on $($prevR.Name): $healed healed, $tossed rejected+removed, $same unchanged, $skipped skipped, $($kept.Count) rows remain")
@@ -605,11 +607,11 @@ if ($doc) {
   $doc.deals = $merged.ToArray()
   if ($doc.PSObject.Properties['deal_count']) { $doc.deal_count = $merged.Count } else { $doc | Add-Member deal_count $merged.Count -Force }
   if ($doc.PSObject.Properties['batch_imports']) { $doc.batch_imports = @(@($doc.batch_imports) + $stamp) } else { $doc | Add-Member batch_imports @($stamp) -Force }
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf
 } else {
-  ([ordered]@{ store = 'Walmart'; week_of = $today; price_type = 'everyday'; price_mode = 'in-store'; deal_count = $merged.Count; batch_imports = @($stamp); deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8
+  $null = ([ordered]@{ store = 'Walmart'; week_of = $today; price_type = 'everyday'; price_mode = 'in-store'; deal_count = $merged.Count; batch_imports = @($stamp); deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf
 }
-if ($rejects.Count) { ($rejects | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $outRootDir ("out\walmart-batch-rejects-$today.json")) -Encoding UTF8 }
+if ($rejects.Count) { $null = ($rejects | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $outRootDir ("out\walmart-batch-rejects-$today.json")) }
 if ($quarantined.Count) {
   $qf = Join-Path $outRootDir ("out\walmart-batch-needs-seller-$today.json")
   ($quarantined | ConvertTo-Json -Depth 4) | Set-Content $qf -Encoding UTF8
@@ -642,7 +644,7 @@ if (Test-Path $idsFile) {
 if ($null -ne $idsOut) {
   $before = $idsOut.Count
   foreach ($k in $ids.Keys) { $idsOut[$k] = $ids[$k] }   # this batch wins on a name it re-captured
-  ($idsOut | ConvertTo-Json) | Set-Content $idsFile -Encoding UTF8
+  $null = ($idsOut | ConvertTo-Json) | Write-TcLfFile -Path $idsFile
   Write-Output ("Walmart: name->itemId map $before -> $($idsOut.Count) entries ($($ids.Count) from this batch, merged not replaced)")
 }
 if ($markdowns -gt 0) {

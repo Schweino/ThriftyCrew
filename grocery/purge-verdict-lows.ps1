@@ -51,6 +51,7 @@
 # Self-test: frozen synthetic history through the pure purge functions; the history and boards are read on the live path below it.
 # gate-inputs: grocery\purge-verdict-lows.ps1, grocery\verdict-lib.ps1
 param([switch]$Apply, [switch]$SelfTest, [string]$HistoryFile = '', [string]$OutDir = '', [string]$SuppressionsFile = '')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $root 'verdict-lib.ps1')   # Get-VerdictNorm / Get-VerdictQuotedItem - ONE definition of item identity
@@ -473,7 +474,7 @@ if ($unres.Count) {
   # before ever reaching the dry-run branch - so a look-don't-touch invocation dirtied the repo (post-batch
   # review 2026-07-30). The list is printed above either way, so the dry run loses no information.
   if ($Apply) {
-    ([ordered]@{ generated = (Get-Date).ToString('s'); note = 'winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared'; cells = $unres } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'purge-verdict-lows-unresolved.json') -Encoding UTF8
+    $null = ([ordered]@{ generated = (Get-Date).ToString('s'); note = 'winning history cells at a verdict-rejected (commodity,store) whose product could not be identified from any surviving board; neither purged nor cleared'; cells = $unres } | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path (Join-Path $OutDir 'purge-verdict-lows-unresolved.json')
   }
 }
 
@@ -486,7 +487,7 @@ Copy-Item $HistoryFile $backup -Force
 Write-Host ('backup: ' + $backup)
 
 $tmp = $HistoryFile + '.tmp'
-($doc | ConvertTo-Json -Depth 12) | Set-Content $tmp -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 12) | Write-TcLfFile -Path $tmp   # LF, so the bytes moved onto the tracked file are the bytes git stores
 $check = Read-Json $tmp
 if (-not $check -or @($check.commodities).Count -ne @($doc.commodities).Count) { Write-Host 'ABORT - the rewritten file did not re-parse with the same commodity count; original left untouched.'; Remove-Item $tmp -Force; exit 2 }
 Move-Item $tmp $HistoryFile -Force

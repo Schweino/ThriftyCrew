@@ -369,7 +369,7 @@ if ($Baseline) {
     Write-Output ('tile-integrity: -Baseline REFUSED - BLIND run (' + $linked + ' linked tiles, ' + $graded + ' graded). Writing a baseline now would pin every priced tile as the coverage high-water mark and permanently disarm the ratchet. Fix product-urls.json first; no baseline was written.')
     exit 3
   }
-  (@{ set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); by_store = $report.by_store } | ConvertTo-Json -Depth 5) | Set-Content $blF -Encoding UTF8
+  $null = (@{ set = (Get-Date -Format 'yyyy-MM-dd HH:mm'); by_store = $report.by_store } | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path $blF
   Write-Output ''
   Write-Output ("baseline written: " + $rows.Count + " violation(s). From here the number may only go DOWN.")
   Exit-Guard -Name 'tile-integrity' -Code 0

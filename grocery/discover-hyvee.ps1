@@ -72,6 +72,7 @@ param(
   [switch]$SelfTest,
   [string]$OutDir = ''
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -341,7 +342,7 @@ if (Test-Path $outF) {
     $docket.Add($p); $carried++
   }
 }
-($docket.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $outF -Encoding UTF8
+$null = ($docket.ToArray() | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $outF
 Write-Output ''
 Write-Output ("searched {0} term(s), {1} failed, {2} product(s) scanned" -f $searched, $failed, $scanned)
 if ($noCommodity.Count) { Write-Output ("  {0} requested id(s) are in NO commodity: {1}" -f $noCommodity.Count, (($noCommodity | Select-Object -First 12) -join ', ')) }

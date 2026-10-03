@@ -33,6 +33,7 @@ param(
   [string]$SummaryFile = '',
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 # The self-test is pure over in-file cells; it dot-sources package-cost-lib through a computed repo path, so it is named here.
 # gate-inputs: grocery\measure-cheapest-selection.ps1, meal-prep\lib\package-cost-lib.ps1
@@ -400,7 +401,7 @@ $report = [ordered]@{
 }
 $outDir = Split-Path $OutFile -Parent
 if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Force -Path $outDir | Out-Null }
-($report | ConvertTo-Json -Depth 8 -Compress) | Set-Content $OutFile -Encoding utf8
+$null = ($report | ConvertTo-Json -Depth 8 -Compress) | Write-TcLfFile -Path $OutFile
 
 $md = New-Object System.Collections.Generic.List[string]
 $md.Add('# Measured: cheapest-store selection, old rule vs min-cost rule')
@@ -453,7 +454,7 @@ if ($freeDiff) {
 }
 $sumDir = Split-Path $SummaryFile -Parent
 if (-not (Test-Path $sumDir)) { New-Item -ItemType Directory -Force -Path $sumDir | Out-Null }
-Set-Content $SummaryFile -Value ($md.ToArray() -join "`r`n") -Encoding utf8
+$null = Write-TcLfFile -Path $SummaryFile -Text ($md.ToArray() -join "`n")   # tracked, stored LF with its BOM
 
 Write-Output ''
 Write-Output ("report -> {0}" -f $OutFile)

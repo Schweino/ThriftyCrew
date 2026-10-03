@@ -49,6 +49,7 @@
 # Self-test: pure fixtures over the sent-log functions; nothing is read from disk, Ghost or the worker.
 # gate-inputs: grocery\notify-item-added.ps1
 param([switch]$DryRun, [string]$OutDir = "", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -199,7 +200,7 @@ foreach ($r in $cmp) { if (@($r.stores).Count -ge 1) { $boardIds[[string]$r.id] 
 
 # ---- state: seed on first run (nothing fires retroactively) ----
 if (-not (Test-Path $stateFile)) {
-  if (-not $DryRun) { [ordered]@{ seeded = (Get-Date -Format 'yyyy-MM-dd'); ids = @($boardIds.Keys | Sort-Object) } | ConvertTo-Json -Depth 3 | Set-Content $stateFile -Encoding UTF8 }
+  if (-not $DryRun) { $null = [ordered]@{ seeded = (Get-Date -Format 'yyyy-MM-dd'); ids = @($boardIds.Keys | Sort-Object) } | ConvertTo-Json -Depth 3 | Write-TcAtomicFile -Path $stateFile -Lf }
   Write-Output ("notify-item-added: SEEDED state with " + $boardIds.Count + " current board ids - notifications start with the NEXT new commodity")
   exit 0
 }
@@ -318,7 +319,7 @@ foreach ($id in $newIds) {
 if (-not $DryRun) {
   $advance = @($boardIds.Keys)
   if ($failed -gt 0) { $advance = @($advance | Where-Object { $known.ContainsKey($_) -or ($newIds -notcontains $_) }) }
-  [ordered]@{ seeded = (Read-JsonFile $stateFile).seeded; updated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); ids = @($advance | Sort-Object) } | ConvertTo-Json -Depth 3 | Set-Content $stateFile -Encoding UTF8
+  $null = [ordered]@{ seeded = (Read-JsonFile $stateFile).seeded; updated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); ids = @($advance | Sort-Object) } | ConvertTo-Json -Depth 3 | Write-TcAtomicFile -Path $stateFile -Lf
 }
 
 # THE SEND LOG IS WRITTEN WHETHER OR NOT THE RUN OTHERWISE SUCCEEDED (I89). It is the only record

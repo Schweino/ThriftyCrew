@@ -20,6 +20,7 @@
 #        nothing must never report ok.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -177,7 +178,7 @@ foreach ($b in ($bugs | Sort-Object { -[math]::Abs($_.ratio - 1) })) {
 # around a List[object] throws ArgumentException, and it also keeps the JSON shape right at every size -
 # [] at zero and [ {..} ] at one, where a bare list would unwrap a single finding into an object.
 $outF = Join-Path $OutDir 'everyday-mismatches.json'
-$bugs.ToArray() | ConvertTo-Json -Depth 5 | Set-Content $outF -Encoding UTF8
+$null = $bugs.ToArray() | ConvertTo-Json -Depth 5 | Write-TcLfFile -Path $outF
 Write-Output ''
 Write-Output ('saved -> ' + $outF)
 

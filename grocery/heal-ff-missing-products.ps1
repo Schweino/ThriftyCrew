@@ -18,6 +18,8 @@
   Safe to re-run: a product already in the file is left alone.
 #>
 param([switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -87,7 +89,7 @@ if ($added -eq 0) { Write-Output 'nothing to do'; return }
 
 $doc.deals = $rows.ToArray()
 $doc | Add-Member -NotePropertyName deal_count -NotePropertyValue @($rows).Count -Force
-($doc | ConvertTo-Json -Depth 6) | Set-Content $curF.FullName -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $curF.FullName -Lf
 Write-Output ("Family Fare file now " + @($rows).Count + " rows -> " + $curF.Name)
-($expect | ConvertTo-Json) | Set-Content (Join-Path $root 'out\ff-heal-expected.json') -Encoding UTF8
+$null = ($expect | ConvertTo-Json) | Write-TcLfFile -Path (Join-Path $root 'out\ff-heal-expected.json')
 Write-Output 'rebuild, then run verify-ff-heal.ps1 to prove each restored cell lands on its linked price'

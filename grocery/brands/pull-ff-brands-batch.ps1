@@ -7,6 +7,7 @@ param(
   [string]$ConfigPath = '',
   [string]$OutPath = ''
 )
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference='Stop'
 $here=$PSScriptRoot
 if(-not $ConfigPath){ $ConfigPath = Join-Path $here 'brand-config.json' }
@@ -65,5 +66,5 @@ foreach($cid in $cfg.PSObject.Properties.Name){
   $out.items[$cid]=@($buckets.Values | Sort-Object per)
   Write-Output ("{0,-22} {1} brands" -f $cid, $buckets.Count)
 }
-($out | ConvertTo-Json -Depth 8) | Set-Content $OutPath -Encoding UTF8
+$null = ($out | ConvertTo-Json -Depth 8) | Write-TcLfFile -Path $OutPath
 Write-Output ("`n-> " + $OutPath)

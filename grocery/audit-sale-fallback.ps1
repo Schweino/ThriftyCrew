@@ -28,6 +28,7 @@
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$AutomationsFile = "", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -361,7 +362,7 @@ foreach ($gp in $gaps) {
   $nextLedger[$key] = [ordered]@{ first_seen=$first; owner=$owner }
 }
 # only CURRENT gaps are carried, so a gap the owner clears drops out and its clock is gone with it
-($nextLedger | ConvertTo-Json -Depth 4) | Set-Content $ledgerPath -Encoding UTF8
+$null = ($nextLedger | ConvertTo-Json -Depth 4) | Write-TcAtomicFile -Path $ledgerPath -Lf
 $escalated = @($gaps | Where-Object { $_.escalated })
 $owned     = @($gaps | Where-Object { -not $_.escalated })
 $unprovenGaps = @($gaps | Where-Object { $_.unproven })

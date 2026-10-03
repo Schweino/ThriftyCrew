@@ -28,6 +28,7 @@ param(
   [switch]$NoArchive,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $ProgressPreference='SilentlyContinue'
 $g = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }   # repo-relative
@@ -112,7 +113,7 @@ foreach($id in ($items.Keys|Sort-Object)){
   $itemsObj[$id]=$entry
 }
 $out=[ordered]@{ readme="Durable per-store direct product URLs + verified price for the Omaha grocery prices page. Keyed by commodity id -> store -> {url,price,size,name}. Survives weekly regeneration; build-deals-page.ps1 renders a 'See item' link per chip."; updated=(Get-Date -Format 'yyyy-MM-dd'); items=$itemsObj }
-$out | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+$null = $out | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $outFile -Lf
 # CONSUME-ONCE: archive every file we just merged, so the next run cannot replay it over links that have
 # since been corrected. Refused (stale) files are deliberately LEFT IN PLACE so they stay visible for review.
 if(-not $NoArchive -and $ordered){

@@ -20,6 +20,7 @@
   Usage:  .\withdraw-stale-link.ps1 -Pairs @(@('caesar-dressing',"Baker's"), @('chicken-noodle-soup','Walmart'))
 #>
 param([Parameter(Mandatory=$true)][array]$Pairs, [string]$Reason = 'board cell moved to a different product; stored link no longer describes it')
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -39,7 +40,7 @@ foreach ($pair in $Pairs) {
   Write-Output ("  withdrew {0,-24} [{1}]  was: {2}" -f $id, $store, ([string]$old.name))
 }
 if ($n -gt 0) {
-  ($pu | ConvertTo-Json -Depth 12) | Set-Content $puFile -Encoding UTF8
+  $null = ($pu | ConvertTo-Json -Depth 12) | Write-TcAtomicFile -Path $puFile -Lf
   Write-Output ("withdrew $n link(s). Reason: $Reason")
   Write-Output 'These cells now fall back to a store-search link and will re-enter resolve-worklist automatically.'
 } else {

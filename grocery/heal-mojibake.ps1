@@ -14,6 +14,7 @@
          .\heal-mojibake.ps1 -Apply
 #>
 param([switch]$Apply)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path $root 'capture-lib.ps1')
@@ -43,7 +44,7 @@ foreach ($glob in $targets) {
     if ($n -gt 0) {
       $totalFiles++; $totalRows += $n
       Write-Output ("  {0,-38} {1} name(s)" -f $f.Name, $n)
-      if ($Apply) { ($doc | ConvertTo-Json -Depth 8) | Set-Content $f.FullName -Encoding UTF8 }
+      if ($Apply) { $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $f.FullName -Lf -KeepShape }
     }
   }
 }
@@ -77,7 +78,7 @@ foreach ($rbName in @('recipe-board-everyday.json', 'recipe-board.json')) {
   if ($rn -gt 0) {
     $totalFiles++; $totalRows += $rn
     Write-Output ("  {0,-38} {1} name(s)" -f $rbName, $rn)
-    if ($Apply) { ($rb | ConvertTo-Json -Depth 8) | Set-Content $rbPath -Encoding UTF8 }
+    if ($Apply) { $null = ($rb | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $rbPath -Lf }
   }
 }
 
@@ -101,7 +102,7 @@ if (Test-Path $puPath) {
   if ($pn -gt 0) {
     $totalFiles++; $totalRows += $pn
     Write-Output ("  {0,-38} {1} link name(s)" -f 'product-urls.json', $pn)
-    if ($Apply) { ($pu | ConvertTo-Json -Depth 8) | Set-Content $puPath -Encoding UTF8 }
+    if ($Apply) { $null = ($pu | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puPath -Lf }
   }
 }
 

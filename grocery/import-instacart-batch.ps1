@@ -9,6 +9,7 @@
 # The self-test reads the store registry and lifts its merge functions from import-walmart-batch.ps1.
 # gate-inputs: grocery\stores.json, grocery\import-walmart-batch.ps1
 param([string]$Store, [string]$Raw, [string]$SourceLabel = "", [string]$ModeVerified = "", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
 # missing mandatory parameter, so `-SelfTest` alone could never be invoked: it died with
@@ -212,6 +213,6 @@ if ($prev) { $doc = Get-Content $prev.FullName -Raw -Encoding UTF8 | ConvertFrom
 $mres = Merge-IwbRows @(if ($doc) { @($doc.deals) } else { @() }) @($rows | ForEach-Object { [pscustomobject]$_ })
 $merged = $mres.merged; $added = $mres.added; $replaced = $mres.replaced
 $outFile = Join-Path $regDir ($prefix + "-$today.json")
-if ($doc) { $doc.deals = $merged.ToArray(); if ($doc.PSObject.Properties['deal_count']) { $doc.deal_count = $merged.Count } else { $doc | Add-Member deal_count $merged.Count -Force }; ($doc | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8 }
-else { ([ordered]@{ store = $Store; week_of = $today; price_type = 'everyday'; price_mode = 'in-store'; mode_verified = $ModeVerified; deal_count = $merged.Count; deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8 }
+if ($doc) { $doc.deals = $merged.ToArray(); if ($doc.PSObject.Properties['deal_count']) { $doc.deal_count = $merged.Count } else { $doc | Add-Member deal_count $merged.Count -Force }; $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf }
+else { $null = ([ordered]@{ store = $Store; week_of = $today; price_type = 'everyday'; price_mode = 'in-store'; mode_verified = $ModeVerified; deal_count = $merged.Count; deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf }
 Write-Output ("$Store : parsed $($rows.Count) sized rows ($skip skipped noise/no-size), $added added / $replaced replaced, total $($merged.Count) -> $(Split-Path $outFile -Leaf)")

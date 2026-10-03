@@ -1,3 +1,4 @@
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference='Stop'
 $here='C:\Codex\ThriftyCrew\grocery\brands'
 $ff = Get-Content (Join-Path $here '..\out\brands\ff-brands.json') -Raw | ConvertFrom-Json
@@ -78,6 +79,6 @@ foreach($itemId in $map.Keys){
   $out[$info.board]=[ordered]@{ label=$info.label; unit=$info.unit; stores=$storesWithData; brands=$brands }
 }
 $doc=[ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd'); store_order=$storeOrder; commodities=$out }
-($doc | ConvertTo-Json -Depth 9 -Compress) | Set-Content (Join-Path $here '..\out\brands\brands-board.json') -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 9 -Compress) | Write-TcLfFile -Path (Join-Path $here '..\out\brands\brands-board.json')
 Write-Output ("brands-board: " + $out.Keys.Count + " commodities")
 foreach($cid in $out.Keys){ $c=$out[$cid]; Write-Output ("  {0,-18} {1} brands across {2} stores" -f $cid, $c.brands.Count, $c.stores.Count) }

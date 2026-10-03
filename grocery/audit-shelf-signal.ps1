@@ -62,6 +62,7 @@ param(
   # out\shelf-signal.json, the same reason audit-basis-reconcile and audit-pack-basis carry one.
   [string]$ReportDir = ''
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 # STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
 # property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
 # mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
@@ -203,7 +204,7 @@ $doc['counts']       = [ordered]@{ SHELF = [int]$counts['SHELF']; 'SHIP_ONLY' = 
 # looks-finished-but-wrote-nothing shape as a capture that reads the wrong path and returns empty.
 $flagArr = [object[]]($flagged.ToArray())
 $doc['flagged']      = $flagArr
-(New-Object psobject -Property $doc) | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $rep -Encoding UTF8
+$null = (New-Object psobject -Property $doc) | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $rep
 Say ("  -> " + $rep)
 Say 'SHELF-SIGNAL-COMPLETE'
 exit 0

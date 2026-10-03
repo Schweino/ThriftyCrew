@@ -60,6 +60,7 @@
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [string]$CompareFile = "", [string]$AllowlistFile = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $contract = Join-Path (Split-Path $root -Parent) 'lib\guard-contract.ps1'
@@ -217,7 +218,7 @@ $rep = [ordered]@{
   files_read = $fileStats
   doubt      = $doubt
 }
-$rep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'instore-channel-doubt.json') -Encoding UTF8
+$null = $rep | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path (Join-Path $OutDir 'instore-channel-doubt.json')
 
 # ---- NO WORKLIST (2026-09-25, queue 2026-09-19-c9f0f3) ---------------------------------------------
 # This block wrote out\research-worklist.json, whole, from today's unreached doubts. Since 2026-09-22 it was the

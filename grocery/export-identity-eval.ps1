@@ -41,6 +41,7 @@
 # The self-test is pure in-memory fixtures and reads no sidecar or grocery data.
 # gate-inputs: grocery\export-identity-eval.ps1
 param([int]$TopK = 8, [switch]$SelfTest, [switch]$Label, [string]$Root = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -161,7 +162,7 @@ if ($Label) {
     unknown_commodity = $unknown; self_pairs = $selfPair
     pairs = $out.ToArray()
   }
-  ($payload | ConvertTo-Json -Depth 4 -Compress) | Set-Content (Join-Path $sd 'mine-labelled.json') -Encoding UTF8
+  $null = ($payload | ConvertTo-Json -Depth 4 -Compress) | Write-TcLfFile -Path (Join-Path $sd 'mine-labelled.json')
   Write-Output ("mine-labelled.json: {0} CLEAN near-miss negative(s) (the candidate's own rules reject the product)" -f $rejected)
   # These are the honest limit named in the header: both commodities accept the name, so the pair is
   # genuinely contested and labelling it either way would teach the eval a lie.

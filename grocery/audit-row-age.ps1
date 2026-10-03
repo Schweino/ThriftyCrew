@@ -30,6 +30,7 @@
 # gate-inputs-text: grocery\check-ad-cycles.ps1, grocery\build-deals-page.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest,[switch]$Baseline,[int]$MaxDays=0,[double]$Tolerance=2.0,[string]$OutDir)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 # STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
 # property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
 # mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
@@ -422,7 +423,7 @@ if($Baseline){
   # let an undated backlog grow invisibly, since undated rows are excluded from the pct denominator entirely.
   $out = [ordered]@{}
   foreach($s in ($profiles.Keys | Sort-Object)){ $out[$s] = [ordered]@{ pct = $profiles[$s].pct; undated = $profiles[$s].undated } }
-  ($out | ConvertTo-Json -Depth 4) | Out-File $baselinePath -Encoding utf8
+  $null = ($out | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $baselinePath
   Write-Output ("row-age baseline recorded for {0} store(s) -> {1}" -f $profiles.Count, $baselinePath)
   foreach($s in ($profiles.Keys | Sort-Object)){ Write-Output ("  {0,-14} {1}% over {2}d, {3} undated" -f $s, $profiles[$s].pct, $MaxDays, $profiles[$s].undated) }
   exit 0

@@ -28,6 +28,7 @@ param(
   [string]$RegularDir = "",
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 # -Store is REQUIRED for a real run but must NOT be declared Mandatory (2026-08-08). PowerShell prompts for a
@@ -202,7 +203,7 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
   # it means a whole term's products changed, or a lane started returning a different shape.
   $note = ("carry-forward: +{0} item(s) from {1} (absent from this pull; as_of-stamped, {2}-day cap), {3} expired, {4} retired (term re-searched, product gone)" -f $carried, $prevF.Name, $maxDays, $expired, $retired)
   if ($new.PSObject.Properties['carry_note']) { $new.carry_note = $note } else { $new | Add-Member -NotePropertyName carry_note -NotePropertyValue $note }
-  $new | ConvertTo-Json -Depth 6 | Set-Content $newF.FullName -Encoding UTF8
+  $null = $new | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $newF.FullName -Lf
   return "carry-forward [$prefix]: $note -> $($newF.Name)"
 }
 

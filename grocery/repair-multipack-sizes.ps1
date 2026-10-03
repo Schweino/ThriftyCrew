@@ -49,6 +49,7 @@ param(
   [string]$Root = '',
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
@@ -202,7 +203,7 @@ foreach ($file in $files) {
     $repaired++
   }
   if ($Apply -and $touched -gt 0) {
-    ($doc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $file.FullName -Encoding UTF8
+    $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $file.FullName -Lf
     Write-Output ('  wrote ' + $file.Name + ' (' + $touched + ' size(s) repaired)')
   }
 }

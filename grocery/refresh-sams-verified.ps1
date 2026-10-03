@@ -51,6 +51,7 @@ param(
   [switch]$WhatIf,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($Root) { $Root } elseif ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -191,7 +192,7 @@ function Invoke-SamsRefresh([string]$base, [string]$dateS, [bool]$whatIf) {
   if (-not $whatIf) {
     if ($doc.PSObject.Properties['refresh_note']) { $doc.refresh_note = $note } else { $doc | Add-Member -NotePropertyName refresh_note -NotePropertyValue $note -Force }
     $outPath = Join-Path $regDir ('sams-regular-' + $dateS + '.json')
-    $doc | ConvertTo-Json -Depth 6 | Set-Content $outPath -Encoding UTF8
+    $null = $doc | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $outPath -Lf
     $note += (" -> " + (Split-Path $outPath -Leaf))
   } else { $note += '  [WhatIf - nothing written]' }
   return @{ text = $note; refreshed = $refreshed; refused = $refused; count = $refreshed.Count; refusedCount = $refused.Count }

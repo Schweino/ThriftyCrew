@@ -21,6 +21,7 @@
   Run AFTER pull-regular-bakers-api.ps1, BEFORE compare/guards.
 #>
 param([string]$CaptureFile = "")
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -72,5 +73,5 @@ foreach ($ip in $pu.items.PSObject.Properties) {
   $hit++
 }
 
-$pu | ConvertTo-Json -Depth 8 | Set-Content $puFile -Encoding UTF8
+$null = $pu | ConvertTo-Json -Depth 8 | Write-TcAtomicFile -Path $puFile -Lf
 Write-Output ("refresh-bakers-links: refreshed $hit snapshot(s) by UPC ($priceMoved price move(s)); $miss entr(ies) not in this capture - left alone for prune to judge")

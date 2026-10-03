@@ -22,6 +22,7 @@
   build-vet-sheet -Ids <batch>.
 #>
 param([string[]]$Ids, [ValidateSet('ff','hyvee','both')][string]$Store = 'both', [switch]$WhatIf, [string]$OutDir = '')
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -80,9 +81,9 @@ function Merge-Rows([string]$fileFor, $newRows, [string]$store) {
     $doc.deals = $merged.ToArray()
     if ($doc.PSObject.Properties['deal_count']) { $doc.deal_count = $merged.Count } else { $doc | Add-Member -NotePropertyName deal_count -NotePropertyValue $merged.Count -Force }
     $doc | Add-Member -NotePropertyName primed_batch -NotePropertyValue $todayS -Force
-    ($doc | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8
+    $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf
   } else {
-    ([ordered]@{ store = $store; week_of = $todayS; price_type = 'everyday'; price_mode = 'in-store'; deal_count = $merged.Count; primed_batch = $todayS; deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8
+    $null = ([ordered]@{ store = $store; week_of = $todayS; price_type = 'everyday'; price_mode = 'in-store'; deal_count = $merged.Count; primed_batch = $todayS; deals = $merged.ToArray() } | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf
   }
   return $added
 }

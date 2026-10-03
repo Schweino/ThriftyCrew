@@ -32,6 +32,7 @@ param(
   [string]$Root = "",
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 # The self-test builds its captures and regular files in a temp tree; it reads no repo file but this one and the libraries it dot-sources.
 # gate-inputs: grocery\repair-asof-evidence.ps1
@@ -124,7 +125,7 @@ function Invoke-AsOfRepair([string]$store, [string]$base, [string]$regDir, [int]
   $doc.deals = $out
   $note = ("asof-repair: re-dated {0} row(s) down to their capture evidence, dropped {1} row(s) past the {2}-day window, left {3} unbacked row(s) alone" -f $redated, $dropped.Count, $maxAge, $unbacked)
   if ($doc.PSObject.Properties['asof_repair_note']) { $doc.asof_repair_note = $note } else { $doc | Add-Member -NotePropertyName asof_repair_note -NotePropertyValue $note }
-  $doc | ConvertTo-Json -Depth 6 | Set-Content $f.FullName -Encoding UTF8
+  $null = $doc | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $f.FullName -Lf
   $msg = "asof-repair [$store]: $note -> $($f.Name)"
   if ($dropped.Count -gt 0) { $msg += ("`n  DROPPED (absent by decision, not by accident): " + (($dropped.ToArray()) -join ', ')) }
   return $msg

@@ -57,6 +57,7 @@
 # harness run replaced the real board's reconciliation with a fixture's.
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = "", [string]$RawDir = "", [double]$Factor = 1.5, [switch]$Strict, [string]$ReportDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 # STRICT MODE PILOT (Brad's ruling on backlog I179, 2026-09-19). An unset variable, a missing property and a
 # property read on $null THROW here instead of reading as empty. Set at the ENTRY script, never in a library: the
 # mode follows the caller (lib\chain-verdict-lib.ps1 says why), so the libraries this dot-sources run strict under
@@ -279,10 +280,10 @@ foreach ($r in $doc.comparison) {
 }
 
 $rep = Join-Path $(if ($ReportDir) { $ReportDir } else { $OutDir }) 'basis-reconcile.json'
-([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf)
+$null = ([pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); compare_file = (Split-Path $CompareFile -Leaf)
                     unit_prices_indexed = $scanned; cells_checked = $checked; allowlisted = $allowed
                     factor_threshold = $Factor; finding_count = $findings.Count; findings = $findings } |
-  ConvertTo-Json -Depth 5) | Set-Content $rep -Encoding UTF8
+  ConvertTo-Json -Depth 5) | Write-TcLfFile -Path $rep
 
 Write-Output ("basis-reconcile: checked $checked cell(s) against the store's own unit price ($scanned indexed, $allowed allowlisted)")
 if ($findings.Count -eq 0) {

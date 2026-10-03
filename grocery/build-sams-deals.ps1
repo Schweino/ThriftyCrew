@@ -67,6 +67,8 @@ param(
   # the club was NOT RECORDED, never a club. The daily build never passes it.
   [switch]$WaiveMissingStoreLine
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
@@ -1566,7 +1568,7 @@ foreach ($r in $rows) { $k = $r.item + '|' + $r.ad_price + '|' + $r.size; if (-n
 $outDir = if ($OutDir) { $OutDir } else { Join-Path $root 'out\sams' }
 if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }
 $outFile = Join-Path $outDir ("sams-deals-$Date.json")
-[ordered]@{
+$null = [ordered]@{
   store      = "Sam's Club"
   price_type = 'everyday'
   # READ from the capture's #tc-store line (backlog I124). Until 2026-09-18 this was the literal
@@ -1583,7 +1585,7 @@ $outFile = Join-Path $outDir ("sams-deals-$Date.json")
   # Distinct search terms is the machine-readable slice-vs-comprehensive marker audit-walmart-fullpull watches.
   pull_terms = @($raw | Select-Object -ExpandProperty q -Unique).Count
   deals      = $ded
-} | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+} | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $outFile -Lf
 
 if ($rejects.Count -or $hintNotes.Count) {
   # NOT "sams-deals-*.rejects.json": compare-deals globs out\sams\sams-deals-*.json to find captures. Today it
@@ -1596,7 +1598,7 @@ if ($rejects.Count -or $hintNotes.Count) {
   # From 9c44c3a37 (2026-09-12) until 2026-09-17 that killed every build with a reject right here, after the deals
   # file was written, so no rejects file, no summary line and no cursor advance. Self-test case 11 is the gate.
   $rjRows = @($rejects.ToArray()) + @($hintNotes)
-  $rjRows | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
+  $null = $rjRows | ConvertTo-Json -Depth 4 | Write-TcLfFile -Path $rj
 }
 # THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build, read by audit-ingest-shape.ps1 beside
 # the rejects file. Never fatal: a builder that dies after writing its rows loses the capture. A self-test child

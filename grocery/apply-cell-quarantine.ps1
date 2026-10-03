@@ -16,6 +16,7 @@
 #>
 [CmdletBinding()]
 param([string]$OutDir = '', [string]$Repo = '', [string]$LastPublishedFile = '', [string]$LastPublishedDate = '', [string]$Today = '', [string]$ProductUrlsFile = '', [string]$PublishedUrlsFile = '')
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path (Split-Path $root -Parent) 'lib\json-io.ps1')
@@ -52,7 +53,7 @@ if ([string]$plan.action -eq 'reapply') {
     $puDoc = Read-JsonFile $ProductUrlsFile
     $lc = Update-TcQuarantineLinks -Items $puDoc.items -Entries $rr.cells -PublishedItems $null
     foreach ($c in $lc) { Write-Output ("  link      {0} / {1}  {2}  {3}" -f $c.id, $c.store, $c.action, $c.url) }
-    if (@($lc).Count -gt 0) { ($puDoc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $ProductUrlsFile -Encoding UTF8 }
+    if (@($lc).Count -gt 0) { $null = ($puDoc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $ProductUrlsFile -Lf }
   } else { Write-Output ('links: BLIND - no ' + $ProductUrlsFile + ', so no withheld cell''s link could be removed') }
   Write-Output ("re-applied to {0}: {1} held cell(s) withheld because the held value was itself condemned. Run guards.ps1 again: it must exit 4." -f (Split-Path $boardF -Leaf), @($rr.cells).Count)
   Exit-Guard -Name 'apply-cell-quarantine' -Summary ("reapplied withheld=" + @($rr.cells).Count) -Code 0
@@ -96,7 +97,7 @@ if (Test-Path -LiteralPath $ProductUrlsFile) {
   }
   $lc = Update-TcQuarantineLinks -Items $puDoc.items -Entries $r.cells -PublishedItems $pubItems
   foreach ($c in $lc) { Write-Output ("  link      {0} / {1}  {2}  {3}" -f $c.id, $c.store, $c.action, $c.url) }
-  if (@($lc).Count -gt 0) { ($puDoc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $ProductUrlsFile -Encoding UTF8; Write-Output ('links: ' + @($lc).Count + ' quarantined cell link(s) moved to the held value; re-run audit-name-drift before guards (check-ad-cycles does)') }
+  if (@($lc).Count -gt 0) { $null = ($puDoc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $ProductUrlsFile -Lf; Write-Output ('links: ' + @($lc).Count + ' quarantined cell link(s) moved to the held value; re-run audit-name-drift before guards (check-ad-cycles does)') }
 } else { Write-Output ('links: BLIND - no ' + $ProductUrlsFile + ', so no quarantined cell''s link could be moved') }
 $held = @(@($r.cells) | Where-Object { $_.action -eq 'last-good' }).Count
 $wh = @(@($r.cells) | Where-Object { $_.action -eq 'withheld' }).Count

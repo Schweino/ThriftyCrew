@@ -32,6 +32,8 @@ param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$M
   # scripts resolve out\regular from $PSScriptRoot, not from -OutDir, so a fixture run would otherwise
   # reach into the live board.
   [switch]$NoCarry)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file as cp1252
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -661,13 +663,13 @@ if (Test-Path $regPath) {
     throw ("REFUSING to overwrite " + (Split-Path $regPath -Leaf) + ": it holds " + @($old.deals).Count + " rows, this rebuild produced only " + $deals.Count + ". That file accumulated verified rows a shop-file rebuild cannot reproduce. Pass -Force only if the shrink is intended.")
   }
 }
-$doc | ConvertTo-Json -Depth 5 | Set-Content $regPath -Encoding UTF8
+$null = $doc | ConvertTo-Json -Depth 5 | Write-TcAtomicFile -Path $regPath -Lf
 # product-URL input for merge-product-urls.ps1 (store key 'fareway'): every priced Fareway cell that has a
 # storefront product page gets a link whose price+size match the board exactly.
 $urlRows = @($byUrl.Values)
 if ($urlRows.Count) {
   $uiDir = Join-Path $OutDir 'url-inputs'; New-Item -ItemType Directory -Force -Path $uiDir | Out-Null
-  ($urlRows | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $uiDir 'store-fareway1-urls.json') -Encoding UTF8
+  $null = ($urlRows | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $uiDir 'store-fareway1-urls.json')
   Write-Output ("store-fareway1-urls.json: $($urlRows.Count) Fareway product links")
 }
 Write-Output ("fareway-regular-$asofS.json: $($deals.Count) commodities")

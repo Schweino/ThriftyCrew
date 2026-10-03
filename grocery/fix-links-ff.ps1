@@ -39,6 +39,8 @@
   Read-only unless -Apply.
 #>
 param([switch]$Apply, [double]$MinScore = 0.75, [string]$OutDir = "", [int]$MaxCalls = 35, [switch]$Fresh)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference = 'SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -78,7 +80,7 @@ if ($Apply) {
     $wrote++
   }
   if ($dropped.Count) { Write-Output ''; Write-Output ("DROPPED (board moved since the plan was written): " + $dropped.Count); $dropped | ForEach-Object { Write-Output $_ } }
-  ($puDoc | ConvertTo-Json -Depth 8) | Set-Content $puPath -Encoding UTF8
+  $null = ($puDoc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puPath -Lf
   Write-Output ''
   Write-Output ("APPLIED: " + $wrote + " Family Fare link(s) written from the plan (0 network calls)")
   exit 0
@@ -160,13 +162,13 @@ foreach ($r in ($refused | Select-Object -First 10)) { Write-Output ("    - " + 
 
 # The plan IS the artifact under review. -Apply writes exactly these rows and nothing else.
 $throttled = @($refused | Where-Object { $_.why -match 'search failed' }).Count
-(@{
+$null = (@{
     generated = (Get-Date -Format 'yyyy-MM-dd HH:mm')
     board     = $cmpF.Name
     worked    = $viol.Count
     resolved  = $fixed
     refused   = $refused
-  } | ConvertTo-Json -Depth 6) | Set-Content $planPath -Encoding UTF8
+  } | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $planPath
 Write-Output ''
 Write-Output ("plan written: out\ff-link-plan.json  (" + $fixed.Count + " resolution(s), " + $refused.Count + " refusal(s))")
 if ($throttled -gt 0) {

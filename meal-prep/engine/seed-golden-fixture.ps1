@@ -17,6 +17,7 @@
 # engine over THESE inputs and rewrites only the expected output. -Reseed exists for the one legitimate
 # case: the engine starts reading an input this fixture does not carry at all.
 param([switch]$Reseed)
+. (Join-Path $PSScriptRoot '..\..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp   = Split-Path -Parent $here
@@ -74,12 +75,12 @@ $SYNTH = @(
   @{ item='ZZ Unit Mismatch';    grams=100 }   # each vs lb board row  -> UNIT MISMATCH
 )
 foreach($z in $SYNTH){ $null = $items.Add($z.item) }
-([ordered]@{
+$null = ([ordered]@{
   name  = 'ZZ Synthetic Flag Cases'
   slug  = $synthSlug
   _doc  = 'NOT A RECIPE. Frozen fixture row that reaches the five cost-flag branches no live recipe reaches. See seed-golden-fixture.ps1.'
   scaler = [ordered]@{ ing = @($SYNTH | ForEach-Object { [ordered]@{ item=$_.item; grams=$_.grams } }) }
-}) | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $fin "db\recipes\$synthSlug.json") -Encoding UTF8
+}) | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path (Join-Path $fin "db\recipes\$synthSlug.json")
 
 # ---- ingredients.json trimmed to the slice ----
 $allIng = Get-Content (Join-Path $db 'ingredients.json') -Raw | ConvertFrom-Json
@@ -100,13 +101,13 @@ $keep = @($keep) + @(
   [pscustomobject]@{ item='ZZ No Package Def'; bid=$donor.bid; gpu=$donor.gpu; unit=$donor.unit }
   [pscustomobject]@{ item='ZZ Unit Mismatch';  bid=$lbRow.bid; gpu=1.0; unit='each' }
 )
-$keep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $fin 'db\ingredients.json') -Encoding UTF8
+$null = $keep | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path (Join-Path $fin 'db\ingredients.json')
 
 # ---- densities / label-prices trimmed; folds + allowlist copied whole (both tiny, both all-or-nothing) ----
 $dens = (Get-Content (Join-Path $db 'densities.json') -Raw | ConvertFrom-Json)
 $dkeep = [ordered]@{}
 foreach($p in $dens.items.PSObject.Properties){ if($items.Contains($p.Name)){ $dkeep[$p.Name] = $p.Value } }
-([ordered]@{ _doc='FROZEN fixture slice of db\densities.json'; items=$dkeep }) | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $fin 'db\densities.json') -Encoding UTF8
+$null = ([ordered]@{ _doc='FROZEN fixture slice of db\densities.json'; items=$dkeep }) | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path (Join-Path $fin 'db\densities.json')
 
 $folds = @((Get-Content (Join-Path $db 'label-folds.json') -Raw | ConvertFrom-Json).folds)
 $lab = Get-Content (Join-Path $db 'label-prices.json') -Raw | ConvertFrom-Json
@@ -115,7 +116,7 @@ $lkeep = @($lab | Where-Object {
   foreach($f in $folds){ if($nm -match [string]$f.match){ $nm = [string]$f.to; break } }
   $items.Contains($nm) -or $items.Contains([string]$_.item)
 })
-$lkeep | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $fin 'db\label-prices.json') -Encoding UTF8
+$null = $lkeep | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path (Join-Path $fin 'db\label-prices.json')
 Copy-Item (Join-Path $db 'label-folds.json')      (Join-Path $fin 'db\label-folds.json') -Force
 Copy-Item (Join-Path $db 'no-board-price-ok.json') (Join-Path $fin 'db\no-board-price-ok.json') -Force
 
@@ -125,22 +126,22 @@ Copy-Item (Join-Path $db 'no-board-price-ok.json') (Join-Path $fin 'db\no-board-
 # layer would silently promote the next one and change every basis string in the expected output.
 $cmpFile = Get-ChildItem (Join-Path $gout 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
 $cmp = Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json
-[pscustomobject]@{
+$null = [pscustomobject]@{
   _doc='FROZEN fixture slice'; source_file=$cmpFile.Name; built_at='2026-01-01T00:00:00'; week_of='2026-01-01'
   comparison=@($cmp.comparison | Where-Object { $bids.Contains([string]$_.id) })
-} | ConvertTo-Json -Depth 12 | Set-Content (Join-Path $fin 'grocery-out\comparison-2026-01-01.json') -Encoding UTF8
+} | ConvertTo-Json -Depth 12 | Write-TcLfFile -Path (Join-Path $fin 'grocery-out\comparison-2026-01-01.json')
 
 $rb = Get-Content (Join-Path $gout 'recipe-board.json') -Raw | ConvertFrom-Json
-[pscustomobject]@{
+$null = [pscustomobject]@{
   _doc='FROZEN fixture slice'; week_of='2026-01-01'; built_at='2026-01-01T00:00:00'
   comparison=@($rb.comparison | Where-Object { $bids.Contains([string]$_.id) })
-} | ConvertTo-Json -Depth 12 | Set-Content (Join-Path $fin 'grocery-out\recipe-board.json') -Encoding UTF8
+} | ConvertTo-Json -Depth 12 | Write-TcLfFile -Path (Join-Path $fin 'grocery-out\recipe-board.json')
 
 $feed = Get-Content (Join-Path $gout 'smp-feed.json') -Raw | ConvertFrom-Json
 $fkeep = [ordered]@{}
 foreach($p in $feed.ingredients.PSObject.Properties){ if($bids.Contains($p.Name)){ $fkeep[$p.Name] = $p.Value } }
-[pscustomobject]@{ _doc='FROZEN fixture slice'; generated='2026-01-01T00:00:00'; week_of='2026-01-01'; ingredients=$fkeep } |
-  ConvertTo-Json -Depth 12 | Set-Content (Join-Path $fin 'grocery-out\smp-feed.json') -Encoding UTF8
+$null = [pscustomobject]@{ _doc='FROZEN fixture slice'; generated='2026-01-01T00:00:00'; week_of='2026-01-01'; ingredients=$fkeep } |
+  ConvertTo-Json -Depth 12 | Write-TcLfFile -Path (Join-Path $fin 'grocery-out\smp-feed.json')
 
 Write-Output ("seeded {0} real specs + 1 synthetic; {1} ingredient rows; {2} bids; comparison {3} rows" -f $SLUGS.Count, $keep.Count, $bids.Count, @($cmp.comparison | Where-Object { $bids.Contains([string]$_.id) }).Count)
 Write-Output "next: engine\golden-test.ps1 -Rebaseline   (writes expected\ + MANIFEST.json)"

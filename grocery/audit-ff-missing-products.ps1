@@ -14,6 +14,7 @@
 #>
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Store = 'Family Fare')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -95,4 +96,4 @@ if ($bad.Count) {
   foreach ($r in $bad) { Write-Output ('  ' + $r.id.PadRight(26) + ' size="' + $r.link_size + '"  unit=' + $r.unit + '  ' + $r.link_item) }
 }
 
-($rows | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $root 'out\ff-missing-products.json') -Encoding UTF8
+$null = ($rows | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path (Join-Path $root 'out\ff-missing-products.json')

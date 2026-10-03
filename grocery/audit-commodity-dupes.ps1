@@ -35,6 +35,7 @@
 # gate-inputs: grocery\audit-commodity-dupes.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$Root = '', [string]$OutDir = '', [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $OutDir) { $OutDir = Join-Path $Root 'out' }
@@ -214,7 +215,7 @@ $labelDupes = Find-LabelDupes $validLabels
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); entries_scanned = $entries.Count
                       namespaces = @('commodities.json', 'recipe-commodities.json', 'recipe-board-everyday.json')
                       suspects = @($sus); category_drift = @($drift); category_label_dupes = @($labelDupes) }
-$report | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $OutDir 'commodity-dupes.json') -Encoding UTF8
+$null = $report | ConvertTo-Json -Depth 5 | Write-TcLfFile -Path (Join-Path $OutDir 'commodity-dupes.json')
 
 if (@($sus).Count -eq 0 -and @($drift).Count -eq 0 -and @($labelDupes).Count -eq 0) {
   Write-Output ("commodity-dupes: OK - {0} ids across 3 namespaces, no unreviewed near-duplicates, every recipe-board category inside the canonical {1}-label set, no near-duplicate labels in the registry itself" -f $entries.Count, @($validLabels).Count)

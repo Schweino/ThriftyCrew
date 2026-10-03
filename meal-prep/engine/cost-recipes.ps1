@@ -20,6 +20,7 @@
 # Even under -SelfTest the top of this file loads the live specs, item rows and boards; the self-test then runs this engine over the golden fixture tree:
 # gate-inputs: meal-prep\db\recipes\*.json, meal-prep\db\ingredients.json, meal-prep\db\label-prices.json, meal-prep\db\label-folds.json, meal-prep\db\densities.json, grocery\out\comparison-*.json, grocery\out\recipe-board.json, grocery\out\smp-feed.json, lib\carriage-lib.ps1, meal-prep\lib\ingredient-identity-lib.ps1, meal-prep\lib\held-state.ps1, meal-prep\engine\regression-inputs\golden\inputs\db\*, meal-prep\engine\regression-inputs\golden\inputs\db\recipes\*, meal-prep\engine\regression-inputs\golden\inputs\grocery-out\*, meal-prep\engine\regression-inputs\golden\expected\*
 param([string[]]$Slugs,[string]$DbRoot,[string]$GroceryOut,[string]$OutFile,[string]$FlagsFile,[switch]$SelfTest,[int]$LedgerMaxAgeDays = 0)
+. (Join-Path $PSScriptRoot '..\..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $mp = Split-Path -Parent $here
@@ -703,7 +704,7 @@ if (@($labelBased).Count -gt 0) {
   foreach ($x in @($labelBased)) { Write-Output ('  ' + $x) }
   exit 2
 }
-$out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8
+$null = $out | ConvertTo-Json -Depth 7 | Write-TcAtomicFile -Path $costedPath -Lf
 
 # WHICH FLAG LINES PAGE (2026-09-21, queue 2026-09-20-6c14f6). Each line carries the recipe that wrote it, and
 # Split-CostFlags decides: HELD and ADVISORY lines are set aside (kept in the stamp below, counted here), LIVE lines
@@ -755,7 +756,7 @@ try {
     live_lines     = $flagSplit.live
     note           = 'Flag lines this recost wrote and deliberately kept OUT of cost-flags.txt, the file the chain pages on: a HELD recipe''s lines (taken down by design, still costed) and ADVISORY lines (bid on no board, the line still priced). The rule is Split-CostFlags in engine\cost-recipes.ps1.'
   }
-  ($stamp | ConvertTo-Json -Depth 5) | Set-Content $stampPath -Encoding UTF8
+  $null = ($stamp | ConvertTo-Json -Depth 5) | Write-TcAtomicFile -Path $stampPath -Lf
 } catch {
   # Never kill a cost run over its own stamp. A recost with no stamp is degraded; a recost KILLED BY
   # its stamp is a lost board - the same rule run-log-lib states for logging.

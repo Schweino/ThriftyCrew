@@ -17,6 +17,7 @@
   -Verify prints the classification and writes nothing.
 #>
 param([switch]$Verify)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = 'C:\Codex\ThriftyCrew'
@@ -74,5 +75,5 @@ Write-Output ("proteins: " + (($protCounts.GetEnumerator() | ForEach-Object { $_
 if ($Verify) { Write-Output 'VERIFY ONLY - nothing written.'; exit 0 }
 
 Copy-Item $dbFile ($dbFile + '.bak-idnorm') -Force
-$db | ConvertTo-Json -Depth 8 | Set-Content $dbFile -Encoding UTF8
+$null = $db | ConvertTo-Json -Depth 8 | Write-TcAtomicFile -Path $dbFile -Lf -NoBom
 Write-Output ("recipes-db.json updated (backup at recipes-db.json.bak-idnorm)")

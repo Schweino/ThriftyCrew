@@ -50,6 +50,7 @@
 # gate-inputs-text: meal-prep\pipeline\reanchor-machine-fields.ps1, meal-prep\engine\publish.ps1, grocery\check-ad-cycles.ps1, grocery\propagate-drain-lib.ps1
 param([switch]$DryRun, [switch]$Full, [switch]$Baseline, [switch]$SelfTest, [string]$Root = "", [string]$AllowCreateFile = "",
       [string]$SlugsFile = "", [int]$MaxUnnamed = 0, [switch]$AllowCatalogue, [switch]$Drain, [int]$DrainMax = 150)
+. (Join-Path $PSScriptRoot '..\..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $mp   = if ($Root) { $Root } else { Split-Path -Parent $here }
@@ -522,7 +523,7 @@ if (Test-Path $stampPath) {
 
 if ($Baseline) {
   foreach ($x in $files) { $stamps[$x.BaseName] = Get-SpecHash $x.FullName }
-  ($stamps | ConvertTo-Json -Depth 3) | Out-File $stampPath -Encoding utf8
+  $null = ($stamps | ConvertTo-Json -Depth 3) | Write-TcAtomicFile -Path $stampPath -Lf
   Write-Output ("propagate baseline stamped for {0} spec(s) - use this ONLY on a catalog independently verified in sync" -f $files.Count)
   exit 0
 }
@@ -653,7 +654,7 @@ foreach ($x in $files) {
   if ($script:unstampable -contains $x.BaseName) { $withheld += $x.BaseName; continue }
   $stamps[$x.BaseName] = Get-SpecHash $x.FullName
 }
-($stamps | ConvertTo-Json -Depth 3) | Out-File $stampPath -Encoding utf8
+$null = ($stamps | ConvertTo-Json -Depth 3) | Write-TcAtomicFile -Path $stampPath -Lf
 if ($withheld.Count) {
   Write-Output ("propagate: STAMPS WITHHELD from {0} spec(s) that did not publish - they stay dirty and will be retried: {1}" -f $withheld.Count, ($withheld -join ', '))
 }

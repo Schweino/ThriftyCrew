@@ -48,6 +48,16 @@
 # that, and -NoNewline still drops the appended newline. It is lib\lf-write.ps1's rule for a file another process
 # may be reading (og-25 and og-39 at once); a tracked file nothing reads concurrently can use Write-TcLfFile.
 #
+# PIPELINE INPUT, AND -KeepShape (2026-10-03, the tracked-writer sweep). `$x | ConvertTo-Json | Write-TcAtomicFile -Path
+# $p -Lf` is the drop-in for `... | Set-Content $p -Encoding UTF8`, with Set-Content's own semantics, measured under PS
+# 5.1 that day: an EMPTY pipeline (ConvertTo-Json handed an empty collection emits nothing) writes nothing and leaves an
+# existing file exactly as it was, and several strings are written one per line. A `-Text (...)` rewrite gets both
+# wrong: an empty head writes a BOM and a newline that no reader can parse, and several strings throw at binding. The
+# return is then 0 for "nothing written". -KeepShape is for a writer whose targets do not share one byte shape (the
+# sweep found grocery\out\url-inputs\store-*.json and the bakers and fareway deals files mixed, BOM and trailer both):
+# when the file exists, ITS first three bytes decide the BOM and ITS last byte decides the newline, overriding -NoBom
+# and -NoNewline, which still decide for a file that does not exist yet. Get-TcFileShape reads four bytes, shared.
+#
 # RETRY ONLY A REFUSAL, DECIDED BY STATE AND NOT BY EXCEPTION TYPE (2026-09-11). A temp file that has gone,
 # or a destination directory that is not there, will not come back by waiting, so those throw at once rather
 # than after ~7 s. Typing the exception is not enough, measured on this box: a missing source under
@@ -211,11 +221,12 @@ function Write-TcDurableFile {
 
 function Write-TcAtomicFile {
   <# Replaces $Path with $Text. Returns the number of move attempts it took (1 when nothing was in the
-     way). Throws at once on a failure waiting cannot fix, and after the budget on a refusal that outlasts
-     it, with the previous file left exactly as it was. #>
+     way), or 0 when the pipeline brought nothing and nothing was written. Throws at once on a failure waiting
+     cannot fix, and after the budget on a refusal that outlasts it, with the previous file left exactly as it was.
+     Pipeline input is Set-Content's, as in lib\lf-write.ps1: several strings one per line, an empty pipeline no write. #>
   param(
     [Parameter(Mandatory=$true)][string]$Path,
-    [Parameter(Mandatory=$true)][AllowEmptyString()][string]$Text,
+    [Parameter(Mandatory=$true, ValueFromPipeline=$true)][AllowEmptyString()][string]$Text,
     [int]$MaxAttempts = $script:TcAtomicAttempts,
     [int]$BaseSleepMs = $script:TcAtomicBaseSleepMs,
     # The WriteAllText byte shape: see THE OTHER BYTE SHAPE in the header. A converted site passes both.
@@ -223,6 +234,8 @@ function Write-TcAtomicFile {
     [switch]$NoNewline,
     # The tracked-file shape: CRLF folded to LF and an LF appended. See -Lf in the header.
     [switch]$Lf,
+    # A writer whose targets do not share one byte shape: see -KeepShape in the header.
+    [switch]$KeepShape,
     # Writers that share no mutex: see -UniqueTemp in the header.
     [switch]$UniqueTemp,
     # A ledger that is NOT re-derived if its last write is lost: see -Flush in the header (Brad, I117).
@@ -231,48 +244,75 @@ function Write-TcAtomicFile {
     # Runs after each refused attempt with the attempt number: see -OnRefusal in the header.
     [scriptblock]$OnRefusal = $null
   )
-  # PowerShell LOCATION semantics for a relative path, the way Set-Content resolved it - [IO.File] alone
-  # would resolve against the process working directory (lib\json-io.ps1, Resolve-JioPath).
-  $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
-  $tmp = if ($UniqueTemp) { '{0}.{1}.tmp' -f $full, [guid]::NewGuid().ToString('N').Substring(0, 8) } else { $full + '.tmp' }
-  $body = if ($Lf) { $Text -replace "`r`n", "`n" } else { $Text }
-  if (-not $NoNewline) { $body += $(if ($Lf) { "`n" } else { "`r`n" }) }
-  $enc = New-Object Text.UTF8Encoding(-not $NoBom)
-  if ($Flush) {
-    # The same bytes WriteAllText would have written: it emits the encoding's preamble and then the text,
-    # and GetBytes never includes the preamble. Built once here so the two paths cannot drift apart.
-    $pre = $enc.GetPreamble()
-    $payload = $enc.GetBytes($body)
-    $bytes = [byte[]]::new($pre.Length + $payload.Length)
-    [Array]::Copy($pre, 0, $bytes, 0, $pre.Length)
-    [Array]::Copy($payload, 0, $bytes, $pre.Length, $payload.Length)
-    Write-TcDurableFile -Path $tmp -Bytes $bytes
-  } else {
-    [IO.File]::WriteAllText($tmp, $body, $enc)
-  }
-  # A budget that reads as zero must still try once: an attempt count of 0 would throw without ever moving.
-  if ($MaxAttempts -lt 1) { $MaxAttempts = 1 }
-  $sw = [Diagnostics.Stopwatch]::StartNew()
-  $last = ''
-  for ($a = 1; $a -le $MaxAttempts; $a++) {
-    try {
-      # -ErrorAction Stop IS WHAT MAKES A REFUSAL VISIBLE AT ALL: under a caller's default EAP=Continue the
-      # refusal is otherwise non-terminating and this catch never runs.
-      Move-Item -LiteralPath $tmp -Destination $full -Force -ErrorAction Stop
-      return $a
-    } catch {
-      $ex = $_.Exception
-      $last = $ex.Message
-      if (-not (Test-TcReplaceRefusal -Exception $ex -Source $tmp -Destination $full)) {
-        $null = Remove-TcAtomicDebris -Source $tmp -Destination $full
-        throw
-      }
-      if ($OnRefusal) { $null = & $OnRefusal $a }
-      if ($a -lt $MaxAttempts) { Start-Sleep -Milliseconds ($BaseSleepMs * [Math]::Min($a, 8)) }
+  begin { $items = New-Object System.Collections.Generic.List[string] }
+  process { $items.Add($Text) }
+  end {
+    if ($items.Count -eq 0) { return 0 }
+    # PowerShell LOCATION semantics for a relative path, the way Set-Content resolved it - [IO.File] alone
+    # would resolve against the process working directory (lib\json-io.ps1, Resolve-JioPath).
+    $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+    $tmp = if ($UniqueTemp) { '{0}.{1}.tmp' -f $full, [guid]::NewGuid().ToString('N').Substring(0, 8) } else { $full + '.tmp' }
+    if ($KeepShape) {
+      $shape = Get-TcFileShape -Path $full
+      if ($shape) { $NoBom = -not $shape.Bom; $NoNewline = -not $shape.Newline }
     }
+    $Text = $items.ToArray() -join "`r`n"
+    $body = if ($Lf) { $Text -replace "`r`n", "`n" } else { $Text }
+    if (-not $NoNewline) { $body += $(if ($Lf) { "`n" } else { "`r`n" }) }
+    $enc = New-Object Text.UTF8Encoding(-not $NoBom)
+    if ($Flush) {
+      # The same bytes WriteAllText would have written: it emits the encoding's preamble and then the text,
+      # and GetBytes never includes the preamble. Built once here so the two paths cannot drift apart.
+      $pre = $enc.GetPreamble()
+      $payload = $enc.GetBytes($body)
+      $bytes = [byte[]]::new($pre.Length + $payload.Length)
+      [Array]::Copy($pre, 0, $bytes, 0, $pre.Length)
+      [Array]::Copy($payload, 0, $bytes, $pre.Length, $payload.Length)
+      Write-TcDurableFile -Path $tmp -Bytes $bytes
+    } else {
+      [IO.File]::WriteAllText($tmp, $body, $enc)
+    }
+    # A budget that reads as zero must still try once: an attempt count of 0 would throw without ever moving.
+    if ($MaxAttempts -lt 1) { $MaxAttempts = 1 }
+    $sw = [Diagnostics.Stopwatch]::StartNew()
+    $last = ''
+    for ($a = 1; $a -le $MaxAttempts; $a++) {
+      try {
+        # -ErrorAction Stop IS WHAT MAKES A REFUSAL VISIBLE AT ALL: under a caller's default EAP=Continue the
+        # refusal is otherwise non-terminating and this catch never runs.
+        Move-Item -LiteralPath $tmp -Destination $full -Force -ErrorAction Stop
+        return $a
+      } catch {
+        $ex = $_.Exception
+        $last = $ex.Message
+        if (-not (Test-TcReplaceRefusal -Exception $ex -Source $tmp -Destination $full)) {
+          $null = Remove-TcAtomicDebris -Source $tmp -Destination $full
+          throw
+        }
+        if ($OnRefusal) { $null = & $OnRefusal $a }
+        if ($a -lt $MaxAttempts) { Start-Sleep -Milliseconds ($BaseSleepMs * [Math]::Min($a, 8)) }
+      }
+    }
+    $kept = Remove-TcAtomicDebris -Source $tmp -Destination $full
+    throw ("Write-TcAtomicFile: could not replace {0} after {1} attempt(s) over {2} ms - another handle kept it open. The previous file is intact and this write is NOT on disk.{3} Last error: {4}" -f $full, $MaxAttempts, $sw.ElapsedMilliseconds, $kept, $last.Trim())
   }
-  $kept = Remove-TcAtomicDebris -Source $tmp -Destination $full
-  throw ("Write-TcAtomicFile: could not replace {0} after {1} attempt(s) over {2} ms - another handle kept it open. The previous file is intact and this write is NOT on disk.{3} Last error: {4}" -f $full, $MaxAttempts, $sw.ElapsedMilliseconds, $kept, $last.Trim())
+}
+
+function Get-TcFileShape {
+  <# The two bytes -KeepShape copies from a file already on disk: does it open with the UTF-8 BOM, and does it end
+     in LF. $null when there is no such file. Opened with ReadWrite and Delete shared, so it never refuses a replace
+     another writer is making, and reads three bytes and one, never the whole file. #>
+  param([string]$Path)
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+  $fs = New-Object IO.FileStream($Path, [IO.FileMode]::Open, [IO.FileAccess]::Read, ([IO.FileShare]::ReadWrite -bor [IO.FileShare]::Delete))
+  try {
+    $head = New-Object byte[] 3
+    $n = $fs.Read($head, 0, 3)
+    $bom = ($n -eq 3 -and $head[0] -eq 0xEF -and $head[1] -eq 0xBB -and $head[2] -eq 0xBF)
+    $nl = $false
+    if ($fs.Length -gt 0) { [void]$fs.Seek(-1, [IO.SeekOrigin]::End); $nl = ($fs.ReadByte() -eq 10) }
+    return [pscustomobject]@{ Bom = $bom; Newline = $nl }
+  } finally { $fs.Dispose() }
 }
 
 function Start-TcFileHold {
@@ -383,6 +423,38 @@ if ($__awSelfTest) {
     [void](Write-TcAtomicFile -Path $viaLf2 -Text $lfJson -Lf -NoBom -NoNewline)
     $lf2B64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaLf2))
     Case 'CLEAN TWIN' '-Lf moves no BOM and no trailer of its own: with -NoBom -NoNewline it is the LF text and nothing else' ($lf2B64 -eq [Convert]::ToBase64String($bomless.GetBytes(($lfJson -replace "`r`n", "`n")))) ("atomic=$lf2B64")
+
+    # ---- pipeline input is Set-Content's: the drop-in for `... | ConvertTo-Json | Set-Content` ----
+    $pEmpty = Join-Path $dir 'pipe-empty.json'
+    [IO.File]::WriteAllText($pEmpty, 'OLD', $bomless)
+    $emptyRows = @()
+    $pn = $emptyRows | ConvertTo-Json | Write-TcAtomicFile -Path $pEmpty -Lf
+    Case 'MUST FIRE' 'an EMPTY pipeline (ConvertTo-Json of an empty collection) writes nothing and leaves the file as it was, as Set-Content does' ($pn -eq 0 -and [IO.File]::ReadAllText($pEmpty) -eq 'OLD' -and -not (Test-Path -LiteralPath ($pEmpty + '.tmp'))) ("returned=$pn text=" + [IO.File]::ReadAllText($pEmpty))
+    $pMulti = Join-Path $dir 'pipe-multi.json'
+    $pmIn = @(1, 2) | ForEach-Object { [ordered]@{ a = $_ } | ConvertTo-Json -Compress }
+    $null = $pmIn | Write-TcAtomicFile -Path $pMulti -Lf
+    $pmB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($pMulti))
+    $pmExpect = [Convert]::ToBase64String([byte[]]((New-Object Text.UTF8Encoding($true)).GetPreamble() + $bomless.GetBytes('{"a":1}' + "`n" + '{"a":2}' + "`n")))
+    Case 'MUST FIRE' 'several pipeline strings are written one per line with LF, as Set-Content writes them with CRLF' ($pmB64 -eq $pmExpect) ("atomic=$pmB64")
+    $pByName = Join-Path $dir 'pipe-byname.json'
+    $null = Write-TcAtomicFile -Path $pByName -Text '' -Lf -NoBom
+    Case 'CLEAN TWIN' '-Text '''' passed BY NAME still writes, one LF: only an empty PIPELINE writes nothing' ([Convert]::ToBase64String([IO.File]::ReadAllBytes($pByName)) -eq 'Cg==') ("bytes=" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($pByName)))
+
+    # ---- -KeepShape: the file on disk decides its own BOM and trailer ----
+    $ksBare = Join-Path $dir 'keep-bare.json'
+    [IO.File]::WriteAllText($ksBare, "{`n}", $bomless)
+    $null = $lfJson | Write-TcAtomicFile -Path $ksBare -Lf -KeepShape
+    $ksB = [IO.File]::ReadAllBytes($ksBare)
+    Case 'MUST FIRE' '-KeepShape over a BOM-less file with no trailer writes neither, though the call passed neither -NoBom nor -NoNewline' ($ksB[0] -eq 0x7B -and $ksB[-1] -eq 0x7D) ("first={0:X2} last={1:X2}" -f $ksB[0], $ksB[-1])
+    $ksFull = Join-Path $dir 'keep-full.json'
+    [IO.File]::WriteAllText($ksFull, "{`n}`n", (New-Object Text.UTF8Encoding($true)))
+    $null = $lfJson | Write-TcAtomicFile -Path $ksFull -Lf -NoBom -NoNewline -KeepShape
+    $kfB = [IO.File]::ReadAllBytes($ksFull)
+    Case 'MUST FIRE' '-KeepShape over a BOM file ending in LF keeps both, overriding -NoBom -NoNewline' ($kfB[0] -eq 0xEF -and $kfB[-1] -eq 0x0A -and $kfB[-2] -eq 0x7D) ("first={0:X2} last={1:X2}" -f $kfB[0], $kfB[-1])
+    $ksNew = Join-Path $dir 'keep-new.json'
+    $null = $lfJson | Write-TcAtomicFile -Path $ksNew -Lf -NoBom -KeepShape
+    $knB = [IO.File]::ReadAllBytes($ksNew)
+    Case 'CLEAN TWIN' '-KeepShape on a file that does not exist yet falls back to the switches: -NoBom, and the LF trailer' ($knB[0] -eq 0x7B -and $knB[-1] -eq 0x0A) ("first={0:X2} last={1:X2}" -f $knB[0], $knB[-1])
 
     # ---- the founding shape: a reader that LETS GO ----
     # The premise first, asserted rather than trusted, so a Windows that stops failing this says so here.

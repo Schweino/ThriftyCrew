@@ -21,6 +21,7 @@
   Read-only. Writes out\gap-triage.json and prints a cause histogram.
 #>
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -94,7 +95,7 @@ foreach ($g in $gaps) {
   }
   $rows.Add([pscustomobject]@{ commodity = [string]$g.commodity; store = [string]$g.store; candidate = [string]$g.candidate; cause = $cause; owner = $e.owner; detail = $e.detail })
 }
-([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $rows.Count; rows = $rows } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'gap-triage.json') -Encoding UTF8
+$null = ([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $rows.Count; rows = $rows } | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path (Join-Path $OutDir 'gap-triage.json')
 
 Write-Output ("triage-coverage-gaps: " + $rows.Count + " gap(s)")
 Write-Output ''

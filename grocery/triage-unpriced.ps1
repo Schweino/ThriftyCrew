@@ -19,6 +19,7 @@
     FIXABLE        a compatible size EXISTS and the engine still could not price it -> a real Get-UnitPrice bug.
 #>
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -60,7 +61,7 @@ foreach ($r in $gapRows) {
   }
   $out.Add([pscustomobject]@{ commodity = [string]$r.commodity; store = [string]$r.store; unit = $u; price_text = $pt; size_text = $st; candidate = [string]$r.candidate; sub = $sub })
 }
-([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $out.Count; rows = $out } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $OutDir 'unpriced-triage.json') -Encoding UTF8
+$null = ([ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); count = $out.Count; rows = $out } | ConvertTo-Json -Depth 5) | Write-TcLfFile -Path (Join-Path $OutDir 'unpriced-triage.json')
 
 Write-Output ("triage-unpriced: " + $out.Count + " UNPRICED gap(s)  (diagnosed from what the ENGINE saw)")
 Write-Output ''

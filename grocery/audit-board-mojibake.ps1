@@ -42,6 +42,7 @@
 # gate-inputs: grocery\audit-board-mojibake.ps1, grocery\capture-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [string]$OutDir, [string]$Board, [switch]$Quiet, [switch]$Tighten, [switch]$Accept)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -282,8 +283,8 @@ $blRead = Read-TcRatchetBaseline -Path $blF -Field 'count'
 if ($Accept) {
   # A BLIND run never reaches here - every could-not-read path above exits 3 first - so a mark recorded at this
   # point is always taken from a board that was actually examined.
-  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet, set 2026-09-05. May only go DOWN. A run above it is a NEW mangled name, i.e. a live reader bug, and hard-fails.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $null = @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet, set 2026-09-05. May only go DOWN. A run above it is a NEW mangled name, i.e. a live reader bug, and hard-fails.' } |
+    ConvertTo-Json -Depth 3 | Write-TcLfFile -Path $blF
   Write-Output ("audit-board-mojibake: baseline recorded at $count by -Accept (it was $($blRead.State)). From here the number may only go DOWN.")
   Exit-Guard -Name 'board-mojibake' -Summary ("baseline $count recorded by -Accept") -Code 0
 }
@@ -300,8 +301,8 @@ $base = [int]$blRead.Value
 # case that motivates the library is already covered here by a different mechanism: every
 # could-not-read path above exits 3 BEFORE this line, so a run that reaches it examined a real board.
 if ($count -lt $base -and $Tighten) {
-  @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet. May only go DOWN.' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $null = @{ generated = (Get-Date).ToString('s'); count = $count; note = 'High-water mark for the board-mojibake ratchet. May only go DOWN.' } |
+    ConvertTo-Json -Depth 3 | Write-TcLfFile -Path $blF
   Write-Output ("audit-board-mojibake: ratchet tightened to $count (was $base).")
   $base = $count
 } elseif ($count -lt $base) {

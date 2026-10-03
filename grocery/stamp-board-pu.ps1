@@ -6,6 +6,7 @@
   item), NOT merely because the verified shelf price differs from the ad price. Run this right after a
   successful merge so freshly resolved links are marked current. Idempotent.
 #>
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -67,5 +68,5 @@ foreach ($p in $pd.items.PSObject.Properties) {
     if ($did) { $stamped++ }
   }
 }
-$pd | ConvertTo-Json -Depth 6 | Set-Content $pf -Encoding UTF8
+$null = $pd | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $pf -Lf
 Write-Output ("stamped board_pu on " + $stamped + " links (skipped " + $skipped + " still-flagged/unresolved)")

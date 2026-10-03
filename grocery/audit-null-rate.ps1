@@ -38,6 +38,7 @@
 # gate-inputs: lib\guard-contract.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$SelfTest, [switch]$Update, [string]$OutDir = '')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 $repo = Split-Path $here -Parent
@@ -201,7 +202,7 @@ if ($Update -or -not (Test-Path $BASELINE)) {
     foreach ($f in ($now[$k].Keys | Sort-Object)) { $fields[$f] = $now[$k][$f].Rate }
     $doc.stores[$k] = $fields
   }
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content $BASELINE -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $BASELINE
   Write-Output ("null-rate: baseline written for {0} store/source pair(s). From here a field's blank rate rising more than {1} points, or a field vanishing, is a finding." -f $now.Count, $RISE_PCT)
   Exit-Guard -Name 'null-rate' -Summary ("baseline=$($now.Count)") -Code 0
 }

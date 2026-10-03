@@ -1662,7 +1662,7 @@ $doc = [ordered]@{
   pull_terms = $stats.terms; capture_terms = $captureTerms.ToArray(); deal_count = $allRows.Count
   deals = $allRows
 }
-($doc | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $file -Lf
 Write-Output ("bakers-api: wrote $($allRows.Count) rows ($($deals.Count) fresh) -> " + (Split-Path $file -Leaf))
 $bakersWindow = Update-BakersAdSchedule (Join-Path $root 'ad-schedule.json') $today
 Write-Output ("bakers-api: advanced ad schedule to {0}..{1}" -f $bakersWindow.from, $bakersWindow.to)

@@ -31,6 +31,7 @@
   A row we cannot verify is LEFT ALONE. Silence beats a confident lie.
 #>
 param([switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -195,6 +196,6 @@ if ($WhatIf) { Write-Output ''; Write-Output 'WhatIf: nothing written'; return }
 $doc.deals = $rows.ToArray()
 $doc | Add-Member -NotePropertyName price_mode -NotePropertyValue 'in-store' -Force
 $doc | Add-Member -NotePropertyName refreshed_today -NotePropertyValue $upd -Force
-($doc | ConvertTo-Json -Depth 6) | Set-Content $regF.FullName -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $regF.FullName -Lf
 Write-Output ''
 Write-Output ("wrote -> " + $regF.Name)

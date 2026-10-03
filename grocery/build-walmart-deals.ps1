@@ -75,6 +75,8 @@ param(
   [switch]$WaiveMissingStoreLine,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 # WHO AM I. This file is a fork of build-sams-deals.ps1 (capture-lib.ps1:14-19) and inherited that name in
@@ -704,7 +706,7 @@ $bwSource = (Get-WalmartSource -Store $cap.cs.store -Id $cap.cs.id -Zip $cap.cs.
 $bwCarry = Get-WalmartSameDayProofCarry -PriorPath $outFile -WeekOf $Date -NewSource $bwSource -FreshTerms ([string[]]@($ded | ForEach-Object { [string]$_.found_by_term }))
 $bwCarry = @($bwCarry)
 if ($bwCarry.Count) { Write-Host ("same-day rebuild: kept {0} ruling-proof term(s) the replaced {1} found at this store" -f $bwCarry.Count, (Split-Path $outFile -Leaf)) }
-[ordered]@{
+$null = [ordered]@{
   store      = "Walmart"
   week_of    = $Date
   price_type = 'everyday'
@@ -721,14 +723,14 @@ if ($bwCarry.Count) { Write-Host ("same-day rebuild: kept {0} ruling-proof term(
   # a string of partials silently ages the last full capture toward the union window's 14-day cliff.
   pull_terms = @($raw | Select-Object -ExpandProperty q -Unique).Count
   deals      = $ded
-} | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+} | ConvertTo-Json -Depth 6 | Write-TcAtomicFile -Path $outFile -Lf
 
 if ($rejects.Count) {
   # NOT "sams-deals-*.rejects.json": compare-deals globs out\sams\sams-deals-*.json to find captures. Today it
   # skips this file only because its BaseName does not end in a date - one refactor of that check away from
   # feeding rejected rows back into the board. Keep the name outside the glob entirely.
   $rj = Join-Path $root ("out\walmart-rejects-$Date.json")
-  $rejects | ConvertTo-Json -Depth 4 | Set-Content $rj -Encoding UTF8
+  $null = $rejects | ConvertTo-Json -Depth 4 | Write-TcLfFile -Path $rj
 }
 # THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build for audit-ingest-shape.ps1. Never fatal.
 # Write-IngestShape comes in through walmart-row-lib's dot-source of ingest-shape-lib.

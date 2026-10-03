@@ -27,6 +27,7 @@ param(
   [string]$Evidence = "",
   [switch]$WhatIf
 )
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -56,5 +57,5 @@ Write-Output ("  price_mode   : " + [string]$doc.price_mode + "  ->  in-store")
 Write-Output ("  mode_verified: " + $ModeVerified)
 Write-Output ("  rows         : " + $before + " (unchanged)")
 if ($WhatIf) { Write-Output '  -WhatIf: nothing written.'; exit 0 }
-($out | ConvertTo-Json -Depth 8) | Set-Content $File -Encoding UTF8
+$null = ($out | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $File -Lf
 Write-Output '  written.'

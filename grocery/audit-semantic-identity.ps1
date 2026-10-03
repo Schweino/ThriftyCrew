@@ -73,6 +73,7 @@ param([switch]$PrepareOnly, [switch]$SelfTest, [int]$MaxReport = 25, [string]$Py
       # own header promised "no data files" while loading the live ledger; a reversal of the coconut-oil
       # ruling would have turned this watcher red for a correct adjudication.
       [string]$LedgerFile = '')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -466,7 +467,7 @@ $report = [ordered]@{
   coverage_excluded_count = $cvExcluded.Count; coverage_excluded = $cvExcluded
 }
 $rp = Join-Path $OutDir 'semantic-findings.json'
-($report | ConvertTo-Json -Depth 6) | Set-Content $rp -Encoding UTF8
+$null = ($report | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $rp
 Write-Output ''
 Write-Output ("  -> $rp   ADVISORY ONLY: nothing here changes a price, a crown, a rule or a link.")
 Exit-Guard -Name 'semantic-identity' -Summary '' -Code 0

@@ -63,6 +63,7 @@ param(
   [switch]$Quiet,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-TextFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
@@ -369,7 +370,7 @@ $report = New-Object psobject -Property @{
   note = 'The store said one thing about this product and our include regex said another. A LIVE CELL entry is on the board right now. A candidate entry has not won a cell but proves the rule matches the wrong product. This is a REVIEW QUEUE, not a gate - see the header.'
 }
 $rf = Join-Path $ReportDir ('taxonomy-disagreements-' + $today + '.json')
-($report | ConvertTo-Json -Depth 6) | Set-Content $rf -Encoding UTF8
+$null = ($report | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $rf
 Log ('taxonomy: report -> ' + $rf)
 
 if ($judged -eq 0) {

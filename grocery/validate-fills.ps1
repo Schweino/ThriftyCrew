@@ -22,6 +22,7 @@ param(
   # param default, so this string became "\out\newitem-candidates.json" - a path off the drive root.
   [string]$FillsFile = ''
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -87,6 +88,6 @@ Write-Output ("REJECTED (would have landed in the WRONG commodity)  {0}" -f $rej
 foreach ($r in $rej) { Write-Output ("  {0,-12} want={1,-18} -> would match '{2}'  [{3}]" -f $r.store, $r.want, $r.owner, $r.item.Substring(0,[Math]::Min(42,$r.item.Length))) }
 
 $out = Join-Path $root 'out\newitem-accepted.json'
-@{ verified=(Get-Date -Format 'yyyy-MM-dd'); accepted=$ok.ToArray(); rejected=$rej.ToArray() } | ConvertTo-Json -Depth 6 | Set-Content $out -Encoding UTF8
+$null = @{ verified=(Get-Date -Format 'yyyy-MM-dd'); accepted=$ok.ToArray(); rejected=$rej.ToArray() } | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $out
 Write-Output ''
 Write-Output ("saved -> " + $out)

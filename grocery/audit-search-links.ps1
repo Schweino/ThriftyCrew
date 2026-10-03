@@ -77,6 +77,7 @@ param(
   [string]$ResponsesFile,
   [string]$BaselineFile
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -254,7 +255,7 @@ $unprov   = @($rows | Where-Object { $_.verdict -eq 'UNPROVABLE' })
 if ($Accept) {
   $acc = [ordered]@{}
   foreach ($r in ($rows | Sort-Object store)) { $acc[$r.store] = [ordered]@{ echo = [bool]$r.echo; verdict = [string]$r.verdict; accepted = (Get-Date -Format 'yyyy-MM-dd') } }
-  ([ordered]@{ readme = 'Accepted per-store echo tier for audit-search-links.ps1. echo=true means that store repeats the query in its page <title>, which proves the search READ our query parameter. A drop from true to false is reported as an advisory downgrade, never a hard finding - re-accept here after checking the store by hand.'; query = $Query; stores = $acc } | ConvertTo-Json -Depth 6) | Set-Content $baseF -Encoding UTF8
+  $null = ([ordered]@{ readme = 'Accepted per-store echo tier for audit-search-links.ps1. echo=true means that store repeats the query in its page <title>, which proves the search READ our query parameter. A drop from true to false is reported as an advisory downgrade, never a hard finding - re-accept here after checking the store by hand.'; query = $Query; stores = $acc } | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $baseF
   Write-Output ("search-links: baseline accepted for " + $rows.Count + " store(s) -> search-link-baseline.json")
 }
 
@@ -278,7 +279,7 @@ $reportObj = [ordered]@{
   downgrades = [string[]]$downgrades
   rows       = $rows.ToArray()
 }
-try { ($reportObj | ConvertTo-Json -Depth 6) | Set-Content $reportF -Encoding UTF8 }
+try { $null = ($reportObj | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $reportF }
 catch { Write-Output ("  WARN  could not write the report to " + $reportF + " - " + $_.Exception.Message + " (the alert body points at this file, so it must exist)") }
 
 foreach ($n in $notes) { Write-Output ("  note: " + $n) }

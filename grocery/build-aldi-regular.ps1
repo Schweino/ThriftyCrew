@@ -40,6 +40,8 @@ param(
   [string]$Date = "",
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
 . (Join-Path $root 'capture-lib.ps1')   # UTF-8 capture read + mojibake repair, shared by every builder
@@ -982,10 +984,10 @@ $doc = [ordered]@{
   deal_count    = $rows.Count
   deals         = $rows
 }
-($doc | ConvertTo-Json -Depth 6) | Set-Content $outFile -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $outFile -Lf
 
 $rejFile = Join-Path $root "out\aldi-rejects-$Date.json"
-($res.rejects | ConvertTo-Json -Depth 4) | Set-Content $rejFile -Encoding UTF8
+$null = ($res.rejects | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $rejFile
 # THE INGEST SHAPE (2026-09-22, queue 2026-09-22-20fecf): one record per build for audit-ingest-shape.ps1. Aldi's
 # rejects carry no unit price, so only new refusal wording can be seen here, never a unit proof. Never fatal.
 try {

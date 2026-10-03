@@ -27,6 +27,7 @@
   the same rule guard 4 uses (>=1.5x / <=0.67x). One tolerance, everywhere.
 #>
 param([double]$Tol = 0.32, [switch]$WhatIf)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -108,7 +109,7 @@ foreach ($row in $cmp.comparison) {
   }
 }
 
-if (-not $WhatIf) { ($doc | ConvertTo-Json -Depth 8) | Set-Content $puFile -Encoding UTF8 }
+if (-not $WhatIf) { $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puFile -Lf }
 Write-Output ("links VERIFIED against the board price : $kept")
 Write-Output ("links DROPPED (wrong product/price)    : $dropped   (of which $saleWrong were SALE cells the old rule skipped entirely)")
 Write-Output ("links DROPPED (per-unit unverifiable)  : $unverifiable   (cannot prove the link shows our price - unknown is not a pass)")

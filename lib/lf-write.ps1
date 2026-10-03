@@ -39,30 +39,41 @@
 # REPLACES-FIRE: ([pscustomobject]@{ computed_at=(Get-Date).ToString('s'); week_of=$wk; recipes=$ranked } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $gout 'recipe-costs.json') -Encoding UTF8
 # REPLACES-FIRE: $doc | ConvertTo-Json -Depth 6 | Out-File -FilePath $p -Encoding utf8
 # REPLACES-SILENT: $null = Write-TcLfFile -Path $p -Text ($doc | ConvertTo-Json -Depth 6)
+# REPLACES-SILENT: $null = $doc | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $p
 # REPLACES-SILENT: $json = $doc | ConvertTo-Json -Depth 6
 # REPLACES-SILENT: Set-Content -LiteralPath $p -Value $text -Encoding UTF8
-# ENFORCED BY: none (none)
+# ENFORCED BY: ops/audit-bare-replace.ps1 (push)
 $__lfwSelfTest = ($MyInvocation.InvocationName -ne '.') -and ($args -contains '-SelfTest')
 
 function Write-TcLfFile {
   <# Writes $Text to $Path as UTF-8 (BOM unless -NoBom) with LF line endings and one trailing LF: the bytes
      `$Text | Set-Content -Encoding UTF8` produces once git has normalised them. Returns $true when it wrote,
-     $false when the file already held exactly these bytes. #>
+     $false when the file already held exactly these bytes or the pipeline brought nothing.
+     PIPELINE INPUT IS SET-CONTENT'S (2026-10-03): `$x | ConvertTo-Json | Write-TcLfFile -Path $p` is the drop-in for
+     `... | Set-Content $p -Encoding UTF8`. Several strings are written one per line, and an EMPTY pipeline writes
+     NOTHING and leaves an existing file as it was, because that is what Set-Content does when ConvertTo-Json is handed
+     an empty collection. -Text '' passed by name still writes one LF. #>
   param(
     [Parameter(Mandatory=$true)][string]$Path,
-    [Parameter(Mandatory=$true)][AllowEmptyString()][string]$Text,
+    [Parameter(Mandatory=$true, ValueFromPipeline=$true)][AllowEmptyString()][string]$Text,
     [switch]$NoBom
   )
-  # PowerShell LOCATION semantics for a relative path, the way Set-Content resolved it (lib\json-io.ps1, Resolve-JioPath).
-  $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
-  $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes((($Text -replace "`r`n", "`n") + "`n"))
-  if (-not $NoBom) { $bytes = [byte[]]((New-Object Text.UTF8Encoding($true)).GetPreamble() + $bytes) }
-  if (Test-Path -LiteralPath $full -PathType Leaf) {
-    $old = [IO.File]::ReadAllBytes($full)
-    if ([string]::Equals([Convert]::ToBase64String($old), [Convert]::ToBase64String($bytes), [StringComparison]::Ordinal)) { return $false }
+  begin { $items = New-Object System.Collections.Generic.List[string] }
+  process { $items.Add($Text) }
+  end {
+    if ($items.Count -eq 0) { return $false }
+    # PowerShell LOCATION semantics for a relative path, the way Set-Content resolved it (lib\json-io.ps1, Resolve-JioPath).
+    $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
+    $body = $items.ToArray() -join "`n"
+    $bytes = (New-Object Text.UTF8Encoding($false)).GetBytes((($body -replace "`r`n", "`n") + "`n"))
+    if (-not $NoBom) { $bytes = [byte[]]((New-Object Text.UTF8Encoding($true)).GetPreamble() + $bytes) }
+    if (Test-Path -LiteralPath $full -PathType Leaf) {
+      $old = [IO.File]::ReadAllBytes($full)
+      if ([string]::Equals([Convert]::ToBase64String($old), [Convert]::ToBase64String($bytes), [StringComparison]::Ordinal)) { return $false }
+    }
+    [IO.File]::WriteAllBytes($full, $bytes)
+    return $true
   }
-  [IO.File]::WriteAllBytes($full, $bytes)
-  return $true
 }
 
 if ($__lfwSelfTest) {
@@ -124,14 +135,35 @@ if ($__lfwSelfTest) {
     Push-Location $t
     try { $null = Write-TcLfFile -Path 'rel.json' -Text $json } finally { Pop-Location }
     Check 'a relative path lands at the PowerShell location, not the process working directory' ([IO.File]::Exists((Join-Path $t 'rel.json'))) ''
+
+    # (7) PIPELINE INPUT IS SET-CONTENT'S, so `| Write-TcLfFile` is a drop-in for `| Set-Content`. Both halves are
+    #     run against Set-Content itself rather than against a remembered answer.
+    $scE = Join-Path $t 'empty-sc.json'; $lfE = Join-Path $t 'empty-lf.json'
+    foreach ($p in @($scE, $lfE)) { [IO.File]::WriteAllText($p, 'OLD') }
+    $none = @()
+    $none | ConvertTo-Json | Set-Content $scE -Encoding UTF8
+    $wE = $none | ConvertTo-Json | Write-TcLfFile -Path $lfE
+    Check 'MUST FIRE  an EMPTY pipeline writes nothing and leaves the file, exactly as Set-Content does with it' `
+      ((-not $wE) -and [IO.File]::ReadAllText($lfE) -eq 'OLD' -and [IO.File]::ReadAllText($scE) -eq 'OLD') ("wrote=$wE lf=$([IO.File]::ReadAllText($lfE)) sc=$([IO.File]::ReadAllText($scE))")
+    $scM = Join-Path $t 'multi-sc.json'; $lfM = Join-Path $t 'multi-lf.json'
+    $multi = @(1, 2) | ForEach-Object { [ordered]@{ a = $_ } | ConvertTo-Json -Compress }
+    $multi | Set-Content $scM -Encoding UTF8
+    $null = $multi | Write-TcLfFile -Path $lfM
+    $scMB = [Text.Encoding]::UTF8.GetBytes((([Text.Encoding]::UTF8.GetString([IO.File]::ReadAllBytes($scM))) -replace "`r`n", "`n"))
+    Check 'MUST FIRE  several pipeline strings land one per line: Set-Content''s bytes with CRLF folded to LF' `
+      ([Convert]::ToBase64String([IO.File]::ReadAllBytes($lfM)) -eq [Convert]::ToBase64String($scMB)) ("lf=" + [Convert]::ToBase64String([IO.File]::ReadAllBytes($lfM)))
+    $byName = Join-Path $t 'byname.json'
+    $wN = Write-TcLfFile -Path $byName -Text '' -NoBom
+    Check 'CLEAN TWIN  -Text '''' passed BY NAME still writes one LF: only an empty PIPELINE writes nothing' `
+      ($wN -and [Convert]::ToBase64String([IO.File]::ReadAllBytes($byName)) -eq 'Cg==') ("wrote=$wN")
   } catch {
     Write-Output ('  FAIL  the self-test threw: ' + $_.Exception.Message); $fail++
   } finally {
     Remove-Item -LiteralPath $t -Recurse -Force -ErrorAction SilentlyContinue
   }
   # A SUITE THAT RAN FEWER CASES THAN IT HOLDS HAS NOT PASSED (the estate's zero-cases-exit-0 trap).
-  if ($cases -lt 6) { Write-Output ("  FAIL  only $cases of 6 cases ran"); $fail++ }
+  if ($cases -lt 9) { Write-Output ("  FAIL  only $cases of 9 cases ran"); $fail++ }
   if ($fail) { Write-Output ("LF-WRITE SELF-TEST FAILED ($fail, $cases case(s) ran)"); exit 1 }
-  Write-Output ("LF-WRITE SELF-TEST PASSED ($cases of 6 cases)")
+  Write-Output ("LF-WRITE SELF-TEST PASSED ($cases of 9 cases)")
   exit 0
 }

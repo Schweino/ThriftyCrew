@@ -18,6 +18,7 @@
   Either way the row is deleted, not edited: we do not know the true number, only that this one is wrong.
 #>
 param([switch]$Apply, [double]$MinRatio = 2.0)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $path = 'C:\Codex\ThriftyCrew\grocery\price-history.json'
 $doc = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -82,6 +83,6 @@ Write-Output ("{0} commodit(ies) carry an impossible record low at >= {1}x" -f $
 if (-not $Apply) { Write-Output 'DRY RUN - pass -Apply to write.'; exit 0 }
 
 $doc.updated = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
-($doc | ConvertTo-Json -Depth 12) | Set-Content $path -Encoding UTF8
+$null = ($doc | ConvertTo-Json -Depth 12) | Write-TcAtomicFile -Path $path -Lf
 $null = Get-Content $path -Raw -Encoding UTF8 | ConvertFrom-Json
 Write-Output 'price-history.json written and re-parsed clean.'

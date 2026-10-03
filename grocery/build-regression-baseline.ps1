@@ -20,6 +20,7 @@
   this script does.
 #>
 param([string]$OutDir = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -55,5 +56,5 @@ foreach ($r in $doc.comparison) {
 }
 $out = [ordered]@{ frozen_week=[string]$doc.week_of; built_at=(Get-Date).ToString('s'); source='regression-inputs (hermetic; engine-rebuilt)'; commodities=$rows.ToArray() }
 $file = Join-Path $root 'regression-baseline.json'
-($out | ConvertTo-Json -Depth 8) | Set-Content $file -Encoding UTF8
+$null = ($out | ConvertTo-Json -Depth 8) | Write-TcLfFile -Path $file
 Write-Output ("golden baseline frozen: " + $rows.Count + " commodities (week " + $doc.week_of + ") -> " + $file)

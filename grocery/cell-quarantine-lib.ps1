@@ -50,6 +50,7 @@
 # (cells x 100 against priced x bar) so a case exactly at a bar is exact, never decided by a double.
 # Direction: an UPPER bound on quarantined cells. When the producer stops (guards does not run, or scopes nothing),
 # no cell is quarantined and the breaker cannot fire - the chain verdict and health-heartbeat own that absence.
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $script:TcQuarantineBoardPct = 2    # more than 2% of the staple board's priced cells quarantined  -> HOLD
 $script:TcQuarantineStorePct = 10   # more than 10% of ONE store's priced cells quarantined        -> HOLD
 
@@ -414,7 +415,7 @@ function Write-TcQuarantinePlan([string]$OutDir, $Disposition, [string]$BoardPat
     note = 'Written by every guards run. action: pass | quarantine (required: run apply-cell-quarantine.ps1, then guards again) | reapply (a held value was itself condemned: apply-cell-quarantine.ps1 withholds reapply_withhold once, then guards again) | quarantined (applied and verified) | hold. See grocery\cell-quarantine-lib.ps1.'
   }
   $path = Join-Path $OutDir 'cell-quarantine.json'
-  ($doc | ConvertTo-Json -Depth 8) | Set-Content -LiteralPath $path -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $path -Lf
   return $path
 }
 

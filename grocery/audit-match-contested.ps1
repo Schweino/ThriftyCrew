@@ -11,6 +11,7 @@
 
   Scope: every row of the NEWEST regular file per store (what compare-deals actually reads).
 #>
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -92,6 +93,6 @@ foreach ($k in ($pairs.Keys | Sort-Object { -$pairs[$_] })) {
 }
 
 $out = Join-Path $root 'out\match-contested.json'
-@{ scanned=$scanned; contested=$rows.ToArray(); pairs=$pairs } | ConvertTo-Json -Depth 5 | Set-Content $out -Encoding UTF8
+$null = @{ scanned=$scanned; contested=$rows.ToArray(); pairs=$pairs } | ConvertTo-Json -Depth 5 | Write-TcLfFile -Path $out
 Write-Output ''
 Write-Output ("detail -> " + $out)

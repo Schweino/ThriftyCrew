@@ -28,6 +28,7 @@
 # Self-test: the frozen adpages-shrink fixture and adpages-lib over temp dirs it seeds itself; no network.
 # gate-inputs: grocery\adpages-lib.ps1, grocery\regression-inputs\guard-fixtures\adpages-shrink.json
 param([string]$OutDir = "", [string]$Today = "", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage; $ProgressPreference = 'SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -206,7 +207,7 @@ function Get-AdPages([string]$kind) {
 $weekly  = Get-AdPages 'weekly'
 $monthly = Get-AdPages 'monthly'
 $manifest = [ordered]@{ generated=$asofS; store='Fareway'; ad_group='OmahaGroup (043)'; weekly=$weekly; monthly=$monthly }
-$manifest | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $fwDir "fareway-ad-manifest-$asofS.json") -Encoding UTF8
+$null = $manifest | ConvertTo-Json -Depth 5 | Write-TcLfFile -Path (Join-Path $fwDir "fareway-ad-manifest-$asofS.json")
 
 function Show([string]$label, $r) {
   if (-not $r.blocked) {

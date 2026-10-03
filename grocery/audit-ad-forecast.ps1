@@ -82,6 +82,7 @@ param(
   [switch]$Accept,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -435,8 +436,8 @@ if ($blRead.State -ne 'read' -and -not $Accept) {
   exit 3
 }
 if ($blRead.State -ne 'read') {
-  @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore; note = $note } |
-    ConvertTo-Json -Depth 4 | Set-Content $Baseline -Encoding UTF8
+  $null = @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore; note = $note } |
+    ConvertTo-Json -Depth 4 | Write-TcLfFile -Path $Baseline
   Write-Output ("BASELINE WRITTEN at {0} full-cycle miss(es) over {1} scored pair(s) by -Accept (it was {2}). These are on the record and are silent from here; the NEXT one fails." -f $fm, $pairs, $blRead.State)
   Write-Output "This is a PREDICTION score, not a staleness check. audit-ad-status.ps1"
   Write-Output "owns 'is an ad closed right now' and runs in the daily watchdog."
@@ -469,9 +470,9 @@ if ($fm -gt $base) {
     $hist = @()
     if ($baseDoc.PSObject.Properties['accepted']) { $hist = @($baseDoc.accepted) }
     $hist += [ordered]@{ at = (Get-Date).ToString('s'); from = $base; to = $fm; stores = $new }
-    @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore
+    $null = @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore
        accepted = $hist; note = $note } |
-      ConvertTo-Json -Depth 5 | Set-Content $Baseline -Encoding UTF8
+      ConvertTo-Json -Depth 5 | Write-TcLfFile -Path $Baseline
     Write-Output ("ACCEPTED: baseline raised {0} -> {1} by -AcceptMiss. The miss stays on the record; the NEXT one fails again." -f $base, $fm)
     foreach ($n in $new) { Write-Output ("  accepted  " + $n) }
     if (Get-Command Write-GuardComplete -ErrorAction SilentlyContinue) {
@@ -498,8 +499,8 @@ if ($fm -lt $base -and -not $AcceptDrop) {
 }
 
 if ($fm -lt $base -and $AcceptDrop) {
-  @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore; note = $note } |
-    ConvertTo-Json -Depth 4 | Set-Content $Baseline -Encoding UTF8
+  $null = @{ generated = (Get-Date).ToString('s'); full_misses = $fm; per_store = $perStore; note = $note } |
+    ConvertTo-Json -Depth 4 | Write-TcLfFile -Path $Baseline
   Write-Output ("baseline lowered to {0} by -AcceptDrop, from {1}." -f $fm, $base)
 }
 

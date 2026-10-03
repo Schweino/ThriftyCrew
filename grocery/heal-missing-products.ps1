@@ -19,6 +19,8 @@
   Re-runnable: a product already in the file is left alone.
 #>
 param([string]$Store = 'Family Fare', [switch]$WhatIf, [switch]$Force)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = $PSScriptRoot
@@ -137,7 +139,7 @@ if ($WhatIf) { Write-Output 'WhatIf: nothing written'; return }
 if ($added -gt 0) {
   $doc.deals = $rows.ToArray()
   $doc | Add-Member -NotePropertyName deal_count -NotePropertyValue @($rows).Count -Force
-  ($doc | ConvertTo-Json -Depth 6) | Set-Content $curF.FullName -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $curF.FullName -Lf
   Write-Output ("$Store file now " + @($rows).Count + " rows -> " + $curF.Name)
 }
 
@@ -156,4 +158,4 @@ if (Test-Path $expF) {
   }
 }
 foreach ($k in $expect.Keys) { [void]$all.Add([pscustomobject]@{ id=$k; store=$Store; want=$expect[$k] }) }
-($all.ToArray() | ConvertTo-Json -Depth 4) | Set-Content $expF -Encoding UTF8
+$null = ($all.ToArray() | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $expF

@@ -24,6 +24,7 @@ param(
   [switch]$Reconcile,
   [switch]$SelfTest
 )
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -359,7 +360,7 @@ $maxWeeks = 0; foreach ($u in $updated) { $hc = @($u.history).Count; if ($hc -gt
 # refuses the swap if the rewritten file does not re-parse with the same commodity count.
 $histTmp = $HistoryFile + '.tmp'
 $histDoc = [ordered]@{ updated=$week; weeks_on_record=$maxWeeks; commodities=$updated }
-($histDoc | ConvertTo-Json -Depth 9) | Set-Content $histTmp -Encoding UTF8
+$null = ($histDoc | ConvertTo-Json -Depth 9) | Write-TcLfFile -Path $histTmp   # LF, so the bytes moved onto the tracked file are the bytes git stores
 $histCheck = $null
 try { $histCheck = Get-Content $histTmp -Raw -Encoding UTF8 | ConvertFrom-Json } catch { }
 if (-not $histCheck -or @($histCheck.commodities.PSObject.Properties).Count -ne @($histDoc.commodities.PSObject.Properties).Count) {

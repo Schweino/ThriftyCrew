@@ -20,6 +20,7 @@
   and MOVE the store-*-urls.json into out\url-inputs-archive\ (a stale file re-merges old data forever).
 #>
 param([string]$Store = "")
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -88,7 +89,7 @@ foreach ($st in ($byStore.Keys | Sort-Object)) {
   $rows = $byStore[$st]
   $sl = if ($slug.ContainsKey($st)) { $slug[$st] } else { ($st -replace '[^a-z]', '').ToLower() }
   $out = Join-Path $dir ('drift-' + $sl + '.json')
-  ($rows | ConvertTo-Json -Depth 4) | Set-Content $out -Encoding UTF8
+  $null = ($rows | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path $out
   Write-Output ("=== " + $st + "  (" + $rows.Count + ")  ->  out\url-inputs\drift-" + $sl + ".json")
   $lit = ($rows | ForEach-Object { "{i:'" + $_.id + "',q:'" + ($_.q -replace "'", "\'") + "',m:'" + ($_.match -replace "'", "\'") + "'}" }) -join ','
   Write-Output ('  BLR.run(''' + $st + ''', [' + $lit + '])')

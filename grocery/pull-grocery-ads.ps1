@@ -12,8 +12,9 @@
   Output: .\out\ads-YYYY-MM-DD.json + a verification table.
 #>
 # The self-test reads the Hy-Vee identity from stores.json and runs mirrors holding every grocery\*-lib.ps1 and stores.json, network stubbed:
-# gate-inputs: grocery\*-lib.ps1, grocery\stores.json
+# gate-inputs: grocery\*-lib.ps1, grocery\stores.json, lib\*.ps1
 param([string]$OutDir = "$PSScriptRoot\out", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 $UA = @{ 'User-Agent' = 'Mozilla/5.0' }
 $TODAY = (Get-Date).Date
@@ -338,6 +339,10 @@ if ($SelfTest) {
       New-Item -ItemType Directory -Path $g -ErrorAction Stop | Out-Null
       foreach ($l in @(Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*-lib.ps1' -File)) { Copy-Item -LiteralPath $l.FullName -Destination $g }
       $reg = Join-Path $PSScriptRoot 'stores.json'; if (Test-Path -LiteralPath $reg) { Copy-Item -LiteralPath $reg -Destination $g }
+      # And the WHOLE repo lib\ beside it (og-33): the script loads lib\atomic-write.ps1 for its tracked ads-<date>.json.
+      $lr = Join-Path (Split-Path $g -Parent) 'lib'
+      New-Item -ItemType Directory -Path $lr -ErrorAction Stop | Out-Null
+      foreach ($l in @(Get-ChildItem -LiteralPath (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib') -Filter '*.ps1' -File)) { Copy-Item -LiteralPath $l.FullName -Destination $lr }
       $p = Join-Path $g 'pull-grocery-ads.ps1'
       [IO.File]::WriteAllText($p, $Text, (New-Object Text.UTF8Encoding($false)))
       $prev = $ErrorActionPreference; $ErrorActionPreference = 'Continue'
@@ -402,7 +407,7 @@ $passStores = @($report | Where-Object { $_.status -eq 'PASS' } | ForEach-Object
 $out = [ordered]@{ pulled_at=(Get-Date).ToString('s'); today=$TODAY.ToString('yyyy-MM-dd'); verification=$report; deal_count=$allDeals.Count; deals=$allDeals }
 if (-not (Test-Path $OutDir)) { New-Item -ItemType Directory -Force $OutDir | Out-Null }
 $file = Join-Path $OutDir ("ads-"+$TODAY.ToString('yyyy-MM-dd')+".json")
-($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
+$null = ($out | ConvertTo-Json -Depth 6) | Write-TcAtomicFile -Path $file -Lf
 Write-Output ""
 Write-Output ("VERIFIED stores: "+(($passStores) -join ', ')+"   total verified deals: "+$allDeals.Count)
 Write-Output ("Saved: "+$file)

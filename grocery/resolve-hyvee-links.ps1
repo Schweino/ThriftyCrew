@@ -19,6 +19,7 @@
 # The self-test is pure in-memory fixtures and runs before any library or data file is loaded.
 # gate-inputs: grocery\resolve-hyvee-links.ps1
 param([switch]$WhatIf, [int]$StoreId = 0, [string[]]$Ids = @(), [switch]$SelfTest)   # 0 = ask hyvee-store-lib; see that file
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 
 # ---- THE SIZE-CONFLICT RELINK QUEUE (2026-09-25, triage 2026-09-25-c2a750) ------------------------------
@@ -377,7 +378,7 @@ foreach ($u in $unresolved) { Write-Output $u }
 
 if ($WhatIf) { Write-Output ''; Write-Output 'WhatIf: product-urls.json not written'; return }
 if ($resolved -gt 0) {
-  ($doc | ConvertTo-Json -Depth 8) | Set-Content $puF -Encoding UTF8
+  $null = ($doc | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $puF -Lf
   Write-Output ''
   Write-Output 'product-urls.json updated - re-run pull-regular-hyvee.ps1 and these will be verified daily from now on.'
 }

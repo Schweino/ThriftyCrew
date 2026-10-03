@@ -28,6 +28,7 @@
 # gate-inputs: grocery\audit-unit-basis-outlier.ps1, lib\json-io.ps1, lib\guard-contract.ps1, grocery\pu-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$CompareFile = '', [double]$Ratio = 4.0, [int]$MinStores = 4, [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -716,12 +717,12 @@ if (@($bandCrowns).Count) {
 }
 
 $outFile = Join-Path $OutDir 'basis-outliers.json'
-@{ generated = (Get-Date).ToString('s'); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; min_stores = $MinStores
+$null = @{ generated = (Get-Date).ToString('s'); compare_file = (Split-Path $CompareFile -Leaf); ratio = $Ratio; min_stores = $MinStores
    findings = @($ranked); kind_mismatch = @($kinds); kind_mismatch_crown = @($kindCrown)
    kind_mismatch_label_vs_declared_unit = @($kindDisagreesUnit)
    kind_mismatch_agrees_unit_not_majority = @($kindAgreesUnit)
    rounding_band_crown = @($bandCrowns) } |
-  ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+  ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $outFile
 Write-Output ("  -> $outFile   ($(@($nearInt).Count) with the pack-shape mismatch, which is the pack-price-on-a-unit-size fingerprint)")
 # THE QUARANTINE PROTOCOL (2026-09-21, grocery\cell-quarantine-lib.ps1 Get-TcChildQuarantineScope). The only hard
 # finding is an unreviewed crown held by a cell measured in a different KIND, and each is one published cell: name

@@ -334,6 +334,7 @@ if ($SelfTest) {
   Write-Output ("check-ad-cycles SELF-TEST PASSED ({0} of {0} case(s): the 2026-09-10 refused commit exits 1, a landed commit with a failed push exits 0, and this file's own tail wires that verdict only without -NoCommit)" -f $script:cacCases)
   exit 0
 }
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 if ($ShipOnly -and -not $NoCommit) { Write-Output 'check-ad-cycles: REFUSED - -ShipOnly stops before this chain''s own commit, so it is only for a caller that commits itself or not at all (-NoCommit).'; exit 3 }
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -880,7 +881,7 @@ foreach ($rec in $newStores) {
 }
 
 # ---- persist schedule ----
-([ordered]@{ updated=$asofS; note=$sched.note; stores=$newStores } | ConvertTo-Json -Depth 8) | Set-Content $ScheduleFile -Encoding UTF8
+$null = ([ordered]@{ updated=$asofS; note=$sched.note; stores=$newStores } | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $ScheduleFile -Lf
 
 # ---- (retired 2026-08-22) the Wednesday browser-refresh watchdog. It paged when the weekly Chrome agent
 #      missed its week; that agent is disabled (Brad: the three TC tasks are the only routines) and the
@@ -3473,9 +3474,7 @@ The chain re-derives every store''s link prices from the rows the board priced, 
       $cutoff = (Get-Date).AddDays(-30)
       foreach ($k in @($fstate.Keys)) { try { if ([datetime]$fstate[$k].last_seen -lt $cutoff) { $fstate.Remove($k) } } catch { $fstate.Remove($k) } }
       try {
-        $tmpF = $fstateFile + '.tmp'
-        ([pscustomobject]$fstate | ConvertTo-Json -Depth 4) | Set-Content $tmpF -Encoding UTF8
-        Move-Item $tmpF $fstateFile -Force
+        $null = ([pscustomobject]$fstate | ConvertTo-Json -Depth 4) | Write-TcAtomicFile -Path $fstateFile -Lf
       } catch { Log ('alerted-flags state write failed: ' + $_.Exception.Message) }
       # retire the old blob signature - it only ever caused the daily re-alert this replaced
       $fsigFile = Join-Path $OutDir 'alerted-flags.sig'

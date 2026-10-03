@@ -18,6 +18,7 @@
           .\explain-coverage-gap.ps1 -Id ground-beef-93-7
 #>
 param([string]$Id = '', [string]$FindingsFile = '')
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -50,7 +51,7 @@ foreach ($r in $rows) {
 # script printed a correct "explained 62" while leaving the PREVIOUS run's 88-row file on disk, and the
 # stale file nearly drove a batch of rule widenings for 16 commodities that had already been fixed. The
 # console said one thing and the artifact said another, with no error anywhere.
-($out.ToArray() | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $root 'out\coverage-gap-explained.json') -Encoding UTF8
+$null = ($out.ToArray() | ConvertTo-Json -Depth 4) | Write-TcLfFile -Path (Join-Path $root 'out\coverage-gap-explained.json')
 
 $by = @($out | Group-Object verdict | Sort-Object { -(@($_.Group).Count) })
 Write-Output ("explained {0} coverage finding(s):" -f $out.Count)

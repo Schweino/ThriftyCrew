@@ -4,6 +4,7 @@
 # 16x brown-sugar trap), then stores the board-anchored pack price. Suspect / unverifiable matches are DROPPED.
 # Usage: transform-store-links.ps1 -Key walmart -Src "C:\Users\Owner\Downloads\store-walmart-urls.json"
 param([Parameter(Mandatory=$true)][string]$Key, [Parameter(Mandatory=$true)][string]$Src)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference='Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -27,6 +28,6 @@ foreach($r in $raw){
   $keep.Add([ordered]@{ id=[string]$r.id; url=[string]$r.url; price=$price; size=[string]$r.size; name=[string]$r.name })
 }
 $outFile = Join-Path $here ("out\url-inputs\store-$Key-urls.json")
-$keep | ConvertTo-Json -Depth 4 | Set-Content $outFile -Encoding UTF8
+$null = $keep | ConvertTo-Json -Depth 4 | Write-TcAtomicFile -Path $outFile -Lf -KeepShape
 Write-Output ("[{0}] kept {1} / {2} -> store-{0}-urls.json ; dropped {3}" -f $Key, $keep.Count, $raw.Count, $drop.Count)
 $drop | ForEach-Object { Write-Output ("  - " + $_) }

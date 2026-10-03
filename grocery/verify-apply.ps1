@@ -34,6 +34,7 @@ param([string]$CompareFile = "", [string]$VerdictFile = "", [string]$OutDir = ""
       # the ~24 single-store long-tail commodities that MinStores 2 legitimately keeps off the published page.
       [string]$OutFile = "",
       [string]$SuppressionsFile = "")
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -136,9 +137,7 @@ if ($suppDirty) {
     updated = (Get-Date).ToString('s')
     suppressions = @($supp.Values | Sort-Object id, store, item_norm)
   }
-  $tmpS = $SuppressionsFile + '.tmp'
-  ($sObj | ConvertTo-Json -Depth 5) | Set-Content $tmpS -Encoding UTF8
-  Move-Item $tmpS $SuppressionsFile -Force
+  $null = ($sObj | ConvertTo-Json -Depth 5) | Write-TcAtomicFile -Path $SuppressionsFile -Lf
 }
 
 Write-Output ("VERIFIED  week $week   commodities kept: " + $verified.Count + " / " + @($doc.comparison).Count)

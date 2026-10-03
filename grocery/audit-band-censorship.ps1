@@ -74,6 +74,7 @@
 # Self-test: frozen rows, and this script run as a child over a temp out dir and baseline it writes itself.
 # gate-inputs: grocery\audit-band-censorship.ps1, lib\json-io.ps1, lib\guard-contract.ps1, lib\ratchet.ps1
 param([string]$OutDir = '', [string]$FlaggedFile = '', [string]$CompareFile = '', [double]$NearFloor = 0.75, [double]$MedianFloor = 0.4, [switch]$SelfTest, [int]$Replay = 0, [string]$ReplayRows = '', [switch]$Tighten, [switch]$Accept)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
@@ -624,8 +625,8 @@ foreach ($rr in ($retired | Sort-Object -Property median_ratio -Descending | Sel
 }
 if ($retired.Count -gt 12) { Write-Output ("    ... and " + ($retired.Count - 12) + " more retired (nothing is dropped silently)") }
 $outFile = Join-Path $OutDir 'band-censorship.json'
-@{ generated = (Get-Date).ToString('s'); flagged_file = (Split-Path $FlaggedFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); near_floor = $NearFloor; median_floor = $MedianFloor; cells = $cells; findings = $findings } |
-  ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
+$null = @{ generated = (Get-Date).ToString('s'); flagged_file = (Split-Path $FlaggedFile -Leaf); compare_file = (Split-Path $CompareFile -Leaf); near_floor = $NearFloor; median_floor = $MedianFloor; cells = $cells; findings = $findings } |
+  ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $outFile
 Write-Output ("  -> $outFile")
 
 # ---- THE RATCHET (2026-09-05, same shape as audit-tile-integrity) ---------------------------------------
@@ -648,8 +649,8 @@ $nCounted = $counted.Count
 Write-Output ("  ratchet counts $nCounted cell(s): $cells finding cell(s) + $($parked.Count) parked (counted before, still a candidate on its own row, retired today by the median alone)")
 foreach ($pc in $parked) { Write-Output ("    parked   $pc") }
 function Write-BandBaseline([int]$N, [string[]]$Set) {
-  @{ generated = (Get-Date).ToString('s'); cells = $N; counted_cells = @($Set); note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails. counted_cells is the set behind the number: a cell in it stays counted while its own row is still a near-floor refusal, even when another store moves the commodity median (backlog I216).' } |
-    ConvertTo-Json -Depth 3 | Set-Content $blF -Encoding UTF8
+  $null = @{ generated = (Get-Date).ToString('s'); cells = $N; counted_cells = @($Set); note = 'High-water mark for the band-censorship ratchet. This number may only go DOWN. A run above it is a NEW censored cell and hard-fails. counted_cells is the set behind the number: a cell in it stays counted while its own row is still a near-floor refusal, even when another store moves the commodity median (backlog I216).' } |
+    ConvertTo-Json -Depth 3 | Write-TcLfFile -Path $blF
 }
 if ($Accept) {
   # THE ONE ROAD TO A MARK (2026-09-24). A BLIND run must never write the baseline: pinning a high-water mark from a

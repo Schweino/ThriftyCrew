@@ -20,6 +20,7 @@
   Usage: -DryRun (compute + print, change nothing) | -Force (rotate even if week unchanged)
 #>
 param([switch]$DryRun, [switch]$Force, [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: a tracked file other processes read
 $ErrorActionPreference = 'Stop'
 # The self-test reads only its own source (source assertions); the libraries it dot-sources first are found by the walk.
 # gate-inputs: meal-prep\rotate-free-dinners.ps1
@@ -213,13 +214,13 @@ $stateFree = New-Object System.Collections.Generic.List[object]
 foreach ($x in $confirmedFree) { [void]$stateFree.Add($x) }
 foreach ($x in $stillOwned)    { [void]$stateFree.Add($x) }
 $stateFree = $stateFree.ToArray()
-[pscustomobject]@{
+$null = [pscustomobject]@{
   readme = 'State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.'
   week_of = $boardWeek; rotated_at = (Get-Date).ToString('s')
   # PS 5.1 TRAP: @($aGenericList) inside a [pscustomobject] cast throws "Argument types do not match".
   # Build one list and hand the cast a real array. Same family as the @(pipeline|ConvertFrom-Json) trap.
   free = $stateFree
-} | ConvertTo-Json -Depth 4 | Set-Content $stateFile -Encoding UTF8
+} | ConvertTo-Json -Depth 4 | Write-TcAtomicFile -Path $stateFile -Lf
 if ($visChanges.Count) { $nvis = Set-RecipeVisibility -DbPath (Join-Path $root 'recipes-db.json') -Map $visChanges; Write-Output ("  recipes-db: patched $nvis visibility field(s) key-scoped (no whole-file round-trip)") }
 [pscustomobject]@{
   week_of = $boardWeek; updated = (Get-Date).ToString('s')

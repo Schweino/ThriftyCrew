@@ -39,6 +39,7 @@
 # gate-inputs: grocery\audit-board-reconciliation.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([string]$OutDir = "", [switch]$SelfTest)
+. (Join-Path $PSScriptRoot '..\lib\lf-write.ps1')       # Write-TcLfFile: a tracked file is written in the bytes git stores
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { 'C:\Codex\ThriftyCrew\grocery' }
@@ -232,7 +233,7 @@ foreach ($x in $res.Contradictions) {
 }
 
 $outF = Join-Path $OutDir 'board-reconciliation.json'
-([pscustomobject]@{ duplicates = $res.Duplicates; contradictions = $res.Contradictions } | ConvertTo-Json -Depth 6) | Set-Content $outF -Encoding UTF8
+$null = ([pscustomobject]@{ duplicates = $res.Duplicates; contradictions = $res.Contradictions } | ConvertTo-Json -Depth 6) | Write-TcLfFile -Path $outF
 Write-Output ('saved -> ' + $outF)
 
 Write-GuardComplete -Name 'board-reconciliation' -Summary ("dupes={0} contra={1}" -f $res.Duplicates.Count, $res.Contradictions.Count)
