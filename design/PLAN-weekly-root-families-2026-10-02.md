@@ -273,6 +273,20 @@ when Family Fare everyday rows land for their cells, or when the cells are ruled
 **Brad's rulings, 2026-10-03** (chat, AskUserQuestion; each recorded as asked):
 - **R7.1 Family Fare priority:** (RULED A by Brad, 2026-10-03, "Yes, jump the queue (Recommended)") a sale cell with no
   everyday fallback moves its term to the front of the Family Fare rotation, inside the same 7-a-day budget.
+  *Status 2026-10-03 (built on branch `ff-fallback-jumps-rotation-r7-1`, not yet landed).* Measured first, bar written
+  before reading: over 2026-09-22..10-02 (11 days with a logged Family Fare plan, 10 with a fallback owed), a fallback was
+  deferred on 1 day of 10, 2026-09-27, in 1 of 19 logged windows that owed one: the 07:00 window's 37 expiries filled the
+  whole expiry allowance (40 - 3), and the ask ledger at f47bd21a0 still read 09-26 for all six; the 10:34 window asked
+  them. The rotation never deferred one. Built: when the front cannot hold an owed fallback, it takes up to
+  RotationTerms - 1 = 2 of the 3-term drip a window (6 of 9 a day at most), same budget and call cap, the cursor
+  advancing that many fewer. Over the window that is 2 to 4 of 99 rotation terms, so the 641-term cycle goes 71.2 to
+  72.7-74.2 days, inside the 90-day RotationDays (the brief's 86 is the pre-09-19 figure); sustained in every window
+  it would fall to 3 a day (213.7 days), and 1 to 2 of 33 landed windows had the condition. **It does not fill the
+  three escalated cells**: frozen-fries, trash-bags and yukon-gold-potatoes were asked in all 10 logged windows from
+  09-28 to 10-02, each term's ledger reads a successful answer on 10-02, and yet the 10-02 catalog holds 0 rows found
+  by the fries or trash-bag term and 1 by the Yukon term (Main St Bistro mashed potatoes, a prepared product, not raw
+  Yukon golds). What Freshop sent for fries and trash bags is not kept on disk, so why each answer priced nothing is
+  open; the next step is an attended one-term read, not more priority.
 - **R7.2 3b trial:** (RULED A by Brad, 2026-10-03, "Run the trial (Recommended)") run the paced catalog-walk trial that
   answers its two COULD NOT VERIFY criteria; Brad then rules build or not.
 - **R7.3 Hy-Vee gaps:** (RULED A by Brad, 2026-10-03, "Measure first (Recommended)") measure whether Hy-Vee carries the
