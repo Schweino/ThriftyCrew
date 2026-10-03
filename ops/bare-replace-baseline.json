@@ -1,10 +1,15 @@
 {
-    "generated":  "2026-09-11T16:10:18",
-    "sites":  20,
+    "generated":  "2026-10-03T04:37:20",
+    "sites":  13,
+    "crlf_json_sites":  98,
     "history":  [
                     {
                         "date":  "2026-09-11T16:10:18",
                         "count":  20
+                    },
+                    {
+                        "date":  "2026-10-03T04:37:20",
+                        "count":  13
                     }
                 ],
     "note":  "HIGH-WATER MARK for Move-Item -Force commands outside lib\\atomic-write.ps1. This number may only go DOWN. A run above it is a NEW bare replace and hard-fails."

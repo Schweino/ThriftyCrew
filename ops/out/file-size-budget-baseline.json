@@ -1,6 +1,6 @@
 ﻿{
     "note":  "Per-file marks for the file-size budget (B2 of design/PLAN-efficiency-budgets-2026-09-27.md, ruled by Brad 2026-09-27). Lines as git stores them, of every tracked .ps1/.py file over the limit. No NEW file may exceed the limit; each mark may only go DOWN; a deliberate growth is recorded with -Accept and its reason in the commit.",
-    "generated":  "2026-10-03T02:40:55",
+    "generated":  "2026-10-03T04:37:29",
     "limit":  1000,
     "files":  [
                   {
@@ -21,7 +21,7 @@
                   },
                   {
                       "path":  "grocery/build-aldi-regular.ps1",
-                      "lines":  1045
+                      "lines":  1047
                   },
                   {
                       "path":  "grocery/build-deals-page.ps1",
@@ -29,11 +29,11 @@
                   },
                   {
                       "path":  "grocery/build-sams-deals.ps1",
-                      "lines":  1630
+                      "lines":  1632
                   },
                   {
                       "path":  "grocery/capture-policy-lib.ps1",
-                      "lines":  2425
+                      "lines":  2334
                   },
                   {
                       "path":  "grocery/capture-run.ps1",
@@ -45,7 +45,7 @@
                   },
                   {
                       "path":  "grocery/check-ad-cycles.ps1",
-                      "lines":  3719
+                      "lines":  3718
                   },
                   {
                       "path":  "grocery/compare-deals.ps1",
@@ -73,11 +73,11 @@
                   },
                   {
                       "path":  "grocery/pull-regular-familyfare.ps1",
-                      "lines":  1596
+                      "lines":  1588
                   },
                   {
                       "path":  "grocery/pull-regular-hyvee.ps1",
-                      "lines":  2138
+                      "lines":  2139
                   },
                   {
                       "path":  "grocery/record-sample-verdict.ps1",
