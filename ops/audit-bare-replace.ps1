@@ -32,6 +32,20 @@
   the gates ran" and the next push pays for every gate again. So a fall is SPOKEN and the committed mark KEPT;
   -Tighten records it, through lib\ratchet.ps1's plausibility bar and in the bytes git stores (lib\lf-write.ps1).
 
+  THE SECOND COUNT: A JSON FILE REPLACED IN CRLF (2026-10-03). `... | ConvertTo-Json | Set-Content` (or Out-File) is
+  the other bare replace of a whole file. Under PS 5.1 ConvertTo-Json joins its lines with CRLF and the cmdlet adds one
+  more, so over a TRACKED file, stored eol=lf, it leaves ` M` with a zero-line `git diff` and push-main refuses the dirty
+  tree. lib\lf-write.ps1 (Write-TcLfFile) and lib\atomic-write.ps1 (Write-TcAtomicFile -Lf) are the replacements, and
+  both take the same pipeline (`... | ConvertTo-Json | Write-TcLfFile -Path $p`). The sweep that day converted the 130
+  production sites whose target resolved to a tracked path; the rest write gitignored or temp files, and are the
+  backlog this mark holds. Counted from the AST: a pipeline whose LAST command is Set-Content, sc or Out-File (not
+  -Append) and whose earlier text calls ConvertTo-Json, outside every self-test body (lib\selftest-lib.ps1's
+  Get-SelfTestSpans, the rule audit-write-only-reports and audit-mustfire-census read). A deliberate exception carries
+  `# crlf-json:allow <reason>` on the pipeline's first line. Its own mark, `crlf_json_sites`, may only go DOWN too, and
+  a plain run never writes it: a baseline with no such key is SPOKEN and passes, and -Tighten records it. Same scope
+  limits as the first count, plus: a JSON text built into a variable first and written on a later line is not seen.
+  Cost: one more AST walk over files this already parses, measured in the commit that added it.
+
   EXIT CODES (lib\guard-contract.ps1 vocabulary): 0 clean, 2 hard finding, 3 could-not-evaluate.
   Read the verdict LINE, not the number.
 
@@ -40,6 +54,8 @@
     ops\audit-bare-replace.ps1 -AcceptDrop  record a fall lib\ratchet.ps1 would otherwise refuse
   Self-test: powershell -File ops\audit-bare-replace.ps1 -SelfTest
 #>
+# The self-test uses literal fixtures and runs this script against temp trees and baselines, so it reads only its libraries:
+# gate-inputs: lib\guard-contract.ps1, lib\ratchet.ps1, lib\lf-write.ps1, lib\tree-walk.ps1, lib\selftest-lib.ps1
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop
 param([switch]$SelfTest, [switch]$AcceptDrop, [switch]$Tighten, [string]$Root = '', [string]$BaselineFile = '')
 $ErrorActionPreference = 'Stop'
@@ -49,6 +65,7 @@ $repo = Split-Path $here -Parent
 . (Join-Path $repo 'lib\ratchet.ps1')
 . (Join-Path $repo 'lib\lf-write.ps1')    # Write-TcLfFile: the baseline is TRACKED and stored eol=lf
 . (Join-Path $repo 'lib\tree-walk.ps1')   # exclusions match below the root, so a worktree root is not excluded whole
+. (Join-Path $repo 'lib\selftest-lib.ps1')   # Get-SelfTestSpans: a CRLF JSON write inside a self-test body is a fixture, not a site
 
 # -Root and -BaselineFile exist for the self-test, so the three live-path cases drive THIS script against a
 # temp tree and a temp baseline rather than a copy of its logic. Production passes neither.
@@ -58,35 +75,124 @@ $BASELINE_FILE = if ($BaselineFile) { $BaselineFile } else { Join-Path $repo 'op
 $EXCLUDE = '\\archive\\|\\worktrees\\|\\out\\|node_modules|\\lib\\atomic-write\.ps1$'
 $MOVE_NAMES = @('move-item', 'move', 'mv', 'mi')
 
-function Get-TcBareReplaceLines {
-  <# Pure: the 1-based line numbers of every Move-Item -Force command in $Text, skipping allow-marked ones.
+function Get-TcBareReplaceScan {
+  <# Pure, ONE parse and ONE walk for both counts: .Bare holds the 1-based line of every Move-Item -Force command,
+     .CrlfJson the line of every `... | ConvertTo-Json ... | Set-Content/sc/Out-File` pipeline (not -Append) outside a
+     self-test body, each skipping its own allow marker. -Path is only for the whole-file test-*.ps1 rule.
      PARSED, NOT MATCHED. The parser already knows a comment, a string and a here-string from a command, and
-     it joins a backtick continuation, so none of those needs a regex of its own here. #>
-  param([string]$Text)
+     it joins a backtick continuation, so none of those needs a regex of its own here.
+     ONE WALK, MEASURED (2026-10-03): a second parse and a second FindAll for the CRLF count took this gate from a
+     median 7.7 s to 16.3 s over three interleaved rounds each. The CRLF candidates are Set-Content commands the
+     Move-Item walk already visits, so they cost a name test each. #>
+  param([string]$Text, [string]$Path = '')
   $tokens = $null; $errs = $null
   $ast = [System.Management.Automation.Language.Parser]::ParseInput($Text, [ref]$tokens, [ref]$errs)
   $lines = $Text -split "`r?`n"
-  $found = @()
+  $bare = @(); $cj = @()
+  $spans = $null
   $cmds = $ast.FindAll({ param($a) $a -is [System.Management.Automation.Language.CommandAst] }, $true)
   foreach ($c in @($cmds)) {
     $name = $c.GetCommandName()
-    if (-not $name -or ($MOVE_NAMES -notcontains $name.ToLower())) { continue }
-    $forced = $false
-    foreach ($el in @($c.CommandElements)) {
-      if ($el -isnot [System.Management.Automation.Language.CommandParameterAst]) { continue }
-      # -Fo, -For, -Forc, -Force: PowerShell accepts any unambiguous prefix. A lone -F is ambiguous with
-      # -Filter on Move-Item and does not run at all, so it is not counted.
-      if ($el.ParameterName -notmatch '(?i)^fo(r(ce?)?)?$') { continue }
-      # -Force:$false forces nothing.
-      if ($el.Argument -and $el.Argument.Extent.Text -match '(?i)^\$false$') { continue }
-      $forced = $true
+    if (-not $name) { continue }
+    $lname = $name.ToLower()
+    if ($MOVE_NAMES -contains $lname) {
+      $forced = $false
+      foreach ($el in @($c.CommandElements)) {
+        if ($el -isnot [System.Management.Automation.Language.CommandParameterAst]) { continue }
+        # -Fo, -For, -Forc, -Force: PowerShell accepts any unambiguous prefix. A lone -F is ambiguous with
+        # -Filter on Move-Item and does not run at all, so it is not counted.
+        if ($el.ParameterName -notmatch '(?i)^fo(r(ce?)?)?$') { continue }
+        # -Force:$false forces nothing.
+        if ($el.Argument -and $el.Argument.Extent.Text -match '(?i)^\$false$') { continue }
+        $forced = $true
+      }
+      if (-not $forced) { continue }
+      $ln = $c.Extent.StartLineNumber
+      if ($ln -ge 1 -and $ln -le $lines.Count -and $lines[$ln - 1] -match 'atomic-replace:allow') { continue }
+      $bare += $ln
+      continue
     }
-    if (-not $forced) { continue }
-    $ln = $c.Extent.StartLineNumber
-    if ($ln -ge 1 -and $ln -le $lines.Count -and $lines[$ln - 1] -match 'atomic-replace:allow') { continue }
-    $found += $ln
+    if ($lname -ne 'set-content' -and $lname -ne 'sc' -and $lname -ne 'out-file') { continue }
+    # THE SECOND COUNT: this command must END a pipeline whose earlier elements call ConvertTo-Json.
+    $p = $c.Parent
+    if ($p -isnot [System.Management.Automation.Language.PipelineAst]) { continue }
+    $els = $p.PipelineElements
+    if ($els.Count -lt 2 -or -not [object]::ReferenceEquals($els[$els.Count - 1], $c)) { continue }
+    $append = $false
+    foreach ($el in @($c.CommandElements)) {
+      if ($el -is [System.Management.Automation.Language.CommandParameterAst] -and $el.ParameterName -match '^(?i)ap(p(e(nd?)?)?)?$') { $append = $true }
+    }
+    if ($append) { continue }
+    $headText = $Text.Substring($p.Extent.StartOffset, $els[$els.Count - 2].Extent.EndOffset - $p.Extent.StartOffset)
+    if ($headText.IndexOf('ConvertTo-Json', [StringComparison]::OrdinalIgnoreCase) -lt 0) { continue }
+    $json = $false
+    for ($i = 0; $i -lt $els.Count - 1 -and -not $json; $i++) {
+      if ($els[$i].Find({ param($a) $a -is [System.Management.Automation.Language.CommandAst] -and $a.GetCommandName() -eq 'ConvertTo-Json' }, $true)) { $json = $true }
+    }
+    if (-not $json) { continue }
+    $ln = $p.Extent.StartLineNumber
+    if ($ln -ge 1 -and $ln -le $lines.Count -and $lines[$ln - 1] -match 'crlf-json:allow') { continue }
+    # A self-test body is a fixture. Spans are the shared rule (lib\selftest-lib.ps1) and cost about 80 ms a file, so
+    # they are computed only for a pipeline that could sit in one (Test-TcCrlfJsonMaybeFixture), once per file.
+    $inBody = $false
+    $fx = Test-TcCrlfJsonMaybeFixture -Pipeline $p -Text $Text -Path $Path
+    if ($fx -eq 'yes') { $inBody = $true }
+    elseif ($fx -eq 'maybe') {
+      if ($null -eq $spans) { try { $spans = @(Get-SelfTestSpans -Text $Text -Path $Path) } catch { $spans = @() } }
+      $off = $p.Extent.StartOffset
+      foreach ($sp in $spans) { if ($off -ge $sp.S -and $off -lt $sp.E) { $inBody = $true; break } }
+    }
+    if ($inBody) { continue }
+    $cj += $ln
   }
-  return ,@($found)
+  return [pscustomobject]@{ Bare = @($bare); CrlfJson = @($cj) }
+}
+
+function Get-TcBareReplaceLines {
+  <# The Move-Item -Force lines of $Text (Get-TcBareReplaceScan's .Bare), as an ARRAY even when it holds one. #>
+  param([string]$Text)
+  $r = Get-TcBareReplaceScan -Text $Text
+  return ,@($r.Bare)
+}
+
+function Test-TcCrlfJsonMaybeFixture {
+  <# Cheap: could this pipeline sit in a self-test body at all? Only a yes pays for Get-SelfTestSpans, which stays
+     the authority. A no is: not a test-*.ps1, no enclosing if whose condition names SelfTest, no enclosing function
+     named *SelfTest, and no `if (-not $...SelfTest` guard anywhere in the file. A self-test variable whose NAME does
+     not say SelfTest slips this test, so its fixture is COUNTED: an over-count, never a hidden site, and the mark is
+     recorded over the same rule. #>
+  param($Pipeline, [string]$Text, [string]$Path)
+  # Returns 'yes' (certainly a self-test body), 'maybe' (ask Get-SelfTestSpans) or 'no'. 'yes' is the one shape the
+  # shared rule has always counted and nothing else can mean: the pipeline sits in the BODY of a clause whose whole
+  # condition is a $...SelfTest variable. It spares the spans for most of the tree's 136 fixture writes (measured
+  # on adding it: spans for those files were most of a 4.4 s cost on every push).
+  $off = $Pipeline.Extent.StartOffset
+  $maybe = $false
+  if ($Path -and (Split-Path $Path -Leaf) -like 'test-*.ps1') { $maybe = $true }
+  if ($Text -match '(?i)if\s*\(\s*-not\s+\$[\w:]*SelfTest') { $maybe = $true }
+  $a = $Pipeline.Parent
+  while ($a) {
+    if ($a -is [System.Management.Automation.Language.IfStatementAst]) {
+      foreach ($cl in @($a.Clauses)) {
+        $cond = $cl.Item1.Extent.Text.Trim()
+        if ($cond -notmatch '(?i)SelfTest') { continue }
+        $body = $cl.Item2.Extent
+        if ($cond -match '^(?i)\$(script:)?\w*SelfTest$' -and $off -ge $body.StartOffset -and $off -lt $body.EndOffset) { return 'yes' }
+        $maybe = $true
+      }
+    }
+    if ($a -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $a.Name -match '(?i)SelfTest$') { $maybe = $true }
+    $a = $a.Parent
+  }
+  if ($maybe) { return 'maybe' }
+  return 'no'
+}
+
+function Get-TcCrlfJsonWriteLines {
+  <# The CRLF JSON lines of $Text (Get-TcBareReplaceScan's .CrlfJson), as an ARRAY even when it holds one. #>
+  param([string]$Text, [string]$Path = '')
+  $r = Get-TcBareReplaceScan -Text $Text -Path $Path
+  return ,@($r.CrlfJson)
 }
 
 function Get-BareReplaceScanFiles {
@@ -142,6 +248,46 @@ if ($SelfTest) {
   $ml = Get-TcBareReplaceLines -Text $mixed
   T 'CLEAN TWIN  the one real site is reported at its own line, 4' ((@($ml).Count -eq 1) -and ($ml[0] -eq 4)) ("lines=" + (@($ml) -join ','))
   T 'MUST FIRE  a single finding comes back as an ARRAY, not unrolled to a bare number' ($ml -is [array]) ($ml.GetType().FullName)
+
+  # ---- THE SECOND COUNT: a JSON file replaced in CRLF (2026-10-03) ----
+  function Count-Cj([string]$Text, [string]$Path = 'grocery\x.ps1') { $r = Get-TcCrlfJsonWriteLines -Text $Text -Path $Path; return @($r).Count }
+  # MUST FIRE - the founding shapes, verbatim from the four grocery writers fixed that morning and the sweep after.
+  T 'MUST FIRE  the bare pipe: $doc | ConvertTo-Json | Set-Content' `
+    ((Count-Cj '$doc | ConvertTo-Json -Depth 6 | Set-Content $regPath -Encoding UTF8') -eq 1) 'missed'
+  T 'MUST FIRE  the parenthesised head: ($x | ConvertTo-Json) | Set-Content' `
+    ((Count-Cj '($rb | ConvertTo-Json -Depth 8) | Set-Content $rbPath -Encoding UTF8') -eq 1) 'missed'
+  T 'MUST FIRE  Out-File is the same write' `
+    ((Count-Cj '$out | ConvertTo-Json -Depth 7 | Out-File $costedPath -Encoding utf8') -eq 1) 'missed'
+  T 'MUST FIRE  a pipe continued onto the next line' `
+    ((Count-Cj ('$doc | ConvertTo-Json -Depth 4 |' + "`n" + '  Set-Content -LiteralPath $p -Encoding UTF8')) -eq 1) 'a continuation hid it'
+  T 'MUST FIRE  inside an if block, as the -Apply writers spell it' `
+    ((Count-Cj 'if ($Apply) { ($pu | ConvertTo-Json -Depth 8) | Set-Content $puPath -Encoding UTF8 }') -eq 1) 'missed'
+  # MUST NOT FIRE - legal inputs.
+  T 'MUST NOT FIRE  the converted form, piped into Write-TcLfFile' `
+    ((Count-Cj '$null = $doc | ConvertTo-Json -Depth 6 | Write-TcLfFile -Path $p') -eq 0) 'counted'
+  T 'MUST NOT FIRE  the converted form, piped into Write-TcAtomicFile -Lf' `
+    ((Count-Cj '$null = ($rb | ConvertTo-Json -Depth 8) | Write-TcAtomicFile -Path $rbPath -Lf') -eq 0) 'counted'
+  T 'MUST NOT FIRE  Set-Content of text that never passed through ConvertTo-Json' `
+    ((Count-Cj '$lines | Set-Content $p -Encoding UTF8') -eq 0) 'counted'
+  T 'MUST NOT FIRE  -Append is an append, not a replace (lib\append-line.ps1 owns that)' `
+    ((Count-Cj '$row | ConvertTo-Json -Compress | Out-File $log -Append -Encoding utf8') -eq 0) 'counted'
+  T 'MUST NOT FIRE  a comment describing the shape' `
+    ((Count-Cj '# the old code did $doc | ConvertTo-Json | Set-Content $p here') -eq 0) 'a comment was counted'
+  T 'MUST NOT FIRE  a string carrying the shape' `
+    ((Count-Cj '$fx = ''$doc | ConvertTo-Json | Set-Content $p''') -eq 0) 'a string was counted'
+  T 'MUST NOT FIRE  a line marked crlf-json:allow' `
+    ((Count-Cj '$doc | ConvertTo-Json | Set-Content $p   # crlf-json:allow a gitignored scratch report') -eq 0) 'the marker was ignored'
+  $cjBody = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  `$doc | ConvertTo-Json | Set-Content `$tmp -Encoding UTF8`n  exit 0`n}`n"
+  T 'MUST NOT FIRE  the same write inside a self-test body is a fixture' ((Count-Cj $cjBody) -eq 0) 'the self-test body was counted'
+  # CLEAN TWIN - the self-test exclusion must not hide the identical line in production code below it.
+  $cjMixed = $cjBody + "`$doc | ConvertTo-Json | Set-Content `$p -Encoding UTF8`n"
+  $cjL = Get-TcCrlfJsonWriteLines -Text $cjMixed -Path 'grocery\x.ps1'
+  T 'CLEAN TWIN  the production twin of a self-test write is counted, at its own line, 6' ((@($cjL).Count -eq 1) -and ($cjL[0] -eq 6)) ("lines=" + (@($cjL) -join ','))
+  T 'CLEAN TWIN  the Move-Item count does not see a CRLF JSON write, so the two marks stay apart' ((Count-Hits '$doc | ConvertTo-Json | Set-Content $p -Encoding UTF8') -eq 0) 'counted as a bare replace'
+  $cjOr = "param([switch]`$SelfTest, [switch]`$Apply)`nif (`$SelfTest -or `$Apply) {`n  `$doc | ConvertTo-Json | Set-Content `$p -Encoding UTF8`n}`n"
+  T 'CLEAN TWIN  `if ($SelfTest -or $Apply)` runs in production too, so its write is COUNTED (the shortcut must not take it)' ((Count-Cj $cjOr) -eq 1) 'a production write was hidden as a fixture'
+  $cjElse = "param([switch]`$SelfTest)`nif (`$SelfTest) {`n  `$x = 1`n} else {`n  `$doc | ConvertTo-Json | Set-Content `$p -Encoding UTF8`n}`n"
+  T 'CLEAN TWIN  the ELSE of `if ($SelfTest)` is production, so its write is COUNTED' ((Count-Cj $cjElse) -eq 1) 'the else branch was hidden as a fixture'
 
   # THE WALK, FROM A WORKTREE ROOT (lib\tree-walk.ps1): the root is scanned, a sibling below it is not.
   $wtFx = New-TcWorktreeFixture -Files @{ 'grocery\a.ps1' = 'Move-Item $t $p -Force'; 'lib\atomic-write.ps1' = 'Move-Item $t $p -Force' }
@@ -200,10 +346,42 @@ if ($SelfTest) {
     $brSame3 = [string]::Equals($brRiseB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($brRise)), [StringComparison]::Ordinal)
     T 'CLEAN TWIN  a count that ROSE still exits 2 and writes nothing, so not recording a fall did not disarm the ratchet' `
       ($brc3 -eq 2 -and $brSame3) ("rc=$brc3 baselineUnchanged=$brSame3")
+
+    # THE CRLF JSON MARK, AT ITS BAR AND ONE STEP PAST IT (og-06). A second tree holds one bare replace and ONE CRLF
+    # JSON write, so the Move-Item mark sits at its bar of 1 in every case below and only the second mark moves.
+    $cjTree = Join-Path $brWt 'tree-cj'
+    New-Item -ItemType Directory -Path (Join-Path $cjTree 'grocery') -ErrorAction Stop -Force | Out-Null
+    [IO.File]::WriteAllText((Join-Path $cjTree 'grocery\one.ps1'), 'Move-Item $t $p -Force', (New-Object Text.UTF8Encoding($false)))
+    [IO.File]::WriteAllText((Join-Path $cjTree 'grocery\cj.ps1'), '$doc | ConvertTo-Json -Depth 4 | Set-Content $p -Encoding UTF8', (New-Object Text.UTF8Encoding($false)))
+    $cjAt = Join-Path $brWt 'baseline-cj-at.json'
+    $null = Write-TcLfFile -Path $cjAt -Text ([pscustomobject]@{ generated = '2026-01-01T00:00:00'; sites = 1; crlf_json_sites = 1; history = @(); note = $brNote } | ConvertTo-Json -Depth 5) -NoBom
+    $cjAtB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($cjAt))
+    $cjo1 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $cjTree -BaselineFile $cjAt)
+    $cjc1 = $LASTEXITCODE
+    $cjSame1 = [string]::Equals($cjAtB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($cjAt)), [StringComparison]::Ordinal)
+    T 'CLEAN TWIN  AT THE BAR: 1 CRLF JSON write against a mark of 1 passes, writes nothing, and names the site' `
+      ($cjc1 -eq 0 -and $cjSame1 -and (($cjo1 -join "`n") -match 'crlf-json\s+grocery\\cj\.ps1:1')) ("rc=$cjc1 baselineUnchanged=$cjSame1")
+    $cjPast = Join-Path $brWt 'baseline-cj-past.json'
+    $null = Write-TcLfFile -Path $cjPast -Text ([pscustomobject]@{ generated = '2026-01-01T00:00:00'; sites = 1; crlf_json_sites = 0; history = @(); note = $brNote } | ConvertTo-Json -Depth 5) -NoBom
+    $cjPastB64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($cjPast))
+    $cjo2 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $cjTree -BaselineFile $cjPast)
+    $cjc2 = $LASTEXITCODE
+    $cjSame2 = [string]::Equals($cjPastB64, [Convert]::ToBase64String([IO.File]::ReadAllBytes($cjPast)), [StringComparison]::Ordinal)
+    T 'MUST FIRE  ONE STEP PAST THE BAR: 1 CRLF JSON write against a mark of 0 exits 2, names the cause, and writes nothing' `
+      ($cjc2 -eq 2 -and $cjSame2 -and (($cjo2 -join "`n") -match 'ConvertTo-Json \| Set-Content/Out-File')) ("rc=$cjc2 baselineUnchanged=$cjSame2")
+    $cjFall = Join-Path $brWt 'baseline-cj-fall.json'
+    $null = Write-TcLfFile -Path $cjFall -Text ([pscustomobject]@{ generated = '2026-01-01T00:00:00'; sites = 1; crlf_json_sites = 2; history = @([pscustomobject]@{ date = '2026-01-01T00:00:00'; count = 1 }); note = $brNote } | ConvertTo-Json -Depth 5) -NoBom
+    $null = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $PSCommandPath -Root $cjTree -BaselineFile $cjFall -Tighten)
+    $cjc3 = $LASTEXITCODE
+    $cjDoc3 = $null
+    try { $cjDoc3 = [IO.File]::ReadAllText($cjFall) | ConvertFrom-Json } catch { }
+    T '-Tighten records a CRLF JSON fall (2 -> 1) and leaves the Move-Item mark and its history as they were' `
+      ($cjc3 -eq 0 -and $null -ne $cjDoc3 -and [int]$cjDoc3.crlf_json_sites -eq 1 -and [int]$cjDoc3.sites -eq 1 -and @($cjDoc3.history).Count -eq 1 -and [string]$cjDoc3.note -eq $brNote) `
+      ("rc=$cjc3 crlf=$(if ($cjDoc3) { $cjDoc3.crlf_json_sites }) sites=$(if ($cjDoc3) { $cjDoc3.sites }) history=$(if ($cjDoc3) { @($cjDoc3.history).Count })")
   } finally { Remove-Item -LiteralPath $brWt -Recurse -Force -ErrorAction SilentlyContinue }
 
   if ($f) { Write-Output ("SELF-TEST FAIL: {0} of {1} check(s)" -f $f, $n); exit 1 }
-  Write-Output ("SELF-TEST PASS: {0} checks - 6 must-fire shapes, 8 must-not-fire inputs, line reporting and return arity, the walk from a worktree root, and the live path driven against a temp tree and baseline" -f $n)
+  Write-Output ("SELF-TEST PASS: {0} checks - 6 must-fire shapes, 8 must-not-fire inputs, line reporting and return arity, the CRLF JSON count's 5 must-fire and 8 must-not-fire shapes, the walk from a worktree root, and the live path driven against a temp tree and baseline, the CRLF JSON mark at its bar and one step past it" -f $n)
   exit 0
 }
 
@@ -217,62 +395,90 @@ if (-not $files.Count) {
   Exit-Guard -Name 'bare-replace' -Summary 'blind=no-files' -Code 3
 }
 $hits = @()
+$cjHits = @()
 foreach ($p in $files) {
-  $found = Get-TcBareReplaceLines -Text ([IO.File]::ReadAllText($p))
-  foreach ($ln in @($found)) { $hits += [pscustomobject]@{ File = $p; Line = $ln } }
+  $scan = Get-TcBareReplaceScan -Text ([IO.File]::ReadAllText($p)) -Path $p
+  foreach ($ln in @($scan.Bare)) { $hits += [pscustomobject]@{ File = $p; Line = $ln } }
+  foreach ($ln in @($scan.CrlfJson)) { $cjHits += [pscustomobject]@{ File = $p; Line = $ln } }
 }
 $count = $hits.Count
+$cj = $cjHits.Count
 
 $BR_NOTE = 'HIGH-WATER MARK for Move-Item -Force commands outside lib\atomic-write.ps1. This number may only go DOWN, and a fall to zero or a fall over 60% in one run is REFUSED as a probably-broken detector (lib\ratchet.ps1).'
 $blDoc = $null
 if (Test-Path -LiteralPath $BASELINE_FILE) {
   try { $blDoc = Get-Content -LiteralPath $BASELINE_FILE -Raw -Encoding UTF8 | ConvertFrom-Json } catch { $blDoc = $null }
 }
-function Write-BrBaseline([int]$Sites) {
-  <# The recorded mark, in the bytes git stores. The committed blob carries NO BOM, so -NoBom. The NOTE the
+function Write-BrBaseline([int]$Sites, $CrlfJson) {
+  <# The recorded marks, in the bytes git stores. The committed blob carries NO BOM, so -NoBom. The NOTE the
      file already carries is KEPT rather than replaced, and the key order is the committed one, so the diff
-     of a record is only what moved. #>
+     of a record is only what moved. The history is the Move-Item mark's, and gains a row only when that mark moves.
+     $CrlfJson is the second mark, or $null to leave the key out. #>
   $keepNote = if ($blDoc -and $blDoc.note) { [string]$blDoc.note } else { $BR_NOTE }
   $srcDoc = if ($blDoc) { $blDoc } else { [pscustomobject]@{} }
-  $hist = Add-RatchetHistory -Doc $srcDoc -Count $Sites
-  $doc = [pscustomobject]@{ generated = (Get-Date).ToString('s'); sites = $Sites; history = $hist; note = $keepNote }
-  $null = Write-TcLfFile -Path $BASELINE_FILE -Text ($doc | ConvertTo-Json -Depth 5) -NoBom
+  $hist = if ($blDoc -and [int]$blDoc.sites -eq $Sites -and $blDoc.PSObject.Properties['history']) { @($blDoc.history) } else { Add-RatchetHistory -Doc $srcDoc -Count $Sites }
+  $doc = [ordered]@{ generated = (Get-Date).ToString('s'); sites = $Sites }
+  if ($null -ne $CrlfJson) { $doc['crlf_json_sites'] = [int]$CrlfJson }
+  $doc['history'] = $hist
+  $doc['note'] = $keepNote
+  $null = Write-TcLfFile -Path $BASELINE_FILE -Text ([pscustomobject]$doc | ConvertTo-Json -Depth 5) -NoBom
   return $hist
 }
+$summary = { param($extra) ("scanned={0} sites={1} crlf_json={2}" -f $files.Count, $count, $cj) + $(if ($extra) { ' ' + $extra } else { '' }) }
 if (-not $blDoc) {
   # SEEDING IS NOT RECORDING A FALL. With no baseline there is nothing to protect and nothing to compare
   # against, so the first run writes one - which in production cannot happen, the file being tracked.
   # The day-one count goes into the history as well, so every later fall is read against what was first measured.
-  $null = Write-BrBaseline $count
-  Write-Output ("bare-replace: baseline written at {0} site(s) over {1} file(s). From here the number may only go DOWN." -f $count, $files.Count)
-  Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} baseline={1}" -f $files.Count, $count) -Code 0
+  $null = Write-BrBaseline $count $cj
+  Write-Output ("bare-replace: baseline written at {0} site(s) and {1} CRLF JSON write(s) over {2} file(s). From here both numbers may only go DOWN." -f $count, $cj, $files.Count)
+  Exit-Guard -Name 'bare-replace' -Summary (& $summary 'seeded') -Code 0
 }
 $base = [int]$blDoc.sites
+$cjBase = if ($blDoc.PSObject.Properties['crlf_json_sites']) { [int]$blDoc.crlf_json_sites } else { $null }
 
 foreach ($h in ($hits | Sort-Object File, Line)) {
   Write-Output ("  bare  {0}:{1}" -f (Get-TcPathBelowRoot $h.File (Get-TcRootFull $Root)).TrimStart('\'), $h.Line)
 }
+foreach ($h in ($cjHits | Sort-Object File, Line)) {
+  Write-Output ("  crlf-json  {0}:{1}" -f (Get-TcPathBelowRoot $h.File (Get-TcRootFull $Root)).TrimStart('\'), $h.Line)
+}
+$rose = $false
 if ($count -gt $base) {
   Write-Output ("BARE-REPLACE AUDIT FAILED: {0} Move-Item -Force command(s) outside lib\atomic-write.ps1, against a baseline of {1}. A NEW one was added: a reader holding that destination open makes it lose the write, silently under the default ErrorActionPreference. Use Write-TcAtomicFile, or mark a deliberate exception with '# atomic-replace:allow <reason>'." -f $count, $base)
-  Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} sites={1} baseline={2}" -f $files.Count, $count, $base) -Code 2
+  $rose = $true
 }
+if ($null -ne $cjBase -and $cj -gt $cjBase) {
+  Write-Output ("BARE-REPLACE AUDIT FAILED: {0} ConvertTo-Json | Set-Content/Out-File write(s) outside a self-test body, against a baseline of {1}. A NEW one was added: under PS 5.1 it writes CRLF, which over a tracked file leaves the checkout dirty with a zero-line diff. Pipe into Write-TcLfFile (lib\lf-write.ps1) or Write-TcAtomicFile -Lf (lib\atomic-write.ps1) instead, matching the file's BOM, or mark a deliberate exception with '# crlf-json:allow <reason>'." -f $cj, $cjBase)
+  $rose = $true
+}
+if ($rose) { Exit-Guard -Name 'bare-replace' -Summary (& $summary ("baseline={0} crlf_json_baseline={1}" -f $base, $cjBase)) -Code 2 }
+
 $move = Test-RatchetMove -Name 'bare-replace' -Count $count -Baseline $base -AcceptDrop:$AcceptDrop
-if ($move.Verdict -eq 'implausible') {
-  Write-Output $move.Message
-  Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} sites={1} baseline={2} refused-to-lower" -f $files.Count, $count, $base) -Code 2
-}
-if ($move.Verdict -eq 'tightened') {
-  # A FALL IS SPOKEN, NOT WRITTEN, unless this run was asked to record it (see the header). -AcceptDrop is
-  # such an ask: it has always recorded the fall it names.
-  if (-not ($Tighten -or $AcceptDrop)) {
-    Write-Output ("bare-replace: PASSED, and the ratchet CAN tighten - {0} site(s), baseline {1}. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\bare-replace-baseline.json." -f $count, $base)
-    Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} sites={1} baseline={2} can-tighten={1}" -f $files.Count, $count, $base) -Code 0
+$cjMove = if ($null -ne $cjBase) { Test-RatchetMove -Name 'crlf-json' -Count $cj -Baseline $cjBase -AcceptDrop:$AcceptDrop } else { $null }
+foreach ($m in @($move, $cjMove)) {
+  if ($m -and $m.Verdict -eq 'implausible') {
+    Write-Output $m.Message
+    Exit-Guard -Name 'bare-replace' -Summary (& $summary 'refused-to-lower') -Code 2
   }
-  $hist = Write-BrBaseline ([int]$move.NewBaseline)
-  Write-Output ("PASSED and TIGHTENED - " + $move.Message)
+}
+# A FALL IS SPOKEN, NOT WRITTEN, unless this run was asked to record it (see the header). -AcceptDrop is
+# such an ask: it has always recorded the fall it names. A baseline without the second key is spoken the same way,
+# and -Tighten records it at today's count.
+$record = ($Tighten -or $AcceptDrop)
+$newSites = $base; $newCj = $cjBase; $moved = @()
+if ($move.Verdict -eq 'tightened') { if ($record) { $newSites = [int]$move.NewBaseline; $moved += $move.Message } else { Write-Output ("bare-replace: the Move-Item ratchet CAN tighten - {0} site(s), baseline {1}." -f $count, $base) } }
+if ($cjMove -and $cjMove.Verdict -eq 'tightened') { if ($record) { $newCj = [int]$cjMove.NewBaseline; $moved += $cjMove.Message } else { Write-Output ("bare-replace: the CRLF JSON ratchet CAN tighten - {0} write(s), baseline {1}." -f $cj, $cjBase) } }
+if ($null -eq $cjBase) { if ($record) { $newCj = $cj; $moved += ("crlf-json: mark recorded at {0}" -f $cj) } else { Write-Output ("bare-replace: NO CRLF JSON MARK in the baseline yet - {0} write(s) today. Record it with -Tighten." -f $cj) } }
+if ($moved.Count) {
+  $hist = Write-BrBaseline $newSites $newCj
+  foreach ($m in $moved) { Write-Output ("PASSED and TIGHTENED - " + $m) }
   Write-Output ("  " + (Get-RatchetTrend -History $hist))
   Write-Output '  New baseline written - commit ops\bare-replace-baseline.json, or it protects only this checkout.'
-  Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} sites={1} tightened-from={2}" -f $files.Count, $count, $base) -Code 0
+  Exit-Guard -Name 'bare-replace' -Summary (& $summary ("tightened-from={0} crlf_json_from={1}" -f $base, $cjBase)) -Code 0
 }
-Write-Output ("bare-replace: PASSED - {0} known Move-Item -Force command(s) over {1} file(s), unchanged from the baseline. Each is a write a held reader can refuse; converting one to lib\atomic-write.ps1 lowers the mark permanently." -f $count, $files.Count)
-Exit-Guard -Name 'bare-replace' -Summary ("scanned={0} sites={1} baseline={2}" -f $files.Count, $count, $base) -Code 0
+if ($count -lt $base -or ($null -ne $cjBase -and $cj -lt $cjBase)) {
+  Write-Output ("bare-replace: PASSED, and the ratchet CAN tighten - {0} site(s) against {1}, {2} CRLF JSON write(s) against {3}. NOT written: this may be a pre-push gate, and a rewrite here dirties the checkout being pushed without riding the push. Record it with -Tighten and commit ops\bare-replace-baseline.json." -f $count, $base, $cj, $cjBase)
+  Exit-Guard -Name 'bare-replace' -Summary (& $summary ("baseline={0} crlf_json_baseline={1} can-tighten" -f $base, $cjBase)) -Code 0
+}
+Write-Output ("bare-replace: PASSED - {0} known Move-Item -Force command(s) and {1} CRLF JSON write(s) over {2} file(s), at their marks. Converting one lowers its mark permanently." -f $count, $cj, $files.Count)
+Exit-Guard -Name 'bare-replace' -Summary (& $summary ("baseline={0} crlf_json_baseline={1}" -f $base, $cjBase)) -Code 0
