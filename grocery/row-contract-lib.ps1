@@ -170,8 +170,8 @@ function Get-TcRowContract {
     # unit, except on a row whose name states the same number as a weight (Test-TcKindLabelsDisagree), so the size
     # value here is the quantity Get-UnitPrice divides by.
     $dgNum = Get-TcDensityGml $Commodity
-    $dgBlocked = ($dgNum -gt 0) -and (Test-TcKindLabelsDisagree $r.size_text $r.name $unit)
-    $dg = if ($dgBlocked) { 0.0 } else { $dgNum }
+    $dg = Get-TcRowDensityGml $Commodity $r.size_text $r.name $unit
+    $dgBlocked = ($dgNum -gt 0) -and ($dg -le 0)
     $a1 = Get-SizeAmount $r.size_text $unit $dg
     if ($null -ne $a1 -and $a1 -gt 0) { $src = 'size_text'; $txt = $r.size_text; $amt = $a1 }
     elseif (-not $twoSizes) {

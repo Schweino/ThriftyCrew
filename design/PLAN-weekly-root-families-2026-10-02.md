@@ -326,7 +326,7 @@ Hy-Vee, which the Family Fare rotation does not explain, so a third call is wait
 **R7.4, RULED 2026-10-03 by Brad ("Give each a density (Recommended)"); built on branch r74-commodity-densities, status
 2026-10-03.** Each of the 11 oz-unit commodities whose fl oz rows step 8's contract would refuse declares a sourced density,
 no number typed from memory. The declaration is `density_g_ml` + `density_source` in `grocery/commodities.json` (the field
-the contract already read); the engine now reads it too, through `Get-TcDensityGml` in `pricing-math-lib.ps1`, so
+the contract already read); the engine now reads it too, through `Get-TcDensityGml` in `grocery/commodity-density-lib.ps1` (dot-sourced by `pricing-math-lib.ps1`), so
 `Convert-ToUnit` converts a volume size to weight on those commodities and the contract's size equals the engine's divisor.
 Five declare a USDA FDC SR Legacy density (mayonnaise 0.9299, miracle-whip 0.9933, coconut-oil 0.9214, evaporated-milk
 1.0651, relish 1.0356 g/ml). condensed-milk and cooking-spray are NOT density cases: their "fl oz" sizes are weights

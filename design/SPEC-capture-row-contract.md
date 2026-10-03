@@ -57,7 +57,7 @@ it; the first file an importer writes is attributed on the next run.
 Input: one row (the engine's candidate shape `name` / `price_text` / `size_text`, or a builder row `item` / `ad_price` /
 `size`, mapped by `ConvertTo-TcContractRow`) and its commodity: `unit` and the declarations `weight_is_one_unit`,
 `pack_is_package`, `pint_oz`, `kind_equivalent`, `density_g_ml` from `grocery/commodities.json`. The density is read by
-`Get-TcCommodityDensity` / `Get-TcDensityGml` in `pricing-math-lib.ps1`, the same functions `Get-UnitPrice` reads
+`Get-TcCommodityDensity` / `Get-TcDensityGml` in `commodity-density-lib.ps1`, the same functions `Get-UnitPrice` reads
 (section 6), so the size the contract states is the divisor the engine uses.
 
 | Field | Value | Source recorded |
@@ -220,7 +220,7 @@ memory; each carries its source.
 **One place, one reader.** The declaration is `density_g_ml` on the commodity in `grocery/commodities.json`, beside a
 `density_source` naming the USDA FoodData Central record and portion it came from. The contract already read that field
 (and nothing declared it); the engine did not read any density at all. `Get-TcCommodityDensity` moved from this lib into
-`pricing-math-lib.ps1`, and `Get-TcDensityGml` returns the number the arithmetic uses: a numeric `density_g_ml` on an oz
+`grocery/commodity-density-lib.ps1` (dot-sourced by `pricing-math-lib.ps1`), and `Get-TcDensityGml` returns the number the arithmetic uses: a numeric `density_g_ml` on an oz
 or lb commodity, else 0. `meal-prep/db/densities.json` was considered and not used: it is keyed by recipe food name and
 household unit, not by commodity id, and the engine does not load it. `kind_equivalent: near-water` stays a declaration
 that silences the kind question without converting (its own text says the units are interchangeable at the board's
@@ -266,11 +266,11 @@ contents density from a source not yet found, a change of unit to floz, or letti
 Harness: a scratch clone of this branch outside the worktree, seeded from the main checkout, `compare-deals.ps1 -MinStores
 1 -IdentityNamespace staple -JudgeDate 2026-10-03` run twice over the same inputs (ads-2026-09-30 and the seeded captures):
 once at HEAD 252c523da (board A, candidates sha256 130F15CF...), once with the change (board B, candidates sha256
-79D7B94A...). Blobs of the change: `grocery/pricing-math-lib.ps1` 3ca1fbcae7fbe85ba5dde3b6983439002a9d5cc0,
-`grocery/row-contract-lib.ps1` 412305070061b4aa579207b04e4dd7c8f7761fbd, `grocery/commodities.json`
+79D7B94A...). Blobs of the change: `grocery/pricing-math-lib.ps1` 6ef65636beb1ad71533853b69679e47c727e4887, `grocery/commodity-density-lib.ps1` 1cb1f9b04455955bddadbe6da7a75f2bd43cb4c9,
+`grocery/row-contract-lib.ps1` 95d96837612171687c4166cb137fb4c3d6f7c825, `grocery/commodities.json`
 b78f90a84d65865f5a5cf21e030b6c6b8f1a1b09, `grocery/basis-kind-allowlist.json` 04d216788de94c761646935187e347cf83a79a49,
 `grocery/pu-lib.ps1` ff69dea376da77cb168f532b4d509cb8fe6061e4, `grocery/audit-row-contract-shadow.ps1`
-b4c5ffaaf14eac6b73cdb649156664303ea5652a. Both builds exit 0.
+b4c5ffaaf14eac6b73cdb649156664303ea5652a. Both builds exit 0. (Board B was first built from an earlier arrangement of the same code, before the density functions moved into their own lib for the file-size budget; a rebuild at the blobs above over the same inputs reproduced it cell for cell, 0 of 2,910 changed, and the shadow again read 9.)
 
 **24 of 2,910 priced cells move, on 5 commodities; 0 crowns change; no cell appears or disappears.** Every move is the
 density factor (density x 1.0432) and nothing else:

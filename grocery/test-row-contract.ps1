@@ -4,7 +4,7 @@
 # row text of a queue item, transcribed from candidates-2026-09-30.json or the item's own body; no board is read.
 # Vocabulary (rule og-05): MUST FIRE = the founding defect is refused or repriced; MUST NOT FIRE = a legal row stays
 # accepted; CLEAN TWIN = the adjacent behaviour the fix was most likely to break still works.
-# gate-inputs: grocery\row-contract-lib.ps1, grocery\pricing-math-lib.ps1, grocery\pu-lib.ps1, grocery\ad-line-price-lib.ps1
+# gate-inputs: grocery\row-contract-lib.ps1, grocery\pricing-math-lib.ps1, grocery\commodity-density-lib.ps1, grocery\pu-lib.ps1, grocery\ad-line-price-lib.ps1
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 . (Join-Path $here 'row-contract-lib.ps1')
