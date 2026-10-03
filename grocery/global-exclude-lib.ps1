@@ -150,6 +150,16 @@ function Get-TcGlobalExclude {
     # rows. The words are the audit's own (audit-household-in-food's $HOUSEHOLD_SIGNAL), so the rule that routes
     # and the guard that checks it name one class. Deliberately NOT here: 'polish' and 'gel' alone (Polish
     # kielbasa, fruit gel bowls) - measured by I217 before choosing its words.
-    '(?:\bdawn\b|nail\s+polish|styling\s+gel)'
+    '(?:\bdawn\b|nail\s+polish|styling\s+gel)',
+    # '\bhard\s+(?:\w+\s+){0,2}teas?\b' and '\btwisted\s+teas?\b' added 2026-10-03: A HARD TEA IS A MALT BEVERAGE.
+    # "Twisted Tea Hard Iced Tea, Peach 24 Fl Oz" held Family Fare's iced-tea cell at 0.1538/floz on
+    # comparison-2026-09-30 and public\board.json: iced-tea's include 'iced\s+tea' claims it, and the alcohol
+    # tokens above ('\bmalt\b', 'spiked', 'hard\s+seltzer') never appear in the retail name. Its siblings carry
+    # dept beer_wine_spirits and aisle admission refuses them; this one is a legacy carried row with no URL, so
+    # admission was BLIND and let it in. The SHAPE is 'hard <up to two words> tea'; the brand token covers a
+    # Twisted Tea line named without 'hard'. Routing over the 20,486 distinct names in the 2026-10-02 inputs
+    # moved 8 (all Twisted Tea, all iced-tea -> unmatched) and nothing else. No commodity sells hard tea, so none
+    # needs relax_global.
+    '\bhard\s+(?:\w+\s+){0,2}teas?\b','\btwisted\s+teas?\b'
   )
 }

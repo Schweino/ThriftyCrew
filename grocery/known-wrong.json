@@ -5315,6 +5315,51 @@
                         "ruled_on":  "2026-09-26",
                         "ruled_by":  "triage-money-lane 2026-09-26",
                         "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "iced-tea|FamilyFare|twisted-tea-hard-iced-tea-peach-24-fl-oz",
+                        "commodity":  "iced-tea",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Twisted Tea Hard Iced Tea, Peach 24 Fl Oz"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "Twisted Tea Hard Iced Tea is an alcoholic malt beverage, not iced tea. It held Family Fare\u0027s iced-tea cell at 0.1538/floz on comparison-2026-09-30 and public/board.json (a legacy carried everyday row, as_of 2026-09-03, with no URL, so aisle admission was BLIND; its siblings shelve in beer_wine_spirits/malternatives). Class fixed in global-exclude-lib.ps1: \u0027\\bhard\\s+(?:\\w+\\s+){0,2}teas?\\b\u0027 and \u0027\\btwisted\\s+teas?\\b\u0027.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-10-03",
+                        "ruled_by":  "session 2026-10-03 (FF wrong-product cells found re-measuring resolve-familyfare-urls, MEASURE-chip-resolvers-2026-10 W8)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "ground-cinnamon|FamilyFare|cinnamon-twirls",
+                        "commodity":  "ground-cinnamon",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Cinnamon Twirls"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "\u0027Cinnamon Twirls\u0027 (16 oz, $4.99, Family Fare Weekly Ad 2026-09-27 to 2026-10-03) is a bakery pastry, not ground cinnamon. It held the ESTATE CHEAPEST ground-cinnamon cell at 0.3119/oz on comparison-2026-09-30 and public/board.json, ahead of Aldi\u0027s real jar at 0.4125. Ad rows carry no shelf path, so aisle admission was BLIND. Class fixed in category-excludes.json: \u0027\\btwirls?\\b\u0027 in bakery_carrier, and bakery_carrier given by id to the 34 single-ingredient spices.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-10-03",
+                        "ruled_by":  "session 2026-10-03 (FF wrong-product cells found re-measuring resolve-familyfare-urls, MEASURE-chip-resolvers-2026-10 W8)",
+                        "retire_when":  "ruling-reversed"
+                    },
+                    {
+                        "key":  "sponges|FamilyFare|mr-clean-mr-clean-magic-eraser-sponge-shower-tub",
+                        "commodity":  "sponges",
+                        "store":  "Family Fare",
+                        "names":  [
+                                      "Mr. Clean Mr. Clean Magic Eraser Sponge, Shower \u0026 Tub Cleaner, Lemon, 3ct 3 Ct"
+                                  ],
+                        "product_id":  "",
+                        "verdict":  "wrong-product",
+                        "evidence":  "A Magic Eraser Shower \u0026 Tub Cleaner is a melamine-foam cleaning pad sold as a bathroom cleaner, not a dish sponge. It held Family Fare\u0027s sponges cell at 2.6633 each (sale, Family Fare Weekly Ad 2026-09-27 to 2026-10-03) on comparison-2026-09-30 and public/board.json. Ad rows carry no shelf path, so aisle admission was BLIND. Fixed in commodities.json: sponges excludes \u0027\\berasers?\\b\u0027.",
+                        "seen_on_board":  "yes - on the newest board when this ruling was made",
+                        "ruled_on":  "2026-10-03",
+                        "ruled_by":  "session 2026-10-03 (FF wrong-product cells found re-measuring resolve-familyfare-urls, MEASURE-chip-resolvers-2026-10 W8)",
+                        "retire_when":  "ruling-reversed"
                     }
                 ]
 }

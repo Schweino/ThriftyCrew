@@ -538,7 +538,23 @@ _RT 'MUST FIRE  754693 an Aldi carrot + sweet potato medley is neither carrots n
 _RT 'CLEAN TWIN  754693 Aldi plain carrots still price carrots' 'Carrot 2 Lbs' 'carrots'
 _RT 'CLEAN TWIN  754693 Family Fare whole carrots still price carrots' 'Our Family Whole Carrots 32 Oz' 'carrots'
 _RT 'CLEAN TWIN  754693 a plain sweet potato still prices sweet-potatoes' 'Sweet Potato (Yam)' 'sweet-potatoes'
-  $rtWant = 103   # +4 for 754693 (1 must-fire carrot/sweet-potato medley, 3 clean twins), 2026-09-29; +10 for c989c6 (6 must-fire, 4 clean twins: Tony Creole, konjac, Cinco de Mayo); +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
+# FF-1003 (2026-10-03): three Family Fare cells on comparison-2026-09-30 and public/board.json priced the wrong product, each
+# from a row with no shelf path, so aisle admission was BLIND. A hard tea is a malt beverage (global-exclude-lib), a pastry
+# named for its spice is not the spice (bakery_carrier, given by id to the single-ingredient spices), and a Magic Eraser is
+# not a dish sponge. Founding names verbatim from family-fare-regular-2026-10-02.json, ads-2026-09-30.json and
+# fareway-regular-2026-10-02.json; clean twins are real everyday names from the same inputs.
+_RT 'MUST FIRE  FF-1003 a peach hard iced tea is not iced tea (global hard-tea shape)' 'Twisted Tea Hard Iced Tea, Peach 24 Fl Oz' '<none>'
+_RT 'MUST FIRE  FF-1003 a hard iced tea 12-pack is not iced tea' 'Twisted Tea Original Hard Iced Tea 12 Ea' '<none>'
+_RT 'MUST FIRE  FF-1003 cinnamon twirls are not ground cinnamon (bakery_carrier twirls, spice scope)' 'Cinnamon Twirls' '<none>'
+_RT 'MUST FIRE  FF-1003 a cinnamon raisin bread is not ground cinnamon (the plural breads fence)' 'Country Hearth Breads, Cinnamon Raisin, Breakfast' '<none>'
+_RT 'MUST FIRE  FF-1003 a Magic Eraser shower cleaner is not a dish sponge (sponges eraser fence)' 'Mr. Clean Mr. Clean Magic Eraser Sponge, Shower & Tub Cleaner, Lemon, 3ct 3 Ct' '<none>'
+_RT 'CLEAN TWIN  FF-1003 a gallon of brewed iced tea still prices iced-tea' 'Great Value Diet Sugar-Free Sweet Brewed Iced Tea, 128 fl oz' 'iced-tea'
+_RT 'CLEAN TWIN  FF-1003 a bottled iced tea still prices iced-tea' 'Pure Leaf Unsweetened Black Iced Tea 18.5 Fl Oz' 'iced-tea'
+_RT 'CLEAN TWIN  FF-1003 a jar named only Cinnamon still prices ground-cinnamon (the bare include survives)' 'Stonemill Cinnamon 1 Each' 'ground-cinnamon'
+_RT 'CLEAN TWIN  FF-1003 a ground cinnamon jar still prices ground-cinnamon' 'Mc Cormick Ground Cinnamon 2.37 Oz' 'ground-cinnamon'
+_RT 'CLEAN TWIN  FF-1003 cinnamon sticks still price cinnamon-stick under the spice bakery class' 'Canela Entera Cinnamon Sticks' 'cinnamon-stick'
+_RT 'CLEAN TWIN  FF-1003 scrub sponges still price sponges' 'Brillo Basics Estracell Heavy Duty Scrub Sponges, 2 Count' 'sponges'
+  $rtWant = 114   # +11 for FF-1003 (5 must-fire, 6 clean twins: hard tea, cinnamon twirls and bread, magic eraser), 2026-10-03; +4 for 754693 (1 must-fire carrot/sweet-potato medley, 3 clean twins), 2026-09-29; +10 for c989c6 (6 must-fire, 4 clean twins: Tony Creole, konjac, Cinco de Mayo); +10 for the cherry fritter and dessert bars (5 must-fire, 2 must-not-fire, 3 clean twins), 2026-09-26; 19 from the 4f rules change, +1 for D4 (La Choy canned sprouts), +6 for the all-produce ruling, +9 for the stew/can ruling, 2026-09-19; +12 for the flavour_pair_carrier (6 must-fire, 6 clean twins), 2026-09-26; +20 for the prepared-product and roast-on-steak classes (11 must-fire, 9 clean twins), queue 2026-09-26-8deaa4; +10 for the swept shapes and ed86c6 (6 must-fire, 4 clean twins); +2 for the sun-dried fallbacks (garlic jar, spread)
   if ($rtRan -ne $rtWant) { Write-Output ("  FAIL  routing fixtures ran {0} case(s), the list holds {1}" -f $rtRan, $rtWant); $rtBad++ }
   if ($rtBad -gt 0) {
     Write-Output ("MATCH-LIB FAILED (routing fixtures: {0} of {1} failed)" -f $rtBad, $rtRan)

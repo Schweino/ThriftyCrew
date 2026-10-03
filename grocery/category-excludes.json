@@ -151,7 +151,8 @@
       "\\bpillsbury\\b",
       "\\bfruit\\s+rolls?\\b",
       "\\bfritters?\\b",
-      "(?<!salad\\s)\\bbars?\\b"
+      "(?<!salad\\s)\\bbars?\\b",
+      "\\btwirls?\\b"
     ],
     "dairy_carrier": [
       "\\bsiggi'?s?\\b",
@@ -465,6 +466,20 @@
         "whole_cut_carrier"
       ],
       "note": "A ROAST OR A WHOLE SUBPRIMAL IS NOT A STEAK (2026-09-26, queue 2026-09-26-8deaa4, candidates from plan-2026-09-26-2 item 177835). A steak or chop commodity prices a cut slice; a product NAMED as a roast, a whole piece or a case is the joint the slices are cut from, sold by the pound at a lower rate, so it wins the cheapest slot. Founding cells on comparison-2026-09-23: sirloin-steak | Family Fare | 'Fresh Usda Choice Whole Sirloin Tip' $5.49/lb (the crown) and sirloin-steak | Sam's Club | 'Sirloin Tip, Case  priced per pound' $6.47/lb. Deliberately NOT here: whether a sirloin tip STEAK (a round cut) may stand for sirloin steak, which is Brad's ruling Q-2026-09-26-sirloin-tip, and chuck-roast, a roast commodity whose case question is Q-2026-09-26-subprimal-case."
+    },
+    {
+      "ids": [
+        "ground-cinnamon", "cinnamon-stick", "ground-ginger", "ground-nutmeg", "fresh-whole-nutmeg", "mace-spice",
+        "ground-cloves", "whole-cloves", "ground-allspice", "ground-cumin", "cumin-seeds", "ground-coriander",
+        "ground-turmeric", "ground-fennel", "ground-sumac", "cardamom", "paprika", "cayenne-pepper", "chipotle-powder",
+        "garlic-powder", "onion-powder", "dried-basil", "dried-oregano", "dried-parsley", "dried-thyme", "dried-dill",
+        "bay-leaves", "black-pepper", "black-peppercorns", "saffron", "crushed-thai-chili", "red-pepper-flakes",
+        "poppy-seeds", "caraway-seeds"
+      ],
+      "classes": [
+        "bakery_carrier"
+      ],
+      "note": "A PASTRY NAMED FOR ITS SPICE IS NOT THE SPICE (2026-10-03). Founding cell on comparison-2026-09-30 and public/board.json: ground-cinnamon | Family Fare | 'Cinnamon Twirls' (16 oz, $4.99, Family Fare weekly ad 09-27 to 10-03), a bakery pastry that took the ESTATE CHEAPEST ground-cinnamon cell at 0.3119/oz. ground-cinnamon's bare '\\bcinnamon\\b' include is needed (Aldi's 'Stonemill Cinnamon 1 Each' is a real jar), and the spices sit in 'Baking & Spices', whose shared category block carries no bakery class, so its own hand list of bakery words was the only fence and lacked 'twirls'. These are the single-ingredient spices of the flavour_pair block above, WITHOUT the three sugars and feta, whose products can be bakery-adjacent. Measured with 'twirls' added to bakery_carrier over the 20,486 distinct names of the 2026-10-02 inputs (newest regular pull per store plus ads-2026-09-30): 1 name moved, Cinnamon Twirls, to unmatched; no spice lost a row. Not a class token: the plural 'breads', which went into ground-cinnamon's own exclude beside its '\\bbread\\b' the same day, because Fareway's 'Country Hearth Breads, Cinnamon Raisin, Breakfast' still routed to ground-cinnamon and was held off it only by a known-wrong ruling; with the exclude it routes to nothing."
     }
   ],
   "exempt": {

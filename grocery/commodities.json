@@ -3062,7 +3062,8 @@
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
                         "(?\u003c!salad\\s)\\bbars?\\b",
-                        "\\bpepper"
+                        "\\bpepper",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -3355,7 +3356,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -3625,7 +3627,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -3889,7 +3892,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -4149,7 +4153,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -4414,7 +4419,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -4694,7 +4700,8 @@
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
                         "(?\u003c!salad\\s)\\bbars?\\b",
-                        "\\bstuffing"
+                        "\\bstuffing",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -4964,7 +4971,8 @@
                         "\\bfruit\\s+bowls?\\b",
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -5236,7 +5244,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -5517,7 +5526,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -5785,7 +5795,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -6064,7 +6075,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -8627,7 +8639,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -8904,7 +8917,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -9186,7 +9200,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -9461,7 +9476,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -9722,7 +9738,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "wrapped"
@@ -9989,7 +10006,8 @@
                         "\\bfritters?\\b",
                         "(?\u003c!salad\\s)\\bbars?\\b",
                         "\\bcarrots?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*sweet\\s+potato",
-                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b"
+                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -10263,7 +10281,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -10522,7 +10541,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -10780,7 +10800,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -11038,7 +11059,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -11300,7 +11322,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -11584,7 +11607,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -11848,7 +11872,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -12122,7 +12147,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -12729,7 +12755,8 @@
                         "\\bfritters?\\b",
                         "(?\u003c!salad\\s)\\bbars?\\b",
                         "\\bcarrots?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*sweet\\s+potato",
-                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b"
+                        "\\bsweet\\s+potato(?:es)?\\s*(?:[\u0026+/,]|\\band\\b)?\\s*carrots?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -16594,7 +16621,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -16725,7 +16775,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -18523,7 +18596,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -18814,7 +18888,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -19070,7 +19145,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -19325,7 +19401,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -19567,7 +19644,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -19842,7 +19920,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -20109,7 +20188,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -20368,7 +20448,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -20666,7 +20747,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -20921,7 +21003,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -21178,7 +21261,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -21442,7 +21526,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -21700,7 +21785,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -21958,7 +22044,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -22218,7 +22305,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -22478,7 +22566,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -22732,7 +22821,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -22988,7 +23078,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -23242,7 +23333,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -23495,7 +23587,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -23767,7 +23860,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -24027,7 +24121,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -24297,7 +24392,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -24550,7 +24646,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -24810,7 +24907,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -25072,7 +25170,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -43048,7 +43147,8 @@
                         "makeup",
                         "\\bmop\\b",
                         "dishwand",
-                        "replacement\\s+heads?"
+                        "replacement\\s+heads?",
+                        "\\berasers?\\b"
                     ],
         "relax_global":  [
                              "\\bscent(?:s|ed)?\\b",
@@ -44277,7 +44377,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -44397,7 +44520,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -44659,7 +44805,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -44783,7 +44930,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -44830,6 +45000,7 @@
                         "toast\\s+crunch",
                         "\\bsugar\\b",
                         "\\bbread\\b",
+                        "\\bbreads\\b",
                         "applesauce",
                         "\\bgum\\b",
                         "candle",
@@ -44953,7 +45124,26 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bscones?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45075,7 +45265,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45197,7 +45410,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45319,7 +45555,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45441,7 +45700,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45559,7 +45841,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -45911,7 +46216,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -54809,7 +55137,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -55832,7 +56161,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -55951,7 +56303,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56067,7 +56442,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56185,7 +56583,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56295,7 +56716,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56410,7 +56854,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56524,7 +56991,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56633,7 +57123,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56760,7 +57273,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56870,7 +57406,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -56988,7 +57547,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -57105,7 +57687,28 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -58469,7 +59072,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -58724,7 +59328,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -58985,7 +59590,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -59245,7 +59851,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -60414,7 +61021,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -60963,7 +61571,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -61451,7 +62082,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -61715,7 +62369,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -62770,7 +63425,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -63035,7 +63691,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "pint_oz":  10
     },
@@ -64294,7 +64951,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -64561,7 +65219,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -64833,7 +65492,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -65098,7 +65758,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -65373,7 +66034,8 @@
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
                         "(?\u003c!salad\\s)\\bbars?\\b",
-                        "\\bsweetened\\b"
+                        "\\bsweetened\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -65632,7 +66294,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -65917,7 +66580,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -66172,7 +66836,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -66429,7 +67094,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -66678,7 +67344,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -66932,7 +67599,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -67195,7 +67863,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -67452,7 +68121,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -67709,7 +68379,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -67964,7 +68635,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -68243,7 +68915,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -68512,7 +69185,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -68767,7 +69441,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -69020,7 +69695,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -69273,7 +69949,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -69525,7 +70202,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -69785,7 +70463,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -70040,7 +70719,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -70295,7 +70975,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -70547,7 +71228,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -70803,7 +71485,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -71058,7 +71741,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -71311,7 +71995,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -71565,7 +72250,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -71826,7 +72512,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -72081,7 +72768,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -72341,7 +73029,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -72603,7 +73292,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -72855,7 +73545,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "\\bkit\\b"
@@ -73125,7 +73816,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -73390,7 +74082,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
@@ -73648,7 +74341,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -73902,7 +74596,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -74160,7 +74855,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -74411,7 +75107,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -74671,7 +75368,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -74924,7 +75622,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -75181,7 +75880,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -75442,7 +76142,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -75700,7 +76401,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -76197,7 +76899,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -76458,7 +77161,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -76719,7 +77423,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -76975,7 +77680,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -78351,7 +79057,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -81886,7 +82593,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -82724,7 +83432,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -83507,7 +84238,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -83621,7 +84375,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -83735,7 +84512,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -84173,7 +84973,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -84398,7 +85199,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -84805,7 +85629,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -84921,7 +85768,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -85382,7 +86252,30 @@
                         "\\b(?!oranges?\\s+(?:habanero|bell|peppers?)\\b)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)(?:\\s*[\u0026+/]\\s*|\\s+and\\s+|\\s+)(?:apples?|peach(?:es)?|mango(?:es|s)?|strawberr(?:y|ies)|raspberr(?:y|ies)|blueberr(?:y|ies)|blackberr(?:y|ies)|cherr(?:y|ies)|bananas?|pineapples?|coconut|lemons?|limes?|oranges?|grapes?|watermelon|kiwis?|pears?|cranberr(?:y|ies)|pomegranates?|passion\\s*fruit|guava|apricots?|cinnamon|vanilla|ginger|cilantro|jalape\\S{1,2}os?|chipotle|habanero|garlic|basil|rosemary|maple|caramel|chocolate|cocoa|peanut\\s+butter|brown\\s+sugar|mint)\\b",
                         "\\b(?:cinnamon|vanilla|maple|caramel|chocolate|cocoa|lemon|lime|orange|strawberr(?:y|ies)|raspberr(?:y|ies)|apples?|pumpkin|coconut|mango|peach|cherry|lavender|espresso|garlic|onion|honey)\\s+(?:sugar|salt|pepper)\\b",
                         "\\bsorbett?[oi]?s?\\b",
-                        "\\bgelato\\b"
+                        "\\bgelato\\b",
+                        "\\bbagels?\\b",
+                        "\\bmuffins?\\b",
+                        "\\bscones?\\b",
+                        "\\bwaffles?\\b",
+                        "pancake",
+                        "toaster\\s+pastr",
+                        "pop[\\s-]?tarts?",
+                        "\\bcereal\\b",
+                        "granola",
+                        "\\bcake\\b",
+                        "\\bpies?\\b",
+                        "\\bcookies?\\b",
+                        "donuts?",
+                        "doughnuts?",
+                        "\\bloaf\\b",
+                        "strudel",
+                        "turnovers?",
+                        "\\bdanish\\b",
+                        "\\bpillsbury\\b",
+                        "\\bfruit\\s+rolls?\\b",
+                        "\\bfritters?\\b",
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
@@ -85639,7 +86532,8 @@
                         "\\bdiced\\b[^,]{0,30}\\bbowls?\\b",
                         "\\bsalad\\s+bowls?\\b",
                         "\\bfritters?\\b",
-                        "(?\u003c!salad\\s)\\bbars?\\b"
+                        "(?\u003c!salad\\s)\\bbars?\\b",
+                        "\\btwirls?\\b"
                     ]
     },
     {
