@@ -19,7 +19,7 @@
           -Alert     send-alert.ps1 once per NEW issue-set (signature de-dup) - for the daily pipeline
 #>
 # The self-test runs on frozen fixtures and temp files, reads its own source and the live alert-registry.json, through these libraries.
-# gate-inputs: lib\guard-contract.ps1, grocery\alert-lib.ps1, grocery\soundness-publish-lib.ps1, grocery\cell-quarantine-lib.ps1, grocery\alert-registry-lib.ps1, lib\json-io.ps1, grocery\alert-registry.json
+# gate-inputs: lib\guard-contract.ps1, lib\atomic-write.ps1,grocery\alert-lib.ps1, grocery\soundness-publish-lib.ps1, grocery\cell-quarantine-lib.ps1, grocery\alert-registry-lib.ps1, lib\json-io.ps1, grocery\alert-registry.json
 [CmdletBinding()]   # an undeclared argument must be a hard error, never a silent $args drop (2026-09-07)
 param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   # -ForceAccept: bless the baseline EVEN OVER outstanding DROP verdicts. The gate below exists because
@@ -40,6 +40,7 @@ param([switch]$Accept, [switch]$Alert, [string]$OutDir = "",
   [switch]$SelfTest)
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\guard-contract.ps1')
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: the baseline, report and sig are tracked LF
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 # Alerts go out through Send-Alert (alert-lib.ps1), never as `powershell -File send-alert.ps1 -Body $long`:
 # Windows refuses to start a process whose command line passes 32767 chars, so an oversized body did not
@@ -1208,7 +1209,8 @@ if ($Accept -or $ForceAccept) {
   if ($routeSb) { $carriedHashOut = $rulesHash }
   $obj = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); rules_hash = $rulesHash; carried_rules_hash = $carriedHashOut; names = $cf.names
                      contested = @($cf.contested.Keys | Sort-Object); last_seen = $cf.last_seen }
-  Set-Content $baseF -Value ($obj | ConvertTo-Json -Depth 4) -Encoding UTF8
+  # BOM and an LF trailer, the bytes the tracked blob holds: Set-Content wrote ConvertTo-Json's CRLF (2026-10-03).
+  [void](Write-TcAtomicFile -Path $baseF -Text ($obj | ConvertTo-Json -Depth 4) -Lf)
   Write-Output ("match-soundness: baseline ACCEPTED ($($cf.names.Count) product names, $($cf.contested.Count) contested) at rules_hash $rulesHash. drift-vs-engine=$drift")
   Write-Output ("  of those, $($names.Count) names and $($contest.Count) contested were SEEN TODAY; $($cf.carried_names) name(s) and $($cf.carried_contested) contested entry(ies) were CARRIED FORWARD as absent-not-gone; $($cf.expired) expired after 30 days absent")
   $cfRr = @($cf.rerouted)
@@ -1366,7 +1368,7 @@ $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); drift_v
                       new_contested = $newContestRows; new_contested_names = $newContest; cell_by_contest = $cellContestRows }
 # -CellScope writes NO report: soundness-report.json is a tracked file the publish gate and the daily -Alert run read,
 # and a second path would be untracked litter on every guards run. Its findings are its stdout, in the guards log.
-if (-not $CellScope) { Set-Content (Join-Path $audDir 'soundness-report.json') -Value ($report | ConvertTo-Json -Depth 4) -Encoding UTF8 }
+if (-not $CellScope) { [void](Write-TcAtomicFile -Path (Join-Path $audDir 'soundness-report.json') -Text ($report | ConvertTo-Json -Depth 4) -Lf) }
 
 $regr = $moved.Count + $dropped.Count
 Write-Output ("match-soundness: MOVED=$($moved.Count)  DROPPED=$($dropped.Count)  new-contested=$($newContest.Count)  drift-vs-engine=$drift")
@@ -1461,7 +1463,7 @@ if ($Alert -and ($regr -gt 0 -or $newContest.Count -gt 0 -or $drift -gt 0)) {
       $keep = $null
     }
   }
-  if ($null -ne $keep) { try { Set-Content $sigF -Value ($keep | ConvertTo-Json -Compress) -Encoding UTF8 } catch { } }
+  if ($null -ne $keep) { try { [void](Write-TcAtomicFile -Path $sigF -Text ($keep | ConvertTo-Json -Compress) -Lf) } catch { } }
 }
 # regressions (moved/dropped of an existing product) HOLD the publish until reviewed+accepted
 # EXIT: 2 stays the REGRESSION verdict (a moved/dropped product holds the publish). CELL-BY-CONTEST is

@@ -180,6 +180,16 @@ else {
   $msNewBase = ConvertFrom-Json ([IO.File]::ReadAllText((Join-Path $fxMs 'out\audit\match-baseline.json')))
   if ($r.rc -eq 0 -and ([string]$msNewBase.names.'Fresh Lemon 1 ct') -eq 'lemons') { Ok '-Accept ignores the sweep cache and baselines a freshly swept truth' }
   else { Bad ('-Accept blessed a CACHED mapping into the permanent baseline (got ' + [string]$msNewBase.names.'Fresh Lemon 1 ct' + ') - a stale sweep is now invisible forever') }
+  # (2026-10-03) BOTH TRACKED FILES -Accept WRITES ARE THE BYTES GIT STORES: the BOM their blobs carry, no CR, one
+  # trailing LF. Set-Content wrote ConvertTo-Json's CRLF over the LF blobs, so every accept left them ` M` with an
+  # empty diff and a hand LF repair could drop the BOM. The seed above is Set-Content's CRLF, so a CRLF writer shows.
+  foreach ($msTr in @('match-baseline.json', 'soundness-report.json')) {
+    $msTb = [IO.File]::ReadAllBytes((Join-Path $fxMs ('out\audit\' + $msTr)))
+    $msTcr = 0; foreach ($msX in $msTb) { if ($msX -eq 13) { $msTcr++ } }
+    $msTbom = ($msTb.Length -ge 3 -and $msTb[0] -eq 0xEF -and $msTb[1] -eq 0xBB -and $msTb[2] -eq 0xBF)
+    if ($r.rc -eq 0 -and $msTcr -eq 0 -and $msTbom -and $msTb[-1] -eq 0x0A) { Ok ('-Accept writes ' + $msTr + ' LF with its BOM kept (CR count 0), so an unchanged accept leaves git status clean') }
+    else { Bad ('-Accept wrote ' + $msTr + ' with ' + $msTcr + ' CR byte(s), bom=' + $msTbom + ' (rc=' + $r.rc + ') - the tracked file reads modified with an empty diff') }
+  }
   # 2026-09-22 (queue 2026-09-22-e9aed3): an accept names the commodities it released a product from and re-checks
   # their links. This copy has no deriver beside it, so the branch must SAY it skipped, never pass silently.
   if ($r.text -match 'link re-check( SKIPPED - derive-links-from-prices\.ps1 is not beside|: no commodity lost|: \d+ commodit\(ies\) released)') { Ok '-Accept reaches the released-commodity link re-check and states what it did' }

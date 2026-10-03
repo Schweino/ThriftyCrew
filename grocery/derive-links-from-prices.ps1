@@ -64,6 +64,7 @@ if (-not $KnownWrongFile) { $KnownWrongFile = Join-Path $root 'known-wrong.json'
 . (Join-Path $root 'commodity-rules-lib.ps1')   # Add-TcRuleIndex / Get-TcReleasingPattern: an exclude releases a linked product
 . (Join-Path $root 'link-identity-lib.ps1')      # Get-TcRowUrl / Test-SamsAlnumShapeProven: ONE copy of the per-store URL rules
 . (Join-Path $root 'link-sibling-lib.ps1')      # Get-TiSiblingReason: THE sibling rule audit-tile-integrity reports by
+. (Join-Path (Split-Path $root -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: product-urls.json is tracked LF and read by the board
 if (-not $CommoditiesFile) { $CommoditiesFile = Join-Path $root 'commodities.json' }
 
 # ---- SAM'S ALPHANUMERIC /ip/<id> IS PROVEN BY A FILE, NOT BY THIS SCRIPT (2026-09-22, plan-2026-09-22-10 bec597) ----
@@ -187,6 +188,13 @@ if ($SelfTest) {
       ([string]$tw.verified)
     TT 'CLEAN TWIN: the seeded file is not rewritten wholesale (only the drifted entry moved)' `
       ($twinBefore -ne (Get-FileHash -LiteralPath $puFx -Algorithm SHA256).Hash -and ([string]$tw.price) -eq '$6.00') ([string]$tw.price)
+    # (2026-10-03) THE -Apply WRITE IS THE BYTES GIT STORES: the BOM product-urls.json's blob carries, no CR, one
+    # trailing LF. The seed is Set-Content's CRLF, so a writer that went back to it shows here.
+    $puB = [IO.File]::ReadAllBytes($puFx)
+    $puCr = 0; foreach ($x in $puB) { if ($x -eq 13) { $puCr++ } }
+    $puBom = ($puB.Length -ge 3 -and $puB[0] -eq 0xEF -and $puB[1] -eq 0xBB -and $puB[2] -eq 0xBF)
+    TT 'BYTES: -Apply writes product-urls.json LF with its BOM kept and one trailing LF (CR count 0)' `
+      ($puCr -eq 0 -and $puBom -and $puB[-1] -eq 0x0A -and $puB[-2] -ne 0x0A) ("cr=$puCr bom=$puBom")
     TT "CLEAN TWIN: with NO url-shape file a numeric Sam's id still derives /ip/15235818162" `
       ($null -ne $tb -and ([string]$tb.Value.'Sam''s Club'.url) -eq 'https://www.samsclub.com/ip/15235818162') ($(if ($tb) { [string]$tb.Value.'Sam''s Club'.url } else { '<none>' }))
     TT "CLEAN TWIN: with NO url-shape file the run says the alphanumeric shape is not proven" `
@@ -341,8 +349,8 @@ if ($SelfTest) {
   }
   finally { Remove-Item -LiteralPath $fx -Recurse -Force -ErrorAction SilentlyContinue }
   Write-Output ''
-  if ($bad -eq 0 -and $ran -eq 28) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
-  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 28 expected)")
+  if ($bad -eq 0 -and $ran -eq 29) { Write-Output ('derive-links-from-prices self-test: PASS (' + $ran + ' case(s), 0 failure(s))'); exit 0 }
+  Write-Output ("derive-links-from-prices self-test: FAIL (" + $bad + " failure(s) of " + $ran + " case(s) run, 29 expected)")
   exit 1
 }
 
@@ -646,7 +654,9 @@ Write-Output ''
 Write-Output 'priced rows carrying NO product identity (these CANNOT be linked - the puller/capture dropped it):'
 foreach ($k in ($noIdentity.Keys | Sort-Object)) { Write-Output ('  ' + $k.PadRight(14) + $noIdentity[$k]) }
 if ($Apply) {
-  ($puDoc | ConvertTo-Json -Depth 8) | Set-Content $puPath -Encoding UTF8
+  # BOM and an LF trailer, the bytes the blob holds (2026-10-03): Set-Content wrote ConvertTo-Json's CRLF over an
+  # LF blob, so a run that derived nothing new still left product-urls.json ` M` with an empty diff.
+  [void](Write-TcAtomicFile -Path $puPath -Text ($puDoc | ConvertTo-Json -Depth 8) -Lf)
   Write-Output ''
   Write-Output ("APPLIED: " + $derived + " link(s) written from the rows the board priced, " + $outgrown.Count + " outgrown link(s) dropped.")
 }

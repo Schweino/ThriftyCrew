@@ -585,6 +585,12 @@ $ceBom = ($ceBytes.Length -ge 3 -and $ceBytes[0] -eq 0xEF -and $ceBytes[1] -eq 0
 $ceNon = 0; foreach ($ceB in $ceBytes) { if ($ceB -gt 127) { $ceNon++ } }
 if ($r.rc -eq 0 -and -not $ceBom -and $ceNon -eq 0) { Ok 'apply-category-excludes writes commodities.json back PURE ASCII with no BOM (the audit-json-encoding pin survives a bake)' }
 else { Bad ('apply-category-excludes un-pinned the rule file: bom=' + $ceBom + ' non-ascii bytes=' + $ceNon + ' rc=' + $r.rc + ' - ops\run-gates.ps1 will hard-fail on audit-json-encoding, and the accented spellings have stopped matching') }
+# (ce1-lf, 2026-10-03) THE BAKE WRITES THE BYTES GIT STORES: no CR, one trailing LF. The blob is LF and ConvertTo-Json
+# joins its lines with CRLF under PS 5.1, so the old WriteAllText left commodities.json ` M` over unchanged content
+# (86,781 CR on one bake). The fixture seed is Set-Content's CRLF, so a writer that kept CRLF would show it here.
+$ceCr = 0; foreach ($ceB in $ceBytes) { if ($ceB -eq 13) { $ceCr++ } }
+if ($r.rc -eq 0 -and $ceCr -eq 0 -and $ceBytes.Length -gt 1 -and $ceBytes[-1] -eq 0x0A -and $ceBytes[-2] -ne 0x0A) { Ok 'apply-category-excludes writes commodities.json LF with one trailing LF (CR count 0), so an unchanged bake leaves git status clean' }
+else { Bad ('apply-category-excludes wrote commodities.json with ' + $ceCr + ' CR byte(s) or a wrong trailer (rc=' + $r.rc + ') - the tracked file reads modified with an empty diff and push-main refuses the dirty tree') }
 # MUST-FIRE: the writer as it stood before the fix, run over the same fixture, MUST produce the finding.
 # Without this the case above could pass on a fixture that simply has no non-ASCII left to lose.
 $ceSrc = Get-Content (Join-Path $root 'apply-category-excludes.ps1') -Raw

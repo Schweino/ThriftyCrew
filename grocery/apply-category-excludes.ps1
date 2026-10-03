@@ -15,6 +15,7 @@
 param([switch]$WhatIf, [string]$Root = '')
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: commodities.json is tracked LF and read by every engine
 # -Root exists ONLY so test-auditors can point this script at a frozen fixture tree and prove the drift
 # detector still detects drift. Live behaviour is byte-identical: with no -Root it is $PSScriptRoot, as before.
 # PowerShell variable names are CASE-INSENSITIVE, so $Root and $root are the SAME variable - this one line
@@ -73,10 +74,10 @@ function Write-AsciiPinnedJson {
   foreach ($ch in $Json.ToCharArray()) {
     if ([int]$ch -gt 127) { [void]$sb.AppendFormat('\u{0:x4}', [int]$ch) } else { [void]$sb.Append($ch) }
   }
-  # Set-Content terminated the file with a newline and the stored file has always carried one; WriteAllText
-  # does not, and a missing terminator is a whole-line diff on the last line for no reason.
-  [void]$sb.Append("`r`n")
-  [IO.File]::WriteAllText($Path, $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+  # Set-Content terminated the file with a newline and the stored file has always carried one, so -Lf appends it.
+  # LF THROUGHOUT (2026-10-03): ConvertTo-Json joins its lines with CRLF under PS 5.1, and the blob is LF, so the
+  # old WriteAllText left the checkout ` M` over unchanged content (86,781 CR on one bake). No BOM, as before.
+  [void](Write-TcAtomicFile -Path $Path -Text $sb.ToString() -NoBom -Lf)
 }
 Write-AsciiPinnedJson -Json ($commods | ConvertTo-Json -Depth 6) -Path (Join-Path $root 'commodities.json')
 $null = Get-Content (Join-Path $root 'commodities.json') -Raw -Encoding UTF8 | ConvertFrom-Json   # validate round-trip

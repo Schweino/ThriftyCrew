@@ -31,7 +31,7 @@
   the gate red: that is the point. Fix the commodity rule, re-run, and it goes green - and stays green.
 #>
 # The self-test runs this script against a per-run temp -Root holding its own ledger, so it reads only its library:
-# gate-inputs: lib\json-io.ps1
+# gate-inputs: lib\json-io.ps1, lib\atomic-write.ps1
 param(
   [string]$Commodity,
   [string]$Store,
@@ -52,6 +52,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 . (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\json-io.ps1')   # Read-JsonFile: PS 5.1 decodes a BOM-less file with the ANSI codepage
+. (Join-Path (Split-Path $PSScriptRoot -Parent) 'lib\atomic-write.ps1')   # Write-TcAtomicFile -Lf: known-wrong.json is tracked LF and read by the engine
 if (-not $Root) { $Root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path } }
 if (-not $ListFile) { $ListFile = Join-Path $Root 'known-wrong.json' }
 $outDir = Join-Path $Root 'out'
@@ -147,7 +148,15 @@ if ($SelfTest) {
     $o5 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'cooked-jasmine-rice' -Store "Baker's" -Name 'Ben''s Original Ready Rice Roasted Chicken Flavored Rice, Easy Dinner Side, 8.8 oz Pouch' -Evidence $ev -RuledBy 'selftest' -DryRun -OneOffShape)
     $rc5 = $LASTEXITCODE
     _Ok ('CLEAN TWIN  -OneOffShape is the reviewed exit and still ADDS the ruling (rc=' + $rc5 + ')') (($rc5 -eq 0) -and (($o5 -join ' ') -match 'ADDING'))
-    _Ok 'MECHANISM  the shape is the first three words, apostrophes dropped' ((Get-KwShape 'Ben''s Original Ready Rice Cilantro Lime') -eq 'bens original ready')  } catch { Write-Output ('  FAIL end-to-end cases could not run: ' + $_.Exception.Message); $bad++ }
+    _Ok 'MECHANISM  the shape is the first three words, apostrophes dropped' ((Get-KwShape 'Ben''s Original Ready Rice Cilantro Lime') -eq 'bens original ready')
+    # A REAL WRITE IS THE BYTES GIT STORES (2026-10-03): no CR, no BOM, no trailing newline, the blob's shape. Every
+    # case above is -DryRun; this one writes, so a writer that went back to ConvertTo-Json's CRLF shows here.
+    $o6 = @(& powershell -NoProfile -ExecutionPolicy Bypass -File $me -Root $stRoot -Commodity 'cooked-jasmine-rice' -Store "Baker's" -Name 'Kroger Yellow Rice Mix 8 oz' -Evidence $ev -RuledBy 'selftest')
+    $rc6 = $LASTEXITCODE
+    $b6 = [IO.File]::ReadAllBytes($stList)
+    $cr6 = 0; foreach ($x6 in $b6) { if ($x6 -eq 13) { $cr6++ } }
+    $bom6 = ($b6.Length -ge 3 -and $b6[0] -eq 0xEF -and $b6[1] -eq 0xBB -and $b6[2] -eq 0xBF)
+    _Ok ('BYTES  a real write leaves known-wrong.json LF (CR=' + $cr6 + '), no BOM (' + $bom6 + '), ending in } with no newline (rc=' + $rc6 + ')') (($rc6 -eq 0) -and ($cr6 -eq 0) -and (-not $bom6) -and ($b6[-1] -eq 0x7D) -and (([Text.Encoding]::UTF8.GetString($b6)) -match 'Kroger Yellow Rice Mix'))  } catch { Write-Output ('  FAIL end-to-end cases could not run: ' + $_.Exception.Message); $bad++ }
   finally { if (Test-Path -LiteralPath $stRoot) { Remove-Item -LiteralPath $stRoot -Recurse -Force -ErrorAction SilentlyContinue } }
   if ($bad -eq 0) { Write-Output ("add-known-wrong SELF-TEST PASS ($ran cases)") } else { Write-Output ("add-known-wrong SELF-TEST FAIL ($bad of $ran cases)") }
   exit $(if ($bad -eq 0) { 0 } else { 1 })
@@ -272,8 +281,10 @@ if ($Reverse) {
 $doc.entries = @($entries)
 $json = ($doc | ConvertTo-Json -Depth 12)
 if ($DryRun) { Write-Output '--- DRY RUN, nothing written ---'; Write-Output $json; exit 0 }
-# no-BOM UTF8: the file is pure ASCII by policy and several readers in this tree are BOM-sensitive
-[IO.File]::WriteAllText($ListFile, $json, (New-Object System.Text.UTF8Encoding($false)))
+# no-BOM UTF8: the file is pure ASCII by policy and several readers in this tree are BOM-sensitive. No trailing
+# newline, as the blob has never carried one. LF (2026-10-03): ConvertTo-Json's CRLF over the LF blob left the
+# checkout ` M` with an empty diff (5,364 CR on one ruling).
+[void](Write-TcAtomicFile -Path $ListFile -Text $json -NoBom -NoNewline -Lf)
 Write-Output ("wrote " + $ListFile + " (" + @($entries).Count + " entries)")
 
 # A RULING RE-CHECKS THE LINK THAT POINTS AT ITS PRODUCT, IN THIS RUN (2026-09-22, plan-2026-09-22-10). On 2026-09-21

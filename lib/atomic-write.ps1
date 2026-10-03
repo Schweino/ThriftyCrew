@@ -39,6 +39,15 @@
 # -NoNewline drops the CRLF (Set-Content's own word for it). Such a site passes BOTH and keeps its bytes.
 # The default is unchanged, so no existing caller moves.
 #
+# -Lf IS THE TRACKED-FILE SHAPE (2026-10-03). A TRACKED file is stored `eol=lf`, and under PS 5.1 ConvertTo-Json
+# joins its lines with CRLF, so a writer that hands that text to the default shape leaves the checkout ` M` over
+# an unchanged blob: a zero-line `git diff`, a push-main dirty-tree refusal, and an LF repair by hand that can drop
+# a BOM the file carries. Found that day on five grocery files (commodities.json 86,781 CR, known-wrong.json
+# 5,364, product-urls.json, match-baseline.json, soundness-report.json). -Lf folds every CRLF in the text to LF
+# and makes the appended newline LF, so the bytes are the ones git stores. It moves no BOM: -NoBom still decides
+# that, and -NoNewline still drops the appended newline. It is lib\lf-write.ps1's rule for a file another process
+# may be reading (og-25 and og-39 at once); a tracked file nothing reads concurrently can use Write-TcLfFile.
+#
 # RETRY ONLY A REFUSAL, DECIDED BY STATE AND NOT BY EXCEPTION TYPE (2026-09-11). A temp file that has gone,
 # or a destination directory that is not there, will not come back by waiting, so those throw at once rather
 # than after ~7 s. Typing the exception is not enough, measured on this box: a missing source under
@@ -212,6 +221,8 @@ function Write-TcAtomicFile {
     # The WriteAllText byte shape: see THE OTHER BYTE SHAPE in the header. A converted site passes both.
     [switch]$NoBom,
     [switch]$NoNewline,
+    # The tracked-file shape: CRLF folded to LF and an LF appended. See -Lf in the header.
+    [switch]$Lf,
     # Writers that share no mutex: see -UniqueTemp in the header.
     [switch]$UniqueTemp,
     # A ledger that is NOT re-derived if its last write is lost: see -Flush in the header (Brad, I117).
@@ -224,7 +235,8 @@ function Write-TcAtomicFile {
   # would resolve against the process working directory (lib\json-io.ps1, Resolve-JioPath).
   $full = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Path)
   $tmp = if ($UniqueTemp) { '{0}.{1}.tmp' -f $full, [guid]::NewGuid().ToString('N').Substring(0, 8) } else { $full + '.tmp' }
-  $body = if ($NoNewline) { $Text } else { $Text + "`r`n" }
+  $body = if ($Lf) { $Text -replace "`r`n", "`n" } else { $Text }
+  if (-not $NoNewline) { $body += $(if ($Lf) { "`n" } else { "`r`n" }) }
   $enc = New-Object Text.UTF8Encoding(-not $NoBom)
   if ($Flush) {
     # The same bytes WriteAllText would have written: it emits the encoding's preamble and then the text,
@@ -358,6 +370,19 @@ if ($__awSelfTest) {
     $scNoCrlf = [Convert]::ToBase64String($scBytes, 0, $scBytes.Length - 2)
     $aw4Bytes = [IO.File]::ReadAllBytes($viaAw4)
     Case 'MUST FIRE' '-NoNewline alone drops exactly the trailing CRLF and keeps the BOM' ($scBytes[$scBytes.Length - 1] -eq 0x0A -and $scNoCrlf -eq [Convert]::ToBase64String($aw4Bytes)) ("atomic=" + [Convert]::ToBase64String($aw4Bytes))
+    # ---- -Lf, the tracked-file shape: ConvertTo-Json's multi-line CRLF text lands as the bytes git stores ----
+    $lfJson = [ordered]@{ note = 'caf' + [char]0x00E9; n = 2; names = @('a', 'b') } | ConvertTo-Json -Depth 3
+    $lfCrIn = ([regex]::Matches($lfJson, "`r")).Count
+    $viaLf = Join-Path $dir 'via-atomic-lf.json'
+    [void](Write-TcAtomicFile -Path $viaLf -Text $lfJson -Lf)
+    $lfB = [IO.File]::ReadAllBytes($viaLf)
+    $lfCr = 0; foreach ($x in $lfB) { if ($x -eq 13) { $lfCr++ } }
+    $lfExpect = [Convert]::ToBase64String([byte[]]((New-Object Text.UTF8Encoding($true)).GetPreamble() + $bomless.GetBytes((($lfJson -replace "`r`n", "`n") + "`n"))))
+    Case 'MUST FIRE' '-Lf writes no CR from a multi-line ConvertTo-Json text, keeps the BOM and ends in one LF (the default shape would carry every CR)' ($lfCrIn -gt 0 -and $lfCr -eq 0 -and [Convert]::ToBase64String($lfB) -eq $lfExpect) ("cr_in=$lfCrIn cr_out=$lfCr")
+    $viaLf2 = Join-Path $dir 'via-atomic-lf-nobom-nonewline.json'
+    [void](Write-TcAtomicFile -Path $viaLf2 -Text $lfJson -Lf -NoBom -NoNewline)
+    $lf2B64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($viaLf2))
+    Case 'CLEAN TWIN' '-Lf moves no BOM and no trailer of its own: with -NoBom -NoNewline it is the LF text and nothing else' ($lf2B64 -eq [Convert]::ToBase64String($bomless.GetBytes(($lfJson -replace "`r`n", "`n")))) ("atomic=$lf2B64")
 
     # ---- the founding shape: a reader that LETS GO ----
     # The premise first, asserted rather than trusted, so a Windows that stops failing this says so here.
