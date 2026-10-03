@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-01T21:39:08",
+  "generated_at": "2026-10-02T21:38:24",
   "reviewer": "claude-fable-medium",
   "instructions": "For each proposal return one verdict object: {proposal_id, verdict: accept|reject|modify|defer|hold_for_human, payload (required if modify), rationale}. Reject anything whose pattern could match a DIFFERENT food — an over-broad alias lets a wrong product take a price, which is the failure this board exists to prevent. Prefer reject over accept when uncertain; a missed alias costs one empty cell. Mark hold_for_human when the change is broad or the evidence is thin. For add_alias, READ blast_radius first: kill=true is an automatic reject (the pattern re-litigates an adjudicated ruling or resurrects a rejection, and include runs before the model). Any cross_commodity hit needs a written reason why the collision is benign, or a `modify` payload that tightens the pattern. absorbs_review + intended_capture are what the alias BUYS; a proposal with none of either is noise. hold_clears are NOT proposals to rule on here: each names a promotion hold that has matched nothing on the board for 30 consecutive daily rechecks, with its readings. Clearing one means re-running the full guard suite (promote_aliases.py --gated) and stays with a person (ruling 2026-09-09, backlog I92).",
   "gates": {
@@ -916,6 +916,30 @@
       "payload": "chili$",
       "stage1_confidence": 0.9,
       "rationale": "Matches listings ending in 'Chili' (e.g., 'Amy's Organic Black Bean Chili', 'Wendy's Bacon Bean Beef Chilli') while avoiding matches for 'Chili Powder' or 'Chili Sauce'.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:09a6646e38dc97016f71",
+      "kind": "add_alias",
+      "target": "cajun-seasoning",
+      "target_label": null,
+      "payload": "cajun\\s+kick\\s+seasoning",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'Tony's Cajun Kick Seasoning' by anchoring on the specific product name.",
+      "blast_radius": {
+        "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
+      }
+    },
+    {
+      "proposal_id": "lp:1c3e7f31b400f6f6c821",
+      "kind": "add_alias",
+      "target": "disinfecting-wipes",
+      "target_label": null,
+      "payload": "sanitizing\\s+wipes",
+      "stage1_confidence": 0.9,
+      "rationale": "Matches 'The Honest Company Fragrance Free Alcohol Sanitizing Wipes'. Sanitizing wipes are disinfecting wipes.",
       "blast_radius": {
         "missing": "no blast-radius report for this proposal — run graph/learning/alias_blast_radius.py before ruling on it"
       }
