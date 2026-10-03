@@ -758,6 +758,55 @@ try {
       else { Bad 'pull-regular-bakers-api no longer records its asked fallbacks - a never-found Baker''s fallback holds the head of the owed order again' }
     } finally { $script:StoreCallCap["Baker's"] = $bkCapWas }
   } finally { $script:PolicyRoot = $sfRootWas; $script:StoreCallCap['Family Fare'] = $sfCapWas }
+
+  # ---- R7.1: A FAMILY FARE SALE FALLBACK JUMPS THE ROTATION QUEUE, INSIDE THE SAME BUDGET (Brad, 2026-10-03) ----------
+  # Frozen from the 07:00 window of 2026-09-27: cap 40, rotation 3, 37 expiries owed (the whole allowance), fallbacks owed
+  # and asked none. Own synthetic root: 200 one-term commodities, one run a day, so rotation = ceil(200 / 90) = 3 and the
+  # expiry allowance is 40 - 3 = 37. The bar is RotationTerms - 1 = 2 fallbacks from the rotation a run.
+  $r7Root = Join-Path $tmp 'r71'; $r7Out = Join-Path $r7Root 'out'; [void][IO.Directory]::CreateDirectory($r7Out)
+  $r7Terms = [ordered]@{}; for ($k = 1; $k -le 197; $k++) { $c = 'item-' + $k.ToString('000'); $r7Terms[$c] = $c }
+  foreach ($c in @('frozen-fries','trash-bags','yukon-gold-potatoes')) { $r7Terms[$c] = $c }
+  [IO.File]::WriteAllText((Join-Path $r7Root 'commodity-search.json'), (@{ terms = $r7Terms } | ConvertTo-Json -Depth 4))
+  function Write-R7Windows([int]$N) {
+    $ws = @(); for ($k = 1; $k -le $N; $k++) { $ws += @{ store = 'Family Fare'; id = ('item-' + $k.ToString('000')); sale_end = '2026-09-26'; refresh_on = '2026-09-27' } }
+    [IO.File]::WriteAllText((Join-Path $r7Root 'sale-windows.json'), (@{ windows = $ws } | ConvertTo-Json -Depth 4))
+  }
+  function Write-R7Gaps([string[]]$Ids) {
+    $gs = @(); foreach ($g in $Ids) { $gs += @{ commodity = $g; store = 'Family Fare'; first_seen = '2026-09-23' } }
+    [IO.File]::WriteAllText((Join-Path $r7Out 'sale-fallback-gaps.json'), (@{ gaps = $gs } | ConvertTo-Json -Depth 4))
+  }
+  $r7RootWas = $script:PolicyRoot; $r7CapWas = $script:StoreCallCap['Family Fare']
+  try {
+    $script:PolicyRoot = $r7Root
+    $script:StoreCallCap['Family Fare'] = @{ cap = 40; basis = 'fixture'; unit = 'search terms' }
+    Write-R7Windows 37; Write-R7Gaps @('frozen-fries','trash-bags','yukon-gold-potatoes')
+    $r7P = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-27' -OutDir $r7Out
+    if ($r7P.RotationTerms -eq 3 -and @($r7P.SaleExpiries).Count -eq 37 -and (@($r7P.SaleFallbacksFromRotation) -join ',') -eq 'frozen-fries,trash-bags' -and (@($r7P.SaleFallbacks) -join ',') -eq 'frozen-fries,trash-bags') { Ok 'MUST FIRE  37 expiries fill the allowance (cap 40, rotation 3) and the fallbacks deferred until R7.1 now take rotation slots: frozen-fries, trash-bags' }
+    else { Bad "R7.1 jump: rotation=$($r7P.RotationTerms) exp=$(@($r7P.SaleExpiries).Count) fromRot=[$(@($r7P.SaleFallbacksFromRotation) -join ',')] fb=[$(@($r7P.SaleFallbacks) -join ',')]" }
+    if ($r7P.SaleFallbackDeferred -eq 1 -and @($r7P.SaleFallbacksFromRotation).Count -eq 2) { Ok 'MUST FIRE  ONE PAST the bar (3 owed beyond the allowance, rotation 3): exactly 2 = RotationTerms - 1 jump and 1 stays deferred' }
+    else { Bad "R7.1 one past: fromRot=$(@($r7P.SaleFallbacksFromRotation).Count) deferred=$($r7P.SaleFallbackDeferred)" }
+    if ($r7P.TermBudget -eq 40 -and $r7P.TermBudget -le $r7P.CallCap -and $r7P.CallCap -eq 40) { Ok 'MUST NOT FIRE  the cap is never exceeded: the budget stays rotation 3 + 37 expiries = 40 = the call cap, the jumped fallbacks ride inside the rotation' }
+    else { Bad "R7.1 budget: $($r7P.TermBudget) cap=$($r7P.CallCap)" }
+    if (@($r7P.SaleExpiries).Count -eq 37 -and $r7P.ExpiryDeferred -eq 0) { Ok 'CLEAN TWIN  an expiry still goes first: all 37 keep their slots and none is deferred by the jump' }
+    else { Bad "R7.1 expiries displaced: exp=$(@($r7P.SaleExpiries).Count) deferred=$($r7P.ExpiryDeferred)" }
+    Write-R7Gaps @('frozen-fries','trash-bags')
+    $r7At = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-27' -OutDir $r7Out
+    if ((@($r7At.SaleFallbacksFromRotation) -join ',') -eq 'frozen-fries,trash-bags' -and $r7At.SaleFallbackDeferred -eq 0) { Ok 'CLEAN TWIN  AT the bar (2 owed beyond the allowance, rotation 3): both jump and none is deferred' }
+    else { Bad "R7.1 at bar: fromRot=[$(@($r7At.SaleFallbacksFromRotation) -join ',')] deferred=$($r7At.SaleFallbackDeferred)" }
+    Write-R7Gaps @()
+    $r7None = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-27' -OutDir $r7Out
+    if (@($r7None.SaleFallbacksFromRotation).Count -eq 0 -and @($r7None.SaleFallbacks).Count -eq 0 -and $r7None.TermBudget -eq 40) { Ok 'CLEAN TWIN  no fallback pending: the rotation keeps its 3 slots and the budget is unchanged' }
+    else { Bad "R7.1 none pending: fromRot=$(@($r7None.SaleFallbacksFromRotation).Count) budget=$($r7None.TermBudget)" }
+    Write-R7Windows 0; Write-R7Gaps @('frozen-fries','trash-bags','yukon-gold-potatoes')
+    $r7Quiet = Get-CapturePlan -Store 'Family Fare' -Today '2026-09-27' -OutDir $r7Out
+    if (@($r7Quiet.SaleFallbacksFromRotation).Count -eq 0 -and @($r7Quiet.SaleFallbacks).Count -eq 3 -and $r7Quiet.TermBudget -eq 6) { Ok 'CLEAN TWIN  a quiet day (no expiries): all 3 fallbacks come from the allowance, none from the rotation (budget 3 + 3)' }
+    else { Bad "R7.1 quiet day: fromRot=$(@($r7Quiet.SaleFallbacksFromRotation).Count) fb=$(@($r7Quiet.SaleFallbacks).Count) budget=$($r7Quiet.TermBudget)" }
+    if (-not (Test-SaleFallbackJumpsRotation 'Hy-Vee') -and -not (Test-SaleFallbackJumpsRotation "Baker's") -and (Test-SaleFallbackJumpsRotation 'Family Fare')) { Ok 'MUST NOT FIRE  the ruling is Family Fare''s: Hy-Vee and Baker''s fallbacks never take a rotation slot' }
+    else { Bad 'R7.1 scope leaked past Family Fare' }
+    $r7T1 = Get-SaleFallbackRotationTake -Pending @('a','b') -RotationTerms 1; $r7T0 = Get-SaleFallbackRotationTake -Pending @() -RotationTerms 3
+    if (@($r7T1).Count -eq 0 -and @($r7T0).Count -eq 0) { Ok 'MUST NOT FIRE  at a rotation of 1 nothing jumps (the drip always re-reads one term), and an empty pending list takes nothing' }
+    else { Bad "R7.1 take: r1=$(@($r7T1).Count) empty=$(@($r7T0).Count)" }
+  } finally { $script:PolicyRoot = $r7RootWas; $script:StoreCallCap['Family Fare'] = $r7CapWas }
 } finally { Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue }
 
 Write-Output ("CAPTURE-POLICY " + $(if ($fail) { "FAILED ($fail)" } else { 'PASSED' }))

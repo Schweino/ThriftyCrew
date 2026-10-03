@@ -382,6 +382,15 @@ function Get-CapturePlan {
   $fallbacks = @($fbPending | Select-Object -First $fbRoom | ForEach-Object { [string]$_ })
   $budget = $rotation + @($expiries).Count + @($fallbacks).Count
   if ($budget -gt $callCap) { $budget = $callCap }
+  # --- 5a. R7.1 (Brad, 2026-10-03): where the store jumps the queue, a fallback the expiry leftover could not hold
+  # takes a slot from the ROTATION's own drip, so the budget above is unchanged (see Get-SaleFallbackRotationTake).
+  $fbFromRotation = @()
+  if (Test-SaleFallbackJumpsRotation $Store) {
+    $fbLeft = @($fbPending | Select-Object -Skip @($fallbacks).Count)
+    $fbRotT = Get-SaleFallbackRotationTake -Pending $fbLeft -RotationTerms $rotation
+    $fbFromRotation = @($fbRotT)
+  }
+  $fallbacks = @(@($fallbacks) + @($fbFromRotation) | Where-Object { $_ })
 
   return [pscustomobject]@{
     Store         = $Store
@@ -396,8 +405,10 @@ function Get-CapturePlan {
     ExpiryDeferred = $deferred
     ExpiryCap     = $expiryCap
     ExpiryOldest  = if (@($ordered).Count) { [string]@($ordered)[0].refresh_on } else { '' }
-    # Today's slice of sale fallbacks (on sale here, no everyday twin): behind the expiries, from what they left.
+    # Today's slice of sale fallbacks (on sale here, no everyday twin): behind the expiries, from what they left, and
+    # (R7.1, Family Fare only) up to RotationTerms - 1 more from the rotation's drip. The budget counts only the first kind.
     SaleFallbacks = $fallbacks
+    SaleFallbacksFromRotation = $fbFromRotation
     # Every fallback this store owes, the slice included. The audit proves ownership from this list.
     SaleFallbackPending = $fbPending
     SaleFallbackDeferred = (@($fbPending).Count - @($fallbacks).Count)
@@ -1212,10 +1223,32 @@ function Select-ExpiryFirstSlice {
 # JSON file only prose read, and Hy-Vee gaps were sent to a browser for a store pulled headless. So a gap was "owned"
 # until its grace ran out and then paged a person (c9f0f3, and 22b4dd before it).
 # Now each gap in out\sale-fallback-gaps.json is OWED to its store's plan: Get-CapturePlan hands out SaleFallbacks from
-# the SAME front allowance the sale expiries use and ALWAYS after them, so a fallback can never displace an expiry or
-# the rotation's drip. The owed order is least-recently-asked first (never asked leads), then oldest first_seen, then
+# the SAME front allowance the sale expiries use and ALWAYS after them, so a fallback can never displace an expiry (and,
+# since R7.1 on 2026-10-03, at Family Fare only, may take up to RotationTerms - 1 of the rotation's drip, below). The owed order is least-recently-asked first (never asked leads), then oldest first_seen, then
 # id, so a fallback the store answers with nothing cannot sit at the head forever. Set-SaleFallbackAsked records an
 # ask only for ids a LANDED capture asked, exactly as Set-SaleExpiryProcessed does for expiries.
+# ---- R7.1: A SALE FALLBACK JUMPS THE ROTATION QUEUE AT FAMILY FARE (Brad, 2026-10-03, verbatim label "Yes, jump the queue
+# (Recommended)"; design\PLAN-weekly-root-families-2026-10-02.md Phase 7) ----
+# "A sale cell with no everyday fallback moves its term to the front of the Family Fare rotation, inside the same 7-a-day
+# budget." Until this, a fallback the expiries crowded out of the front allowance waited for the next window (measured: the
+# 07:00 window of 2026-09-27 owed at least 2, asked 0, behind 37 expiries). Now such a fallback takes a slot from the
+# rotation's OWN drip: the call cap, the budget and RotationDays are untouched, only the order inside the drip changes
+# (memory ff-term-budget-is-quarterly-by-design, rule gr-12). AT MOST RotationTerms - 1 a window, so the rotation always
+# re-reads at least one term and the cursor never stalls on this cause (og-13); at a rotation of 1 nothing moves. The cap
+# was chosen, not swept: 1 variant tried. Lifting it to RotationTerms is this one function.
+$script:SaleFallbackJumpsRotation = @{ 'Family Fare' = $true }
+function Test-SaleFallbackJumpsRotation([string]$Store) { return [bool]$script:SaleFallbackJumpsRotation.ContainsKey($Store) }
+# PURE: the first RotationTerms - 1 of an ordered pending list (ids for the plan, terms for the Family Fare window).
+function Get-SaleFallbackRotationTake {
+  param([AllowEmptyCollection()][AllowNull()][string[]]$Pending = @(), [int]$RotationTerms)
+  $take = New-Object 'System.Collections.Generic.List[string]'
+  $room = $RotationTerms - 1
+  foreach ($p in @($Pending)) {
+    if ($take.Count -ge $room) { break }
+    if ($p -and -not $take.Contains([string]$p)) { [void]$take.Add([string]$p) }
+  }
+  return ,$take.ToArray()
+}
 function Get-SaleFallbackAskedPath([string]$OutDir) { return (Join-Path $OutDir 'sale-fallback-asked.json') }
 function Read-SaleFallbackAsked([string]$OutDir) {
   $h = @{}
