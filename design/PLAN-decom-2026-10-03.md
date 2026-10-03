@@ -484,7 +484,7 @@ Order matters: logins move off `admin@thriftycrew.com` before the Workspace clos
 | A gate or watchdog complaining that a TC task is off | expected, never repaired (section 0) |
 | A decom commit sweeping in another session's files | pathspec commits from a worktree, `git show --stat HEAD` after each |
 
-## 7. Knowledge consulted
+## Knowledge consulted
 
 Searched 2026-10-03 with `knowledge-search/search.py` for "decommission shut down wind down project", "mute email
 alerts send-alert" (`--estate`), "Ghost members paid tier Stripe paywall", "Cloudflare estate R2 D1 Ghost admin key",
