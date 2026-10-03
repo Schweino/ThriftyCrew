@@ -5,6 +5,8 @@ Brad, 2026-10-03: *"We are going to be decommishioning ThrifyCrew slowly. I want
 future date."*
 
 **Status: PLAN. Phase 0 is DONE. Nothing past Phase 0 has started.** Brad picks the start date, called **S** below.
+**Ruled 2026-10-03 (Brad): D1 C (leave the price pages), D3 A (stop new signups now), D6 C (leave the 7 commits on
+main), and P1.4, P1.5 and P1.6 wait until S, where they become its first steps (P2.0).**
 The Phase 1 items are worth doing before S, because some of the exposure grows every day (section 1). Section 2 lists
 every decision only Brad can make, each with a recommendation. A ruling goes into section 2 the turn it is given.
 
@@ -20,7 +22,8 @@ message). Steps marked **Claude** are repo, box and verification work.
   on a clock any more.
 - **The site is still live and is now going stale.** The deals board shows sale prices that end on Oct 3 and Oct 4
   under the words "checked every morning". A leftover route from the deleted V3 platform still serves August prices.
-  Two forms promise replies nobody will send. Phase 1 closes all of that and can start now.
+  Three forms promise replies nobody will send. Brad ruled on 2026-10-03 to leave all of that as it is until S, where
+  closing it is the first step (P2.0).
 - **Possible money still going out:** a $5/day Google Ads campaign was live in August, and its current state is not
   recorded anywhere on the box. Pausing it is a two-minute job for Brad.
 - **One blocker before anything closes:** the Ghost owner login is the old `admin@simplemoneyplaybook.com`, a
@@ -137,14 +140,17 @@ two daily capture tasks back on until S. That costs tokens, runs pushes to main 
 (C) Leave it. **Recommend A**: it is the end state anyway, it is reversible (pages go to draft, not deleted), and it
 stops a wrong number reaching a paying reader. Know the cost: the board was about three quarters of all site traffic,
 and all-time it had produced 5 free members and 0 paid (memory `board-conversion-surface`, as of 2026-08-04), so A
-ends most of the traffic early but no revenue. Ruling: *(none yet)*
+ends most of the traffic early but no revenue. **Ruling (Brad, 2026-10-03): C, leave them as they are.** P1.4
+moves to day S as P2.0.
 
 **D2. Google Ads.** It may still be spending $5 a day to send people to a site that is closing. **Recommend: Brad
 pauses every campaign today** (P1.1). Ruling: *(none yet)*
 
 **D3. New signups.** Every new member from now on is someone who will have to be told, and maybe refunded. (A) Stop
 new signups now. (B) Stop them at S. **Recommend A**, using Ghost's "Only people I invite" setting, which keeps sign-in
-working for existing members. ("Nobody" would lock existing members out of what they paid for.) Ruling: *(none yet)*
+working for existing members. ("Nobody" would lock existing members out of what they paid for.) **Ruling (Brad,
+2026-10-03): A, stop new signups now.** That is P1.7, Brad's step in Ghost Admin; Claude can drive the page in the
+browser with his OK.
 
 **D4. The scheduled Facebook reels.** They promote the site for up to a month ahead. **Recommend: clear the queue
 now** (P1.2). Ruling: *(none yet)*
@@ -156,7 +162,9 @@ step. **Recommend `admin@thriftycrew.com` now, and then to a personal address be
 **D6. The 7 stranded triage commits on local `main`.** (A) Park them on a branch `triage/2026-10-03-unlanded` and
 move local `main` back to origin, so nothing ships by accident and the work is kept. (B) Land them through
 `ops\push-main.ps1` and let the gates decide. (C) Leave them. **Recommend A**: they fix machinery that is being
-switched off, and leaving them on `main` means whoever pushes next ships them unreviewed. Ruling: *(none yet)*
+switched off, and leaving them on `main` means whoever pushes next ships them unreviewed. **Ruling (Brad,
+2026-10-03): C, leave them on main.** P1.8 is void. Decom changes are made from a worktree (principle 7), so they
+never carry these commits; a push from the main checkout would, through the full gate.
 
 **D7. What happens to the content at close.** (A) Delete everything with Ghost. (B) Keep the 59 lessons, the money
 hacks, the glossary and the free calculators readable for free as a static archive served by the existing
@@ -253,7 +261,8 @@ See section 0. Exit check passed: no TC routine, Claude task or cloud routine is
   Staff, your profile). Then confirm each of these logins reaches a mailbox Brad can read, and note which: Ghost,
   Stripe, both Cloudflare accounts, Google Ads, Search Console, Bing Webmaster, Meta, GitHub. Check: a password-reset
   or verification email for Ghost actually arrives. Undo: change it back.
-- [ ] **P1.4 Claude, with Brad's OK: take the price pages offline** (D1). Draft the 4 deals-board pages
+- [ ] **P1.4 MOVED TO DAY S (P2.0), Brad 2026-10-03. Claude, with Brad's OK: take the price pages offline** (D1).
+  Draft the 4 deals-board pages
   (`omaha-grocery-prices`, `-beta`, `shop-smart-at-your-store`, `omaha-price-tracker`) and the 20 public
   `*-price-omaha` trend posts; publish one short page saying the prices are no longer updated; add redirects from the
   drafted addresses to it (the redirect file is `grocery/redirects-base.yaml` plus the trend redirects from
@@ -261,28 +270,35 @@ See section 0. Exit check passed: no TC routine, Claude task or cloud routine is
   Check: each old address returns the notice; the live HTML of the site no longer contains "checked every morning";
   the 375px mobile check on the notice page. Undo: republish the drafts (`ops/revert-ghost-write.ps1` undoes a
   journaled write).
-- [ ] **P1.5 Brad, or Claude with his OK: remove the frozen V3 routes.** Delete the `tc-grocery-public` zone routes
+- [ ] **P1.5 MOVED TO DAY S (P2.0), Brad 2026-10-03. Brad, or Claude with his OK: remove the frozen V3 routes.**
+  Delete the `tc-grocery-public` zone routes
   (`www.thriftycrew.com/api/v2/*`, `/v2/*`, `/member-status*`; `ops/cloudflare-estate.json` around line 141). The worker
   itself goes in P5.5. Check: the `recipe-feed` address above returns 404, and a paid recipe still shows its paywall
   correctly. Undo: re-add the routes.
-- [ ] **P1.6 Claude, with Brad's OK: close the forms that promise a reply.** Remove the price-alert signup, the
+- [ ] **P1.6 MOVED TO DAY S (P2.0), Brad 2026-10-03. Claude, with Brad's OK: close the forms that promise a
+  reply.** Remove the price-alert signup, the
   "Suggest an Item" form and "Submit a recipe" from their pages, and have the Worker's `/alert`, `/submit` and
   `/submit-recipe` answer with a short "closed" message (a `worker/index.js` change, deployed by committing it, since
   Cloudflare builds smp-feed from the repo). Check: each form is gone from its page; a POST to each endpoint gets the
   closed message; nothing emails. Undo: revert the commit.
 - [ ] **P1.7 Brad: stop new signups** (D3). Ghost Admin, Settings, Membership, Access: "Only people I invite". Check:
   in a private window, the site offers sign-in but no signup. Undo: set it back to "Anyone can sign up".
-- [ ] **P1.8 Claude: the stranded commits** (D6). If A: `git branch triage/2026-10-03-unlanded main`, then move local
+- [x] **P1.8 VOID: D6 ruled C, the commits stay on main (Brad, 2026-10-03). Claude: the stranded commits** (D6). If A: `git branch triage/2026-10-03-unlanded main`, then move local
   `main` to `origin/main` with `git reset --keep` (it refuses rather than overwrite a dirty file). Check:
   `git log origin/main..main` is empty and the branch holds the 7 commits. Undo: `git reset --keep` back to the
   branch tip.
 - [ ] **P1.9 Claude: take a fresh baseline export** with `grocery/ghost-export.ps1` (read-only; the last one is
   `site-backups/ghost-export-2026-10.zip` from 2026-10-01). Check: post count in the export matches Ghost Admin.
 
-**Exit check:** no live page shows a sale price or a "checked this morning" claim; the V3 route is gone; no form
-accepts a request; no new member can join; Ads spend is $0; Brad can reset every login.
+**Exit check, as ruled on 2026-10-03:** no new member can join; Ads spend is $0; no reel is scheduled; Brad can
+reset every login; the baseline export is counted. (The price pages, the V3 route and the forms are checked at P2.0.)
 
 ### Phase 2. Tell members and settle money (day S)
+
+- [ ] **P2.0 First, before the farewell email: the three Phase 1 steps Brad moved here on 2026-10-03.** P1.4 (price
+  pages offline), P1.5 (frozen V3 routes) and P1.6 (forms closed), each with its own check and undo as written in
+  Phase 1. Check: no live page shows a sale price or a "checked every morning" claim; the `recipe-feed` address
+  returns 404; no form accepts a request.
 
 - [ ] **P2.1 Claude drafts, Brad sends: the farewell email** to all 19 members, in Brad's voice (modelled on live
   posts, never the older repo copies). It says what is closing and when (S+30), what happens to their subscription
@@ -479,7 +495,7 @@ Order matters: logins move off `admin@thriftycrew.com` before the Workspace clos
 | Ghost recovery goes to a dead mailbox | P1.3 before any Ghost step |
 | Another project breaks | Phase 4, proved by the P4.10 rehearsal |
 | Losing work held only in worktrees, stashes or the main checkout | P3.5 sweep, P3.6 bundle clone check, before Phase 7 |
-| A wrong price on a live or archived page | P1.4 now; P5.2 archives nothing that carries a price |
+| A wrong price on a live or archived page | accepted until S (D1 ruled C); P2.0 on day S; P5.2 archives nothing that carries a price |
 | R2 lifecycle rules delete data on schedule | D15 decides whether anything is wanted; if so, export early |
 | A gate or watchdog complaining that a TC task is off | expected, never repaired (section 0) |
 | A decom commit sweeping in another session's files | pathspec commits from a worktree, `git show --stat HEAD` after each |
