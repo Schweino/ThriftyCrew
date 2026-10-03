@@ -241,7 +241,7 @@ function Save-FfCursorAdvance([int]$From, [int]$To, [string]$Today, [string]$Out
 # empty from throttle refusal" - even when this very run had read error_code 429 off that term's response.
 # The key is the same string the run-wide tally uses, so the two cannot drift.
 function Get-FfApiAnswerKey([int]$StatusCode, [string]$ErrorCode, [switch]$NoItemsArray) {
-  if ($NoItemsArray) { return "HTTP $StatusCode without an items array" }
+  if ($NoItemsArray) { return "HTTP $StatusCode without an items array" }   # a throttled 200 (Read-FreshopSearchAnswer)
   if ($StatusCode -and $ErrorCode) { return ("HTTP $StatusCode (error_code $ErrorCode" + $(if ($ErrorCode -eq '429') { ' = RATE LIMITED)' } else { ')' })) }
   if ($StatusCode) { return "HTTP $StatusCode" }
   return 'no response/timeout'
@@ -262,35 +262,6 @@ function New-FfRejectedTermEntry([string]$Term, [int]$Ordinal, [string]$ApiSaid)
          else { ('request failed (' + $ApiSaid + ') - no answer about the term') }
   return [ordered]@{ term=$Term; ordinal=$Ordinal; outcome='rejected'; row_count=0; reason=$why; api_said=$ApiSaid }
 }
-
-# WHAT ONE SEARCH 200 BROUGHT BACK, AND WHAT IT SAID (2026-10-03, design\MEASURE-chip-resolvers-2026-10-rerun.md
-# finding 4). Freshop sometimes answers a throttled search with HTTP 200 and NO `items` property. This lane read it
-# as @($r.items), which is @($null): Count 1, so the term was scored a SUCCESS for today (moving the cursor, the
-# term ledger and the expiry classes) while Ingest-Items skipped the null row. Read-FreshopSearchItems (ff-price-lib)
-# is the one reading: no items array is a REFUSAL, keyed through Get-FfApiAnswerKey into the run-wide tally and the
-# term's answer, and returns zero rows. It is never retried here: retries under a hard throttle ran 45 minutes, and
-# the recovery pass re-asks it like any other refused term. Returns the rows; an empty 200 keeps its own answer.
-# query -> what Freshop last said to it when it brought back no rows (see Get-FfApiAnswerKey). Ordinal, because a
-# bare @{} is case-insensitive and two terms differing only in case are two different requests.
-$script:ffTermAnswer = New-Object 'System.Collections.Generic.Dictionary[string,string]' ([StringComparer]::Ordinal)
-function Read-FfSearchAnswer($Resp, [string]$Term) {
-  $ans = Read-FreshopSearchItems $Resp
-  if (-not $ans.answered) {
-    $key = Get-FfApiAnswerKey 200 '' -NoItemsArray
-    if (-not $script:apiStatus) { $script:apiStatus = @{} }
-    $script:apiStatus[$key] = 1 + [int]$script:apiStatus[$key]
-    $script:ffTermAnswer[$Term] = $key
-    return @()
-  }
-  # The LAST answer per query wins: a term refused in the main pass and answered in recovery is judged on the
-  # answer. A row-bearing answer clears it, because a success is recorded as a success elsewhere.
-  if ($ans.items.Count -eq 0) { $script:ffTermAnswer[$Term] = $script:FfEmpty200 } else { [void]$script:ffTermAnswer.Remove($Term) }
-  return $ans.items
-}
-# WAS THIS TERM BOUGHT? The one test both buy loops (main pass and recovery) score a term by: at least one real
-# product came back. A null element is not a product, so the @($null) shape cannot score here even if a reader
-# upstream regresses.
-function Test-FfTermBought($Items) { return (@(@($Items) | Where-Object { $null -ne $_ }).Count -gt 0) }
 
 # WHAT DOES ONE EXPIRY ACTUALLY MEAN? Three different things, and only one of them is news.
 #   starved - the row's own search term has not returned a single product inside the whole carry window. The
@@ -715,34 +686,7 @@ if ($SelfTest) {
   $rjOldJson = ($rjOld | ConvertTo-Json -Compress)
   _T 'CLEAN-TWIN: with no recorded answer the entry is byte-identical to what this lane wrote before' ($rjOldJson -eq '{"term":"ground coriander","ordinal":3,"outcome":"rejected","row_count":0,"reason":"request returned no product rows; Freshop does not distinguish a true empty from throttle refusal"}')
   _T 'CLEAN-TWIN: a timeout keeps its own words' (((New-FfRejectedTermEntry 'x' 0 (Get-FfApiAnswerKey 0 '')).reason) -match 'no response/timeout')
-
-  # ---- A 200 WITH NO items ARRAY IS A REFUSAL, NEVER A SUCCESS (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun
-  # finding 4). Each response is ConvertFrom-Json of a body, which is what Invoke-RestMethod hands Get-FreshopItems.
-  # Two copies of the defence, a case each (og-18): Read-FfSearchAnswer returns no rows and records the refusal, and
-  # Test-FfTermBought, the one test both buy loops score a term by, refuses the old @($null) shape on its own.
-  $script:apiStatus = @{}; $script:ffTermAnswer.Clear()
-  $tNo = 'Armour Family Pack Pepperoni Slices 12'
-  $kNo = Get-FfApiAnswerKey 200 '' -NoItemsArray
-  $gotNo = Read-FfSearchAnswer ('{"total":0}' | ConvertFrom-Json) $tNo
-  $rowsNo = @(@($gotNo) | ForEach-Object { New-FfRow $_ $tNo '2026-10-03' '6401' $null } | Where-Object { $null -ne $_ })
-  _T 'MUST FIRE: a 200 with no items array is not a success (Test-FfTermBought false) and adds no row' ((-not (Test-FfTermBought $gotNo)) -and ($rowsNo.Count -eq 0) -and (@($gotNo).Count -eq 0))
-  _T 'MUST FIRE: it is keyed through Get-FfApiAnswerKey into the run-wide tally and the term''s answer' (([int]$script:apiStatus[$kNo] -eq 1) -and ($script:ffTermAnswer[$tNo] -eq $kNo) -and ($kNo -eq 'HTTP 200 without an items array'))
-  _T 'MUST FIRE: its ledger entry says REFUSED, not answered empty' (((New-FfRejectedTermEntry $tNo 0 $script:ffTermAnswer[$tNo]).reason) -match '^refused: HTTP 200 without an items array')
-  _T 'MUST FIRE: the old reading''s @($null) is not a bought term' (-not (Test-FfTermBought @($null)))
-  $script:apiStatus = @{}; $script:ffTermAnswer.Clear()
-  $tYes = 'pepperoni'
-  $script:ffTermAnswer[$tYes] = $kNo   # refused in the main pass, answered in recovery: the answer must win
-  $gotYes = Read-FfSearchAnswer ('{"items":[{"id":"77","name":"Armour Pepperoni Slices","size":"12 oz","price":"$3.99","base_price":3.99,"canonical_url":"/product/armour-pepperoni"}],"total":1}' | ConvertFrom-Json) $tYes
-  $rowsYes = @(@($gotYes) | ForEach-Object { New-FfRow $_ $tYes '2026-10-03' '6401' $null } | Where-Object { $null -ne $_ })
-  _T 'CLEAN TWIN: a 200 with a real row is a success and ingests one row' ((Test-FfTermBought $gotYes) -and ($rowsYes.Count -eq 1) -and ($rowsYes[0].item -eq 'Armour Pepperoni Slices'))
-  _T 'CLEAN TWIN: a row-bearing answer clears the term''s earlier refusal and tallies nothing' ((-not $script:ffTermAnswer.ContainsKey($tYes)) -and ($script:apiStatus.Count -eq 0))
-  $tEmpty = 'ground coriander'
-  $gotEmpty = Read-FfSearchAnswer ('{"items":[],"total":0}' | ConvertFrom-Json) $tEmpty
-  _T 'MUST NOT FIRE: an empty-array 200 keeps its empty handling (answered empty, not tallied as a refusal, not bought)' ((-not (Test-FfTermBought $gotEmpty)) -and ($script:ffTermAnswer[$tEmpty] -eq $script:FfEmpty200) -and ($script:apiStatus.Count -eq 0))
-  $tNull = 'ground cumin'
-  $gotNull = Read-FfSearchAnswer ('{"items":null,"total":0}' | ConvertFrom-Json) $tNull
-  _T 'MUST NOT FIRE: a null items array is normalised to zero rows and read as answered empty' ((@($gotNull).Count -eq 0) -and (-not (Test-FfTermBought $gotNull)) -and ($script:ffTermAnswer[$tNull] -eq $script:FfEmpty200) -and ($script:apiStatus.Count -eq 0))
-  $script:apiStatus = $null; $script:ffTermAnswer.Clear()
+  _T 'MUST-FIRE: a 200 with no items array (MEASURE-chip-resolvers-2026-10-rerun finding 4) is ledgered REFUSED under its own key, never answered empty' ((((New-FfRejectedTermEntry 'pepperoni' 0 (Get-FfApiAnswerKey 200 '' -NoItemsArray)).reason) -match '^refused: HTTP 200 without an items array') -and ((Get-FfApiAnswerKey 200 '' -NoItemsArray) -ne $script:FfEmpty200))
 
   # ---- THE CURSOR COMMIT RECORDS ITS DATE (2026-09-18, backlog I232 / I161) -------------------------------
   # Driven through the real Save-CaptureCursor against a TEMP cursor file seeded with the live file's other
@@ -985,14 +929,14 @@ $FIELDS_RICH = 'id,name,size,price,base_price,unit_price,canonical_url'
 $FIELDS_MIN = 'name,size,price,base_price,unit_price'
 $script:fieldsMode = $FIELDS_RICH
 $script:fellBack = $false
-# $script:ffTermAnswer (query -> what Freshop last said) is declared with Read-FfSearchAnswer near the top.
+# query -> what Freshop last said to it when it brought back no rows (see Get-FfApiAnswerKey). Ordinal, because a
+# bare @{} is case-insensitive and two terms differing only in case are two different requests.
+$script:ffTermAnswer = New-Object 'System.Collections.Generic.Dictionary[string,string]' ([StringComparer]::Ordinal); $script:apiStatus = @{}
 function Get-FreshopItems($term) {
   for ($attempt = 1; $attempt -le 2; $attempt++) {
     try {
       $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $script:fieldsMode) -Headers $UA -TimeoutSec 20
-      # Any 200 returns here, never retried: rows, an empty answer, or a refusal without an items array (zero rows,
-      # recorded). The caller queues every zero for the recovery pass.
-      return (Read-FfSearchAnswer $r $term)
+      return (Read-FreshopSearchAnswer $r $term $script:ffTermAnswer $script:apiStatus $script:FfEmpty200 (Get-FfApiAnswerKey 200 '' -NoItemsArray))   # any 200 returns, never retried (ff-price-lib)
     }
     catch {
       # On the FIRST hard failure while asking for the rich field set, try the minimal one once. If that works,
@@ -1003,7 +947,7 @@ function Get-FreshopItems($term) {
           $r2 = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $FIELDS_MIN) -Headers $UA -TimeoutSec 20
           $script:fieldsMode = $FIELDS_MIN; $script:fellBack = $true
           Write-Warning 'Family Fare: Freshop rejected the canonical_url field whitelist - fell back to the minimal fields. Rows will carry NO product identity this run, so their links cannot be derived and must be searched. Check the Freshop field names.'
-          return (Read-FfSearchAnswer $r2 $term)
+          return (Read-FreshopSearchAnswer $r2 $term $script:ffTermAnswer $script:apiStatus $script:FfEmpty200 (Get-FfApiAnswerKey 200 '' -NoItemsArray))
         }
         catch { }   # both failed -> it is the throttle, not the whitelist; fall through to the normal retry
       }
@@ -1277,7 +1221,7 @@ for ($i = 0; $i -lt $termList.Count; $i++) {
   $queries = @($term); if ($supplemental.ContainsKey($term)) { $queries += $supplemental[$term] }
   $items = @(); foreach ($q in $queries) { $items += (Get-FreshopItems $q) }
   Start-Sleep -Milliseconds 200
-  if (-not (Test-FfTermBought $items)) {
+  if (-not (Test-FreshopItemsBought $items)) {
     $empty.Add($term); $streak++; $emptyRun++
     $limit = if (@($script:deals).Count -eq 0) { $ABORT_COLD_START } else { $ABORT_EMPTY_RUN }
     if ($emptyRun -ge $limit) {
@@ -1329,7 +1273,7 @@ while (-not $aborted -and $empty.Count -gt 0 -and $pass -lt 2 -and -not (Over-Ca
     $termAttempted[$term] = $true
     $script:ffAttempts++
     $items = Get-FreshopItems $term; Start-Sleep -Milliseconds 250
-    if (-not (Test-FfTermBought $items)) { $still.Add($term) } else { $termSuccess[$term] = $todayS; Ingest-Items $items $term }
+    if (-not (Test-FreshopItemsBought $items)) { $still.Add($term) } else { $termSuccess[$term] = $todayS; Ingest-Items $items $term }
   }
   $empty = $still
 }

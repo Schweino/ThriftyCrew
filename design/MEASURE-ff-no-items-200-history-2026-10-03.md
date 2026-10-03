@@ -5,6 +5,16 @@ with HTTP 200 and no `items` array, and `pull-regular-familyfare.ps1` read that 
 scored `success` for the day with no row. The fix (same commit as this file) makes it a refusal. This file answers
 "how often has it happened", which that doc left unmeasured.
 
+## Knowledge consulted
+
+Searched "freshop 200 without items refusal" (knowledge-search --estate, 2026-10-03). Used:
+- memory:fail-open-reads-as-empty: a throttled request answering HTTP 200 with no rows is read as "no products", which
+  manufactures false ABSENCE. Here the same shape manufactured false PRESENCE (a bought term), the other direction.
+- memory:ps-null-count-is-one: `@($null).Count` is 1, the arithmetic behind the defect.
+- memory:freshop-probes-share-the-production-budget: no live probe was made; this measurement reads git history only.
+- .claude/rules/measurement.md ms-01 (a rate carries its denominator), ms-04 (one row per case, totals derived),
+  ms-07 (a one-off harness keeps its description).
+
 ## What the artifacts can and cannot say
 
 Every committed `grocery/out/regular/family-fare-regular-*.json` carries `capture_terms`: one entry per term with

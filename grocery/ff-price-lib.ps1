@@ -180,6 +180,25 @@ function Read-FreshopSearchItems($Doc) {
   $items = @(@($Doc.items) | Where-Object { $null -ne $_ })
   return [pscustomobject]@{ answered = $true; items = $items }
 }
+# THE PRICE PULL'S USE OF IT. The pull read a search answer as @($r.items), so the no-items 200 above was ONE product:
+# both buy loops scored the term SUCCESS for today (moving the term cursor, ff-term-ledger.json and the expiry classes)
+# while Ingest-Items skipped the null row, and the answer was recorded neither as an empty 200 nor as a refusal.
+# Read-FreshopSearchAnswer returns the rows (none for a refusal) and records what was said: a refusal adds one to
+# $Tally[$RefusedKey] (the run-wide tally) and sets $Answers[$Term] = $RefusedKey; an empty answer sets $EmptyKey; a
+# row-bearing answer clears the term, so the LAST answer per query wins (refused in the main pass and answered in
+# recovery is judged on the answer). The caller builds both keys (pull-regular-familyfare's Get-FfApiAnswerKey), so
+# the tally and the term ledger cannot drift. Never retried here: retries under a hard throttle ran 45 minutes, and
+# the pull's recovery pass re-asks a refused term once like any other.
+function Read-FreshopSearchAnswer($Resp, [string]$Term, $Answers, $Tally, [string]$EmptyKey, [string]$RefusedKey) {
+  $ans = Read-FreshopSearchItems $Resp
+  if (-not $ans.answered) { $Tally[$RefusedKey] = 1 + [int]$Tally[$RefusedKey]; $Answers[$Term] = $RefusedKey; return @() }
+  if ($ans.items.Count -eq 0) { $Answers[$Term] = $EmptyKey } else { [void]$Answers.Remove($Term) }
+  return $ans.items
+}
+# WAS THIS TERM BOUGHT? The one test both of the pull's buy loops score a term by: at least one real product came
+# back. A null element is not a product, so the @($null) shape cannot score even if a reader upstream regresses. A
+# separate guard on purpose (og-18), with its own fixture case.
+function Test-FreshopItemsBought($Items) { return (@(@($Items) | Where-Object { $null -ne $_ }).Count -gt 0) }
 if ($FfPriceSelfTest) {
   $bad = 0
   function T($label, $got, $want) {
@@ -198,6 +217,26 @@ if ($FfPriceSelfTest) {
   # no honest price is null, not zero
   T 'no price at all -> null'  (Get-FfPrice ([pscustomobject]@{ price = ''; base_price = 0 })) $null
   T 'null item -> null'        (Get-FfPrice $null) $null
-  if ($bad -eq 0) { Write-Output 'ff-price-lib SELF-TEST PASS (multi-buy dropped, current beats regular, no-price is null)'; exit 0 }
+
+  # ---- A SEARCH 200 WITH NO items ARRAY IS A REFUSAL, NEVER A BOUGHT TERM (2026-10-03, MEASURE-chip-resolvers-2026-10-rerun
+  # finding 4). Each response is ConvertFrom-Json of a body, which is what Invoke-RestMethod hands the pull. Two copies
+  # of the defence, a case each (og-18): Read-FreshopSearchAnswer returns no rows and records the refusal, and
+  # Test-FreshopItemsBought refuses the old @($null) shape on its own. Keys are the pull's own spellings.
+  function B($label, [bool]$cond) { if (-not $cond) { Write-Output ("  X {0}" -f $label); $script:bad++ } }
+  $kRef = 'HTTP 200 without an items array'; $kEmp = 'HTTP 200 with zero product rows'
+  $ans = New-Object 'System.Collections.Generic.Dictionary[string,string]' ([StringComparer]::Ordinal); $tal = @{}
+  $tNo = 'Armour Family Pack Pepperoni Slices 12'
+  $gotNo = Read-FreshopSearchAnswer ('{"total":0}' | ConvertFrom-Json) $tNo $ans $tal $kEmp $kRef
+  B 'MUST FIRE: a 200 with no items array returns no rows and is not a bought term' ((@($gotNo).Count -eq 0) -and (-not (Test-FreshopItemsBought $gotNo)))
+  B 'MUST FIRE: it is recorded as a refusal in the run-wide tally and the term answer' (([int]$tal[$kRef] -eq 1) -and ($ans[$tNo] -eq $kRef))
+  B 'MUST FIRE: the old reading''s @($null) is not a bought term' (-not (Test-FreshopItemsBought @($null)))
+  $tal.Clear(); $tYes = 'pepperoni'; $ans[$tYes] = $kRef   # refused in the main pass, answered in recovery
+  $gotYes = Read-FreshopSearchAnswer ('{"items":[{"id":"77","name":"Armour Pepperoni Slices","size":"12 oz","price":"$3.99","base_price":3.99}],"total":1}' | ConvertFrom-Json) $tYes $ans $tal $kEmp $kRef
+  B 'CLEAN TWIN: a 200 with a real row is bought, returns that row, and the answer replaces the earlier refusal' ((Test-FreshopItemsBought $gotYes) -and (@($gotYes).Count -eq 1) -and (@($gotYes)[0].name -eq 'Armour Pepperoni Slices') -and (-not $ans.ContainsKey($tYes)))
+  $gotEmpty = Read-FreshopSearchAnswer ('{"items":[],"total":0}' | ConvertFrom-Json) 'ground coriander' $ans $tal $kEmp $kRef
+  B 'MUST NOT FIRE: an empty-array 200 keeps its empty handling (answered empty, not tallied, not bought)' ((-not (Test-FreshopItemsBought $gotEmpty)) -and ($ans['ground coriander'] -eq $kEmp) -and ($tal.Count -eq 0))
+  $gotNull = Read-FreshopSearchAnswer ('{"items":null,"total":0}' | ConvertFrom-Json) 'ground cumin' $ans $tal $kEmp $kRef
+  B 'MUST NOT FIRE: a null items array is zero rows, answered empty, not tallied' ((@($gotNull).Count -eq 0) -and (-not (Test-FreshopItemsBought $gotNull)) -and ($ans['ground cumin'] -eq $kEmp) -and ($tal.Count -eq 0))
+  if ($bad -eq 0) { Write-Output 'ff-price-lib SELF-TEST PASS (multi-buy dropped, current beats regular, no-price is null, a no-items 200 is refused)'; exit 0 }
   Write-Output ("ff-price-lib SELF-TEST FAIL ({0} problem(s))" -f $bad); exit 1
 }
