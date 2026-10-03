@@ -4,11 +4,65 @@ Brad, 2026-10-03: *"We are going to be decommishioning ThrifyCrew slowly. I want
 1. Stop the alerts from firing. 2. Create a robust "decom" plan end to end that we can follow. Well start decom at a
 future date."*
 
-**Status: PLAN. Phase 0 is DONE. Nothing past Phase 0 has started.** Brad picks the start date, called **S** below.
+**Status: IN PROGRESS as a FAST CLOSE.** Brad, later on 2026-10-03: *"I want you to go ahead and start the decom
+plan."* So S is 2026-10-03, and his rulings that afternoon (D7 to D10, D14, D15, below) replaced the 30-day notice
+with a close as soon as possible. **The live checklist is section F, directly below.** The phases further down remain
+the reference for HOW each step is done; where they assume a notice period, an email, an archive or a paywall lift,
+section F marks them void.
 **Ruled 2026-10-03 (Brad): D1 C (leave the price pages), D3 A (stop new signups now), D6 C (leave the 7 commits on
-main), and P1.4, P1.5 and P1.6 wait until S, where they become its first steps (P2.0).**
-The Phase 1 items are worth doing before S, because some of the exposure grows every day (section 1). Section 2 lists
-every decision only Brad can make, each with a recommendation. A ruling goes into section 2 the turn it is given.
+main), and P1.4, P1.5 and P1.6 wait until S, where they become its first steps (P2.0).** P2.0 is void under the fast
+close: the whole site goes with Ghost instead. Section 2 lists every decision only Brad can make, each with a
+recommendation. A ruling goes into section 2 the turn it is given.
+
+## F. The fast close (ruled 2026-10-03): the live checklist
+
+Brad's rulings, verbatim where short: D7 "Delete everything". D8: "Im refunding them right now", then "all payments
+have been refunded now. So we also need to cancel/close Ghost". Stripe shows 0 active subscriptions (Brad, asked
+whether refunding had also cancelled them). D9: "Dont do anything". D10: "Shut it down ASAP". No email to members.
+The site goes dark by cancelling Ghost(Pro) alone, so it stays public until the billing cycle ends. Keep only "what
+could be relevant for FamilyPost - the video creator/ai voice was good" (D14, and D15 by the same words: nothing
+else is archived, the V3 data and its D1 dump included).
+
+**Done**
+- [x] **F0** Routines off; alert email muted (`b06660ef2`).
+- [x] **F1 Brad:** every payment refunded; Stripe shows 0 active subscriptions.
+- [x] **F2 Claude: Ghost content export, opened and counted.** `C:\Codex\decom-archive\ghost-export-2026-10-03\ghost-export-2026-10.zip`
+  (31.7 MB, outside the repo): 1,569 posts (published 618 paid and 439 public, 5 sent as email, 507 drafts) and 19
+  pages, every one carrying its content. The counts match the 2026-10-01 export.
+- [x] **F3 Claude: the FamilyPost keep.** ThriftyCrew's `media/reels` (the video creator and the voice engine) copied
+  unchanged into FamilyPost `tools/reels`, and FamilyPost's `scripts/walkthrough/narrate.mjs` now reads it there:
+  FamilyPost commit `0b89613` on branch `tools/reels-from-thriftycrew` (worktree
+  `C:\Codex\FamilyPost\.claude\worktrees\reels-from-thriftycrew`). Checked: a full narration from that worktree,
+  exit 0, 7:17 at -14.89 LUFS. **Not merged** into FamilyPost's `poc/local-demo`, where other sessions are working:
+  it must be merged before F11. **Azure Speech answers 401**, so the HD voice falls back to the free one; FamilyPost's
+  own run at 10:50 that day did the same. Renewing the key is Brad's, in the Azure portal, and is a FamilyPost item.
+
+**Open: Brad (logins and accounts)**
+- [ ] **F4 Close Ghost.** Sign in to Ghost Admin (the owner login is the restricted `admin@simplemoneyplaybook.com`;
+  if the sign-in code cannot be read, Ghost support). Then, in this order: Settings, Membership, Access: **"Nobody"**
+  (D3 ruled signups stop now, and Stripe is still connected, so until then a new paid signup would take money for a
+  closing site); then cancel Ghost(Pro) in billing. Ghost deletes the site and account at the end of the billing
+  cycle. Record the end date here. Check: billing shows cancelled; a private window shows no signup.
+- [ ] **F5 Pause Google Ads** (P1.1), and **F6 clear the scheduled Facebook reels** (P1.2): both still point people at
+  the closing site.
+- [ ] **F7 Cloudflare** (P5.5): delete `tc-grocery-public` (this also ends the frozen V3 route), `tc-grocery-v3` and
+  its secrets, the 3 Workflows, the `tc_grocery_funnel` dataset, the `tc-grocery-v3` D1 database and the 4 R2 buckets.
+  After Ghost is gone: `smp-feed` (it carries the forms) and the `www`, `beta` and `feed` DNS records. The box's
+  Cloudflare token is read-only (an authentication error on DNS and routes, 2026-10-03), so this is a dashboard job.
+
+**Open: Claude**
+- [ ] **F8 Phase 4**, every item but P4.2 (done as F3): what other projects read moves out before the folder goes.
+- [ ] **F9 Phase 6**, after F4 and F7: revoke every key at its service. The Azure Speech key is KEPT (FamilyPost).
+- [ ] **F10 Brad's go-ahead for the deletion** (irreversible): F11 removes everything below.
+- [ ] **F11 Phase 7**, after F3 is merged, F8 is done and F10 is given, **run from a session whose folder is NOT inside
+  ThriftyCrew**: a process with its working folder inside a directory stops Windows deleting it, and this plan's own
+  session runs from inside it. No bundle and no data archive (D14): the 68 worktrees' unpushed work, the stashes, the
+  main checkout's uncommitted files and the gitignored data are discarded on purpose. GitHub still holds `main`.
+- [ ] **F12 Phase 8** (accounts), keeping whatever D16 keeps for FamilyPost, and **F13 Phase 9** (books).
+
+**Void under the fast close:** P1.4 to P1.6 and P2.0 (the site goes whole), P2.1 (no email), P2.2 (no notice to
+write), P2.3 and P2.4 (done by Brad as F1), P2.5 (no paywall lift), P3.2 to P3.8 (nothing archived but F2 and F3),
+P5.2 (no static archive). P1.7 becomes part of F4.
 
 **How to follow it.** Work the phases in order. Each step says who does it, how to check it worked, and how to undo
 it. A phase is done when its exit check passes, never when its steps were merely attempted. Steps marked
@@ -18,6 +72,9 @@ message). Steps marked **Claude** are repo, box and verification work.
 
 ## TLDR
 
+- **Since the afternoon of 2026-10-03 this is a fast close (section F):** everything refunded, no notice, no email,
+  nothing kept but FamilyPost's video and voice tools. The bullets below are the plan as first written, before those
+  rulings; where they speak of a notice period or an archive, section F wins.
 - **Done today:** every scheduled routine is off and alert email is muted. Nothing on the box or in the cloud runs
   on a clock any more.
 - **The site is still live and is now going stale.** The deals board shows sale prices that end on Oct 3 and Oct 4
@@ -171,20 +228,22 @@ hacks, the glossary and the free calculators readable for free as a static archi
 `smp-feed` Worker at thriftycrew.com, and take down everything that carries a price (board, trend pages, recipes).
 (C) Keep Ghost running free for a while, then (A). **Recommend B**: the lessons are evergreen and are Brad's own
 work, the cost is about the domain alone, and nothing frozen can show a wrong price. Recipes stay out because their
-costs would freeze and their dishes came from other sites. Ruling: *(none yet)*
+costs would freeze and their dishes came from other sites. **Ruling (Brad, 2026-10-03): A, "Delete everything".**
 
 **D8. Paying members' money.** (A) Cancel at the end of each paid period; nothing refunded (the refund page says
 payments are final). (B) Cancel at S and refund the unused part of each annual plan. (C) Cancel at S and refund each
 paying member's latest payment in full. **Recommend C**: with 5 paying members the most it can cost is $50 (if all 5
 are annual), it is the simplest to carry out and explain, and it leaves nobody with a reason to dispute a charge.
-Ruling: *(none yet)*
+**Ruling (Brad, 2026-10-03): he refunded every payment himself the same afternoon, and Stripe shows 0 active
+subscriptions** (section F, F1).
 
 **D9. Founders.** They paid once for lifetime access, and lifetime is ending. (A) Refund the founder payment in full.
 (B) Refund part. (C) Refund nothing and say thank you. **Recommend A** if the count in Stripe is small; the count
-decides the cost. Ruling: *(none yet)*
+decides the cost. **Ruling (Brad, 2026-10-03): "Dont do anything".**
 
 **D10. Notice period.** **Recommend 30 days** between the farewell email (S) and the close (S+30), with every
-lesson and tool free for those 30 days so members can read or save what they paid for. Ruling: *(none yet)*
+lesson and tool free for those 30 days so members can read or save what they paid for. **Ruling (Brad, 2026-10-03):
+"Shut it down ASAP"**, with no email to members, and the site going dark by cancelling Ghost(Pro) alone.
 
 **D11. The domain thriftycrew.com** (Cloudflare Registrar, renews 2027-07-10). **Recommend: keep it through at least
 one renewal** even with no site, so nobody else can buy it and email former members as "Thrifty Crew". Needed anyway
@@ -203,12 +262,23 @@ alive mainly for a search leg the store's own notes rate as weak (memories `simi
 
 **D14. Where the cold archive lives.** It must not be anything that closes with the business (not the
 `admin@thriftycrew.com` Google Drive). **Recommend: two copies**, one on an external disk and one in Brad's personal
-cloud storage. Ruling: *(none yet)*
+cloud storage. **Ruling (Brad, 2026-10-03): keep nothing but "what could be relevant for FamilyPost - the video
+creator/ai voice was good"**, which moved into FamilyPost (F3). Only the Ghost content export (F2) sits in
+`C:\Codex\decom-archive\`.
 
 **D15. The V3 platform's leftover data** (a 3.27 GB D1 dump already on disk at `C:\Codex\backups\v3-d1\`, and about
 42 GB across 4 R2 buckets whose lifecycle rules keep deleting on schedule). **Recommend: delete without exporting
 R2, and keep the D1 dump in the cold archive.** It is the abandoned platform's working data; nothing financial lives
-there. Ruling: *(none yet)*
+there. **Ruling: delete all of it, the D1 dump included**, by the same words as D14 (Brad, 2026-10-03: keep only what
+could be relevant for FamilyPost). Derived, not asked separately: Brad can still say otherwise before F7 and F11.
+
+**D16. Accounts that could serve FamilyPost instead of closing** (raised 2026-10-03 by the FamilyPost keep).
+FamilyPost runs on Cloudflare Workers and will take payments through Stripe. Keeping an account costs nothing while it
+is idle. Candidates: the Cloudflare account (FamilyPost's eventual host; it also holds the thriftycrew.com
+registration), the Stripe login (open a separate account under it for FamilyPost, so the books stay apart, and close
+ThriftyCrew's account after the dispute window), the Google Ads account, the Azure Speech key (already kept, F9), and
+the Facebook Page (its followers came for budget dinners, not a family paper). **Recommend: keep Cloudflare and the
+Stripe login; close Google Ads and the Facebook Page with the rest.** Ruling: *(none yet)*
 
 ## 3. Principles (the order of operations follows from these)
 
